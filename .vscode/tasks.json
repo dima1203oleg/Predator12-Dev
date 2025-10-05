@@ -1,0 +1,72 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build and Run",
+			"type": "shell",
+			"command": "echo",
+			"args": [
+				"Чисте середовище готове до роботи!"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Python 3.11",
+			"type": "shell",
+			"command": "python3.11",
+			"args": ["app.py"],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Node.js",
+			"type": "shell",
+			"command": "node",
+			"args": ["app.js"],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Git: Add All",
+			"type": "shell",
+			"command": "git",
+			"args": ["add", "."],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Git: Commit",
+			"type": "shell",
+			"command": "git",
+			"args": ["commit", "-m", "${input:commitMessage}"],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Git: Push",
+			"type": "shell",
+			"command": "git",
+			"args": ["push", "origin", "main"],
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Git: Quick Commit & Push",
+			"type": "shell",
+			"command": "git",
+			"args": ["add", ".", "&&", "git", "commit", "-m", "${input:commitMessage}", "&&", "git", "push", "origin", "main"],
+			"group": "build",
+			"problemMatcher": []
+		}
+	],
+	"inputs": [
+		{
+			"id": "commitMessage",
+			"description": "Enter commit message",
+			"default": "Update files",
+			"type": "promptString"
+		}
+	]
+}
