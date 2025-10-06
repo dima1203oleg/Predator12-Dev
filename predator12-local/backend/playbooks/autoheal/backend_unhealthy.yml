@@ -1,0 +1,71 @@
+---
+name: "Backend Unhealthy Recovery"
+description: "Відновлення нездорового backend сервісу"
+version: "1.0"
+triggers:
+  - alert: "BackendDown"
+  - alert: "HighErrorRate" 
+  - health_check_failed: "backend"
+
+steps:
+  - name: "Діагностика стану"
+    type: "check"
+    actions:
+      - check_process: "python"
+      - check_port: 5001
+      - check_memory_usage: true
+      - check_cpu_usage: true
+    timeout: 30
+
+  - name: "Спроба м'якого відновлення"
+    type: "soft_recovery"
+    actions:
+      - clear_redis_cache: "predator:*"
+      - reload_config: true
+      - garbage_collect: true
+    timeout: 60
+    
+  - name: "Перевірка після м'якого відновлення"
+    type: "health_check"
+    actions:
+      - curl: "http://localhost:5001/health"
+      - check_response_time: 5000
+    success_condition: "status_code == 200"
+    
+  - name: "Рестарт контейнера"
+    type: "hard_recovery"
+    condition: "previous_step_failed"
+    actions:
+      - docker_restart: "predator11-backend-1"
+      - wait_for_health: 120
+    timeout: 180
+    
+  - name: "Відновлення з backup"
+    type: "disaster_recovery"
+    condition: "previous_step_failed"
+    actions:
+      - restore_from_backup: "latest"
+      - rebuild_image: true
+      - docker_restart: "predator11-backend-1"
+    timeout: 300
+
+notifications:
+  on_start:
+    - slack: "#alerts"
+      message: "🚨 AutoHeal: Розпочато відновлення backend"
+  on_success:
+    - slack: "#alerts" 
+      message: "✅ AutoHeal: Backend відновлено успішно"
+  on_failure:
+    - slack: "#critical"
+      message: "❌ AutoHeal: Не вдалося відновити backend. Потрібна ручна інтервенція."
+    - pagerduty: "escalate"
+
+rollback:
+  enabled: true
+  conditions:
+    - "health_degraded_after_recovery"
+    - "error_rate_increased"
+  actions:
+    - restore_previous_config
+    - docker_restart

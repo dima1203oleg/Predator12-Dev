@@ -1,0 +1,8 @@
+{
+  "description": "Normalize and tokenize description",
+  "processors": [
+    {"grok": {"field": "Опис товару", "patterns": ["%{GREEDYDATA:desc}"]}},
+    {"set": {"field": "desc_normalized", "value": "{{Опис товару}}"}},
+    {"remove": {"field": "temp_field", "ignore_missing": true}}
+  ]
+}

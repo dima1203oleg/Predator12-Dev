@@ -1,0 +1,10 @@
+const fs = require('fs');
+const path = require('path');
+const base = __dirname + '/..';
+const dist = path.join(base,'dist');
+if (!fs.existsSync(dist)) fs.mkdirSync(dist);
+fs.copyFileSync(path.join(base,'tokens.json'), path.join(dist,'tokens.json'));
+const tokens = JSON.parse(fs.readFileSync(path.join(base,'tokens.json'),'utf8'));
+const js = `export const tokens = ${JSON.stringify(tokens)};\nexport function applyThemeVars(root=document.documentElement){\n  const c = tokens.colors; const r=tokens.radii; const s=tokens.shadows;\n  Object.entries(c).forEach(([k,v])=>root.style.setProperty('--'+k, v));\n  Object.entries(r).forEach(([k,v])=>root.style.setProperty('--radius-'+k, v));\n  Object.entries(s).forEach(([k,v])=>root.style.setProperty('--shadow-'+k, v));\n  return true;\n}\n`; 
+fs.writeFileSync(path.join(dist,'index.js'), js);
+console.log('[ui-theme] Built with tokens', Object.keys(tokens.colors).length);

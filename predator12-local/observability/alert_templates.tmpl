@@ -1,0 +1,41 @@
+{{ define "email.html" }}
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .header { padding: 10px 0; }
+    .logo { height: 40px; }
+    .grafana-link { 
+      display: inline-block; 
+      margin-top: 10px;
+      color: #0056b3;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="https://your-company.com/logo.png" alt="Logo" class="logo">
+  </div>
+  
+  <div class="alert-{{ .CommonLabels.severity }}">
+    <h2>{{ .CommonAnnotations.summary }}</h2>
+    <p><strong>Статус:</strong> 
+      {{ if .Alerts.Firing }}<span style="color: #dc3545">❌ Активний</span>
+      {{ else }}<span style="color: #28a745">✅ Виправлено</span>{{ end }}
+    </p>
+    <p>{{ .CommonAnnotations.description }}</p>
+  </div>
+  
+  <div class="footer">
+    Predator11 Monitoring • {{ .StartsAt.Format "2006-01-02 15:04" }}
+  </div>
+  
+  {{ if .Alerts.Firing }}
+  <a href="https://grafana.your-company.com/dashboard" class="grafana-link">
+    Перейти доGrafana для деталей
+  </a>
+  {{ end }}
+</body>
+</html>
+{{ end }}

@@ -1,0 +1,112 @@
+fallback:
+  backoff_factor: 2.0
+  enabled: true
+  max_retries: 3
+limits:
+  max_concurrent_requests: 10
+  max_requests_per_minute: 100
+  max_tokens_per_request: 4096
+  timeout_seconds: 300
+
+# PII та безпека
+pii_policies:
+  masking_enabled: true
+  masking_patterns:
+    edrpou: "[COMPANY_ID_MASKED]"
+    company_name: "[COMPANY_MASKED]" 
+    phone: "[PHONE_MASKED]"
+    email: "[EMAIL_MASKED]"
+  access_roles:
+    - view_pii
+    - data_analyst_senior
+  audit_enabled: true
+  audit_table: "audit_pii_access"
+
+# Агенти та їх права доступу
+agent_permissions:
+  DatasetIngestAgent:
+    can_access_pii: false
+    can_write_restricted: false
+  IndexerAgent:
+    can_access_pii: true
+    can_write_restricted: true
+    masking_required: true
+  SearchPlannerAgent:
+    can_access_pii: false
+    can_read_safe: true
+  BillingGateAgent:
+    can_access_pii: true
+    audit_required: true
+
+models:
+  meta/meta-llama-3.1-405b-instruct:
+    cost: 0.9
+    latency: 0.3
+    quality: 1.0
+  meta/meta-llama-3.1-8b-instruct:
+    cost: 0.4
+    latency: 0.9
+    quality: 0.7
+  microsoft/phi-4-reasoning:
+    cost: 0.5
+    latency: 0.7
+    quality: 0.9
+  microsoft/phi-4-mini-instruct:
+    cost: 0.2
+    latency: 0.95
+    quality: 0.6
+  microsoft/phi-4-mini-reasoning:
+    cost: 0.25
+    latency: 0.85
+    quality: 0.65
+  mistral-ai/mistral-large-2411:
+    cost: 0.7
+    latency: 0.6
+    quality: 0.9
+  mistral-ai/mistral-small-2503:
+    cost: 0.3
+    latency: 0.85
+    quality: 0.75
+  mistral-ai/codestral-2501:
+    cost: 0.6
+    latency: 0.7
+    quality: 0.85
+  openai/gpt-4o-mini:
+    cost: 0.3
+    latency: 0.8
+    quality: 0.8
+  openai/gpt-4o:
+    cost: 0.8
+    latency: 0.5
+    quality: 0.95
+  deepseek/deepseek-v3-0324:
+    cost: 0.45
+    latency: 0.75
+    quality: 0.85
+  cohere/cohere-embed-v3-multilingual:
+    cost: 0.1
+    latency: 0.9
+    quality: 0.8
+    type: embedding
+
+# Автоматичне самовідновлення
+autoheal:
+  enabled: true
+  webhook_url: "http://autoheal:8080/webhook"
+  restart_threshold: 3
+  scale_threshold: 5
+  rollback_enabled: true
+
+# Self-improvement налаштування
+self_improvement:
+  enabled: true
+  model_drift_threshold: 0.05
+  retrain_threshold: 0.1
+  canary_deployment: true
+  feedback_collection: true
+
+routing:
+  cost_weight: 0.3
+  latency_weight: 0.3
+  quality_weight: 0.4
+  rate_limit_threshold: 0.8

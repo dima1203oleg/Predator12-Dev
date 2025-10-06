@@ -1,0 +1,203 @@
+"""
+Agents Configuration Module
+Centralized configuration for all agents in the system
+"""
+
+import os
+from typing import Dict, List, Optional
+
+from pydantic import BaseModel
+
+
+class AgentConfig(BaseModel):
+    """Configuration for a single agent"""
+
+    name: str
+    url: str
+    port: int
+    health_endpoint: str
+    timeout: float = 10.0
+    retry_count: int = 3
+    retry_delay: float = 1.0
+    enabled: bool = True
+
+
+class WorkflowConfig(BaseModel):
+    """Configuration for workflow execution"""
+
+    max_concurrent_workflows: int = 10
+    default_timeout: float = 300.0  # 5 minutes
+    enable_dependency_validation: bool = True
+    enable_result_caching: bool = True
+    cache_ttl: int = 3600  # 1 hour
+
+
+class AgentsSystemConfig:
+    """Central configuration for the agents system"""
+
+    def __init__(self):
+        self.agents = self._load_agent_configs()
+        self.workflow = self._load_workflow_config()
+        self.dependencies = self._load_dependencies()
+        self.analysis_descriptions = self._load_analysis_descriptions()
+
+    def _load_agent_configs(self) -> Dict[str, AgentConfig]:
+        """Load agent configurations"""
+        base_timeout = float(os.getenv("AGENT_TIMEOUT", "10.0"))
+
+        return {
+            "chief": AgentConfig(
+                name="Chief Orchestrator",
+                url="http://chief-orchestrator:9001",
+                port=9001,
+                health_endpoint="/chief/health",
+                timeout=base_timeout,
+            ),
+            "model_router": AgentConfig(
+                name="Model Router",
+                url="http://model-router:9002",
+                port=9002,
+                health_endpoint="/router/health",
+                timeout=base_timeout,
+            ),
+            "ingest": AgentConfig(
+                name="Ingest Agent",
+                url="http://ingest-agent:9010",
+                port=9010,
+                health_endpoint="/ingest/health",
+                timeout=base_timeout * 2,  # Ingestion can take longer
+            ),
+            "synthetic": AgentConfig(
+                name="Synthetic Data Agent",
+                url="http://synthetic-agent:9015",
+                port=9015,
+                health_endpoint="/synthetic/health",
+                timeout=base_timeout * 3,  # Generation can take longer
+            ),
+            "data_quality": AgentConfig(
+                name="Data Quality Agent",
+                url="http://data-quality-agent:9012",
+                port=9012,
+                health_endpoint="/quality/health",
+                timeout=base_timeout,
+            ),
+            "anomaly": AgentConfig(
+                name="Anomaly Detection Agent",
+                url="http://anomaly-agent:9020",
+                port=9020,
+                health_endpoint="/anomaly/health",
+                timeout=base_timeout * 2,  # ML processing can take longer
+            ),
+            "security_privacy": AgentConfig(
+                name="Security & Privacy Agent",
+                url="http://security-privacy-agent:9050",
+                port=9050,
+                health_endpoint="/security/health",
+                timeout=base_timeout,
+            ),
+            "self_healing": AgentConfig(
+                name="Self Healing Agent",
+                url="http://self-healing-agent:9041",
+                port=9041,
+                health_endpoint="/healing/health",
+                timeout=base_timeout,
+            ),
+        }
+
+    def _load_workflow_config(self) -> WorkflowConfig:
+        """Load workflow configuration"""
+        return WorkflowConfig(
+            max_concurrent_workflows=int(os.getenv("MAX_CONCURRENT_WORKFLOWS", "10")),
+            default_timeout=float(os.getenv("WORKFLOW_TIMEOUT", "300.0")),
+            enable_dependency_validation=os.getenv("ENABLE_DEPENDENCY_VALIDATION", "true").lower()
+            == "true",
+            enable_result_caching=os.getenv("ENABLE_RESULT_CACHING", "true").lower() == "true",
+            cache_ttl=int(os.getenv("CACHE_TTL", "3600")),
+        )
+
+    def _load_dependencies(self) -> Dict[str, List[str]]:
+        """Load analysis dependencies"""
+        return {"anomaly": ["ingest"], "synthetic": ["data_quality"], "data_quality": ["ingest"]}
+
+    def _load_analysis_descriptions(self) -> Dict[str, str]:
+        """Load analysis descriptions"""
+        return {
+            "ingest": "Data ingestion and preparation from various sources",
+            "data_quality": "Data quality validation, profiling, and assessment",
+            "anomaly": "Anomaly detection using machine learning algorithms",
+            "synthetic": "Synthetic data generation for testing and privacy",
+            "security_privacy": "Security scanning and PII detection",
+            "self_healing": "System monitoring and automatic issue resolution",
+        }
+
+    def get_agent_config(self, agent_name: str) -> Optional[AgentConfig]:
+        """Get configuration for a specific agent"""
+        return self.agents.get(agent_name)
+
+    def get_agent_url(self, agent_name: str) -> Optional[str]:
+        """Get URL for a specific agent"""
+        config = self.get_agent_config(agent_name)
+        return config.url if config else None
+
+    def get_health_endpoint(self, agent_name: str) -> Optional[str]:
+        """Get health endpoint for a specific agent"""
+        config = self.get_agent_config(agent_name)
+        if config:
+            return f"{config.url}{config.health_endpoint}"
+        return None
+
+    def get_enabled_agents(self) -> List[str]:
+        """Get list of enabled agents"""
+        return [name for name, config in self.agents.items() if config.enabled]
+
+    def validate_analyses(self, analyses: List[str]) -> bool:
+        """Validate that all analyses are available"""
+        available = set(self.agents.keys())
+        requested = set(analyses)
+        return requested.issubset(available)
+
+    def validate_dependencies(self, analyses: List[str]) -> bool:
+        """Validate that all dependencies are satisfied"""
+        for analysis in analyses:
+            if analysis in self.dependencies:
+                required = self.dependencies[analysis]
+                for req in required:
+                    if req not in analyses:
+                        return False
+        return True
+
+    def get_missing_dependencies(self, analyses: List[str]) -> Dict[str, List[str]]:
+        """Get missing dependencies for analyses"""
+        missing = {}
+        for analysis in analyses:
+            if analysis in self.dependencies:
+                required = self.dependencies[analysis]
+                missing_deps = [req for req in required if req not in analyses]
+                if missing_deps:
+                    missing[analysis] = missing_deps
+        return missing
+
+
+# Global configuration instance
+agents_config = AgentsSystemConfig()
+
+
+# Convenience functions for backward compatibility
+def get_agent_urls() -> Dict[str, str]:
+    """Get all agent URLs as a dictionary"""
+    return {name: config.url for name, config in agents_config.agents.items()}
+
+
+def get_agent_timeouts() -> Dict[str, float]:
+    """Get all agent timeouts as a dictionary"""
+    return {name: config.timeout for name, config in agents_config.agents.items()}
+
+
+def get_dependencies() -> Dict[str, List[str]]:
+    """Get analysis dependencies"""
+    return agents_config.dependencies.copy()
+
+
+def get_analysis_descriptions() -> Dict[str, str]:
+    """Get analysis descriptions"""
+    return agents_config.analysis_descriptions.copy()

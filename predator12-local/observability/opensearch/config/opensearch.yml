@@ -1,0 +1,48 @@
+# OpenSearch Main Configuration
+cluster.name: predator-opensearch-cluster
+node.name: opensearch-node1
+
+# Network
+network.host: 0.0.0.0
+http.port: 9200
+transport.port: 9300
+
+# Discovery
+discovery.type: single-node
+
+# Path settings
+path.data: /usr/share/opensearch/data
+path.logs: /usr/share/opensearch/logs
+
+# Security Settings (производство)
+plugins.security.ssl.http.enabled: false
+plugins.security.ssl.transport.enabled: false
+plugins.security.allow_default_init_securityindex: true
+plugins.security.authcz.admin_dn:
+  - CN=admin,OU=client,O=client,L=test,C=de
+
+# Cluster settings
+bootstrap.memory_lock: true
+
+# Thread pool
+thread_pool.write.queue_size: 1000
+
+# Indices settings  
+indices.recovery.max_bytes_per_sec: 40mb
+
+# Performance
+indices.fielddata.cache.size: 20%
+indices.breaker.fielddata.limit: 40%
+indices.breaker.request.limit: 25%
+indices.breaker.total.limit: 70%
+
+# Logging
+logger.level: INFO
+
+# Performance analyzer
+webservice-bind-host: 0.0.0.0
+webservice-port: 9600
+
+# Cross-cluster replication
+plugins.security.enable_snapshot_restore_privilege: true
+plugins.security.check_snapshot_restore_write_privileges: true

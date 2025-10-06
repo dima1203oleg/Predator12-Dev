@@ -1,0 +1,11 @@
+{
+  "data_asset_name": "customs_dataset",
+  "expectation_suite_name": "basic_suite",
+  "expectations": [
+    {"expectation_type": "expect_column_values_to_not_be_null", "kwargs": {"column": "doc_id"}},
+    {"expectation_type": "expect_column_values_to_be_between", "kwargs": {"column": "amount", "min_value": 0}},
+    {"expectation_type": "expect_column_values_to_match_regex", "kwargs": {"column": "hs_code", "regex": "^[0-9]{4,8}$"}},
+    {"expectation_type": "expect_column_values_to_be_in_set", "kwargs": {"column": "country", "value_set": ["UA","PL","DE","US","CN"]}}
+  ],
+  "meta": {"created_by": "cascade", "notes": "Starter Great Expectations suite."}
+}

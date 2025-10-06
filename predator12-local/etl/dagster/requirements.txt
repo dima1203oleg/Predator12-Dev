@@ -1,0 +1,9 @@
+dagster
+dagster-duckdb
+pandas
+pyarrow
+minio
+requests
+openpyxl
+psycopg2-binary
+dagster-postgres

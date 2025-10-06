@@ -1,0 +1,35 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      timeInterval: "15s"
+      httpMethod: "POST"
+    version: 1
+
+  - name: OpenSearch
+    type: opensearch
+    access: proxy
+    url: http://opensearch:9200
+    database: "*"
+    isDefault: false
+    editable: false
+    jsonData:
+      interval: Daily
+      timeField: '@timestamp'
+      esVersion: 1.0.0
+      maxConcurrentShardRequests: 5
+    version: 1
+
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    isDefault: false
+    editable: false
+    version: 1

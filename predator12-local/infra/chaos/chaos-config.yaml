@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chaos-monkey-config
+data:
+  config.toml: |
+    [chaosmonkey]
+    # Ймовірність виконання хаос експериментів (0.0 - 1.0)
+    enabled = true
+    # Запускати в режимі тестування (true) чи реально вимикати сервіси (false)
+    dry_run = true
+    # Інтервал між експериментами в секундах
+    interval = 300
+    # Логування
+    log_level = "info"
+    
+    [targets]
+    # Цілі для хаос експериментів
+    namespaces = ["predator-system"]
+    
+    # Ймовірність атак на різні типи ресурсів
+    [attacks]
+    # Вимкнення подів
+    kill_pods = 0.1
+    # Ресурсне навантаження
+    memory_stress = 0.05
+    cpu_stress = 0.05
+    # Мережеві збої
+    network_delay = 0.03
+    network_loss = 0.02
+    
+    # Виключення критичних сервісів
+    [exclusions]
+    deployments = ["keycloak", "postgres", "redis"]
+    labels = ["app=critical", "tier=database"]
+    
+    [notifications]
+    # Сповіщення про експерименти
+    webhook_url = "http://alertmanager:9093/api/v1/alerts"
+    enabled = true

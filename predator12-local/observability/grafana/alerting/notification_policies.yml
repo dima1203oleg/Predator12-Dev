@@ -1,0 +1,55 @@
+apiVersion: 1
+
+# Default policy that matches all alerts
+policies:
+  - receiver: 'default-receiver'
+    group_by: ['alertname', 'severity']
+    # Continue to the next policy if no matches
+    continue: false
+    # Match all alerts
+    match:
+      alertname: '.+'
+    # Wait time before sending initial notification
+    group_wait: 30s
+    # Wait time before sending an updated notification
+    group_interval: 5m
+    # Minimum time between two notifications for the same alert
+    repeat_interval: 4h
+    # Notification template to use
+    template: 'default_template'
+
+# Additional policies can be added here for specific alert groups
+  - receiver: 'critical-receiver'
+    match:
+      severity: 'critical'
+    group_by: ['alertname']
+    group_wait: 10s
+    group_interval: 5m
+    repeat_interval: 1h
+    template: 'default_template'
+
+# Receivers configuration
+receivers:
+  - name: 'default-receiver'
+    # Add your default notification channels here
+    grafana_managed_receiver_configs:
+      - uid: 'default-email'
+        type: 'email'
+        settings:
+          addresses: 'your-email@example.com'
+          singleEmail: true
+          message: '{{ template "email.html" . }}'
+
+  - name: 'critical-receiver'
+    # Add critical notification channels here (e.g., PagerDuty, SMS)
+    grafana_managed_receiver_configs:
+      - uid: 'critical-email'
+        type: 'email'
+        settings:
+          addresses: 'oncall@example.com'
+          singleEmail: true
+          message: '{{ template "email.html" . }}'
+
+# Template files to include
+templates:
+  - '/etc/grafana/alerting/notification_templates.yml'

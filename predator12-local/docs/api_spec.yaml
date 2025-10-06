@@ -1,0 +1,103 @@
+openapi: 3.0.3
+info:
+  title: Predator11 Agent Orchestration API
+  version: 2.0.0
+  description: |
+    Enhanced API with:
+    - Circuit breakers
+    - Request batching
+    - Caching
+    - Metrics
+
+servers:
+  - url: http://localhost:9001
+    description: Development server
+
+paths:
+  /chief/ask:
+    post:
+      summary: Submit a new task request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '200':
+          description: Task accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task_id:
+                    type: string
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+  /v2/chief/ask:
+    post:
+      summary: Validated task request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidatedUserRequest'
+      responses:
+        '200':
+          description: Task accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '400':
+          description: Invalid request
+
+components:
+  schemas:
+    UserRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        channel:
+          type: string
+          enum: [ui, telegram, api]
+        user_id:
+          type: string
+        context:
+          type: object
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+
+    ValidatedUserRequest:
+      allOf:
+        - $ref: '#/components/schemas/UserRequest'
+        - type: object
+          required: [query, user_id]
+          properties:
+            query:
+              minLength: 3
+              maxLength: 1000
+            user_id:
+              pattern: '^[a-zA-Z0-9_-]+$'
+
+    TaskResponse:
+      type: object
+      properties:
+        task_id:
+          type: string
+        status:
+          type: string
+        progress:
+          type: object
+          properties:
+            completed_agents:
+              type: integer
+            total_agents:
+              type: integer
+            current_stage:
+              type: string

@@ -1,0 +1,564 @@
+agents:
+  Anomaly:
+    arbiter_model: cohere/command-r-08-2024
+    competition_models:
+    - microsoft/phi-3-small-8k-instruct
+    - qwen/qwen2.5-7b-instruct
+    - meta-llama/llama-3.2-3b-instruct
+    emergency_pool:
+    - qwen/qwen2.5-1.5b-instruct
+    - qwen/qwen2.5-0.5b-instruct
+    fallback_chain:
+    - microsoft/phi-3-mini-4k-instruct
+    - qwen/qwen2.5-3b-instruct
+    - meta-llama/llama-3.2-1b-instruct
+    llm_profile: fast_tier4
+    load_balancing: ultra_fast
+    max_concurrent: 10
+    priority: normal
+    thermal_protection: true
+  Arbiter:
+    arbiter_model: mistralai/mixtral-8x7b-instruct-v0.1
+    competition_models:
+    - ai21-labs/ai21-jamba-1.5-large
+    - meta-llama/meta-llama-3-70b-instruct
+    - cohere/command-r-plus-08-2024
+    emergency_pool:
+    - mistralai/mistral-7b-instruct-v0.3
+    - meta-llama/meta-llama-3-8b-instruct
+    fallback_chain:
+    - qwen/qwen2.5-32b-instruct
+    - microsoft/phi-3-small-128k-instruct
+    - google/gemma-2-27b-it
+    llm_profile: balanced_tier2
+    load_balancing: decision_quality
+    max_concurrent: 3
+    priority: normal
+    thermal_protection: true
+  AutoHeal:
+    arbiter_model: cohere/command-r-plus-08-2024
+    competition_models:
+    - mistralai/codestral-latest
+    - ai21-labs/ai21-jamba-1.5-large
+    - microsoft/phi-3-small-128k-instruct
+    emergency_pool:
+    - microsoft/phi-3-mini-128k-instruct
+    - google/gemma-2-27b-it
+    fallback_chain:
+    - meta-llama/meta-llama-3-8b-instruct
+    - qwen/qwen2.5-7b-instruct
+    - mistralai/mistral-7b-instruct-v0.3
+    llm_profile: specialized_tier3
+    load_balancing: code_quality_score
+    max_concurrent: 3
+    priority: normal
+    thermal_protection: true
+  BillingGate:
+    arbiter_model: ai21-labs/ai21-jamba-1.5-large
+    competition_models:
+    - qwen/qwen2.5-32b-instruct
+    - microsoft/phi-3-small-8k-instruct
+    - cohere/command-r-08-2024
+    emergency_pool:
+    - qwen/qwen2.5-7b-instruct
+    - microsoft/phi-3-mini-128k-instruct
+    fallback_chain:
+    - meta-llama/meta-llama-3-8b-instruct
+    - google/gemma-2-27b-it
+    - mistralai/mistral-7b-instruct-v0.3
+    llm_profile: balanced_tier2
+    load_balancing: financial_accuracy
+    max_concurrent: 3
+    priority: normal
+    thermal_protection: true
+  ChiefOrchestrator:
+    arbiter_model: cohere/command-r-plus-08-2024
+    competition_models:
+    - ai21-labs/ai21-jamba-1.5-large
+    - mistralai/mixtral-8x7b-instruct-v0.1
+    - meta-llama/meta-llama-3-70b-instruct
+    emergency_pool:
+    - microsoft/phi-3-mini-128k-instruct
+    - qwen/qwen2.5-7b-instruct
+    fallback_chain:
+    - mistralai/mistral-7b-instruct-v0.3
+    - microsoft/phi-3-mini-4k-instruct
+    - meta-llama/meta-llama-3-8b-instruct
+    llm_profile: critical_tier1
+    load_balancing: competition_winner
+    max_concurrent: 5
+    priority: critical
+    thermal_protection: true
+  ComplianceMonitor:
+    arbiter_model: ai21-labs/ai21-jamba-1.5-large
+    competition_models:
+    - cohere/command-r-plus-08-2024
+    - microsoft/phi-3-small-128k-instruct
+    - qwen/qwen2.5-32b-instruct
+    emergency_pool:
+    - mistralai/mistral-7b-instruct-v0.3
+    - qwen/qwen2.5-7b-instruct
+    fallback_chain:
+    - meta-llama/meta-llama-3-70b-instruct
+    - google/gemma-2-27b-it
+    - cohere/command-r-08-2024
+    llm_profile: balanced_tier2
+    load_balancing: compliance_accuracy
+    max_concurrent: 4
+    priority: normal
+    thermal_protection: true
+  DataQuality:
+    arbiter_model: cohere/command-r-08-2024
+    competition_models:
+    - meta-llama/meta-llama-3-8b-instruct
+    - microsoft/phi-3-mini-128k-instruct
+    - qwen/qwen2.5-7b-instruct
+    emergency_pool:
+    - microsoft/phi-3-mini-4k-instruct
+    - qwen/qwen2.5-1.5b-instruct
+    fallback_chain:
+    - microsoft/phi-3-small-8k-instruct
+    - qwen/qwen2.5-3b-instruct
+    - meta-llama/llama-3.2-3b-instruct
+    llm_profile: balanced_tier2
+    load_balancing: round_robin_fast
+    max_concurrent: 8
+    priority: normal
+    thermal_protection: true
+  DatasetIngest:
+    arbiter_model: microsoft/phi-3-small-8k-instruct
+    competition_models:
+    - meta-llama/llama-3.2-1b-instruct
+    - qwen/qwen2.5-3b-instruct
+    - microsoft/phi-3-mini-4k-instruct
+    emergency_pool:
+    - meta-llama/llama-3.2-3b-instruct
+    - cohere/command-r-08-2024
+    fallback_chain:
+    - qwen/qwen2.5-1.5b-instruct
+    - qwen/qwen2.5-0.5b-instruct
+    - microsoft/phi-3-medium-4k-instruct
+    llm_profile: fast_tier4
+    load_balancing: maximum_throughput
+    max_concurrent: 15
+    priority: normal
+    thermal_protection: true
+  ETLOrchestrator:
+    arbiter_model: cohere/command-r-plus-08-2024
+    competition_models:
+    - microsoft/phi-3-small-128k-instruct
+    - qwen/qwen2.5-7b-instruct
+    - meta-llama/meta-llama-3-8b-instruct
+    emergency_pool:
+    - qwen/qwen2.5-32b-instruct
+    - meta-llama/llama-3.2-3b-instruct
+    fallback_chain:
+    - google/gemma-2-27b-it
+    - mistralai/mistral-7b-instruct-v0.3
+    - microsoft/phi-3-mini-128k-instruct
+    llm_profile: balanced_tier2
+    load_balancing: pipeline_efficiency
+    max_concurrent: 8
+    priority: normal
+    thermal_protection: true
+  Embedding:
+    arbiter_model: ai21-labs/ai21-jamba-1.5-large
+    competition_models:
+    - cohere/command-r-plus-08-2024
+    - qwen/qwen2.5-32b-instruct
+    - microsoft/phi-3-small-128k-instruct
+    emergency_pool:
+    - qwen/qwen2.5-7b-instruct
+    - mistralai/mistral-7b-instruct-v0.3
+    fallback_chain:
+    - meta-llama/meta-llama-3-8b-instruct
+    - google/gemma-2-27b-it
+    - cohere/command-r-08-2024
+    llm_profile: balanced_tier2
+    load_balancing: vector_quality
+    max_concurrent: 12
+    priority: normal
+    thermal_protection: true
+  Forecast:
+    arbiter_model: meta-llama/meta-llama-3-70b-instruct
+    competition_models:
+    - mistralai/mixtral-8x7b-instruct-v0.1
+    - ai21-labs/ai21-jamba-1.5-large
+    - qwen/qwen2.5-32b-instruct
+    emergency_pool:
+    - mistralai/mistral-7b-instruct-v0.3
+    - meta-llama/meta-llama-3-8b-instruct
+    fallback_chain:
+    - cohere/command-r-plus-08-2024
+    - microsoft/phi-3-small-128k-instruct
+    - qwen/qwen2.5-7b-instruct
+    llm_profile: balanced_tier2
+    load_balancing: accuracy_weighted
+    max_concurrent: 5
+    priority: normal
+    thermal_protection: true
+  GraphBuilder:
+    arbiter_model: meta-llama/meta-llama-3-70b-instruct
+    competition_models:
+    - ai21-labs/ai21-jamba-1.5-large
+    - microsoft/phi-3-small-128k-instruct
+    - qwen/qwen2.5-32b-instruct
+    emergency_pool:
+    - meta-llama/meta-llama-3-8b-instruct
+    - qwen/qwen2.5-7b-instruct
+    fallback_chain:
+    - cohere/command-r-plus-08-2024
+    - google/gemma-2-27b-it
+    - mistralai/mistral-7b-instruct-v0.3
+    llm_profile: balanced_tier2
+    load_balancing: graph_complexity
+    max_concurrent: 4
+    priority: normal
+    thermal_protection: true
+  Indexer:
+    arbiter_model: meta-llama/meta-llama-3-8b-instruct
+    competition_models:
+    - cohere/command-r-08-2024
+    - qwen/qwen2.5-7b-instruct
+    - microsoft/phi-3-mini-128k-instruct
+    emergency_pool:
+    - meta-llama/llama-3.2-3b-instruct
+    - qwen/qwen2.5-1.5b-instruct
+    fallback_chain:
+    - google/gemma-2-27b-it
+    - qwen/qwen2.5-3b-instruct
+    - microsoft/phi-3-small-8k-instruct
+    llm_profile: balanced_tier2
+    load_balancing: search_relevance
+    max_concurrent: 6
+    priority: normal
+    thermal_protection: true
+  ModelRouter:
+    arbiter_model: mistralai/mistral-7b-instruct-v0.3
+    competition_models:
+    - meta-llama/meta-llama-3-70b-instruct
+    - microsoft/phi-3-small-128k-instruct
+    - cohere/command-r-plus-08-2024
+    emergency_pool:
+    - qwen/qwen2.5-32b-instruct
+    - google/gemma-2-27b-it
+    fallback_chain:
+    - microsoft/phi-3-mini-4k-instruct
+    - qwen/qwen2.5-7b-instruct
+    - meta-llama/meta-llama-3-8b-instruct
+    llm_profile: critical_tier1
+    load_balancing: fastest_accurate
+    max_concurrent: 4
+    priority: critical
+    thermal_protection: true
+  NexusGuide:
+    arbiter_model: qwen/qwen2.5-32b-instruct
+    competition_models:
+    - cohere/command-r-plus-08-2024
+    - microsoft/phi-3-small-128k-instruct
+    - meta-llama/meta-llama-3-8b-instruct
+    emergency_pool:
+    - microsoft/phi-3-mini-128k-instruct
+    - qwen/qwen2.5-7b-instruct
+    fallback_chain:
+    - google/gemma-2-27b-it
+    - cohere/command-r-08-2024
+    - mistralai/mistral-7b-instruct-v0.3
+    llm_profile: balanced_tier2
+    load_balancing: user_satisfaction
+    max_concurrent: 5
+    priority: normal
+    thermal_protection: true
+  OSINTCrawler:
+    arbiter_model: cohere/command-r-08-2024
+    competition_models:
+    - meta-llama/llama-3.2-3b-instruct
+    - qwen/qwen2.5-3b-instruct
+    - microsoft/phi-3-mini-4k-instruct
+    emergency_pool:
+    - qwen/qwen2.5-0.5b-instruct
+    - google/gemma-2-27b-it
+    fallback_chain:
+    - qwen/qwen2.5-1.5b-instruct
+    - meta-llama/llama-3.2-1b-instruct
+    - microsoft/phi-3-medium-4k-instruct
+    llm_profile: balanced_tier2
+    load_balancing: crawl_speed
+    max_concurrent: 10
+    priority: normal
+    thermal_protection: true
+  PIIGuardian:
+    arbiter_model: meta-llama/meta-llama-3-70b-instruct
+    competition_models:
+    - microsoft/phi-3-small-128k-instruct
+    - cohere/command-r-plus-08-2024
+    - qwen/qwen2.5-7b-instruct
+    emergency_pool:
+    - meta-llama/meta-llama-3-8b-instruct
+    - cohere/command-r-08-2024
+    fallback_chain:
+    - ai21-labs/ai21-jamba-1.5-large
+    - google/gemma-2-27b-it
+    - mistralai/mistral-7b-instruct-v0.3
+    llm_profile: balanced_tier2
+    load_balancing: privacy_score
+    max_concurrent: 6
+    priority: normal
+    thermal_protection: true
+  PerformanceOptimizer:
+    arbiter_model: ai21-labs/ai21-jamba-1.5-large
+    competition_models:
+    - mistralai/codestral-latest
+    - microsoft/phi-3-small-128k-instruct
+    - qwen/qwen2.5-32b-instruct
+    emergency_pool:
+    - mistralai/mistral-7b-instruct-v0.3
+    - qwen/qwen2.5-7b-instruct
+    fallback_chain:
+    - meta-llama/meta-llama-3-8b-instruct
+    - cohere/command-r-plus-08-2024
+    - google/gemma-2-27b-it
+    llm_profile: specialized_tier3
+    load_balancing: optimization_impact
+    max_concurrent: 3
+    priority: normal
+    thermal_protection: true
+  QueryPlanner:
+    arbiter_model: meta-llama/meta-llama-3-70b-instruct
+    competition_models:
+    - ai21-labs/ai21-jamba-1.5-large
+    - cohere/command-r-plus-08-2024
+    - mistralai/mixtral-8x7b-instruct-v0.1
+    emergency_pool:
+    - mistralai/mistral-7b-instruct-v0.3
+    - microsoft/phi-3-mini-128k-instruct
+    fallback_chain:
+    - microsoft/phi-3-small-8k-instruct
+    - qwen/qwen2.5-32b-instruct
+    - cohere/command-r-08-2024
+    llm_profile: critical_tier1
+    load_balancing: consensus_vote
+    max_concurrent: 3
+    priority: critical
+    thermal_protection: true
+  RedTeam:
+    arbiter_model: cohere/command-r-plus-08-2024
+    competition_models:
+    - mistralai/codestral-latest
+    - ai21-labs/ai21-jamba-1.5-large
+    - meta-llama/meta-llama-3-70b-instruct
+    emergency_pool:
+    - mistralai/mistral-7b-instruct-v0.3
+    - meta-llama/meta-llama-3-8b-instruct
+    fallback_chain:
+    - microsoft/phi-3-small-128k-instruct
+    - qwen/qwen2.5-32b-instruct
+    - google/gemma-2-27b-it
+    llm_profile: specialized_tier3
+    load_balancing: security_depth
+    max_concurrent: 2
+    priority: normal
+    thermal_protection: true
+  ReportExport:
+    arbiter_model: ai21-labs/ai21-jamba-1.5-large
+    competition_models:
+    - cohere/command-r-plus-08-2024
+    - microsoft/phi-3-small-128k-instruct
+    - meta-llama/meta-llama-3-8b-instruct
+    emergency_pool:
+    - mistralai/mistral-7b-instruct-v0.3
+    - qwen/qwen2.5-7b-instruct
+    fallback_chain:
+    - qwen/qwen2.5-32b-instruct
+    - google/gemma-2-27b-it
+    - cohere/command-r-08-2024
+    llm_profile: balanced_tier2
+    load_balancing: document_quality
+    max_concurrent: 4
+    priority: normal
+    thermal_protection: true
+  SchemaMapper:
+    arbiter_model: ai21-labs/ai21-jamba-1.5-large
+    competition_models:
+    - microsoft/phi-3-small-128k-instruct
+    - qwen/qwen2.5-32b-instruct
+    - cohere/command-r-08-2024
+    emergency_pool:
+    - qwen/qwen2.5-7b-instruct
+    - microsoft/phi-3-mini-128k-instruct
+    fallback_chain:
+    - meta-llama/meta-llama-3-8b-instruct
+    - google/gemma-2-27b-it
+    - mistralai/mistral-7b-instruct-v0.3
+    llm_profile: balanced_tier2
+    load_balancing: schema_complexity
+    max_concurrent: 3
+    priority: normal
+    thermal_protection: true
+  SelfDiagnosis:
+    arbiter_model: ai21-labs/ai21-jamba-1.5-large
+    competition_models:
+    - meta-llama/meta-llama-3-70b-instruct
+    - microsoft/phi-3-small-128k-instruct
+    - cohere/command-r-08-2024
+    emergency_pool:
+    - microsoft/phi-3-mini-4k-instruct
+    - meta-llama/meta-llama-3-8b-instruct
+    fallback_chain:
+    - qwen/qwen2.5-32b-instruct
+    - google/gemma-2-27b-it
+    - mistralai/mistral-7b-instruct-v0.3
+    llm_profile: balanced_tier2
+    load_balancing: diagnostic_depth
+    max_concurrent: 4
+    priority: normal
+    thermal_protection: true
+  SelfImprovement:
+    arbiter_model: cohere/command-r-plus-08-2024
+    competition_models:
+    - ai21-labs/ai21-jamba-1.5-large
+    - mistralai/mixtral-8x7b-instruct-v0.1
+    - meta-llama/meta-llama-3-70b-instruct
+    emergency_pool:
+    - mistralai/mistral-7b-instruct-v0.3
+    - meta-llama/meta-llama-3-8b-instruct
+    fallback_chain:
+    - qwen/qwen2.5-32b-instruct
+    - microsoft/phi-3-small-128k-instruct
+    - google/gemma-2-27b-it
+    llm_profile: specialized_tier3
+    load_balancing: learning_efficiency
+    max_concurrent: 2
+    priority: normal
+    thermal_protection: true
+  Simulator:
+    arbiter_model: ai21-labs/ai21-jamba-1.5-large
+    competition_models:
+    - mistralai/mixtral-8x7b-instruct-v0.1
+    - qwen/qwen2.5-32b-instruct
+    - microsoft/phi-3-small-128k-instruct
+    emergency_pool:
+    - qwen/qwen2.5-7b-instruct
+    - mistralai/mistral-7b-instruct-v0.3
+    fallback_chain:
+    - cohere/command-r-plus-08-2024
+    - meta-llama/meta-llama-3-8b-instruct
+    - google/gemma-2-27b-it
+    llm_profile: balanced_tier2
+    load_balancing: simulation_accuracy
+    max_concurrent: 3
+    priority: normal
+    thermal_protection: true
+  SyntheticData:
+    arbiter_model: meta-llama/meta-llama-3-70b-instruct
+    competition_models:
+    - cohere/command-r-plus-08-2024
+    - microsoft/phi-3-small-128k-instruct
+    - qwen/qwen2.5-7b-instruct
+    emergency_pool:
+    - mistralai/mistral-7b-instruct-v0.3
+    - qwen/qwen2.5-32b-instruct
+    fallback_chain:
+    - ai21-labs/ai21-jamba-1.5-large
+    - google/gemma-2-27b-it
+    - meta-llama/meta-llama-3-8b-instruct
+    llm_profile: balanced_tier2
+    load_balancing: data_diversity
+    max_concurrent: 5
+    priority: normal
+    thermal_protection: true
+kafka_topics:
+  agents_communication:
+  - agents.requests
+  - agents.responses
+  - agents.status
+  - agents.competition
+  - agents.arbitration
+  data_flow:
+  - data.ingest
+  - data.quality
+  - data.processed
+  - etl.status
+  models:
+  - models.requests
+  - models.responses
+  - models.health
+  - models.failover
+  - models.competition
+  - models.arbitration
+  monitoring:
+  - monitoring.metrics
+  - monitoring.performance
+  - monitoring.thermal
+  - monitoring.costs
+  orchestrator:
+  - orchestrator.tasks
+  - orchestrator.results
+  - orchestrator.scaling
+  - orchestrator.competition
+  system_events:
+  - system.incidents
+  - system.notifications
+  - system.health
+  - system.alerts
+  - system.thermal
+llm_profiles:
+  balanced_tier2:
+    cost_per_1k_tokens: 0.0
+    max_tokens: 4096
+    models:
+    - meta-llama/meta-llama-3-8b-instruct
+    - microsoft/phi-3-mini-128k-instruct
+    - microsoft/phi-3-small-8k-instruct
+    - microsoft/phi-3-small-128k-instruct
+    - qwen/qwen2.5-7b-instruct
+    - qwen/qwen2.5-32b-instruct
+    provider: sdk
+    strategy: round_robin_with_fallback
+    temperature: 0.2
+    timeout: 20
+  critical_tier1:
+    cost_per_1k_tokens: 0.0
+    max_tokens: 8192
+    models:
+    - ai21-labs/ai21-jamba-1.5-large
+    - mistralai/mixtral-8x7b-instruct-v0.1
+    - meta-llama/meta-llama-3-70b-instruct
+    - mistralai/mistral-7b-instruct-v0.3
+    - microsoft/phi-3-mini-4k-instruct
+    provider: sdk
+    strategy: competition_best_of_3
+    temperature: 0.1
+    timeout: 30
+  fast_tier4:
+    cost_per_1k_tokens: 0.0
+    max_tokens: 2048
+    models:
+    - meta-llama/llama-3.2-1b-instruct
+    - qwen/qwen2.5-3b-instruct
+    - qwen/qwen2.5-1.5b-instruct
+    - qwen/qwen2.5-0.5b-instruct
+    - microsoft/phi-3-medium-4k-instruct
+    provider: sdk
+    strategy: fastest_response
+    temperature: 0.1
+    timeout: 10
+  specialized_tier3:
+    cost_per_1k_tokens: 0.0
+    max_tokens: 4096
+    models:
+    - cohere/command-r-plus-08-2024
+    - cohere/command-r-08-2024
+    - mistralai/codestral-latest
+    - google/gemma-2-27b-it
+    - meta-llama/llama-3.2-3b-instruct
+    provider: sdk
+    strategy: task_specific_selection
+    temperature: 0.15
+    timeout: 25
+system_config:
+  arbitration_enabled: true
+  competition_enabled: true
+  failover_enabled: true
+  thermal_protection: true
+version: 2.0_production

@@ -1,0 +1,22 @@
+# Alert rules for Predator Analytics services
+
+groups:
+  - name: websocket_alerts
+    rules:
+      - alert: WebSocketNoConnections
+        expr: websocket_active_connections == 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "No active WebSocket connections"
+          description: "There have been no active WebSocket connections for 10 minutes, which may indicate a frontend connection issue or service problem."
+      
+      - alert: WebSocketHighConnectionCount
+        expr: websocket_active_connections > 500
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of WebSocket connections"
+          description: "There are more than 500 active WebSocket connections, which may indicate a potential performance issue or abuse." 

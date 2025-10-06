@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberFace AI - Демонстрація</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Orbitron', 'Fira Code', monospace;
+            background: linear-gradient(135deg, #05070A 0%, #0F121A 50%, #1A2332 100%);
+            color: #00FFC6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, #00FFC620 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, #0A75FF20 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, #A020F020 0%, transparent 50%);
+            z-index: -1;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(0, 255, 198, 0.1);
+            border: 2px solid #00FFC660;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px #00FFC6;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #00FFC6; }
+            to { text-shadow: 0 0 30px #00FFC6, 0 0 40px #0A75FF; }
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #0A75FF;
+            margin-bottom: 20px;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(45deg, #00FFC6, #0A75FF);
+            color: #05070A;
+            border-radius: 20px;
+            font-weight: bold;
+            animation: pulse-status 3s infinite;
+        }
+        
+        @keyframes pulse-status {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .demo-card {
+            background: rgba(10, 117, 255, 0.1);
+            border: 2px solid #0A75FF40;
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .demo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 198, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .demo-card:hover::before {
+            left: 100%;
+        }
+        
+        .demo-card:hover {
+            border-color: #0A75FF;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 198, 0.3);
+        }
+        
+        .demo-card h3 {
+            color: #00FFC6;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .demo-card p {
+            color: #C5D1E6;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .command-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .command-list li {
+            background: rgba(0, 255, 198, 0.1);
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 3px solid #00FFC6;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        .launch-button {
+            display: block;
+            width: 300px;
+            margin: 40px auto;
+            padding: 20px;
+            background: linear-gradient(45deg, #00FFC6, #0A75FF);
+            color: #05070A;
+            text-decoration: none;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 255, 198, 0.4);
+        }
+        
+        .launch-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 255, 198, 0.6);
+            background: linear-gradient(45deg, #0A75FF, #A020F0);
+        }
+        
+        .tech-specs {
+            background: rgba(160, 32, 240, 0.1);
+            border: 2px solid #A020F040;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .tech-specs h3 {
+            color: #A020F0;
+            margin-bottom: 15px;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .tech-item {
+            background: rgba(160, 32, 240, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 3px solid #A020F0;
+        }
+        
+        .warning {
+            background: rgba(255, 51, 51, 0.1);
+            border: 2px solid #FF333340;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #FF6B6B;
+        }
+        
+        .success {
+            background: rgba(0, 255, 198, 0.1);
+            border: 2px solid #00FFC640;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #00FFC6;
+        }
+    </style>
+</head>
+<body>
+    <div class="cyber-bg"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🤖 CYBERFACE AI</h1>
+            <div class="subtitle">Інтерактивний 3D Кібер-Асистент</div>
+            <div class="status">✅ СИСТЕМА АКТИВНА</div>
+        </div>
+        
+        <div class="demo-grid">
+            <div class="demo-card">
+                <h3>🎯 Основні можливості</h3>
+                <p>CyberFace AI - це революційний 3D асистент з повним голосовим інтерфейсом та емоційними реакціями.</p>
+                <ul class="command-list">
+                    <li>✅ 3D кібер-лице з WebGL</li>
+                    <li>✅ Голосове розпізнавання</li>
+                    <li>✅ Синтез мови українською</li>
+                    <li>✅ 5 емоційних станів</li>
+                    <li>✅ Команди навігації</li>
+                </ul>
+            </div>
+            
+            <div class="demo-card">
+                <h3>🎙️ Голосові команди</h3>
+                <p>Скажіть одну з цих фраз для навігації системою:</p>
+                <ul class="command-list">
+                    <li>"Покажи статус системи"</li>
+                    <li>"Відкрий модуль агентів"</li>
+                    <li>"Перейди до даних"</li>
+                    <li>"Активуй безпеку"</li>
+                    <li>"Привіт" / "Вітаю"</li>
+                </ul>
+            </div>
+            
+            <div class="demo-card">
+                <h3>💬 Текстові команди</h3>
+                <p>Або напишіть у чаті:</p>
+                <ul class="command-list">
+                    <li>статус / стан</li>
+                    <li>агенти / mas</li>
+                    <li>дані / аналітика</li>
+                    <li>безпека / загрози</li>
+                    <li>привіт / вітаю</li>
+                </ul>
+            </div>
+            
+            <div class="demo-card">
+                <h3>🎨 Візуальні ефекти</h3>
+                <p>Насолоджуйтесь неймовірними 3D ефектами:</p>
+                <ul class="command-list">
+                    <li>🔮 Wireframe кібер-голова</li>
+                    <li>👁️ Світлові очі (смарагдові)</li>
+                    <li>💋 Анімований рот</li>
+                    <li>✨ 100 частинок навколо</li>
+                    <li>⭕ 3 енергетичні кільця</li>
+                </ul>
+            </div>
+        </div>
+        
+        <a href="http://localhost:5090" class="launch-button" target="_blank">
+            🚀 ЗАПУСТИТИ NEXUS CORE
+        </a>
+        
+        <div class="success">
+            <strong>✅ Система готова!</strong> Фронтенд працює на порті 5090, бекенд на порті 8000.
+        </div>
+        
+        <div class="tech-specs">
+            <h3>⚡ Технічні характеристики</h3>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <strong>3D Engine:</strong><br>Three.js + WebGL
+                </div>
+                <div class="tech-item">
+                    <strong>Voice API:</strong><br>Web Speech API
+                </div>
+                <div class="tech-item">
+                    <strong>Animations:</strong><br>Framer Motion
+                </div>
+                <div class="tech-item">
+                    <strong>UI Framework:</strong><br>Material-UI
+                </div>
+                <div class="tech-item">
+                    <strong>Language:</strong><br>TypeScript
+                </div>
+                <div class="tech-item">
+                    <strong>Rendering:</strong><br>React 18
+                </div>
+            </div>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ Важливо:</strong> Для роботи голосового інтерфейсу потрібен HTTPS або localhost. 
+            Переконайтеся, що браузер має дозвіл на використання мікрофона.
+        </div>
+        
+        <div class="demo-card" style="margin-top: 30px;">
+            <h3>🎮 Інструкції для тестування</h3>
+            <p><strong>Крок 1:</strong> Відкрийте Nexus Core за посиланням вище</p>
+            <p><strong>Крок 2:</strong> Знайдіть Floating Action Button (іконка робота) в правому нижньому куті</p>
+            <p><strong>Крок 3:</strong> Натисніть на кнопку для відкриття AI-асистента</p>
+            <p><strong>Крок 4:</strong> Спробуйте голосові команди або напишіть у чаті</p>
+            <p><strong>Крок 5:</strong> Насолоджуйтесь 3D анімаціями та навігацією!</p>
+        </div>
+    </div>
+    
+    <script>
+        // Додаємо інтерактивності
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.demo-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) rotateX(5deg)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) rotateX(0)';
+                });
+            });
+            
+            // Анімація появи карток
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

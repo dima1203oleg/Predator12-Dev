@@ -1,0 +1,91 @@
+apiVersion: 1
+
+groups:
+  - name: Application
+    interval: 1m
+    rules:
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(http_requests_total{status=~"5.."}[5m])) by (service, method, path)
+          /
+          sum(rate(http_requests_total[5m])) by (service, method, path)
+          * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+          team: backend
+        annotations:
+          summary: "High error rate on {{ $labels.service }}"
+          description: |
+            {{ $labels.service }} is experiencing {{ $value | humanizePercentage }} error rate
+            for {{ $labels.method }} {{ $labels.path }}.
+
+      - alert: HighRequestLatency
+        expr: |
+          histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, service))
+          > 1
+        for: 10m
+        labels:
+          severity: warning
+          team: backend
+        annotations:
+          summary: "High request latency on {{ $labels.service }}"
+          description: |
+            {{ $labels.service }} has a 99th percentile request latency of {{ $value }}s.
+
+  - name: Kubernetes
+    interval: 1m
+    rules:
+      - alert: KubePodCrashLooping
+        expr: |
+          kube_pod_container_status_restarts_total > 0
+        for: 5m
+        labels:
+          severity: critical
+          team: devops
+        annotations:
+          summary: "Pod {{ $labels.pod }} is crash looping"
+          description: |
+            Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has restarted {{ $value }} times.
+
+      - alert: KubeNodeNotReady
+        expr: |
+          kube_node_status_condition{condition="Ready", status="false"} == 1
+        for: 10m
+        labels:
+          severity: critical
+          team: devops
+        annotations:
+          summary: "Node {{ $labels.node }} is not ready"
+          description: |
+            Node {{ $labels.node }} has been in a not ready state for more than 10 minutes.
+
+  - name: Business
+    interval: 5m
+    rules:
+      - alert: HighOrderFailureRate
+        expr: |
+          sum(rate(orders_failed_total[5m])) by (service)
+          /
+          sum(rate(orders_processed_total[5m])) by (service)
+          * 100 > 1
+        for: 15m
+        labels:
+          severity: critical
+          team: business
+        annotations:
+          summary: "High order failure rate on {{ $labels.service }}"
+          description: |
+            {{ $labels.service }} has a {{ $value | humanizePercentage }} order failure rate.
+
+      - alert: LowInventory
+        expr: |
+          sum(inventory_items_available) by (product_id) < 10
+        for: 1h
+        labels:
+          severity: warning
+          team: business
+        annotations:
+          summary: "Low inventory for product {{ $labels.product_id }}"
+          description: |
+            Only {{ $value }} items left in stock for product {{ $labels.product_id }}.

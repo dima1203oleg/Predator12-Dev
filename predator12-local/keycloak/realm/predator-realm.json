@@ -1,0 +1,38 @@
+{
+  "realm": "predator",
+  "enabled": true,
+  "displayName": "Predator Analytics",
+  "clients": [
+    {
+      "clientId": "predator-web",
+      "name": "Predator WebChat",
+      "rootUrl": "http://localhost:3001",
+      "baseUrl": "/",
+      "redirectUris": [
+        "http://localhost:3001/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3001",
+        "http://localhost:3010"
+      ],
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "implicitFlowEnabled": false
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "email": "admin@predator.local",
+      "emailVerified": true,
+      "firstName": "Predator",
+      "lastName": "Admin",
+      "credentials": [
+        { "type": "password", "value": "admin", "temporary": false }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{{ define "slack.default.title" }}{{ .CommonLabels.alertname }} - {{ .CommonLabels.severity | toUpper }}{{ end }}
+
+{{ define "slack.default.text" }}
+{{ range .Alerts }}
+*Alert:* {{ .Annotations.summary }}
+*Description:* {{ .Annotations.description }}
+*Status:* {{ .Status | toUpper }}
+*Starts at:* {{ .StartsAt.Format "2006-01-02 15:04:05 UTC" }}
+{{ if gt (len .Labels) 0 }}*Labels:*
+{{ range .Labels.SortedPairs }}• {{ .Name }}: `{{ .Value }}`
+{{ end }}
+{{ end }}
+{{ end }}
+{{ end }}

@@ -1,0 +1,45 @@
+{
+  "dashboard": {
+    "title": "ETL Data Quality",
+    "panels": [
+      {
+        "title": "Processing Volume",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "sum(rate(dq_records_processed_total[5m])) by (source)",
+            "legend": "{{source}}"
+          }
+        ]
+      },
+      {
+        "title": "Data Completeness",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "dq_field_completeness_ratio",
+            "legend": "{{field}}"
+          }
+        ]
+      },
+      {
+        "title": "Error Rates",
+        "type": "heatmap",
+        "targets": [
+          {
+            "expr": "sum(rate(dq_validation_errors_total[5m])) by (type)",
+            "legend": "{{type}}"
+          }
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "source",
+          "query": "label_values(dq_records_processed_total, source)"
+        }
+      ]
+    }
+  }
+}

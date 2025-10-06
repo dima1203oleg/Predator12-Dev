@@ -1,0 +1,46 @@
+groups:
+- name: cache-alerts
+  rules:
+  - alert: CacheHitRatioLow
+    expr: (
+      sum(rate(tiered_cache_hit_memory[5m]) + rate(tiered_cache_hit_redis[5m]))
+      /
+      sum(rate(tiered_cache_hit_memory[5m]) + rate(tiered_cache_hit_redis[5m]) + rate(tiered_cache_miss[5m]))
+    ) < 0.7
+    for: 10m
+    labels:
+      severity: warning
+      team: platform
+    annotations:
+      summary: "Низький кеш hit ratio (<70% за 10 хв)"
+      description: "Перевірте TTL, обсяг кешу та шаблони запитів. Hit ratio впав нижче 70%."
+
+  - alert: CacheEvictionsHigh
+    expr: sum(rate(tiered_cache_evictions[5m])) > 10
+    for: 5m
+    labels:
+      severity: warning
+      team: platform
+    annotations:
+      summary: "Високі евікції кешу"
+      description: "Евікції з in-memory LRU перевищують поріг. Можливо, замалий розмір кешу."
+
+  - alert: CacheMissRateHigh
+    expr: sum(rate(tiered_cache_miss[5m])) > 50
+    for: 5m
+    labels:
+      severity: critical
+      team: platform
+    annotations:
+      summary: "Висока частота промахів кешу"
+      description: "Miss rate > 50/хв протягом 5 хв. Перевірте доступність Redis або холодний старт."
+
+  - alert: CacheRedisUnavailable
+    expr: absent(tiered_cache_set)
+    for: 10m
+    labels:
+      severity: critical
+      team: platform
+    annotations:
+      summary: "Метрики кешу відсутні"
+      description: "Prometheus не бачить метрики кешу. Можлива проблема з /metrics або експортером."

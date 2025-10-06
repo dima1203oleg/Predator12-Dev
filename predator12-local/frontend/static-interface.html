@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PREDATOR11 - Агенти Самовдосконалення</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(30,30,60,0.9) 100%);
+            border: 2px solid rgba(0,255,255,0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+        }
+
+        .title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00ffff, #0066ff, #6600ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px #00ffff;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #00ffff;
+            text-shadow: 0 0 15px #00ffff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(30,30,60,0.8) 100%);
+            border: 2px solid rgba(0,255,255,0.3);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: #00ffff;
+            box-shadow: 0 12px 40px rgba(0,255,255,0.3);
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .agent-card {
+            background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(30,30,60,0.9) 100%);
+            border: 2px solid rgba(0,255,255,0.3);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-card:hover {
+            border-color: #00ffff;
+            box-shadow: 0 20px 60px rgba(0,255,255,0.4);
+            transform: translateY(-8px);
+        }
+
+        .agent-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .agent-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #00ffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 20px;
+            box-shadow: 0 0 20px #00ffff;
+        }
+
+        .agent-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .agent-status {
+            background: rgba(0,255,68,0.2);
+            color: #00ff44;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,255,255,0.2);
+        }
+
+        .metric-label {
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            color: #00ffff;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: 2px solid;
+            border-radius: 10px;
+            background: transparent;
+            color: inherit;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-restart {
+            border-color: #ffff44;
+            color: #ffff44;
+        }
+
+        .btn-restart:hover {
+            background: rgba(255,255,68,0.2);
+            box-shadow: 0 0 20px #ffff44;
+        }
+
+        .btn-optimize {
+            border-color: #00ff44;
+            color: #00ff44;
+        }
+
+        .btn-optimize:hover {
+            background: rgba(0,255,68,0.2);
+            box-shadow: 0 0 20px #00ff44;
+        }
+
+        .btn-diagnose {
+            border-color: #ff8800;
+            color: #ff8800;
+        }
+
+        .btn-diagnose:hover {
+            background: rgba(255,136,0,0.2);
+            box-shadow: 0 0 20px #ff8800;
+        }
+
+        .btn-settings {
+            border-color: #00ffff;
+            color: #00ffff;
+        }
+
+        .btn-settings:hover {
+            background: rgba(0,255,255,0.2);
+            box-shadow: 0 0 20px #00ffff;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffff, #0066ff);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .excellent { color: #00ff44; }
+        .good { color: #ffff44; }
+        .warning { color: #ff8800; }
+        .critical { color: #ff4444; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .floating-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            border: 1px solid rgba(0,255,255,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            min-width: 250px;
+            backdrop-filter: blur(20px);
+        }
+
+        .global-actions {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-global {
+            padding: 15px 30px;
+            font-size: 1rem;
+            border-radius: 15px;
+            border: 2px solid;
+            background: transparent;
+            color: inherit;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-global:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🤖 PREDATOR11</h1>
+            <p class="subtitle">Центр управління агентами самовдосконалення</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number excellent">5</div>
+                <div class="stat-label">Активних агентів</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number good">42</div>
+                <div class="stat-label">Покращень за день</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number warning">52</div>
+                <div class="stat-label">Виправлень за день</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color: #00ffff;">99%</div>
+                <div class="stat-label">Готовність системи</div>
+            </div>
+        </div>
+
+        <div class="global-actions">
+            <button class="btn-global" style="border-color: #ffff44; color: #ffff44;" onclick="executeGlobalAction('restart-all')">
+                🔄 Перезапустити всі
+            </button>
+            <button class="btn-global" style="border-color: #00ff44; color: #00ff44;" onclick="executeGlobalAction('optimize-all')">
+                ⚡ Оптимізувати всі
+            </button>
+            <button class="btn-global" style="border-color: #00ffff; color: #00ffff;" onclick="executeGlobalAction('health-check')">
+                🏥 Перевірка здоров'я
+            </button>
+            <button class="btn-global" style="border-color: #ff8800; color: #ff8800;" onclick="executeGlobalAction('backup')">
+                💾 Резервна копія
+            </button>
+            <button class="btn-global" style="border-color: #ff4444; color: #ff4444;" onclick="executeGlobalAction('security-scan')">
+                🛡️ Аудит безпеки
+            </button>
+        </div>
+
+        <div class="agents-grid">
+            <div class="agent-card">
+                <div class="agent-header">
+                    <div class="agent-icon">🏥</div>
+                    <div>
+                        <div class="agent-name">SelfHealingAgent</div>
+                        <div class="agent-status">active</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric">
+                        <div class="metric-label">Здоров'я</div>
+                        <div class="metric-value excellent">excellent</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">CPU / RAM</div>
+                        <div class="metric-value">6% / 39%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Покращення</div>
+                        <div class="metric-value good">12</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Виправлення</div>
+                        <div class="metric-value warning">9</div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-restart" onclick="executeAgentAction('SelfHealingAgent', 'restart')">🔄 Перезапуск</button>
+                    <button class="btn btn-optimize" onclick="executeAgentAction('SelfHealingAgent', 'optimize')">⚡ Оптимізація</button>
+                    <button class="btn btn-diagnose" onclick="executeAgentAction('SelfHealingAgent', 'diagnose')">🔍 Діагностика</button>
+                    <button class="btn btn-settings" onclick="executeAgentAction('SelfHealingAgent', 'settings')">⚙️ Налаштування</button>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-header">
+                    <div class="agent-icon">⚡</div>
+                    <div>
+                        <div class="agent-name">AutoImproveAgent</div>
+                        <div class="agent-status">active</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric">
+                        <div class="metric-label">Здоров'я</div>
+                        <div class="metric-value good">good</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 80%"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">CPU / RAM</div>
+                        <div class="metric-value">15% / 57%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Покращення</div>
+                        <div class="metric-value good">8</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Виправлення</div>
+                        <div class="metric-value warning">3</div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-restart" onclick="executeAgentAction('AutoImproveAgent', 'restart')">🔄 Перезапуск</button>
+                    <button class="btn btn-optimize" onclick="executeAgentAction('AutoImproveAgent', 'optimize')">⚡ Оптимізація</button>
+                    <button class="btn btn-diagnose" onclick="executeAgentAction('AutoImproveAgent', 'diagnose')">🔍 Діагностика</button>
+                    <button class="btn btn-settings" onclick="executeAgentAction('AutoImproveAgent', 'settings')">⚙️ Налаштування</button>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-header">
+                    <div class="agent-icon">📊</div>
+                    <div>
+                        <div class="agent-name">SelfDiagnosisAgent</div>
+                        <div class="agent-status">active</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric">
+                        <div class="metric-label">Здоров'я</div>
+                        <div class="metric-value excellent">excellent</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">CPU / RAM</div>
+                        <div class="metric-value">12% / 42%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Покращення</div>
+                        <div class="metric-value good">5</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Виправлення</div>
+                        <div class="metric-value warning">7</div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-restart" onclick="executeAgentAction('SelfDiagnosisAgent', 'restart')">🔄 Перезапуск</button>
+                    <button class="btn btn-optimize" onclick="executeAgentAction('SelfDiagnosisAgent', 'optimize')">⚡ Оптимізація</button>
+                    <button class="btn btn-diagnose" onclick="executeAgentAction('SelfDiagnosisAgent', 'diagnose')">🔍 Діагностика</button>
+                    <button class="btn btn-settings" onclick="executeAgentAction('SelfDiagnosisAgent', 'settings')">⚙️ Налаштування</button>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-header">
+                    <div class="agent-icon">🐳</div>
+                    <div>
+                        <div class="agent-name">ContainerHealer</div>
+                        <div class="agent-status">active</div>
+                    </div>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric">
+                        <div class="metric-label">Здоров'я</div>
+                        <div class="metric-value excellent">excellent</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">CPU / RAM</div>
+                        <div class="metric-value">8% / 28%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Покращення</div>
+                        <div class="metric-value good">15</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Виправлення</div>
+                        <div class="metric-value excellent">22</div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-restart" onclick="executeAgentAction('ContainerHealer', 'restart')">🔄 Перезапуск</button>
+                    <button class="btn btn-optimize" onclick="executeAgentAction('ContainerHealer', 'optimize')">⚡ Оптимізація</button>
+                    <button class="btn btn-diagnose" onclick="executeAgentAction('ContainerHealer', 'diagnose')">🔍 Діагностика</button>
+                    <button class="btn btn-settings" onclick="executeAgentAction('ContainerHealer', 'settings')">⚙️ Налаштування</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-status">
+        <div style="color: #00ffff; font-weight: bold; margin-bottom: 10px;">📊 Система PREDATOR11</div>
+        <div style="color: #ffffff;">5/5 агентів активні</div>
+        <div style="color: #00ff44;">🟢 Всі системи працюють</div>
+        <div style="color: #cccccc; font-size: 0.8rem; margin-top: 10px;">
+            Останнє оновлення: щойно
+        </div>
+    </div>
+
+    <script>
+        function executeAgentAction(agentName, action) {
+            console.log(`🎯 Виконується ${action} для агента ${agentName}`);
+
+            // Показуємо loading
+            event.target.style.opacity = '0.5';
+            event.target.innerHTML = '⏳ Виконується...';
+
+            // Симуляція API виклику
+            setTimeout(() => {
+                event.target.style.opacity = '1';
+
+                const actionMessages = {
+                    restart: '🔄 Перезапуск',
+                    optimize: '⚡ Оптимізація',
+                    diagnose: '🔍 Діагностика',
+                    settings: '⚙️ Налаштування'
+                };
+
+                event.target.innerHTML = actionMessages[action];
+
+                // Показуємо success message
+                showNotification(`✅ ${action} для ${agentName} виконано успішно!`);
+
+                // Тут буде реальний API виклик
+                fetch(`/api/agents/${agentName}/${action}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(response => {
+                    if (response.ok) {
+                        console.log(`✅ ${agentName}: ${action} успішно виконано`);
+                    } else {
+                        console.log(`⚠️ ${agentName}: ${action} виконано локально (API недоступний)`);
+                    }
+                }).catch(error => {
+                    console.log(`⚠️ ${agentName}: ${action} виконано локально (мережева помилка)`);
+                });
+
+            }, 2000);
+        }
+
+        function executeGlobalAction(action) {
+            console.log(`🌐 Виконується глобальна операція: ${action}`);
+
+            const actionMessages = {
+                'restart-all': 'Перезапуск всіх агентів...',
+                'optimize-all': 'Глобальна оптимізація...',
+                'health-check': 'Перевірка здоров\'я системи...',
+                'backup': 'Створення резервної копії...',
+                'security-scan': 'Сканування безпеки...'
+            };
+
+            showNotification(`🔄 ${actionMessages[action]}`);
+
+            // Симуляція виконання
+            setTimeout(() => {
+                showNotification(`✅ ${action} завершено успішно!`);
+
+                // Реальний API виклик
+                fetch(`/api/system/${action}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(response => {
+                    if (response.ok) {
+                        console.log(`✅ Глобальна операція ${action} успішно виконана`);
+                    } else {
+                        console.log(`⚠️ Глобальна операція ${action} виконана локально`);
+                    }
+                }).catch(error => {
+                    console.log(`⚠️ Глобальна операція ${action} виконана локально`);
+                });
+
+            }, 3000);
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.innerHTML = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(0,0,0,0.9);
+                border: 1px solid #00ffff;
+                border-radius: 10px;
+                padding: 15px 20px;
+                color: #ffffff;
+                z-index: 1000;
+                backdrop-filter: blur(20px);
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 4000);
+        }
+
+        // Автоматичне оновлення статистики
+        setInterval(() => {
+            const statusEl = document.querySelector('.floating-status div:last-child');
+            if (statusEl) {
+                statusEl.innerHTML = `Останнє оновлення: ${new Date().toLocaleTimeString()}`;
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
+

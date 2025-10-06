@@ -1,0 +1,32 @@
+{
+    "name": "Predator11 Development",
+    "dockerComposeFile": "../docker-compose.dev.yml",
+    "service": "dev",
+    "workspaceFolder": "/workspace",
+    
+    "features": {
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.11",
+            "installTools": true
+        },
+        "ghcr.io/devcontainers/features/docker-in-docker:1": {}
+    },
+    
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "python.linting.enabled": true,
+                "python.formatting.provider": "black"
+            }
+        }
+    },
+    
+    "postCreateCommand": "pip install -r requirements-dev.txt",
+    
+    "remoteUser": "vscode"
+}

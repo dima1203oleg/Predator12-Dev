@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint-and-health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies (codespaces-models)
+        run: npm ci
+        working-directory: codespaces-models
+
+      - name: Lint (optional)
+        run: npx --yes eslint . || true
+        working-directory: codespaces-models
+
+      - name: Start MCP server (background)
+        env:
+          PORT: 3010
+          METRICS_ENABLED: '1'
+        run: |
+          nohup node server.js > server_ci.log 2>&1 &
+          echo $! > server_ci.pid
+        working-directory: codespaces-models
+
+      - name: Wait for readiness
+        run: |
+          for i in {1..20}; do
+            curl -fsS http://localhost:3010/ready && exit 0
+            sleep 3
+          done
+          echo "MCP server not ready" >&2
+          tail -n +1 codespaces-models/server_ci.log || true
+          exit 1
+
+      - name: Show metrics head
+        run: |
+          curl -fsS http://localhost:3010/metrics | head -n 30 || true
+
+      - name: Stop MCP server
+        if: always()
+        run: |
+          if [ -f codespaces-models/server_ci.pid ]; then kill $(cat codespaces-models/server_ci.pid) || true; fi

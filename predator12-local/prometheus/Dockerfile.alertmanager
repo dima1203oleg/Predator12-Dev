@@ -1,0 +1,20 @@
+FROM prom/alertmanager:v0.26.0
+
+# Copy configuration from canonical observability directory
+COPY observability/alertmanager/alertmanager.yml /etc/alertmanager/alertmanager.yml
+
+# Set permissions
+USER root
+RUN chown -R alertmanager:alertmanager /etc/alertmanager
+USER alertmanager
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:9093/-/healthy || exit 1
+
+EXPOSE 9093
+
+CMD ["--config.file=/etc/alertmanager/alertmanager.yml", \
+     "--storage.path=/alertmanager", \
+     "--web.external-url=http://localhost:9093/", \
+     "--cluster.listen-address=0.0.0.0:9094"]

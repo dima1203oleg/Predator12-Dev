@@ -1,0 +1,261 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate
+  namespace: predator12-prod
+spec:
+  args:
+    - name: service-name
+    - name: threshold
+      value: "0.95"  # 95% success rate
+  
+  metrics:
+    - name: success-rate
+      interval: 1m
+      count: 5
+      successCondition: result >= {{args.threshold}}
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring:9090
+          query: |
+            sum(rate(
+              http_requests_total{
+                service="{{args.service-name}}",
+                status=~"2.."
+              }[5m]
+            )) 
+            / 
+            sum(rate(
+              http_requests_total{
+                service="{{args.service-name}}"
+              }[5m]
+            ))
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: latency
+  namespace: predator12-prod
+spec:
+  args:
+    - name: service-name
+    - name: threshold
+      value: "500"  # 500ms P95 latency
+  
+  metrics:
+    - name: p95-latency
+      interval: 1m
+      count: 5
+      successCondition: result <= {{args.threshold}}
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring:9090
+          query: |
+            histogram_quantile(0.95,
+              sum(rate(
+                http_request_duration_seconds_bucket{
+                  service="{{args.service-name}}"
+                }[5m]
+              )) by (le)
+            ) * 1000
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: error-rate
+  namespace: predator12-prod
+spec:
+  args:
+    - name: service-name
+    - name: threshold
+      value: "0.05"  # 5% error rate max
+  
+  metrics:
+    - name: error-rate
+      interval: 1m
+      count: 5
+      successCondition: result <= {{args.threshold}}
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring:9090
+          query: |
+            sum(rate(
+              http_requests_total{
+                service="{{args.service-name}}",
+                status=~"5.."
+              }[5m]
+            )) 
+            / 
+            sum(rate(
+              http_requests_total{
+                service="{{args.service-name}}"
+              }[5m]
+            ))
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: continuous-success-rate
+  namespace: predator12-prod
+spec:
+  args:
+    - name: service-name
+  
+  metrics:
+    - name: success-rate
+      interval: 1m
+      # No count - runs continuously
+      successCondition: result >= 0.95
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring:9090
+          query: |
+            sum(rate(
+              http_requests_total{
+                service="{{args.service-name}}",
+                status=~"2.."
+              }[5m]
+            )) 
+            / 
+            sum(rate(
+              http_requests_total{
+                service="{{args.service-name}}"
+              }[5m]
+            ))
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: cpu-usage
+  namespace: predator12-prod
+spec:
+  args:
+    - name: service-name
+    - name: threshold
+      value: "80"  # 80% CPU max
+  
+  metrics:
+    - name: cpu-usage
+      interval: 1m
+      count: 5
+      successCondition: result <= {{args.threshold}}
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring:9090
+          query: |
+            sum(rate(
+              container_cpu_usage_seconds_total{
+                pod=~"{{args.service-name}}-.*"
+              }[5m]
+            )) by (pod) * 100
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: memory-usage
+  namespace: predator12-prod
+spec:
+  args:
+    - name: service-name
+    - name: threshold
+      value: "85"  # 85% memory max
+  
+  metrics:
+    - name: memory-usage
+      interval: 1m
+      count: 5
+      successCondition: result <= {{args.threshold}}
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring:9090
+          query: |
+            (sum(container_memory_working_set_bytes{
+              pod=~"{{args.service-name}}-.*"
+            }) by (pod) 
+            / 
+            sum(container_spec_memory_limit_bytes{
+              pod=~"{{args.service-name}}-.*"
+            }) by (pod)) * 100
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: database-connections
+  namespace: predator12-prod
+spec:
+  args:
+    - name: service-name
+    - name: threshold
+      value: "80"  # 80% of max connections
+  
+  metrics:
+    - name: db-connections
+      interval: 1m
+      count: 5
+      successCondition: result <= {{args.threshold}}
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring:9090
+          query: |
+            (pg_stat_database_numbackends{
+              datname="predator12"
+            } / pg_settings_max_connections) * 100
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: celery-queue-length
+  namespace: predator12-prod
+spec:
+  args:
+    - name: service-name
+    - name: threshold
+      value: "1000"  # Max 1000 tasks in queue
+  
+  metrics:
+    - name: queue-length
+      interval: 1m
+      count: 5
+      successCondition: result <= {{args.threshold}}
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring:9090
+          query: |
+            sum(celery_queue_length{
+              service="{{args.service-name}}"
+            })
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: ai-agent-health
+  namespace: predator12-prod
+spec:
+  args:
+    - name: service-name
+  
+  metrics:
+    - name: agent-health
+      interval: 1m
+      count: 5
+      successCondition: result >= 0.9  # 90% agents healthy
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring:9090
+          query: |
+            sum(ai_agent_healthy{
+              service="{{args.service-name}}"
+            }) 
+            / 
+            sum(ai_agent_total{
+              service="{{args.service-name}}"
+            })

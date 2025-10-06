@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Predator AI Platform - Потужна платформа для роботи з AI моделями" />
+    <meta name="theme-color" content="#667eea" />
+    <title>🚀 Predator AI Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      #root {
+        min-height: 100vh;
+      }
+
+      /* Loading animation */
+      .loading {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #667eea;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.1); }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="loading">🚀 Loading Predator AI Platform...</div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

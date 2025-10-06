@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Cache Performance",
+    "panels": [
+      {
+        "title": "Hit Rate",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "cache_hits_total / (cache_hits_total + cache_misses_total)",
+            "legend": "Hit Rate"
+          }
+        ]
+      },
+      {
+        "title": "Memory Usage",
+        "type": "gauge",
+        "targets": [
+          {
+            "expr": "cache_size_bytes / 1000000",
+            "legend": "MB Used"
+          }
+        ]
+      },
+      {
+        "title": "Top Hot Keys",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "topk(10, rate(cache_accesses_total[5m]))",
+            "legend": "{{key}}"
+          }
+        ]
+      }
+    ],
+    "alerts": [
+      {
+        "name": "LowCacheHitRate",
+        "expr": "cache_hits_total / (cache_hits_total + cache_misses_total) < 0.7",
+        "for": "15m",
+        "severity": "warning"
+      },
+      {
+        "name": "CacheOverflow",
+        "expr": "cache_size_bytes > 0.9 * cache_size_limit_bytes",
+        "severity": "critical"
+      }
+    ]
+  }
+}

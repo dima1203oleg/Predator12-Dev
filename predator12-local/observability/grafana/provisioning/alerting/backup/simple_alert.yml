@@ -1,0 +1,35 @@
+apiVersion: 1
+groups:
+  - name: SimpleAlerts
+    folder: Simple Alerts
+    interval: 1m
+    orgId: 1
+    rules:
+      - alert: TestAlert
+        title: Test Alert
+        uid: test-alert-1
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            datasourceUid: "prometheus"
+            model:
+              datasource:
+                type: "prometheus"
+                uid: "prometheus"
+              expr: "1 == 1"
+              refId: A
+              editorMode: "code"
+              instant: false
+              range: true
+              intervalMs: 10000
+              maxDataPoints: 100
+              timeRange:
+                from: "now-5m"
+                to: "now"
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "This is a test alert"
+          description: "Test alert is firing"

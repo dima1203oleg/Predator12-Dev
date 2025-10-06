@@ -1,0 +1,21 @@
+# Alert for container restarts
+groups:
+  - name: container_alerts
+    rules:
+      - alert: ContainerRestarted
+        expr: increase(kube_pod_container_status_restarts_total[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container restarted on {{ $labels.instance }}"
+          description: "Container {{ $labels.container }} in pod {{ $labels.pod }} has restarted {{ $value }} times in the last 5 minutes"
+
+      - alert: MultipleContainerRestarts
+        expr: increase(kube_pod_container_status_restarts_total[1h]) > 3
+        for: 15m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Multiple container restarts on {{ $labels.instance }}"
+          description: "Container {{ $labels.container }} in pod {{ $labels.pod }} has restarted {{ $value }} times in the last hour"

@@ -1,0 +1,101 @@
+apiVersion: 1
+groups:
+  - name: SystemAlerts
+    folder: System Alerts
+    interval: 1m
+    orgId: 1
+    rules:
+      # CPU Usage Alert
+      - alert: HighCPUUsage
+        title: High CPU Usage
+        uid: high-cpu-usage
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            datasourceUid: "prometheus"
+            model:
+              datasource:
+                type: "prometheus"
+                uid: "prometheus"
+              expr: >
+                100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[1m])) * 100 > 80
+              refId: A
+              editorMode: "code"
+              instant: false
+              range: true
+              intervalMs: 10000
+              maxDataPoints: 100
+              timeRange:
+                from: "now-5m"
+                to: "now"
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is {{ $value | humanize }}%"
+
+      # Memory Usage Alert
+      - alert: HighMemoryUsage
+        title: High Memory Usage
+        uid: high-memory-usage
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            datasourceUid: "prometheus"
+            model:
+              datasource:
+                type: "prometheus"
+                uid: "prometheus"
+              expr: >
+                (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / 
+                node_memory_MemTotal_bytes * 100 > 80
+              refId: A
+              editorMode: "code"
+              instant: false
+              range: true
+              intervalMs: 10000
+              maxDataPoints: 100
+              timeRange:
+                from: "now-5m"
+                to: "now"
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage is {{ $value | humanize }}%"
+
+      # Disk Space Alert
+      - alert: LowDiskSpace
+        title: Low Disk Space
+        uid: low-disk-space
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            datasourceUid: "prometheus"
+            model:
+              datasource:
+                type: "prometheus"
+                uid: "prometheus"
+              expr: >
+                (node_filesystem_avail_bytes{mountpoint="/", fstype!="tmpfs"} * 100) / 
+                node_filesystem_size_bytes{mountpoint="/", fstype!="tmpfs"} < 20
+              refId: A
+              editorMode: "code"
+              instant: false
+              range: true
+              intervalMs: 10000
+              maxDataPoints: 100
+              timeRange:
+                from: "now-5m"
+                to: "now"
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low disk space on {{ $labels.instance }} ({{ $labels.mountpoint }})"
+          description: "Only {{ $value | humanize }}% available on {{ $labels.mountpoint }}"

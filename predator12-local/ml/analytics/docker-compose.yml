@@ -1,0 +1,190 @@
+##############################################################
+# Predator Analytics Docker Compose Stack - Clean Version
+# This is a clean version with a single, properly configured Alertmanager instance
+##############################################################
+
+version: '3.8'
+
+services:
+  # === Alertmanager (Alert Management) ===
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    restart: unless-stopped
+    user: "1000:1000"
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./observability/alertmanager:/etc/alertmanager
+      - alertmanager-data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+      - '--cluster.peer=alertmanager:9094'
+    environment:
+      - "TZ=Europe/Kyiv"
+    networks:
+      - predator-net
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:9093/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # === Prometheus (Monitoring) ===
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    user: "1000:1000"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observability/prometheus.yml/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./observability/prometheus.yml/rules:/etc/prometheus/rules
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-lifecycle'
+      - '--storage.tsdb.retention.time=30d'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.external-url=/prometheus'
+    environment:
+      - "TZ=Europe/Kyiv"
+    networks:
+      - predator-net
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # === Grafana (Dashboards) ===
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    user: "1000:1000"
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_METRICS_ENABLED=true
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_SECURITY_DISABLE_INITIAL_ADMIN_PASSWORD_HINT=true
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_AUTH_BASIC_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/grafana/
+      - GF_SERVER_DOMAIN=localhost
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+      - GF_SERVER_ENFORCE_DOMAIN=false
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel,natel-plotly-panel,mtanda-histogram-panel
+      - TZ=Europe/Kyiv
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - grafana-etc:/etc/grafana/provisioning
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning
+      - ./observability/grafana/dashboards:/etc/grafana/dashboards
+    depends_on:
+      - prometheus
+    networks:
+      - predator-net
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # === Node Exporter (Host metrics) ===
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    restart: unless-stopped
+    pid: host
+    user: root
+    ports:
+      - "9100:9100"
+    command:
+      - '--path.rootfs=/host'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--collector.netclass.ignored-devices=^veth.*'
+      - '--collector.netdev.ignored-devices=^veth.*'
+    volumes:
+      - '/:/host:ro,rslave'
+      - '/etc/machine-id:/etc/machine-id:ro'
+      - '/etc/os-release:/etc/os-release:ro'
+    networks:
+      - predator-net
+
+  # === cAdvisor (Container metrics) ===
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - "/dev/kmsg:/dev/kmsg"
+    ports:
+      - "8082:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /dev/disk/:/dev/disk:ro
+      - /cgroup:/cgroup:ro
+    networks:
+      - predator-net
+
+  # === Loki (Log Aggregation) ===
+  loki:
+    image: grafana/loki:2.9.2
+    container_name: loki
+    restart: unless-stopped
+    user: "1000:1000"
+    ports:
+      - "3100:3100"
+    volumes:
+      - loki-data:/loki
+      - ./observability/loki/loki-config.yml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - predator-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/ready || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # === OpenSearch Exporter (Prometheus) ===
+  opensearch_exporter:
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:latest
+    container_name: opensearch_exporter
+    command:
+      - '--es.uri=http://opensearch:9200'
+    ports:
+      - "9114:9114"
+    depends_on:
+      - opensearch
+    networks:
+      - predator-net
+
+networks:
+  predator-net:
+    driver: bridge
+
+volumes:
+  alertmanager-data:
+  prometheus-data:
+  grafana-data:
+  grafana-etc:
+  loki-data:

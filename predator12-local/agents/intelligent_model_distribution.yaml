@@ -1,0 +1,464 @@
+agents:
+  Anomaly:
+    category: real_time_detection
+    concurrency:
+      load_balancing: fastest_response
+      max_concurrent: 6
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - cohere/command-r-08-2024
+      fallback:
+      - qwen/qwen2.5-14b-instruct
+      - mistral/ministral-8b-2410
+      primary:
+      - meta/meta-llama-3.2-3b-instruct
+      - microsoft/phi-3-small-128k-instruct
+  Arbiter:
+    category: decision_making
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 2
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - mistral/mistral-large-2411
+      primary:
+      - qwen/qwen2.5-32b-instruct
+  AutoHeal:
+    category: code_generation
+    concurrency:
+      load_balancing: code_quality
+      max_concurrent: 2
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - qwen/qwen2.5-3b-instruct
+      fallback:
+      - core42/jais-30b-chat
+      - microsoft/phi-3-small-8k-instruct
+      primary:
+      - deepseek/deepseek-coder-v2
+      - ai21/ai21-jamba-1-5-mini
+  BillingGate:
+    category: financial_analysis
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 2
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - microsoft/phi-3-mini-128k-instruct
+      primary:
+      - qwen/qwen2.5-3b-instruct
+  ChiefOrchestrator:
+    category: critical_reasoning
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 4
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - openai/gpt-4o-2024-11-20
+      fallback:
+      - qwen/qwen2.5-72b-instruct
+      - mistral/mixtral-8x22b-instruct
+      primary:
+      - deepseek/deepseek-r1
+      - meta/meta-llama-3.3-70b-instruct
+  ComplianceMonitor:
+    category: compliance_check
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 3
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - deepseek/deepseek-v3
+      primary:
+      - microsoft/phi-3-vision-128k-instruct
+  DataQuality:
+    category: high_load_analysis
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 5
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - ai21/ai21-jamba-1-5-large
+      fallback:
+      - microsoft/phi-3-vision-128k-instruct
+      - deepseek/deepseek-coder-v2-lite
+      primary:
+      - meta/meta-llama-3.2-11b-vision-instruct
+      - openai/o1-mini-2024-09-12
+  DatasetIngest:
+    category: fast_processing
+    concurrency:
+      load_balancing: throughput
+      max_concurrent: 8
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - openai/gpt-3.5-turbo-0125
+      fallback:
+      - openai/gpt-4-0613
+      - openai/gpt-4-0125-preview
+      primary:
+      - meta/meta-llama-3.1-405b-instruct
+      - openai/gpt-4-turbo-2024-04-09
+  ETLOrchestrator:
+    category: data_transformation
+    concurrency:
+      load_balancing: data_size_based
+      max_concurrent: 6
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - mistral/mistral-nemo-2407
+      fallback:
+      - openai/gpt-4o-2024-08-06
+      - openai/gpt-4o-2024-05-13
+      primary:
+      - openai/gpt-3.5-turbo-1106
+      - openai/chatgpt-4o-latest
+  Embedding:
+    category: embeddings
+    concurrency:
+      load_balancing: embedding_dimension
+      max_concurrent: 10
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - microsoft/phi-3-mini-4k-instruct
+      fallback:
+      - meta/meta-llama-3.2-3b-instruct
+      - qwen/qwen2.5-1.5b-instruct
+      primary:
+      - cohere/embed-english-v3.0
+      - cohere/embed-multilingual-v3.0
+  Forecast:
+    category: predictive_analytics
+    concurrency:
+      load_balancing: accuracy_based
+      max_concurrent: 4
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - meta/meta-llama-3.2-1b-instruct
+      fallback:
+      - mistral/ministral-3b-2410
+      - cohere/command-r7b-12-2024
+      primary:
+      - qwen/qwen2.5-7b-instruct
+      - microsoft/phi-3-mini-128k-instruct
+  GraphBuilder:
+    category: graph_analysis
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 3
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - mistral/ministral-3b-2410
+      primary:
+      - microsoft/phi-3-small-8k-instruct
+  Indexer:
+    category: indexing
+    concurrency:
+      load_balancing: index_size
+      max_concurrent: 4
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - cohere/command-light
+      fallback:
+      - openai/o4-2024-12-17
+      - mistral/codestral-2405
+      primary:
+      - openai/o2-2024-12-17
+      - openai/o3-mini-2024-12-17
+  ModelRouter:
+    category: critical_routing
+    concurrency:
+      load_balancing: least_loaded
+      max_concurrent: 3
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - meta/meta-llama-3.2-90b-vision-instruct
+      fallback:
+      - openai/o1-preview-2024-09-12
+      - xai/grok-2-1212
+      primary:
+      - microsoft/phi-4
+      - deepseek/deepseek-v3
+  NexusGuide:
+    category: user_assistance
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 3
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - microsoft/phi-3-medium-128k-instruct
+      primary:
+      - cohere/command-r-plus-08-2024
+  OSINTCrawler:
+    category: web_analysis
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 5
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - qwen/qwen2.5-0.5b-instruct
+      primary:
+      - meta/meta-llama-3.2-1b-instruct
+  PIIGuardian:
+    category: privacy_protection
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 4
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - cohere/command-r-08-2024
+      primary:
+      - mistral/ministral-8b-2410
+  PerformanceOptimizer:
+    category: performance
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 2
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - meta/meta-llama-3.2-11b-vision-instruct
+      primary:
+      - openai/o1-mini-2024-09-12
+  QueryPlanner:
+    category: critical_planning
+    concurrency:
+      load_balancing: performance_based
+      max_concurrent: 3
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - cohere/command-r-plus-08-2024
+      fallback:
+      - qwen/qwen2.5-32b-instruct
+      - mistral/mistral-large-2411
+      primary:
+      - openai/gpt-4o-mini-2024-07-18
+      - microsoft/phi-3-medium-128k-instruct
+  RedTeam:
+    category: security_testing
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 2
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - openai/o1-preview-2024-09-12
+      primary:
+      - meta/meta-llama-3.2-90b-vision-instruct
+  ReportExport:
+    category: document_generation
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 2
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - meta/meta-llama-3.1-8b-instruct
+      primary:
+      - xai/grok-2-vision-1212
+  SchemaMapper:
+    category: schema_analysis
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 2
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - mistral/ministral-8b-2410
+      primary:
+      - qwen/qwen2.5-14b-instruct
+  SelfDiagnosis:
+    category: system_analysis
+    concurrency:
+      load_balancing: diagnostic_accuracy
+      max_concurrent: 3
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency:
+      - meta/meta-llama-3.1-70b-instruct
+      fallback:
+      - qwen/qwen2.5-1.5b-instruct
+      - qwen/qwen2.5-0.5b-instruct
+      primary:
+      - xai/grok-2-vision-1212
+      - meta/meta-llama-3.1-8b-instruct
+  SelfImprovement:
+    category: optimization
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 1
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - ai21/ai21-jamba-1-5-large
+      primary:
+      - deepseek/deepseek-coder-v2-lite
+  Simulator:
+    category: simulation
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 2
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - ai21/ai21-jamba-1-5-mini
+      primary:
+      - cohere/command-r7b-12-2024
+  SyntheticData:
+    category: data_generation
+    concurrency:
+      load_balancing: round_robin
+      max_concurrent: 3
+    failover:
+      backoff_strategy: exponential
+      enabled: true
+      retry_attempts: 3
+    models:
+      emergency: []
+      fallback:
+      - deepseek/deepseek-coder-v2
+      primary:
+      - core42/jais-30b-chat
+load_balancing:
+  strategies:
+    accuracy_based:
+      precision: high
+      weight: 1.0
+    fastest_response:
+      speed: high
+      weight: 0.7
+    least_loaded:
+      efficiency: high
+      weight: 0.8
+    performance_based:
+      quality: high
+      weight: 0.9
+    round_robin:
+      fairness: high
+      weight: 1.0
+    throughput:
+      volume: high
+      weight: 0.6
+model_distribution:
+  auto_scaling: true
+  distribution_strategy: intelligent_load_balancing
+  failover_enabled: true
+  thermal_protection: true
+  total_agents: 26
+  total_models: 58
+monitoring:
+  auto_recovery: true
+  failure_detection: true
+  health_checks: true
+  performance_metrics: true
+thermal_protection:
+  cooldown_period: 30
+  emergency_fallback: true
+  model_rotation: true
+  temperature_threshold: 0.8

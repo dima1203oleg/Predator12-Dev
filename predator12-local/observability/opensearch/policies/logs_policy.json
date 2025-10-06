@@ -1,0 +1,41 @@
+{
+  "policy": {
+    "description": "Policy for log indices: rollover at 30d or 50GB, delete at 90d",
+    "default_state": "hot",
+    "states": [
+      {
+        "name": "hot",
+        "actions": [
+          {
+            "rollover": {
+              "min_index_age": "30d",
+              "min_size": "50gb"
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "delete",
+            "conditions": {
+              "min_index_age": "90d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "actions": [
+          {
+            "delete": {}
+          }
+        ],
+        "transitions": []
+      }
+    ],
+    "ism_template": {
+      "index_patterns": ["logs-*"],
+      "priority": 100
+    }
+  }
+}
+

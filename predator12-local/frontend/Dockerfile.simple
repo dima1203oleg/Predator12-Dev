@@ -1,0 +1,10 @@
+# SUPER SIMPLE TEST DOCKERFILE
+FROM nginx:alpine
+
+# Copy only one simple file
+COPY frontend/test-simple.html /usr/share/nginx/html/index.html
+
+# Use default nginx config
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

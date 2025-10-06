@@ -1,0 +1,104 @@
+---
+name: "Qdrant Service Recovery"
+description: "Відновлення Qdrant векторного сховища"
+version: "1.0"
+triggers:
+  - alert: "QdrantDown"
+  - service_unavailable: "qdrant:6333"
+  - vector_search_timeout: true
+
+steps:
+  - name: "Перевірка доступності"
+    type: "connectivity_check"
+    actions:
+      - ping_service: "qdrant:6333"
+      - check_collections: "/collections"
+      - verify_storage: "/qdrant/storage"
+      - check_memory_usage: true
+    timeout: 30
+
+  - name: "М'який рестарт сервісу"
+    type: "soft_restart"
+    actions:
+      - graceful_shutdown: "SIGTERM"
+      - wait_for_shutdown: 30
+      - start_service: true
+      - wait_for_ready: 60
+    timeout: 120
+
+  - name: "Перевірка колекцій"
+    type: "data_validation"
+    actions:
+      - list_collections: true
+      - verify_collection_integrity: "all"
+      - check_vector_count: "compare_with_baseline"
+    timeout: 180
+
+  - name: "Відновлення з backup"
+    type: "backup_restore"
+    condition: "data_corruption_detected OR collections_missing"
+    actions:
+      - stop_qdrant: true
+      - clear_storage: "/qdrant/storage"
+      - restore_latest_backup: true
+      - restart_qdrant: true
+      - verify_collections: true
+    timeout: 600
+
+  - name: "Пересоздання колекцій"
+    type: "rebuild_collections"
+    condition: "backup_restore_failed"
+    actions:
+      - recreate_collections_from_schema: "agents/registry.yaml"
+      - trigger_reembedding: "all_documents"
+    timeout: 1800
+
+  - name: "Контейнер рестарт"
+    type: "hard_restart"
+    condition: "service_unresponsive"
+    actions:
+      - docker_restart: "predator11-qdrant-1"
+      - wait_for_healthy: 120
+      - verify_collections: true
+    timeout: 300
+
+performance_checks:
+  post_recovery:
+    - vector_search_latency: "< 100ms"
+    - insertion_throughput: "> 1000 vectors/sec"
+    - memory_usage: "< 80%"
+    - collection_count: "matches_expected"
+
+data_integrity:
+  verification_queries:
+    - collection: "documents"
+      expected_min_count: 1000
+    - collection: "embeddings" 
+      expected_min_count: 5000
+    - similarity_search: "test_vector"
+      expected_results: "> 0"
+
+rollback:
+  enabled: true
+  triggers:
+    - "search_accuracy_degraded"
+    - "vector_count_mismatch > 10%"
+  actions:
+    - restore_previous_snapshot
+    - verify_data_consistency
+
+notifications:
+  on_start:
+    - slack: "#vectors"
+      message: "🔄 AutoHeal: Відновлення Qdrant розпочато"
+  on_success:
+    - slack: "#vectors"
+      message: "✅ AutoHeal: Qdrant відновлено. Всі колекції доступні."
+  on_data_loss:
+    - slack: "#critical"
+      message: "⚠️ AutoHeal: Виявлено втрату даних у Qdrant. Перевірте integrity."
+    - page_oncall: true
+  on_failure:
+    - slack: "#critical"
+      message: "❌ AutoHeal: Не вдалося відновити Qdrant. Векторний пошук недоступний."
+    - create_incident: "high_priority"

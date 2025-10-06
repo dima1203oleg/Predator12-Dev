@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Predator Analytics Nexus Core v1.0 - Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0f1e 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e1f5fe;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .nexus-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .nexus-header {
+            position: relative;
+            z-index: 100;
+            background: rgba(10, 15, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+            padding: 1rem 2rem;
+        }
+        
+        .nexus-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00e5ff, #7c4dff, #ff4081);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.5)); }
+            to { filter: drop-shadow(0 0 30px rgba(124, 77, 255, 0.8)); }
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 3rem 2rem;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(124, 77, 255, 0.1));
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 229, 255, 0.3);
+            border-color: rgba(124, 77, 255, 0.6);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00e5ff, #7c4dff, #ff4081, #00e5ff);
+            z-index: -1;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            opacity: 0.7;
+            animation: border-glow 2s linear infinite;
+        }
+        
+        @keyframes border-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #00e5ff;
+        }
+        
+        .feature-description {
+            color: #b3e5fc;
+            line-height: 1.6;
+        }
+        
+        .stats-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 15, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0, 229, 255, 0.2);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00e5ff;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #81d4fa;
+            text-transform: uppercase;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00e5ff;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        .launch-button {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, #00e5ff, #7c4dff);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 200;
+        }
+        
+        .launch-button:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="nexus-container">
+        <!-- Фонові частинки -->
+        <div id="particles"></div>
+        
+        <header class="nexus-header">
+            <h1 class="nexus-title">🚀 Predator Analytics Nexus Core v1.0</h1>
+            <p style="margin-top: 0.5rem; color: #81d4fa;">Розумна система аналітики з 48 безкоштовних AI моделей</p>
+        </header>
+        
+        <main class="features-grid">
+            <div class="feature-card" onclick="alert('🤖 48 безкоштовних AI моделей готові до роботи!')">
+                <span class="feature-icon">🤖</span>
+                <h3 class="feature-title">AI Models Hub</h3>
+                <p class="feature-description">48 безкоштовних AI моделей: Claude, Gemini, Llama, Qwen, DeepSeek та інші. Всі моделі підтверджено безкоштовні!</p>
+            </div>
+            
+            <div class="feature-card" onclick="alert('🧠 Multi-Agent System активна!')">
+                <span class="feature-icon">🧠</span>
+                <h3 class="feature-title">MAS - Multi-Agent System</h3>
+                <p class="feature-description">Інтелектуальна мережа агентів: самодіагностика, автовиправлення, самовдосконалення. Повна автономність!</p>
+            </div>
+            
+            <div class="feature-card" onclick="alert('🎯 3D інтерактивний гід готовий!')">
+                <span class="feature-icon">🎯</span>
+                <h3 class="feature-title">3D Interactive Guide</h3>
+                <p class="feature-description">Голографічний AI-гід з 3D візуалізацією, контекстуальним чатом та інтерактивними сценаріями.</p>
+            </div>
+            
+            <div class="feature-card" onclick="alert('📊 Розширена аналітика працює!')">
+                <span class="feature-icon">📊</span>
+                <h3 class="feature-title">Enhanced Analytics</h3>
+                <p class="feature-description">Моніторинг в реальному часі, візуалізація даних, метрики продуктивності та глибока аналітика.</p>
+            </div>
+            
+            <div class="feature-card" onclick="alert('🔄 Система самовдосконалення активна!')">
+                <span class="feature-icon">🔄</span>
+                <h3 class="feature-title">Self-Improvement System</h3>
+                <p class="feature-description">Автоматичне виправлення помилок, оптимізація продуктивності, навчання на власних даних.</p>
+            </div>
+            
+            <div class="feature-card" onclick="alert('🌍 Повна i18n підтримка!')">
+                <span class="feature-icon">🌍</span>
+                <h3 class="feature-title">i18n Support</h3>
+                <p class="feature-description">Повна локалізація українською та англійською мовами. Контекстуальні переклади та культурна адаптація.</p>
+            </div>
+        </main>
+        
+        <button class="launch-button" onclick="window.open('http://localhost:5173', '_blank')">
+            🚀 Запустити Nexus
+        </button>
+    </div>
+    
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-value">48</div>
+            <div class="stat-label">AI Models</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Free</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">24/7</div>
+            <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">∞</div>
+            <div class="stat-label">Possibilities</div>
+        </div>
+    </div>
+    
+    <script>
+        // Створюємо фонові частинки
+        function createParticles() {
+            const container = document.getElementById('particles');
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                
+                container.appendChild(particle);
+                
+                // Видаляємо частинку після анімації
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 6000);
+            }, 200);
+        }
+        
+        createParticles();
+        
+        // Додаємо інтерактивність
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.feature-card');
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardX = rect.left + rect.width / 2;
+                const cardY = rect.top + rect.height / 2;
+                
+                const distance = Math.sqrt(Math.pow(mouseX - cardX, 2) + Math.pow(mouseY - cardY, 2));
+                const maxDistance = 300;
+                
+                if (distance < maxDistance) {
+                    const intensity = (maxDistance - distance) / maxDistance;
+                    const rotateX = (mouseY - cardY) / 10;
+                    const rotateY = (cardX - mouseX) / 10;
+                    
+                    card.style.transform = `translateY(-10px) rotateX(${rotateX * intensity}deg) rotateY(${rotateY * intensity}deg) scale(${1 + intensity * 0.05})`;
+                } else {
+                    card.style.transform = 'translateY(0) rotateX(0deg) rotateY(0deg) scale(1)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+# Central model registry (IDs map to remote SDK-served models)
+# NOTE: Actual weights/models live on the remote model server; this registry maps tasks to model IDs.
+
+routing:
+  weights:
+    cost: 0.3
+    latency: 0.3
+    quality: 0.4
+  defaults:
+    timeout_seconds: 300
+    cache_ttl_seconds: 60
+
+models:
+  # Reasoning / long-form (free/open)
+  - id: meta/meta-llama-3.1-70b-instruct
+    task: reason
+    primary: true
+    free: true
+  - id: meta/meta-llama-3.1-8b-instruct
+    task: reason
+    fallback: true
+    free: true
+  - id: mistral/mixtral-8x7b-instruct
+    task: reason
+    fallback: true
+    free: true
+  - id: mistral/mistral-7b-instruct-v0.3
+    task: reason
+    fallback: true
+    free: true
+  - id: qwen/qwen2.5-14b-instruct
+    task: reason
+    fallback: true
+    free: true
+  - id: microsoft/phi-3-medium-4k-instruct
+    task: reason
+    fallback: true
+    free: true
+  - id: google/gemma-2-9b-it
+    task: reason
+    fallback: true
+    free: true
+  - id: snowflake-arctic/arctic-instruct
+    task: reason
+    fallback: true
+    free: true
+
+  # Code / remediation (free/open)
+  - id: deepseek/deepseek-coder-v2
+    task: code
+    primary: true
+    free: true
+  - id: bigcode/starcoder2-15b
+    task: code
+    fallback: true
+    free: true
+  - id: qwen/qwen2.5-coder-7b-instruct
+    task: code
+    fallback: true
+    free: true
+  - id: replit/replit-code-v1.5
+    task: code
+    fallback: true
+    free: true
+  - id: phind/phind-codellama-34b-v2
+    task: code
+    fallback: true
+    free: true
+
+  # Quick classification / light tasks (free/open)
+  - id: microsoft/phi-3-mini-4k-instruct
+    task: quick
+    primary: true
+    free: true
+  - id: mistral/mistral-7b-instruct-v0.3
+    task: quick
+    fallback: true
+    free: true
+  - id: qwen/qwen2.5-3b-instruct
+    task: quick
+    fallback: true
+    free: true
+  - id: meta/meta-llama-3.2-3b-instruct
+    task: quick
+    fallback: true
+    free: true
+
+  # Embeddings (free/open)
+  - id: BAAI/bge-m3
+    task: embed
+    primary: true
+    type: embedding
+    free: true
+  - id: jinaai/jina-embeddings-v3
+    task: embed
+    fallback: true
+    type: embedding
+    free: true
+  - id: intfloat/e5-large-v2
+    task: embed
+    fallback: true
+    type: embedding
+    free: true
+  - id: intfloat/multilingual-e5-large
+    task: embed
+    fallback: true
+    type: embedding
+    free: true
+
+  # Vision (free/open)
+  - id: llava-hf/llava-1.6-mistral-7b
+    task: vision
+    primary: true
+    free: true
+  - id: Qwen/Qwen2-VL-7B-Instruct
+    task: vision
+    fallback: true
+    free: true
+  - id: meta/llama-3.2-11b-vision-instruct
+    task: vision
+    fallback: true
+    free: true
+
+  # Synthetic data generation (gen, free/open)
+  - id: meta/meta-llama-3.1-8b-instruct
+    task: gen
+    primary: true
+    free: true
+  - id: mistral/mixtral-8x7b-instruct
+    task: gen
+    fallback: true
+    free: true
+  - id: qwen/qwen2.5-14b-instruct
+    task: gen
+    fallback: true
+    free: true
+
+limits:
+  # Global per-minute limits per task type; SDK will enforce stricter provider limits internally
+  reason:
+    tpm: 200000
+    rpm: 600
+  code:
+    tpm: 150000
+    rpm: 400
+  quick:
+    tpm: 80000
+    rpm: 1200
+  embed:
+    tpm: 500000
+    rpm: 2000
+  vision:
+    tpm: 120000
+    rpm: 200
+  gen:
+    tpm: 100000
+    rpm: 200
+
+backoff:
+  strategy: exponential
+  base_seconds: 1
+  max_seconds: 30
+  max_retries: 3
+
+cache:
+  enabled: true
+  ttl_seconds: 120
+  idempotency_key: request_key
+
+arbiter:
+  enabled: true
+  # When multiple candidates exist, arbiter will score them via the following weights
+  weights:
+    quality: 0.6
+    consistency: 0.25
+    cost: 0.15
+  target_len: 300
+  keyword_weight: 0.2
+  length_weight: 0.2
+  safety_penalty: 0.2
+  keywords:
+    reason:
+      - "PII"
+      - "cache"
+      - "Redis"
+      - "latency"
+      - "backoff"
+      - "timeout"
+      - "performance"
+      - "optimization"
+    code:
+      - "function"
+      - "class"
+      - "error"
+      - "exception"
+      - "optimize"
+      - "refactor"
+      - "debug"
+      - "algorithm"
+    vision:
+      - "image"
+      - "ocr"
+      - "caption"
+      - "bounding box"
+      - "detection"
+      - "classification"
+      - "segmentation"
+      - "recognition"
+
+pii_editor:
+  enabled: true
+  mode: redact # or mask
+
+ensemble:
+  enabled: true
+  default_candidates: 3
+  default_quorum: 2
+  default_deadline_ms: 8000
+  tasks:
+    reason:
+      enabled: true
+      candidates: 3
+      quorum: 2
+      deadline_ms: 10000
+    code:
+      enabled: true
+      candidates: 3
+      quorum: 2
+      deadline_ms: 10000
+    quick:
+      enabled: false
+    embed:
+      enabled: false
+    vision:
+      enabled: true
+      candidates: 3
+      quorum: 2
+      deadline_ms: 12000
+
+critical:
+  tasks:
+    - reason
+    - code
+    - vision
+  paths: []
+
+
+canary:
+  enabled: true
+  default_sample_rate: 0.1
+  default_candidate_index: 0
+  tasks:
+    quick:
+      enabled: true
+      sample_rate: 0.15
+      candidate_index: 0
+
+task_overrides:
+  reason:
+    timeout_seconds: 420
+    candidates: 2
+  code:
+    timeout_seconds: 300
+    candidates: 2
+  quick:
+    timeout_seconds: 60
+  embed:
+    timeout_seconds: 120
+  vision:
+    timeout_seconds: 180
+  gen:
+    timeout_seconds: 300
+
+# Extended catalog - 48 free models total for MAS agents
+free_models_catalog:
+  # Total count: 48 free models
+  reasoning: # 12 models
+    - id: meta/meta-llama-3.1-70b-instruct
+      free: true
+      performance: 95
+    - id: meta/meta-llama-3.1-8b-instruct
+      free: true
+      performance: 82
+    - id: mistral/mixtral-8x7b-instruct
+      free: true
+      performance: 89
+    - id: mistral/mistral-7b-instruct-v0.3
+      free: true
+      performance: 78
+    - id: qwen/qwen2.5-72b-instruct
+      free: true
+      performance: 92
+    - id: qwen/qwen2.5-14b-instruct
+      free: true
+      performance: 85
+    - id: microsoft/phi-3-medium-4k-instruct
+      free: true
+      performance: 81
+    - id: microsoft/phi-4-reasoning
+      free: true
+      performance: 94
+    - id: google/gemma-2-27b-it
+      free: true
+      performance: 87
+    - id: google/gemma-2-9b-it
+      free: true
+      performance: 79
+    - id: snowflake-arctic/arctic-instruct
+      free: true
+      performance: 83
+    - id: mistral/ministral-3b
+      free: true
+      performance: 74
+
+  code: # 10 models
+    - id: deepseek/deepseek-coder-v2
+      free: true
+      performance: 93
+    - id: bigcode/starcoder2-15b
+      free: true
+      performance: 88
+    - id: qwen/qwen2.5-coder-7b-instruct
+      free: true
+      performance: 84
+    - id: replit/replit-code-v1.5
+      free: true
+      performance: 82
+    - id: phind/phind-codellama-34b-v2
+      free: true
+      performance: 86
+    - id: deepseek/deepseek-coder-33b-instruct
+      free: true
+      performance: 91
+    - id: bigcode/starcoder2-7b
+      free: true
+      performance: 80
+    - id: qwen/qwen2.5-coder-14b-instruct
+      free: true
+      performance: 87
+    - id: codestral-2501
+      free: true
+      performance: 95
+    - id: wizardcoder/wizardcoder-15b
+      free: true
+      performance: 83
+
+  quick: # 8 models
+    - id: microsoft/phi-3-mini-4k-instruct
+      free: true
+      performance: 79
+    - id: mistral/mistral-7b-instruct-v0.3
+      free: true
+      performance: 78
+    - id: qwen/qwen2.5-3b-instruct
+      free: true
+      performance: 76
+    - id: meta/meta-llama-3.2-3b-instruct
+      free: true
+      performance: 75
+    - id: microsoft/phi-3-mini-128k-instruct
+      free: true
+      performance: 80
+    - id: qwen/qwen2.5-1.5b-instruct
+      free: true
+      performance: 72
+    - id: meta/meta-llama-3.2-1b-instruct
+      free: true
+      performance: 70
+    - id: google/gemma-2-2b-it
+      free: true
+      performance: 74
+
+  embed: # 8 models
+    - id: BAAI/bge-m3
+      free: true
+      performance: 91
+    - id: jinaai/jina-embeddings-v3
+      free: true
+      performance: 89
+    - id: intfloat/e5-large-v2
+      free: true
+      performance: 87
+    - id: intfloat/multilingual-e5-large
+      free: true
+      performance: 88
+    - id: BAAI/bge-base-en-v1.5
+      free: true
+      performance: 84
+    - id: BAAI/bge-small-en-v1.5
+      free: true
+      performance: 80
+    - id: text-embedding-3-large
+      free: true
+      performance: 93
+    - id: sentence-transformers/all-MiniLM-L6-v2
+      free: true
+      performance: 77
+
+  vision: # 6 models
+    - id: llava-hf/llava-1.6-mistral-7b
+      free: true
+      performance: 85
+    - id: Qwen/Qwen2-VL-7B-Instruct
+      free: true
+      performance: 88
+    - id: meta/llama-3.2-11b-vision-instruct
+      free: true
+      performance: 90
+    - id: llava-hf/llava-1.5-7b
+      free: true
+      performance: 82
+    - id: Qwen/Qwen2-VL-2B-Instruct
+      free: true
+      performance: 79
+    - id: moondream/moondream2
+      free: true
+      performance: 76
+
+  gen: # 4 models 
+    - id: meta/meta-llama-3.1-8b-instruct
+      free: true
+      performance: 82
+    - id: mistral/mixtral-8x7b-instruct
+      free: true
+      performance: 89
+    - id: qwen/qwen2.5-14b-instruct
+      free: true
+      performance: 85
+    - id: gpt-5
+      free: true
+      performance: 97
+
+# Competition scenarios for Arbiter agent
+arbiter_competitions:
+  # Scenario 1: Top-tier reasoning models
+  reasoning_premium:
+    models: ["gpt-5", "phi-4-reasoning", "qwen/qwen2.5-72b-instruct"]
+    tasks: ["complex_analysis", "multi_step_reasoning", "logical_deduction"]
+    
+  # Scenario 2: Code generation specialists  
+  coding_showdown:
+    models: ["codestral-2501", "deepseek/deepseek-coder-v2", "phind/phind-codellama-34b-v2"]
+    tasks: ["algorithm_design", "code_optimization", "bug_fixing"]
+    
+  # Scenario 3: Quick response models
+  speed_test:
+    models: ["phi-3-mini-4k-instruct", "ministral-3b", "gemma-2-2b-it"]
+    tasks: ["classification", "simple_qa", "sentiment_analysis"]
+    
+  # Scenario 4: Multilingual capabilities
+  language_masters:
+    models: ["qwen/qwen2.5-14b-instruct", "gemma-2-9b-it", "llama-3.1-8b-instruct"]
+    tasks: ["translation", "multilingual_understanding", "cultural_context"]
+
+# Agent-to-model assignments (default routing)
+agent_model_assignments:
+  ChiefOrchestrator: "gpt-5"
+  QueryPlanner: "phi-4-reasoning" 
+  ModelRouter: "ministral-3b"
+  Arbiter: "phi-4-reasoning"
+  NexusGuide: "gpt-5"
+  DatasetIngest: "ministral-3b"
+  DataQuality: "qwen/qwen2.5-3b-instruct"
+  SchemaMapper: "phi-4-reasoning"
+  ETLOrchestrator: "ministral-3b"
+  Indexer: "qwen/qwen2.5-1.5b-instruct"
+  Embedding: "text-embedding-3-large"
+  OSINTCrawler: "llama-3.1-8b-instruct"
+  GraphBuilder: "gpt-5"
+  Anomaly: "phi-3-mini-4k-instruct"
+  Forecast: "qwen/qwen2.5-7b-instruct"
+  Simulator: "gpt-5"
+  SyntheticData: "mixtral-8x7b-instruct"
+  ReportExport: "ministral-3b"
+  BillingGate: "phi-3-mini-128k-instruct"
+  PIIGuardian: "gemma-2-2b-it"
+  AutoHeal: "codestral-2501"
+  SelfDiagnosis: "deepseek-coder-v2"
+  SelfImprovement: "phi-4-reasoning"
+  RedTeam: "gpt-5"

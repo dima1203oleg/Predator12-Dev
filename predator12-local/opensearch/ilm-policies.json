@@ -1,0 +1,578 @@
+# OpenSearch ILM Policies Configuration
+# Part of Delta Revision 1.1 - Block A2: Performance OpenSearch
+
+# Events ILM Policy
+PUT _plugins/_ism/policies/events_lifecycle
+{
+  "policy": {
+    "description": "ILM policy for customs events indices",
+    "default_state": "hot",
+    "states": [
+      {
+        "name": "hot",
+        "actions": [
+          {
+            "rollover": {
+              "min_size": "10GB",
+              "min_doc_count": 1000000,
+              "min_index_age": "1d"
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "warm",
+            "conditions": {
+              "min_index_age": "1d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "warm",
+        "actions": [
+          {
+            "replica_count": {
+              "number_of_replicas": 0
+            }
+          },
+          {
+            "force_merge": {
+              "max_num_segments": 1
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "cold",
+            "conditions": {
+              "min_index_age": "7d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "cold",
+        "actions": [
+          {
+            "allocation": {
+              "require": {
+                "box_type": "cold"
+              }
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "delete",
+            "conditions": {
+              "min_index_age": "365d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "actions": [
+          {
+            "delete": {}
+          }
+        ]
+      }
+    ],
+    "ism_template": [
+      {
+        "index_patterns": ["events-*"],
+        "priority": 100
+      }
+    ]
+  }
+}
+
+# Metrics ILM Policy  
+PUT _plugins/_ism/policies/metrics_lifecycle
+{
+  "policy": {
+    "description": "ILM policy for metrics indices - longer retention",
+    "default_state": "hot",
+    "states": [
+      {
+        "name": "hot",
+        "actions": [
+          {
+            "rollover": {
+              "min_size": "20GB",
+              "min_doc_count": 5000000,
+              "min_index_age": "3d"
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "warm",
+            "conditions": {
+              "min_index_age": "3d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "warm",
+        "actions": [
+          {
+            "replica_count": {
+              "number_of_replicas": 0
+            }
+          },
+          {
+            "force_merge": {
+              "max_num_segments": 1
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "cold",
+            "conditions": {
+              "min_index_age": "14d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "cold",
+        "actions": [
+          {
+            "allocation": {
+              "require": {
+                "box_type": "cold"
+              }
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "delete",
+            "conditions": {
+              "min_index_age": "730d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "actions": [
+          {
+            "delete": {}
+          }
+        ]
+      }
+    ],
+    "ism_template": [
+      {
+        "index_patterns": ["metrics-*"],
+        "priority": 100
+      }
+    ]
+  }
+}
+
+# Logs ILM Policy - Legal compliance (7 years retention)
+PUT _plugins/_ism/policies/logs_lifecycle
+{
+  "policy": {
+    "description": "ILM policy for audit logs - legal compliance",
+    "default_state": "hot",
+    "states": [
+      {
+        "name": "hot",
+        "actions": [
+          {
+            "rollover": {
+              "min_size": "50GB",
+              "min_doc_count": 10000000,
+              "min_index_age": "7d"
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "warm",
+            "conditions": {
+              "min_index_age": "7d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "warm",
+        "actions": [
+          {
+            "replica_count": {
+              "number_of_replicas": 0
+            }
+          },
+          {
+            "force_merge": {
+              "max_num_segments": 1
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "cold",
+            "conditions": {
+              "min_index_age": "30d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "cold",
+        "actions": [
+          {
+            "allocation": {
+              "require": {
+                "box_type": "cold"
+              }
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "frozen",
+            "conditions": {
+              "min_index_age": "365d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "frozen",
+        "actions": [
+          {
+            "allocation": {
+              "require": {
+                "box_type": "frozen"
+              }
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "delete",
+            "conditions": {
+              "min_index_age": "2555d"
+            }
+          }
+        ]
+      },
+      {
+        "name": "delete",
+        "actions": [
+          {
+            "delete": {}
+          }
+        ]
+      }
+    ],
+    "ism_template": [
+      {
+        "index_patterns": ["logs-*", "audit-*"],
+        "priority": 100
+      }
+    ]
+  }
+}
+
+# Index Templates with optimal settings
+
+# Events Template
+PUT _index_template/events_template
+{
+  "index_patterns": ["events-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1,
+      "refresh_interval": "30s",
+      "index.codec": "best_compression",
+      "index.max_result_window": 50000,
+      "plugins.index_state_management.policy_id": "events_lifecycle",
+      "plugins.index_state_management.rollover_alias": "events_write"
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date",
+          "format": "strict_date_optional_time||epoch_millis"
+        },
+        "event_type": {
+          "type": "keyword"
+        },
+        "severity": {
+          "type": "keyword",
+          "fields": {
+            "numeric": {
+              "type": "byte",
+              "ignore_malformed": true
+            }
+          }
+        },
+        "source": {
+          "type": "keyword"
+        },
+        "user_id": {
+          "type": "keyword"
+        },
+        "session_id": {
+          "type": "keyword"
+        },
+        "location": {
+          "type": "geo_point",
+          "ignore_malformed": true
+        },
+        "customs_post": {
+          "type": "keyword"
+        },
+        "declaration_id": {
+          "type": "keyword"
+        },
+        "goods_code": {
+          "type": "keyword"
+        },
+        "country_origin": {
+          "type": "keyword"
+        },
+        "country_destination": {
+          "type": "keyword"
+        },
+        "amount": {
+          "type": "double"
+        },
+        "currency": {
+          "type": "keyword"
+        },
+        "anomaly_score": {
+          "type": "float"
+        },
+        "risk_level": {
+          "type": "keyword"
+        },
+        "message": {
+          "type": "text",
+          "analyzer": "standard",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "enabled": false
+        },
+        "pii_fields": {
+          "type": "keyword"
+        },
+        "classification": {
+          "type": "keyword"
+        }
+      }
+    }
+  },
+  "priority": 100,
+  "version": 1
+}
+
+# Metrics Template
+PUT _index_template/metrics_template
+{
+  "index_patterns": ["metrics-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 1,
+      "refresh_interval": "60s",
+      "index.codec": "best_compression",
+      "plugins.index_state_management.policy_id": "metrics_lifecycle",
+      "plugins.index_state_management.rollover_alias": "metrics_write"
+    },
+    "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "metric_name": {
+          "type": "keyword"
+        },
+        "metric_type": {
+          "type": "keyword"
+        },
+        "value": {
+          "type": "double"
+        },
+        "unit": {
+          "type": "keyword"
+        },
+        "component": {
+          "type": "keyword"
+        },
+        "host": {
+          "type": "keyword"
+        },
+        "labels": {
+          "type": "flattened"
+        }
+      }
+    }
+  },
+  "priority": 100,
+  "version": 1
+}
+
+# Create initial write indices and aliases
+PUT events-000001
+{
+  "aliases": {
+    "events_write": {
+      "is_write_index": true
+    },
+    "events_current": {}
+  }
+}
+
+PUT metrics-000001
+{
+  "aliases": {
+    "metrics_write": {
+      "is_write_index": true
+    },
+    "metrics_current": {}
+  }
+}
+
+PUT logs-000001
+{
+  "aliases": {
+    "logs_write": {
+      "is_write_index": true
+    },
+    "logs_current": {}
+  }
+}
+
+# Pre-aggregation Transform for Dashboard Performance
+
+# Hourly events aggregation
+PUT _transform/events_hourly_agg
+{
+  "source": {
+    "index": ["events-*"]
+  },
+  "dest": {
+    "index": "events_hourly_summary"
+  },
+  "frequency": "1h",
+  "sync": {
+    "time": {
+      "field": "@timestamp",
+      "delay": "60s"
+    }
+  },
+  "pivot": {
+    "group_by": {
+      "timestamp": {
+        "date_histogram": {
+          "field": "@timestamp",
+          "calendar_interval": "1h"
+        }
+      },
+      "event_type": {
+        "terms": {
+          "field": "event_type"
+        }
+      },
+      "customs_post": {
+        "terms": {
+          "field": "customs_post"
+        }
+      }
+    },
+    "aggregations": {
+      "event_count": {
+        "value_count": {
+          "field": "event_type"
+        }
+      },
+      "avg_anomaly_score": {
+        "avg": {
+          "field": "anomaly_score"
+        }
+      },
+      "max_amount": {
+        "max": {
+          "field": "amount"
+        }
+      },
+      "unique_users": {
+        "cardinality": {
+          "field": "user_id"
+        }
+      }
+    }
+  },
+  "description": "Hourly aggregation of events for dashboard performance"
+}
+
+# Start the transform
+POST _transform/events_hourly_agg/_start
+
+# Cache warming queries for frequent dashboards
+POST events_current/_cache/clear
+
+# Warm up cache with common queries
+POST events_current/_search
+{
+  "size": 0,
+  "query": {
+    "range": {
+      "@timestamp": {
+        "gte": "now-24h"
+      }
+    }
+  },
+  "aggs": {
+    "events_by_hour": {
+      "date_histogram": {
+        "field": "@timestamp",
+        "calendar_interval": "1h"
+      }
+    },
+    "top_customs_posts": {
+      "terms": {
+        "field": "customs_post",
+        "size": 10
+      }
+    },
+    "risk_distribution": {
+      "terms": {
+        "field": "risk_level",
+        "size": 5
+      }
+    }
+  }
+}
+
+# Configure cluster settings for optimal performance
+PUT _cluster/settings
+{
+  "persistent": {
+    "indices.queries.cache.size": "15%",
+    "indices.requests.cache.size": "5%",
+    "search.max_buckets": 65536,
+    "thread_pool.search.size": 13,
+    "thread_pool.search.queue_size": 1000
+  }
+}

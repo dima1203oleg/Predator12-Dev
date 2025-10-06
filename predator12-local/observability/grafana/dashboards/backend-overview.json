@@ -1,0 +1,42 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Backend Up",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+      "targets": [
+        {"expr": "up{job=\"backend-api\"}", "refId": "A"}
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Backend CPU (process)",
+      "gridPos": {"h": 8, "w": 12, "x": 6, "y": 0},
+      "targets": [
+        {"expr": "rate(process_cpu_seconds_total{job=\"backend-api\"}[5m])", "refId": "A"}
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Python GC Objects Collected",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+      "targets": [
+        {"expr": "python_gc_objects_collected_total{job=\"backend-api\"}", "refId": "A"}
+      ]
+    }
+  ],
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["backend"],
+  "templating": {"list": []},
+  "time": {"from": "now-6h", "to": "now"},
+  "timepicker": {},
+  "timezone": "",
+  "title": "Backend Overview",
+  "version": 1
+}

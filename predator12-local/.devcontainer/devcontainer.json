@@ -1,0 +1,169 @@
+{
+    "name": "Predator12 Development Environment",
+    "dockerComposeFile": "../docker-compose.dev.yml",
+    "service": "dev",
+    "workspaceFolder": "/workspace",
+    
+    "features": {
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.11",
+            "installTools": true
+        },
+        "ghcr.io/devcontainers/features/docker-in-docker:1": {
+            "version": "latest",
+            "moby": true
+        },
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "22",
+            "nodeGypDependencies": true
+        },
+        "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+            "version": "latest",
+            "helm": "latest",
+            "minikube": "none"
+        },
+        "ghcr.io/devcontainers/features/azure-cli:1": {}
+    },
+    
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                // Python
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "ms-python.flake8",
+                
+                // JavaScript/TypeScript
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                
+                // Docker & Kubernetes
+                "ms-azuretools.vscode-docker",
+                "ms-kubernetes-tools.vscode-kubernetes-tools",
+                
+                // GitOps
+                "redhat.vscode-yaml",
+                "redhat.vscode-xml",
+                
+                // DevOps
+                "github.vscode-github-actions",
+                "ms-vscode.makefile-tools",
+                
+                // Code Quality
+                "editorconfig.editorconfig",
+                "shardulm94.trailing-spaces",
+                "streetsidesoftware.code-spell-checker",
+                
+                // AI & Collaboration
+                "github.copilot",
+                "github.copilot-chat",
+                
+                // Utilities
+                "eamodio.gitlens",
+                "gruntfuggly.todo-tree",
+                "visualstudioexptteam.vscodeintellicode",
+                "ms-vscode.live-server"
+            ],
+            "settings": {
+                // Python
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.linting.enabled": true,
+                "python.linting.pylintEnabled": true,
+                "python.linting.flake8Enabled": true,
+                "python.linting.banditEnabled": true,
+                "python.formatting.provider": "black",
+                "python.formatting.blackArgs": ["--line-length", "100"],
+                "python.sortImports.args": ["--profile", "black"],
+                "python.testing.pytestEnabled": true,
+                "python.testing.unittestEnabled": false,
+                
+                // Editor
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": "explicit",
+                    "source.fixAll": "explicit"
+                },
+                "editor.rulers": [100],
+                "files.trimTrailingWhitespace": true,
+                "files.insertFinalNewline": true,
+                
+                // Git
+                "git.autofetch": true,
+                "git.enableSmartCommit": true,
+                "git.confirmSync": false,
+                
+                // Terminal
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                "terminal.integrated.fontSize": 14,
+                
+                // Files
+                "files.exclude": {
+                    "**/__pycache__": true,
+                    "**/.pytest_cache": true,
+                    "**/.ruff_cache": true,
+                    "**/.mypy_cache": true,
+                    "**/node_modules": true,
+                    "**/.DS_Store": true
+                },
+                "files.watcherExclude": {
+                    "**/.git/objects/**": true,
+                    "**/node_modules/**": true,
+                    "**/.venv/**": true
+                },
+                
+                // YAML
+                "yaml.schemas": {
+                    "kubernetes": [
+                        "infra/k8s/**/*.yaml",
+                        "helm/**/*.yaml"
+                    ]
+                },
+                
+                // Docker
+                "docker.languageserver.diagnostics.enabled": true,
+                
+                // Makefile
+                "makefile.configureOnOpen": true
+            }
+        }
+    },
+    
+    "forwardPorts": [
+        8000,  // Backend API
+        3000,  // Frontend Dev
+        5432,  // PostgreSQL
+        6379,  // Redis
+        9200,  // OpenSearch
+        8200,  // Vault
+        9090,  // Prometheus
+        16686, // Jaeger UI
+        8025   // MailHog UI
+    ],
+    
+    "portsAttributes": {
+        "8000": {
+            "label": "Backend API",
+            "onAutoForward": "notify"
+        },
+        "3000": {
+            "label": "Frontend",
+            "onAutoForward": "openBrowser"
+        },
+        "9090": {
+            "label": "Prometheus",
+            "onAutoForward": "ignore"
+        }
+    },
+    
+    "postCreateCommand": "bash -c 'pip install -r requirements.txt && pip install -r requirements-dev.txt && pre-commit install && cd frontend && npm install'",
+    
+    "postStartCommand": "echo '✅ Predator12 Dev Container Ready! Run \"make dev\" to start.'",
+    
+    "remoteUser": "vscode",
+    
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ]
+}

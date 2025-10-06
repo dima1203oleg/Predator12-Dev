@@ -1,0 +1,19 @@
+# File: observability/opensearch/dashboards.yml
+server.host: 0.0.0.0
+server.port: 5601
+
+opensearch.hosts: ["http://opensearch:9200"]
+# Development convenience; in production configure TLS and proper certs
+opensearch.ssl.verificationMode: none
+
+# Security disabled for development  
+opensearch.requestHeadersAllowlist: ["securitytenant","Authorization"]
+
+# Default route (replaces deprecated defaultAppId)
+server.defaultRoute: "/app/home"
+
+# Performance settings
+data.search.timeout: 600000
+
+# Saved objects
+savedObjects.maxImportPayloadBytes: 26214400

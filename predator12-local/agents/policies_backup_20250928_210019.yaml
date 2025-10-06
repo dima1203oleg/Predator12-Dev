@@ -1,0 +1,119 @@
+routing:
+  max_latency_ms: 3000
+  prefer_cost: true
+  fanout_best_of: 2
+  shadow_test: true
+  retry_attempts: 3
+  circuit_breaker_threshold: 5
+  circuit_breaker_timeout: 30
+
+budgets:
+  org_monthly_usd: 300
+  per_user_daily_usd: 3
+  per_agent_hourly_usd: 0.5
+  emergency_reserve_usd: 50
+
+pii:
+  mask_by_default: true
+  allow_reveal_roles: ["analyst", "admin", "security_officer"]
+  audit_all_access: true
+  retention_days: 90
+  auto_purge_enabled: true
+
+fallback_order:
+  reasoning: [reasoning_primary, reasoning_backup, fast_small]
+  codegen: [codegen_primary, codegen_backup]
+  embed: [embed_multi, embed_fast]
+
+rate_limits:
+  per_user_per_minute: 100
+  per_agent_per_minute: 1000
+  burst_multiplier: 2
+
+security:
+  require_auth: true
+  log_all_requests: true
+  blocked_patterns:
+    - "system prompt"
+    - "ignore instructions"
+    - "admin override"
+
+  sensitive_endpoints:
+    - "/api/v1/pii/reveal"
+    - "/api/v1/admin/*"
+    - "/api/v1/agents/config"
+
+monitoring:
+  collect_metrics: true
+  trace_requests: true
+  log_level: "INFO"
+  alert_on_failures: true
+  health_check_interval: 30
+
+self_healing:
+  enabled: true
+  max_restarts_per_hour: 3
+  escalation_threshold: 5
+  auto_scale_enabled: true
+
+diagnostics:
+  enabled: true
+  retention_days: 30
+  pattern_learning: true
+  anomaly_detection: true
+
+agent_specific_policies:
+  ChiefOrchestrator:
+    priority: "high"
+    max_concurrent_tasks: 50
+    timeout_minutes: 10
+
+  AutoHeal:
+    priority: "critical"
+    max_healing_actions_per_hour: 10
+    require_approval_for: ["rollback", "scale_down"]
+
+  SelfDiagnosis:
+    priority: "high"
+    analysis_window_minutes: 15
+    confidence_threshold: 0.7
+
+  SelfImprovement:
+    priority: "medium"
+    analysis_interval_minutes: 300
+    max_improvements_per_day: 5
+
+  PIIGuardian:
+    priority: "critical"
+    default_action: "mask"
+    audit_retention_years: 7
+
+  RedTeam:
+    priority: "medium"
+    restricted_hours: ["22:00-06:00"]
+    require_approval: true
+
+data_governance:
+  staging_retention_days: 30
+  gold_retention_years: 7
+  backup_frequency: "daily"
+  encryption_at_rest: true
+
+opensearch_policies:
+  safe_indices:
+    - "customs_safe_*"
+    - "companies_safe_*"
+    - "osint_safe_*"
+
+  restricted_indices:
+    - "customs_restricted_*"
+    - "companies_restricted_*"
+    - "pii_data_*"
+
+  ism_policy: "rollover_50gb_30d"
+
+compliance:
+  gdpr_enabled: true
+  iso27001_controls: true
+  audit_trail_enabled: true
+  data_minimization: true

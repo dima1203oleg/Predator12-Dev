@@ -1,0 +1,239 @@
+{
+  "model_distribution": {
+    "total_working_models": 23,
+    "total_agents": 26,
+    "distribution_strategy": "working_models_only",
+    "last_tested": "2025-09-28T20:38:26.722500",
+    "failover_enabled": true,
+    "thermal_protection": true
+  },
+  "working_models": [
+    "ai21-labs/ai21-jamba-1.5-large",
+    "ai21-labs/ai21-jamba-1.5-mini",
+    "cohere/cohere-command-a",
+    "cohere/cohere-command-r-08-2024",
+    "cohere/cohere-command-r-plus-08-2024",
+    "core42/jais-30b-chat",
+    "meta/llama-3.2-11b-vision-instruct",
+    "meta/llama-3.2-90b-vision-instruct",
+    "meta/llama-4-scout-17b-16e-instruct",
+    "meta/meta-llama-3.1-405b-instruct",
+    "meta/meta-llama-3.1-8b-instruct",
+    "microsoft/phi-4-mini-reasoning",
+    "microsoft/phi-4-reasoning",
+    "mistral-ai/codestral-2501",
+    "mistral-ai/ministral-3b",
+    "mistral-ai/mistral-large-2411",
+    "mistral-ai/mistral-medium-2505",
+    "mistral-ai/mistral-nemo",
+    "mistral-ai/mistral-small-2503",
+    "openai/gpt-4.1-nano",
+    "openai/gpt-4o",
+    "openai/gpt-4o-mini",
+    "openai/gpt-5-chat"
+  ],
+  "agents": {
+    "ChiefOrchestrator": {
+      "primary_models": [
+        "ai21-labs/ai21-jamba-1.5-large"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "ModelRouter": {
+      "primary_models": [
+        "ai21-labs/ai21-jamba-1.5-mini"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "QueryPlanner": {
+      "primary_models": [
+        "cohere/cohere-command-a"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "DataQuality": {
+      "primary_models": [
+        "cohere/cohere-command-r-08-2024"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "Anomaly": {
+      "primary_models": [
+        "cohere/cohere-command-r-plus-08-2024"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "Forecast": {
+      "primary_models": [
+        "core42/jais-30b-chat"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "AutoHeal": {
+      "primary_models": [
+        "meta/llama-3.2-11b-vision-instruct"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "SelfDiagnosis": {
+      "primary_models": [
+        "meta/llama-3.2-90b-vision-instruct"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "DatasetIngest": {
+      "primary_models": [
+        "meta/llama-4-scout-17b-16e-instruct"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "ETLOrchestrator": {
+      "primary_models": [
+        "meta/meta-llama-3.1-405b-instruct"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "Indexer": {
+      "primary_models": [
+        "meta/meta-llama-3.1-8b-instruct"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "Embedding": {
+      "primary_models": [
+        "microsoft/phi-4-mini-reasoning"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "OSINTCrawler": {
+      "primary_models": [
+        "microsoft/phi-4-reasoning"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "GraphBuilder": {
+      "primary_models": [
+        "mistral-ai/codestral-2501"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "Simulator": {
+      "primary_models": [
+        "mistral-ai/ministral-3b"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "SyntheticData": {
+      "primary_models": [
+        "mistral-ai/mistral-large-2411"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "ReportExport": {
+      "primary_models": [
+        "mistral-ai/mistral-medium-2505"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "BillingGate": {
+      "primary_models": [
+        "mistral-ai/mistral-nemo"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "PIIGuardian": {
+      "primary_models": [
+        "mistral-ai/mistral-small-2503"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "SelfImprovement": {
+      "primary_models": [
+        "openai/gpt-4.1-nano"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "RedTeam": {
+      "primary_models": [
+        "openai/gpt-4o"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "ComplianceMonitor": {
+      "primary_models": [
+        "openai/gpt-4o-mini"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "PerformanceOptimizer": {
+      "primary_models": [
+        "openai/gpt-5-chat"
+      ],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "Arbiter": {
+      "primary_models": [],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "NexusGuide": {
+      "primary_models": [],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    },
+    "SchemaMapper": {
+      "primary_models": [],
+      "fallback_models": [],
+      "max_concurrent": 3,
+      "load_balancing": "round_robin"
+    }
+  }
+}

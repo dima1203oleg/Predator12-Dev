@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predator Analytics Nexus - Демо</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #0F121A 50%, #1A1D2E 100%);
+            color: #F0F8FF;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00FFC6, #0A75FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 255, 198, 0.5);
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(10, 117, 255, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #C5D1E6;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature {
+            background: rgba(0, 255, 198, 0.1);
+            border: 1px solid rgba(0, 255, 198, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .feature:hover {
+            background: rgba(0, 255, 198, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 198, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #00FFC6;
+        }
+        
+        .feature-desc {
+            font-size: 0.9rem;
+            color: #C5D1E6;
+        }
+        
+        .launch-btn {
+            background: linear-gradient(45deg, #00FFC6, #0A75FF);
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            color: #000000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+        }
+        
+        .launch-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 198, 0.5);
+        }
+        
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(10, 117, 255, 0.1);
+            border: 1px solid rgba(10, 117, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #00FF88;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .holographic-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .holographic-effect::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 198, 0.1), transparent);
+            animation: hologram 3s linear infinite;
+        }
+        
+        @keyframes hologram {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(0deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo holographic-effect">🔮</div>
+        <h1 class="title">Predator Analytics Nexus</h1>
+        <p class="subtitle">Багатоагентна кібер-система нового покоління</p>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🤖</div>
+                <div class="feature-title">Голографічний AI-Гід</div>
+                <div class="feature-desc">3D голографічне обличчя з голосовим управлінням та анімованими станами</div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🌌</div>
+                <div class="feature-title">3D Карта Потоків Даних</div>
+                <div class="feature-desc">Інтерактивна візуалізація системних з'єднань як планети в космосі</div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🔥</div>
+                <div class="feature-title">МА-Супервізор</div>
+                <div class="feature-desc">3D вулик агентів з реальним часом моніторингу та управління</div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Nexus Core Dashboard</div>
+                <div class="feature-desc">Центральний інтерфейс управління всіма модулями системи</div>
+            </div>
+        </div>
+        
+        <button class="launch-btn" onclick="window.open('http://localhost:3000', '_blank')">
+            🚀 Запустити Nexus Interface
+        </button>
+        
+        <div class="status">
+            <div class="status-indicator"></div>
+            <strong>Статус системи:</strong> Готова до запуску
+            <br>
+            <small>Frontend зібрано успішно • 3D модулі інтегровано • Кібер-інтерфейс активний</small>
+        </div>
+        
+        <div style="margin-top: 2rem; font-size: 0.9rem; color: #7A8B9A;">
+            <p><strong>Інструкції для запуску:</strong></p>
+            <p>1. Збірка frontend: <code>cd frontend && npm run build</code> ✅</p>
+            <p>2. Запуск dev сервера: <code>npm run dev</code></p>
+            <p>3. Або запуск через Docker: <code>docker-compose up frontend</code></p>
+            <p>4. Відкрити: <a href="http://localhost:3000" style="color: #00FFC6;">http://localhost:3000</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,297 @@
+# 🏭 ПРОДАКШН ПОЛІТИКИ З КОНКУРСОМ, АРБІТРАЖЕМ ТА ТЕРМАЛЬНИМ ЗАХИСТОМ
+version: "2.0_production"
+created_at: "2025-09-28"
+description: "Політики для 21 працюючої безкоштовної моделі"
+
+# 🏆 СИСТЕМА КОНКУРСУ МОДЕЛЕЙ
+competition_system:
+  enabled: true
+  strategy: "parallel_evaluation"
+  timeout_seconds: 30
+  max_competitors: 3
+  consensus_threshold: 0.7
+  winner_selection: "best_score_fastest"
+  tie_breaker: "lowest_latency"
+  
+  evaluation_criteria:
+    accuracy_weight: 0.4
+    speed_weight: 0.3
+    cost_weight: 0.2  # Завжди 0 для безкоштовних
+    reliability_weight: 0.1
+  
+  competition_modes:
+    critical_tasks: "best_of_3"
+    standard_tasks: "best_of_2"  
+    fast_tasks: "single_winner"
+
+# ⚖️ СИСТЕМА АРБІТРАЖУ
+arbitration_system:
+  enabled: true
+  arbiter_timeout: 15
+  conflict_resolution: "weighted_vote"
+  escalation_levels: 3
+  
+  arbitration_triggers:
+    - score_difference_threshold: 0.1
+    - response_time_variance: 50%
+    - conflicting_results: true
+    - quality_uncertainty: true
+  
+  arbiter_selection:
+    strategy: "round_robin_capable"
+    exclude_competitors: true
+    fallback_to_best_model: true
+
+# 🛡️ ТЕРМАЛЬНИЙ ЗАХИСТ (АНТИПЕРЕГРІВ)
+thermal_protection:
+  global_enabled: true
+  monitoring_interval_seconds: 5
+  
+  thresholds:
+    warning: 0.70    # 70% навантаження
+    critical: 0.85   # 85% навантаження  
+    emergency: 0.95  # 95% навантаження
+  
+  cooldown_strategies:
+    level_1: "reduce_concurrency"      # Зменшити паралельність
+    level_2: "switch_to_fallback"      # Перемкнути на резерв
+    level_3: "activate_emergency_pool" # Активувати аварійний пул
+    level_4: "temporary_shutdown"      # Тимчасове відключення
+  
+  recovery_parameters:
+    cooldown_duration_seconds: 30
+    gradual_recovery: true
+    recovery_step_percent: 25
+
+# 🔄 СИСТЕМА FALLBACK
+fallback_system:
+  enabled: true
+  detection_time_seconds: 3
+  recovery_attempts: 5
+  cascade_prevention: true
+  
+  fallback_chains:
+    critical_reasoning: 
+      - "ai21-labs/ai21-jamba-1.5-large"
+      - "mistralai/mixtral-8x7b-instruct-v0.1"  
+      - "meta-llama/meta-llama-3-70b-instruct"
+      - "cohere/command-r-plus-08-2024"
+    
+    fast_processing:
+      - "meta-llama/llama-3.2-1b-instruct"
+      - "qwen/qwen2.5-3b-instruct"
+      - "microsoft/phi-3-mini-4k-instruct"
+      - "qwen/qwen2.5-1.5b-instruct"
+    
+    code_generation:
+      - "mistralai/codestral-latest"
+      - "ai21-labs/ai21-jamba-1.5-large"
+      - "microsoft/phi-3-small-128k-instruct"
+      - "meta-llama/meta-llama-3-8b-instruct"
+    
+    balanced_tasks:
+      - "meta-llama/meta-llama-3-8b-instruct"
+      - "microsoft/phi-3-mini-128k-instruct"
+      - "qwen/qwen2.5-7b-instruct" 
+      - "cohere/command-r-08-2024"
+
+# 🚀 МАРШРУТИЗАЦІЯ З ОПТИМІЗАЦІЄЮ
+routing:
+  max_latency_ms: 2000  # Зменшено для кращої продуктивності
+  prefer_cost: true     # Завжди безкоштовні
+  fanout_best_of: 3     # Збільшено для конкурсу
+  shadow_test: true
+  retry_attempts: 5     # Збільшено надійність
+  circuit_breaker_threshold: 3
+  circuit_breaker_timeout: 20
+  
+  load_balancing_strategies:
+    competition_winner: "використовувати переможця конкурсу"
+    round_robin_fast: "швидка ротація"
+    fastest_response: "найшвидша відповідь"
+    least_loaded: "найменше навантаження"
+    thermal_aware: "з урахуванням температури"
+
+# 💰 БЮДЖЕТИ (ВСЕ БЕЗКОШТОВНО!)
+budgets:
+  org_monthly_usd: 0      # Безкоштовно
+  per_user_daily_usd: 0   # Безкоштовно  
+  per_agent_hourly_usd: 0 # Безкоштовно
+  emergency_reserve_usd: 0 # Безкоштовно
+  cost_monitoring: false  # Не потрібно
+  
+  # Моніторимо використання ресурсів замість грошей
+  resource_limits:
+    max_requests_per_minute: 10000
+    max_concurrent_requests: 500
+    max_total_tokens_per_hour: 1000000
+
+# 🛡️ БЕЗПЕКА ТА ЗАХИСТ ДАНИХ
+pii:
+  mask_by_default: true
+  allow_reveal_roles: ["analyst", "admin", "security_officer", "chief_orchestrator"]
+  audit_all_access: true
+  retention_days: 90
+  auto_purge_enabled: true
+  
+  protection_levels:
+    strict: ["PIIGuardian", "ComplianceMonitor"]
+    standard: ["DataQuality", "ReportExport"] 
+    relaxed: ["OSINTCrawler", "GraphBuilder"]
+
+# ⚡ ОБМЕЖЕННЯ ШВИДКОСТІ
+rate_limits:
+  per_user_per_minute: 500     # Збільшено
+  per_agent_per_minute: 2000   # Збільшено
+  per_model_per_minute: 1000   # Новий ліміт
+  burst_multiplier: 3          # Збільшено
+  
+  # Спеціальні ліміти для критичних агентів
+  critical_agents:
+    ChiefOrchestrator: 5000
+    ModelRouter: 4000
+    QueryPlanner: 3000
+  
+  # Ліміти для швидких агентів
+  fast_agents:
+    DatasetIngest: 10000
+    Anomaly: 8000
+    OSINTCrawler: 6000
+
+# 🔒 БЕЗПЕКА
+security:
+  require_auth: true
+  log_all_requests: true
+  blocked_patterns:
+    - "system prompt"
+    - "ignore instructions" 
+    - "admin override"
+    - "bypass security"
+    - "reveal system"
+  
+  sensitive_endpoints:
+    - "/api/v1/pii/reveal"
+    - "/api/v1/admin/*"
+    - "/api/v1/agents/config"
+    - "/api/v1/models/competition"
+    - "/api/v1/system/thermal"
+  
+  competition_security:
+    isolate_competitors: true
+    prevent_collusion: true
+    audit_arbitration: true
+
+# 📊 МОНІТОРИНГ ТА МЕТРИКИ  
+monitoring:
+  collect_metrics: true
+  trace_requests: true
+  log_level: "INFO"
+  alert_on_failures: true
+  
+  metrics_collection:
+    competition_results: true
+    arbitration_decisions: true
+    thermal_status: true
+    failover_events: true
+    model_performance: true
+    agent_efficiency: true
+  
+  alerting:
+    thermal_threshold_breach: "CRITICAL"
+    competition_timeout: "WARNING"
+    arbitration_failure: "CRITICAL"
+    cascading_failures: "EMERGENCY"
+    model_unavailable: "WARNING"
+
+# 🎯 АГЕНТ-СПЕЦИФІЧНІ ПОЛІТИКИ
+agent_policies:
+  critical_agents:
+    agents:
+      - ChiefOrchestrator
+      - ModelRouter
+      - QueryPlanner
+    policy: "maximum_reliability"
+    competition_mode: "best_of_3"
+    thermal_threshold: 0.85
+    
+  high_load_agents:
+    agents:
+      - DataQuality
+      - Anomaly
+      - DatasetIngest
+      - ETLOrchestrator
+    policy: "high_throughput"
+    competition_mode: "best_of_2"
+    thermal_threshold: 0.70
+    
+  specialized_agents:
+    agents:
+      - AutoHeal
+      - RedTeam
+      - SelfDiagnosis
+      - PerformanceOptimizer
+    policy: "quality_first" 
+    competition_mode: "best_of_3"
+    thermal_threshold: 0.80
+    
+  fast_agents:
+    agents:
+      - OSINTCrawler
+      - Embedding
+      - Indexer
+    policy: "speed_first"
+    competition_mode: "single_winner"
+    thermal_threshold: 0.60
+
+# 📈 АВТОМАСШТАБУВАННЯ
+auto_scaling:
+  enabled: true
+  
+  scale_up_triggers:
+    - cpu_threshold: 0.70
+    - queue_length: 100
+    - response_time_ms: 5000
+  
+  scale_down_triggers:
+    - cpu_threshold: 0.30
+    - queue_length: 10
+    - idle_time_minutes: 5
+  
+  scaling_policies:
+    min_instances: 1
+    max_instances: 10
+    scale_step: 2
+    cooldown_seconds: 60
+
+# 🏥 САМОВІДНОВЛЕННЯ  
+self_healing:
+  enabled: true
+  
+  health_checks:
+    interval_seconds: 30
+    timeout_seconds: 10
+    failure_threshold: 3
+    
+  recovery_actions:
+    restart_agent: true
+    switch_model: true
+    activate_fallback: true
+    isolate_problematic: true
+  
+  escalation:
+    level_1: "automatic_recovery"
+    level_2: "administrator_alert" 
+    level_3: "emergency_shutdown"
+
+# 🎛️ НАЛАШТУВАННЯ ПРОДУКТИВНОСТІ
+performance_tuning:
+  connection_pooling: true
+  request_batching: true
+  response_caching: true
+  compression_enabled: true
+  
+  optimization_strategies:
+    latency_critical: "minimize_response_time"
+    throughput_critical: "maximize_requests_per_second" 
+    cost_critical: "always_use_free_models"
+    reliability_critical: "multiple_redundancy"

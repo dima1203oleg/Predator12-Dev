@@ -1,0 +1,48 @@
+{
+  "index_patterns": ["customs_safe_*", "customs_restricted_*"],
+  "template": {
+    "settings": {
+      "index": {
+        "number_of_shards": 6,
+        "number_of_replicas": 1,
+        "routing": {
+          "allocation.include._tier_preference": "data_hot"
+        },
+        "opendistro.index_state_management.policy_id": "customs_policy",
+        "refresh_interval": "30s"
+      }
+    },
+    "mappings": {
+      "dynamic": "strict",
+      "properties": {
+        "doc_id": {"type": "keyword"},
+        "ts": {"type": "date"},
+        "hs_code": {"type": "keyword"},
+        "amount": {"type": "double"},
+        "country": {"type": "keyword"},
+        "company_name": {"type": "keyword"},
+        "company_masked": {"type": "keyword"},
+        "declaration_number": {"type": "keyword"},
+        "port_of_entry": {"type": "keyword"},
+        "goods_description": {
+          "type": "text",
+          "analyzer": "ukrainian_analyzer"
+        },
+        "weight": {"type": "double"},
+        "currency": {"type": "keyword"},
+        "exchange_rate": {"type": "double"},
+        "customs_value": {"type": "double"},
+        "duty_amount": {"type": "double"},
+        "vat_amount": {"type": "double"},
+        "origin_country": {"type": "keyword"},
+        "transport_type": {"type": "keyword"},
+        "risk_score": {"type": "float"},
+        "anomaly_flags": {"type": "keyword"},
+        "processing_status": {"type": "keyword"},
+        "created_at": {"type": "date"},
+        "updated_at": {"type": "date"}
+      }
+    }
+  }
+}
+

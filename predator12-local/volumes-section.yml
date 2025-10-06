@@ -1,0 +1,15 @@
+volumes:
+  postgres_data:
+  redis_data:
+  opensearch_data:
+  minio_data:
+  prometheus_data:
+  grafana_data:
+  mlflow_data:
+  qdrant_data:
+  airflow_logs:
+  chaos_data:
+  rabbitmq_data:
+  kafka_data:
+  zookeeper_data:
+  influxdb_data:

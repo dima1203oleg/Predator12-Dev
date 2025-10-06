@@ -1,0 +1,22 @@
+{
+  "name": "@nexus/ui-theme",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./tokens.json": "./tokens.json",
+    "./index.css": "./index.css"
+  },
+  "files": [
+    "dist",
+    "tokens.json",
+    "index.css"
+  ],
+  "scripts": {
+    "build": "node ./scripts/build.cjs"
+  }
+}

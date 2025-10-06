@@ -1,0 +1,356 @@
+# Model SDK Configuration
+# Конфігурація 48 РЕАЛЬНИХ моделей через API провайдери
+
+models:
+  # OpenAI Models (через openrouter/together)
+  "openai/gpt-4o":
+    provider: "openrouter"
+    endpoint: "openai/gpt-4o"
+    quality_score: 0.95
+    latency_ms: 2000
+    cost_per_1k: 0.0
+  "openai/gpt-4o-mini":
+    provider: "openrouter"
+    endpoint: "openai/gpt-4o-mini"
+    quality_score: 0.90
+    latency_ms: 1500
+    cost_per_1k: 0.0
+  "openai/gpt-3.5-turbo":
+    provider: "openrouter"
+    endpoint: "openai/gpt-3.5-turbo"
+    quality_score: 0.85
+    latency_ms: 1200
+    cost_per_1k: 0.0
+
+  # Anthropic Models
+  "anthropic/claude-3.5-sonnet":
+    provider: "openrouter"
+    endpoint: "anthropic/claude-3.5-sonnet"
+    quality_score: 0.94
+    latency_ms: 2500
+    cost_per_1k: 0.0
+  "anthropic/claude-3-haiku":
+    provider: "openrouter"
+    endpoint: "anthropic/claude-3-haiku"
+    quality_score: 0.88
+    latency_ms: 1800
+    cost_per_1k: 0.0
+
+  # Meta Llama Models
+  "meta/meta-llama-3.1-70b-instruct":
+    provider: "together"
+    endpoint: "meta-llama/Llama-3.1-70B-Instruct-Turbo"
+    quality_score: 0.94
+    latency_ms: 3000
+    cost_per_1k: 0.0
+  "meta/meta-llama-3.1-8b-instruct":
+    provider: "together"
+    endpoint: "meta-llama/Llama-3.1-8B-Instruct-Turbo"
+    quality_score: 0.86
+    latency_ms: 1000
+    cost_per_1k: 0.0
+  "meta/llama-3.2-90b-vision":
+    provider: "together"
+    endpoint: "meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo"
+    quality_score: 0.92
+    latency_ms: 2800
+    cost_per_1k: 0.0
+
+  # Mistral Models
+  "mistral/mixtral-8x7b-instruct":
+    provider: "together"
+    endpoint: "mistralai/Mixtral-8x7B-Instruct-v0.1"
+    quality_score: 0.90
+    latency_ms: 1800
+    cost_per_1k: 0.0
+  "mistral/mistral-7b-instruct":
+    provider: "together"
+    endpoint: "mistralai/Mistral-7B-Instruct-v0.1"
+    quality_score: 0.84
+    latency_ms: 1200
+    cost_per_1k: 0.0
+
+  # Google Models
+  "google/gemini-1.5-pro":
+    provider: "openrouter"
+    endpoint: "google/gemini-1.5-pro"
+    quality_score: 0.93
+    latency_ms: 2200
+    cost_per_1k: 0.0
+  "google/gemini-1.5-flash":
+    provider: "openrouter"
+    endpoint: "google/gemini-1.5-flash"
+    quality_score: 0.88
+    latency_ms: 1500
+    cost_per_1k: 0.0
+
+  # Qwen Models
+  "qwen/qwen2.5-72b-instruct":
+    provider: "together"
+    endpoint: "Qwen/Qwen2.5-72B-Instruct-Turbo"
+    quality_score: 0.91
+    latency_ms: 2600
+    cost_per_1k: 0.0
+  "qwen/qwen2.5-14b-instruct":
+    provider: "together"
+    endpoint: "Qwen/Qwen2.5-14B-Instruct-Turbo"
+    quality_score: 0.87
+    latency_ms: 1600
+    cost_per_1k: 0.0
+  "qwen/qwen2.5-7b-instruct":
+    provider: "together"
+    endpoint: "Qwen/Qwen2.5-7B-Instruct-Turbo"
+    quality_score: 0.83
+    latency_ms: 1100
+    cost_per_1k: 0.0
+
+  # DeepSeek Models
+  "deepseek/deepseek-coder-v2":
+    provider: "together"
+    endpoint: "deepseek-ai/deepseek-coder-33b-instruct"
+    quality_score: 0.91
+    latency_ms: 2200
+    cost_per_1k: 0.0
+  "deepseek/deepseek-chat":
+    provider: "openrouter"
+    endpoint: "deepseek/deepseek-chat"
+    quality_score: 0.89
+    latency_ms: 1800
+    cost_per_1k: 0.0
+
+  # Cohere Models
+  "cohere/command-r-plus":
+    provider: "openrouter"
+    endpoint: "cohere/command-r-plus"
+    quality_score: 0.90
+    latency_ms: 2000
+    cost_per_1k: 0.0
+  "cohere/command-r":
+    provider: "openrouter"
+    endpoint: "cohere/command-r"
+    quality_score: 0.86
+    latency_ms: 1600
+    cost_per_1k: 0.0
+
+  # Code Specialized Models
+  "bigcode/starcoder2-15b":
+    provider: "huggingface"
+    endpoint: "bigcode/starcoder2-15b"
+    quality_score: 0.88
+    latency_ms: 1700
+    cost_per_1k: 0.0
+  "codellama/codellama-70b-instruct":
+    provider: "together"
+    endpoint: "codellama/CodeLlama-70b-Instruct-hf"
+    quality_score: 0.90
+    latency_ms: 2500
+    cost_per_1k: 0.0
+
+  # Vision Models
+  "llava-hf/llava-1.6-mistral-7b":
+    provider: "huggingface"
+    endpoint: "llava-hf/llava-1.6-mistral-7b-hf"
+    quality_score: 0.86
+    latency_ms: 2000
+    cost_per_1k: 0.0
+  "microsoft/kosmos-2":
+    provider: "huggingface"
+    endpoint: "microsoft/kosmos-2-patch14-224"
+    quality_score: 0.82
+    latency_ms: 1800
+    cost_per_1k: 0.0
+
+  # Embedding Models
+  "BAAI/bge-m3":
+    provider: "huggingface"
+    endpoint: "BAAI/bge-m3"
+    type: "embedding"
+    quality_score: 0.89
+    latency_ms: 800
+  "intfloat/e5-large-v2":
+    provider: "huggingface"
+    endpoint: "intfloat/e5-large-v2"
+    type: "embedding"
+    quality_score: 0.87
+    latency_ms: 600
+  "sentence-transformers/all-MiniLM-L6-v2":
+    provider: "huggingface"
+    endpoint: "sentence-transformers/all-MiniLM-L6-v2"
+    type: "embedding"
+    quality_score: 0.84
+    latency_ms: 400
+
+  # Specialized Models
+  "nvidia/nemotron-4-340b-instruct":
+    provider: "openrouter"
+    endpoint: "nvidia/nemotron-4-340b-instruct"
+    quality_score: 0.95
+    latency_ms: 3500
+    cost_per_1k: 0.0
+  "x-ai/grok-beta":
+    provider: "openrouter"
+    endpoint: "x-ai/grok-beta"
+    quality_score: 0.91
+    latency_ms: 2400
+    cost_per_1k: 0.0
+
+  # Additional Free Models
+  "microsoft/phi-3-medium":
+    provider: "together"
+    endpoint: "microsoft/Phi-3-medium-4k-instruct"
+    quality_score: 0.85
+    latency_ms: 1400
+    cost_per_1k: 0.0
+  "microsoft/phi-3-mini":
+    provider: "together"
+    endpoint: "microsoft/Phi-3-mini-4k-instruct"
+    quality_score: 0.82
+    latency_ms: 900
+    cost_per_1k: 0.0
+  "microsoft/wizardlm-2-8x22b":
+    provider: "together"
+    endpoint: "microsoft/WizardLM-2-8x22B"
+    quality_score: 0.92
+    latency_ms: 2800
+    cost_per_1k: 0.0
+
+  # Math and Reasoning
+  "deepseek/deepseek-math":
+    provider: "openrouter"
+    endpoint: "deepseek/deepseek-math-7b-instruct"
+    quality_score: 0.88
+    latency_ms: 1600
+    cost_per_1k: 0.0
+  "internlm/internlm2.5-7b-chat":
+    provider: "huggingface"
+    endpoint: "internlm/internlm2_5-7b-chat"
+    quality_score: 0.84
+    latency_ms: 1300
+    cost_per_1k: 0.0
+
+  # Multilingual Models
+  "01-ai/yi-34b-chat":
+    provider: "together"
+    endpoint: "zero-one-ai/Yi-34B-Chat"
+    quality_score: 0.89
+    latency_ms: 2100
+    cost_per_1k: 0.0
+  "baichuan-inc/baichuan2-13b-chat":
+    provider: "huggingface"
+    endpoint: "baichuan-inc/Baichuan2-13B-Chat"
+    quality_score: 0.85
+    latency_ms: 1700
+    cost_per_1k: 0.0
+
+  # Fast Inference Models
+  "nous-hermes-2-mixtral-8x7b":
+    provider: "together"
+    endpoint: "NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO"
+    quality_score: 0.87
+    latency_ms: 1500
+    cost_per_1k: 0.0
+  "openchat/openchat-3.5":
+    provider: "together"
+    endpoint: "openchat/openchat-3.5-1210"
+    quality_score: 0.83
+    latency_ms: 1100
+    cost_per_1k: 0.0
+
+  # Domain-Specific Models
+  "teknium/openhermes-2.5-mistral-7b":
+    provider: "together"
+    endpoint: "teknium/OpenHermes-2.5-Mistral-7B"
+    quality_score: 0.84
+    latency_ms: 1200
+    cost_per_1k: 0.0
+  "garage-bai/platypus2-70b-instruct":
+    provider: "together"
+    endpoint: "garage-bAInd/Platypus2-70B-instruct"
+    quality_score: 0.88
+    latency_ms: 2300
+    cost_per_1k: 0.0
+
+  # Additional Vision and Multimodal
+  "microsoft/cogvlm-chat":
+    provider: "huggingface"
+    endpoint: "THUDM/cogvlm-chat-hf"
+    quality_score: 0.86
+    latency_ms: 2200
+    cost_per_1k: 0.0
+  "salesforce/instructblip":
+    provider: "huggingface"
+    endpoint: "Salesforce/instructblip-vicuna-7b"
+    quality_score: 0.82
+    latency_ms: 1900
+    cost_per_1k: 0.0
+
+  # Experimental and Emerging
+  "alpindale/goliath-120b":
+    provider: "together"
+    endpoint: "alpindale/goliath-120b"
+    quality_score: 0.93
+    latency_ms: 3200
+    cost_per_1k: 0.0
+  "sophiamyang/chatglm3-6b":
+    provider: "huggingface"
+    endpoint: "THUDM/chatglm3-6b"
+    quality_score: 0.81
+    latency_ms: 1300
+    cost_per_1k: 0.0
+
+  # Additional Code Models
+  "WizardLM/WizardCoder-Python-34B-V1.0":
+    provider: "huggingface"
+    endpoint: "WizardLM/WizardCoder-Python-34B-V1.0"
+    quality_score: 0.89
+    latency_ms: 2000
+    cost_per_1k: 0.0
+  "phind/phind-codellama-34b":
+    provider: "together"
+    endpoint: "Phind/Phind-CodeLlama-34B-v2"
+    quality_score: 0.87
+    latency_ms: 2100
+    cost_per_1k: 0.0
+
+  # Research and Academic Models
+  "togethercomputer/redpajama-incite-7b-chat":
+    provider: "together"
+    endpoint: "togethercomputer/RedPajama-INCITE-7B-Chat"
+    quality_score: 0.80
+    latency_ms: 1000
+    cost_per_1k: 0.0
+  "stabilityai/stablelm-tuned-alpha-7b":
+    provider: "huggingface"
+    endpoint: "stabilityai/stablelm-tuned-alpha-7b"
+    quality_score: 0.79
+    latency_ms: 1100
+    cost_per_1k: 0.0
+
+  # Additional Embedding Models
+  "thenlper/gte-large":
+    provider: "huggingface"
+    endpoint: "thenlper/gte-large"
+    type: "embedding"
+    quality_score: 0.88
+    latency_ms: 500
+  "microsoft/e5-large":
+    provider: "huggingface"
+    endpoint: "intfloat/e5-large"
+    type: "embedding"
+    quality_score: 0.87
+    latency_ms: 550
+
+# API Keys та конфігурація провайдерів
+providers:
+  openrouter:
+    base_url: "https://openrouter.ai/api/v1"
+    api_key_env: "OPENROUTER_API_KEY"
+    default: true
+  together:
+    base_url: "https://api.together.xyz/v1"
+    api_key_env: "TOGETHER_API_KEY"
+    default: true
+  huggingface:
+    base_url: "https://api-inference.huggingface.co"
+    api_key_env: "HUGGINGFACE_API_KEY"
+    default: true

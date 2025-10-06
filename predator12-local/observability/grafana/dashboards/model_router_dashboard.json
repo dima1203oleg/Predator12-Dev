@@ -1,0 +1,76 @@
+{
+  "annotations": {"list": [{"builtIn": 1, "datasource": "-- Grafana --", "enable": true, "hide": true, "iconColor": "rgba(0, 211, 255, 1)", "name": "Annotations & Alerts", "type": "dashboard"}]},
+  "editable": true,
+  "graphTooltip": 1,
+  "liveNow": true,
+  "panels": [
+    {"type": "row", "title": "Model Router Overview", "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0}},
+    {
+      "type": "timeseries",
+      "title": "Requests by task (rate)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "sum by (task) (rate(model_router_requests_total[1m]))", "legendFormat": "{{task}}"}
+      ],
+      "gridPos": {"h": 6, "w": 12, "x": 0, "y": 1}
+    },
+    {
+      "type": "timeseries",
+      "title": "Failures by task (rate)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "sum by (task) (rate(model_router_requests_total{status=\"failure\"}[1m]))", "legendFormat": "{{task}}"}
+      ],
+      "gridPos": {"h": 6, "w": 12, "x": 12, "y": 1}
+    },
+    {
+      "type": "timeseries",
+      "title": "Retries (rate)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "sum(rate(model_router_retries_total[1m]))", "legendFormat": "retries"}
+      ],
+      "gridPos": {"h": 6, "w": 12, "x": 0, "y": 7}
+    },
+    {
+      "type": "timeseries",
+      "title": "Fallbacks (rate)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "sum(rate(model_router_fallbacks_total[1m]))", "legendFormat": "fallbacks"}
+      ],
+      "gridPos": {"h": 6, "w": 12, "x": 12, "y": 7}
+    },
+    {"type": "row", "title": "Breakdowns", "gridPos": {"h": 1, "w": 24, "x": 0, "y": 13}},
+    {
+      "type": "table",
+      "title": "Top failing models",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "topk(10, sum by (model) (rate(model_router_requests_total{status=\"failure\"}[5m])))", "legendFormat": "{{model}}"}
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 14},
+      "transformations": [{"id": "labelsToFields"}]
+    },
+    {
+      "type": "table",
+      "title": "Top fallback chains",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "topk(10, sum by (from_model, to_model) (rate(model_router_fallbacks_total[5m])))", "legendFormat": "{{from_model}}→{{to_model}}"}
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 14},
+      "transformations": [{"id": "labelsToFields"}]
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["predator11", "sdk", "model-router", "observability"],
+  "templating": {"list": [{"name": "DS_PROMETHEUS", "type": "datasource", "query": "prometheus", "current": {"selected": true}, "label": "Prometheus"}]},
+  "time": {"from": "now-6h", "to": "now"},
+  "timezone": "browser",
+  "title": "Predator11 • Model Router",
+  "uid": "predator11-model-router",
+  "version": 1
+}

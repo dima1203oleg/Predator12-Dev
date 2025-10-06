@@ -1,0 +1,120 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Predator Analytics - System Pulse",
+    "tags": ["predator", "system", "monitoring"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Backend Health",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "up{job=\"backend\"}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "green", "value": 1}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 4, "w": 3, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "API Response Time",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"backend\"}[5m]))",
+            "refId": "A",
+            "legendFormat": "95th percentile"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 3, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Celery Queue Length",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "celery_queue_length",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 6, "x": 15, "y": 0}
+      },
+      {
+        "id": 4,
+        "title": "Agent Task Success Rate",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "(sum(rate(celery_task_success_total[5m])) / sum(rate(celery_task_total[5m]))) * 100",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "yellow", "value": 90},
+                {"color": "green", "value": 95}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 4, "w": 3, "x": 21, "y": 0}
+      },
+      {
+        "id": 5,
+        "title": "Container Resource Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(container_cpu_usage_seconds_total{name=~\"predator.*\"}[5m]) * 100",
+            "refId": "A",
+            "legendFormat": "{{name}} CPU %"
+          },
+          {
+            "expr": "(container_memory_usage_bytes{name=~\"predator.*\"} / container_spec_memory_limit_bytes{name=~\"predator.*\"}) * 100",
+            "refId": "B", 
+            "legendFormat": "{{name}} Memory %"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 6,
+        "title": "Error Rate by Service",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{status=~\"5..\"}[5m])",
+            "refId": "A",
+            "legendFormat": "{{service}} errors/sec"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "5s"
+  }
+}

@@ -1,0 +1,69 @@
+# Core async libraries
+asyncio-mqtt==0.16.1
+aioredis==2.0.1
+asyncpg==0.29.0
+aiofiles==23.2.1
+structlog
+
+# Kafka for inter-agent communication
+kafka-python==2.0.2
+aiokafka==0.10.0
+
+# Vector database
+qdrant-client==1.7.0
+
+# Machine Learning and Data Processing
+scikit-learn==1.3.2
+numpy==1.24.4
+pandas==2.1.4
+scipy==1.11.4
+
+# Monitoring and Metrics
+prometheus-client==0.19.0
+
+# HTTP clients
+requests==2.31.0
+httpx==0.25.2
+
+# System monitoring
+psutil==5.9.6
+docker==7.0.0
+
+# Data validation and processing
+pydantic==2.5.0
+python-multipart==0.0.6
+
+# Logging and observability
+structlog==23.2.0
+opentelemetry-api==1.21.0
+opentelemetry-sdk==1.21.0
+opentelemetry-exporter-otlp==1.21.0
+
+# Natural Language Processing
+transformers==4.36.0
+sentence-transformers==2.2.2
+
+# Graph processing
+networkx==3.2.1
+
+# Time series and forecasting
+prophet==1.1.5
+lightgbm==4.1.0
+
+# Data quality
+great-expectations==0.18.5
+
+# Security and encryption
+cryptography==41.0.8
+python-jose[cryptography]==3.3.0
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2023.3
+tenacity==8.2.3
+click==8.1.7
+
+# Development and testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0

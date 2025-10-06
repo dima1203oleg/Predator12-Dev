@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "predator-analytics-api"
+version = "0.1.0"
+description = "API for the Predator Analytics platform"
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.92.0"
+uvicorn = "^0.20.0"
+psycopg2-binary = "^2.9.5"
+redis = "^4.5.1"
+sqlalchemy = "^2.0.0"
+alembic = "^1.9.0"
+pydantic = "^2.0.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.5"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+black = "^22.10.0"
+isort = "^5.10.1"
+flake8 = "^6.0.0"
+mypy = "^0.991"
+pytest-asyncio = "^0.20.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

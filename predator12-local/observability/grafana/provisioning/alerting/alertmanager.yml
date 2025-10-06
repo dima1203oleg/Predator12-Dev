@@ -1,0 +1,35 @@
+apiVersion: 1
+
+# List of Alertmanager configurations to be used
+configs:
+  - name: default
+    # API URL of the Alertmanager instance
+    alertmanager_url: http://alertmanager:9093
+    # Timeout for requests to the Alertmanager API
+    api_timeout: 10s
+    # Whether to automatically resolve alerts when they are no longer firing
+    resolve_timeout: 5m
+    
+    # Default contact points
+    contact_points:
+      - name: email-default
+        type: email
+        settings:
+          addresses: "admin@example.com"  # Replace with your email
+          singleEmail: true
+          message: '{{ template "default.message" . }}'
+          subject: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }} for {{ .CommonLabels.job }}'
+          
+    # Default notification policies
+    notification_policies:
+      - receiver: email-default
+        group_by: ['alertname', 'severity']
+        group_wait: 30s
+        group_interval: 5m
+        repeat_interval: 4h
+        
+    # Default mute time intervals
+    mute_time_intervals: []
+    
+    # Default group by labels
+    group_by: ['alertname', 'severity', 'instance']

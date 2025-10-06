@@ -1,0 +1,37 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: true
+    
+  - name: PostgreSQL
+    type: postgres
+    access: proxy
+    url: postgres:5432
+    database: predator_nexus
+    user: predator_user
+    secureJsonData:
+      password: predator_pass123
+    jsonData:
+      sslmode: disable
+      postgresVersion: 1400
+      
+  - name: OpenSearch
+    type: elasticsearch
+    access: proxy
+    url: http://opensearch-node:9200
+    database: predator-logs-*
+    jsonData:
+      esVersion: 7.10.0
+      timeField: "@timestamp"
+      interval: Daily
+      
+  - name: MLflow
+    type: grafana-mlflow-datasource
+    access: proxy
+    url: http://mlflow:5000
+    isDefault: false

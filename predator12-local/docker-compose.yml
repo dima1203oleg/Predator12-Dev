@@ -1,0 +1,563 @@
+version: '3.8'
+
+# ============================================================================
+#                    PREDATOR11 PRODUCTION-READY STACK
+#           Багатоагентна система з повним стеком спостережуваності
+# ============================================================================
+
+services:
+  # ===== CORE APPLICATION STACK =====
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - redis
+      - opensearch
+      - minio
+      - modelsdk
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - OPENSEARCH_URL=${OPENSEARCH_URL}
+      - MINIO_URL=${MINIO_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - MODEL_SDK_BASE_URL=http://modelsdk:3010
+      - MODEL_SDK_KEY=${MODEL_SDK_KEY}
+      - QDRANT_URL=${QDRANT_URL}
+      - KAFKA_BROKERS=${KAFKA_BROKERS}
+      - LOKI_URL=${LOKI_URL}
+      - TEMPO_URL=${TEMPO_URL}
+    ports:
+      - "8000:5001"
+    volumes:
+      - ./backend:/app
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:5001/health', timeout=5).raise_for_status()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prebuilt
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  # ===== MULTI-AGENT INFRASTRUCTURE =====
+
+  # Celery Worker для виконання фонових задач агентів
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+      - redis
+      - db
+      - qdrant
+      - redpanda
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - OPENSEARCH_URL=${OPENSEARCH_URL}
+      - MINIO_URL=${MINIO_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - QDRANT_URL=${QDRANT_URL}
+      - KAFKA_BROKERS=${KAFKA_BROKERS}
+      - CELERY_CONCURRENCY=${CELERY_CONCURRENCY}
+      - LOKI_URL=${LOKI_URL}
+    command: >
+      sh -c "celery -A app.workers.celery_app worker -l info --concurrency=${CELERY_CONCURRENCY}"
+    volumes:
+      - ./backend:/app
+      - ./logs:/app/logs
+    restart: unless-stopped
+
+  # Celery Beat для планування задач
+  scheduler:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - worker
+      - redis
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+    command: >
+      sh -c "celery -A app.workers.celery_app beat -l info"
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+
+  # Супервізор агентів (постійно працюючі агенти)
+  agent-supervisor:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+      - worker
+      - qdrant
+      - redpanda
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - OPENSEARCH_URL=${OPENSEARCH_URL}
+      - QDRANT_URL=${QDRANT_URL}
+      - KAFKA_BROKERS=${KAFKA_BROKERS}
+      - PROMETHEUS_URL=${PROMETHEUS_URL}
+      - LOKI_URL=${LOKI_URL}
+    command: python -u agents/supervisor.py --config agents/agents.yaml --cmd run
+    volumes:
+      - ./backend:/app
+      - ./agents:/app/agents
+      - ./logs:/app/logs
+    restart: unless-stopped
+
+  # Брокер подій Redpanda (Kafka-сумісний)
+  redpanda:
+    image: redpandadata/redpanda:v24.1.2
+    command:
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp
+      - "1"
+      - --memory
+      - "1G"
+      - --reserve-memory
+      - "0M"
+      - --node-id
+      - "0"
+      - --check=false
+      - --kafka-addr
+      - "PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092"
+      - --advertise-kafka-addr
+      - "PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092"
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+      - "29092:29092"
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster info"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # Векторне сховище Qdrant
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:6333/healthz || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  # Model SDK сервер
+  modelsdk:
+    build:
+      context: ./services/model-sdk
+      dockerfile: Dockerfile
+    ports:
+      - "3010:3010"
+    environment:
+      - PORT=3010
+      - MODEL_SDK_KEY=${MODEL_SDK_KEY}
+    volumes:
+      - ./services/model-sdk:/app
+      - ./data/models:/app/models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3010/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  # ===== DATA LAYER =====
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass ${REDIS_PASSWORD:-redis_secure_pass} --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD:-redis_secure_pass}", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  opensearch:
+    image: opensearchproject/opensearch:2.9.0
+    container_name: predator-opensearch
+    environment:
+      - cluster.name=predator-opensearch-cluster
+      - node.name=opensearch-node1
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms2g -Xmx2g"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "DISABLE_SECURITY_PLUGIN=false"  # Увімкнена безпека для prod
+      - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_ADMIN_PASSWORD}"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+      - ./observability/opensearch/config:/usr/share/opensearch/config
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.9.0
+    container_name: predator-opensearch-dashboards
+    depends_on:
+      - opensearch
+    ports:
+      - "5601:5601"
+    environment:
+      - OPENSEARCH_HOSTS=http://opensearch:9200
+      - DISABLE_SECURITY_DASHBOARDS_PLUGIN=false
+    volumes:
+      - ./observability/opensearch/dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
+    restart: unless-stopped
+
+  minio:
+    image: quay.io/minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # ===== OBSERVABILITY STACK =====
+
+  # Prometheus для метрик
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./observability/prometheus/rules:/etc/prometheus/rules
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Grafana для візуалізації
+  grafana:
+    image: grafana/grafana:10.1.0
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./observability/grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Alertmanager для сповіщень
+  alertmanager:
+    image: prom/alertmanager:v0.26.0
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./observability/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager_data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+      - '--web.external-url=http://localhost:9093'
+    restart: unless-stopped
+
+  # Loki для централізованих логів
+  loki:
+    image: grafana/loki:2.9.0
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./observability/loki/loki-config.yml:/etc/loki/local-config.yaml
+      - loki_data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/metrics || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  # Promtail для збору логів
+  promtail:
+    image: grafana/promtail:2.9.0
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./observability/promtail/config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    restart: unless-stopped
+
+  # Tempo для трейсів
+  tempo:
+    image: grafana/tempo:2.5.0
+    ports:
+      - "3200:3200"   # HTTP
+      - "4317:4317"   # OTLP gRPC
+    volumes:
+      - ./observability/tempo/tempo.yml:/etc/tempo/tempo.yml
+      - tempo_data:/var/tempo
+    command: -config.file=/etc/tempo/tempo.yml
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3200/ready || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
+  # ===== PROMETHEUS EXPORTERS =====
+
+  # Node Exporter для метрик хоста
+  node-exporter:
+    image: prom/node-exporter:v1.6.1
+    container_name: predator-node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - "9100:9100"
+
+  # cAdvisor для метрик контейнерів
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    container_name: predator-cadvisor
+    ports:
+      - "8085:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    restart: unless-stopped
+
+  # OpenSearch Exporter
+  opensearch-exporter:
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:v1.7.0
+    ports:
+      - "9114:9114"
+    command:
+      - "--es.uri=http://opensearch:9200"
+      - "--es.all"
+      - "--es.indices"
+      - "--es.shards"
+    depends_on:
+      - opensearch
+    restart: unless-stopped
+
+  # Blackbox Exporter для зовнішніх перевірок
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.24.0
+    ports:
+      - "9115:9115"
+    volumes:
+      - ./observability/blackbox/config.yml:/etc/blackbox_exporter/config.yml
+    restart: unless-stopped
+
+  # ===== AUTHENTICATION & AUTHORIZATION =====
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0
+    environment:
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_DB=postgres
+      - KC_DB_URL=${KC_DB_URL}
+      - KC_DB_USERNAME=${KC_DB_USERNAME}
+      - KC_DB_PASSWORD=${KC_DB_PASSWORD}
+      - KC_HOSTNAME_STRICT=false
+      - KC_HTTP_ENABLED=true
+      - KC_METRICS_ENABLED=true
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    command: start-dev
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/realms/master || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # ===== SETUP AND INITIALIZATION =====
+
+  # OpenSearch ініціалізація (ISM політики, індекси)
+  opensearch-setup:
+    image: curlimages/curl:8.2.1
+    depends_on:
+      - opensearch
+    volumes:
+      - ./observability/opensearch/policies:/policies:ro
+    command: >
+      sh -c "
+      sleep 60;
+      echo 'Setting up OpenSearch policies and indices...';
+      curl -X PUT -u 'admin:${OPENSEARCH_ADMIN_PASSWORD}' -H 'Content-Type: application/json'
+           'http://opensearch:9200/_plugins/_ism/policies/logs_policy' -d @/policies/logs_policy.json;
+      curl -X PUT -u 'admin:${OPENSEARCH_ADMIN_PASSWORD}' -H 'Content-Type: application/json'
+           'http://opensearch:9200/_index_template/logs_template' -d @/policies/logs_template.json;
+      curl -X PUT -u 'admin:${OPENSEARCH_ADMIN_PASSWORD}' -H 'Content-Type: application/json'
+           'http://opensearch:9200/logs-000001' -d '{\"aliases\":{\"logs_current\":{\"is_write_index\":true}}}';
+      echo 'OpenSearch setup completed';
+      "
+    restart: "no"
+
+  # MinIO ініціалізація (створення buckets)
+  minio-setup:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 10;
+      /usr/bin/mc alias set predator http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      /usr/bin/mc mb predator/models;
+      /usr/bin/mc mb predator/reports;
+      /usr/bin/mc mb predator/datasets;
+      /usr/bin/mc mb predator/backups;
+      /usr/bin/mc policy set public predator/reports;
+      echo 'MinIO buckets created successfully';
+      "
+    restart: "no"
+
+# ===== VOLUMES =====
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  opensearch_data:
+    driver: local
+  minio_data:
+    driver: local
+  qdrant_data:
+    driver: local
+  redpanda_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  alertmanager_data:
+    driver: local
+  loki_data:
+    driver: local
+  tempo_data:
+    driver: local
+
+# ===== NETWORKS =====
+networks:
+  default:
+    name: predator11-network
+    driver: bridge
