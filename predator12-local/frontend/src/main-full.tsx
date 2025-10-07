@@ -11,7 +11,11 @@ import RealTimeMonitor from './components/RealTimeMonitor';
 import Neural3DVisualization from './components/Neural3DVisualization';
 import AgentControlCenter from './components/AgentControlCenter';
 import VoiceControlInterface from './components/VoiceControlInterface';
+import AgentProgressTracker from './components/AgentProgressTracker';
 import type { AIAgent, AIModel } from './components/AIComponents';
+import './styles/dashboard-refined.css';
+import './styles/cosmic-enhancements.css';
+import MetricBlock from './components/MetricBlock';
 
 // ============= TYPES =============
 interface SystemMetrics {
@@ -128,188 +132,37 @@ const AnimatedBackground: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 0,
-        pointerEvents: 'none',
-      }}
+      className="animated-canvas"
     />
   );
 };
 
 // ============= METRIC CARD =============
-const MetricCard: React.FC<{
-  title: string;
-  value: number;
-  unit: string;
-  icon: string;
-  color: string;
-  trend?: number;
-}> = ({ title, value, unit, icon, color, trend }) => {
-  return (
-    <div
-      style={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: '20px',
-        padding: '24px',
-        position: 'relative',
-        overflow: 'hidden',
-        transition: 'all 0.3s ease',
-        cursor: 'pointer',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-5px)';
-        e.currentTarget.style.boxShadow = `0 20px 60px ${color}40`;
-        e.currentTarget.style.borderColor = color;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = 'none';
-        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          width: '150px',
-          height: '150px',
-          background: `radial-gradient(circle, ${color}20 0%, transparent 70%)`,
-          pointerEvents: 'none',
-        }}
-      />
-
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-          <div
-            style={{
-              fontSize: '32px',
-              width: '48px',
-              height: '48px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: `${color}20`,
-              borderRadius: '12px',
-            }}
-          >
-            {icon}
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ color: '#888', fontSize: '13px', marginBottom: '4px' }}>{title}</div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-              <span style={{ fontSize: '28px', fontWeight: '700', color: '#fff' }}>
-                {value.toFixed(1)}
-              </span>
-              <span style={{ fontSize: '16px', color: '#888' }}>{unit}</span>
-            </div>
-          </div>
-        </div>
-
-        <div
-          style={{
-            width: '100%',
-            height: '6px',
-            background: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '3px',
-            overflow: 'hidden',
-            marginBottom: '8px',
-          }}
-        >
-          <div
-            style={{
-              width: `${value}%`,
-              height: '100%',
-              background: `linear-gradient(90deg, ${color} 0%, ${color}80 100%)`,
-              transition: 'width 0.5s ease',
-              boxShadow: `0 0 10px ${color}`,
-            }}
-          />
-        </div>
-
-        {trend !== undefined && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '12px' }}>
-            <span style={{ color: trend > 0 ? '#10B981' : '#EF4444' }}>
-              {trend > 0 ? '↗' : '↘'} {Math.abs(trend)}%
-            </span>
-            <span style={{ color: '#666' }}>від минулої години</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+// (Заміна на MetricBlock - старий inline варіант видалено)
 
 // ============= SERVICE CARD =============
 const ServiceCard: React.FC<{
   service: ServiceStatus;
   onClick?: () => void;
 }> = ({ service, onClick }) => {
-  const statusColors = {
-    online: '#10B981',
-    offline: '#EF4444',
-    warning: '#F59E0B',
-  };
-
-  const color = statusColors[service.status];
-
   return (
     <div
-      style={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: '16px',
-        padding: '16px',
-        transition: 'all 0.3s ease',
-        cursor: 'pointer',
-        marginBottom: '8px',
-      }}
+      className="service-card"
+      data-status={service.status}
       onClick={onClick}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateX(5px)';
-        e.currentTarget.style.borderColor = color;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateX(0)';
-        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-      }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div className="service-card-inner">
         <div
-          style={{
-            width: '8px',
-            height: '8px',
-            borderRadius: '50%',
-            background: color,
-            boxShadow: `0 0 10px ${color}`,
-            animation: service.status === 'online' ? 'pulse 2s infinite' : 'none',
-          }}
+          className="service-card-status-dot"
+          data-animated={service.status === 'online' ? 'true' : 'false'}
         />
-        <div style={{ flex: 1 }}>
-          <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>{service.name}</div>
-          <div style={{ color: '#888', fontSize: '11px' }}>
+        <div className="service-card-content">
+          <div className="service-card-name">{service.name}</div>
+          <div className="service-card-meta">
             {service.requests.toLocaleString()}/min · {service.uptime}
           </div>
         </div>
-        <div
-          style={{
-            background: `${color}20`,
-            color: color,
-            padding: '2px 8px',
-            borderRadius: '6px',
-            fontSize: '10px',
-            fontWeight: '600',
-            textTransform: 'uppercase',
-          }}
-        >
+        <div className="service-card-badge" data-status={service.status}>
           {service.status}
         </div>
       </div>
@@ -327,49 +180,26 @@ const ServiceCategorySection: React.FC<{
   if (services.length === 0) return null;
 
   return (
-    <div
-      style={{
-        marginBottom: '32px',
-        animation: 'fadeIn 0.6s ease',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          marginBottom: '16px',
-          paddingBottom: '12px',
-          borderBottom: '2px solid rgba(139, 92, 246, 0.3)',
-        }}
-      >
-        <span style={{ fontSize: '24px' }}>{icon}</span>
-        <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#fff' }}>{title}</h3>
-        <span
-          style={{
-            background: 'rgba(139, 92, 246, 0.2)',
-            color: '#8B5CF6',
-            padding: '4px 12px',
-            borderRadius: '12px',
-            fontSize: '12px',
-            fontWeight: '600',
-          }}
-        >
+    <div className="service-category-section">
+      <div className="service-category-header">
+        <span className="category-icon">{icon}</span>
+        <h3>{title}</h3>
+        <span className="service-category-count">
           {services.length} {services.length === 1 ? 'service' : 'services'}
         </span>
-        <div style={{ flex: 1 }} />
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <span style={{ color: '#10B981', fontSize: '12px' }}>
+        <div className="category-spacer" />
+        <div className="service-category-stats">
+          <span className="stat-online">
             ● {services.filter(s => s.status === 'online').length} online
           </span>
           {services.filter(s => s.status === 'warning').length > 0 && (
-            <span style={{ color: '#F59E0B', fontSize: '12px' }}>
+            <span className="stat-warning">
               ● {services.filter(s => s.status === 'warning').length} warning
             </span>
           )}
         </div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '12px' }}>
+      <div className="grid-services">
         {services.map((service, i) => (
           <ServiceCard key={i} service={service} onClick={() => onServiceClick(service)} />
         ))}
@@ -394,23 +224,23 @@ const App: React.FC = () => {
     { name: 'Celery Worker', status: 'online', uptime: '99.7%', requests: 234, responseTime: 67, lastCheck: '3s ago', category: 'core' },
     { name: 'Celery Scheduler', status: 'online', uptime: '99.8%', requests: 156, responseTime: 45, lastCheck: '4s ago', category: 'core' },
     { name: 'Agent Supervisor', status: 'online', uptime: '99.6%', requests: 834, responseTime: 123, lastCheck: '2s ago', category: 'core' },
-    
+
     // 💾 Database & Storage (4)
     { name: 'PostgreSQL', status: 'online', uptime: '100%', requests: 892, responseTime: 15, lastCheck: '1s ago', category: 'database' },
     { name: 'Redis Cache', status: 'online', uptime: '99.8%', requests: 3421, responseTime: 3, lastCheck: '1s ago', category: 'database' },
     { name: 'MinIO Storage', status: 'online', uptime: '100%', requests: 678, responseTime: 34, lastCheck: '2s ago', category: 'database' },
     { name: 'Qdrant Vector', status: 'warning', uptime: '98.5%', requests: 456, responseTime: 156, lastCheck: '10s ago', category: 'database' },
-    
+
     // 🔍 Search & Indexing (2)
     { name: 'OpenSearch', status: 'online', uptime: '99.9%', requests: 2145, responseTime: 67, lastCheck: '2s ago', category: 'search' },
     { name: 'OpenSearch Dashboard', status: 'online', uptime: '99.8%', requests: 567, responseTime: 89, lastCheck: '3s ago', category: 'search' },
-    
+
     // 📨 Message Queue & Event Streaming (1)
     { name: 'Redpanda Kafka', status: 'online', uptime: '99.7%', requests: 1876, responseTime: 45, lastCheck: '2s ago', category: 'messaging' },
-    
+
     // 🤖 AI/ML Services (1)
     { name: 'Model SDK', status: 'online', uptime: '99.5%', requests: 743, responseTime: 234, lastCheck: '5s ago', category: 'ai' },
-    
+
     // 📊 Monitoring Stack (7)
     { name: 'Prometheus', status: 'online', uptime: '100%', requests: 445, responseTime: 56, lastCheck: '1s ago', category: 'monitoring' },
     { name: 'Grafana', status: 'online', uptime: '100%', requests: 789, responseTime: 78, lastCheck: '2s ago', category: 'monitoring' },
@@ -419,11 +249,11 @@ const App: React.FC = () => {
     { name: 'Tempo Tracing', status: 'online', uptime: '99.8%', requests: 1234, responseTime: 67, lastCheck: '2s ago', category: 'monitoring' },
     { name: 'AlertManager', status: 'online', uptime: '100%', requests: 67, responseTime: 34, lastCheck: '3s ago', category: 'monitoring' },
     { name: 'Blackbox Exporter', status: 'online', uptime: '100%', requests: 234, responseTime: 23, lastCheck: '2s ago', category: 'monitoring' },
-    
+
     // 📈 System Metrics (2)
     { name: 'cAdvisor', status: 'online', uptime: '100%', requests: 567, responseTime: 45, lastCheck: '1s ago', category: 'metrics' },
     { name: 'Node Exporter', status: 'online', uptime: '100%', requests: 890, responseTime: 34, lastCheck: '1s ago', category: 'metrics' },
-    
+
     // 🔐 Security Services (3)
     { name: 'Keycloak Auth', status: 'online', uptime: '100%', requests: 445, responseTime: 89, lastCheck: '2s ago', category: 'security' },
     { name: 'Vault Secrets', status: 'online', uptime: '99.9%', requests: 234, responseTime: 56, lastCheck: '2s ago', category: 'security' },
@@ -1565,612 +1395,179 @@ const App: React.FC = () => {
 
   return (
     <>
+      <a href="#main" className="skip-link">Skip to main content</a>
       <AnimatedBackground />
-
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-        }
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-          background: linear-gradient(135deg, #0a0a14 0%, #1a1a2e 50%, #0f0f1e 100%);
-          color: #fff;
-          overflow-x: hidden;
-        }
-        ::-webkit-scrollbar {
-          width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-        }
-        ::-webkit-scrollbar-thumb {
-          background: rgba(139, 92, 246, 0.5);
-          border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-          background: rgba(139, 92, 246, 0.8);
-        }
-      `}</style>
-
-      <div style={{ position: 'relative', zIndex: 1, minHeight: '100vh', padding: '40px 20px' }}>
-        {/* Header */}
-        <div
-          style={{
-            maxWidth: '1400px',
-            margin: '0 auto 40px',
-            animation: 'fadeIn 0.6s ease',
-          }}
-        >
-          <div
-            style={{
-              display: 'inline-block',
-              background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              fontSize: '48px',
-              fontWeight: '900',
-              marginBottom: '8px',
-              textShadow: '0 0 40px rgba(139, 92, 246, 0.5)',
-            }}
-          >
-            🚀 PREDATOR12
-          </div>
-          <div style={{ color: '#888', fontSize: '18px', marginTop: '8px' }}>
-            Self-Evolving AI System · 37 Self-Improvement Agents · 58 Neural Models
-          </div>
-
-          <div
-            style={{
-              background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%)',
-              border: '1px solid rgba(139, 92, 246, 0.3)',
-              borderRadius: '12px',
-              padding: '16px 24px',
-              marginTop: '16px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '12px',
-            }}
-          >
-            <div style={{ fontSize: '20px' }}>🧠</div>
-            <div>
-              <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>
-                AUTONOMOUS SELF-IMPROVEMENT ACTIVE
-              </div>
-              <div style={{ color: '#ccc', fontSize: '12px' }}>
-                System continuously evolving and optimizing itself
-              </div>
-            </div>
-            <div
-              style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                background: '#10B981',
-                animation: 'pulse 2s infinite',
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              marginTop: '16px',
-              background: 'rgba(16, 185, 129, 0.1)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              padding: '8px 16px',
-              borderRadius: '20px',
-            }}
-          >
-            <div
-              style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                background: '#10B981',
-                boxShadow: '0 0 10px #10B981',
-                animation: 'pulse 2s infinite',
-              }}
-            />
-            <span style={{ color: '#10B981', fontSize: '14px', fontWeight: '600' }}>
-              System Online · {services.length} Services · {services.filter(s => s.status === 'online').length} OK · {services.filter(s => s.status === 'warning').length} Warning
-            </span>
-          </div>
-        </div>
-
-        {/* Search Bar & Filters */}
-        {/* Stats Cards */}
-        <div style={{ maxWidth: '1400px', margin: '0 auto', marginBottom: '24px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
-            <div style={{
-              background: 'rgba(139, 92, 246, 0.1)',
-              border: '1px solid rgba(139, 92, 246, 0.3)',
-              borderRadius: '16px',
-              padding: '20px',
-              textAlign: 'center',
-            }}>
-              <div style={{ fontSize: '32px', fontWeight: '700', color: '#8B5CF6', marginBottom: '8px' }}>
-                {agents.length}
-              </div>
-              <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>AI Agents</div>
-              <div style={{ color: '#888', fontSize: '12px' }}>
-                {agents.filter(a => a.status === 'active').length} active
-              </div>
-            </div>
-
-            <div style={{
-              background: 'rgba(236, 72, 153, 0.1)',
-              border: '1px solid rgba(236, 72, 153, 0.3)',
-              borderRadius: '16px',
-              padding: '20px',
-              textAlign: 'center',
-            }}>
-              <div style={{ fontSize: '32px', fontWeight: '700', color: '#EC4899', marginBottom: '8px' }}>
-                {models.length}
-              </div>
-              <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>ML Models</div>
-              <div style={{ color: '#888', fontSize: '12px' }}>
-                {models.filter(m => m.status === 'loaded').length} loaded
-              </div>
-            </div>
-
-            <div style={{
-              background: 'rgba(16, 185, 129, 0.1)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              borderRadius: '16px',
-              padding: '20px',
-              textAlign: 'center',
-            }}>
-              <div style={{ fontSize: '32px', fontWeight: '700', color: '#10B981', marginBottom: '8px' }}>
-                {Math.round(agents.reduce((sum, a) => sum + a.successRate, 0) / agents.length * 10) / 10}%
-              </div>
-              <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>Success Rate</div>
-              <div style={{ color: '#888', fontSize: '12px' }}>System-wide avg</div>
-            </div>
-
-            <div style={{
-              background: 'rgba(59, 130, 246, 0.1)',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
-              borderRadius: '16px',
-              padding: '20px',
-              textAlign: 'center',
-            }}>
-              <div style={{ fontSize: '32px', fontWeight: '700', color: '#3B82F6', marginBottom: '8px' }}>
-                {agents.reduce((sum, a) => sum + a.tasksCompleted, 0).toLocaleString()}
-              </div>
-              <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>Total Tasks</div>
-              <div style={{ color: '#888', fontSize: '12px' }}>Completed today</div>
-            </div>
-
-            <div style={{
-              background: 'rgba(255, 165, 0, 0.1)',
-              border: '1px solid rgba(255, 165, 0, 0.3)',
-              borderRadius: '16px',
-              padding: '20px',
-              textAlign: 'center',
-            }}>
-              <div style={{ fontSize: '24px', fontWeight: '700', color: '#FFA500', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                <span>🔄</span> 24/7
-              </div>
-              <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600' }}>Self-Evolution</div>
-              <div style={{ color: '#888', fontSize: '12px' }}>Always improving</div>
-            </div>
-          </div>
-        </div>
-
-        <div style={{ maxWidth: '1400px', margin: '0 auto', marginBottom: '24px' }}>
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '16px' }}>
-            <FilterChip
-              label="🌟 All Services"
-              active={activeFilter === 'all'}
-              onClick={() => setActiveFilter('all')}
-              count={categoryCounts.all}
-            />
-            <FilterChip
-              label="🚀 Core"
-              active={activeFilter === 'core'}
-              onClick={() => setActiveFilter('core')}
-              count={categoryCounts.core}
-            />
-            <FilterChip
-              label="💾 Database"
-              active={activeFilter === 'database'}
-              onClick={() => setActiveFilter('database')}
-              count={categoryCounts.database}
-            />
-            <FilterChip
-              label="🔍 Search"
-              active={activeFilter === 'search'}
-              onClick={() => setActiveFilter('search')}
-              count={categoryCounts.search}
-            />
-            <FilterChip
-              label="📨 Messaging"
-              active={activeFilter === 'messaging'}
-              onClick={() => setActiveFilter('messaging')}
-              count={categoryCounts.messaging}
-            />
-            <FilterChip
-              label="🤖 AI/ML"
-              active={activeFilter === 'ai'}
-              onClick={() => setActiveFilter('ai')}
-              count={categoryCounts.ai}
-            />
-            <FilterChip
-              label="📊 Monitoring"
-              active={activeFilter === 'monitoring'}
-              onClick={() => setActiveFilter('monitoring')}
-              count={categoryCounts.monitoring}
-            />
-            <FilterChip
-              label="📈 Metrics"
-              active={activeFilter === 'metrics'}
-              onClick={() => setActiveFilter('metrics')}
-              count={categoryCounts.metrics}
-            />
-            <FilterChip
-              label="🔐 Security"
-              active={activeFilter === 'security'}
-              onClick={() => setActiveFilter('security')}
-              count={categoryCounts.security}
-            />
-          </div>
-        </div>
-
-        {/* Metrics Grid */}
-        <div
-          style={{
-            maxWidth: '1400px',
-            margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '24px',
-            marginBottom: '40px',
-            animation: 'fadeIn 0.8s ease 0.2s backwards',
-          }}
-        >
-          <MetricCard
-            title="CPU Usage"
-            value={metrics.cpu}
-            unit="%"
-            icon="⚡"
-            color="#8B5CF6"
-            trend={-2.3}
-          />
-          <MetricCard
-            title="Memory"
-            value={metrics.memory}
-            unit="%"
-            icon="💾"
-            color="#EC4899"
-            trend={1.5}
-          />
-          <MetricCard
-            title="Disk"
-            value={metrics.disk}
-            unit="%"
-            icon="💿"
-            color="#3B82F6"
-            trend={0.8}
-          />
-          <MetricCard
-            title="Network"
-            value={metrics.network}
-            unit="MB/s"
-            icon="🌐"
-            color="#10B981"
-            trend={5.2}
-          />
-        </div>
-
-        {/* AI Dashboard Section */}
-        <div style={{ maxWidth: '1400px', margin: '0 auto 40px' }}>
-          <div style={{ marginBottom: '24px' }}>
-            <h2 style={{
-              fontSize: '32px',
-              fontWeight: '700',
-              marginBottom: '8px',
-              background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>
-              🤖 AI Intelligence Layer
-            </h2>
-            <p style={{ color: '#888', fontSize: '16px' }}>
-              Autonomous agents and AI models powering the platform
-            </p>
-          </div>
-
-          <AIStatsSummary
-            totalAgents={agents.length}
-            activeAgents={agents.filter(a => a.status === 'active').length}
-            totalModels={models.length}
-            totalRequests={models.reduce((sum, m) => sum + m.requests, 0)}
-          />
-
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', marginBottom: '40px' }}>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <h3 style={{ color: '#fff', fontSize: '20px', fontWeight: '700' }}>
-                  🤖 AI Agents ({agents.length})
-                </h3>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', gap: '4px', marginRight: '12px' }}>
-                    {['autonomous', 'supervised', 'specialized'].map(type => {
-                      const count = agents.filter(a => a.type === type).length;
-                      const color = type === 'autonomous' ? '#8B5CF6' : type === 'supervised' ? '#EC4899' : '#10B981';
-                      return (
-                        <div key={type} style={{
-                          background: `${color}20`,
-                          border: `1px solid ${color}40`,
-                          padding: '4px 8px',
-                          borderRadius: '6px',
-                          fontSize: '12px',
-                          color,
-                        }}>
-                          {type}: {count}
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <button
-                    onClick={() => setAgentsPage(Math.max(0, agentsPage - 1))}
-                    disabled={agentsPage === 0}
-                    style={{
-                      background: agentsPage === 0 ? 'rgba(255,255,255,0.1)' : 'rgba(139,92,246,0.3)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      borderRadius: '8px',
-                      color: agentsPage === 0 ? '#666' : '#fff',
-                      padding: '8px 12px',
-                      cursor: agentsPage === 0 ? 'not-allowed' : 'pointer',
-                    }}
-                  >
-                    ←
-                  </button>
-                  <span style={{ color: '#888', fontSize: '14px', minWidth: '80px', textAlign: 'center' }}>
-                    {agentsPage + 1} / {totalAgentPages}
-                  </span>
-                  <button
-                    onClick={() => setAgentsPage(Math.min(totalAgentPages - 1, agentsPage + 1))}
-                    disabled={agentsPage >= totalAgentPages - 1}
-                    style={{
-                      background: agentsPage >= totalAgentPages - 1 ? 'rgba(255,255,255,0.1)' : 'rgba(139,92,246,0.3)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      borderRadius: '8px',
-                      color: agentsPage >= totalAgentPages - 1 ? '#666' : '#fff',
-                      padding: '8px 12px',
-                      cursor: agentsPage >= totalAgentPages - 1 ? 'not-allowed' : 'pointer',
-                    }}
-                  >
-                    →
-                  </button>
-                </div>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-                {agentsToShow.map((agent) => (
-                  <AgentCard key={agent.id} agent={agent} />
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <AgentActivityTimeline activities={activities} />
-            </div>
-          </div>
-
+      <div id="main" className="app-shell enhanced-visible">
+        <div className="app-header-bar">
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h3 style={{ color: '#fff', fontSize: '20px', fontWeight: '700' }}>
-                🧠 AI Models ({models.length})
-              </h3>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <div style={{ display: 'flex', gap: '4px', marginRight: '12px' }}>
-                  {['OpenAI', 'Anthropic', 'Google', 'Meta', 'Mistral AI'].map(provider => {
-                    const count = models.filter(m => m.provider === provider).length;
-                    return (
-                      <div key={provider} style={{
-                        background: 'rgba(255,255,255,0.1)',
-                        padding: '4px 8px',
-                        borderRadius: '6px',
-                        fontSize: '12px',
-                        color: '#ccc',
-                      }}>
-                        {provider}: {count}
-                      </div>
-                    );
-                  })}
-                </div>
-                <button
-                  onClick={() => setModelsPage(Math.max(0, modelsPage - 1))}
-                  disabled={modelsPage === 0}
-                  style={{
-                    background: modelsPage === 0 ? 'rgba(255,255,255,0.1)' : 'rgba(236,72,153,0.3)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
-                    color: modelsPage === 0 ? '#666' : '#fff',
-                    padding: '8px 12px',
-                    cursor: modelsPage === 0 ? 'not-allowed' : 'pointer',
-                  }}
-                >
-                  ←
-                </button>
-                <span style={{ color: '#888', fontSize: '14px', minWidth: '80px', textAlign: 'center' }}>
-                  {modelsPage + 1} / {totalModelPages}
-                </span>
-                <button
-                  onClick={() => setModelsPage(Math.min(totalModelPages - 1, modelsPage + 1))}
-                  disabled={modelsPage >= totalModelPages - 1}
-                  style={{
-                    background: modelsPage >= totalModelPages - 1 ? 'rgba(255,255,255,0.1)' : 'rgba(236,72,153,0.3)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '8px',
-                    color: modelsPage >= totalModelPages - 1 ? '#666' : '#fff',
-                    padding: '8px 12px',
-                    cursor: modelsPage >= totalModelPages - 1 ? 'not-allowed' : 'pointer',
-                  }}
-                >
-                  →
-                </button>
-              </div>
+            <h1 className="app-header-title">Predator Nexus Visibility Hub</h1>
+            <div className="subtitle-dim">Unified Infrastructure · AI Orchestration · Real‑Time Intelligence</div>
+            <div className="system-status-pill"><span className="system-status-dot"/>System Online · {services.length} Services · {services.filter(s=>s.status==='online').length} OK · {services.filter(s=>s.status==='warning').length} Warn</div>
+          </div>
+        </div>
+        {/* Replacing original metric cards with new markup wrapper classes can be iterative; keep legacy below for now */}
+        {/* ...existing code... */}
+        {/* Metrics Grid */}
+        <div className="metrics-grid">
+          <MetricBlock title="CPU Usage" value={metrics.cpu} unit="%" icon="⚡" color="#8B5CF6" trend={-2.3} />
+          <MetricBlock title="Memory" value={metrics.memory} unit="%" icon="💾" color="#EC4899" trend={1.5} />
+          <MetricBlock title="Disk" value={metrics.disk} unit="%" icon="💿" color="#3B82F6" trend={0.8} />
+          <MetricBlock title="Network" value={metrics.network} unit="MB/s" icon="🌐" color="#10B981" trend={5.2} />
+        </div>
+
+        {/* ========== SERVICE FILTERS & SEARCH ========== */}
+        <div className="filter-strip">
+          <div className="search-bar">
+            <span className="search-bar-icon">🔍</span>
+            <input
+              value={searchQuery}
+              onChange={(e)=>setSearchQuery(e.target.value)}
+              placeholder="Search services..."
+              aria-label="Search services"
+            />
+          </div>
+          <button className="filter-chip" data-active={activeFilter==='all'} onClick={()=>setActiveFilter('all')}>🌟 All<span className="filter-chip-badge">{categoryCounts.all}</span></button>
+          <button className="filter-chip" data-active={activeFilter==='core'} onClick={()=>setActiveFilter('core')}>🚀 Core<span className="filter-chip-badge">{categoryCounts.core}</span></button>
+          <button className="filter-chip" data-active={activeFilter==='database'} onClick={()=>setActiveFilter('database')}>💾 DB<span className="filter-chip-badge">{categoryCounts.database}</span></button>
+          <button className="filter-chip" data-active={activeFilter==='search'} onClick={()=>setActiveFilter('search')}>🔍 Search<span className="filter-chip-badge">{categoryCounts.search}</span></button>
+            <button className="filter-chip" data-active={activeFilter==='messaging'} onClick={()=>setActiveFilter('messaging')}>📨 MQ<span className="filter-chip-badge">{categoryCounts.messaging}</span></button>
+          <button className="filter-chip" data-active={activeFilter==='ai'} onClick={()=>setActiveFilter('ai')}>🤖 AI<span className="filter-chip-badge">{categoryCounts.ai}</span></button>
+          <button className="filter-chip" data-active={activeFilter==='monitoring'} onClick={()=>setActiveFilter('monitoring')}>📊 Mon<span className="filter-chip-badge">{categoryCounts.monitoring}</span></button>
+          <button className="filter-chip" data-active={activeFilter==='metrics'} onClick={()=>setActiveFilter('metrics')}>📈 Metrics<span className="filter-chip-badge">{categoryCounts.metrics}</span></button>
+          <button className="filter-chip" data-active={activeFilter==='security'} onClick={()=>setActiveFilter('security')}>🔐 Sec<span className="filter-chip-badge">{categoryCounts.security}</span></button>
+        </div>
+
+        {/* ========== SERVICES SECTION ========== */}
+        {activeFilter === 'all' ? (
+          <div>
+            {/* Core */}
+            <ServiceCategorySection
+              title="Core Application Services"
+              icon="🚀"
+              services={filteredServices.filter(s=>s.category==='core')}
+              onServiceClick={setSelectedService}
+            />
+            <ServiceCategorySection
+              title="Database & Storage"
+              icon="💾"
+              services={filteredServices.filter(s=>s.category==='database')}
+              onServiceClick={setSelectedService}
+            />
+            <ServiceCategorySection
+              title="Search & Indexing"
+              icon="🔍"
+              services={filteredServices.filter(s=>s.category==='search')}
+              onServiceClick={setSelectedService}
+            />
+            <ServiceCategorySection
+              title="Message Queue & Streaming"
+              icon="📨"
+              services={filteredServices.filter(s=>s.category==='messaging')}
+              onServiceClick={setSelectedService}
+            />
+            <ServiceCategorySection
+              title="AI / ML Services"
+              icon="🤖"
+              services={filteredServices.filter(s=>s.category==='ai')}
+              onServiceClick={setSelectedService}
+            />
+            <ServiceCategorySection
+              title="Monitoring Stack"
+              icon="📊"
+              services={filteredServices.filter(s=>s.category==='monitoring')}
+              onServiceClick={setSelectedService}
+            />
+            <ServiceCategorySection
+              title="System Metrics"
+              icon="📈"
+              services={filteredServices.filter(s=>s.category==='metrics')}
+              onServiceClick={setSelectedService}
+            />
+            <ServiceCategorySection
+              title="Security & Edge"
+              icon="🔐"
+              services={filteredServices.filter(s=>s.category==='security')}
+              onServiceClick={setSelectedService}
+            />
+          </div>
+        ) : (
+          <div className="category-section">
+            <div className="category-header"><h3>{activeFilter.toUpperCase()} Services</h3></div>
+            <div className="grid-services">
+              {filteredServices.map((s,i)=>(<ServiceCard key={i} service={s} onClick={()=>setSelectedService(s)} />))}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-              {modelsToShow.map((model) => (
-                <ModelCard key={model.id} model={model} />
+            {filteredServices.length===0 && <div className="no-results">No services match filter</div>}
+          </div>
+        )}
+
+        {/* ========== AI AGENTS & MODELS ========== */}
+        <div className="section-ai-ecosystem">
+          <h2 className="app-header-title section-title-lg">AI Ecosystem</h2>
+          <div className="subtitle-dim section-subtitle">Agents · Models · Operational Intelligence</div>
+          <div className="grid-agents">
+            {agentsToShow.map(a => (
+              <AgentCard key={a.id} agent={a} />
+            ))}
+          </div>
+          {totalAgentPages>1 && (
+            <div className="pagination">
+              {Array.from({ length: totalAgentPages }).map((_,i)=>(
+                <button key={i} className={i===agentsPage? 'active':''} onClick={()=>setAgentsPage(i)}>{i+1}</button>
               ))}
             </div>
+          )}
+
+          <h3 className="models-title">Models Registry</h3>
+          <div className="grid-models">
+            {modelsToShow.map(m => (
+              <ModelCard key={m.id} model={m} />
+            ))}
           </div>
-        </div>
-
-        {/* Advanced Monitoring & Visualization */}
-        <div style={{ maxWidth: '1400px', margin: '0 auto 40px' }}>
-          <RealTimeMonitor />
-          <Neural3DVisualization />
-          <AgentControlCenter agents={agents} />
-          <VoiceControlInterface />
-        </div>
-
-        {/* Services List */}
-        <div style={{ maxWidth: '1400px', margin: '0 auto 40px' }}>
-          <div
-            style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '20px',
-              padding: '32px',
-            }}
-          >
-            <div style={{ marginBottom: '32px' }}>
-              <h2 style={{ fontSize: '28px', fontWeight: '800', marginBottom: '12px', background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                Infrastructure Services
-              </h2>
-              <p style={{ color: '#888', fontSize: '15px', lineHeight: '1.6' }}>
-                {filteredServices.length} total services · 
-                <span style={{ color: '#10B981', fontWeight: '600', marginLeft: '8px' }}>
-                  {filteredServices.filter(s => s.status === 'online').length} online
-                </span> · 
-                <span style={{ color: '#F59E0B', fontWeight: '600', marginLeft: '8px' }}>
-                  {filteredServices.filter(s => s.status === 'warning').length} warning
-                </span>
-              </p>
+          {totalModelPages>1 && (
+            <div className="pagination">
+              {Array.from({ length: totalModelPages }).map((_,i)=>(
+                <button key={i} className={i===modelsPage? 'active':''} onClick={()=>setModelsPage(i)}>{i+1}</button>
+              ))}
             </div>
+          )}
+        </div>
 
-            {activeFilter === 'all' ? (
-              <>
-                <ServiceCategorySection
-                  title="Core Application Services"
-                  icon="🚀"
-                  services={filteredServices.filter(s => s.category === 'core')}
-                  onServiceClick={setSelectedService}
-                />
-                <ServiceCategorySection
-                  title="Database & Storage"
-                  icon="💾"
-                  services={filteredServices.filter(s => s.category === 'database')}
-                  onServiceClick={setSelectedService}
-                />
-                <ServiceCategorySection
-                  title="Search & Indexing"
-                  icon="🔍"
-                  services={filteredServices.filter(s => s.category === 'search')}
-                  onServiceClick={setSelectedService}
-                />
-                <ServiceCategorySection
-                  title="Message Queue & Streaming"
-                  icon="📨"
-                  services={filteredServices.filter(s => s.category === 'messaging')}
-                  onServiceClick={setSelectedService}
-                />
-                <ServiceCategorySection
-                  title="AI/ML Services"
-                  icon="🤖"
-                  services={filteredServices.filter(s => s.category === 'ai')}
-                  onServiceClick={setSelectedService}
-                />
-                <ServiceCategorySection
-                  title="Monitoring Stack"
-                  icon="📊"
-                  services={filteredServices.filter(s => s.category === 'monitoring')}
-                  onServiceClick={setSelectedService}
-                />
-                <ServiceCategorySection
-                  title="System Metrics"
-                  icon="📈"
-                  services={filteredServices.filter(s => s.category === 'metrics')}
-                  onServiceClick={setSelectedService}
-                />
-                <ServiceCategorySection
-                  title="Security Services"
-                  icon="🔐"
-                  services={filteredServices.filter(s => s.category === 'security')}
-                  onServiceClick={setSelectedService}
-                />
-              </>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '12px' }}>
-                {filteredServices.map((service, i) => (
-                  <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
-                ))}
-              </div>
-            )}
+        {/* ========== AGENT PROGRESS TRACKER ========== */}
+        <AgentProgressTracker />
 
-            {filteredServices.length === 0 && (
-              <div style={{
-                textAlign: 'center',
-                padding: '60px 40px',
-                color: '#888',
-                background: 'rgba(139, 92, 246, 0.05)',
-                borderRadius: '20px',
-                border: '2px dashed rgba(139, 92, 246, 0.3)',
-              }}>
-                <div style={{ fontSize: '64px', marginBottom: '20px' }}>🔍</div>
-                <div style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px', color: '#fff' }}>No services found</div>
-                <div style={{ fontSize: '15px', color: '#888' }}>Try adjusting your search or filter criteria</div>
-              </div>
-            )}
+        {/* ========== ADVANCED INTERACTIVE PANELS ========== */}
+        <div className="section-advanced">
+          <h2 className="app-header-title section-title-md">Operational Control Center</h2>
+          <div className="subtitle-dim section-subtitle">Real-Time Monitoring · 3D Neural Map · Voice & Terminal Interfaces</div>
+          <div className="grid-advanced">
+            <div className="enhanced-card">
+              <h4>Real-Time Monitor</h4>
+              <RealTimeMonitor />
+            </div>
+            <div className="enhanced-card">
+              <h4>3D Neural Visualization</h4>
+              <Neural3DVisualization />
+            </div>
+            <div className="enhanced-card">
+              <h4>Agent Control Center</h4>
+              <AgentControlCenter agents={agents} />
+            </div>
+            <div className="enhanced-card">
+              <h4>Voice Control Interface</h4>
+              <VoiceControlInterface />
+            </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div
-          style={{
-            maxWidth: '1400px',
-            margin: '40px auto 0',
-            textAlign: 'center',
-            color: '#666',
-            fontSize: '14px',
-            animation: 'fadeIn 1.2s ease 0.6s backwards',
-          }}
-        >
-          <div style={{ marginBottom: '8px' }}>
-            ⚡ Powered by React + TypeScript · Built with ❤️ for Excellence
-          </div>
-          <div>© 2025 PREDATOR12 · All Systems Operational</div>
-        </div>
-      </div>
+        <div className="app-footer">© 2025 PREDATOR12 · All Systems Operational</div>
 
-      {alerts.map((alert) => (
-        <AlertNotification
-          key={alert.id}
-          alert={alert}
-          onClose={() => setAlerts(alerts.filter((a) => a.id !== alert.id))}
-        />
+      </div>{/* /app-shell */}
+      {/* Alerts & Modal restored */}
+      {alerts.map(alert => (
+        <AlertNotification key={alert.id} alert={alert} onClose={()=>setAlerts(alerts.filter(a=>a.id!==alert.id))} />
       ))}
-
-      <ServiceModal service={selectedService} onClose={() => setSelectedService(null)} />
+      <ServiceModal service={selectedService} onClose={()=>setSelectedService(null)} />
     </>
   );
 };

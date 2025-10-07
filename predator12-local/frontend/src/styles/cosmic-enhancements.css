@@ -1,0 +1,462 @@
+/* ============================================================
+   PREDATOR12 NEXUS CORE - COSMIC VISUAL ENHANCEMENTS
+   Inspired by "Галактичний Командний Центр"
+   ============================================================ */
+
+:root {
+  /* Quantum Palette */
+  --quantum-emerald: #00FFC6;
+  --quantum-sapphire: #0A75FF;
+  --quantum-amethyst: #A020F0;
+  --quantum-crimson: #FF0033;
+  --quantum-gold: #FFD700;
+  
+  /* Nebula Gradients */
+  --nebula-primary: linear-gradient(135deg, var(--quantum-emerald), var(--quantum-sapphire), var(--quantum-amethyst));
+  --nebula-danger: linear-gradient(135deg, var(--quantum-crimson), #8B0000);
+  --nebula-success: linear-gradient(135deg, var(--quantum-emerald), #00CC99);
+  
+  /* Cosmic Depths */
+  --void-black: #05070A;
+  --anthracite: #0F121A;
+  --obsidian: #1A1C24;
+  
+  /* Holographic Effects */
+  --holo-shift: linear-gradient(90deg, 
+    rgba(0,255,198,0.3) 0%, 
+    rgba(10,117,255,0.3) 25%, 
+    rgba(160,32,240,0.3) 50%, 
+    rgba(10,117,255,0.3) 75%, 
+    rgba(0,255,198,0.3) 100%);
+  
+  /* Neural Pulse Animation */
+  --pulse-duration: 2.5s;
+  --glow-intensity: 0 0 20px currentColor, 0 0 40px currentColor;
+}
+
+/* ============================================================
+   QUANTUM BACKGROUND - Living Artifact Texture
+   ============================================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0,255,198,0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(160,32,240,0.03) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(10,117,255,0.02) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+  animation: nebula-shift 30s ease-in-out infinite;
+}
+
+@keyframes nebula-shift {
+  0%, 100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
+  50% { opacity: 0.6; transform: scale(1.1) rotate(5deg); }
+}
+
+/* ============================================================
+   HOLOGRAPHIC DATA STREAMS - Neural Flow
+   ============================================================ */
+.app-shell::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,255,198,0.03) 2px,
+      rgba(0,255,198,0.03) 4px
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: scan-lines 8s linear infinite;
+}
+
+@keyframes scan-lines {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(100px); }
+}
+
+/* ============================================================
+   QUANTUM CARDS - Iridescent Panels
+   ============================================================ */
+.metric-block,
+.service-card,
+.enhanced-card,
+.agent-progress-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.metric-block::before,
+.service-card::before,
+.enhanced-card::before,
+.agent-progress-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: var(--holo-shift);
+  background-size: 400% 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: -1;
+  animation: holographic-flow 6s linear infinite;
+  pointer-events: none;
+}
+
+.metric-block:hover::before,
+.service-card:hover::before,
+.enhanced-card:hover::before,
+.agent-progress-card:hover::before {
+  opacity: 0.4;
+}
+
+@keyframes holographic-flow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 400% 0%; }
+}
+
+/* ============================================================
+   BIOLUMINESCENT GLOW - Energy Veins
+   ============================================================ */
+.metric-value,
+.service-card-name,
+.agent-progress-name {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+  animation: bio-pulse var(--pulse-duration) ease-in-out infinite;
+}
+
+@keyframes bio-pulse {
+  0%, 100% { text-shadow: 0 0 10px currentColor, 0 0 20px currentColor; }
+  50% { text-shadow: 0 0 15px currentColor, 0 0 30px currentColor, 0 0 45px currentColor; }
+}
+
+/* ============================================================
+   QUANTUM STATUS INDICATORS - Pulsating Cores
+   ============================================================ */
+.service-card-status-dot[data-animated="true"],
+.system-status-dot {
+  position: relative;
+  animation: quantum-pulse var(--pulse-duration) ease-in-out infinite;
+}
+
+.service-card-status-dot[data-animated="true"]::after,
+.system-status-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+  animation: ripple 2s ease-out infinite;
+}
+
+@keyframes quantum-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 10px currentColor; }
+  50% { transform: scale(1.2); box-shadow: 0 0 20px currentColor, 0 0 40px currentColor; }
+}
+
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* ============================================================
+   NEURAL PROGRESS BARS - Energy Flow
+   ============================================================ */
+.progress-inner,
+.agent-progress-bar span {
+  position: relative;
+  background: var(--nebula-primary);
+  background-size: 400% 100%;
+  animation: energy-flow 3s linear infinite, progress-move 6s linear infinite;
+  box-shadow: 
+    0 0 10px rgba(0,255,198,0.6),
+    0 0 20px rgba(10,117,255,0.4),
+    0 0 30px rgba(160,32,240,0.3);
+}
+
+.progress-inner::after,
+.agent-progress-bar span::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255,255,255,0.4) 50%, 
+    transparent 100%);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes energy-flow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 400% 0%; }
+}
+
+@keyframes shimmer {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+/* ============================================================
+   FILTER CHIPS - Quantum Buttons
+   ============================================================ */
+.filter-chip {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-chip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--nebula-primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.filter-chip[data-active="true"]::after {
+  opacity: 1;
+  animation: quantum-glow 2s ease-in-out infinite;
+}
+
+@keyframes quantum-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(0,255,198,0.5), 0 0 20px rgba(10,117,255,0.3); }
+  50% { box-shadow: 0 0 20px rgba(0,255,198,0.7), 0 0 40px rgba(10,117,255,0.5); }
+}
+
+/* ============================================================
+   VOICE INTERFACE - Temporal Scanner
+   ============================================================ */
+.voice-mic-button {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.voice-mic-button::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  opacity: 0;
+  animation: scanner-ring 2s ease-out infinite;
+}
+
+.voice-mic-button.listening::before {
+  opacity: 1;
+}
+
+@keyframes scanner-ring {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* ============================================================
+   AGENT PROGRESS - Chrono-Spatial Flow
+   ============================================================ */
+.agent-progress-card {
+  animation: card-materialize 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+.agent-progress-card:nth-child(1) { animation-delay: 0.05s; }
+.agent-progress-card:nth-child(2) { animation-delay: 0.1s; }
+.agent-progress-card:nth-child(3) { animation-delay: 0.15s; }
+.agent-progress-card:nth-child(4) { animation-delay: 0.2s; }
+.agent-progress-card:nth-child(5) { animation-delay: 0.25s; }
+.agent-progress-card:nth-child(6) { animation-delay: 0.3s; }
+.agent-progress-card:nth-child(7) { animation-delay: 0.35s; }
+.agent-progress-card:nth-child(8) { animation-delay: 0.4s; }
+
+@keyframes card-materialize {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9) rotateX(15deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+  }
+}
+
+/* ============================================================
+   MODAL - Quantum Portal
+   ============================================================ */
+.modal-backdrop {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: radial-gradient(circle at center, 
+    rgba(0,255,198,0.1) 0%, 
+    rgba(5,7,10,0.95) 100%);
+  animation: portal-open 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes portal-open {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-panel {
+  animation: panel-descent 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 
+    0 20px 60px rgba(0,0,0,0.8),
+    0 0 40px rgba(0,255,198,0.2),
+    inset 0 0 30px rgba(255,255,255,0.05);
+}
+
+@keyframes panel-descent {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ============================================================
+   ALERT NOTIFICATIONS - Chrono Alerts
+   ============================================================ */
+.alert {
+  animation: alert-slide-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 
+    0 10px 30px rgba(0,0,0,0.6),
+    0 0 20px currentColor;
+}
+
+@keyframes alert-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(100%) rotate(5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+
+/* ============================================================
+   GLITCH EFFECT - Temporal Distortion (for errors)
+   ============================================================ */
+.glitch-effect {
+  position: relative;
+  animation: glitch 1s ease-in-out infinite;
+}
+
+.glitch-effect::before,
+.glitch-effect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-effect::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--quantum-crimson);
+  animation: glitch-anim-1 2s infinite linear alternate-reverse;
+}
+
+.glitch-effect::after {
+  left: -2px;
+  text-shadow: 2px 0 var(--quantum-sapphire);
+  animation: glitch-anim-2 3s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim-1 {
+  0% { clip-path: inset(40% 0 61% 0); }
+  20% { clip-path: inset(92% 0 1% 0); }
+  40% { clip-path: inset(43% 0 1% 0); }
+  60% { clip-path: inset(25% 0 58% 0); }
+  80% { clip-path: inset(54% 0 7% 0); }
+  100% { clip-path: inset(58% 0 43% 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip-path: inset(65% 0 25% 0); }
+  20% { clip-path: inset(13% 0 80% 0); }
+  40% { clip-path: inset(70% 0 15% 0); }
+  60% { clip-path: inset(35% 0 50% 0); }
+  80% { clip-path: inset(90% 0 5% 0); }
+  100% { clip-path: inset(20% 0 70% 0); }
+}
+
+/* ============================================================
+   COSMIC DUST PARTICLES (optional overlay)
+   ============================================================ */
+@keyframes float-particles {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+  50% { transform: translateY(-20px) translateX(10px); opacity: 0.6; }
+}
+
+/* ============================================================
+   RESPONSIVE QUANTUM ADJUSTMENTS
+   ============================================================ */
+@media (max-width: 768px) {
+  body::before { animation-duration: 20s; }
+  .app-shell::after { opacity: 0.5; }
+  .metric-block::before,
+  .service-card::before { opacity: 0.2; }
+}
+
+/* ============================================================
+   ACCESSIBILITY - Reduced Motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   QUANTUM SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--void-black);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--quantum-emerald), var(--quantum-sapphire));
+  border-radius: 10px;
+  box-shadow: 0 0 10px var(--quantum-emerald);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--quantum-sapphire), var(--quantum-amethyst));
+  box-shadow: 0 0 15px var(--quantum-amethyst);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--quantum-emerald) var(--void-black);
+}

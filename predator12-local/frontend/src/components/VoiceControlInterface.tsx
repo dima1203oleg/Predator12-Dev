@@ -9,11 +9,16 @@ interface VoiceCommand {
   agentTarget?: string;
 }
 
+type VoiceEngine = 'browser' | 'whisper' | 'vosk';
+type TTSEngine = 'browser' | 'coqui' | 'piper';
+
 export const VoiceControlInterface: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
   const [commands, setCommands] = useState<VoiceCommand[]>([]);
   const [currentTranscript, setCurrentTranscript] = useState('');
+  const [sttEngine, setSTTEngine] = useState<VoiceEngine>('browser');
+  const [ttsEngine, setTTSEngine] = useState<TTSEngine>('browser');
   const recognitionRef = useRef<any>(null);
 
   // Проверяем поддержку Web Speech API
@@ -175,107 +180,62 @@ export const VoiceControlInterface: React.FC = () => {
   ];
 
   return (
-    <div style={{
-      background: 'rgba(255, 255, 255, 0.05)',
-      backdropFilter: 'blur(20px)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      borderRadius: '20px',
-      padding: '24px',
-      margin: '20px 0',
-    }}>
-      <h2 style={{
-        color: '#fff',
-        fontSize: '24px',
-        fontWeight: '700',
-        marginBottom: '20px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-      }}>
+    <div className="voice-interface">
+      <div className="voice-header">
         🎤 Voice Control Interface
         {isSupported ? (
-          <div style={{
-            background: 'rgba(16, 185, 129, 0.2)',
-            border: '1px solid #10B981',
-            borderRadius: '8px',
-            color: '#10B981',
-            padding: '4px 8px',
-            fontSize: '12px',
-            fontWeight: '600',
-          }}>
-            READY
-          </div>
+          <div className="voice-status-badge">READY</div>
         ) : (
-          <div style={{
-            background: 'rgba(239, 68, 68, 0.2)',
-            border: '1px solid #EF4444',
-            borderRadius: '8px',
-            color: '#EF4444',
-            padding: '4px 8px',
-            fontSize: '12px',
-            fontWeight: '600',
-          }}>
-            NOT SUPPORTED
-          </div>
+          <div className="voice-status-badge off">NOT SUPPORTED</div>
         )}
-      </h2>
+        <div className="voice-mode-select">
+          <select
+            value={sttEngine}
+            onChange={(e) => setSTTEngine(e.target.value as VoiceEngine)}
+            className="voice-engine-select"
+            aria-label="Speech-to-text engine selection"
+          >
+            <option value="browser">🌐 Browser (Web Speech API)</option>
+            <option value="whisper">🤖 Whisper.cpp (Local)</option>
+            <option value="vosk">⚡ Vosk (Offline)</option>
+          </select>
+          <select
+            value={ttsEngine}
+            onChange={(e) => setTTSEngine(e.target.value as TTSEngine)}
+            className="voice-tts-select"
+            aria-label="Text-to-speech engine selection"
+          >
+            <option value="browser">🌐 Browser TTS</option>
+            <option value="coqui">🎙️ Coqui TTS (Local)</option>
+            <option value="piper">⚡ Piper (Fast)</option>
+          </select>
+        </div>
+      </div>
 
       {isSupported ? (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '24px' }}>
+        <div className="voice-layout">
           {/* Voice Controls */}
           <div>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '20px',
-              padding: '20px',
-              background: 'rgba(0, 0, 0, 0.3)',
-              borderRadius: '12px',
-            }}>
+            <div className="voice-controls">
               <button
                 onClick={isListening ? stopListening : startListening}
-                style={{
-                  width: '120px',
-                  height: '120px',
-                  borderRadius: '50%',
-                  border: `4px solid ${isListening ? '#EF4444' : '#10B981'}`,
-                  background: isListening
-                    ? 'radial-gradient(circle, rgba(239, 68, 68, 0.3) 0%, rgba(239, 68, 68, 0.1) 100%)'
-                    : 'radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0.1) 100%)',
-                  color: '#fff',
-                  cursor: 'pointer',
-                  fontSize: '48px',
-                  transition: 'all 0.3s ease',
-                  transform: isListening ? 'scale(1.1)' : 'scale(1)',
-                  boxShadow: isListening ? `0 0 30px ${isListening ? '#EF4444' : '#10B981'}50` : 'none',
-                  animation: isListening ? 'pulse 2s infinite' : 'none',
-                }}
+                className={`voice-mic-button ${isListening ? 'listening' : ''}`}
               >
                 {isListening ? '🛑' : '🎤'}
               </button>
 
-              <div style={{ textAlign: 'center' }}>
-                <div style={{
-                  color: isListening ? '#EF4444' : '#10B981',
-                  fontSize: '16px',
-                  fontWeight: '700',
-                  marginBottom: '8px'
-                }}>
+              <div className="voice-current">
+                <div className={`voice-status-text ${isListening ? 'listening' : 'ready'}`}>
                   {isListening ? 'LISTENING...' : 'READY TO LISTEN'}
+                </div>
+                <div className="voice-engine-label">
+                  {sttEngine === 'browser' && '🌐 Web Speech API'}
+                  {sttEngine === 'whisper' && '🤖 Whisper.cpp (Local)'}
+                  {sttEngine === 'vosk' && '⚡ Vosk Offline'}
                 </div>
 
                 {currentTranscript && (
-                  <div style={{
-                    background: 'rgba(139, 92, 246, 0.2)',
-                    border: '1px solid rgba(139, 92, 246, 0.3)',
-                    borderRadius: '8px',
-                    padding: '8px 12px',
-                    color: '#8B5CF6',
-                    fontSize: '14px',
-                    fontStyle: 'italic',
-                    minHeight: '20px',
-                  }}>
+                  <div className="voice-current-text">
                     "{currentTranscript}"
                   </div>
                 )}
@@ -283,33 +243,14 @@ export const VoiceControlInterface: React.FC = () => {
             </div>
 
             {/* Example Commands */}
-            <div style={{ marginTop: '20px' }}>
-              <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: '600', marginBottom: '12px' }}>
-                Try saying:
-              </h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="voice-examples">
+              <h4>Try saying:</h4>
+              <div className="voice-examples-list">
                 {exampleCommands.map((cmd, index) => (
                   <div
                     key={index}
                     onClick={() => processVoiceCommand(cmd)}
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      borderRadius: '8px',
-                      padding: '8px 12px',
-                      color: '#ccc',
-                      fontSize: '12px',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(139, 92, 246, 0.2)';
-                      e.currentTarget.style.color = '#8B5CF6';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                      e.currentTarget.style.color = '#ccc';
-                    }}
+                    className="voice-example"
                   >
                     "{cmd}"
                   </div>
@@ -319,66 +260,32 @@ export const VoiceControlInterface: React.FC = () => {
           </div>
 
           {/* Command History */}
-          <div>
-            <h3 style={{ color: '#fff', fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}>
-              Voice Command History
-            </h3>
-            <div style={{
-              maxHeight: '400px',
-              overflowY: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px',
-            }}>
+          <div className="voice-history">
+            <h3>Voice Command History</h3>
+            <div className="voice-history-list">
               {commands.map((command) => (
-                <div
-                  key={command.id}
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    padding: '16px',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '8px' }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ color: '#fff', fontSize: '14px', fontWeight: '600', marginBottom: '4px' }}>
+                <div key={command.id} className="voice-history-item">
+                  <div className="voice-history-header">
+                    <div className="voice-history-content">
+                      <div className="voice-history-text">
                         "{command.text}"
                       </div>
-                      <div style={{ color: '#888', fontSize: '12px' }}>
+                      <div className="voice-history-meta">
                         {new Date(command.timestamp).toLocaleTimeString()}
                         {command.agentTarget && (
-                          <span style={{ color: '#8B5CF6', marginLeft: '8px' }}>
+                          <span className="voice-agent-target">
                             → {command.agentTarget}
                           </span>
                         )}
                       </div>
                     </div>
-                    <div style={{
-                      background: command.status === 'processing' ? 'rgba(249, 158, 11, 0.2)' :
-                                 command.status === 'completed' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                      color: command.status === 'processing' ? '#F59E0B' :
-                             command.status === 'completed' ? '#10B981' : '#EF4444',
-                      padding: '4px 8px',
-                      borderRadius: '6px',
-                      fontSize: '10px',
-                      fontWeight: '600',
-                      textTransform: 'uppercase',
-                    }}>
+                    <div className={`voice-history-status ${command.status}`}>
                       {command.status}
                     </div>
                   </div>
 
                   {command.result && (
-                    <div style={{
-                      background: 'rgba(16, 185, 129, 0.1)',
-                      border: '1px solid rgba(16, 185, 129, 0.3)',
-                      borderRadius: '8px',
-                      padding: '8px 12px',
-                      color: '#10B981',
-                      fontSize: '12px',
-                      lineHeight: '1.4',
-                    }}>
+                    <div className="voice-result">
                       {command.result}
                     </div>
                   )}
@@ -386,14 +293,7 @@ export const VoiceControlInterface: React.FC = () => {
               ))}
 
               {commands.length === 0 && (
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: '200px',
-                  color: '#888',
-                  fontSize: '16px',
-                }}>
+                <div className="voice-history-empty">
                   No voice commands yet. Click the microphone to start!
                 </div>
               )}
@@ -401,17 +301,9 @@ export const VoiceControlInterface: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '200px',
-          color: '#888',
-          fontSize: '16px',
-          textAlign: 'center',
-        }}>
+        <div className="voice-unsupported">
           <div>
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🚫</div>
+            <div className="voice-unsupported-icon">🚫</div>
             Voice control is not supported in your browser.
             <br />
             Try using Chrome or Edge for voice commands.
