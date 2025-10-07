@@ -317,6 +317,67 @@ const ServiceCard: React.FC<{
   );
 };
 
+// ============= SERVICE CATEGORY SECTION =============
+const ServiceCategorySection: React.FC<{
+  title: string;
+  icon: string;
+  services: ServiceStatus[];
+  onServiceClick: (service: ServiceStatus) => void;
+}> = ({ title, icon, services, onServiceClick }) => {
+  if (services.length === 0) return null;
+
+  return (
+    <div
+      style={{
+        marginBottom: '32px',
+        animation: 'fadeIn 0.6s ease',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          marginBottom: '16px',
+          paddingBottom: '12px',
+          borderBottom: '2px solid rgba(139, 92, 246, 0.3)',
+        }}
+      >
+        <span style={{ fontSize: '24px' }}>{icon}</span>
+        <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#fff' }}>{title}</h3>
+        <span
+          style={{
+            background: 'rgba(139, 92, 246, 0.2)',
+            color: '#8B5CF6',
+            padding: '4px 12px',
+            borderRadius: '12px',
+            fontSize: '12px',
+            fontWeight: '600',
+          }}
+        >
+          {services.length} {services.length === 1 ? 'service' : 'services'}
+        </span>
+        <div style={{ flex: 1 }} />
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <span style={{ color: '#10B981', fontSize: '12px' }}>
+            ● {services.filter(s => s.status === 'online').length} online
+          </span>
+          {services.filter(s => s.status === 'warning').length > 0 && (
+            <span style={{ color: '#F59E0B', fontSize: '12px' }}>
+              ● {services.filter(s => s.status === 'warning').length} warning
+            </span>
+          )}
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '12px' }}>
+        {services.map((service, i) => (
+          <ServiceCard key={i} service={service} onClick={() => onServiceClick(service)} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 // ============= MAIN APP =============
 const App: React.FC = () => {
   const [metrics, setMetrics] = useState<SystemMetrics>({
@@ -327,16 +388,46 @@ const App: React.FC = () => {
   });
 
   const [services] = useState<ServiceStatus[]>([
+    // 🚀 Core Application Services (5)
     { name: 'Backend API', status: 'online', uptime: '99.9%', requests: 1247, responseTime: 45, lastCheck: '2s ago', category: 'core' },
     { name: 'Frontend React', status: 'online', uptime: '100%', requests: 2156, responseTime: 12, lastCheck: '1s ago', category: 'core' },
+    { name: 'Celery Worker', status: 'online', uptime: '99.7%', requests: 234, responseTime: 67, lastCheck: '3s ago', category: 'core' },
+    { name: 'Celery Scheduler', status: 'online', uptime: '99.8%', requests: 156, responseTime: 45, lastCheck: '4s ago', category: 'core' },
+    { name: 'Agent Supervisor', status: 'online', uptime: '99.6%', requests: 834, responseTime: 123, lastCheck: '2s ago', category: 'core' },
+    
+    // 💾 Database & Storage (4)
     { name: 'PostgreSQL', status: 'online', uptime: '100%', requests: 892, responseTime: 15, lastCheck: '1s ago', category: 'database' },
     { name: 'Redis Cache', status: 'online', uptime: '99.8%', requests: 3421, responseTime: 3, lastCheck: '1s ago', category: 'database' },
+    { name: 'MinIO Storage', status: 'online', uptime: '100%', requests: 678, responseTime: 34, lastCheck: '2s ago', category: 'database' },
     { name: 'Qdrant Vector', status: 'warning', uptime: '98.5%', requests: 456, responseTime: 156, lastCheck: '10s ago', category: 'database' },
+    
+    // 🔍 Search & Indexing (2)
     { name: 'OpenSearch', status: 'online', uptime: '99.9%', requests: 2145, responseTime: 67, lastCheck: '2s ago', category: 'search' },
+    { name: 'OpenSearch Dashboard', status: 'online', uptime: '99.8%', requests: 567, responseTime: 89, lastCheck: '3s ago', category: 'search' },
+    
+    // 📨 Message Queue & Event Streaming (1)
+    { name: 'Redpanda Kafka', status: 'online', uptime: '99.7%', requests: 1876, responseTime: 45, lastCheck: '2s ago', category: 'messaging' },
+    
+    // 🤖 AI/ML Services (1)
     { name: 'Model SDK', status: 'online', uptime: '99.5%', requests: 743, responseTime: 234, lastCheck: '5s ago', category: 'ai' },
+    
+    // 📊 Monitoring Stack (7)
     { name: 'Prometheus', status: 'online', uptime: '100%', requests: 445, responseTime: 56, lastCheck: '1s ago', category: 'monitoring' },
     { name: 'Grafana', status: 'online', uptime: '100%', requests: 789, responseTime: 78, lastCheck: '2s ago', category: 'monitoring' },
+    { name: 'Loki Logs', status: 'online', uptime: '99.9%', requests: 2341, responseTime: 45, lastCheck: '1s ago', category: 'monitoring' },
+    { name: 'Promtail', status: 'online', uptime: '99.9%', requests: 3567, responseTime: 12, lastCheck: '1s ago', category: 'monitoring' },
+    { name: 'Tempo Tracing', status: 'online', uptime: '99.8%', requests: 1234, responseTime: 67, lastCheck: '2s ago', category: 'monitoring' },
+    { name: 'AlertManager', status: 'online', uptime: '100%', requests: 67, responseTime: 34, lastCheck: '3s ago', category: 'monitoring' },
+    { name: 'Blackbox Exporter', status: 'online', uptime: '100%', requests: 234, responseTime: 23, lastCheck: '2s ago', category: 'monitoring' },
+    
+    // 📈 System Metrics (2)
+    { name: 'cAdvisor', status: 'online', uptime: '100%', requests: 567, responseTime: 45, lastCheck: '1s ago', category: 'metrics' },
+    { name: 'Node Exporter', status: 'online', uptime: '100%', requests: 890, responseTime: 34, lastCheck: '1s ago', category: 'metrics' },
+    
+    // 🔐 Security Services (3)
     { name: 'Keycloak Auth', status: 'online', uptime: '100%', requests: 445, responseTime: 89, lastCheck: '2s ago', category: 'security' },
+    { name: 'Vault Secrets', status: 'online', uptime: '99.9%', requests: 234, responseTime: 56, lastCheck: '2s ago', category: 'security' },
+    { name: 'Traefik Proxy', status: 'online', uptime: '100%', requests: 4567, responseTime: 23, lastCheck: '1s ago', category: 'security' },
   ]);
 
   const [agents] = useState<AIAgent[]>([
@@ -1452,8 +1543,10 @@ const App: React.FC = () => {
     core: services.filter((s) => s.category === 'core').length,
     database: services.filter((s) => s.category === 'database').length,
     search: services.filter((s) => s.category === 'search').length,
+    messaging: services.filter((s) => s.category === 'messaging').length,
     ai: services.filter((s) => s.category === 'ai').length,
     monitoring: services.filter((s) => s.category === 'monitoring').length,
+    metrics: services.filter((s) => s.category === 'metrics').length,
     security: services.filter((s) => s.category === 'security').length,
   };
 
@@ -1681,37 +1774,55 @@ const App: React.FC = () => {
 
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '16px' }}>
             <FilterChip
-              label="All Services"
+              label="🌟 All Services"
               active={activeFilter === 'all'}
               onClick={() => setActiveFilter('all')}
               count={categoryCounts.all}
             />
             <FilterChip
-              label="Core"
+              label="🚀 Core"
               active={activeFilter === 'core'}
               onClick={() => setActiveFilter('core')}
               count={categoryCounts.core}
             />
             <FilterChip
-              label="Database"
+              label="💾 Database"
               active={activeFilter === 'database'}
               onClick={() => setActiveFilter('database')}
               count={categoryCounts.database}
             />
             <FilterChip
-              label="AI/ML"
+              label="🔍 Search"
+              active={activeFilter === 'search'}
+              onClick={() => setActiveFilter('search')}
+              count={categoryCounts.search}
+            />
+            <FilterChip
+              label="📨 Messaging"
+              active={activeFilter === 'messaging'}
+              onClick={() => setActiveFilter('messaging')}
+              count={categoryCounts.messaging}
+            />
+            <FilterChip
+              label="🤖 AI/ML"
               active={activeFilter === 'ai'}
               onClick={() => setActiveFilter('ai')}
               count={categoryCounts.ai}
             />
             <FilterChip
-              label="Monitoring"
+              label="📊 Monitoring"
               active={activeFilter === 'monitoring'}
               onClick={() => setActiveFilter('monitoring')}
               count={categoryCounts.monitoring}
             />
             <FilterChip
-              label="Security"
+              label="📈 Metrics"
+              active={activeFilter === 'metrics'}
+              onClick={() => setActiveFilter('metrics')}
+              count={categoryCounts.metrics}
+            />
+            <FilterChip
+              label="🔐 Security"
               active={activeFilter === 'security'}
               onClick={() => setActiveFilter('security')}
               count={categoryCounts.security}
@@ -1942,30 +2053,92 @@ const App: React.FC = () => {
               padding: '32px',
             }}
           >
-            <div style={{ marginBottom: '24px' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px' }}>
-                Service Status
+            <div style={{ marginBottom: '32px' }}>
+              <h2 style={{ fontSize: '28px', fontWeight: '800', marginBottom: '12px', background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                Infrastructure Services
               </h2>
-              <p style={{ color: '#888', fontSize: '14px' }}>
-                {filteredServices.length} services · {filteredServices.filter(s => s.status === 'online').length} online · {filteredServices.filter(s => s.status === 'warning').length} warning
+              <p style={{ color: '#888', fontSize: '15px', lineHeight: '1.6' }}>
+                {filteredServices.length} total services · 
+                <span style={{ color: '#10B981', fontWeight: '600', marginLeft: '8px' }}>
+                  {filteredServices.filter(s => s.status === 'online').length} online
+                </span> · 
+                <span style={{ color: '#F59E0B', fontWeight: '600', marginLeft: '8px' }}>
+                  {filteredServices.filter(s => s.status === 'warning').length} warning
+                </span>
               </p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-              {filteredServices.map((service, i) => (
-                <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
-              ))}
-            </div>
+            {activeFilter === 'all' ? (
+              <>
+                <ServiceCategorySection
+                  title="Core Application Services"
+                  icon="🚀"
+                  services={filteredServices.filter(s => s.category === 'core')}
+                  onServiceClick={setSelectedService}
+                />
+                <ServiceCategorySection
+                  title="Database & Storage"
+                  icon="💾"
+                  services={filteredServices.filter(s => s.category === 'database')}
+                  onServiceClick={setSelectedService}
+                />
+                <ServiceCategorySection
+                  title="Search & Indexing"
+                  icon="🔍"
+                  services={filteredServices.filter(s => s.category === 'search')}
+                  onServiceClick={setSelectedService}
+                />
+                <ServiceCategorySection
+                  title="Message Queue & Streaming"
+                  icon="📨"
+                  services={filteredServices.filter(s => s.category === 'messaging')}
+                  onServiceClick={setSelectedService}
+                />
+                <ServiceCategorySection
+                  title="AI/ML Services"
+                  icon="🤖"
+                  services={filteredServices.filter(s => s.category === 'ai')}
+                  onServiceClick={setSelectedService}
+                />
+                <ServiceCategorySection
+                  title="Monitoring Stack"
+                  icon="📊"
+                  services={filteredServices.filter(s => s.category === 'monitoring')}
+                  onServiceClick={setSelectedService}
+                />
+                <ServiceCategorySection
+                  title="System Metrics"
+                  icon="📈"
+                  services={filteredServices.filter(s => s.category === 'metrics')}
+                  onServiceClick={setSelectedService}
+                />
+                <ServiceCategorySection
+                  title="Security Services"
+                  icon="🔐"
+                  services={filteredServices.filter(s => s.category === 'security')}
+                  onServiceClick={setSelectedService}
+                />
+              </>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '12px' }}>
+                {filteredServices.map((service, i) => (
+                  <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
+                ))}
+              </div>
+            )}
 
             {filteredServices.length === 0 && (
               <div style={{
                 textAlign: 'center',
-                padding: '40px',
+                padding: '60px 40px',
                 color: '#888',
+                background: 'rgba(139, 92, 246, 0.05)',
+                borderRadius: '20px',
+                border: '2px dashed rgba(139, 92, 246, 0.3)',
               }}>
-                <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
-                <div style={{ fontSize: '18px', fontWeight: '600', marginBottom: '8px' }}>No services found</div>
-                <div style={{ fontSize: '14px' }}>Try adjusting your search or filter criteria</div>
+                <div style={{ fontSize: '64px', marginBottom: '20px' }}>🔍</div>
+                <div style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px', color: '#fff' }}>No services found</div>
+                <div style={{ fontSize: '15px', color: '#888' }}>Try adjusting your search or filter criteria</div>
               </div>
             )}
           </div>
