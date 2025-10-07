@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Server Working?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            font-size: 48px;
+            margin: 0 0 20px 0;
+        }
+        p {
+            font-size: 20px;
+            margin: 10px 0;
+        }
+        .success {
+            color: #10B981;
+            font-weight: bold;
+        }
+        .link {
+            margin-top: 30px;
+        }
+        a {
+            color: #60A5FA;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Сервер Працює!</h1>
+        <p>Якщо ви бачите цю сторінку, то:</p>
+        <p class="success">✓ Vite dev server запущений</p>
+        <p class="success">✓ Порт 5092 доступний</p>
+        <p class="success">✓ HTTP requests працюють</p>
+        
+        <div class="link">
+            <p>Тепер спробуйте головну сторінку:</p>
+            <a href="/">← Повернутись до Dashboard</a>
+        </div>
+
+        <div style="margin-top: 40px; font-size: 14px; opacity: 0.7;">
+            <p>Якщо головна сторінка не працює, але ви бачите це - проблема в React/TypeScript коді</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('✅ Test page loaded successfully!');
+        console.log('📍 Current URL:', window.location.href);
+        console.log('🌐 Server is working!');
+    </script>
+</body>
+</html>

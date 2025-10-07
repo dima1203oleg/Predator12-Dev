@@ -43,7 +43,7 @@ const TestApp = () => {
           ✅ Vite dev сервер активний<br/>
           ✅ Порт 5173 доступний
         </p>
-        <button 
+        <button
           style={{
             background: 'linear-gradient(45deg, #00ff88, #0088ff)',
             border: 'none',
@@ -59,7 +59,7 @@ const TestApp = () => {
         >
           🚀 Завантажити Nexus Core
         </button>
-        <button 
+        <button
           style={{
             background: 'rgba(0, 136, 255, 0.2)',
             border: '2px solid #0088ff',
@@ -70,7 +70,7 @@ const TestApp = () => {
             cursor: 'pointer',
             fontSize: '16px'
           }}
-          onClick={() => window.open('file:///Users/dima/Documents/Predator11/🎮_NEXUS_INTERACTIVE_DEMO.html', '_blank')}
+          onClick={() => window.open('file:///Users/dima/Documents/Predator12/predator12-local/🎮_NEXUS_INTERACTIVE_DEMO.html', '_blank')}
         >
           📱 Відкрити Демо
         </button>

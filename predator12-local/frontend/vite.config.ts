@@ -15,6 +15,16 @@ export default defineConfig({
     strictPort: false,
     hmr: {
       overlay: true
+    },
+    fs: {
+      allow: [
+        // Дозволяємо доступ до packages
+        path.resolve(__dirname, '../packages'),
+        // Дозволяємо доступ до поточної директорії
+        path.resolve(__dirname, '.'),
+        // Дозволяємо доступ до батьківської директорії
+        path.resolve(__dirname, '..')
+      ]
     }
   },
   build: {

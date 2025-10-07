@@ -1,5 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
+import { SearchBar, FilterChip, AlertNotification, ServiceModal } from './components/EnhancedComponents';
+import {
+  AgentCard,
+  ModelCard,
+  AIStatsSummary,
+  AgentActivityTimeline,
+  TrainingPipelineCard,
+  ModelComparisonTable,
+  AgentControlPanel,
+  AIMetricsDashboard
+} from './components/AIComponents';
+import type { AIAgent, AIModel, TrainingPipeline } from './components/AIComponents';
+import { AIAgentsSection } from './components/ai/AIAgentsSection';
 
 // ============= TYPES =============
 interface SystemMetrics {
@@ -14,11 +27,44 @@ interface ServiceStatus {
   status: 'online' | 'offline' | 'warning';
   uptime: string;
   requests: number;
+  responseTime?: number;
+  lastCheck?: string;
+  category?: string;
 }
 
 interface ChartDataPoint {
   time: string;
   value: number;
+}
+
+interface Alert {
+  id: string;
+  type: 'error' | 'warning' | 'info';
+  message: string;
+  timestamp: string;
+}
+
+interface AIAgent {
+  id: string;
+  name: string;
+  type: 'autonomous' | 'supervised' | 'specialized';
+  status: 'active' | 'idle' | 'training';
+  tasksCompleted: number;
+  successRate: number;
+  model: string;
+  lastActivity: string;
+}
+
+interface AIModel {
+  id: string;
+  name: string;
+  type: 'llm' | 'vision' | 'embedding' | 'classifier';
+  provider: string;
+  status: 'loaded' | 'loading' | 'error';
+  requests: number;
+  avgLatency: number;
+  accuracy?: number;
+  size: string;
 }
 
 // ============= ANIMATED BACKGROUND =============
@@ -233,10 +279,10 @@ const MetricCard: React.FC<{
 // ============= SERVICE CARD =============
 const CategoryHeader: React.FC<{ title: string; icon: string; count: number }> = ({ title, icon, count }) => {
   return (
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: '12px', 
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
       marginTop: '24px',
       marginBottom: '12px',
       paddingBottom: '8px',
@@ -246,8 +292,8 @@ const CategoryHeader: React.FC<{ title: string; icon: string; count: number }> =
       <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#fff', flex: 1 }}>
         {title}
       </h3>
-      <span style={{ 
-        background: 'rgba(139, 92, 246, 0.2)', 
+      <span style={{
+        background: 'rgba(139, 92, 246, 0.2)',
         color: '#8B5CF6',
         padding: '4px 12px',
         borderRadius: '12px',
@@ -260,7 +306,10 @@ const CategoryHeader: React.FC<{ title: string; icon: string; count: number }> =
   );
 };
 
-const ServiceCard: React.FC<{ service: ServiceStatus }> = ({ service }) => {
+const ServiceCard: React.FC<{
+  service: ServiceStatus;
+  onClick?: () => void;
+}> = ({ service, onClick }) => {
   const statusColors = {
     online: '#10B981',
     offline: '#EF4444',
@@ -280,6 +329,7 @@ const ServiceCard: React.FC<{ service: ServiceStatus }> = ({ service }) => {
         transition: 'all 0.3s ease',
         cursor: 'pointer',
       }}
+      onClick={onClick}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateX(5px)';
         e.currentTarget.style.borderColor = color;
@@ -402,44 +452,377 @@ const App: React.FC = () => {
 
   const [services] = useState<ServiceStatus[]>([
     // Core Application Services (5)
-    { name: 'Backend API', status: 'online', uptime: '99.9%', requests: 1247 },
-    { name: 'Frontend React', status: 'online', uptime: '100%', requests: 2156 },
-    { name: 'Celery Worker', status: 'online', uptime: '99.7%', requests: 234 },
-    { name: 'Celery Scheduler', status: 'online', uptime: '99.8%', requests: 156 },
-    { name: 'Agent Supervisor', status: 'online', uptime: '99.6%', requests: 834 },
+    { name: 'Backend API', status: 'online', uptime: '99.9%', requests: 1247, responseTime: 45, lastCheck: '2s ago', category: 'core' },
+    { name: 'Frontend React', status: 'online', uptime: '100%', requests: 2156, responseTime: 12, lastCheck: '1s ago', category: 'core' },
+    { name: 'Celery Worker', status: 'online', uptime: '99.7%', requests: 234, responseTime: 78, lastCheck: '3s ago', category: 'core' },
+    { name: 'Celery Scheduler', status: 'online', uptime: '99.8%', requests: 156, responseTime: 23, lastCheck: '5s ago', category: 'core' },
+    { name: 'Agent Supervisor', status: 'online', uptime: '99.6%', requests: 834, responseTime: 56, lastCheck: '2s ago', category: 'core' },
 
     // Database & Storage (4)
-    { name: 'PostgreSQL', status: 'online', uptime: '100%', requests: 892 },
-    { name: 'Redis Cache', status: 'online', uptime: '99.8%', requests: 3421 },
-    { name: 'MinIO Storage', status: 'online', uptime: '100%', requests: 678 },
-    { name: 'Qdrant Vector', status: 'warning', uptime: '98.5%', requests: 456 },
+    { name: 'PostgreSQL', status: 'online', uptime: '100%', requests: 892, responseTime: 15, lastCheck: '1s ago', category: 'database' },
+    { name: 'Redis Cache', status: 'online', uptime: '99.8%', requests: 3421, responseTime: 3, lastCheck: '1s ago', category: 'database' },
+    { name: 'MinIO Storage', status: 'online', uptime: '100%', requests: 678, responseTime: 89, lastCheck: '4s ago', category: 'database' },
+    { name: 'Qdrant Vector', status: 'warning', uptime: '98.5%', requests: 456, responseTime: 156, lastCheck: '10s ago', category: 'database' },
 
     // Search & Indexing (2)
-    { name: 'OpenSearch', status: 'online', uptime: '99.9%', requests: 2145 },
-    { name: 'OpenSearch Dashboard', status: 'online', uptime: '99.8%', requests: 567 },
+    { name: 'OpenSearch', status: 'online', uptime: '99.9%', requests: 2145, responseTime: 67, lastCheck: '2s ago', category: 'search' },
+    { name: 'OpenSearch Dashboard', status: 'online', uptime: '99.8%', requests: 567, responseTime: 123, lastCheck: '3s ago', category: 'search' },
 
     // Message Queue & Event Streaming (1)
-    { name: 'Redpanda Kafka', status: 'online', uptime: '99.7%', requests: 1876 },
+    { name: 'Redpanda Kafka', status: 'online', uptime: '99.7%', requests: 1876, responseTime: 34, lastCheck: '2s ago', category: 'queue' },
 
     // AI/ML Services (1)
-    { name: 'Model SDK', status: 'online', uptime: '99.5%', requests: 743 },
+    { name: 'Model SDK', status: 'online', uptime: '99.5%', requests: 743, responseTime: 234, lastCheck: '5s ago', category: 'ai' },
 
     // Monitoring Stack (7)
-    { name: 'Prometheus', status: 'online', uptime: '100%', requests: 445 },
-    { name: 'Grafana', status: 'online', uptime: '100%', requests: 789 },
-    { name: 'Loki Logs', status: 'online', uptime: '99.9%', requests: 2341 },
-    { name: 'Promtail', status: 'online', uptime: '99.9%', requests: 3567 },
-    { name: 'Tempo Tracing', status: 'online', uptime: '99.8%', requests: 1234 },
-    { name: 'AlertManager', status: 'online', uptime: '100%', requests: 67 },
-    { name: 'Blackbox Exporter', status: 'online', uptime: '100%', requests: 234 },
+    { name: 'Prometheus', status: 'online', uptime: '100%', requests: 445, responseTime: 56, lastCheck: '1s ago', category: 'monitoring' },
+    { name: 'Grafana', status: 'online', uptime: '100%', requests: 789, responseTime: 78, lastCheck: '2s ago', category: 'monitoring' },
+    { name: 'Loki Logs', status: 'online', uptime: '99.9%', requests: 2341, responseTime: 43, lastCheck: '1s ago', category: 'monitoring' },
+    { name: 'Promtail', status: 'online', uptime: '99.9%', requests: 3567, responseTime: 23, lastCheck: '1s ago', category: 'monitoring' },
+    { name: 'Tempo Tracing', status: 'online', uptime: '99.8%', requests: 1234, responseTime: 67, lastCheck: '2s ago', category: 'monitoring' },
+    { name: 'AlertManager', status: 'online', uptime: '100%', requests: 67, responseTime: 45, lastCheck: '3s ago', category: 'monitoring' },
+    { name: 'Blackbox Exporter', status: 'online', uptime: '100%', requests: 234, responseTime: 12, lastCheck: '1s ago', category: 'monitoring' },
 
     // System Metrics (2)
-    { name: 'cAdvisor', status: 'online', uptime: '100%', requests: 567 },
-    { name: 'Node Exporter', status: 'online', uptime: '100%', requests: 890 },
+    { name: 'cAdvisor', status: 'online', uptime: '100%', requests: 567, responseTime: 34, lastCheck: '1s ago', category: 'system' },
+    { name: 'Node Exporter', status: 'online', uptime: '100%', requests: 890, responseTime: 23, lastCheck: '1s ago', category: 'system' },
 
     // Security & Auth (1)
-    { name: 'Keycloak Auth', status: 'online', uptime: '100%', requests: 445 },
+    { name: 'Keycloak Auth', status: 'online', uptime: '100%', requests: 445, responseTime: 89, lastCheck: '2s ago', category: 'security' },
   ]);
+
+  // AI Agents Data - EXPANDED TO 12 AGENTS
+  const [agents] = useState<AIAgent[]>([
+    {
+      id: '1',
+      name: 'Alpha Agent',
+      type: 'autonomous',
+      status: 'active',
+      tasksCompleted: 1247,
+      successRate: 98.5,
+      model: 'GPT-4',
+      lastActivity: '2 min ago',
+    },
+    {
+      id: '2',
+      name: 'Beta Supervisor',
+      type: 'supervised',
+      status: 'active',
+      tasksCompleted: 856,
+      successRate: 99.2,
+      model: 'Claude-3',
+      lastActivity: '5 min ago',
+    },
+    {
+      id: '3',
+      name: 'Gamma Specialist',
+      type: 'specialized',
+      status: 'idle',
+      tasksCompleted: 2341,
+      successRate: 97.8,
+      model: 'GPT-4',
+      lastActivity: '15 min ago',
+    },
+    {
+      id: '4',
+      name: 'Delta Analyzer',
+      type: 'autonomous',
+      status: 'training',
+      tasksCompleted: 543,
+      successRate: 96.5,
+      model: 'Llama-2-70B',
+      lastActivity: '1 min ago',
+    },
+    {
+      id: '5',
+      name: 'Epsilon Coordinator',
+      type: 'supervised',
+      status: 'active',
+      tasksCompleted: 1892,
+      successRate: 99.7,
+      model: 'GPT-4-Turbo',
+      lastActivity: '30 sec ago',
+    },
+    {
+      id: '6',
+      name: 'Zeta Vision Agent',
+      type: 'specialized',
+      status: 'active',
+      tasksCompleted: 3456,
+      successRate: 99.1,
+      model: 'GPT-4-Vision',
+      lastActivity: '1 min ago',
+    },
+    {
+      id: '7',
+      name: 'Eta Code Assistant',
+      type: 'autonomous',
+      status: 'active',
+      tasksCompleted: 5678,
+      successRate: 97.3,
+      model: 'CodeLlama-34B',
+      lastActivity: '45 sec ago',
+    },
+    {
+      id: '8',
+      name: 'Theta Researcher',
+      type: 'supervised',
+      status: 'active',
+      tasksCompleted: 2890,
+      successRate: 98.9,
+      model: 'Claude-3-Opus',
+      lastActivity: '3 min ago',
+    },
+    {
+      id: '9',
+      name: 'Iota Data Miner',
+      type: 'specialized',
+      status: 'training',
+      tasksCompleted: 4123,
+      successRate: 96.7,
+      model: 'Mistral-Large',
+      lastActivity: '2 min ago',
+    },
+    {
+      id: '10',
+      name: 'Kappa Security Bot',
+      type: 'autonomous',
+      status: 'active',
+      tasksCompleted: 6789,
+      successRate: 99.5,
+      model: 'GPT-4',
+      lastActivity: '20 sec ago',
+    },
+    {
+      id: '11',
+      name: 'Lambda Translator',
+      type: 'specialized',
+      status: 'idle',
+      tasksCompleted: 1567,
+      successRate: 98.2,
+      model: 'Mixtral-8x7B',
+      lastActivity: '10 min ago',
+    },
+    {
+      id: '12',
+      name: 'Mu Optimizer',
+      type: 'supervised',
+      status: 'active',
+      tasksCompleted: 3234,
+      successRate: 97.6,
+      model: 'Gemini-Pro',
+      lastActivity: '1 min ago',
+    },
+  ]);
+
+  // AI Models Data - EXPANDED TO 15 MODELS
+  const [models] = useState<AIModel[]>([
+    {
+      id: '1',
+      name: 'GPT-4 Turbo',
+      type: 'llm',
+      provider: 'OpenAI',
+      status: 'loaded',
+      requests: 15234,
+      avgLatency: 456,
+      accuracy: 98.5,
+      size: '1.5TB',
+    },
+    {
+      id: '2',
+      name: 'Claude-3 Opus',
+      type: 'llm',
+      provider: 'Anthropic',
+      status: 'loaded',
+      requests: 8945,
+      avgLatency: 523,
+      accuracy: 99.1,
+      size: '1.2TB',
+    },
+    {
+      id: '3',
+      name: 'CLIP ViT-L/14',
+      type: 'vision',
+      provider: 'OpenAI',
+      status: 'loaded',
+      requests: 23456,
+      avgLatency: 123,
+      accuracy: 96.8,
+      size: '1.7GB',
+    },
+    {
+      id: '4',
+      name: 'BGE-Large-EN',
+      type: 'embedding',
+      provider: 'BAAI',
+      status: 'loaded',
+      requests: 45678,
+      avgLatency: 45,
+      size: '1.3GB',
+    },
+    {
+      id: '5',
+      name: 'Llama-2-70B',
+      type: 'llm',
+      provider: 'Meta',
+      status: 'loading',
+      requests: 3421,
+      avgLatency: 789,
+      accuracy: 97.3,
+      size: '140GB',
+    },
+    {
+      id: '6',
+      name: 'BERT-Classifier',
+      type: 'classifier',
+      provider: 'Google',
+      status: 'loaded',
+      requests: 12345,
+      avgLatency: 78,
+      accuracy: 94.6,
+      size: '440MB',
+    },
+    {
+      id: '7',
+      name: 'GPT-4 Vision',
+      type: 'vision',
+      provider: 'OpenAI',
+      status: 'loaded',
+      requests: 18934,
+      avgLatency: 567,
+      accuracy: 97.9,
+      size: '1.8TB',
+    },
+    {
+      id: '8',
+      name: 'Mistral-Large',
+      type: 'llm',
+      provider: 'Mistral AI',
+      status: 'loaded',
+      requests: 6789,
+      avgLatency: 345,
+      accuracy: 98.2,
+      size: '890GB',
+    },
+    {
+      id: '9',
+      name: 'CodeLlama-34B',
+      type: 'llm',
+      provider: 'Meta',
+      status: 'loaded',
+      requests: 14567,
+      avgLatency: 423,
+      accuracy: 96.5,
+      size: '68GB',
+    },
+    {
+      id: '10',
+      name: 'Sentence-T5',
+      type: 'embedding',
+      provider: 'Google',
+      status: 'loaded',
+      requests: 56789,
+      avgLatency: 34,
+      size: '890MB',
+    },
+    {
+      id: '11',
+      name: 'YOLO-v8',
+      type: 'vision',
+      provider: 'Ultralytics',
+      status: 'loaded',
+      requests: 34567,
+      avgLatency: 67,
+      accuracy: 95.3,
+      size: '2.1GB',
+    },
+    {
+      id: '12',
+      name: 'RoBERTa-Large',
+      type: 'classifier',
+      provider: 'Facebook',
+      status: 'loaded',
+      requests: 23456,
+      avgLatency: 89,
+      accuracy: 96.1,
+      size: '1.4GB',
+    },
+    {
+      id: '13',
+      name: 'Gemini-Pro',
+      type: 'llm',
+      provider: 'Google',
+      status: 'loaded',
+      requests: 9876,
+      avgLatency: 412,
+      accuracy: 98.7,
+      size: '1.3TB',
+    },
+    {
+      id: '14',
+      name: 'Mixtral-8x7B',
+      type: 'llm',
+      provider: 'Mistral AI',
+      status: 'loaded',
+      requests: 11234,
+      avgLatency: 389,
+      accuracy: 97.4,
+      size: '94GB',
+    },
+    {
+      id: '15',
+      name: 'XLM-RoBERTa',
+      type: 'embedding',
+      provider: 'Facebook',
+      status: 'loaded',
+      requests: 45123,
+      avgLatency: 56,
+      size: '2.2GB',
+    },
+  ]);
+
+  // Agent Activity
+  const [activities] = useState([
+    { agent: 'Alpha Agent', action: 'Completed data analysis task', time: '2 min ago', status: 'success' as const },
+    { agent: 'Epsilon Coordinator', action: 'Coordinated 5 agents successfully', time: '5 min ago', status: 'success' as const },
+    { agent: 'Delta Analyzer', action: 'Started training on new dataset', time: '8 min ago', status: 'info' as const },
+    { agent: 'Beta Supervisor', action: 'Reviewed 23 tasks', time: '12 min ago', status: 'success' as const },
+    { agent: 'Gamma Specialist', action: 'Failed to process image batch', time: '15 min ago', status: 'error' as const },
+    { agent: 'Alpha Agent', action: 'Generated report successfully', time: '18 min ago', status: 'success' as const },
+  ]);
+
+  // Search and Filter State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [selectedService, setSelectedService] = useState<ServiceStatus | null>(null);
+  const [alerts, setAlerts] = useState<Alert[]>([
+    {
+      id: '1',
+      type: 'warning',
+      message: 'Qdrant Vector DB experiencing high response times (156ms)',
+      timestamp: new Date().toLocaleTimeString(),
+    },
+  ]);
+
+  // Filter services based on search and category
+  const filteredServices = services.filter((service) => {
+    const matchesSearch = service.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter = activeFilter === 'all' || service.category === activeFilter;
+    return matchesSearch && matchesFilter;
+  });
+
+  // Category counts
+  const categoryCounts = {
+    all: services.length,
+    core: services.filter((s) => s.category === 'core').length,
+    database: services.filter((s) => s.category === 'database').length,
+    search: services.filter((s) => s.category === 'search').length,
+    queue: services.filter((s) => s.category === 'queue').length,
+    ai: services.filter((s) => s.category === 'ai').length,
+    monitoring: services.filter((s) => s.category === 'monitoring').length,
+    system: services.filter((s) => s.category === 'system').length,
+    security: services.filter((s) => s.category === 'security').length,
+  };
 
   const [chartData] = useState<ChartDataPoint[]>(
     Array.from({ length: 20 }, (_, i) => ({
@@ -476,6 +859,11 @@ const App: React.FC = () => {
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(100px); }
+          to { opacity: 1; transform: translateX(0); }
         }
 
         * {
@@ -565,6 +953,56 @@ const App: React.FC = () => {
           </div>
         </div>
 
+        {/* Search Bar & Filters */}
+        <div style={{ maxWidth: '1400px', margin: '0 auto', marginBottom: '24px' }}>
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '16px' }}>
+            <FilterChip
+              label="All Services"
+              active={activeFilter === 'all'}
+              onClick={() => setActiveFilter('all')}
+              count={categoryCounts.all}
+            />
+            <FilterChip
+              label="Core"
+              active={activeFilter === 'core'}
+              onClick={() => setActiveFilter('core')}
+              count={categoryCounts.core}
+            />
+            <FilterChip
+              label="Database"
+              active={activeFilter === 'database'}
+              onClick={() => setActiveFilter('database')}
+              count={categoryCounts.database}
+            />
+            <FilterChip
+              label="Search"
+              active={activeFilter === 'search'}
+              onClick={() => setActiveFilter('search')}
+              count={categoryCounts.search}
+            />
+            <FilterChip
+              label="AI/ML"
+              active={activeFilter === 'ai'}
+              onClick={() => setActiveFilter('ai')}
+              count={categoryCounts.ai}
+            />
+            <FilterChip
+              label="Monitoring"
+              active={activeFilter === 'monitoring'}
+              onClick={() => setActiveFilter('monitoring')}
+              count={categoryCounts.monitoring}
+            />
+            <FilterChip
+              label="Security"
+              active={activeFilter === 'security'}
+              onClick={() => setActiveFilter('security')}
+              count={categoryCounts.security}
+            />
+          </div>
+        </div>
+
         {/* Metrics Grid */}
         <div
           style={{
@@ -609,6 +1047,63 @@ const App: React.FC = () => {
             color="#10B981"
             trend={5.2}
           />
+        </div>
+
+        {/* AI Dashboard Section */}
+        <div style={{ maxWidth: '1400px', margin: '0 auto 40px' }}>
+          <div style={{ marginBottom: '24px' }}>
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: '700',
+              marginBottom: '8px',
+              background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}>
+              🤖 AI Intelligence Layer
+            </h2>
+            <p style={{ color: '#888', fontSize: '16px' }}>
+              Autonomous agents and AI models powering the platform
+            </p>
+          </div>
+
+          <AIStatsSummary
+            totalAgents={agents.length}
+            activeAgents={agents.filter(a => a.status === 'active').length}
+            totalModels={models.length}
+            totalRequests={models.reduce((sum, m) => sum + m.requests, 0)}
+          />
+
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', marginBottom: '40px' }}>
+            {/* AI Agents */}
+            <div>
+              <h3 style={{ color: '#fff', fontSize: '20px', fontWeight: '700', marginBottom: '16px' }}>
+                🤖 AI Agents ({agents.length})
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                {agents.map((agent) => (
+                  <AgentCard key={agent.id} agent={agent} />
+                ))}
+              </div>
+            </div>
+
+            {/* Activity Timeline */}
+            <div>
+              <AgentActivityTimeline activities={activities} />
+            </div>
+          </div>
+
+          {/* AI Models */}
+          <div>
+            <h3 style={{ color: '#fff', fontSize: '20px', fontWeight: '700', marginBottom: '16px' }}>
+              🧠 AI Models ({models.length})
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+              {models.map((model) => (
+                <ModelCard key={model.id} model={model} />
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Content Grid */}
@@ -696,51 +1191,102 @@ const App: React.FC = () => {
               <h2 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '8px' }}>
                 Service Status
               </h2>
-              <p style={{ color: '#888', fontSize: '14px' }}>25 services · 24 online · 1 warning</p>
+              <p style={{ color: '#888', fontSize: '14px' }}>
+                {filteredServices.length} services · {filteredServices.filter(s => s.status === 'online').length} online · {filteredServices.filter(s => s.status === 'warning').length} warning
+              </p>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <CategoryHeader title="Core Application Services" icon="⚙️" count={5} />
-              {services.slice(0, 5).map((service, i) => (
-                <ServiceCard key={i} service={service} />
-              ))}
+              {activeFilter === 'all' || activeFilter === 'core' ? (
+                <>
+                  <CategoryHeader title="Core Application Services" icon="⚙️" count={filteredServices.filter(s => s.category === 'core').length} />
+                  {filteredServices.filter(s => s.category === 'core').map((service, i) => (
+                    <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
+                  ))}
+                </>
+              ) : null}
 
-              <CategoryHeader title="Database & Storage" icon="🗄️" count={4} />
-              {services.slice(5, 9).map((service, i) => (
-                <ServiceCard key={i} service={service} />
-              ))}
+              {activeFilter === 'all' || activeFilter === 'database' ? (
+                <>
+                  <CategoryHeader title="Database & Storage" icon="🗄️" count={filteredServices.filter(s => s.category === 'database').length} />
+                  {filteredServices.filter(s => s.category === 'database').map((service, i) => (
+                    <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
+                  ))}
+                </>
+              ) : null}
 
-              <CategoryHeader title="Search & Indexing" icon="🔍" count={2} />
-              {services.slice(9, 11).map((service, i) => (
-                <ServiceCard key={i} service={service} />
-              ))}
+              {activeFilter === 'all' || activeFilter === 'search' ? (
+                <>
+                  <CategoryHeader title="Search & Indexing" icon="🔍" count={filteredServices.filter(s => s.category === 'search').length} />
+                  {filteredServices.filter(s => s.category === 'search').map((service, i) => (
+                    <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
+                  ))}
+                </>
+              ) : null}
 
-              <CategoryHeader title="Message Queue & Event Streaming" icon="📦" count={1} />
-              {services.slice(11, 12).map((service, i) => (
-                <ServiceCard key={i} service={service} />
-              ))}
+              {activeFilter === 'all' || activeFilter === 'queue' ? (
+                <>
+                  <CategoryHeader title="Message Queue & Event Streaming" icon="📦" count={filteredServices.filter(s => s.category === 'queue').length} />
+                  {filteredServices.filter(s => s.category === 'queue').map((service, i) => (
+                    <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
+                  ))}
+                </>
+              ) : null}
 
-              <CategoryHeader title="AI/ML Services" icon="🤖" count={1} />
-              {services.slice(12, 13).map((service, i) => (
-                <ServiceCard key={i} service={service} />
-              ))}
+              {activeFilter === 'all' || activeFilter === 'ai' ? (
+                <>
+                  <CategoryHeader title="AI/ML Services" icon="🤖" count={filteredServices.filter(s => s.category === 'ai').length} />
+                  {filteredServices.filter(s => s.category === 'ai').map((service, i) => (
+                    <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
+                  ))}
+                </>
+              ) : null}
 
-              <CategoryHeader title="Monitoring Stack" icon="📊" count={7} />
-              {services.slice(13, 20).map((service, i) => (
-                <ServiceCard key={i} service={service} />
-              ))}
+              {activeFilter === 'all' || activeFilter === 'monitoring' ? (
+                <>
+                  <CategoryHeader title="Monitoring Stack" icon="📊" count={filteredServices.filter(s => s.category === 'monitoring').length} />
+                  {filteredServices.filter(s => s.category === 'monitoring').map((service, i) => (
+                    <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
+                  ))}
+                </>
+              ) : null}
 
-              <CategoryHeader title="System Metrics" icon="📈" count={2} />
-              {services.slice(20, 22).map((service, i) => (
-                <ServiceCard key={i} service={service} />
-              ))}
+              {activeFilter === 'all' || activeFilter === 'system' ? (
+                <>
+                  <CategoryHeader title="System Metrics" icon="📈" count={filteredServices.filter(s => s.category === 'system').length} />
+                  {filteredServices.filter(s => s.category === 'system').map((service, i) => (
+                    <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
+                  ))}
+                </>
+              ) : null}
 
-              <CategoryHeader title="Security & Auth" icon="🔒" count={1} />
-              {services.slice(22, 23).map((service, i) => (
-                <ServiceCard key={i} service={service} />
-              ))}
+              {activeFilter === 'all' || activeFilter === 'security' ? (
+                <>
+                  <CategoryHeader title="Security & Auth" icon="🔒" count={filteredServices.filter(s => s.category === 'security').length} />
+                  {filteredServices.filter(s => s.category === 'security').map((service, i) => (
+                    <ServiceCard key={i} service={service} onClick={() => setSelectedService(service)} />
+                  ))}
+                </>
+              ) : null}
+
+              {filteredServices.length === 0 && (
+                <div style={{
+                  textAlign: 'center',
+                  padding: '40px',
+                  color: '#888',
+                }}>
+                  <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+                  <div style={{ fontSize: '18px', fontWeight: '600', marginBottom: '8px' }}>No services found</div>
+                  <div style={{ fontSize: '14px' }}>Try adjusting your search or filter criteria</div>
+                </div>
+              )}
             </div>
           </div>
+        </div>
+
+        {/* AI Agents & Models Section */}
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <AIAgentsSection />
         </div>
 
         {/* Footer */}
@@ -760,6 +1306,18 @@ const App: React.FC = () => {
           <div>© 2024 PREDATOR12 · All Systems Operational</div>
         </div>
       </div>
+
+      {/* Alert Notifications */}
+      {alerts.map((alert) => (
+        <AlertNotification
+          key={alert.id}
+          alert={alert}
+          onClose={() => setAlerts(alerts.filter((a) => a.id !== alert.id))}
+        />
+      ))}
+
+      {/* Service Details Modal */}
+      <ServiceModal service={selectedService} onClose={() => setSelectedService(null)} />
     </>
   );
 };
