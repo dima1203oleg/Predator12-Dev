@@ -10,6 +10,9 @@ from datetime import datetime, timedelta
 from typing import List, Dict
 from dotenv import load_dotenv
 
+# Імпорт Voice Providers API
+from api.voice_providers import router as voice_providers_router
+
 load_dotenv()
 
 app = FastAPI(
@@ -17,6 +20,9 @@ app = FastAPI(
     description="Backend API for Nexus Core galactic interface",
     version="1.0.0"
 )
+
+# Підключення Voice Providers API
+app.include_router(voice_providers_router)
 
 # CORS middleware for frontend communication
 app.add_middleware(
@@ -60,7 +66,7 @@ async def health_check():
         "version": "1.0.0",
         "components": {
             "database": "connected",
-            "redis": "connected", 
+            "redis": "connected",
             "opensearch": "connected",
             "agents": "8 active"
         }
@@ -71,7 +77,7 @@ async def get_system_status():
     """РЕАЛЬНИЙ СТАТУС СИСТЕМИ з 26 агентами"""
     from app.routes_agents_real import load_agents_registry
     agents_config = load_agents_registry()
-    
+
     return {
         "system_health": "optimal",
         "total_agents": len(agents_config),
