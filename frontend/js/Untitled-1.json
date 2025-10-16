@@ -1,0 +1,9 @@
+{
+  "id": "1",
+  "date": "2025-10-01",
+  "product": "Product A",
+  "quantity": 5,
+  "price": 100.00,
+  "revenue": 500.00,
+  "processed_at": "2025-10-15T10:30:48.123Z"
+}

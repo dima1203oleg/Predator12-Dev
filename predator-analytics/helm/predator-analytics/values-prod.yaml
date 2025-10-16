@@ -1,0 +1,217 @@
+# Production Configuration
+# Uses environment variables from .env file
+
+global:
+  domain: "${DOMAIN}"
+  environment: production
+  imageRegistry: "${IMAGE_REGISTRY}"
+  
+  monitoring:
+    enabled: true
+    prometheus:
+      enabled: true
+      url: "${PROMETHEUS_URL}"
+    grafana:
+      enabled: true
+      url: "${GRAFANA_URL}"
+
+backend:
+  enabled: true
+  replicaCount: 5
+  
+  image:
+    repository: "${BACKEND_IMAGE}"
+    tag: "${VERSION}"
+  
+  ingress:
+    enabled: true
+    hosts:
+      - host: "${API_DOMAIN}"
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: api-tls-prod
+        hosts:
+          - "${API_DOMAIN}"
+  
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 5
+    maxReplicas: 20
+  
+  env:
+    - name: DEBUG
+      value: "false"
+    - name: DB_HOST
+      value: "${DB_HOST}"
+    - name: DB_PORT
+      value: "${DB_PORT}"
+    - name: DB_USER
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-secret
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: postgresql-secret
+          key: password
+    - name: REDIS_HOST
+      value: "${REDIS_HOST}"
+    - name: REDIS_PORT
+      value: "${REDIS_PORT}"
+    - name: KEYCLOAK_URL
+      value: "${KEYCLOAK_URL}"
+    - name: KEYCLOAK_REALM
+      value: "${KEYCLOAK_REALM}"
+    - name: KEYCLOAK_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: keycloak-secret
+          key: client-secret
+    - name: VAULT_ADDR
+      value: "${VAULT_ADDR}"
+    - name: VAULT_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: vault-secret
+          key: token
+    - name: GOOGLE_CLOUD_TTS_API_KEY
+      valueFrom:
+        secretKeyRef:
+          name: voice-secrets
+          key: google-api-key
+    - name: AZURE_SPEECH_KEY
+      valueFrom:
+        secretKeyRef:
+          name: voice-secrets
+          key: azure-key
+    - name: AZURE_SPEECH_REGION
+      value: "${AZURE_SPEECH_REGION}"
+
+frontend:
+  enabled: true
+  replicaCount: 3
+  
+  image:
+    repository: "${FRONTEND_IMAGE}"
+    tag: "${VERSION}"
+  
+  ingress:
+    enabled: true
+    hosts:
+      - host: "${DOMAIN}"
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: frontend-tls-prod
+        hosts:
+          - "${DOMAIN}"
+  
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+
+arbiter-agent:
+  enabled: true
+  replicaCount: 3
+  
+  env:
+    - name: ARBITER_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: agent-secrets
+          key: arbiter-token
+
+redis:
+  enabled: true
+  architecture: replication
+  
+  auth:
+    enabled: true
+    existingSecret: redis-secret-prod
+  
+  master:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+    persistence:
+      size: 50Gi
+  
+  replica:
+    replicaCount: 3
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 512Mi
+
+postgresql:
+  enabled: true
+  architecture: replication
+  
+  auth:
+    username: "${DB_USER}"
+    database: "${DB_NAME}"
+    existingSecret: postgresql-secret-prod
+  
+  primary:
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+    persistence:
+      size: 200Gi
+  
+  readReplicas:
+    replicaCount: 2
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+
+qdrant:
+  enabled: true
+  replicaCount: 3
+  
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+  
+  persistence:
+    size: 500Gi

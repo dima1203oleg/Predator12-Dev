@@ -1,0 +1,91 @@
+⚡ ШВИДКИЙ СТАРТ - HERO INTERFACE
+═════════════════════════════════
+
+🎯 1. ЗАПУСК (одна команда)
+   ./🚀_START_HERO.sh
+
+🌐 2. ВІДКРИТИ БРАУЗЕР
+   http://localhost:5173
+
+✅ 3. ГОТОВО!
+   • AI обличчя з неоновою сіткою
+   • Чат з голосовим вводом 🎙️
+   • Граф зв'язків (Cytoscape)
+   • Стрім агентських подій
+
+═════════════════════════════════
+
+📦 ЯКЩО ПЕРШИЙ РАЗ:
+
+cd predator12-local/frontend
+npm install
+npm run dev
+
+═════════════════════════════════
+
+🎨 ЩО ПРАЦЮЄ:
+
+✅ /frontend/src/pages/Home.tsx        → Головна сторінка
+✅ /frontend/src/components/Hero/      → Всі компоненти
+✅ /frontend/src/styles/hero.css       → Неонові стилі
+✅ Cytoscape, framer-motion            → Встановлено
+✅ Voice I/O (uk-UA)                   → Web Speech API
+✅ SSE events                          → /api/events
+✅ Chat                                → /api/chat
+
+═════════════════════════════════
+
+🔧 BACKEND ТРЕБА ЗАПУСТИТИ:
+
+cd predator12-local/backend
+source venv/bin/activate
+uvicorn app.main:app --reload
+
+Або додай endpoints:
+• POST /api/chat
+• GET /api/events (SSE)
+
+═════════════════════════════════
+
+🎙️ ГОЛОСОВЕ ВВЕДЕННЯ:
+
+1. Клік на 🎙️ в чаті
+2. Дозвіл на мікрофон
+3. Говори українською
+4. AI відповість голосом (TTS)
+
+═════════════════════════════════
+
+📁 ФАЙЛИ:
+
+frontend/
+├── src/
+│   ├── pages/
+│   │   └── Home.tsx               ← ГОЛОВНА
+│   ├── components/Hero/
+│   │   ├── HeroHUD.tsx           ← HUD + AI face
+│   │   ├── AIFace.tsx            ← SVG обличчя
+│   │   ├── ChatDock.tsx          ← Чат + voice
+│   │   └── NetworkMini.tsx       ← Cytoscape граф
+│   └── styles/
+│       └── hero.css              ← Неонові стилі
+
+═════════════════════════════════
+
+⚡ HOTKEYS:
+
+Enter       → Відправити повідомлення
+🎙️ Button   → Голосове введення
+Click Node  → Підсвітка зв'язків
+
+═════════════════════════════════
+
+✅ ВСЕ ГОТОВО ДО ЗАПУСКУ!
+
+Просто запусти:
+./🚀_START_HERO.sh
+
+і відкрий:
+http://localhost:5173
+
+═════════════════════════════════

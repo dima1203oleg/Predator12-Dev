@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predator Analytics - 3D Avatar Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #4c1d95 50%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            background: linear-gradient(to right, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .avatar-container {
+            width: 100%;
+            max-width: 600px;
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(168, 85, 247, 0.3);
+        }
+
+        #canvas3d {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .button {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background: rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
+        }
+
+        .button.active {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-color: transparent;
+        }
+
+        .info {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            color: #a855f7;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(168, 85, 247, 0.5);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <h1>🤖 Predator Analytics AI Avatar</h1>
+        
+        <div class="avatar-container">
+            <canvas id="canvas3d"></canvas>
+            <div class="loading" id="loading">Завантаження 3D аватара...</div>
+        </div>
+
+        <div class="controls">
+            <button class="button" id="btnListen">🎤 Слухати</button>
+            <button class="button" id="btnThink">🧠 Обробка</button>
+            <button class="button" id="btnSpeak">💬 Говорити</button>
+            <button class="button" id="btnReset">🔄 Скинути</button>
+        </div>
+
+        <div class="info">
+            <p>✨ Інтерактивний 3D AI-аватар з анімацією</p>
+            <p>🎨 Створено з Three.js | 🇺🇦 Made in Ukraine</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Create particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Three.js Setup
+        const canvas = document.getElementById('canvas3d');
+        const loading = document.getElementById('loading');
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas, 
+            antialias: true,
+            alpha: true 
+        });
+        
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        renderer.setClearColor(0x000000, 0);
+        camera.position.z = 5;
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const spotLight = new THREE.SpotLight(0xa855f7, 1);
+        spotLight.position.set(10, 10, 10);
+        scene.add(spotLight);
+
+        const pointLight = new THREE.PointLight(0xec4899, 0.5);
+        pointLight.position.set(-10, -10, -10);
+        scene.add(pointLight);
+
+        // Create Avatar Head
+        const headGeometry = new THREE.SphereGeometry(1.5, 64, 64);
+        const headMaterial = new THREE.MeshPhongMaterial({
+            color: 0x8b5cf6,
+            emissive: 0x4c1d95,
+            shininess: 100,
+            transparent: true,
+            opacity: 0.9
+        });
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        scene.add(head);
+
+        // Create Eyes
+        const eyeGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+        const eyeMaterial = new THREE.MeshPhongMaterial({
+            color: 0xffffff,
+            emissive: 0x60a5fa,
+            emissiveIntensity: 0.5
+        });
+
+        const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+        leftEye.position.set(-0.4, 0.3, 1.4);
+        scene.add(leftEye);
+
+        const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+        rightEye.position.set(0.4, 0.3, 1.4);
+        scene.add(rightEye);
+
+        // Create Particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 10;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0xa855f7,
+            transparent: true,
+            opacity: 0.3
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Animation state
+        let isListening = false;
+        let isProcessing = false;
+        let isSpeaking = false;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotate head gently
+            head.rotation.y += 0.005;
+
+            // Particle rotation
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x += 0.0005;
+
+            // Eye blinking
+            const time = Date.now() * 0.001;
+            const blink = Math.sin(time * 0.5) > 0.95 ? 0.1 : 1;
+            leftEye.scale.y = blink;
+            rightEye.scale.y = blink;
+
+            // State-based animations
+            if (isListening) {
+                const scale = 1 + Math.sin(time * 4) * 0.05;
+                head.scale.set(scale, scale, scale);
+                headMaterial.color.setHex(0xa855f7);
+                eyeMaterial.emissiveIntensity = 1;
+            } else if (isProcessing) {
+                head.rotation.y += 0.02;
+                headMaterial.color.setHex(0x3b82f6);
+                eyeMaterial.emissiveIntensity = 0.8;
+            } else if (isSpeaking) {
+                const scale = 1 + Math.sin(time * 6) * 0.03;
+                head.scale.set(1, scale, 1);
+                headMaterial.color.setHex(0xec4899);
+                eyeMaterial.emissiveIntensity = 0.7;
+            } else {
+                head.scale.set(1, 1, 1);
+                headMaterial.color.setHex(0x8b5cf6);
+                eyeMaterial.emissiveIntensity = 0.5;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+
+        // Controls
+        const btnListen = document.getElementById('btnListen');
+        const btnThink = document.getElementById('btnThink');
+        const btnSpeak = document.getElementById('btnSpeak');
+        const btnReset = document.getElementById('btnReset');
+
+        function resetStates() {
+            isListening = false;
+            isProcessing = false;
+            isSpeaking = false;
+            btnListen.classList.remove('active');
+            btnThink.classList.remove('active');
+            btnSpeak.classList.remove('active');
+        }
+
+        btnListen.addEventListener('click', () => {
+            resetStates();
+            isListening = !isListening;
+            if (isListening) btnListen.classList.add('active');
+        });
+
+        btnThink.addEventListener('click', () => {
+            resetStates();
+            isProcessing = !isProcessing;
+            if (isProcessing) btnThink.classList.add('active');
+        });
+
+        btnSpeak.addEventListener('click', () => {
+            resetStates();
+            isSpeaking = !isSpeaking;
+            if (isSpeaking) btnSpeak.classList.add('active');
+        });
+
+        btnReset.addEventListener('click', () => {
+            resetStates();
+            head.rotation.set(0, 0, 0);
+            head.scale.set(1, 1, 1);
+        });
+
+        // Start animation
+        loading.style.display = 'none';
+        animate();
+
+        console.log('🎉 3D Avatar loaded successfully!');
+        console.log('🇺🇦 Predator Analytics - Made in Ukraine');
+    </script>
+</body>
+</html>

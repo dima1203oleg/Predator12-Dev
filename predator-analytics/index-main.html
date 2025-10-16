@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PREDATOR ANALYTICS - AI Avatar</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: #000000;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 40px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 8px;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0 0 30px rgba(0, 255, 255, 0.5); }
+            25% { text-shadow: -2px 0 30px rgba(255, 0, 255, 0.5); }
+            50% { text-shadow: 2px 0 30px rgba(0, 255, 255, 0.7); }
+            75% { text-shadow: 0 2px 30px rgba(255, 0, 255, 0.5); }
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            height: 70vh;
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+
+        /* Sidebar Panels */
+        .panel {
+            flex: 0 0 280px;
+            background: rgba(0, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+        }
+
+        .panel.right {
+            border-color: rgba(255, 0, 255, 0.3);
+            background: rgba(255, 0, 255, 0.03);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.1);
+        }
+
+        .panel-header {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 1.5rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .panel.right .panel-header {
+            color: #ff00ff;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+        }
+
+        .panel-content {
+            color: rgba(0, 255, 255, 0.7);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .panel.right .panel-content {
+            color: rgba(255, 0, 255, 0.7);
+        }
+
+        .chat-input {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 5px;
+            padding: 0.5rem;
+            color: #00ffff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+        }
+
+        .chat-input input::placeholder {
+            color: rgba(0, 255, 255, 0.3);
+        }
+
+        .network-node {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 0, 255, 0.05);
+            border-left: 2px solid #ff00ff;
+            border-radius: 3px;
+        }
+
+        .network-node::before {
+            content: '◆';
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+
+        /* Avatar Container */
+        .avatar-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #canvas3d {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 2rem;
+            padding: 1rem 2rem;
+            background: rgba(0, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00ffff;
+            font-size: 0.9rem;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ffff;
+            box-shadow: 0 0 10px #00ffff;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Scan lines effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 255, 0.03) 2px,
+                rgba(0, 255, 255, 0.03) 4px
+            );
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Loading */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00ffff;
+            font-size: 1.2rem;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>PREDATOR ANALYTICS</h1>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Left Panel - Chat -->
+            <div class="panel">
+                <div class="panel-header">◤ CHAT</div>
+                <div class="panel-content">
+                    <p style="margin-bottom: 1rem;">Поіскові запити цифрового агента з сумісні</p>
+                    <p style="margin-bottom: 1rem; color: rgba(255, 0, 255, 0.7);">Знайдено Х аварових, У інцидентів в обігу, z конкурентів Розпочати у?</p>
+                    <div class="chat-input">
+                        <input type="text" placeholder="Enter a message">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center - Avatar -->
+            <div class="avatar-container">
+                <canvas id="canvas3d"></canvas>
+                <div class="loading" id="loading">INITIALIZING...</div>
+            </div>
+
+            <!-- Right Panel - Network -->
+            <div class="panel right">
+                <div class="panel-header">◢ NETWORK</div>
+                <div class="panel-content">
+                    <div class="network-node">Очікується У</div>
+                    <div class="network-node">Сумова оцінка</div>
+                    <div class="network-node">Офілу</div>
+                    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255, 0, 255, 0.2);">
+                        <div style="font-weight: 700; margin-bottom: 0.5rem;">Контрагент X</div>
+                        <div style="font-size: 0.75rem;">Хабар 5000$<br>диверсія реєстр<br>Прохэто</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-indicator"></div>
+                <span>ВИЯВЛЕНО РИЗИК</span>
+            </div>
+            <div class="status-item">
+                <div class="status-indicator" style="background: #ff00ff; box-shadow: 0 0 10px #ff00ff;"></div>
+                <span style="color: #ff00ff;">контрагент X пов'язаний із санкційною фірмою</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Three.js Setup
+        const canvas = document.getElementById('canvas3d');
+        const loading = document.getElementById('loading');
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas, 
+            antialias: true,
+            alpha: true 
+        });
+        
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        renderer.setClearColor(0x000000, 0);
+        camera.position.z = 3;
+
+        // Lighting for wireframe
+        const ambientLight = new THREE.AmbientLight(0x00ffff, 0.3);
+        scene.add(ambientLight);
+
+        const pointLight1 = new THREE.PointLight(0x00ffff, 1);
+        pointLight1.position.set(2, 2, 2);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0xff00ff, 1);
+        pointLight2.position.set(-2, -2, 2);
+        scene.add(pointLight2);
+
+        // Create Wireframe Head
+        const headGeometry = new THREE.SphereGeometry(1, 32, 32);
+        const wireframeMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ffff,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.8
+        });
+        const head = new THREE.Mesh(headGeometry, wireframeMaterial);
+        scene.add(head);
+
+        // Create Eyes with glow
+        const eyeGeometry = new THREE.SphereGeometry(0.08, 16, 16);
+        const eyeMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ffff,
+            emissive: 0x00ffff,
+            emissiveIntensity: 1
+        });
+
+        const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+        leftEye.position.set(-0.25, 0.15, 0.85);
+        scene.add(leftEye);
+
+        const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+        rightEye.position.set(0.25, 0.15, 0.85);
+        scene.add(rightEye);
+
+        // Eye glow spheres
+        const glowGeometry = new THREE.SphereGeometry(0.12, 16, 16);
+        const glowMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ffff,
+            transparent: true,
+            opacity: 0.3
+        });
+
+        const leftGlow = new THREE.Mesh(glowGeometry, glowMaterial);
+        leftGlow.position.copy(leftEye.position);
+        scene.add(leftGlow);
+
+        const rightGlow = new THREE.Mesh(glowGeometry, glowMaterial);
+        rightGlow.position.copy(rightEye.position);
+        scene.add(rightGlow);
+
+        // Particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 2000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 8;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.02,
+            color: 0x00ffff,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Accent particles (magenta)
+        const accentParticlesGeometry = new THREE.BufferGeometry();
+        const accentPosArray = new Float32Array(500 * 3);
+
+        for (let i = 0; i < 500 * 3; i++) {
+            accentPosArray[i] = (Math.random() - 0.5) * 8;
+        }
+
+        accentParticlesGeometry.setAttribute('position', new THREE.BufferAttribute(accentPosArray, 3));
+        const accentParticlesMaterial = new THREE.PointsMaterial({
+            size: 0.03,
+            color: 0xff00ff,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+
+        const accentParticlesMesh = new THREE.Points(accentParticlesGeometry, accentParticlesMaterial);
+        scene.add(accentParticlesMesh);
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const time = Date.now() * 0.001;
+
+            // Rotate head slowly
+            head.rotation.y = Math.sin(time * 0.2) * 0.3;
+            head.rotation.x = Math.cos(time * 0.15) * 0.1;
+
+            // Pulsating wireframe
+            wireframeMaterial.opacity = 0.7 + Math.sin(time * 2) * 0.2;
+
+            // Eye glow pulse
+            const glowIntensity = 0.3 + Math.sin(time * 3) * 0.2;
+            glowMaterial.opacity = glowIntensity;
+            leftGlow.scale.set(1 + glowIntensity, 1 + glowIntensity, 1 + glowIntensity);
+            rightGlow.scale.set(1 + glowIntensity, 1 + glowIntensity, 1 + glowIntensity);
+
+            // Color shift between cyan and magenta
+            const colorShift = Math.sin(time * 0.5);
+            const r = 0;
+            const g = (1 - colorShift) * 0.5;
+            const b = (1 + colorShift) * 0.5;
+            wireframeMaterial.color.setRGB(g, b, b);
+
+            // Particles rotation
+            particlesMesh.rotation.y += 0.0005;
+            particlesMesh.rotation.x += 0.0003;
+            accentParticlesMesh.rotation.y -= 0.0007;
+            accentParticlesMesh.rotation.x -= 0.0004;
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            const width = canvas.clientWidth;
+            const height = canvas.clientHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+
+        // Start
+        loading.style.display = 'none';
+        animate();
+
+        console.log('🤖 PREDATOR ANALYTICS - System Online');
+        console.log('🇺🇦 Made in Ukraine');
+    </script>
+</body>
+</html>

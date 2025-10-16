@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 PREDATOR12 NEXUS CORE V3 - ULTRA GAME INTERFACE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', 'Orbitron', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(ellipse at center, #1a1d2e 0%, #0f121a 50%, #000000 100%);
+            color: #f0f8ff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .nexus-container {
+            position: relative;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Анімовані частинки фону */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #00ffc6, #a020f0);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 0 10px #00ffc6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
+        }
+
+        /* Заголовок з ефектами */
+        .nexus-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(0, 255, 198, 0.1), rgba(160, 32, 240, 0.1));
+            border: 1px solid rgba(0, 255, 198, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nexus-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 198, 0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .nexus-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(45deg, #00ffc6, #a020f0, #0a75ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 4s ease infinite;
+            text-shadow: 0 0 30px rgba(0, 255, 198, 0.5);
+            margin-bottom: 20px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nexus-subtitle {
+            font-size: 1.4rem;
+            color: #c5d1e6;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        /* Статистика панель */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
+            border: 1px solid rgba(0, 255, 198, 0.3);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(0, 255, 198, 0.6);
+            box-shadow: 0 20px 40px rgba(0, 255, 198, 0.2);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00ffc6, #a020f0);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00ffc6;
+            font-family: 'Orbitron', monospace;
+            text-shadow: 0 0 10px rgba(0, 255, 198, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #c5d1e6;
+            opacity: 0.8;
+        }
+
+        /* Прогрес бари */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 4px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffc6, #a020f0);
+            border-radius: 4px;
+            animation: pulse 2s ease-in-out infinite alternate;
+            transition: width 1s ease;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 5px #00ffc6; }
+            100% { box-shadow: 0 0 20px #00ffc6; }
+        }
+
+        /* Дії панель */
+        .actions-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, rgba(0, 255, 198, 0.1), rgba(160, 32, 240, 0.1));
+            border: 2px solid rgba(0, 255, 198, 0.3);
+            border-radius: 12px;
+            padding: 20px 30px;
+            color: #f0f8ff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-button:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 198, 0.2), rgba(160, 32, 240, 0.2));
+            border-color: rgba(0, 255, 198, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 255, 198, 0.3);
+            color: #00ffc6;
+        }
+
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Відгукливість */
+        @media (max-width: 768px) {
+            .nexus-title { font-size: 2.5rem; }
+            .nexus-subtitle { font-size: 1.1rem; }
+            .stats-panel { grid-template-columns: 1fr; }
+            .actions-panel { grid-template-columns: 1fr; }
+        }
+
+        /* Спеціальні ефекти */
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #00ffc6; }
+            to { text-shadow: 0 0 30px #00ffc6, 0 0 40px #a020f0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nexus-container">
+        <!-- Анімовані частинки -->
+        <div id="particles-container"></div>
+
+        <!-- Заголовок -->
+        <div class="nexus-header">
+            <h1 class="nexus-title glow">🎮 PREDATOR12 NEXUS CORE V3</h1>
+            <p class="nexus-subtitle">Ультра Ігровий Веб-Пульт Управління ШІ Системою</p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <span style="background: rgba(0, 255, 198, 0.2); padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(0, 255, 198, 0.5);">
+                    🤖 32+ ШІ Агентів
+                </span>
+                <span style="background: rgba(160, 32, 240, 0.2); padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(160, 32, 240, 0.5);">
+                    🧠 48+ Моделей
+                </span>
+                <span style="background: rgba(10, 117, 255, 0.2); padding: 8px 16px; border-radius: 20px; border: 1px solid rgba(10, 117, 255, 0.5);">
+                    ⚡ Реальний час
+                </span>
+            </div>
+        </div>
+
+        <!-- Статистика системи -->
+        <div class="stats-panel">
+            <div class="stat-card">
+                <div class="stat-icon">🚀</div>
+                <div class="stat-value" id="cpu-value">45.7%</div>
+                <div class="stat-label">CPU Потужність</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="cpu-progress" style="width: 45.7%"></div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🧠</div>
+                <div class="stat-value" id="memory-value">32.1%</div>
+                <div class="stat-label">RAM Використання</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="memory-progress" style="width: 32.1%"></div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-value" id="gpu-value">78.9%</div>
+                <div class="stat-label">GPU Навантаження</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="gpu-progress" style="width: 78.9%"></div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🌐</div>
+                <div class="stat-value" id="network-value">12ms</div>
+                <div class="stat-label">Мережа Latency</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="network-progress" style="width: 88%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Дії -->
+        <div class="actions-panel">
+            <a href="#" class="action-button" onclick="launchReactApp()">
+                <span>🚀</span> Запустити React Інтерфейс
+            </a>
+            <a href="#" class="action-button" onclick="runSystemDiagnostics()">
+                <span>🔧</span> Діагностика Системи
+            </a>
+            <a href="#" class="action-button" onclick="activateAllAgents()">
+                <span>🤖</span> Активувати всі ШІ агенти
+            </a>
+            <a href="#" class="action-button" onclick="showSystemMonitor()">
+                <span>📊</span> Системний Моніторинг
+            </a>
+        </div>
+
+        <!-- Статус панель -->
+        <div style="margin-top: 50px; text-align: center; opacity: 0.7;">
+            <p>🌌 Статус системи: <span style="color: #00ffc6; font-weight: bold;">АКТИВНА</span></p>
+            <p>⏰ Час роботи: <span id="uptime">00:42:17</span></p>
+            <p>🔄 Останнє оновлення: <span id="last-update">щойно</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Створення частинок
+        function createParticles() {
+            const container = document.getElementById('particles-container');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Оновлення реального часу
+        function updateMetrics() {
+            const cpu = Math.max(20, Math.min(90, 45.7 + (Math.random() - 0.5) * 10));
+            const memory = Math.max(15, Math.min(85, 32.1 + (Math.random() - 0.5) * 8));
+            const gpu = Math.max(30, Math.min(95, 78.9 + (Math.random() - 0.5) * 15));
+            const latency = Math.max(5, Math.min(50, 12 + (Math.random() - 0.5) * 6));
+
+            document.getElementById('cpu-value').textContent = cpu.toFixed(1) + '%';
+            document.getElementById('cpu-progress').style.width = cpu + '%';
+
+            document.getElementById('memory-value').textContent = memory.toFixed(1) + '%';
+            document.getElementById('memory-progress').style.width = memory + '%';
+
+            document.getElementById('gpu-value').textContent = gpu.toFixed(1) + '%';
+            document.getElementById('gpu-progress').style.width = gpu + '%';
+
+            document.getElementById('network-value').textContent = Math.round(latency) + 'ms';
+            document.getElementById('network-progress').style.width = (100 - latency) + '%';
+
+            document.getElementById('last-update').textContent = 'щойно';
+        }
+
+        // Функції дій
+        function launchReactApp() {
+            alert('🚀 Запуск React додатку...\n\nВиконайте команду:\ncd predator12-local/frontend && npm run dev');
+        }
+
+        function runSystemDiagnostics() {
+            alert('🔧 Запуск діагностики системи...\n\n✅ CPU: Оптимально\n✅ RAM: Стабільно\n✅ GPU: Активний\n✅ Мережа: Швидка');
+        }
+
+        function activateAllAgents() {
+            alert('🤖 Активація всіх ШІ агентів...\n\n• Nexus Prime: АКТИВНИЙ\n• Data Analyzer: АКТИВНИЙ\n• Security Guardian: АКТИВНИЙ\n• Pattern Detector: АКТИВНИЙ\n• Anomaly Hunter: АКТИВНИЙ');
+        }
+
+        function showSystemMonitor() {
+            alert('📊 Системний моніторинг:\n\n🎮 Ігровий режим: УВІМКНЕНО\n⚡ Продуктивність: ВИСОКА\n🛡️ Безпека: ЗАХИЩЕНО\n🌐 З\'єднання: СТАБІЛЬНЕ');
+        }
+
+        // Ініціалізація
+        createParticles();
+        updateMetrics();
+        setInterval(updateMetrics, 2000);
+
+        // Час роботи
+        let startTime = Date.now();
+        setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            const hours = Math.floor(elapsed / 3600000);
+            const minutes = Math.floor((elapsed % 3600000) / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            document.getElementById('uptime').textContent =
+                String(hours).padStart(2, '0') + ':' +
+                String(minutes).padStart(2, '0') + ':' +
+                String(seconds).padStart(2, '0');
+        }, 1000);
+
+        console.log('🎮 PREDATOR12 NEXUS CORE V3 Initialized!');
+        console.log('🌌 Ultra Gaming Interface Active');
+        console.log('🚀 Ready for interstellar operations...');
+    </script>
+</body>
+</html>

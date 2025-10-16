@@ -1,17 +1,23 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
+from pydantic import BaseModel
 import uvicorn
 import os
 import asyncio
 import json
 import random
 from datetime import datetime, timedelta
-from typing import List, Dict
+from typing import List, Dict, AsyncGenerator
 from dotenv import load_dotenv
 
 # Імпорт Voice Providers API
-from api.voice_providers import router as voice_providers_router
+# from api.voice_providers import router as voice_providers_router
+
+# Імпорт CYBER-ACE API
+# import sys
+# sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+# from cyber_ace.routes.cyber_ace import router as cyber_ace_router
 
 load_dotenv()
 
@@ -22,7 +28,10 @@ app = FastAPI(
 )
 
 # Підключення Voice Providers API
-app.include_router(voice_providers_router)
+# app.include_router(voice_providers_router)
+
+# Підключення CYBER-ACE API
+# app.include_router(cyber_ace_router)
 
 # CORS middleware for frontend communication
 app.add_middleware(
@@ -71,6 +80,135 @@ async def health_check():
             "agents": "8 active"
         }
     }
+
+# ===== HERO INTERFACE ENDPOINTS ===== #
+
+class ChatMessage(BaseModel):
+    """Модель повідомлення чату"""
+    message: str
+    trace: bool = False
+
+@app.post("/api/chat")
+async def hero_chat(msg: ChatMessage):
+    """
+    Обробляє повідомлення користувача Hero Interface
+    """
+    user_msg = msg.message.lower()
+
+    # Проста логіка відповідей (можна замінити на реальний AI)
+    if "контрагент" in user_msg or "компанія" in user_msg:
+        reply = (
+            "🔍 Аналізую контрагента... \n\n"
+            "Знайдено потенційні ризики:\n"
+            "• Пов'язаний з офшорною компанією\n"
+            "• Судова справа від 2024 року\n"
+            "• Директор має подвійне громадянство\n\n"
+            "Рекомендую детальну перевірку через Network граф."
+        )
+    elif "граф" in user_msg or "зв'язки" in user_msg or "мережа" in user_msg:
+        reply = (
+            "🕸️ Візуалізую граф зв'язків...\n\n"
+            "Виявлено:\n"
+            "• 4 вузли у мережі\n"
+            "• 3 прямі зв'язки\n"
+            "• 1 підозрілий зв'язок\n\n"
+            "Граф доступний справа у панелі Network."
+        )
+    elif "суд" in user_msg or "справа" in user_msg:
+        reply = (
+            "⚖️ Перевіряю судові справи...\n\n"
+            "Знайдено 2 активні справи:\n"
+            "1. Позов до ТОВ 'Контрагент X' (2024)\n"
+            "2. Арбітражна справа з Офшором\n\n"
+            "Статус: В процесі розгляду"
+        )
+    elif "ризик" in user_msg or "небезпека" in user_msg:
+        reply = (
+            "⚠️ Оцінка ризиків:\n\n"
+            "• Фінансовий ризик: ВИСОКИЙ (75%)\n"
+            "• Репутаційний ризик: СЕРЕДНІЙ (45%)\n"
+            "• Юридичний ризик: ВИСОКИЙ (80%)\n\n"
+            "Рекомендую додаткову due diligence перевірку."
+        )
+    elif "агент" in user_msg:
+        reply = (
+            "🤖 Статус агентів:\n\n"
+            "• Router Agent: Активний ✅\n"
+            "• Law Agent: Активний ✅\n"
+            "• Court Agent: Активний ✅\n"
+            "• Risk Agent: Активний ✅\n\n"
+            "Всі агенти готові до роботи!"
+        )
+    else:
+        reply = (
+            "👋 Вітаю! Я AI помічник Predator Analytics.\n\n"
+            "Можу допомогти з:\n"
+            "• Аналізом контрагентів\n"
+            "• Візуалізацією зв'язків\n"
+            "• Перевіркою судових справ\n"
+            "• Оцінкою ризиків\n\n"
+            "Що вас цікавить?"
+        )
+
+    return {"reply": reply, "status": "success"}
+
+async def event_generator() -> AsyncGenerator[str, None]:
+    """Генерує SSE події для Hero Interface"""
+    events = [
+        "Router Agent: Обробка запиту...",
+        "Law Agent: Пошук у базі законодавства",
+        "Court Agent: Перевірка судових реєстрів",
+        "Risk Agent: Аналіз ризиків контрагента",
+        "Graph Agent: Побудова мережі зв'язків",
+        "Router Agent: Запит успішно оброблено ✅",
+        "Law Agent: Знайдено 15 релевантних документів",
+        "Court Agent: Виявлено 2 активні справи",
+        "Risk Agent: Ризик-профіль оновлено",
+        "Graph Agent: Граф містить 47 вузлів",
+    ]
+
+    while True:
+        event = random.choice(events)
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        yield f"data: [{timestamp}] {event}\n\n"
+        await asyncio.sleep(random.uniform(2, 5))
+
+@app.get("/api/events")
+async def hero_events():
+    """
+    SSE стрім подій агентів для Hero Interface
+    """
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+        }
+    )
+
+@app.get("/api/network")
+async def hero_network():
+    """
+    Повертає дані графа для Hero Interface
+    """
+    return {
+        "nodes": [
+            {"id": "Контрагент X", "label": "Контрагент X", "type": "company"},
+            {"id": "Судова справа", "label": "Судова справа №123", "type": "legal"},
+            {"id": "Офшор", "label": "Offshore Ltd", "type": "offshore"},
+            {"id": "Директор", "label": "Іванов І.І.", "type": "person"},
+            {"id": "Банк", "label": "Privatbank", "type": "financial"}
+        ],
+        "edges": [
+            {"source": "Контрагент X", "target": "Судова справа", "label": "defendant"},
+            {"source": "Контрагент X", "target": "Офшор", "label": "owns"},
+            {"source": "Директор", "target": "Контрагент X", "label": "director"},
+            {"source": "Контрагент X", "target": "Банк", "label": "account"}
+        ]
+    }
+
+# ===== END HERO INTERFACE ENDPOINTS ===== #
 
 @app.get("/api/system/status")
 async def get_system_status():

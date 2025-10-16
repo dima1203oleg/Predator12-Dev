@@ -1,0 +1,53 @@
+apiVersion: v2
+name: predator-analytics
+description: Predator Analytics - AI-Powered Analytics Platform with Multi-Agent System
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+
+keywords:
+  - ai
+  - analytics
+  - machine-learning
+  - multi-agent
+  - kubernetes
+
+maintainers:
+  - name: Predator Analytics Team
+    email: team@predator-analytics.io
+
+dependencies:
+  - name: backend
+    version: "1.0.0"
+    repository: "file://./charts/backend"
+    condition: backend.enabled
+
+  - name: frontend
+    version: "1.0.0"
+    repository: "file://./charts/frontend"
+    condition: frontend.enabled
+
+  - name: arbiter-agent
+    version: "1.0.0"
+    repository: "file://./charts/arbiter-agent"
+    condition: arbiter-agent.enabled
+
+  - name: dataset-inspector-agent
+    version: "1.0.0"
+    repository: "file://./charts/dataset-inspector-agent"
+    condition: dataset-inspector-agent.enabled
+
+  - name: redis
+    version: "18.4.0"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: redis.enabled
+
+  - name: postgresql
+    version: "13.2.24"
+    repository: "https://charts.bitnami.com/bitnami"
+    condition: postgresql.enabled
+
+  - name: qdrant
+    version: "0.7.0"
+    repository: "https://qdrant.github.io/qdrant-helm"
+    condition: qdrant.enabled
