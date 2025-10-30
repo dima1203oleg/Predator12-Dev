@@ -5,7 +5,7 @@ global:
   domain: "${DOMAIN}"
   environment: production
   imageRegistry: "${IMAGE_REGISTRY}"
-  
+
   monitoring:
     enabled: true
     prometheus:
@@ -18,11 +18,11 @@ global:
 backend:
   enabled: true
   replicaCount: 5
-  
+
   image:
     repository: "${BACKEND_IMAGE}"
     tag: "${VERSION}"
-  
+
   ingress:
     enabled: true
     hosts:
@@ -34,7 +34,7 @@ backend:
       - secretName: api-tls-prod
         hosts:
           - "${API_DOMAIN}"
-  
+
   resources:
     limits:
       cpu: 4000m
@@ -42,12 +42,12 @@ backend:
     requests:
       cpu: 1000m
       memory: 2Gi
-  
+
   autoscaling:
     enabled: true
     minReplicas: 5
     maxReplicas: 20
-  
+
   env:
     - name: DEBUG
       value: "false"
@@ -101,11 +101,11 @@ backend:
 frontend:
   enabled: true
   replicaCount: 3
-  
+
   image:
     repository: "${FRONTEND_IMAGE}"
     tag: "${VERSION}"
-  
+
   ingress:
     enabled: true
     hosts:
@@ -117,7 +117,7 @@ frontend:
       - secretName: frontend-tls-prod
         hosts:
           - "${DOMAIN}"
-  
+
   resources:
     limits:
       cpu: 2000m
@@ -125,7 +125,7 @@ frontend:
     requests:
       cpu: 500m
       memory: 1Gi
-  
+
   autoscaling:
     enabled: true
     minReplicas: 3
@@ -134,7 +134,7 @@ frontend:
 arbiter-agent:
   enabled: true
   replicaCount: 3
-  
+
   env:
     - name: ARBITER_TOKEN
       valueFrom:
@@ -145,11 +145,11 @@ arbiter-agent:
 redis:
   enabled: true
   architecture: replication
-  
+
   auth:
     enabled: true
     existingSecret: redis-secret-prod
-  
+
   master:
     resources:
       limits:
@@ -160,7 +160,7 @@ redis:
         memory: 1Gi
     persistence:
       size: 50Gi
-  
+
   replica:
     replicaCount: 3
     resources:
@@ -174,12 +174,12 @@ redis:
 postgresql:
   enabled: true
   architecture: replication
-  
+
   auth:
     username: "${DB_USER}"
     database: "${DB_NAME}"
     existingSecret: postgresql-secret-prod
-  
+
   primary:
     resources:
       limits:
@@ -190,7 +190,7 @@ postgresql:
         memory: 2Gi
     persistence:
       size: 200Gi
-  
+
   readReplicas:
     replicaCount: 2
     resources:
@@ -204,7 +204,7 @@ postgresql:
 qdrant:
   enabled: true
   replicaCount: 3
-  
+
   resources:
     limits:
       cpu: 4000m
@@ -212,6 +212,6 @@ qdrant:
     requests:
       cpu: 2000m
       memory: 4Gi
-  
+
   persistence:
     size: 500Gi

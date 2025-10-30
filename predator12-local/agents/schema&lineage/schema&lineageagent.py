@@ -5,10 +5,11 @@ Role: AI-powered schema inference and data lineage tracking
 Auto-generated from agents.yaml configuration
 """
 import asyncio
+import json
 import logging
 import os
-import json
 from datetime import datetime
+
 import aioredis
 import httpx
 from prometheus_client import Counter, Gauge
@@ -24,10 +25,10 @@ class Schema&LineageAgent:
         self.agent_name = "Schema&LineageAgent"
         self.port = 9011
         self.role = "AI-powered schema inference and data lineage tracking"
-        
+
         # З'єднання з Redis для координації
         self.redis = None
-        
+
     async def initialize(self):
         """Ініціалізація агента"""
         try:
@@ -41,12 +42,12 @@ class Schema&LineageAgent:
             self.logger.error(f"Failed to initialize {self.agent_name}: {e}")
             HEALTH_GAUGE.set(0)  # Unhealthy
             raise
-        
+
     async def start(self):
         """Запуск основного циклу агента"""
         self.running = True
         self.logger.info(f"Starting {self.agent_name} - {self.role}")
-        
+
         # Реєструємо агента в Redis
         if self.redis:
             await self.redis.hset(f"agent:{self.agent_name}:status", mapping={
@@ -56,44 +57,44 @@ class Schema&LineageAgent:
                 "last_seen": datetime.utcnow().isoformat(),
                 "tasks_completed": 0
             })
-        
+
         task_counter = 0
         while self.running:
             try:
                 # Симулюємо роботу агента
                 task_counter += 1
                 TASKS_COUNTER.inc()
-                
+
                 # Оновлюємо статус в Redis
                 if self.redis:
                     await self.redis.hset(f"agent:{self.agent_name}:status", mapping={
                         "last_seen": datetime.utcnow().isoformat(),
                         "tasks_completed": task_counter
                     })
-                
+
                 self.logger.info(f"{self.agent_name} активний - завдання {task_counter}")
                 await asyncio.sleep(60)  # Цикл кожну хвилину
-                
+
             except Exception as e:
                 self.logger.error(f"Error in {self.agent_name} loop: {e}")
                 HEALTH_GAUGE.set(0)
                 await asyncio.sleep(30)
-            
+
     async def stop(self):
         """Зупинка агента"""
         self.running = False
         HEALTH_GAUGE.set(0)
         self.logger.info(f"Stopping {self.agent_name}")
-        
+
         if self.redis:
-            await self.redis.hset(f"agent:{self.agent_name}:status", 
+            await self.redis.hset(f"agent:{self.agent_name}:status",
                                  "status", "stopped")
             await self.redis.close()
 
 async def main():
     logging.basicConfig(level=logging.INFO)
     agent = Schema&LineageAgent()
-    
+
     try:
         await agent.initialize()
         await agent.start()

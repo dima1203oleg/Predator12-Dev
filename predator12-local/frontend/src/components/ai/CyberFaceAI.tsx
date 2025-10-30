@@ -1,12 +1,12 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Box, Paper, IconButton, Typography, TextField, Fab, Tooltip } from '@mui/material';
-import { 
-  Mic, 
-  MicOff, 
-  Send, 
-  VolumeUp, 
-  VolumeOff, 
+import {
+  Mic,
+  MicOff,
+  Send,
+  VolumeUp,
+  VolumeOff,
   SmartToy,
   Close,
   Minimize,
@@ -56,7 +56,7 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentEmotion, setCurrentEmotion] = useState<'neutral' | 'happy' | 'thinking' | 'concerned' | 'excited'>('neutral');
-  
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<THREE.Scene>();
   const rendererRef = useRef<THREE.WebGLRenderer>();
@@ -73,18 +73,18 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
     const canvas = canvasRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ 
-      canvas, 
-      alpha: true, 
-      antialias: true 
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true
     });
-    
+
     renderer.setSize(200, 200);
     renderer.setClearColor(0x000000, 0);
-    
+
     // Створення кібер-лиця
     const faceGroup = new THREE.Group();
-    
+
     // Основа голови (сфера з wireframe)
     const headGeometry = new THREE.SphereGeometry(1, 32, 32);
     const headMaterial = new THREE.MeshBasicMaterial({
@@ -103,11 +103,11 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
       emissive: nexusColors.emerald,
       emissiveIntensity: 0.5
     });
-    
+
     const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
     leftEye.position.set(-0.3, 0.2, 0.8);
     faceGroup.add(leftEye);
-    
+
     const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
     rightEye.position.set(0.3, 0.2, 0.8);
     faceGroup.add(rightEye);
@@ -130,7 +130,7 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
       emissive: nexusColors.quantum,
       emissiveIntensity: 0.3
     });
-    
+
     for (let i = 0; i < 3; i++) {
       const energyRing = new THREE.Mesh(energyGeometry, energyMaterial);
       energyRing.rotation.x = (Math.PI / 3) * i;
@@ -142,22 +142,22 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
     const particlesGeometry = new THREE.BufferGeometry();
     const particleCount = 100;
     const positions = new Float32Array(particleCount * 3);
-    
+
     for (let i = 0; i < particleCount * 3; i += 3) {
       positions[i] = (Math.random() - 0.5) * 6;
       positions[i + 1] = (Math.random() - 0.5) * 6;
       positions[i + 2] = (Math.random() - 0.5) * 6;
     }
-    
+
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    
+
     const particlesMaterial = new THREE.PointsMaterial({
       color: nexusColors.emerald,
       size: 0.05,
       transparent: true,
       opacity: 0.6
     });
-    
+
     const particles = new THREE.Points(particlesGeometry, particlesMaterial);
     faceGroup.add(particles);
 
@@ -172,15 +172,15 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
     // Анімаційний цикл
     const animate = () => {
       animationIdRef.current = requestAnimationFrame(animate);
-      
+
       if (faceRef.current) {
         // Обертання голови
         faceRef.current.rotation.y += 0.005;
-        
+
         // Пульсація залежно від емоції
         const scale = 1 + Math.sin(Date.now() * 0.003) * 0.05;
         faceRef.current.scale.setScalar(scale);
-        
+
         // Анімація частинок
         const particles = faceRef.current.children.find(child => child instanceof THREE.Points);
         if (particles) {
@@ -188,10 +188,10 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
           particles.rotation.y += 0.01;
         }
       }
-      
+
       renderer.render(scene, camera);
     };
-    
+
     animate();
   }, []);
 
@@ -200,21 +200,21 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       const recognition = new SpeechRecognitionAPI();
-      
+
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = 'uk-UA';
-      
+
       recognition.onresult = (event: any) => {
         const text = event.results[0][0].transcript;
         handleUserMessage(text);
         setIsListening(false);
       };
-      
+
       recognition.onerror = () => {
         setIsListening(false);
       };
-      
+
       recognitionRef.current = recognition;
     }
 
@@ -256,10 +256,10 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
         utterance.lang = 'uk-UA';
         utterance.rate = 0.9;
         utterance.pitch = 1.1;
-        
+
         utterance.onstart = () => setIsSpeaking(true);
         utterance.onend = () => setIsSpeaking(false);
-        
+
         synthRef.current.speak(utterance);
       }
 
@@ -273,7 +273,7 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
   // Генерація відповідей AI
   const generateAIResponse = (userText: string): { text: string; emotion: Message['emotion']; command?: string } => {
     const text = userText.toLowerCase();
-    
+
     if (text.includes('статус') || text.includes('стан')) {
       return {
         text: `Система працює на ${systemStatus.health}% потужності. Активні модулі: ${systemStatus.activeModules.join(', ')}. Виявлено ${systemStatus.alerts} попереджень.`,
@@ -281,7 +281,7 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
         command: 'show_status'
       };
     }
-    
+
     if (text.includes('агент') || text.includes('mas')) {
       return {
         text: 'Переключаюсь на модуль MAS Supervisor для моніторингу агентів. Зараз активні ETL та OSINT агенти.',
@@ -289,7 +289,7 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
         command: 'navigate_mas'
       };
     }
-    
+
     if (text.includes('дані') || text.includes('аналітика')) {
       return {
         text: 'Відкриваю DataOps Control Hub. Тут ви можете завантажити нові датасети та керувати ETL процесами.',
@@ -297,7 +297,7 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
         command: 'navigate_etl'
       };
     }
-    
+
     if (text.includes('безпека') || text.includes('загроз')) {
       return {
         text: 'Активую модуль кібербезпеки. Система під захистом, всі метрики в нормі.',
@@ -305,14 +305,14 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
         command: 'navigate_security'
       };
     }
-    
+
     if (text.includes('привіт') || text.includes('вітаю')) {
       return {
         text: 'Привіт! Готовий допомогти з управлінням Predator Analytics. Що вас цікавить?',
         emotion: 'happy'
       };
     }
-    
+
     return {
       text: 'Цікаве питання! Я аналізую дані та можу допомогти з навігацією системою, моніторингом агентів та аналітикою. Спробуйте запитати про статус системи або конкретний модуль.',
       emotion: 'thinking'
@@ -367,7 +367,7 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
   };
 
   const positionStyles = getPositionStyles();
-  
+
   return (
     <div style={positionStyles}>
       {/* Floating Action Button */}
@@ -475,7 +475,7 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
                     </Typography>
                   </Box>
                 </Box>
-                
+
                 <Box sx={{ display: 'flex', gap: 1 }}>
                   <IconButton
                     size="small"
@@ -593,7 +593,7 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
                         }
                       }}
                     />
-                    
+
                     <IconButton
                       onClick={startListening}
                       disabled={isListening}
@@ -607,7 +607,7 @@ const CyberFaceAI: React.FC<CyberFaceAIProps> = ({
                     >
                       {isListening ? <Mic /> : <MicOff />}
                     </IconButton>
-                    
+
                     <IconButton
                       onClick={sendMessage}
                       disabled={!inputText.trim()}

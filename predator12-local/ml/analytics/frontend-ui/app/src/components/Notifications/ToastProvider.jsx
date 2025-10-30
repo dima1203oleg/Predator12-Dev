@@ -38,20 +38,20 @@ export const ToastProvider = ({
     autoCloseDelay,
     filterByPreferences
   });
-  
+
   // Inject cyberpunk theme CSS variables if needed
   useEffect(() => {
     if (theme === 'cyberpunk') {
       // Add cyberpunk-specific CSS variables
       document.documentElement.classList.add('toast-cyberpunk-theme');
     }
-    
+
     return () => {
       // Clean up on unmount
       document.documentElement.classList.remove('toast-cyberpunk-theme');
     };
   }, [theme]);
-  
+
   // Enhanced addToast function that supports animation style
   const addToastWithAnimation = (toast) => {
     // If toast has no animation style specified, use the default
@@ -60,9 +60,9 @@ export const ToastProvider = ({
     }
     return addToast(toast);
   };
-  
+
   return (
-    <ToastContext.Provider 
+    <ToastContext.Provider
       value={{
         addToast: addToastWithAnimation,
         removeToast,
@@ -92,12 +92,12 @@ export const ToastProvider = ({
  */
 export const useToast = () => {
   const context = useContext(ToastContext);
-  
+
   if (!context) {
     throw new Error('useToast must be used within a ToastProvider');
   }
-  
+
   return context;
 };
 
-export default ToastProvider; 
+export default ToastProvider;

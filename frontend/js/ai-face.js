@@ -19,7 +19,7 @@ class AIFace {
         };
         this.currentEmotion = 'neutral';
         this.isAnimating = false;
-        
+
         this.init();
     }
 
@@ -30,7 +30,7 @@ class AIFace {
             this.createFace();
             this.setupLighting();
             this.startRenderLoop();
-            
+
             console.log('AI Face initialized successfully');
         } catch (error) {
             console.error('Failed to initialize AI Face:', error);
@@ -45,20 +45,20 @@ class AIFace {
 
         // Камера
         this.camera = new THREE.PerspectiveCamera(
-            75, 
-            this.container.clientWidth / this.container.clientHeight, 
-            0.1, 
+            75,
+            this.container.clientWidth / this.container.clientHeight,
+            0.1,
             1000
         );
         this.camera.position.z = 5;
 
         // Рендерер
-        this.renderer = new THREE.WebGLRenderer({ 
-            antialias: true, 
-            alpha: true 
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true
         });
         this.renderer.setSize(
-            this.container.clientWidth, 
+            this.container.clientWidth,
             this.container.clientHeight
         );
         this.renderer.shadowMap.enabled = true;
@@ -79,16 +79,16 @@ class AIFace {
             opacity: 0.8,
             shininess: 100
         });
-        
+
         this.face = new THREE.Mesh(faceGeometry, faceMaterial);
         this.scene.add(this.face);
 
         // Очі
         this.createEyes();
-        
+
         // Рот
         this.createMouth();
-        
+
         // Брови
         this.createEyebrows();
 
@@ -99,11 +99,11 @@ class AIFace {
     createEyes() {
         // Ліве око
         const leftEyeGeometry = new THREE.SphereGeometry(0.15, 16, 16);
-        const eyeMaterial = new THREE.MeshPhongMaterial({ 
+        const eyeMaterial = new THREE.MeshPhongMaterial({
             color: 0x00ffff,
             emissive: 0x004444
         });
-        
+
         this.leftEye = new THREE.Mesh(leftEyeGeometry, eyeMaterial);
         this.leftEye.position.set(-0.4, 0.3, 1.2);
         this.face.add(this.leftEye);
@@ -116,7 +116,7 @@ class AIFace {
         // Зіниці
         const pupilGeometry = new THREE.SphereGeometry(0.08, 8, 8);
         const pupilMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
-        
+
         this.leftPupil = new THREE.Mesh(pupilGeometry, pupilMaterial);
         this.leftPupil.position.set(-0.4, 0.3, 1.3);
         this.face.add(this.leftPupil);
@@ -129,11 +129,11 @@ class AIFace {
     createMouth() {
         // Рот як тор
         const mouthGeometry = new THREE.TorusGeometry(0.3, 0.05, 8, 16);
-        const mouthMaterial = new THREE.MeshPhongMaterial({ 
+        const mouthMaterial = new THREE.MeshPhongMaterial({
             color: 0xff4444,
             emissive: 0x220000
         });
-        
+
         this.mouth = new THREE.Mesh(mouthGeometry, mouthMaterial);
         this.mouth.position.set(0, -0.4, 1.2);
         this.mouth.rotation.x = Math.PI / 2;
@@ -142,7 +142,7 @@ class AIFace {
 
     createEyebrows() {
         const browGeometry = new THREE.BoxGeometry(0.4, 0.08, 0.1);
-        const browMaterial = new THREE.MeshPhongMaterial({ 
+        const browMaterial = new THREE.MeshPhongMaterial({
             color: 0x00ffff,
             emissive: 0x002222
         });
@@ -161,7 +161,7 @@ class AIFace {
     createParticles() {
         const particleCount = 50;
         const positions = new Float32Array(particleCount * 3);
-        
+
         for (let i = 0; i < particleCount * 3; i += 3) {
             positions[i] = (Math.random() - 0.5) * 10;     // x
             positions[i + 1] = (Math.random() - 0.5) * 10; // y
@@ -202,7 +202,7 @@ class AIFace {
     startRenderLoop() {
         const animate = () => {
             requestAnimationFrame(animate);
-            
+
             // Обертання обличчя
             if (this.face) {
                 this.face.rotation.y += 0.005;
@@ -219,7 +219,7 @@ class AIFace {
 
             this.renderer.render(this.scene, this.camera);
         };
-        
+
         animate();
     }
 
@@ -237,7 +237,7 @@ class AIFace {
 
     blink() {
         this.isBlinking = true;
-        
+
         // Анімація закриття очей
         const closeAnimation = new TWEEN.Tween(this.leftEye.scale)
             .to({ y: 0.1 }, 100)
@@ -248,9 +248,9 @@ class AIFace {
                     .onComplete(() => {
                         this.isBlinking = false;
                     });
-                
+
                 openAnimation.start();
-                
+
                 // Синхронізація з правим оком
                 new TWEEN.Tween(this.rightEye.scale)
                     .to({ y: 1 }, 100)
@@ -258,7 +258,7 @@ class AIFace {
             });
 
         closeAnimation.start();
-        
+
         // Синхронізація з правим оком
         new TWEEN.Tween(this.rightEye.scale)
             .to({ y: 0.1 }, 100)
@@ -267,19 +267,19 @@ class AIFace {
 
     setEmotion(emotion) {
         if (!this.emotions[emotion] || this.isAnimating) return;
-        
+
         this.isAnimating = true;
         this.currentEmotion = emotion;
-        
+
         const target = this.emotions[emotion];
         const duration = 500;
 
         // Анімація рота
         if (this.mouth) {
             new TWEEN.Tween(this.mouth.scale)
-                .to({ 
+                .to({
                     x: 1 + target.mouth * 0.5,
-                    y: 1 + target.mouth * 0.3 
+                    y: 1 + target.mouth * 0.3
                 }, duration)
                 .start();
         }
@@ -287,11 +287,11 @@ class AIFace {
         // Анімація очей
         if (this.leftEye && this.rightEye) {
             const eyeScale = 1 + target.eyes * 0.2;
-            
+
             new TWEEN.Tween(this.leftEye.scale)
                 .to({ x: eyeScale, z: eyeScale }, duration)
                 .start();
-                
+
             new TWEEN.Tween(this.rightEye.scale)
                 .to({ x: eyeScale, z: eyeScale }, duration)
                 .start();
@@ -300,11 +300,11 @@ class AIFace {
         // Анімація брів
         if (this.leftEyebrow && this.rightEyebrow) {
             const browY = 0.6 + target.eyebrows * 0.2;
-            
+
             new TWEEN.Tween(this.leftEyebrow.position)
                 .to({ y: browY }, duration)
                 .start();
-                
+
             new TWEEN.Tween(this.rightEyebrow.position)
                 .to({ y: browY }, duration)
                 .onComplete(() => {
@@ -318,10 +318,10 @@ class AIFace {
 
     speak(text) {
         this.setEmotion('speaking');
-        
+
         // Симуляція руху губ під час говоріння
         const speakDuration = text.length * 50; // 50мс на символ
-        
+
         setTimeout(() => {
             this.setEmotion(this.currentEmotion === 'speaking' ? 'neutral' : this.currentEmotion);
         }, speakDuration);
@@ -329,7 +329,7 @@ class AIFace {
 
     startThinking() {
         this.setEmotion('thinking');
-        
+
         // Пульсація при мисленні
         this.thinkingAnimation = new TWEEN.Tween(this.face.material)
             .to({ opacity: 0.6 }, 1000)
@@ -348,7 +348,7 @@ class AIFace {
 
     startProcessing() {
         this.setEmotion('processing');
-        
+
         // Швидке обертання при обробці
         this.processingAnimation = new TWEEN.Tween(this.face.rotation)
             .to({ y: this.face.rotation.y + Math.PI * 2 }, 2000)
@@ -383,7 +383,7 @@ class AIFace {
                 <div class="status-text">AI Assistant Ready</div>
             </div>
         `;
-        
+
         console.log('Using 2D fallback for AI Face');
     }
 
@@ -392,11 +392,11 @@ class AIFace {
             this.container.removeChild(this.renderer.domElement);
             this.renderer.dispose();
         }
-        
+
         if (this.scene) {
             this.scene.clear();
         }
-        
+
         console.log('AI Face destroyed');
     }
 }

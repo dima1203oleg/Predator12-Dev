@@ -242,7 +242,7 @@ echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     print_success "Запускаємо frontend..."
     echo ""
-    
+
     # Спробуємо запустити backend (якщо є скрипт)
     if [ -f "../../start-voice-premium-free.sh" ]; then
         print_info "Запускаємо Premium FREE Voice API в фоні..."
@@ -250,13 +250,13 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         sleep 3
         print_success "Backend запущено на http://localhost:5094"
     fi
-    
+
     print_success "Запускаємо frontend на http://localhost:3000"
     echo ""
     print_info "Браузер відкриється автоматично через кілька секунд..."
     print_info "Перейдіть на /voice для доступу до голосового інтерфейсу"
     echo ""
-    
+
     # Запуск frontend
     npm start
 else

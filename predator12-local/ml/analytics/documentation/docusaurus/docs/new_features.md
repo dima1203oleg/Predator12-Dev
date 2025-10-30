@@ -36,24 +36,24 @@
 
 ## Next Steps and Testing Guidelines
 
-- **Testing Backend Endpoints**: 
+- **Testing Backend Endpoints**:
   - Test the `/orchestrated-analysis` endpoint by sending various analysis queries to ensure the LangGraph orchestration handles complex tasks correctly. Use tools like Postman or curl to simulate requests.
   - Verify the `/api/analyze` and `/generate-insight` endpoints with different input data to confirm remote LLM integration works as expected.
-- **Frontend Testing**: 
+- **Frontend Testing**:
   - Test the `AnalysisPanel.jsx` component with client users to ensure it displays analytics results accurately and is user-friendly.
   - Test the `AdminDashboard.jsx` component with admin users to confirm all administrative functionalities are accessible and operational.
-- **Performance Testing**: 
+- **Performance Testing**:
   - Conduct load testing on the FastAPI backend with tools like Locust to ensure it handles multiple concurrent requests under the specified memory limits.
   - Monitor memory usage and performance metrics via Grafana dashboards during testing to identify any bottlenecks.
-- **Database Performance**: 
+- **Database Performance**:
   - Test PostgreSQL with TimescaleDB under heavy analytical query loads to verify the configuration settings in `postgresql.conf` are optimal for performance.
-- **Deployment Testing**: 
+- **Deployment Testing**:
   - Deploy the system using the updated `docker-compose.yml` on a low-memory environment (e.g., macOS M3 with 8 GB RAM) to confirm all services run within memory constraints.
   - Test Kubernetes deployment with Helm charts on a high-performance server to ensure scalability and resource allocation are correctly configured.
-- **Expansion**: 
+- **Expansion**:
   - Develop additional UI components for both client and admin interfaces, maintaining logical separation and enhancing user experience with TailwindCSS.
   - Add more detailed analytics tasks in `analytics.py` to cover other scenarios like lobbying influence and customs schemes.
-- **Documentation**: 
+- **Documentation**:
   - Continue to update documentation with detailed guides for deployment, usage, and troubleshooting. Include examples of API requests and responses for each endpoint.
 
-For any issues or further enhancements, please refer to the project repository or contact the development team. 
+For any issues or further enhancements, please refer to the project repository or contact the development team.

@@ -118,7 +118,11 @@ class OpenSearchILMManager:
             }
             policy_config["policy"]["states"][-1]["transitions"].append(delete_transition)
 
-            delete_state = {"name": "delete", "actions": [{"delete": {}}], "transitions": []}
+            delete_state = {
+                "name": "delete",
+                "actions": [{"delete": {}}],
+                "transitions": [],
+            }
             policy_config["policy"]["states"].append(delete_state)
 
         try:
@@ -186,7 +190,13 @@ class OpenSearchILMManager:
         """Setup alias for write operations with routing"""
         alias_config = {
             "actions": [
-                {"add": {"index": write_index, "alias": alias_name, "is_write_index": True}}
+                {
+                    "add": {
+                        "index": write_index,
+                        "alias": alias_name,
+                        "is_write_index": True,
+                    }
+                }
             ]
         }
 
@@ -223,7 +233,10 @@ class MinIORetentionManager:
     """MinIO bucket lifecycle management"""
 
     def __init__(
-        self, minio_endpoint: str = "localhost:9000", access_key: str = "", secret_key: str = ""
+        self,
+        minio_endpoint: str = "localhost:9000",
+        access_key: str = "",
+        secret_key: str = "",
     ):
         self.minio_endpoint = minio_endpoint
         self.access_key = access_key
@@ -316,7 +329,10 @@ class CacheManager:
                 "index": index_pattern,
                 "query": aggregation_config.get("query", {"match_all": {}}),
             },
-            "dest": {"index": f"{index_pattern}_aggregated", "version_type": "external"},
+            "dest": {
+                "index": f"{index_pattern}_aggregated",
+                "version_type": "external",
+            },
             "frequency": aggregation_config.get("frequency", "1h"),
             "page_size": 1000,
             "aggregations": aggregation_config.get("aggregations", {}),

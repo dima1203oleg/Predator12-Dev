@@ -66,7 +66,7 @@ function Eyes({ isListening }: { isListening: boolean }) {
       <Sphere ref={leftEyeRef} args={[0.15, 32, 32]} position={[-0.4, 0.3, 1.8]}>
         <meshStandardMaterial color={isListening ? '#60a5fa' : '#ffffff'} emissive={isListening ? '#3b82f6' : '#000000'} emissiveIntensity={0.5} />
       </Sphere>
-      
+
       {/* Right Eye */}
       <Sphere ref={rightEyeRef} args={[0.15, 32, 32]} position={[0.4, 0.3, 1.8]}>
         <meshStandardMaterial color={isListening ? '#60a5fa' : '#ffffff'} emissive={isListening ? '#3b82f6' : '#000000'} emissiveIntensity={0.5} />
@@ -126,12 +126,12 @@ export function AIAvatar({ isListening, isProcessing }: AIAvatarProps) {
       <ambientLight intensity={0.5} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
       <pointLight position={[-10, -10, -10]} intensity={0.5} />
-      
+
       {/* Avatar Components */}
       <AvatarHead isListening={isListening} isProcessing={isProcessing} />
       <Eyes isListening={isListening} />
       <ParticleField isActive={isListening || isProcessing} />
-      
+
       {/* Controls */}
       <OrbitControls
         enableZoom={false}

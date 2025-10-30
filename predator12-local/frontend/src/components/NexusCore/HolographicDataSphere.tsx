@@ -92,20 +92,20 @@ export const HolographicDataSphere: React.FC = () => {
         uniform float iridescence;
         varying vec3 vNormal;
         varying vec3 vPosition;
-        
+
         void main() {
           float intensity = pow(0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
           vec3 glow = baseColor * intensity;
-          
+
           // Iridescent shimmer
-          float shimmer = sin(vPosition.x * 10.0 + time) * 
+          float shimmer = sin(vPosition.x * 10.0 + time) *
                          cos(vPosition.y * 10.0 + time) * 0.3;
           vec3 iridescent = vec3(
             0.5 + 0.5 * sin(time + vPosition.x * 5.0),
             0.5 + 0.5 * cos(time + vPosition.y * 5.0),
             0.5 + 0.5 * sin(time + vPosition.z * 5.0)
           );
-          
+
           vec3 finalColor = mix(glow, iridescent, iridescence * shimmer);
           gl_FragColor = vec4(finalColor, 0.8);
         }
@@ -138,7 +138,7 @@ export const HolographicDataSphere: React.FC = () => {
         uniform vec3 glowColor;
         uniform float pulse;
         varying vec3 vNormal;
-        
+
         void main() {
           float intensity = pow(0.4 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);
           float pulseEffect = 0.5 + 0.5 * sin(time * 2.0);
@@ -228,7 +228,7 @@ export const HolographicDataSphere: React.FC = () => {
         const pulse = 1 + 0.1 * Math.sin(time * 2);
         const breathe = 1 + 0.05 * Math.sin(time * 0.5);
         sphereRef.current.scale.setScalar(pulse * breathe);
-        
+
         // Update shader uniform
         const mat = sphereRef.current.material as THREE.ShaderMaterial;
         if (mat.uniforms) {

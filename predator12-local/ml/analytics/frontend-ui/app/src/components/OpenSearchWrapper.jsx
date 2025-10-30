@@ -27,4 +27,4 @@ const OpenSearchWrapper = () => {
   );
 };
 
-export default OpenSearchWrapper; 
+export default OpenSearchWrapper;

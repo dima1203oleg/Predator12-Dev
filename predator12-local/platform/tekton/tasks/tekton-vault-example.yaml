@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: tekton-vault-example
+spec:
+  workspaces:
+    - name: repo
+  params:
+    - name: secret-path
+      type: string
+      default: "secret/data/predator12/ci/credentials"
+  steps:
+    - name: fetch-vault-secret
+      image: hashicorp/vault:1.13.0
+      script: |
+        #!/bin/sh
+        set -e
+        echo "Fetching secrets from Vault (example)"
+        # The Tekton service account should have a Vault token (via Vault Agent or CSI)
+        if [ -z "${VAULT_ADDR:-}" ]; then
+          echo "VAULT_ADDR not set; skipping secret fetch (dry-run)" >&2
+          exit 0
+        fi
+        # Example: vault kv get -format=json $(params.secret-path) | jq -r '.data.data' > /workspace/repo/.ci_secrets.json
+        echo "(example) vault kv get ${SECRET_PATH} -> /workspace/repo/.ci_secrets.json"

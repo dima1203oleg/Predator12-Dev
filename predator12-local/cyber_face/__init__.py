@@ -9,17 +9,17 @@ Provides real-time emotion detection, conversational AI, and adaptive user inter
 __version__ = "1.0.0"
 __author__ = "Predator Analytics Team"
 
-from .config import CyberFaceConfig
-from .vision import EmotionDetector, FaceDetector
 from .ai import ConversationEngine, PersonalityManager
-from .voice import VoiceInterface, SpeechRecognition
 from .avatar import AvatarRenderer, ExpressionMapper
-from .integration import WebSocketHandler, DashboardConnector
+from .config import CyberFaceConfig
+from .integration import DashboardConnector, WebSocketHandler
+from .vision import EmotionDetector, FaceDetector
+from .voice import SpeechRecognition, VoiceInterface
 
 __all__ = [
     "CyberFaceConfig",
     "EmotionDetector",
-    "FaceDetector", 
+    "FaceDetector",
     "ConversationEngine",
     "PersonalityManager",
     "VoiceInterface",
@@ -27,5 +27,5 @@ __all__ = [
     "AvatarRenderer",
     "ExpressionMapper",
     "WebSocketHandler",
-    "DashboardConnector"
+    "DashboardConnector",
 ]

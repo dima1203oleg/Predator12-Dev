@@ -10,7 +10,7 @@ class Predator12App {
         this.networkGraph = null;
         this.isInitialized = false;
         this.currentAnalysisData = null;
-        
+
         // Конфігурація додатку
         this.config = {
             api: {
@@ -35,28 +35,28 @@ class Predator12App {
     async init() {
         try {
             console.log('🚀 Ініціалізація Predator12...');
-            
+
             // Перевірка наявності необхідних контейнерів
             this.validateContainers();
-            
+
             // Ініціалізація компонентів
             await this.initializeComponents();
-            
+
             // Налаштування взаємодії між компонентами
             this.setupComponentIntegration();
-            
+
             // Завантаження початкових даних
             await this.loadInitialData();
-            
+
             // Налаштування обробників подій
             this.setupEventHandlers();
-            
+
             this.isInitialized = true;
             console.log('✅ Predator12 успішно ініціалізовано');
-            
+
             // Показ привітального повідомлення
             this.showWelcomeMessage();
-            
+
         } catch (error) {
             console.error('❌ Помилка ініціалізації Predator12:', error);
             this.showErrorMessage('Помилка ініціалізації системи');
@@ -72,7 +72,7 @@ class Predator12App {
             'chat-container',
             'network-container'
         ];
-        
+
         for (const containerId of requiredContainers) {
             const container = document.getElementById(containerId);
             if (!container) {
@@ -89,7 +89,7 @@ class Predator12App {
         console.log('🎭 Ініціалізація AI Face...');
         this.aiFace = new window.AIFace('ai-face-container');
         await this.aiFace.init();
-        
+
         // Ініціалізація Chat Interface
         console.log('💬 Ініціалізація Chat Interface...');
         this.chatInterface = new window.ChatInterface('chat-container', {
@@ -97,7 +97,7 @@ class Predator12App {
             apiUrl: this.config.api.baseUrl + this.config.api.endpoints.chat
         });
         await this.chatInterface.init();
-        
+
         // Ініціалізація Network Graph
         console.log('🕸️ Ініціалізація Network Graph...');
         this.networkGraph = new window.NetworkGraph('network-container');
@@ -112,26 +112,26 @@ class Predator12App {
         this.chatInterface.on('messageProcessing', () => {
             this.aiFace.setEmotion('thinking');
         });
-        
+
         this.chatInterface.on('messageResponse', (response) => {
             this.aiFace.setEmotion('speaking');
-            
+
             // Якщо відповідь містить дані для мережі
             if (response.networkData) {
                 this.networkGraph.updateData(response.networkData);
             }
         });
-        
+
         this.chatInterface.on('messageComplete', () => {
             this.aiFace.setEmotion('neutral');
         });
-        
+
         // Інтеграція мережі з чатом
         this.networkGraph.on('nodeClick', (nodeData) => {
             const message = `Розкажи детальніше про: ${nodeData.label}`;
             this.chatInterface.addMessage(message, 'user');
         });
-        
+
         this.networkGraph.on('connectionClick', (connectionData) => {
             const message = `Поясни зв'язок між ${connectionData.source} та ${connectionData.target}`;
             this.chatInterface.addMessage(message, 'user');
@@ -155,9 +155,9 @@ class Predator12App {
                     { source: 'process1', target: 'output1', weight: 1 }
                 ]
             };
-            
+
             this.networkGraph.updateData(demoNetworkData);
-            
+
         } catch (error) {
             console.warn('⚠️ Не вдалося завантажити початкові дані:', error);
         }
@@ -176,12 +176,12 @@ class Predator12App {
                 this.aiFace.resize();
             }
         });
-        
+
         // Обробник клавіатурних скорочень
         document.addEventListener('keydown', (event) => {
             this.handleKeyboardShortcuts(event);
         });
-        
+
         // Обробник помилок
         window.addEventListener('error', (event) => {
             console.error('💥 Глобальна помилка:', event.error);
@@ -198,12 +198,12 @@ class Predator12App {
             event.preventDefault();
             this.chatInterface.submitCurrentMessage();
         }
-        
+
         // Escape - скинути емоцію AI обличчя
         if (event.key === 'Escape') {
             this.aiFace.setEmotion('neutral');
         }
-        
+
         // F1 - показати довідку
         if (event.key === 'F1') {
             event.preventDefault();
@@ -216,21 +216,21 @@ class Predator12App {
      */
     showWelcomeMessage() {
         this.aiFace.setEmotion('happy');
-        
+
         const welcomeMessage = `
             Вітаю в системі Predator12! 🎯
-            
+
             Я ваш AI помічник для аналізу даних. Ось що я можу:
             • Обробляти та аналізувати ваші дані
             • Візуалізувати мережі зв'язків
             • Відповідати на питання про результати
             • Надавати детальні пояснення
-            
+
             Просто напишіть мені повідомлення або завантажте дані для аналізу!
         `;
-        
+
         this.chatInterface.addMessage(welcomeMessage.trim(), 'assistant');
-        
+
         setTimeout(() => {
             this.aiFace.setEmotion('neutral');
         }, 3000);
@@ -242,7 +242,7 @@ class Predator12App {
     showErrorMessage(message) {
         this.aiFace.setEmotion('sad');
         this.chatInterface.addMessage(`❌ ${message}`, 'system');
-        
+
         setTimeout(() => {
             this.aiFace.setEmotion('neutral');
         }, 3000);
@@ -254,17 +254,17 @@ class Predator12App {
     showHelp() {
         const helpMessage = `
             📚 Довідка Predator12:
-            
+
             Клавіатурні скорочення:
             • Ctrl+Enter - відправити повідомлення
             • Escape - скинути емоцію
             • F1 - показати довідку
-            
+
             Взаємодія:
             • Клікніть на вузол мережі для деталей
             • Натисніть на зв'язок для пояснення
             • Використовуйте чат для запитань
-            
+
             Емоції AI:
             • 😐 Нейтральний - очікування
             • 🤔 Думає - обробка запиту
@@ -272,7 +272,7 @@ class Predator12App {
             • 😮 Здивований - несподіваний результат
             • 😢 Сумний - помилка
         `;
-        
+
         this.chatInterface.addMessage(helpMessage.trim(), 'system');
     }
 
@@ -283,33 +283,33 @@ class Predator12App {
         try {
             this.aiFace.setEmotion('thinking');
             this.chatInterface.addMessage(`📁 Аналізую файл: ${file.name}`, 'system');
-            
+
             // Формування даних для відправки
             const formData = new FormData();
             formData.append('file', file);
-            
+
             // Відправка на аналіз
             const response = await fetch(this.config.api.baseUrl + this.config.api.endpoints.analyze, {
                 method: 'POST',
                 body: formData
             });
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
-            
+
             const result = await response.json();
             this.currentAnalysisData = result;
-            
+
             // Оновлення мережі з результатами
             if (result.networkData) {
                 this.networkGraph.updateData(result.networkData);
             }
-            
+
             // Показ результатів в чаті
             this.aiFace.setEmotion('happy');
             this.chatInterface.addMessage(`✅ Аналіз завершено! Знайдено ${result.summary || 'дані для обробки'}.`, 'assistant');
-            
+
         } catch (error) {
             console.error('Помилка аналізу файлу:', error);
             this.aiFace.setEmotion('sad');
@@ -344,13 +344,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         predator12App = new Predator12App();
         await predator12App.init();
-        
+
         // Експорт для глобального доступу
         window.Predator12 = predator12App;
-        
+
     } catch (error) {
         console.error('Критична помилка ініціалізації:', error);
-        
+
         // Показ fallback інтерфейсу
         document.body.innerHTML = `
             <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #1a1a1a; color: #fff; font-family: Arial, sans-serif;">

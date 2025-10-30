@@ -91,7 +91,7 @@
           },
           {
             "expr": "(container_memory_usage_bytes{name=~\"predator.*\"} / container_spec_memory_limit_bytes{name=~\"predator.*\"}) * 100",
-            "refId": "B", 
+            "refId": "B",
             "legendFormat": "{{name}} Memory %"
           }
         ],

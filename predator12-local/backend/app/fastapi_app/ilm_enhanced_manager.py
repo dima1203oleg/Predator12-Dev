@@ -27,19 +27,35 @@ class OpenSearchILMManager:
                     "states": [
                         {
                             "name": "hot",
-                            "actions": [{"rollover": {"min_size": "50gb", "min_index_age": "3d"}}],
+                            "actions": [
+                                {
+                                    "rollover": {
+                                        "min_size": "50gb",
+                                        "min_index_age": "3d",
+                                    }
+                                }
+                            ],
                             "transitions": [
-                                {"state_name": "warm", "conditions": {"min_index_age": "14d"}}
+                                {
+                                    "state_name": "warm",
+                                    "conditions": {"min_index_age": "14d"},
+                                }
                             ],
                         },
                         {
                             "name": "warm",
                             "actions": [{"replica_count": {"number_of_replicas": 0}}],
                             "transitions": [
-                                {"state_name": "cold", "conditions": {"min_index_age": "60d"}}
+                                {
+                                    "state_name": "cold",
+                                    "conditions": {"min_index_age": "60d"},
+                                }
                             ],
                         },
-                        {"name": "cold", "actions": [{"force_merge": {"max_num_segments": 1}}]},
+                        {
+                            "name": "cold",
+                            "actions": [{"force_merge": {"max_num_segments": 1}}],
+                        },
                     ],
                     "ism_template": [{"index_patterns": ["customs_*"], "priority": 100}],
                 }
@@ -50,16 +66,29 @@ class OpenSearchILMManager:
                     "states": [
                         {
                             "name": "hot",
-                            "actions": [{"rollover": {"min_size": "30gb", "min_index_age": "1d"}}],
+                            "actions": [
+                                {
+                                    "rollover": {
+                                        "min_size": "30gb",
+                                        "min_index_age": "1d",
+                                    }
+                                }
+                            ],
                             "transitions": [
-                                {"state_name": "warm", "conditions": {"min_index_age": "7d"}}
+                                {
+                                    "state_name": "warm",
+                                    "conditions": {"min_index_age": "7d"},
+                                }
                             ],
                         },
                         {
                             "name": "warm",
                             "actions": [{"replica_count": {"number_of_replicas": 0}}],
                             "transitions": [
-                                {"state_name": "delete", "conditions": {"min_index_age": "30d"}}
+                                {
+                                    "state_name": "delete",
+                                    "conditions": {"min_index_age": "30d"},
+                                }
                             ],
                         },
                         {"name": "delete", "actions": [{"delete": {}}]},
@@ -242,7 +271,10 @@ class OpenSearchILMManager:
                                 break
 
                         if pattern not in stats["by_pattern"]:
-                            stats["by_pattern"][pattern] = {"count": 0, "total_size_gb": 0}
+                            stats["by_pattern"][pattern] = {
+                                "count": 0,
+                                "total_size_gb": 0,
+                            }
 
                         stats["by_pattern"][pattern]["count"] += 1
                         stats["by_pattern"][pattern]["total_size_gb"] += size_gb

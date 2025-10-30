@@ -153,8 +153,8 @@ const ModelProviderManager: React.FC = () => {
                       label={provider.status}
                       size="small"
                       sx={{
-                        background: provider.status === 'active' 
-                          ? colors.status.success 
+                        background: provider.status === 'active'
+                          ? colors.status.success
                           : colors.status.error,
                         color: '#fff',
                         fontWeight: 600,

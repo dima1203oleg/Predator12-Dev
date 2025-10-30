@@ -11,11 +11,11 @@ echo ""
 if [ -d "predator12-local/frontend" ]; then
     echo "✅ Frontend директорія знайдена"
     cd predator12-local/frontend
-    
+
     # Перевірка package.json
     if [ -f "package.json" ]; then
         echo "✅ package.json знайдено"
-        
+
         # Встановлення залежностей якщо потрібно
         if [ ! -d "node_modules" ]; then
             echo "📦 Встановлення залежностей..."
@@ -23,7 +23,7 @@ if [ -d "predator12-local/frontend" ]; then
         else
             echo "✅ Залежності вже встановлені"
         fi
-        
+
         echo ""
         echo "🎉 Запуск УЛЬТРА інтерфейсу..."
         echo "🌐 Відкриється на: http://localhost:3000"
@@ -38,10 +38,10 @@ if [ -d "predator12-local/frontend" ]; then
         echo "   • Підтримка клавіатурної навігації"
         echo "   • Автоматичне виявлення системних переваг"
         echo ""
-        
+
         # Запуск сервера розробки
         npm start
-        
+
     else
         echo "❌ package.json не знайдено в frontend директорії"
         echo "🔧 Можливо потрібно створити React проект"
@@ -51,11 +51,11 @@ else
     echo "📂 Поточна директорія: $(pwd)"
     echo ""
     echo "🌐 Запуск HTML демо замість цього..."
-    
+
     # Пошук HTML демо файлу
     if [ -f "predator12-local/nexus-ultra-demo.html" ]; then
         echo "✅ HTML демо знайдено"
-        
+
         # Відкриття в браузері
         if command -v open &> /dev/null; then
             open predator12-local/nexus-ultra-demo.html

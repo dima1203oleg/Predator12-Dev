@@ -5,7 +5,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from fastapi.testclient import TestClient
-
 from fastapi_app.event_logger import EventLogger
 from fastapi_app.ingest_manager import ChunkStorage
 from fastapi_app.main import app
@@ -13,8 +12,8 @@ from fastapi_app.object_storage import ObjectStorageClient
 from fastapi_app.routes_ingest import (
     get_chunk_storage,
     get_commit_root,
-    get_object_storage,
     get_event_logger,
+    get_object_storage,
 )
 
 
@@ -105,7 +104,9 @@ def test_chunked_upload_roundtrip(tmp_path: Path) -> None:
     assert object_file.read_bytes() == file_bytes
 
     assert event_log_path.exists()
-    events = [line for line in event_log_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    events = [
+        line for line in event_log_path.read_text(encoding="utf-8").splitlines() if line.strip()
+    ]
     assert events
 
     trigger_response = client.post(
@@ -117,7 +118,9 @@ def test_chunked_upload_roundtrip(tmp_path: Path) -> None:
     assert trigger_payload["status"] == "queued"
     assert trigger_payload["upload_id"] == upload_id
 
-    trigger_events = [line for line in event_log_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    trigger_events = [
+        line for line in event_log_path.read_text(encoding="utf-8").splitlines() if line.strip()
+    ]
     assert len(trigger_events) >= 2
     assert any('"type": "etl.trigger"' in line for line in trigger_events)
 

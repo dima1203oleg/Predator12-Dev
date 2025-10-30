@@ -1,10 +1,10 @@
 import os
 import time
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 import httpx
-from fastapi import HTTPException, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import jwt
 
 _http = httpx.AsyncClient(timeout=10)
@@ -18,12 +18,14 @@ ISSUER = f"{KC_URL}/realms/{REALM}"
 
 security = HTTPBearer(auto_error=False)
 
+
 async def _get_openid_cfg() -> Dict[str, Any]:
     url = f"{ISSUER}/.well-known/openid-configuration"
     r = await _http.get(url)
     if r.status_code >= 300:
         raise HTTPException(status_code=500, detail="OIDC discovery failed")
     return r.json()
+
 
 async def _get_jwks() -> Dict[str, Any]:
     global _jwks_cache_ts
@@ -43,7 +45,10 @@ async def _get_jwks() -> Dict[str, Any]:
     _jwks_cache_ts = now
     return data
 
-async def verify_token_required(creds: Optional[HTTPAuthorizationCredentials] = Depends(security)) -> Dict[str, Any]:
+
+async def verify_token_required(
+    creds: Optional[HTTPAuthorizationCredentials] = Depends(security),
+) -> Dict[str, Any]:
     if not creds or not creds.scheme.lower() == "bearer":
         raise HTTPException(status_code=401, detail="Missing bearer token")
     token = creds.credentials
@@ -55,10 +60,17 @@ async def verify_token_required(creds: Optional[HTTPAuthorizationCredentials] = 
         if not key:
             raise HTTPException(status_code=401, detail="Unknown kid")
         public_key = jwt.construct_public_key(key)
-        payload = jwt.decode(token, public_key, algorithms=[key.get("alg", "RS256")], audience=None, issuer=ISSUER)
+        payload = jwt.decode(
+            token,
+            public_key,
+            algorithms=[key.get("alg", "RS256")],
+            audience=None,
+            issuer=ISSUER,
+        )
     except Exception:
         raise HTTPException(status_code=401, detail="Invalid token")
     return payload
+
 
 def requires_role(role_name: str):
     async def _inner(payload: Dict[str, Any] = Depends(verify_token_required)):
@@ -68,4 +80,5 @@ def requires_role(role_name: str):
         if role_name not in roles:
             raise HTTPException(status_code=403, detail="Forbidden")
         return payload
+
     return _inner

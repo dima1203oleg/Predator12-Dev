@@ -12,7 +12,7 @@ export async function main() {
 
   const response = await client.embeddings.create({
 	input: ["first phrase", "second phrase", "third phrase"],
-	model: modelName     
+	model: modelName
   });
 
   for (const item of response.data) {

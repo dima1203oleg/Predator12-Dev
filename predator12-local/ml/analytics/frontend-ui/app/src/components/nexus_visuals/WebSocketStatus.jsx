@@ -7,15 +7,15 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:800
  * A reusable component that displays WebSocket connection status
  * and provides reconnection functionality
  */
-const WebSocketStatus = ({ 
-  wsEndpoint, 
-  connectionStatus, 
-  onConnected, 
-  onDisconnected, 
+const WebSocketStatus = ({
+  wsEndpoint,
+  connectionStatus,
+  onConnected,
+  onDisconnected,
   showReconnectButton = true,
   onReconnect,
-  minimal = false, 
-  className = '' 
+  minimal = false,
+  className = ''
 }) => {
   const [serviceHealthy, setServiceHealthy] = useState(false);
   const [lastChecked, setLastChecked] = useState(null);
@@ -24,7 +24,7 @@ const WebSocketStatus = ({
   // Check if the WebSocket service is healthy via the health endpoint
   const checkServiceHealth = useCallback(async () => {
     if (checking) return;
-    
+
     try {
       setChecking(true);
       const response = await fetch(`${API_BASE_URL}/ws/health`);
@@ -97,9 +97,9 @@ const WebSocketStatus = ({
 
   // Full version
   return (
-    <div 
-      className={className} 
-      style={{ 
+    <div
+      className={className}
+      style={{
         backgroundColor: 'rgba(10, 25, 47, 0.8)',
         padding: '8px 12px',
         borderRadius: '4px',
@@ -127,7 +127,7 @@ const WebSocketStatus = ({
           {lastChecked ? `Last checked: ${lastChecked.toLocaleTimeString()}` : ''}
         </span>
       </div>
-      
+
       {showReconnectButton && connectionStatus !== 'connected' && serviceHealthy && (
         <button
           onClick={handleReconnect}
@@ -161,4 +161,4 @@ WebSocketStatus.propTypes = {
   className: PropTypes.string
 };
 
-export default WebSocketStatus; 
+export default WebSocketStatus;

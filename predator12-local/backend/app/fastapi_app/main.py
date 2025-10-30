@@ -1,20 +1,21 @@
 from __future__ import annotations
 
+import asyncio
+import contextlib
 import os
 import re
 import uuid
+from contextlib import asynccontextmanager
 from typing import List
+
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Request, Response, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from opensearchpy import OpenSearch
-from prometheus_client import generate_latest, CONTENT_TYPE_LATEST, Counter, Histogram, Gauge
+from prometheus_client import CONTENT_TYPE_LATEST, Counter, Gauge, Histogram, generate_latest
 from pydantic import BaseModel
 from redis import asyncio as aioredis
-import asyncio
-import contextlib
-from contextlib import asynccontextmanager
 
 # Optional health monitor import with fallback
 try:
@@ -26,14 +27,18 @@ except ImportError:
             return {
                 "overall_status": "healthy",
                 "health_score": 1.0,
-                "system_metrics": {"cpu_percent": 10, "memory_percent": 20, "disk_percent": 30},
-                "component_health": {}
+                "system_metrics": {
+                    "cpu_percent": 10,
+                    "memory_percent": 20,
+                    "disk_percent": 30,
+                },
+                "component_health": {},
             }
-    
+
     class MockSelfHealingManager:
         async def auto_heal_issues(self, health_report):
             return {"healing_results": []}
-    
+
     health_checker = MockHealthChecker()
     self_healing_manager = MockSelfHealingManager()
 
@@ -44,35 +49,50 @@ except Exception:
 
 
 """Import application modules with fallbacks (some optional in dev)."""
+# Import ingest router first so ingest endpoints are available even when other
+# optional modules fail to import during local/dev test runs.
+from .routes_ingest import router as ingest_router
+
 try:
+    # Prefer local fastapi_app routes module (routes_agents) for agent endpoints
     from ai_assistant import ai_assistant
-    from ml_manager import ml_manager
-    from routes_ingest import router as ingest_router
-    from ilm_manager import ilm_orchestrator
+    from billing_manager import get_billing_manager, initialize_billing_manager
+    from data_governance import data_governance_manager as data_governance
+    from dr_manager import dr_manager as dr_enhanced
     from error_system import (
         PredatorException,
+        error_tracker,
+        http_exception_handler,
         predator_exception_handler,
         validation_exception_handler,
-        http_exception_handler,
-        error_tracker,
     )
-    from billing_manager import initialize_billing_manager, get_billing_manager
-    from export_worker import initialize_export_worker, get_export_worker
-    from security_manager import initialize_security_manager, get_security_manager
+    from export_worker import get_export_worker, initialize_export_worker
+    from fastapi.exceptions import RequestValidationError
+
+    # Delta Revision 1.2 - Enhanced Production Modules
+    from ilm_manager import ilm_orchestrator
+    from ilm_manager import ilm_orchestrator as ilm_enhanced
+    from middleware_audit import AuditMiddleware
+    from ml_manager import ml_manager
+    from mlops_manager import mlops_manager as mlops_enhanced
+    from routes_agents import router as agents_sim_router
     from routes_billing import router as billing_router
     from routes_export import router as export_router
-    from routes_security import router as security_router
-    from agents.routes import router as agents_router
     from routes_ml import router as ml_router
     from routes_search import router as search_router
-    from middleware_audit import AuditMiddleware
+    from routes_security import router as security_router
     from routes_ws import router as ws_router
-    from routes_agents import router as agents_sim_router
+    from security_manager import get_security_manager, initialize_security_manager
+    from starlette.exceptions import HTTPException as StarletteHTTPException
+    from supply_chain_security import supply_chain_security_manager as supply_chain_sec
+
+    from .routes_agents import close_http_session
+    from .routes_agents import router as agents_router
+
 except Exception as e:  # graceful fallbacks in dev
     print(f"⚠️  Import warning: {e}")
     ai_assistant = None
     ml_manager = None
-    ingest_router = None
     billing_router = None
     export_router = None
     security_router = None
@@ -86,6 +106,25 @@ except Exception as e:  # graceful fallbacks in dev
     validation_exception_handler = None
     http_exception_handler = None
     error_tracker = type("_ErrTracker", (), {"get_error_stats": staticmethod(lambda: {})})
+    RequestValidationError = None
+    StarletteHTTPException = None
+    ilm_enhanced = None
+    data_governance = None
+    mlops_enhanced = None
+    supply_chain_sec = None
+    dr_enhanced = None
+
+# Ensure agents router is imported if available even when other optional imports fail
+if agents_router is None:
+    try:
+        # relative import from this package
+        from . import routes_agents as _routes_agents
+
+        agents_router = getattr(_routes_agents, "router", None)
+        # prefer the package-level close_http_session if present
+        close_http_session = getattr(_routes_agents, "close_http_session", close_http_session)
+    except Exception as _e:
+        print(f"⚠️  Could not import routes_agents fallback: {_e}")
 
 # Initialize Redis/OpenSearch clients
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
@@ -93,6 +132,7 @@ redis_client = aioredis.from_url(REDIS_URL, encoding=None, decode_responses=Fals
 
 os_url = os.getenv("OPENSEARCH_URL", "http://localhost:9200")
 os_client = OpenSearch(hosts=[os_url])
+
 
 # Pydantic request models used by endpoints
 class AIQuery(BaseModel):
@@ -102,12 +142,14 @@ class AIQuery(BaseModel):
 class AnomalyData(BaseModel):
     records: list[dict]
 
+
 _bg_health_task: asyncio.Task | None = None
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan with background self-healing loop."""
+
     # Startup: start background self-heal loop
     async def _self_heal_loop():
         # Prometheus metrics for self-healing worker
@@ -126,7 +168,12 @@ async def lifespan(app: FastAPI):
         )
 
         def _status_value(s: str) -> float:
-            return {"healthy": 1.0, "warning": 0.5, "critical": 0.0, "unknown": 0.25}.get(s, 0.25)
+            return {
+                "healthy": 1.0,
+                "warning": 0.5,
+                "critical": 0.0,
+                "unknown": 0.25,
+            }.get(s, 0.25)
 
         interval = int(os.getenv("SELF_HEAL_INTERVAL_SECONDS", "60"))
         while True:
@@ -192,9 +239,23 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Predator Analytics API", version="8.0", lifespan=lifespan)
 
+# Configure CORS for local development. Can be overridden with FRONTEND_ALLOW_ORIGINS env var
+_default_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://localhost:3002",
+]
+_env_origins = os.getenv("FRONTEND_ALLOW_ORIGINS")
+if _env_origins:
+    # comma-separated
+    allowed_origins = [o.strip() for o in _env_origins.split(",") if o.strip()]
+else:
+    allowed_origins = _default_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000", "http://localhost:3002"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -553,18 +614,24 @@ async def prometheus_metrics():
 
         # Component status (1 = healthy, 0.5 = warning, 0 = critical)
         for comp_name, comp_data in health_report["component_health"].items():
-            status_val = {"healthy": 1.0, "warning": 0.5, "critical": 0.0, "unknown": 0.25}.get(
-                comp_data["status"], 0
-            )
+            status_val = {
+                "healthy": 1.0,
+                "warning": 0.5,
+                "critical": 0.0,
+                "unknown": 0.25,
+            }.get(comp_data["status"], 0)
             metrics.append(f'predator_component_health{{component="{comp_name}"}} {status_val}')
             metrics.append(
                 f'predator_component_response_time_ms{{component="{comp_name}"}} {comp_data["response_time_ms"]}'
             )
 
         # Overall status
-        overall_val = {"healthy": 1.0, "warning": 0.5, "critical": 0.0, "unknown": 0.25}.get(
-            health_report["overall_status"], 0
-        )
+        overall_val = {
+            "healthy": 1.0,
+            "warning": 0.5,
+            "critical": 0.0,
+            "unknown": 0.25,
+        }.get(health_report["overall_status"], 0)
         metrics.append(f"predator_overall_health {overall_val}")
 
         body = "\n".join(metrics)
@@ -594,9 +661,17 @@ async def get_ilm_status():
             raise HTTPException(status_code=503, detail="ILM Enhanced Manager not initialized")
 
         status = await ilm_enhanced.get_ilm_status()
-        return {"status": "success", "data": status, "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "success",
+            "data": status,
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/ilm/rollover")
@@ -607,9 +682,17 @@ async def trigger_rollover():
             raise HTTPException(status_code=503, detail="ILM Enhanced Manager not initialized")
 
         result = await ilm_enhanced.trigger_rollover()
-        return {"status": "success", "data": result, "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "success",
+            "data": result,
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.get("/ilm/policies")
@@ -626,7 +709,11 @@ async def get_ilm_policies():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # Data Governance Enhanced Endpoints
@@ -645,7 +732,11 @@ async def get_data_lineage(dataset_id: str):
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.get("/governance/catalog")
@@ -662,7 +753,11 @@ async def get_data_catalog():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.get("/governance/pii-registry")
@@ -679,7 +774,11 @@ async def get_pii_registry():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/governance/scan-pii")
@@ -701,7 +800,11 @@ async def scan_pii(request: dict):
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # MLOps Enhanced Endpoints
@@ -719,7 +822,11 @@ async def get_model_registry():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/mlops/deploy/canary")
@@ -743,7 +850,11 @@ async def deploy_canary_model(request: dict):
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.get("/mlops/drift/detection")
@@ -760,7 +871,11 @@ async def get_drift_detection():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/mlops/explain")
@@ -783,7 +898,11 @@ async def explain_model_prediction(request: dict):
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # Supply Chain Security Endpoints
@@ -797,9 +916,17 @@ async def get_sbom():
             )
 
         sbom = await supply_chain_sec.generate_sbom()
-        return {"status": "success", "data": sbom, "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "success",
+            "data": sbom,
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/security/sign-artifact")
@@ -823,7 +950,11 @@ async def sign_artifact(request: dict):
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/security/scan-vulnerabilities")
@@ -847,7 +978,11 @@ async def scan_vulnerabilities(request: dict):
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/security/rotate-secrets")
@@ -866,7 +1001,11 @@ async def rotate_secrets():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # DR Enhanced Endpoints
@@ -884,7 +1023,11 @@ async def get_dr_status():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/dr/backup")
@@ -901,7 +1044,11 @@ async def trigger_backup():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/dr/failover")
@@ -918,7 +1065,11 @@ async def trigger_failover():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.get("/dr/rpo-rto")
@@ -935,7 +1086,11 @@ async def get_rpo_rto_metrics():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/dr/chaos-test")
@@ -959,7 +1114,11 @@ async def run_chaos_test(request: dict):
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.get("/dr/runbooks")
@@ -976,7 +1135,11 @@ async def get_runbooks():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # E2E Acceptance & Production Readiness Endpoints
@@ -997,7 +1160,7 @@ async def run_acceptance_test():
         try:
             health_report = await health_checker.run_comprehensive_health_check()
             components_tests["health_system"] = {
-                "status": "passed" if health_report["overall_status"] != "critical" else "failed",
+                "status": ("passed" if health_report["overall_status"] != "critical" else "failed"),
                 "details": health_report,
             }
         except Exception as e:
@@ -1007,7 +1170,10 @@ async def run_acceptance_test():
         try:
             if ilm_enhanced:
                 ilm_status = await ilm_enhanced.get_ilm_status()
-                components_tests["ilm_enhanced"] = {"status": "passed", "details": ilm_status}
+                components_tests["ilm_enhanced"] = {
+                    "status": "passed",
+                    "details": ilm_status,
+                }
             else:
                 components_tests["ilm_enhanced"] = {
                     "status": "skipped",
@@ -1062,15 +1228,24 @@ async def run_acceptance_test():
                     "reason": "not_initialized",
                 }
         except Exception as e:
-            components_tests["supply_chain_security"] = {"status": "failed", "error": str(e)}
+            components_tests["supply_chain_security"] = {
+                "status": "failed",
+                "error": str(e),
+            }
 
         # DR test
         try:
             if dr_enhanced:
                 dr_status = await dr_enhanced.get_dr_status()
-                components_tests["dr_enhanced"] = {"status": "passed", "details": dr_status}
+                components_tests["dr_enhanced"] = {
+                    "status": "passed",
+                    "details": dr_status,
+                }
             else:
-                components_tests["dr_enhanced"] = {"status": "skipped", "reason": "not_initialized"}
+                components_tests["dr_enhanced"] = {
+                    "status": "skipped",
+                    "reason": "not_initialized",
+                }
         except Exception as e:
             components_tests["dr_enhanced"] = {"status": "failed", "error": str(e)}
 
@@ -1104,7 +1279,11 @@ async def run_acceptance_test():
         }
 
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.get("/production/readiness-report")
@@ -1124,7 +1303,9 @@ async def get_production_readiness_report():
         try:
             health_report = await health_checker.run_comprehensive_health_check()
             readiness_checks["core_api"] = {
-                "status": "ready" if health_report["overall_status"] != "critical" else "not_ready",
+                "status": (
+                    "ready" if health_report["overall_status"] != "critical" else "not_ready"
+                ),
                 "health_score": health_report.get("health_score", 0),
                 "details": health_report,
             }
@@ -1148,7 +1329,10 @@ async def get_production_readiness_report():
                         status = await module_instance.health_check()
                     else:
                         status = {"status": "initialized"}
-                    readiness_checks[module_name] = {"status": "ready", "details": status}
+                    readiness_checks[module_name] = {
+                        "status": "ready",
+                        "details": status,
+                    }
                 else:
                     readiness_checks[module_name] = {
                         "status": "not_initialized",
@@ -1169,11 +1353,13 @@ async def get_production_readiness_report():
         report.update(
             {
                 "overall_readiness": readiness_percentage,
-                "status": "production_ready" if readiness_percentage >= 95 else "needs_attention",
+                "status": ("production_ready" if readiness_percentage >= 95 else "needs_attention"),
                 "ready_components": ready_components,
                 "total_components": total_components,
                 "components_readiness": readiness_checks,
-                "recommendations": [],
+                "recommendations": (
+                    [] if "recommendations" not in report else report["recommendations"]
+                ),
             }
         )
 
@@ -1191,10 +1377,18 @@ async def get_production_readiness_report():
                 "System is 99%+ production-ready - safe for deployment"
             )
 
-        return {"status": "success", "data": report, "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "success",
+            "data": report,
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # ==================== END DELTA REVISION 1.2 Enhanced Endpoints ====================
@@ -1223,7 +1417,11 @@ async def get_rate_limits():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/system/adjust-rate-limits")
@@ -1247,7 +1445,11 @@ async def adjust_rate_limits(request: dict):
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # Unified Error Format Endpoints
@@ -1286,7 +1488,11 @@ async def get_unified_error_format():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # Frontend UX Fallback Endpoints
@@ -1315,7 +1521,11 @@ async def get_frontend_capabilities():
                 "high_contrast_mode": True,
                 "font_scaling": True,
             },
-            "offline_mode": {"enabled": True, "cache_duration": "24h", "sync_on_reconnect": True},
+            "offline_mode": {
+                "enabled": True,
+                "cache_duration": "24h",
+                "sync_on_reconnect": True,
+            },
             "error_boundaries": {
                 "enabled": True,
                 "fallback_ui": "simplified_interface",
@@ -1329,7 +1539,11 @@ async def get_frontend_capabilities():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 @app.post("/frontend/toggle-fallback")
@@ -1354,7 +1568,11 @@ async def toggle_frontend_fallback(request: dict):
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # Self-healing trigger endpoint (enhanced)
@@ -1415,7 +1633,11 @@ async def trigger_advanced_self_healing(request: dict):
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # KPI endpoint to expose totals from OpenSearch
@@ -1434,7 +1656,11 @@ async def kpi_customs():
             "timestamp": pd.Timestamp.utcnow().isoformat(),
         }
     except Exception as e:
-        return {"status": "error", "error": str(e), "timestamp": pd.Timestamp.utcnow().isoformat()}
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": pd.Timestamp.utcnow().isoformat(),
+        }
 
 
 # ==================== End Additional Production Features ====================

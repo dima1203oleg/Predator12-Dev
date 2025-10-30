@@ -39,7 +39,7 @@ export default function HomePage() {
               <h2 className="text-xl font-semibold text-white mb-4">
                 AI Асистент
               </h2>
-              
+
               {/* 3D Avatar Container */}
               <div className="aspect-square rounded-xl overflow-hidden bg-black/20 border border-white/5">
                 <Suspense
@@ -49,7 +49,7 @@ export default function HomePage() {
                     </div>
                   }
                 >
-                  <AIAvatar 
+                  <AIAvatar
                     isListening={isListening}
                     isProcessing={isProcessing}
                   />

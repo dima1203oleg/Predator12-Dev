@@ -74,7 +74,7 @@ export const RealitySimulatorModule: React.FC = () => {
   const sceneRef = useRef<THREE.Scene>();
   const rendererRef = useRef<THREE.WebGLRenderer>();
   const animationIdRef = useRef<number>();
-  
+
   const templates: SimulationTemplate[] = React.useMemo(
     () => [
       {
@@ -187,17 +187,17 @@ export const RealitySimulatorModule: React.FC = () => {
     });
 
     const cubes: THREE.Mesh[] = [];
-    
+
     // Create branching structure
     for (let i = 0; i < 20; i++) {
       const cube = new THREE.Mesh(geometry, material.clone());
       const angle = (i / 20) * Math.PI * 2;
       const radius = 2 + Math.random() * 3;
-      
+
       cube.position.x = Math.cos(angle) * radius;
       cube.position.y = Math.sin(angle) * radius;
       cube.position.z = (Math.random() - 0.5) * 4;
-      
+
       cube.scale.setScalar(0.3 + Math.random() * 0.5);
       cubes.push(cube);
       scene.add(cube);
@@ -215,27 +215,27 @@ export const RealitySimulatorModule: React.FC = () => {
     let time = 0;
     const animate = () => {
       time += 0.01;
-      
+
       cubes.forEach((cube, index) => {
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.02;
-        
+
         // Pulsing effect
         const scale = 0.5 + Math.sin(time + index * 0.5) * 0.3;
         cube.scale.setScalar(scale);
-        
+
         // Color change based on simulation state
         if (cube.material instanceof THREE.MeshPhongMaterial) {
           const hue = (time + index * 0.1) % 1;
           cube.material.color.setHSL(hue, 0.7, 0.5);
         }
       });
-      
+
       // Rotate camera
       camera.position.x = Math.cos(time * 0.2) * 8;
       camera.position.z = Math.sin(time * 0.2) * 8;
       camera.lookAt(0, 0, 0);
-      
+
       renderer.render(scene, camera);
       animationIdRef.current = requestAnimationFrame(animate);
     };
@@ -281,9 +281,9 @@ export const RealitySimulatorModule: React.FC = () => {
 
     // Simulate progress
     const progressInterval = setInterval(() => {
-      setSimulationRuns(prev => 
-        prev.map(run => 
-          run.id === newRun.id 
+      setSimulationRuns(prev =>
+        prev.map(run =>
+          run.id === newRun.id
             ? { ...run, progress: Math.min(run.progress + Math.random() * 10, 100) }
             : run
         )
@@ -293,13 +293,13 @@ export const RealitySimulatorModule: React.FC = () => {
     // Complete simulation after random time
     setTimeout(() => {
       clearInterval(progressInterval);
-      setSimulationRuns(prev => 
-        prev.map(run => 
-          run.id === newRun.id 
-            ? { 
-                ...run, 
-                status: 'completed', 
-                progress: 100, 
+      setSimulationRuns(prev =>
+        prev.map(run =>
+          run.id === newRun.id
+            ? {
+                ...run,
+                status: 'completed',
+                progress: 100,
                 completed_at: new Date(),
                 results: {
                   success_rate: Math.random(),
@@ -331,10 +331,10 @@ export const RealitySimulatorModule: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            mb: 3, 
+        <Typography
+          variant="h4"
+          sx={{
+            mb: 3,
             color: nexusColors.warning,
             fontFamily: 'Orbitron',
             textShadow: `0 0 10px ${nexusColors.warning}`
@@ -352,7 +352,7 @@ export const RealitySimulatorModule: React.FC = () => {
                 <Typography variant="h6" sx={{ mb: 2, color: nexusColors.emerald }}>
                   Конфігурація Сценарію
                 </Typography>
-                
+
                 <FormControl fullWidth sx={{ mb: 2 }}>
                   <InputLabel sx={{ color: nexusColors.nebula }}>Шаблон симуляції</InputLabel>
                   <Select
@@ -376,7 +376,7 @@ export const RealitySimulatorModule: React.FC = () => {
                     <Typography variant="body2" sx={{ color: nexusColors.nebula, mb: 2 }}>
                       {selectedTemplate.description}
                     </Typography>
-                    
+
                     <Chip
                       label={selectedTemplate.model_type.replace('_', ' ').toUpperCase()}
                       sx={{
@@ -391,7 +391,7 @@ export const RealitySimulatorModule: React.FC = () => {
                         <Typography variant="body2" sx={{ color: nexusColors.frost, mb: 1 }}>
                           {param.description}
                         </Typography>
-                        
+
                         {param.type === 'number' && (
                           <TextField
                             fullWidth
@@ -402,7 +402,7 @@ export const RealitySimulatorModule: React.FC = () => {
                             size="small"
                           />
                         )}
-                        
+
                         {param.type === 'boolean' && (
                           <FormControl fullWidth size="small">
                             <Select
@@ -414,7 +414,7 @@ export const RealitySimulatorModule: React.FC = () => {
                             </Select>
                           </FormControl>
                         )}
-                        
+
                         {param.type === 'range' && (
                           <Box sx={{ px: 2 }}>
                             <Slider
@@ -475,7 +475,7 @@ export const RealitySimulatorModule: React.FC = () => {
                 <Typography variant="h6" sx={{ mb: 2, color: nexusColors.sapphire }}>
                   Фрактал Обчислень
                 </Typography>
-                
+
                 {show3D ? (
                   <Box
                     ref={mountRef}
@@ -537,7 +537,7 @@ export const RealitySimulatorModule: React.FC = () => {
                 <Typography variant="h6" sx={{ mb: 2, color: nexusColors.amethyst }}>
                   Історія Симуляцій
                 </Typography>
-                
+
                 <TableContainer component={Paper} sx={{ backgroundColor: 'transparent' }}>
                   <Table>
                     <TableHead>
@@ -625,8 +625,8 @@ export const RealitySimulatorModule: React.FC = () => {
         </Grid>
 
         {/* Results Dialog */}
-        <Dialog 
-          open={resultsDialogOpen} 
+        <Dialog
+          open={resultsDialogOpen}
           onClose={() => setResultsDialogOpen(false)}
           maxWidth="md"
           fullWidth
@@ -642,8 +642,8 @@ export const RealitySimulatorModule: React.FC = () => {
                   <Box key={key} sx={{ mb: 2 }}>
                     <Typography variant="body1" sx={{ color: nexusColors.frost }}>
                       {key.replace('_', ' ').toUpperCase()}: {
-                        typeof value === 'number' 
-                          ? value.toFixed(3) 
+                        typeof value === 'number'
+                          ? value.toFixed(3)
                           : String(value)
                       }
                     </Typography>

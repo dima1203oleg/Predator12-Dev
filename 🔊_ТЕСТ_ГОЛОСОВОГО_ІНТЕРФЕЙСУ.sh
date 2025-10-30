@@ -26,7 +26,7 @@ print_color() {
 # Перевірка статусу сервера
 check_server_status() {
     print_color "cyan" "🔍 Перевірка статусу сервера..."
-    
+
     if curl -s http://localhost:5094 > /dev/null 2>&1; then
         print_color "green" "✅ Сервер активний на http://localhost:5094"
         return 0
@@ -45,10 +45,10 @@ start_server_if_needed() {
         local server_pid=$!
         echo $server_pid > ../server.pid
         cd ../..
-        
+
         print_color "cyan" "⏳ Очікую запуску сервера..."
         sleep 5
-        
+
         if check_server_status; then
             print_color "green" "✅ Сервер успішно запущено!"
         else
@@ -62,21 +62,21 @@ start_server_if_needed() {
 show_test_instructions() {
     print_color "purple" "🎯 ІНСТРУКЦІЇ ДЛЯ ТЕСТУВАННЯ ГОЛОСОВОГО ІНТЕРФЕЙСУ:"
     echo ""
-    
+
     print_color "cyan" "🔊 TTS (TEXT-TO-SPEECH) ТЕСТУВАННЯ:"
     echo "1. Відкрийте http://localhost:5094#voice-interface"
     echo "2. Натисніть кнопку 'Тест голосу' (зелена кнопка)"
     echo "3. Ви повинні почути голосове повідомлення українською"
     echo "4. Переконайтеся, що звук увімкнений в браузері"
     echo ""
-    
+
     print_color "green" "🎤 STT (SPEECH-TO-TEXT) ТЕСТУВАННЯ:"
     echo "1. Натисніть 'Почати слухати' (синя кнопка)"
     echo "2. Дозвольте доступ до мікрофону"
     echo "3. Скажіть: 'Привіт, як справи?'"
     echo "4. Подивіться на розпізнавання та відповідь AI"
     echo ""
-    
+
     print_color "yellow" "🗣️ РЕКОМЕНДОВАНІ КОМАНДИ ДЛЯ ТЕСТУВАННЯ:"
     echo "• 'привіт' або 'вітаю'"
     echo "• 'відкрий дашборд'"
@@ -85,7 +85,7 @@ show_test_instructions() {
     echo "• 'допомога'"
     echo "• 'дякую'"
     echo ""
-    
+
     print_color "blue" "🔧 НАЛАШТУВАННЯ:"
     echo "• Натисніть 'Налаштування' для зміни мови та голосу"
     echo "• Доступні мови: українська (uk-UA), англійська (en-US)"
@@ -97,21 +97,21 @@ show_test_instructions() {
 show_technical_details() {
     print_color "purple" "🔧 ТЕХНІЧНІ ДЕТАЛІ ГОЛОСОВОГО МОДУЛЯ:"
     echo ""
-    
+
     print_color "cyan" "📊 TTS (СИНТЕЗ МОВЛЕННЯ):"
     echo "• API: Web Speech Synthesis"
     echo "• Голоси: Системні + Google голоси"
     echo "• Мови: українська, англійська"
     echo "• Налаштування: швидкість, тон, гучність"
     echo ""
-    
+
     print_color "green" "📈 STT (РОЗПІЗНАВАННЯ МОВИ):"
     echo "• API: Web Speech Recognition"
     echo "• Режими: continuous, interim results"
     echo "• Підтримка: Chrome, Edge, Safari (частково)"
     echo "• Точність: 95%+ для чіткої мови"
     echo ""
-    
+
     print_color "yellow" "🤖 AI АСИСТЕНТ:"
     echo "• Локальна обробка команд"
     echo "• Інтелектуальні відповіді українською"
@@ -124,7 +124,7 @@ show_technical_details() {
 show_statistics() {
     print_color "blue" "📊 СТАТИСТИКА ГОЛОСОВОГО МОДУЛЯ V5.2:"
     echo ""
-    
+
     print_color "green" "✅ РЕАЛІЗОВАНІ ФУНКЦІЇ:"
     echo "• TTS з українськими голосами"
     echo "• STT з високою точністю"
@@ -134,7 +134,7 @@ show_statistics() {
     echo "• Налаштування голосу"
     echo "• Тестування функціональності"
     echo ""
-    
+
     print_color "cyan" "🎯 КЛЮЧОВІ МЕТРИКИ:"
     echo "• Час відгуку AI: < 500ms"
     echo "• Точність розпізнавання: 95%+"
@@ -148,7 +148,7 @@ show_statistics() {
 open_voice_interface() {
     local url="http://localhost:5094#voice-interface"
     print_color "green" "🌐 Відкриваю голосовий інтерфейс: $url"
-    
+
     if command -v open > /dev/null; then
         open "$url"  # macOS
     elif command -v xdg-open > /dev/null; then
@@ -173,9 +173,9 @@ show_menu() {
         echo "6) 📊 Статистика"
         echo "7) ❌ Вихід"
         echo ""
-        
+
         read -p "Виберіть опцію (1-7): " choice
-        
+
         case $choice in
             1)
                 print_color "cyan" "🔊 Для тестування TTS:"
@@ -216,17 +216,17 @@ show_menu() {
 main() {
     # Перевірка та запуск сервера
     start_server_if_needed
-    
+
     # Показати статистику
     show_statistics
-    
+
     # Показати інструкції
     show_test_instructions
-    
+
     # Автоматично відкрити браузер
     print_color "yellow" "🤖 Автоматично відкриваю голосовий інтерфейс..."
     open_voice_interface
-    
+
     # Показати меню
     show_menu
 }

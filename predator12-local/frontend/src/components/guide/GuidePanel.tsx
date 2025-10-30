@@ -550,4 +550,3 @@ const GuidePanel: React.FC<GuidePanelProps> = ({
 };
 
 export default GuidePanel;
-

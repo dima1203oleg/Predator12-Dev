@@ -1,7 +1,9 @@
+import logging
 import time
+
 import minio
 import requests
-import logging
+
 
 def watch_minio():
     # Self-healing MinIO watcher
@@ -13,6 +15,7 @@ def watch_minio():
         time.sleep(10)
         watch_minio()
 
+
 def trigger_etl():
     # Trigger Airflow DAG via REST API
     try:
@@ -22,6 +25,7 @@ def trigger_etl():
             logging.error(f"Airflow trigger failed: {resp.text}")
     except Exception as e:
         logging.error(f"Airflow trigger error: {e}")
+
 
 if __name__ == "__main__":
     while True:

@@ -1,5 +1,8 @@
-import { create } from 'zustand';
-export const useAppEventStore = create((set, get) => ({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.useAppEventStore = void 0;
+const zustand_1 = require("zustand");
+exports.useAppEventStore = (0, zustand_1.create)((set, get) => ({
     events: [],
     unreadCount: 0,
     wsConnected: false,
@@ -17,7 +20,7 @@ export const useAppEventStore = create((set, get) => ({
             title,
             message,
             timestamp: new Date(),
-            ttl: level === 'error' || level === 'action' ? 300 : 60, // 5 min for errors, 1 min for others
+            ttl: level === 'error' || level === 'action' ? 300 : 60,
             isRead: false,
             actions: actions || [],
             source
@@ -29,7 +32,7 @@ export const useAppEventStore = create((set, get) => ({
     },
     markAsRead: (eventId) => {
         set(state => ({
-            events: state.events.map(event => event.id === eventId ? { ...event, isRead: true } : event),
+            events: state.events.map(event => event.id === eventId ? Object.assign(Object.assign({}, event), { isRead: true }) : event),
             unreadCount: Math.max(0, state.unreadCount - 1)
         }));
     },
@@ -44,27 +47,22 @@ export const useAppEventStore = create((set, get) => ({
     },
     setGuideMode: (mode) => {
         set(state => ({
-            guide: { ...state.guide, mode }
+            guide: Object.assign(Object.assign({}, state.guide), { mode })
         }));
     },
     activateGuide: (module) => {
         set(state => ({
-            guide: {
-                ...state.guide,
-                isActive: true,
-                currentModule: module || state.guide.currentModule,
-                lastInteraction: new Date()
-            }
+            guide: Object.assign(Object.assign({}, state.guide), { isActive: true, currentModule: module || state.guide.currentModule, lastInteraction: new Date() })
         }));
     },
     deactivateGuide: () => {
         set(state => ({
-            guide: { ...state.guide, isActive: false }
+            guide: Object.assign(Object.assign({}, state.guide), { isActive: false })
         }));
     },
     updateLastInteraction: () => {
         set(state => ({
-            guide: { ...state.guide, lastInteraction: new Date() }
+            guide: Object.assign(Object.assign({}, state.guide), { lastInteraction: new Date() })
         }));
     },
     clearAllEvents: () => {
@@ -76,5 +74,5 @@ export const useAppEventStore = create((set, get) => ({
 }));
 // Auto cleanup expired events every 30 seconds
 setInterval(() => {
-    useAppEventStore.getState().clearExpiredEvents();
+    exports.useAppEventStore.getState().clearExpiredEvents();
 }, 30000);

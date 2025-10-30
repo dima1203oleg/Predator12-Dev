@@ -43,7 +43,7 @@ import { useNexusTheme } from '../contexts/ThemeContext';
 
 const MyComponent = () => {
   const { colors, currentTheme, setTheme } = useNexusTheme();
-  
+
   return (
     <Box sx={{ background: colors.background.paper }}>
       <Typography sx={{ color: colors.text.primary }}>
@@ -89,7 +89,7 @@ const {
 ### Утиліти
 
 ```tsx
-import { 
+import {
   getThemeById,      // (id: string) => ThemeConfig
   getDefaultTheme,   // () => ThemeConfig
   getCurrentThemeId, // () => string | null

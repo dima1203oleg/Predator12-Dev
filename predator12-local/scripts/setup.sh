@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}"
 cat << 'EOF'
- ____                 _       _             _ _ 
+ ____                 _       _             _ _
 |  _ \ _ __ ___  ____ | | __ _| |_ ___  _ __/ / |
 | |_) | '__/ _ \/ _  || |/ _  | __/ _ \| '__| | |
 |  __/| | |  __/ (_| || | (_| | || (_) | |  | | |
@@ -105,7 +105,7 @@ check_service_health() {
     local service=$1
     local max_attempts=30
     local attempt=1
-    
+
     while [[ $attempt -le $max_attempts ]]; do
         if docker compose ps "$service" | grep -q "healthy\|Up"; then
             echo -e "${GREEN}✅ $service is ready${NC}"
@@ -119,7 +119,7 @@ check_service_health() {
 }
 
 check_service_health "postgres"
-check_service_health "opensearch" 
+check_service_health "opensearch"
 check_service_health "minio"
 
 # Initialize databases and indices
@@ -231,15 +231,15 @@ cat << EOF
       • OPENAI_API_KEY
       • TELEGRAM_BOT_TOKEN
       • TELEGRAM_CHAT_ID
-   
+
    2. Configure Keycloak:
       • Create predator11 realm
       • Set up users and roles
-      
+
    3. Test the system:
       • make test
       • ./scripts/test_system.sh
-      
+
    4. Load sample data:
       • python3 scripts/indexing/discover_pg_schema.py
       • python3 scripts/indexing/index_pg_to_opensearch.py

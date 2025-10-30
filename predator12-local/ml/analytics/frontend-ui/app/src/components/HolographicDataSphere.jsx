@@ -91,4 +91,4 @@ const HolographicDataSphere = () => {
   return <div ref={mountRef} className="w-full h-[300px] md:h-[500px]" />;
 };
 
-export default HolographicDataSphere; 
+export default HolographicDataSphere;

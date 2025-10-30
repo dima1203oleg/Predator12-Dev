@@ -36,7 +36,7 @@ export const PhantomScanner: React.FC<PhantomScannerProps> = ({
     const animate = () => {
       const elapsed = (Date.now() - startTime) / 1000;
       const progress = (elapsed % scanSpeed) / scanSpeed;
-      
+
       setScanProgress(progress);
 
       if (elapsed >= scanSpeed) {
@@ -71,7 +71,7 @@ export const PhantomScanner: React.FC<PhantomScannerProps> = ({
     for (let i = 0; i < scanLines; i++) {
       const y = (i / scanLines) * height;
       const opacity = Math.abs(Math.sin((scanProgress * Math.PI * 2) + (i * 0.2)));
-      
+
       ctx.strokeStyle = `${color}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`;
       ctx.lineWidth = 2;
       ctx.beginPath();

@@ -45,20 +45,20 @@ class CyberAceAI:
         self.openai_client = OpenAI()
         self.memory = []
         self.context = {}
-    
+
     async def process_query(self, query: str, user_id: str) -> dict:
         """Обробка запиту користувача"""
         # 1. Класифікація наміру
         intent = await self.classify_intent(query)
-        
+
         # 2. Витяг entities
         entities = await self.extract_entities(query)
-        
+
         # 3. Генерація відповіді
         response = await self.generate_response(
             query, intent, entities, user_id
         )
-        
+
         return {
             'intent': intent,
             'entities': entities,
@@ -107,7 +107,7 @@ async def get_agents():
 // AgentManager.ts
 export class AgentManager {
     private agents: Map<string, Agent> = new Map();
-    
+
     /**
      * Створення нового агента
      */
@@ -117,17 +117,17 @@ export class AgentManager {
         this.agents.set(agent.id, agent);
         return agent;
     }
-    
+
     /**
      * Делегування завдання агенту
      */
     async delegateTask(agentId: string, task: Task): Promise<TaskResult> {
         const agent = this.agents.get(agentId);
         if (!agent) throw new Error('Agent not found');
-        
+
         return await agent.execute(task);
     }
-    
+
     /**
      * Моніторинг стану агентів
      */
@@ -165,7 +165,7 @@ export class AgentManager {
 export const VoiceInput: React.FC = () => {
     const [wakeWordActive, setWakeWordActive] = useState(false);
     const [emotion, setEmotion] = useState<Emotion>('neutral');
-    
+
     // Wake word detection
     useEffect(() => {
         const wakeWord = new WakeWordDetector('cyber-ace');
@@ -174,18 +174,18 @@ export const VoiceInput: React.FC = () => {
             startListening();
         });
     }, []);
-    
+
     // Emotion recognition
     const analyzeEmotion = async (audio: Blob) => {
         const result = await emotionAPI.analyze(audio);
         setEmotion(result.emotion);
-        
+
         // Адаптація відповіді під емоцію
         if (result.emotion === 'angry') {
             // Більш спокійна відповідь
         }
     };
-    
+
     return (
         <div className="voice-input-enhanced">
             <WakeWordIndicator active={wakeWordActive} />
@@ -218,7 +218,7 @@ export const VoiceInput: React.FC = () => {
 const AceAvatar: React.FC = () => {
     const [lipSync, setLipSync] = useState<LipSyncData | null>(null);
     const [expression, setExpression] = useState<Expression>('neutral');
-    
+
     // Lip sync з TTS
     useEffect(() => {
         if (speaking) {
@@ -226,10 +226,10 @@ const AceAvatar: React.FC = () => {
             setLipSync(sync);
         }
     }, [speaking, audioData]);
-    
+
     return (
         <Canvas>
-            <HolographicHead 
+            <HolographicHead
                 lipSync={lipSync}
                 expression={expression}
                 particles={true}
@@ -262,23 +262,23 @@ const AceAvatar: React.FC = () => {
 // NetworkGraph.tsx
 export const NetworkGraph: React.FC<NetworkGraphProps> = ({ data }) => {
     const svgRef = useRef<SVGSVGElement>(null);
-    
+
     useEffect(() => {
         if (!svgRef.current) return;
-        
+
         const svg = d3.select(svgRef.current);
         const simulation = d3.forceSimulation(data.nodes)
             .force('link', d3.forceLink(data.links))
             .force('charge', d3.forceManyBody().strength(-100))
             .force('center', d3.forceCenter(width / 2, height / 2));
-        
+
         // Візуалізація
         const links = svg.append('g')
             .selectAll('line')
             .data(data.links)
             .enter().append('line')
             .attr('class', 'network-link');
-        
+
         const nodes = svg.append('g')
             .selectAll('circle')
             .data(data.nodes)
@@ -286,20 +286,20 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({ data }) => {
             .attr('class', 'network-node')
             .attr('r', 5)
             .call(drag(simulation));
-        
+
         simulation.on('tick', () => {
             links
                 .attr('x1', d => d.source.x)
                 .attr('y1', d => d.source.y)
                 .attr('x2', d => d.target.x)
                 .attr('y2', d => d.target.y);
-            
+
             nodes
                 .attr('cx', d => d.x)
                 .attr('cy', d => d.y);
         });
     }, [data]);
-    
+
     return <svg ref={svgRef} className="network-graph" />;
 };
 ```
@@ -328,17 +328,17 @@ describe('CyberAcePage', () => {
         render(<CyberAcePage />);
         expect(screen.getByTestId('ace-avatar')).toBeInTheDocument();
     });
-    
+
     it('should handle voice input', async () => {
         render(<CyberAcePage />);
         const micButton = screen.getByRole('button', { name: /microphone/i });
         fireEvent.click(micButton);
-        
+
         await waitFor(() => {
             expect(screen.getByText(/listening/i)).toBeInTheDocument();
         });
     });
-    
+
     it('should display agents', () => {
         render(<CyberAcePage />);
         expect(screen.getAllByTestId('agent-card')).toHaveLength(6);
@@ -490,7 +490,7 @@ touch src/modules/cyber-ace/__tests__/CyberAcePage.test.tsx
 
 ## 🎊 ВИСНОВОК
 
-**Фаза 1 успішно завершена!** Маємо робочий прототип з усіма core компонентами. 
+**Фаза 1 успішно завершена!** Маємо робочий прототип з усіма core компонентами.
 
 **Наступний фокус:**
 1. 🎯 Backend інтеграція (ПРІОРИТЕТ!)

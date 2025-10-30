@@ -7,9 +7,9 @@ echo "================================="
 check_service() {
     local service_name=$1
     local url=$2
-    
+
     echo -n "Перевірка $service_name... "
-    
+
     if curl -s -f "$url" > /dev/null 2>&1; then
         echo "✅ OK"
         return 0
@@ -23,9 +23,9 @@ check_service() {
 start_agent() {
     local agent_name=$1
     local agent_path=$2
-    
+
     echo "🤖 Запуск $agent_name..."
-    
+
     if [ -f "$agent_path" ]; then
         cd "$(dirname "$agent_path")"
         python3 "$(basename "$agent_path")" &
@@ -43,7 +43,7 @@ echo "📋 Перевірка сервісів..."
 echo "========================"
 
 check_service "PostgreSQL" "localhost:5432" || echo "   PostgreSQL може бути недоступний"
-check_service "Redis" "localhost:6379" || echo "   Redis може бути недоступний" 
+check_service "Redis" "localhost:6379" || echo "   Redis може бути недоступний"
 check_service "Prometheus" "http://localhost:9090/-/healthy"
 check_service "Backend API" "http://localhost:8000/health"
 
@@ -103,7 +103,7 @@ echo "===================="
 
 log_dirs=(
     "/Users/dima/Documents/Predator11/logs/agents"
-    "/Users/dima/Documents/Predator11/logs/autoheal"  
+    "/Users/dima/Documents/Predator11/logs/autoheal"
     "/tmp"
 )
 
@@ -121,7 +121,7 @@ echo ""
 # 6. Cleanup функція для зупинки агентів
 cleanup_agents() {
     echo "🛑 Зупинка агентів..."
-    
+
     for pid_file in /tmp/AutoHeal.pid /tmp/SelfImprovement.pid /tmp/SelfDiagnosis.pid; do
         if [ -f "$pid_file" ]; then
             agent_name=$(basename "$pid_file" .pid)

@@ -4,8 +4,10 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Optional
 from uuid import UUID, uuid4
+
+from typing_extensions import Literal
 
 # Delta Revision 1.1 - Enhanced data governance and ILM
 try:
@@ -15,16 +17,19 @@ except ImportError:
     class DataClassification:
         SENSITIVE = "sensitive"
         PUBLIC = "public"
-    
+
     def enforce_data_governance(data, classification=None):
         return data  # Pass-through in dev mode
-from dataset_registry import DatasetRegistry
-from etl_trigger import EtlTrigger
-from event_logger import EventLogger
+
+
 from fastapi import APIRouter, Depends, HTTPException, status
-from ingest_manager import ChunkStorage, decode_chunk
-from object_storage import DEFAULT_BUCKET, ObjectStorageClient
 from pydantic import BaseModel, Field
+
+from .dataset_registry import DatasetRegistry
+from .etl_trigger import EtlTrigger
+from .event_logger import EventLogger
+from .ingest_manager import ChunkStorage, decode_chunk
+from .object_storage import DEFAULT_BUCKET, ObjectStorageClient
 
 router = APIRouter(prefix="/ingest", tags=["ingest"])
 
@@ -40,7 +45,9 @@ class ChunkUploadRequest(BaseModel):
 class ChunkUploadResponse(BaseModel):
     upload_id: UUID
     received_chunks: int
-    status: Literal["pending", "completed"]
+    # use plain str here to avoid typing/Literal incompatibilities in some
+    # test/runtime environments; callers still use the strings 'pending'/'completed'.
+    status: str
     file_path: Optional[str] = None
 
 
@@ -49,7 +56,7 @@ class UploadStatusResponse(BaseModel):
     file_name: Optional[str] = None
     total_chunks: int
     received_chunks: int
-    status: Literal["pending", "completed"]
+    status: str
     file_path: Optional[str] = None
 
 
@@ -77,15 +84,13 @@ def get_event_logger() -> EventLogger:
 
 
 @lru_cache(maxsize=1)
-def get_dataset_registry() -> DatasetRegistry:
-    committed_root = get_commit_root()
+def get_dataset_registry(committed_root: Path = Depends(get_commit_root)) -> DatasetRegistry:
     return DatasetRegistry(committed_root)
 
 
 @lru_cache(maxsize=1)
-def get_etl_trigger() -> EtlTrigger:
-    logger = get_event_logger()
-    return EtlTrigger(logger)
+def get_etl_trigger(event_logger: EventLogger = Depends(get_event_logger)) -> EtlTrigger:
+    return EtlTrigger(event_logger)
 
 
 @router.post("/upload", response_model=ChunkUploadResponse)
@@ -162,7 +167,7 @@ class TriggerDatasetRequest(BaseModel):
 class TriggerDatasetResponse(BaseModel):
     upload_id: str
     dataset: str
-    status: Literal["queued"]
+    status: str
 
 
 @router.post("/commit", response_model=CommitUploadResponse)

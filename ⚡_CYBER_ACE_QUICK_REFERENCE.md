@@ -204,7 +204,7 @@ const isUkrainian = i18n.language === 'uk-UA';
 ```typescript
 const startRecording = () => {
   if (!recognition) return;
-  
+
   recognition.start();
   useCyberAceStore.getState().toggleListening();
 };
@@ -215,7 +215,7 @@ const startRecording = () => {
 ```typescript
 const stopRecording = () => {
   if (!recognition) return;
-  
+
   recognition.stop();
   useCyberAceStore.getState().toggleListening();
 };

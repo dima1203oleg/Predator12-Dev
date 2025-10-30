@@ -44,7 +44,7 @@ export default function ChatDock({ apiUrl }: ChatDockProps) {
 
       const data = await res.json();
       const reply = data.reply || data.response || 'Отримано відповідь від системи.';
-      
+
       setMsgs(m => [...m, { role: 'assistant', text: reply }]);
 
       // TTS, якщо дозволено браузером
@@ -74,7 +74,7 @@ export default function ChatDock({ apiUrl }: ChatDockProps) {
   const startVoice = () => {
     // Web Speech API (Chrome: webkitSpeechRecognition)
     const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    
+
     if (!SR) {
       alert('⚠️ Ваш браузер не підтримує розпізнавання мовлення. Спробуйте Chrome або Edge.');
       return;
@@ -108,7 +108,7 @@ export default function ChatDock({ apiUrl }: ChatDockProps) {
   return (
     <div className="chat-dock">
       <h3>💬 CHAT</h3>
-      
+
       {/* Банер помилки чату */}
       {error && (
         <div className="chat-error-banner">
@@ -135,14 +135,14 @@ export default function ChatDock({ apiUrl }: ChatDockProps) {
           onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send(input)}
           disabled={pending}
         />
-        <button 
-          onClick={() => send(input)} 
+        <button
+          onClick={() => send(input)}
           disabled={pending || !input.trim()}
           title="Відправити (Enter)"
         >
           📤
         </button>
-        <button 
+        <button
           onClick={startVoice}
           disabled={pending}
           title="Голосове введення"

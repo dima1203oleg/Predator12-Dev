@@ -32,7 +32,7 @@ class AgentsSystemConfig:
     def _load_agent_configs(self) -> Dict[str, AgentConfig]:
         """Load agent configurations"""
         base_timeout = float(os.getenv("AGENT_TIMEOUT", "10.0"))
-        
+
         # All 26 agents configuration
         return {
             "chief": AgentConfig(

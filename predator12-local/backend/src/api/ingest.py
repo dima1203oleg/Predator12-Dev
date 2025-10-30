@@ -3,21 +3,24 @@
 Backend API for Ingest Hub - File uploads, link crawling, Telegram integration
 """
 
-from fastapi import APIRouter, UploadFile, File, HTTPException, WebSocket, WebSocketDisconnect
+import asyncio
+import uuid
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from fastapi import APIRouter, File, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, HttpUrl
-from typing import Optional, List, Dict, Any
-from enum import Enum
-import asyncio
-from datetime import datetime
-import uuid
 
 # ============= MODELS =============
+
 
 class SourceType(str, Enum):
     FILE = "file"
     LINK = "link"
     TELEGRAM = "telegram"
+
 
 class TaskStatus(str, Enum):
     PENDING = "pending"
@@ -26,10 +29,12 @@ class TaskStatus(str, Enum):
     ERROR = "error"
     PAUSED = "paused"
 
+
 class LinkType(str, Enum):
     URL = "url"
     RSS = "rss"
     SITEMAP = "sitemap"
+
 
 # Request Models
 class LinkCrawlRequest(BaseModel):
@@ -39,8 +44,10 @@ class LinkCrawlRequest(BaseModel):
     extractImages: bool = True
     extractLinks: bool = False
 
+
 class TelegramConnectRequest(BaseModel):
     token: str
+
 
 class TelegramSubscribeRequest(BaseModel):
     identifier: str  # @channel or invite link
@@ -48,8 +55,9 @@ class TelegramSubscribeRequest(BaseModel):
         "media": True,
         "links": True,
         "forwards": False,
-        "minLength": None
+        "minLength": None,
     }
+
 
 # Response Models
 class TaskResponse(BaseModel):
@@ -61,9 +69,11 @@ class TaskResponse(BaseModel):
     progress: float = 0.0
     details: Optional[Dict[str, Any]] = None
 
+
 class TelegramConnectionResponse(BaseModel):
     status: str
     userId: Optional[str] = None
+
 
 # ============= ROUTER =============
 
@@ -75,11 +85,12 @@ telegram_sessions: Dict[str, Any] = {}
 
 # ============= FILE UPLOAD =============
 
+
 @router.post("/upload")
 async def upload_file(
     file: UploadFile = File(...),
     dataset: Optional[str] = None,
-    tags: Optional[List[str]] = None
+    tags: Optional[List[str]] = None,
 ):
     """
     Upload a file for processing
@@ -102,14 +113,11 @@ async def upload_file(
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "application/pdf",
             "image/",
-            "video/"
+            "video/",
         ]
 
         if not any(content_type.startswith(t) for t in allowed_types):
-            raise HTTPException(
-                status_code=400,
-                detail=f"Unsupported file type: {content_type}"
-            )
+            raise HTTPException(status_code=400, detail=f"Unsupported file type: {content_type}")
 
         # Read file content
         content = await file.read()
@@ -126,8 +134,8 @@ async def upload_file(
                 "size": file_size,
                 "contentType": content_type,
                 "dataset": dataset,
-                "tags": tags or []
-            }
+                "tags": tags or [],
+            },
         )
 
         tasks_storage[task_id] = task
@@ -139,13 +147,15 @@ async def upload_file(
             "id": task_id,
             "status": "pending",
             "filename": file.filename,
-            "size": file_size
+            "size": file_size,
         }
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============= LINK CRAWLING =============
+
 
 @router.post("/crawl")
 async def crawl_link(request: LinkCrawlRequest):
@@ -165,10 +175,7 @@ async def crawl_link(request: LinkCrawlRequest):
 
         # Validate depth
         if request.depth < 1 or request.depth > 3:
-            raise HTTPException(
-                status_code=400,
-                detail="Depth must be between 1 and 3"
-            )
+            raise HTTPException(status_code=400, detail="Depth must be between 1 and 3")
 
         # Create task
         task = TaskResponse(
@@ -182,8 +189,8 @@ async def crawl_link(request: LinkCrawlRequest):
                 "linkType": request.type,
                 "depth": request.depth,
                 "extractImages": request.extractImages,
-                "extractLinks": request.extractLinks
-            }
+                "extractLinks": request.extractLinks,
+            },
         )
 
         tasks_storage[task_id] = task
@@ -191,16 +198,14 @@ async def crawl_link(request: LinkCrawlRequest):
         # TODO: Queue crawling task
         # await queue_crawl_task(task_id, request)
 
-        return {
-            "id": task_id,
-            "status": "pending",
-            "url": str(request.url)
-        }
+        return {"id": task_id, "status": "pending", "url": str(request.url)}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============= TELEGRAM INTEGRATION =============
+
 
 @router.post("/telegram/connect")
 async def telegram_connect(request: TelegramConnectRequest):
@@ -217,16 +222,14 @@ async def telegram_connect(request: TelegramConnectRequest):
         telegram_sessions[session_id] = {
             "token": request.token,
             "connected": True,
-            "connectedAt": datetime.now()
+            "connectedAt": datetime.now(),
         }
 
-        return TelegramConnectionResponse(
-            status="connected",
-            userId=session_id
-        )
+        return TelegramConnectionResponse(status="connected", userId=session_id)
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.post("/telegram/subscribe")
 async def telegram_subscribe(request: TelegramSubscribeRequest):
@@ -242,10 +245,10 @@ async def telegram_subscribe(request: TelegramSubscribeRequest):
         task_id = str(uuid.uuid4())
 
         # Validate identifier
-        if not (request.identifier.startswith('@') or 'joinchat' in request.identifier):
+        if not (request.identifier.startswith("@") or "joinchat" in request.identifier):
             raise HTTPException(
                 status_code=400,
-                detail="Invalid identifier. Use @channel or invite link"
+                detail="Invalid identifier. Use @channel or invite link",
             )
 
         # Create task
@@ -255,10 +258,7 @@ async def telegram_subscribe(request: TelegramSubscribeRequest):
             status=TaskStatus.PENDING,
             name=request.identifier,
             createdAt=datetime.now(),
-            details={
-                "identifier": request.identifier,
-                "filters": request.filters
-            }
+            details={"identifier": request.identifier, "filters": request.filters},
         )
 
         tasks_storage[task_id] = task
@@ -266,14 +266,11 @@ async def telegram_subscribe(request: TelegramSubscribeRequest):
         # TODO: Queue Telegram subscription
         # await queue_telegram_subscription(task_id, request)
 
-        return {
-            "id": task_id,
-            "status": "pending",
-            "identifier": request.identifier
-        }
+        return {"id": task_id, "status": "pending", "identifier": request.identifier}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.post("/telegram/{source_id}/sync")
 async def telegram_sync(source_id: str):
@@ -291,24 +288,23 @@ async def telegram_sync(source_id: str):
         # TODO: Trigger sync
         # await trigger_telegram_sync(source_id)
 
-        return {
-            "status": "syncing",
-            "sourceId": source_id
-        }
+        return {"status": "syncing", "sourceId": source_id}
 
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============= TASK MANAGEMENT =============
+
 
 @router.get("/tasks")
 async def get_tasks(
     status: Optional[TaskStatus] = None,
     type: Optional[SourceType] = None,
     limit: int = 100,
-    offset: int = 0
+    offset: int = 0,
 ):
     """
     Get list of tasks with optional filtering
@@ -326,14 +322,15 @@ async def get_tasks(
 
     # Apply pagination
     total = len(tasks)
-    tasks = tasks[offset:offset + limit]
+    tasks = tasks[offset : offset + limit]
 
     return {
         "tasks": [t.dict() for t in tasks],
         "total": total,
         "limit": limit,
-        "offset": offset
+        "offset": offset,
     }
+
 
 @router.get("/tasks/{task_id}")
 async def get_task(task_id: str):
@@ -346,6 +343,7 @@ async def get_task(task_id: str):
 
     return task.dict()
 
+
 @router.post("/tasks/{task_id}/retry")
 async def retry_task(task_id: str):
     """
@@ -356,10 +354,7 @@ async def retry_task(task_id: str):
         raise HTTPException(status_code=404, detail="Task not found")
 
     if task.status != TaskStatus.ERROR:
-        raise HTTPException(
-            status_code=400,
-            detail="Can only retry failed tasks"
-        )
+        raise HTTPException(status_code=400, detail="Can only retry failed tasks")
 
     # Reset task status
     task.status = TaskStatus.PENDING
@@ -371,6 +366,7 @@ async def retry_task(task_id: str):
 
     return {"status": "retrying", "taskId": task_id}
 
+
 @router.post("/tasks/{task_id}/cancel")
 async def cancel_task(task_id: str):
     """
@@ -381,10 +377,7 @@ async def cancel_task(task_id: str):
         raise HTTPException(status_code=404, detail="Task not found")
 
     if task.status not in [TaskStatus.PENDING, TaskStatus.PROCESSING]:
-        raise HTTPException(
-            status_code=400,
-            detail="Can only cancel pending or processing tasks"
-        )
+        raise HTTPException(status_code=400, detail="Can only cancel pending or processing tasks")
 
     # TODO: Cancel task in queue
     # await cancel_queued_task(task_id)
@@ -393,6 +386,7 @@ async def cancel_task(task_id: str):
     del tasks_storage[task_id]
 
     return {"status": "cancelled", "taskId": task_id}
+
 
 @router.delete("/tasks/{task_id}")
 async def delete_task(task_id: str):
@@ -405,7 +399,9 @@ async def delete_task(task_id: str):
     del tasks_storage[task_id]
     return {"status": "deleted", "taskId": task_id}
 
+
 # ============= WEBSOCKET =============
+
 
 class ConnectionManager:
     def __init__(self):
@@ -425,7 +421,9 @@ class ConnectionManager:
             except:
                 pass
 
+
 manager = ConnectionManager()
+
 
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -446,15 +444,14 @@ async def websocket_endpoint(websocket: WebSocket):
             data = await websocket.receive_text()
 
             # Echo back (heartbeat)
-            await websocket.send_json({
-                "type": "pong",
-                "timestamp": datetime.now().isoformat()
-            })
+            await websocket.send_json({"type": "pong", "timestamp": datetime.now().isoformat()})
 
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
+
 # ============= HELPER FUNCTIONS =============
+
 
 async def broadcast_task_update(task_id: str, event_type: str, data: dict):
     """
@@ -464,9 +461,10 @@ async def broadcast_task_update(task_id: str, event_type: str, data: dict):
         "type": event_type,
         "taskId": task_id,
         "timestamp": datetime.now().isoformat(),
-        **data
+        **data,
     }
     await manager.broadcast(message)
+
 
 # Example usage in task processing:
 # await broadcast_task_update(task_id, "task.progress", {
@@ -476,6 +474,7 @@ async def broadcast_task_update(task_id: str, event_type: str, data: dict):
 # })
 
 # ============= STATISTICS =============
+
 
 @router.get("/stats")
 async def get_statistics():
@@ -493,6 +492,6 @@ async def get_statistics():
         "byType": {
             "files": len([t for t in tasks if t.type == SourceType.FILE]),
             "links": len([t for t in tasks if t.type == SourceType.LINK]),
-            "telegram": len([t for t in tasks if t.type == SourceType.TELEGRAM])
-        }
+            "telegram": len([t for t in tasks if t.type == SourceType.TELEGRAM]),
+        },
     }

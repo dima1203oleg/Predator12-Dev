@@ -52,19 +52,19 @@ echo -e "${BLUE}4️⃣  Checking Frontend Directory...${NC}"
 FRONTEND_DIR="/Users/dima/Documents/Predator11/frontend"
 if [ -d "$FRONTEND_DIR" ]; then
     echo -e "${GREEN}✅ Frontend directory exists${NC}"
-    
+
     if [ -d "$FRONTEND_DIR/node_modules" ]; then
         echo -e "${GREEN}✅ node_modules exists${NC}"
     else
         echo -e "${RED}❌ node_modules not found${NC}"
     fi
-    
+
     if [ -f "$FRONTEND_DIR/package.json" ]; then
         echo -e "${GREEN}✅ package.json exists${NC}"
     else
         echo -e "${RED}❌ package.json not found${NC}"
     fi
-    
+
     if [ -f "$FRONTEND_DIR/vite.config.ts" ]; then
         echo -e "${GREEN}✅ vite.config.ts exists${NC}"
     else

@@ -60,14 +60,14 @@ TOTAL_AGENTS=${#AGENTS[@]}
 for agent in "${!AGENTS[@]}"; do
     url=${AGENTS[$agent]}
     echo -n -e "${CYAN}Checking ${agent}... ${NC}"
-    
+
     # Try to reach the agent
     response=$(curl -s -w "%{http_code}" -o /dev/null --max-time 5 "$url" 2>/dev/null)
-    
+
     if [ "$response" = "200" ]; then
         echo -e "${GREEN}✅ HEALTHY${NC}"
         ((HEALTHY_AGENTS++))
-        
+
         # Get capabilities if available
         capabilities_url="${url%/health}/capabilities"
         capabilities=$(curl -s --max-time 3 "$capabilities_url" 2>/dev/null)
@@ -76,7 +76,7 @@ for agent in "${!AGENTS[@]}"; do
         fi
     else
         echo -e "${RED}❌ UNHEALTHY (HTTP: $response)${NC}"
-        
+
         # Check if container is running
         container_name=$(echo "$agent" | sed 's/Agent$//' | tr '[:upper:]' '[:lower:]')
         if docker compose ps | grep -q "$container_name"; then
@@ -129,7 +129,7 @@ declare -A INFRA=(
 for service in "${!INFRA[@]}"; do
     port=${INFRA[$service]}
     echo -n -e "${CYAN}${service} (port ${port}): ${NC}"
-    
+
     if nc -z localhost $port 2>/dev/null; then
         echo -e "${GREEN}✅ Running${NC}"
     else

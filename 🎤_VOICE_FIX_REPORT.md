@@ -50,13 +50,13 @@ language: 'uk-UA', // Українська за замовчуванням
 ### 3. Додано двомовність UI ✅
 ```typescript
 // Заголовки
-settings.language === 'uk-UA' 
+settings.language === 'uk-UA'
   ? '🎤 AI Голосовий Інтерфейс'
   : '🎤 AI Voice Interface'
 
 // Статус
-isListening 
-  ? (settings.language === 'uk-UA' ? '🎧 Слухаю...' : '🎧 Listening...') 
+isListening
+  ? (settings.language === 'uk-UA' ? '🎧 Слухаю...' : '🎧 Listening...')
   : (settings.language === 'uk-UA' ? '🔇 Натисніть для активації' : '🔇 Click to activate')
 
 // Вибір мови
@@ -103,10 +103,10 @@ const speakResponseBrowser = (text: string) => {
     selectedVoice = voices.find((voice: any) => voice.lang === 'uk-UA');
     // ... fallback логіка
   }
-  
+
   // ✅ Детальне логування
   console.log(`🎵 Встановлено голос: ${selectedVoice.name} (${selectedVoice.lang})`);
-  
+
   // ✅ Retry механізм
   const speakWithRetry = (retries = 3) => {
     if (voices.length > 0) {
@@ -121,7 +121,7 @@ const speakResponseBrowser = (text: string) => {
 #### Зміна 4: Двомовний UI
 ```typescript
 // Заголовки
-{settings.language === 'uk-UA' 
+{settings.language === 'uk-UA'
   ? '🎤 AI Голосовий Інтерфейс'
   : '🎤 AI Voice Interface'}
 

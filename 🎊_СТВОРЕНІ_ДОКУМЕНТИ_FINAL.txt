@@ -31,7 +31,7 @@
    🔬 Технічні характеристики
    ⚔️ Детальні порівняння
    💡 Альтернативні варіанти
-   
+
 5. ⚡_НОВИЙ_VOICE_STACK_QUICKSTART.txt
    📄 Покрокові інструкції встановлення
    🧪 Checklist
@@ -61,7 +61,7 @@
    ✅ Створення віртуального середовища
    ✅ Завантаження українських моделей
    ✅ Автоматичне тестування
-   
+
    Встановлює:
      • Piper TTS
      • Whisper Large v3 Turbo
@@ -146,7 +146,7 @@ Predator12/
 👔 ДЛЯ МЕНЕДЖМЕНТУ:
    1. ⚡_ГОЛОСОВІ_TECH_SUMMARY.txt      (5 хв читання)
    2. 🎉_ФІНАЛЬНИЙ_ЗВІТ_...(розділ ROI)  (10 хв читання)
-   
+
    Ключові метрики:
      • Економія: $540/рік
      • ROI: 2.2 місяці
@@ -156,7 +156,7 @@ Predator12/
    1. 📖_VOICE_README.md                (Quick Start)
    2. ⚡_НОВИЙ_VOICE_STACK_QUICKSTART.txt  (Setup)
    3. 🔥_КРАЩІ_АЛЬТЕРНАТИВИ_...(технічні деталі)
-   
+
    Що робити:
      • ./install-new-voice-stack.sh
      • python test_piper_tts.py
@@ -166,7 +166,7 @@ Predator12/
    1. 🔥_КРАЩІ_АЛЬТЕРНАТИВИ_VOICE_TECH.md
    2. test_piper_tts.py (benchmark код)
    3. test_whisper_turbo.py (comparison)
-   
+
    Що цікаво:
      • Benchmark результати
      • Порівняльні таблиці
@@ -175,7 +175,7 @@ Predator12/
 🧪 ДЛЯ QA:
    1. ⚡_НОВИЙ_VOICE_STACK_QUICKSTART.txt (Checklist)
    2. test_*.py скрипти (Test cases)
-   
+
    Що тестувати:
      • Unit tests
      • Integration tests

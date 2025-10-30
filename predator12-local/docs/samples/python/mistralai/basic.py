@@ -2,6 +2,7 @@
 It is leveraging your endpoint and key. The call is synchronous."""
 
 import os
+
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
 
@@ -20,9 +21,9 @@ response = client.chat(
         ChatMessage(role="user", content="What is the capital of France?"),
     ],
     # Optional parameters
-    temperature=1.,
+    temperature=1.0,
     max_tokens=1000,
-    top_p=1.    
+    top_p=1.0,
 )
 
 print(response.choices[0].message.content)

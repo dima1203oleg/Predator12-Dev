@@ -134,7 +134,7 @@ Uptime:
   vs GPT-4:   ~$30,000/міс  ✅
   vs Claude:  ~$15,000/міс  ✅
   vs Gemini:  ~$1,000/міс   ✅
-  
+
   ЗАГАЛЬНА ЕКОНОМІЯ:  ~$50,000/міс  🎉
 ```
 
@@ -248,8 +248,8 @@ Predator12/
 
 2. Інтегрувати в main.tsx:
    import { aiAgents, aiModels } from './data/AIAgentsModelsData';
-   
-   <AIAgentsSection 
+
+   <AIAgentsSection
      agents={aiAgents}
      models={aiModels}
    />

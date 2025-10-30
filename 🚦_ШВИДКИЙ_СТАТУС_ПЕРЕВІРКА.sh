@@ -105,7 +105,7 @@ echo ""
 if [ "$BACKEND_RUNNING" = true ]; then
     echo -e "${BLUE}💊 Health Check:${NC}"
     echo -n "   Testing endpoint... "
-    
+
     if response=$(curl -s http://localhost:8000/api/cyber-ace/health 2>/dev/null); then
         if echo "$response" | grep -q "healthy"; then
             echo -e "${GREEN}Healthy ✓${NC}"

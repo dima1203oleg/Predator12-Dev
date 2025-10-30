@@ -90,7 +90,7 @@
   - Функції: PII маскування, RBAC
 
 - **SelfDiagnosisAgent** - В РОЗРОБЦІ ⚠️
-  
+
 - **ComplianceAgent** - НЕ РЕАЛІЗОВАНИЙ ❌
 - **BillingQuotaAgent** - НЕ РЕАЛІЗОВАНИЙ ❌
 - **CostOptimizerAgent** - НЕ РЕАЛІЗОВАНИЙ ❌

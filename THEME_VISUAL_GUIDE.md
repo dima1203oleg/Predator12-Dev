@@ -353,7 +353,7 @@ Hover:     transform: translateY(-2px)
 
 ```tsx
 // Floating button in UI
-<ThemeSwitcher 
+<ThemeSwitcher
   currentThemeId={currentThemeId}
   onThemeChange={setTheme}
 />

@@ -49,4 +49,3 @@ const OpenSearchWrapper: React.FC<OpenSearchWrapperProps> = ({ dashboardId, jwtT
 };
 
 export default OpenSearchWrapper;
-

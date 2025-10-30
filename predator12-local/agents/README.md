@@ -20,15 +20,15 @@ graph TB
     UI[UI/Telegram] --> Chief[Chief Orchestrator]
     Chief --> Router[Model Router]
     Chief --> Agents[Specialized Agents]
-    
+
     Router --> Models[58 AI/ML Models]
-    
+
     Agents --> Ingest[Ingest Agent]
     Agents --> Quality[Data Quality]
     Agents --> Anomaly[Anomaly Detection]
     Agents --> Security[Security & Privacy]
     Agents --> Healing[Self-Healing]
-    
+
     Agents --> Redis[(Redis Streams)]
     Agents --> OpenSearch[(OpenSearch)]
     Agents --> MinIO[(MinIO)]
@@ -231,7 +231,7 @@ agents/
 # Додавання нової моделі
 models["new-provider/new-model"] = ModelConfig(
     name="new-provider/new-model",
-    provider="new-provider", 
+    provider="new-provider",
     model_type=ModelType.REASONING,
     max_tokens=32768,
     cost_per_1k=0.02,
@@ -258,7 +258,7 @@ curl -X POST http://localhost:9050/security/mask \
   -H "Content-Type: application/json" \
   -d '{
     "data": {
-      "name": "Іван Петренко", 
+      "name": "Іван Петренко",
       "email": "ivan@example.com"
     },
     "resource": "customer_data"

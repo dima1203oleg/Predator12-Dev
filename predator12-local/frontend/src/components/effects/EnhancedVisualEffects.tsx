@@ -111,7 +111,7 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
   const createConnection = (p1: Particle, p2: Particle): Connection => {
     const distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
     const opacity = Math.max(0, 1 - distance / config.connectionDistance) * 0.3;
-    
+
     return {
       startX: p1.x,
       startY: p1.y,
@@ -126,7 +126,7 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
   // Оновлення частинки
   const updateParticle = (particle: Particle, canvas: HTMLCanvasElement): Particle => {
     let newParticle = { ...particle };
-    
+
     // Оновлення позиції
     newParticle.x += newParticle.vx;
     newParticle.y += newParticle.vy;
@@ -137,7 +137,7 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
       const dx = mousePos.x - newParticle.x;
       const dy = mousePos.y - newParticle.y;
       const distance = Math.sqrt(dx ** 2 + dy ** 2);
-      
+
       if (distance < 100) {
         const force = (100 - distance) / 100;
         newParticle.vx += (dx / distance) * force * 0.01;
@@ -193,11 +193,11 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
         ctx.fillStyle = particle.color;
         ctx.shadowBlur = gameMode ? 10 : 5;
         ctx.shadowColor = particle.color;
-        
+
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
-        
+
         // Додаткові ефекти для ігрового режиму
         if (gameMode && particle.type === 'neural') {
           ctx.strokeStyle = particle.color;
@@ -206,7 +206,7 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
           ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2);
           ctx.stroke();
         }
-        
+
         ctx.restore();
       });
 
@@ -216,7 +216,7 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
     // Оновлення з'єднань
     setConnections(prevConnections => {
       const newConnections: Connection[] = [];
-      
+
       particles.forEach((p1, i) => {
         particles.slice(i + 1).forEach(p2 => {
           const distance = Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
@@ -235,7 +235,7 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
           ctx.lineWidth = connection.width;
           ctx.shadowBlur = gameMode ? 5 : 2;
           ctx.shadowColor = connection.color;
-          
+
           ctx.beginPath();
           ctx.moveTo(connection.startX, connection.startY);
           ctx.lineTo(connection.endX, connection.endY);
@@ -277,7 +277,7 @@ const EnhancedVisualEffects: React.FC<EnhancedVisualEffectsProps> = ({
   // Обробка кліків
   const handleClick = (event: MouseEvent) => {
     if (!gameMode) return;
-    
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 

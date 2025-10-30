@@ -14,6 +14,7 @@ import {
 import type { AIAgent, AIModel, TrainingPipeline } from './components/AIComponents';
 import { AIAgentsSection } from './components/ai/AIAgentsSection';
 import './styles/global.css';
+import { initGlobalErrorReporting, triggerSelfHeal as apiTriggerSelfHeal } from './utils/selfHeal';
 
 // ============= TYPES =============
 interface SystemMetrics {
@@ -846,6 +847,40 @@ const App: React.FC = () => {
     return () => clearInterval(interval);
   }, [metrics]);
 
+  // Initialize global error reporting (reports to /observability/errors)
+  useEffect(() => {
+    try {
+      initGlobalErrorReporting({ sampleRate: 1.0 });
+    } catch (e) {
+      // ignore init errors
+      console.warn('initGlobalErrorReporting failed', e);
+    }
+  }, []);
+
+  const [lastHealReport, setLastHealReport] = useState<any | null>(null);
+  const [isHealing, setIsHealing] = useState(false);
+
+  const handleTriggerSelfHeal = async () => {
+    setIsHealing(true);
+    try {
+      const report = await apiTriggerSelfHeal();
+      setLastHealReport(report);
+      // also show a toast alert
+      setAlerts((s) => [
+        ...s,
+        { id: Date.now().toString(), type: 'info', message: 'Self-heal: ' + (report?.health_before || 'done'), timestamp: new Date().toLocaleTimeString() }
+      ]);
+    } catch (err: any) {
+      setLastHealReport({ error: String(err) });
+      setAlerts((s) => [
+        ...s,
+        { id: Date.now().toString(), type: 'error', message: 'Self-heal failed: ' + (err?.message || String(err)), timestamp: new Date().toLocaleTimeString() }
+      ]);
+    } finally {
+      setIsHealing(false);
+    }
+  };
+
   return (
     <>
       <AnimatedBackground />
@@ -877,32 +912,72 @@ const App: React.FC = () => {
             Ultra-Modern AI System Dashboard · Real-Time Monitoring
           </div>
 
-          {/* Live Status Badge */}
+          {/* Live Status Badge + Self-heal button */}
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px',
+              gap: '12px',
               marginTop: '16px',
-              background: 'rgba(16, 185, 129, 0.1)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              padding: '8px 16px',
-              borderRadius: '20px',
             }}
           >
-            <div
-              style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                background: '#10B981',
-                boxShadow: '0 0 10px #10B981',
-                animation: 'pulse 2s infinite',
-              }}
-            />
-            <span style={{ color: '#10B981', fontSize: '14px', fontWeight: '600' }}>
-              System Online · 25 Services · 24 OK · 1 Warning (Qdrant)
-            </span>
+            <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'rgba(16, 185, 129, 0.1)',
+                border: '1px solid rgba(16, 185, 129, 0.3)',
+                padding: '8px 12px',
+                borderRadius: '20px'
+              }}>
+              <div
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  background: '#10B981',
+                  boxShadow: '0 0 10px #10B981',
+                  animation: 'pulse 2s infinite',
+                }}
+              />
+              <span style={{ color: '#10B981', fontSize: '14px', fontWeight: '600' }}>
+                System Online · 25 Services · 24 OK · 1 Warning (Qdrant)
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button
+                onClick={handleTriggerSelfHeal}
+                disabled={isHealing}
+                style={{
+                  background: isHealing ? '#555' : '#00bfa5',
+                  color: '#012',
+                  padding: '8px 12px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  cursor: isHealing ? 'wait' : 'pointer',
+                  fontWeight: 700
+                }}
+                title="Запустити health check та auto-heal"
+              >
+                {isHealing ? '🩺 В роботі...' : '🩺 Перевірити систему'}
+              </button>
+
+              {lastHealReport && (
+                <div style={{
+                  background: 'rgba(0,0,0,0.5)',
+                  color: '#fff',
+                  padding: '8px 12px',
+                  borderRadius: '12px',
+                  fontSize: '12px',
+                  maxWidth: '320px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}>
+                  <strong>Останній звіт:</strong> {lastHealReport?.health_before || lastHealReport?.error || '—'}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

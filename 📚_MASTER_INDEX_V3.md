@@ -13,7 +13,7 @@
 
 ### 🚀 ШВИДКИЙ СТАРТ
 
-1. **🎯 Quick Reference Card** 
+1. **🎯 Quick Reference Card**
    - Файл: `🎯_QUICK_REFERENCE_CARD.txt`
    - Опис: Швидка довідка - всі основні команди, API, статус
    - Час читання: 2 хвилини

@@ -217,7 +217,9 @@ async def get_user_quotas(
 
 
 @router.get("/pricing")
-async def get_pricing_info(billing_manager: BillingManager = Depends(get_billing_manager)):
+async def get_pricing_info(
+    billing_manager: BillingManager = Depends(get_billing_manager),
+):
     """
     Get current pricing matrix for all plan tiers.
 
@@ -330,7 +332,9 @@ async def admin_adjust_quota(
 
 
 @router.get("/health")
-async def billing_health_check(billing_manager: BillingManager = Depends(get_billing_manager)):
+async def billing_health_check(
+    billing_manager: BillingManager = Depends(get_billing_manager),
+):
     """
     Health check for billing service.
     """
@@ -357,7 +361,11 @@ async def billing_health_check(billing_manager: BillingManager = Depends(get_bil
 
     except Exception as e:
         logger.error(f"Billing health check failed: {e}")
-        return {"status": "unhealthy", "error": str(e), "timestamp": datetime.now().isoformat()}
+        return {
+            "status": "unhealthy",
+            "error": str(e),
+            "timestamp": datetime.now().isoformat(),
+        }
 
 
 # Middleware function to automatically record API usage

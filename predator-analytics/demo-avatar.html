@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -125,19 +126,35 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+
+            0%,
+            100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100vh) translateX(50px);
+                opacity: 0;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="particles" id="particles"></div>
-    
+
     <div class="container">
         <h1>🤖 Predator Analytics AI Avatar</h1>
-        
+
         <div class="avatar-container">
             <canvas id="canvas3d"></canvas>
             <div class="loading" id="loading">Завантаження 3D аватара...</div>
@@ -169,29 +186,42 @@
             particlesContainer.appendChild(particle);
         }
 
+        // State variables
+        let isListening = false;
+        let isThinking = false;
+        let isSpeaking = false;
+        let avatar; // Will hold our 3D avatar
+
         // Three.js Setup
         const canvas = document.getElementById('canvas3d');
         const loading = document.getElementById('loading');
-        
+
+        // Initialize Three.js scene
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ 
-            canvas, 
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
             antialias: true,
-            alpha: true 
+            alpha: true
         });
-        
+
+        // Set up renderer
         renderer.setSize(canvas.clientWidth, canvas.clientHeight);
         renderer.setClearColor(0x000000, 0);
         camera.position.z = 5;
 
-        // Lighting
+        // Lighting setup
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         scene.add(ambientLight);
 
         const spotLight = new THREE.SpotLight(0xa855f7, 1);
         spotLight.position.set(10, 10, 10);
         scene.add(spotLight);
+
+        // Add point light for better depth
+        const pointLight = new THREE.PointLight(0xec4899, 0.5);
+        pointLight.position.set(-10, -10, -10);
+        scene.add(pointLight);
 
         const pointLight = new THREE.PointLight(0xec4899, 0.5);
         pointLight.position.set(-10, -10, -10);
@@ -245,93 +275,167 @@
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
 
-        // Animation state
-        let isListening = false;
-        let isProcessing = false;
-        let isSpeaking = false;
+        // Create a simple avatar
+        function createAvatar() {
+            // Head
+            const headGeometry = new THREE.SphereGeometry(1, 32, 32);
+            const headMaterial = new THREE.MeshPhongMaterial({
+                color: 0x8b5cf6,
+                emissive: 0x4c1d95,
+                shininess: 100,
+                transparent: true,
+                opacity: 0.9
+            });
+
+            avatar = new THREE.Mesh(headGeometry, headMaterial);
+            scene.add(avatar);
+
+            // Eyes
+            const eyeGeometry = new THREE.SphereGeometry(0.15, 16, 16);
+            const eyeMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
+
+            const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            leftEye.position.set(-0.3, 0.2, 0.8);
+
+            const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            rightEye.position.set(0.3, 0.2, 0.8);
+
+            avatar.add(leftEye, rightEye);
+
+            // Hide loading message when done
+            if (loading) {
+                loading.style.display = 'none';
+            }
+
+            return { head: avatar, leftEye, rightEye };
+        }
 
         // Animation loop
+        let lastTime = 0;
+        const clock = new THREE.Clock();
+
         function animate() {
             requestAnimationFrame(animate);
 
-            // Rotate head gently
-            head.rotation.y += 0.005;
+            const time = clock.getElapsedTime();
+            const delta = clock.getDelta();
 
-            // Particle rotation
-            particlesMesh.rotation.y += 0.001;
-            particlesMesh.rotation.x += 0.0005;
+            if (avatar) {
+                // Gentle floating animation
+                avatar.rotation.y = time * 0.2;
+                avatar.position.y = Math.sin(time * 0.5) * 0.1;
 
-            // Eye blinking
-            const time = Date.now() * 0.001;
-            const blink = Math.sin(time * 0.5) > 0.95 ? 0.1 : 1;
-            leftEye.scale.y = blink;
-            rightEye.scale.y = blink;
-
-            // State-based animations
-            if (isListening) {
-                const scale = 1 + Math.sin(time * 4) * 0.05;
-                head.scale.set(scale, scale, scale);
-                headMaterial.color.setHex(0xa855f7);
-                eyeMaterial.emissiveIntensity = 1;
-            } else if (isProcessing) {
-                head.rotation.y += 0.02;
-                headMaterial.color.setHex(0x3b82f6);
-                eyeMaterial.emissiveIntensity = 0.8;
-            } else if (isSpeaking) {
-                const scale = 1 + Math.sin(time * 6) * 0.03;
-                head.scale.set(1, scale, 1);
-                headMaterial.color.setHex(0xec4899);
-                eyeMaterial.emissiveIntensity = 0.7;
-            } else {
-                head.scale.set(1, 1, 1);
-                headMaterial.color.setHex(0x8b5cf6);
-                eyeMaterial.emissiveIntensity = 0.5;
+                // State-based animations
+                if (isListening) {
+                    const scale = 1 + Math.sin(time * 3) * 0.05;
+                    avatar.scale.set(scale, scale, scale);
+                    avatar.material.color.lerp(new THREE.Color(0xa855f7), 0.1);
+                } else if (isThinking) {
+                    avatar.rotation.y += delta * 2;
+                    avatar.material.color.lerp(new THREE.Color(0x3b82f6), 0.1);
+                } else if (isSpeaking) {
+                    const scale = 1 + Math.sin(time * 5) * 0.03;
+                    avatar.scale.y = scale;
+                    avatar.material.color.lerp(new THREE.Color(0xec4899), 0.1);
+                } else {
+                    avatar.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1);
+                    avatar.material.color.lerp(new THREE.Color(0x8b5cf6), 0.1);
+                }
             }
 
             renderer.render(scene, camera);
         }
 
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
-            renderer.setSize(width, height);
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-        });
+        // Initialize the application
+        function init() {
+            try {
+                // Create and set up the avatar
+                createAvatar();
 
-        // Controls
-        const btnListen = document.getElementById('btnListen');
-        const btnThink = document.getElementById('btnThink');
-        const btnSpeak = document.getElementById('btnSpeak');
-        const btnReset = document.getElementById('btnReset');
+                // Set up window resize handler
+                function handleResize() {
+                    const width = canvas.clientWidth;
+                    const height = canvas.clientHeight;
+                    renderer.setSize(width, height);
+                    camera.aspect = width / height;
+                    camera.updateProjectionMatrix();
+                }
 
-        function resetStates() {
-            isListening = false;
-            isProcessing = false;
-            isSpeaking = false;
-            btnListen.classList.remove('active');
-            btnThink.classList.remove('active');
-            btnSpeak.classList.remove('active');
+                window.addEventListener('resize', handleResize);
+                handleResize(); // Initial resize
+
+                // Set up controls
+                const btnListen = document.getElementById('btnListen');
+                const btnThink = document.getElementById('btnThink');
+                const btnSpeak = document.getElementById('btnSpeak');
+                const btnReset = document.getElementById('btnReset');
+
+                function resetStates() {
+                    isListening = false;
+                    isThinking = false;
+                    isSpeaking = false;
+
+                    // Reset button states
+                    if (btnListen) btnListen.classList.remove('active');
+                    if (btnThink) btnThink.classList.remove('active');
+                    if (btnSpeak) btnSpeak.classList.remove('active');
+
+                    // Reset avatar state
+                    if (avatar) {
+                        avatar.rotation.set(0, 0, 0);
+                        avatar.scale.set(1, 1, 1);
+                    }
+                }
+
+                // Set up event listeners
+                if (btnListen) {
+                    btnListen.addEventListener('click', () => {
+                        resetStates();
+                        isListening = !isListening;
+                        if (isListening) btnListen.classList.add('active');
+                        console.log('Listening:', isListening);
+                    });
+                }
+
+                if (btnThink) {
+                    btnThink.addEventListener('click', () => {
+                        resetStates();
+                        isThinking = !isThinking;
+                        if (isThinking) btnThink.classList.add('active');
+                        console.log('Thinking:', isThinking);
+                    });
+                }
+
+                if (btnSpeak) {
+                    btnSpeak.addEventListener('click', () => {
+                        resetStates();
+                        isSpeaking = !isSpeaking;
+                        if (isSpeaking) btnSpeak.classList.add('active');
+                        console.log('Speaking:', isSpeaking);
+                    });
+                }
+
+                if (btnReset) {
+                    btnReset.addEventListener('click', resetStates);
+                }
+
+                // Start animation loop
+                animate();
+
+            } catch (error) {
+                console.error('Error initializing application:', error);
+                if (loading) {
+                    loading.textContent = 'Помилка ініціалізації: ' + error.message;
+                }
+            }
         }
 
-        btnListen.addEventListener('click', () => {
-            resetStates();
-            isListening = !isListening;
-            if (isListening) btnListen.classList.add('active');
-        });
-
-        btnThink.addEventListener('click', () => {
-            resetStates();
-            isProcessing = !isProcessing;
-            if (isProcessing) btnThink.classList.add('active');
-        });
-
-        btnSpeak.addEventListener('click', () => {
-            resetStates();
-            isSpeaking = !isSpeaking;
-            if (isSpeaking) btnSpeak.classList.add('active');
-        });
+        // Start the application when the page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
 
         btnReset.addEventListener('click', () => {
             resetStates();
@@ -347,4 +451,5 @@
         console.log('🇺🇦 Predator Analytics - Made in Ukraine');
     </script>
 </body>
+
 </html>

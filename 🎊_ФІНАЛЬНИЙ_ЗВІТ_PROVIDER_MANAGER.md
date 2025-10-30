@@ -145,7 +145,7 @@ const [showApiKey, setShowApiKey] = useState(false);
 <Stack direction="row" spacing={2}>
   <Chip label="All Categories" onClick={...} />
   {categories.map(cat => (
-    <Chip 
+    <Chip
       label={`${cat.icon} ${cat.name} (${cat.modelCount})`}
       onClick={...}
     />
@@ -321,7 +321,7 @@ const handleAddProvider = () => {
   const selectedProvider = AVAILABLE_PROVIDERS.find(
     p => p.id === newProviderForm.providerId
   );
-  
+
   if (!selectedProvider) return;
 
   const newAccount: ProviderAccount = {
@@ -338,7 +338,7 @@ const handleAddProvider = () => {
 
   setProviderAccounts([...providerAccounts, newAccount]);
   setAddProviderDialogOpen(false);
-  
+
   // Reset form
   setNewProviderForm({
     providerId: '',
@@ -356,8 +356,8 @@ const handleAddProvider = () => {
 const handleToggleAccount = (accountId: string) => {
   setProviderAccounts(accounts =>
     accounts.map(acc =>
-      acc.id === accountId 
-        ? { ...acc, isActive: !acc.isActive } 
+      acc.id === accountId
+        ? { ...acc, isActive: !acc.isActive }
         : acc
     )
   );
@@ -368,7 +368,7 @@ const handleToggleAccount = (accountId: string) => {
 
 ```typescript
 const handleDeleteAccount = (accountId: string) => {
-  setProviderAccounts(accounts => 
+  setProviderAccounts(accounts =>
     accounts.filter(acc => acc.id !== accountId)
   );
 };
@@ -383,21 +383,21 @@ const providerStats = useMemo(() => {
     active: number;
     requests: number;
   }>();
-  
+
   providerAccounts.forEach(account => {
     const current = stats.get(account.providerName) || {
       accounts: 0,
       active: 0,
       requests: 0
     };
-    
+
     current.accounts++;
     if (account.isActive) current.active++;
     current.requests += account.requestCount || 0;
-    
+
     stats.set(account.providerName, current);
   });
-  
+
   return stats;
 }, [providerAccounts]);
 ```
@@ -470,8 +470,8 @@ nexusColors = {
 
 ```css
 background: linear-gradient(
-  135deg, 
-  rgba(0,242,255,0.05) 0%, 
+  135deg,
+  rgba(0,242,255,0.05) 0%,
   rgba(138,43,226,0.05) 100%
 )
 ```

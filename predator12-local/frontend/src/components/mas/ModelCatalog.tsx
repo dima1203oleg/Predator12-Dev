@@ -77,14 +77,14 @@ const ModelCatalog: React.FC<ModelCatalogProps> = ({
   const getCategoryStats = (category: string) => {
     const models = getModelsByCategory(category);
     const avgPerformance = models.reduce((sum, m) => sum + m.performance, 0) / models.length;
-    const topModel = models.reduce((best, current) => 
+    const topModel = models.reduce((best, current) =>
       current.performance > best.performance ? current : best
     );
     return { count: models.length, avgPerformance, topModel };
   };
 
   const handleCategoryToggle = (category: string) => {
-    setExpandedCategories(prev => 
+    setExpandedCategories(prev =>
       prev.includes(category)
         ? prev.filter(c => c !== category)
         : [...prev, category]
@@ -102,8 +102,8 @@ const ModelCatalog: React.FC<ModelCatalogProps> = ({
     return nexusColors.crimson;
   };
 
-  const filteredCategories = filterCategory 
-    ? [filterCategory] 
+  const filteredCategories = filterCategory
+    ? [filterCategory]
     : Object.keys(FREE_MODELS_CATALOG);
 
   return (
@@ -120,7 +120,7 @@ const ModelCatalog: React.FC<ModelCatalogProps> = ({
         }}>
           Каталог ШІ Моделей
         </Typography>
-        
+
         <Stack direction="row" spacing={2} alignItems="center">
           <Chip
             icon={<StarIcon />}
@@ -148,7 +148,7 @@ const ModelCatalog: React.FC<ModelCatalogProps> = ({
           const stats = getCategoryStats(category);
           const IconComponent = categoryIcons[category as keyof typeof categoryIcons];
           const isExpanded = expandedCategories.includes(category);
-          
+
           return (
             <Grid item xs={12} key={category}>
               <motion.div
@@ -172,16 +172,16 @@ const ModelCatalog: React.FC<ModelCatalogProps> = ({
                   <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: nexusColors.frost }} />}>
                     <Stack direction="row" alignItems="center" spacing={2} sx={{ width: '100%', pr: 2 }}>
                       <Badge badgeContent={stats.count} color="primary">
-                        <IconComponent 
-                          sx={{ 
+                        <IconComponent
+                          sx={{
                             color: categoryColors[category as keyof typeof categoryColors],
                             fontSize: '2rem'
-                          }} 
+                          }}
                         />
                       </Badge>
-                      
+
                       <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ 
+                        <Typography variant="h6" sx={{
                           color: nexusColors.frost,
                           fontFamily: 'Orbitron',
                           textTransform: 'capitalize'
@@ -190,10 +190,10 @@ const ModelCatalog: React.FC<ModelCatalogProps> = ({
                            category === 'code' ? 'Програмування' :
                            category === 'quick' ? 'Швидкі відповіді' :
                            category === 'embed' ? 'Вбудовування' :
-                           category === 'vision' ? 'Комп\'ютерний зір' : 
+                           category === 'vision' ? 'Комп\'ютерний зір' :
                            'Генерація'}
                         </Typography>
-                        
+
                         <Stack direction="row" spacing={2} alignItems="center">
                           <Typography variant="caption" sx={{ color: nexusColors.nebula }}>
                             Середня продуктивність: {stats.avgPerformance.toFixed(1)}%
@@ -211,7 +211,7 @@ const ModelCatalog: React.FC<ModelCatalogProps> = ({
                       </Box>
                     </Stack>
                   </AccordionSummary>
-                  
+
                   <AccordionDetails>
                     <Grid container spacing={1}>
                       {getModelsByCategory(category)
@@ -248,7 +248,7 @@ const ModelCatalog: React.FC<ModelCatalogProps> = ({
                                   }}>
                                     {formatModelName(model.id)}
                                   </Typography>
-                                  
+
                                   {index === 0 && (
                                     <Chip
                                       size="small"
@@ -263,7 +263,7 @@ const ModelCatalog: React.FC<ModelCatalogProps> = ({
                                     />
                                   )}
                                 </Stack>
-                                
+
                                 <Typography variant="caption" sx={{
                                   color: nexusColors.shadow,
                                   display: 'block',
@@ -272,14 +272,14 @@ const ModelCatalog: React.FC<ModelCatalogProps> = ({
                                 }}>
                                   {model.id}
                                 </Typography>
-                                
+
                                 {showPerformance && (
                                   <Box>
                                     <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.5 }}>
                                       <Typography variant="caption" sx={{ color: nexusColors.nebula }}>
                                         Продуктивність
                                       </Typography>
-                                      <Typography variant="caption" sx={{ 
+                                      <Typography variant="caption" sx={{
                                         color: getPerformanceColor(model.performance),
                                         fontWeight: 'bold'
                                       }}>

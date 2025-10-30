@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Card, CardContent, Chip, LinearProgress, IconButton, Tooltip, Button } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  CloudUpload, 
+import {
+  CloudUpload,
   DataObject,
   Analytics,
   Transform,
@@ -175,12 +175,12 @@ const DataOps: React.FC = () => {
           metrics={[]}
           showPredictions={true}
         />
-        
+
         <Box sx={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
           <Tooltip title="Повернутися до DataOps">
-            <IconButton 
+            <IconButton
               onClick={() => setViewAnalytics(false)}
-              sx={{ 
+              sx={{
                 background: `${nexusColors.obsidian}90`,
                 color: nexusColors.frost,
                 backdropFilter: 'blur(10px)',
@@ -205,9 +205,9 @@ const DataOps: React.FC = () => {
       >
         <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography 
-              variant="h3" 
-              sx={{ 
+            <Typography
+              variant="h3"
+              sx={{
                 background: `linear-gradient(45deg, ${nexusColors.quantum}, ${nexusColors.sapphire})`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -226,7 +226,7 @@ const DataOps: React.FC = () => {
               }}
             />
           </Box>
-          
+
           {isFeatureEnabled('threeDee') && (
             <Tooltip title="3D Аналітика">
               <IconButton
@@ -296,9 +296,9 @@ const DataOps: React.FC = () => {
                     {/* Pipeline Header */}
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box sx={{ 
-                          p: 1.5, 
-                          borderRadius: 2, 
+                        <Box sx={{
+                          p: 1.5,
+                          borderRadius: 2,
                           background: `${getStatusColor(pipeline.status)}20`,
                           border: `1px solid ${getStatusColor(pipeline.status)}40`
                         }}>
@@ -313,7 +313,7 @@ const DataOps: React.FC = () => {
                           </Typography>
                         </Box>
                       </Box>
-                      
+
                       <Chip
                         label={pipeline.status.toUpperCase()}
                         size="small"
@@ -406,7 +406,7 @@ const DataOps: React.FC = () => {
                       </Tooltip>
                     </Box>
                   </CardContent>
-                  
+
                   {/* Animated progress line */}
                   {pipeline.status === 'running' && (
                     <Box
@@ -450,7 +450,7 @@ const DataOps: React.FC = () => {
           >
             Upload Dataset
           </Button>
-          
+
           <Button
             startIcon={<Transform />}
             variant="outlined"
@@ -466,7 +466,7 @@ const DataOps: React.FC = () => {
           >
             Create Pipeline
           </Button>
-          
+
           <Button
             startIcon={<DataObject />}
             variant="outlined"

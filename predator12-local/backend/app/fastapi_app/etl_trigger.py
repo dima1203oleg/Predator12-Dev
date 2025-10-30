@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Dict
 
-from event_logger import EventLogger
+from .event_logger import EventLogger
 
 
 class EtlTrigger:

@@ -58,7 +58,7 @@
 ```yaml
 # 24 агента з призначеними моделями
 ChiefOrchestrator: "gpt-5"
-QueryPlanner: "microsoft/phi-4-reasoning" 
+QueryPlanner: "microsoft/phi-4-reasoning"
 ModelRouter: "mistral/ministral-3b"
 Arbiter: "microsoft/phi-4-reasoning"
 # ... та ще 20 агентів

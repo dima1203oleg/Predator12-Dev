@@ -71,7 +71,7 @@ DOCUMENTATION:
 
 3. ВИКОРИСТАННЯ:
    import { voiceAPIUltimate } from '@/services/voiceAPIUltimate';
-   
+
    await voiceAPIUltimate.textToSpeech({
      text: 'Привіт!',
      language: 'uk',
@@ -102,7 +102,7 @@ BROWSER (Рівень 3):
 
 📖 Повний гайд:
    🎤_ULTIMATE_VOICE_API_V53.md
-   
+
    • Архітектура системи
    • Встановлення та налаштування
    • API endpoints
@@ -112,7 +112,7 @@ BROWSER (Рівень 3):
 
 📊 Фінальний звіт:
    🎉_ФІНАЛЬНИЙ_ЗВІТ_ULTIMATE_VOICE_V53.md
-   
+
    • Створені файли
    • Статистика
    • Порівняння версій
@@ -120,7 +120,7 @@ BROWSER (Рівень 3):
 
 ⚡ Quickstart:
    ⚡_ULTIMATE_VOICE_QUICKSTART.txt
-   
+
    • 3 команди для запуску
    • Швидкий довідник
    • API endpoints
@@ -128,7 +128,7 @@ BROWSER (Рівень 3):
 
 📋 Index:
    📋_ULTIMATE_VOICE_INDEX.txt
-   
+
    • Всі файли
    • Структура проекту
    • Швидкі посилання

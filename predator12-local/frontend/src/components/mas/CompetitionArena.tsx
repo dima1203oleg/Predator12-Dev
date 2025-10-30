@@ -55,7 +55,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
   // Timer for competition
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (isRunning && competitionTimer < 100) {
       interval = setInterval(() => {
         setCompetitionTimer(prev => {
@@ -67,7 +67,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
         });
       }, 100);
     }
-    
+
     return () => {
       if (interval) clearInterval(interval);
     };
@@ -87,7 +87,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
         });
         setLiveResults(newResults);
       }, 200);
-      
+
       return () => clearInterval(interval);
     }
   }, [isRunning, competitionTimer, selectedScenario]);
@@ -148,7 +148,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
         }}>
           🏆 Арена змагань ШІ
         </Typography>
-        
+
         <Stack direction="row" spacing={1}>
           <Button
             variant={isRunning ? "outlined" : "contained"}
@@ -166,7 +166,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
           >
             {isRunning ? 'Призупинити' : 'Запустити'}
           </Button>
-          
+
           <Button
             variant="outlined"
             startIcon={<RefreshIcon />}
@@ -194,14 +194,14 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
             borderRadius: 2
           }}>
             <CardContent>
-              <Typography variant="h6" sx={{ 
-                color: nexusColors.frost, 
+              <Typography variant="h6" sx={{
+                color: nexusColors.frost,
                 mb: 2,
                 fontFamily: 'Orbitron'
               }}>
                 Сценарії змагань
               </Typography>
-              
+
               <Stack spacing={1}>
                 {COMPETITION_SCENARIOS.map((s, index) => (
                   <motion.div key={index} whileHover={{ scale: 1.02 }}>
@@ -229,7 +229,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
                             <Typography variant="subtitle2" sx={{ color: nexusColors.frost }}>
                               {s.title}
                             </Typography>
-                            <Typography variant="caption" sx={{ 
+                            <Typography variant="caption" sx={{
                               color: nexusColors.nebula,
                               display: 'block'
                             }}>
@@ -256,13 +256,13 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
           }}>
             <CardContent>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-                <Typography variant="h6" sx={{ 
+                <Typography variant="h6" sx={{
                   color: nexusColors.frost,
                   fontFamily: 'Orbitron'
                 }}>
                   {scenario.title}
                 </Typography>
-                
+
                 {(isRunning || competitionTimer > 0) && (
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <TimerIcon sx={{ color: nexusColors.nebula, fontSize: '1rem' }} />
@@ -272,7 +272,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
                   </Stack>
                 )}
               </Stack>
-              
+
               {/* Progress bar */}
               <Box sx={{ mb: 2 }}>
                 <LinearProgress
@@ -286,7 +286,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
                     }
                   }}
                 />
-                <Typography variant="caption" sx={{ 
+                <Typography variant="caption" sx={{
                   color: nexusColors.nebula,
                   mt: 0.5,
                   display: 'block'
@@ -294,7 +294,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
                   Прогрес: {competitionTimer.toFixed(0)}%
                 </Typography>
               </Box>
-              
+
               {/* Tasks */}
               <Typography variant="body2" sx={{ color: nexusColors.nebula, mb: 1 }}>
                 Завдання: {scenario.tasks.join(', ')}
@@ -309,14 +309,14 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
             borderRadius: 2
           }}>
             <CardContent>
-              <Typography variant="h6" sx={{ 
-                color: nexusColors.frost, 
+              <Typography variant="h6" sx={{
+                color: nexusColors.frost,
                 mb: 2,
                 fontFamily: 'Orbitron'
               }}>
                 {Object.keys(displayResults).length > 0 ? 'Результати змагання' : 'Учасники'}
               </Typography>
-              
+
               <Stack spacing={2}>
                 {Object.keys(displayResults).length > 0 ? (
                   // Show results
@@ -331,7 +331,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
                         <Typography variant="h6" sx={{ minWidth: 30 }}>
                           {getMedalEmoji(index)}
                         </Typography>
-                        
+
                         <Avatar sx={{
                           backgroundColor: `${nexusColors.quantum}20`,
                           border: `1px solid ${nexusColors.quantum}`
@@ -340,9 +340,9 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
                             #{index + 1}
                           </Typography>
                         </Avatar>
-                        
+
                         <Box sx={{ flex: 1 }}>
-                          <Typography variant="subtitle1" sx={{ 
+                          <Typography variant="subtitle1" sx={{
                             color: nexusColors.frost,
                             fontWeight: 'bold'
                           }}>
@@ -352,10 +352,10 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
                             {modelId}
                           </Typography>
                         </Box>
-                        
+
                         <Box sx={{ minWidth: 100 }}>
                           <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography variant="h6" sx={{ 
+                            <Typography variant="h6" sx={{
                               color: index === 0 ? nexusColors.emerald : nexusColors.frost
                             }}>
                               {score.toFixed(1)}%
@@ -392,7 +392,7 @@ const CompetitionArena: React.FC<CompetitionArenaProps> = ({
                           {index + 1}
                         </Typography>
                       </Avatar>
-                      
+
                       <Box>
                         <Typography variant="subtitle1" sx={{ color: nexusColors.frost }}>
                           {formatModelName(modelId)}

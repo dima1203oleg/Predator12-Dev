@@ -14,7 +14,7 @@ check_item() {
     local item="$1"
     local path="$2"
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
-    
+
     if [ -f "$path" ] || [ -d "$path" ]; then
         echo "✅ $item"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
@@ -166,7 +166,7 @@ if [ $PERCENTAGE -ge 90 ] && [ -f "predator12-local/nexus-ultra-demo.html" ]; th
     echo ""
     echo "⌨️  ГАРЯЧІ КЛАВІШІ:"
     echo "   Alt+H = Довідка"
-    echo "   Alt+D = Dashboard" 
+    echo "   Alt+D = Dashboard"
     echo "   Ctrl+G = Ігровий режим"
 else
     echo "⚠️  Не всі компоненти готові"

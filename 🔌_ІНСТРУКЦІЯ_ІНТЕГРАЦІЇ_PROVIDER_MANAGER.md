@@ -272,16 +272,16 @@ export const PROVIDER_CONFIG = {
   apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000',
   providersEndpoint: '/api/providers',
   modelsEndpoint: '/api/models',
-  
+
   // Features
   enableProviderManager: process.env.REACT_APP_ENABLE_PROVIDER_MANAGER === 'true',
   enableMultiAccount: true,
   enableCustomEndpoints: true,
-  
+
   // Limits
   maxAccountsPerProvider: 10,
   maxModelsPerAccount: 50,
-  
+
   // UI
   showApiKeys: false,  // Default hide
   animationDuration: 200,  // ms
@@ -377,7 +377,7 @@ const ModelProviderManager: React.FC = () => {
         apiKey: newProviderForm.apiKey,
         // ... інші поля
       });
-      
+
       setProviderAccounts([...providerAccounts, newAccount]);
       setAddProviderDialogOpen(false);
     } catch (error) {
@@ -428,19 +428,19 @@ describe('ModelProviderManager', () => {
 
   it('should switch between models and agents', () => {
     render(<ModelProviderManager />);
-    
+
     const agentsTab = screen.getByText('👥 Agents');
     fireEvent.click(agentsTab);
-    
+
     expect(screen.getByText('Core Agents')).toBeInTheDocument();
   });
 
   it('should open add provider dialog', () => {
     render(<ModelProviderManager />);
-    
+
     const addButton = screen.getByText('Add Provider Account');
     fireEvent.click(addButton);
-    
+
     expect(screen.getByText('➕ Add New Provider Account')).toBeInTheDocument();
   });
 });

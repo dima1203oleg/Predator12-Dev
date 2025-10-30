@@ -43,7 +43,7 @@ cp settings-new.json settings.json
 
 **Проблема:**
 ```
-This configuration will be deprecated soon. 
+This configuration will be deprecated soon.
 Please replace `python` with `debugpy` to use the new Python Debugger extension.
 ```
 

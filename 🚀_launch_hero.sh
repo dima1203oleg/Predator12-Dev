@@ -40,17 +40,17 @@ start_frontend() {
 cleanup() {
     echo ""
     echo -e "${YELLOW}🛑 Зупинка сервісів...${NC}"
-    
+
     if [ ! -z "$BACKEND_PID" ]; then
         kill $BACKEND_PID 2>/dev/null
         echo -e "${GREEN}✅ Бекенд зупинено${NC}"
     fi
-    
+
     if [ ! -z "$FRONTEND_PID" ]; then
         kill $FRONTEND_PID 2>/dev/null
         echo -e "${GREEN}✅ Фронтенд зупинено${NC}"
     fi
-    
+
     echo ""
     echo -e "${GREEN}🎉 Дякую за використання Predator Analytics!${NC}"
     exit 0

@@ -71,7 +71,7 @@ npm start
 
 ### Проблема: "Доступ до мікрофона заборонено"
 **Рішення:**
-1. **Chrome/Edge**: 
+1. **Chrome/Edge**:
    - Клікніть на іконку замка у адресному рядку
    - Дозвольте доступ до мікрофона
    - Перезавантажте сторінку
@@ -217,7 +217,7 @@ if ('webkitSpeechRecognition' in window) {
 
 ### Список доступних голосів:
 ```javascript
-speechSynthesis.getVoices().forEach(voice => 
+speechSynthesis.getVoices().forEach(voice =>
   console.log(voice.name, voice.lang)
 );
 ```

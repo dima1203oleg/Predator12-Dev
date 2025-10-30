@@ -6,7 +6,7 @@
     <title>PREDATOR ANALYTICS - AI Avatar</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-        
+
         * {
             margin: 0;
             padding: 0;
@@ -27,7 +27,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 50px 50px;
@@ -316,15 +316,15 @@
         // Three.js Setup
         const canvas = document.getElementById('canvas3d');
         const loading = document.getElementById('loading');
-        
+
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ 
-            canvas, 
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
             antialias: true,
-            alpha: true 
+            alpha: true
         });
-        
+
         renderer.setSize(canvas.clientWidth, canvas.clientHeight);
         renderer.setClearColor(0x000000, 0);
         camera.position.z = 3;

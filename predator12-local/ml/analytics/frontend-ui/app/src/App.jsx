@@ -18,10 +18,10 @@ const ToastDemoPage = lazy(() => import('./pages/ToastDemoPage'));
 const App = () => {
   return (
     <WebSocketProvider>
-      <ToastProvider 
-        position="top-right" 
-        autoCloseDelay={5000} 
-        pauseOnHover={true} 
+      <ToastProvider
+        position="top-right"
+        autoCloseDelay={5000}
+        pauseOnHover={true}
         maxToasts={3}
         animationStyle="slide-right"
         theme="cyberpunk"
@@ -131,4 +131,4 @@ const WebSocketMonitorPage = () => {
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 
-export default App; 
+export default App;

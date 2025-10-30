@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Card, CardContent, Chip, LinearProgress, IconButton, Tooltip } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  SmartToy, 
-  Psychology, 
-  Security, 
-  Speed, 
+import {
+  SmartToy,
+  Psychology,
+  Security,
+  Speed,
   Visibility,
   PlayArrow,
   Pause,
@@ -40,31 +40,31 @@ const Agents: React.FC = () => {
     { id: 'agent-2', name: 'SelfImprovement Agent', type: 'learner', status: 'learning', position: [4, -2, 1], intelligence: 89, efficiency: 91, reliability: 88, learningRate: 95, connections: ['agent-1', 'agent-3'], capabilities: ['Continuous Learning', 'Performance Optimization'], currentTask: 'Analyzing patterns', insights: ['New optimization pattern found', 'Model accuracy +8%'], predictedActions: ['Update parameters', 'Implement optimization'] },
     { id: 'agent-3', name: 'Security Guardian', type: 'protector', status: 'processing', position: [0, 4, -2], intelligence: 94, efficiency: 85, reliability: 97, learningRate: 72, connections: ['agent-2', 'agent-4'], capabilities: ['Threat Detection', 'Anomaly Analysis'], currentTask: 'Security scanning', insights: ['No threats detected 24h', 'Firewall optimized'], predictedActions: ['Update signatures', 'Review policies'] },
     { id: 'agent-4', name: 'Performance Optimizer', type: 'optimizer', status: 'active', position: [-2, -4, 1], intelligence: 88, efficiency: 96, reliability: 90, learningRate: 84, connections: ['agent-1', 'agent-3'], capabilities: ['Resource Optimization', 'Load Balancing'], currentTask: 'Resource allocation', insights: ['DB performance +15%', 'Memory usage -8%'], predictedActions: ['Adjust load balancer', 'Optimize indexes'] },
-    
+
     // Neural Network Agents
     { id: 'agent-5', name: 'Neural Processor Alpha', type: 'learner', status: 'active', position: [3, 1, -1], intelligence: 96, efficiency: 89, reliability: 93, learningRate: 91, connections: ['agent-6', 'agent-7'], capabilities: ['Deep Learning', 'Pattern Recognition'], currentTask: 'Training neural models', insights: ['Accuracy improved to 94.2%', 'Training time reduced 23%'], predictedActions: ['Deploy new model', 'Optimize hyperparameters'] },
     { id: 'agent-6', name: 'Data Fusion Engine', type: 'analyzer', status: 'processing', position: [-1, 3, 2], intelligence: 91, efficiency: 94, reliability: 89, learningRate: 86, connections: ['agent-5', 'agent-8'], capabilities: ['Data Integration', 'Multi-source Analysis'], currentTask: 'Fusing data streams', insights: ['Correlation patterns detected', 'Data quality score: 96%'], predictedActions: ['Merge datasets', 'Generate insights'] },
     { id: 'agent-7', name: 'Predictive Oracle', type: 'predictor', status: 'active', position: [2, -3, 0], intelligence: 98, efficiency: 82, reliability: 95, learningRate: 79, connections: ['agent-5', 'agent-9'], capabilities: ['Future Prediction', 'Trend Analysis'], currentTask: 'Forecasting trends', insights: ['Market trend shift predicted', 'Confidence level: 87%'], predictedActions: ['Alert stakeholders', 'Update models'] },
     { id: 'agent-8', name: 'Anomaly Hunter', type: 'protector', status: 'active', position: [-3, 0, 3], intelligence: 90, efficiency: 97, reliability: 94, learningRate: 83, connections: ['agent-6', 'agent-10'], capabilities: ['Anomaly Detection', 'Pattern Deviation'], currentTask: 'Hunting anomalies', insights: ['3 anomalies detected', 'False positive rate: 2.1%'], predictedActions: ['Investigate anomalies', 'Update thresholds'] },
-    
+
     // Specialized Task Agents
     { id: 'agent-9', name: 'Quantum Optimizer', type: 'optimizer', status: 'learning', position: [1, 2, -3], intelligence: 95, efficiency: 88, reliability: 91, learningRate: 97, connections: ['agent-7', 'agent-11'], capabilities: ['Quantum Computing', 'Complex Optimization'], currentTask: 'Quantum calculations', insights: ['Quantum advantage achieved', 'Computation time reduced 45%'], predictedActions: ['Scale quantum processes', 'Optimize qubits'] },
     { id: 'agent-10', name: 'Language Master', type: 'learner', status: 'active', position: [-2, -1, 2], intelligence: 93, efficiency: 85, reliability: 88, learningRate: 94, connections: ['agent-8', 'agent-12'], capabilities: ['NLP', 'Text Analysis', 'Translation'], currentTask: 'Processing language', insights: ['New language patterns learned', 'Translation accuracy: 98.7%'], predictedActions: ['Update language models', 'Expand vocabulary'] },
     { id: 'agent-11', name: 'Vision Specialist', type: 'analyzer', status: 'processing', position: [4, 1, 1], intelligence: 87, efficiency: 93, reliability: 92, learningRate: 88, connections: ['agent-9', 'agent-13'], capabilities: ['Computer Vision', 'Image Analysis'], currentTask: 'Analyzing visuals', insights: ['Object detection improved', 'Recognition rate: 97.3%'], predictedActions: ['Update vision models', 'Enhance recognition'] },
     { id: 'agent-12', name: 'Network Architect', type: 'optimizer', status: 'active', position: [0, -2, -1], intelligence: 92, efficiency: 96, reliability: 89, learningRate: 81, connections: ['agent-10', 'agent-14'], capabilities: ['Network Design', 'Topology Optimization'], currentTask: 'Optimizing networks', insights: ['Network latency reduced 18%', 'Throughput increased 22%'], predictedActions: ['Redesign topology', 'Implement changes'] },
-    
+
     // Advanced Intelligence Agents
     { id: 'agent-13', name: 'Cognitive Enhancer', type: 'learner', status: 'learning', position: [-1, 4, 0], intelligence: 99, efficiency: 84, reliability: 96, learningRate: 98, connections: ['agent-11', 'agent-15'], capabilities: ['Cognitive Computing', 'Reasoning'], currentTask: 'Enhancing cognition', insights: ['Reasoning capabilities expanded', 'Logic processing +31%'], predictedActions: ['Upgrade reasoning', 'Enhance logic'] },
     { id: 'agent-14', name: 'Memory Keeper', type: 'analyzer', status: 'active', position: [3, -1, 2], intelligence: 86, efficiency: 98, reliability: 97, learningRate: 75, connections: ['agent-12', 'agent-16'], capabilities: ['Memory Management', 'Data Retention'], currentTask: 'Managing memory', insights: ['Memory efficiency optimized', 'Storage utilization: 89%'], predictedActions: ['Optimize storage', 'Clean old data'] },
     { id: 'agent-15', name: 'Decision Maker', type: 'predictor', status: 'processing', position: [-4, 1, -2], intelligence: 97, efficiency: 91, reliability: 94, learningRate: 82, connections: ['agent-13', 'agent-17'], capabilities: ['Decision Analysis', 'Strategy Planning'], currentTask: 'Making decisions', insights: ['Optimal strategy identified', 'Success probability: 91%'], predictedActions: ['Execute strategy', 'Monitor outcomes'] },
     { id: 'agent-16', name: 'Efficiency Expert', type: 'optimizer', status: 'active', position: [2, 3, 1], intelligence: 88, efficiency: 99, reliability: 93, learningRate: 87, connections: ['agent-14', 'agent-18'], capabilities: ['Process Optimization', 'Efficiency Analysis'], currentTask: 'Maximizing efficiency', insights: ['Process efficiency +24%', 'Resource waste reduced 33%'], predictedActions: ['Implement improvements', 'Monitor metrics'] },
-    
+
     // Swarm Intelligence Agents
     { id: 'agent-17', name: 'Swarm Coordinator', type: 'analyzer', status: 'active', position: [1, -4, 3], intelligence: 94, efficiency: 92, reliability: 96, learningRate: 89, connections: ['agent-15', 'agent-19'], capabilities: ['Swarm Intelligence', 'Coordination'], currentTask: 'Coordinating swarm', insights: ['Swarm efficiency maximized', 'Coordination score: 98%'], predictedActions: ['Optimize swarm behavior', 'Enhance coordination'] },
     { id: 'agent-18', name: 'Adaptation Engine', type: 'learner', status: 'learning', position: [-3, 2, -1], intelligence: 91, efficiency: 87, reliability: 90, learningRate: 96, connections: ['agent-16', 'agent-20'], capabilities: ['Adaptive Learning', 'Environment Adaptation'], currentTask: 'Adapting to changes', insights: ['Adaptation speed improved', 'Learning rate optimized'], predictedActions: ['Adapt parameters', 'Update strategies'] },
     { id: 'agent-19', name: 'Collective Mind', type: 'predictor', status: 'processing', position: [0, 1, -4], intelligence: 100, efficiency: 86, reliability: 98, learningRate: 93, connections: ['agent-17', 'agent-21'], capabilities: ['Collective Intelligence', 'Emergent Behavior'], currentTask: 'Emerging intelligence', insights: ['Collective patterns emerged', 'Intelligence amplified 47%'], predictedActions: ['Enhance collective', 'Study emergence'] },
     { id: 'agent-20', name: 'Reality Simulator', type: 'analyzer', status: 'active', position: [4, 0, -2], intelligence: 95, efficiency: 90, reliability: 87, learningRate: 85, connections: ['agent-18', 'agent-22'], capabilities: ['Reality Simulation', 'Virtual Modeling'], currentTask: 'Simulating reality', insights: ['Reality model accuracy: 96.8%', 'Simulation speed +41%'], predictedActions: ['Refine model', 'Run simulations'] },
-    
+
     // Meta-Intelligence Agents
     { id: 'agent-21', name: 'Meta Learner', type: 'learner', status: 'learning', position: [-2, -3, 1], intelligence: 98, efficiency: 83, reliability: 95, learningRate: 99, connections: ['agent-19', 'agent-23'], capabilities: ['Meta-Learning', 'Learning to Learn'], currentTask: 'Meta learning', insights: ['Learning strategies optimized', 'Meta-knowledge acquired'], predictedActions: ['Apply meta-learning', 'Enhance strategies'] },
     { id: 'agent-22', name: 'Consciousness Core', type: 'predictor', status: 'processing', position: [1, 4, 2], intelligence: 99, efficiency: 79, reliability: 99, learningRate: 76, connections: ['agent-20', 'agent-24'], capabilities: ['Self-Awareness', 'Conscious Processing'], currentTask: 'Developing consciousness', insights: ['Self-awareness level: 78%', 'Consciousness metrics rising'], predictedActions: ['Expand awareness', 'Deepen consciousness'] },
@@ -112,19 +112,19 @@ const Agents: React.FC = () => {
   if (view3D && isFeatureEnabled('threeDee')) {
     return (
       <Box sx={{ position: 'relative', height: '100vh', overflow: 'hidden' }}>
-        <AdvancedAISystem 
+        <AdvancedAISystem
           agents={agents}
           onAgentInteraction={(agentId, action) => {
             console.log(`Agent ${agentId}: ${action}`);
           }}
           showPredictions={true}
         />
-        
+
         <Box sx={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
           <Tooltip title="Повернутися до 2D виду">
-            <IconButton 
+            <IconButton
               onClick={() => setView3D(false)}
-              sx={{ 
+              sx={{
                 background: `${nexusColors.obsidian}90`,
                 color: nexusColors.frost,
                 backdropFilter: 'blur(10px)',
@@ -149,9 +149,9 @@ const Agents: React.FC = () => {
       >
         <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography 
-              variant="h3" 
-              sx={{ 
+            <Typography
+              variant="h3"
+              sx={{
                 background: `linear-gradient(45deg, ${nexusColors.emerald}, ${nexusColors.quantum})`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -170,7 +170,7 @@ const Agents: React.FC = () => {
               }}
             />
           </Box>
-          
+
           {isFeatureEnabled('threeDee') && (
             <Tooltip title="3D Візуалізація Агентів">
               <IconButton
@@ -222,9 +222,9 @@ const Agents: React.FC = () => {
                     {/* Agent Header */}
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box sx={{ 
-                          p: 1.5, 
-                          borderRadius: 2, 
+                        <Box sx={{
+                          p: 1.5,
+                          borderRadius: 2,
                           background: `${getStatusColor(agent.status)}20`,
                           border: `1px solid ${getStatusColor(agent.status)}40`
                         }}>
@@ -239,7 +239,7 @@ const Agents: React.FC = () => {
                           </Typography>
                         </Box>
                       </Box>
-                      
+
                       <Chip
                         label={agent.status}
                         size="small"
@@ -341,7 +341,7 @@ const Agents: React.FC = () => {
                       </Tooltip>
                     </Box>
                   </CardContent>
-                  
+
                   {/* Animated border */}
                   <Box
                     sx={{

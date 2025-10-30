@@ -42,7 +42,7 @@ export function VoiceControls({ isListening, onToggleListening, transcript }: Vo
           ) : (
             <Mic className="w-8 h-8 text-white" />
           )}
-          
+
           {/* Pulse animation when listening */}
           {isListening && (
             <>

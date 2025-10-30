@@ -120,7 +120,7 @@ const AgentStatusCard: React.FC<AgentStatusCardProps> = ({
   const totalAgents = agents.length;
   const healthPercentage = totalAgents > 0 ? (activeAgents / totalAgents) * 100 : 0;
 
-  const overallStatus = 
+  const overallStatus =
     healthPercentage === 100 ? 'optimal' :
     healthPercentage >= 70 ? 'degraded' :
     healthPercentage >= 30 ? 'critical' : 'down';

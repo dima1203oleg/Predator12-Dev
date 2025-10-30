@@ -116,7 +116,7 @@ const SelfImprovementDashboard: React.FC = () => {
       // Оновлення агентів
       setAgents(prev => prev.map(agent => {
         const shouldImprove = Math.random() < 0.3; // 30% шансу на покращення
-        
+
         if (shouldImprove) {
           const improvements = [
             'Оптимізація алгоритму розподілу моделей',
@@ -129,7 +129,7 @@ const SelfImprovementDashboard: React.FC = () => {
             'Кешування результатів запитів',
             'Паралелізація обробки в агентах'
           ];
-          
+
           return {
             ...agent,
             status: 'improving' as const,
@@ -138,7 +138,7 @@ const SelfImprovementDashboard: React.FC = () => {
             lastAction: improvements[Math.floor(Math.random() * improvements.length)]
           };
         }
-        
+
         return {
           ...agent,
           status: Math.random() < 0.8 ? 'active' as const : 'idle' as const
@@ -232,13 +232,13 @@ const SelfImprovementDashboard: React.FC = () => {
             </Typography>
           </Box>
         </Box>
-        
+
         <Box sx={{ display: 'flex', gap: 1 }}>
           <Tooltip title={isRunning ? 'Призупинити' : 'Запустити'}>
             <IconButton
               onClick={() => setIsRunning(!isRunning)}
-              sx={{ 
-                bgcolor: 'rgba(255,255,255,0.2)', 
+              sx={{
+                bgcolor: 'rgba(255,255,255,0.2)',
                 color: 'white',
                 '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' }
               }}
@@ -248,8 +248,8 @@ const SelfImprovementDashboard: React.FC = () => {
           </Tooltip>
           <Tooltip title="Оновити">
             <IconButton
-              sx={{ 
-                bgcolor: 'rgba(255,255,255,0.2)', 
+              sx={{
+                bgcolor: 'rgba(255,255,255,0.2)',
                 color: 'white',
                 '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' }
               }}
@@ -268,13 +268,13 @@ const SelfImprovementDashboard: React.FC = () => {
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <BrainIcon color="primary" />
                 Агенти Самовдосконалення
-                <Chip 
+                <Chip
                   label={`${agents.filter(a => a.status === 'active' || a.status === 'improving').length} активні`}
-                  color="success" 
-                  size="small" 
+                  color="success"
+                  size="small"
                 />
               </Typography>
-              
+
               <Grid container spacing={2}>
                 {agents.map((agent) => (
                   <Grid item xs={12} sm={6} key={agent.id}>
@@ -283,10 +283,10 @@ const SelfImprovementDashboard: React.FC = () => {
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Paper 
-                        elevation={2} 
-                        sx={{ 
-                          p: 2, 
+                      <Paper
+                        elevation={2}
+                        sx={{
+                          p: 2,
                           border: `2px solid ${getStatusColor(agent.status)}`,
                           bgcolor: agent.status === 'improving' ? `${agent.color}10` : 'white'
                         }}
@@ -299,10 +299,10 @@ const SelfImprovementDashboard: React.FC = () => {
                             <Typography variant="subtitle2" fontWeight="bold">
                               {agent.name}
                             </Typography>
-                            <Chip 
+                            <Chip
                               label={agent.status}
                               size="small"
-                              sx={{ 
+                              sx={{
                                 bgcolor: getStatusColor(agent.status),
                                 color: 'white',
                                 textTransform: 'capitalize'
@@ -310,19 +310,19 @@ const SelfImprovementDashboard: React.FC = () => {
                             />
                           </Box>
                         </Box>
-                        
+
                         <Typography variant="body2" color="text.secondary" gutterBottom>
                           📈 Покращень: {agent.improvements}
                         </Typography>
-                        
+
                         <Box sx={{ mb: 2 }}>
                           <Typography variant="body2" color="text.secondary">
                             Ефективність: {agent.efficiency.toFixed(1)}%
                           </Typography>
-                          <LinearProgress 
-                            variant="determinate" 
-                            value={agent.efficiency} 
-                            sx={{ 
+                          <LinearProgress
+                            variant="determinate"
+                            value={agent.efficiency}
+                            sx={{
                               mt: 1,
                               '& .MuiLinearProgress-bar': {
                                 bgcolor: agent.color
@@ -330,7 +330,7 @@ const SelfImprovementDashboard: React.FC = () => {
                             }}
                           />
                         </Box>
-                        
+
                         <Typography variant="caption" display="block" sx={{ fontStyle: 'italic' }}>
                           🔧 {agent.lastAction}
                         </Typography>
@@ -350,13 +350,13 @@ const SelfImprovementDashboard: React.FC = () => {
               <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <SecurityIcon color="primary" />
                 Бізнес-Інсайти
-                <Chip 
+                <Chip
                   label={`${businessInsights.length} активні`}
-                  color="info" 
-                  size="small" 
+                  color="info"
+                  size="small"
                 />
               </Typography>
-              
+
               <List dense>
                 <AnimatePresence>
                   {businessInsights.slice(0, 5).map((insight) => (
@@ -385,7 +385,7 @@ const SelfImprovementDashboard: React.FC = () => {
                                 {insight.description}
                               </Typography>
                               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
-                                <Chip 
+                                <Chip
                                   label={`${insight.confidence.toFixed(0)}%`}
                                   size="small"
                                   color="primary"
@@ -403,7 +403,7 @@ const SelfImprovementDashboard: React.FC = () => {
                   ))}
                 </AnimatePresence>
               </List>
-              
+
               {businessInsights.length === 0 && (
                 <Typography variant="body2" color="text.secondary" textAlign="center" sx={{ py: 2 }}>
                   Очікування нових інсайтів...
@@ -421,37 +421,37 @@ const SelfImprovementDashboard: React.FC = () => {
                 <TrendIcon color="primary" />
                 Системні Метрики в Реальному Часі
               </Typography>
-              
+
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={systemMetrics}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="timestamp" />
                   <YAxis domain={[0, 100]} />
                   <RechartsTooltip />
-                  <Area 
-                    type="monotone" 
-                    dataKey="health" 
-                    stackId="1" 
-                    stroke="#10B981" 
-                    fill="#10B981" 
+                  <Area
+                    type="monotone"
+                    dataKey="health"
+                    stackId="1"
+                    stroke="#10B981"
+                    fill="#10B981"
                     fillOpacity={0.3}
                     name="Здоров'я системи"
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="performance" 
-                    stackId="2" 
-                    stroke="#3B82F6" 
-                    fill="#3B82F6" 
+                  <Area
+                    type="monotone"
+                    dataKey="performance"
+                    stackId="2"
+                    stroke="#3B82F6"
+                    fill="#3B82F6"
                     fillOpacity={0.3}
                     name="Продуктивність"
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="efficiency" 
-                    stackId="3" 
-                    stroke="#8B5CF6" 
-                    fill="#8B5CF6" 
+                  <Area
+                    type="monotone"
+                    dataKey="efficiency"
+                    stackId="3"
+                    stroke="#8B5CF6"
+                    fill="#8B5CF6"
                     fillOpacity={0.3}
                     name="Ефективність"
                   />

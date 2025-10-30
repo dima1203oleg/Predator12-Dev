@@ -52,10 +52,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { nexusColors } from '../../theme/nexusTheme';
 import { useI18n } from '../../i18n/I18nProvider';
-import { 
-  COMPETITION_SCENARIOS, 
-  AGENT_MODEL_ASSIGNMENTS, 
-  getModelPerformance, 
+import {
+  COMPETITION_SCENARIOS,
+  AGENT_MODEL_ASSIGNMENTS,
+  getModelPerformance,
   simulateCompetitionResults,
   formatModelName,
   getTotalModelsCount
@@ -214,9 +214,9 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
     <Box sx={{ p: 3 }}>
       {/* Header with global stats */}
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h4" sx={{ 
-          color: nexusColors.frost, 
-          fontFamily: 'Orbitron', 
+        <Typography variant="h4" sx={{
+          color: nexusColors.frost,
+          fontFamily: 'Orbitron',
           mb: 2,
           background: `linear-gradient(45deg, ${nexusColors.sapphire}, ${nexusColors.quantum})`,
           WebkitBackgroundClip: 'text',
@@ -227,7 +227,7 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} md={2.4}>
-            <Card sx={{ 
+            <Card sx={{
               background: `linear-gradient(135deg, ${nexusColors.emerald}20, ${nexusColors.emerald}10)`,
               border: `1px solid ${nexusColors.emerald}60`
             }}>
@@ -242,7 +242,7 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
             </Card>
           </Grid>
           <Grid item xs={12} md={2.4}>
-            <Card sx={{ 
+            <Card sx={{
               background: `linear-gradient(135deg, ${nexusColors.sapphire}20, ${nexusColors.sapphire}10)`,
               border: `1px solid ${nexusColors.sapphire}60`
             }}>
@@ -257,7 +257,7 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
             </Card>
           </Grid>
           <Grid item xs={12} md={2.4}>
-            <Card sx={{ 
+            <Card sx={{
               background: `linear-gradient(135deg, ${nexusColors.quantum}20, ${nexusColors.quantum}10)`,
               border: `1px solid ${nexusColors.quantum}60`
             }}>
@@ -272,7 +272,7 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
             </Card>
           </Grid>
           <Grid item xs={12} md={2.4}>
-            <Card sx={{ 
+            <Card sx={{
               background: `linear-gradient(135deg, ${nexusColors.nebula}20, ${nexusColors.nebula}10)`,
               border: `1px solid ${nexusColors.nebula}60`
             }}>
@@ -287,7 +287,7 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
             </Card>
           </Grid>
           <Grid item xs={12} md={2.4}>
-            <Card sx={{ 
+            <Card sx={{
               background: `linear-gradient(135deg, ${nexusColors.crimson}20, ${nexusColors.crimson}10)`,
               border: `1px solid ${nexusColors.crimson}60`
             }}>
@@ -335,11 +335,11 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
       <Typography variant="h6" sx={{ color: nexusColors.frost, mb: 2, fontFamily: 'Orbitron' }}>
         {t('mas.coreAgents')} ({coreAgents.length})
       </Typography>
-      
+
       <Grid container spacing={2} sx={{ mb: 4 }}>
         {coreAgents.map((agent) => {
           const IconComponent = agentIcons[agent.name as keyof typeof agentIcons];
-          
+
           return (
             <Grid item xs={12} sm={6} md={4} lg={3} key={agent.id}>
               <motion.div
@@ -368,17 +368,17 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
                         badgeContent={agent.isArbitrating ? '⚖️' : undefined}
                         sx={{ '& .MuiBadge-badge': { backgroundColor: nexusColors.sapphire } }}
                       >
-                        <Avatar sx={{ 
+                        <Avatar sx={{
                           backgroundColor: `${getStatusColor(agent.status)}20`,
                           border: `1px solid ${getStatusColor(agent.status)}`
                         }}>
                           <IconComponent sx={{ color: getStatusColor(agent.status) }} />
                         </Avatar>
                       </Badge>
-                      
+
                       <Box sx={{ flex: 1 }}>
-                        <Typography variant="subtitle1" sx={{ 
-                          color: nexusColors.frost, 
+                        <Typography variant="subtitle1" sx={{
+                          color: nexusColors.frost,
                           fontWeight: 'bold',
                           fontSize: '0.9rem'
                         }}>
@@ -422,8 +422,8 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
 
                     {/* Current task */}
                     {agent.currentTask && (
-                      <Typography variant="caption" sx={{ 
-                        color: nexusColors.nebula, 
+                      <Typography variant="caption" sx={{
+                        color: nexusColors.nebula,
                         display: 'block',
                         mb: 1,
                         minHeight: '2.5em',
@@ -479,7 +479,7 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
                           transition={{ duration: 0.3 }}
                         >
                           <Divider sx={{ my: 2, borderColor: nexusColors.quantum }} />
-                          
+
                           {/* Detailed metrics */}
                           <Stack spacing={1}>
                             <Stack direction="row" justifyContent="space-between">
@@ -527,14 +527,14 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
                                 .map(([model, score], index) => (
                                 <Stack key={model} direction="row" justifyContent="space-between" alignItems="center">
                                   <Stack direction="row" alignItems="center" spacing={1}>
-                                    <Typography variant="caption" sx={{ 
+                                    <Typography variant="caption" sx={{
                                       color: index === 0 ? nexusColors.quantum : nexusColors.frost,
                                       fontWeight: index === 0 ? 'bold' : 'normal'
                                     }}>
                                       {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'} {formatModelName(model)}
                                     </Typography>
                                   </Stack>
-                                  <Typography variant="caption" sx={{ 
+                                  <Typography variant="caption" sx={{
                                     color: index === 0 ? nexusColors.quantum : nexusColors.emerald,
                                     fontWeight: 'bold'
                                   }}>
@@ -559,7 +559,7 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
                                 <InfoIcon fontSize="small" />
                               </IconButton>
                             </Tooltip>
-                            
+
                             {agent.status === 'active' && (
                               <Tooltip title={t('mas.pause')}>
                                 <IconButton
@@ -574,7 +574,7 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
                                 </IconButton>
                               </Tooltip>
                             )}
-                            
+
                             {(agent.status === 'paused' || agent.status === 'down') && (
                               <Tooltip title={t('mas.start')}>
                                 <IconButton
@@ -589,7 +589,7 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
                                 </IconButton>
                               </Tooltip>
                             )}
-                            
+
                             <Tooltip title={t('mas.restart')}>
                               <IconButton
                                 size="small"
@@ -650,11 +650,11 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
       <Typography variant="h6" sx={{ color: nexusColors.frost, mb: 2, fontFamily: 'Orbitron' }}>
         {t('mas.specializedAgents')} ({specializedAgents.length})
       </Typography>
-      
+
       <Grid container spacing={2}>
         {specializedAgents.map((agent) => {
           const IconComponent = agentIcons[agent.name as keyof typeof agentIcons];
-          
+
           return (
             <Grid item xs={12} sm={6} md={4} lg={3} key={agent.id}>
               <motion.div
@@ -677,7 +677,7 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
                   <CardContent>
                     {/* Similar structure as core agents but more compact */}
                     <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
-                      <Avatar sx={{ 
+                      <Avatar sx={{
                         backgroundColor: `${getStatusColor(agent.status)}20`,
                         border: `1px solid ${getStatusColor(agent.status)}`,
                         width: 32,
@@ -685,10 +685,10 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
                       }}>
                         <IconComponent sx={{ color: getStatusColor(agent.status), fontSize: '1rem' }} />
                       </Avatar>
-                      
+
                       <Box sx={{ flex: 1 }}>
-                        <Typography variant="subtitle2" sx={{ 
-                          color: nexusColors.frost, 
+                        <Typography variant="subtitle2" sx={{
+                          color: nexusColors.frost,
                           fontWeight: 'bold',
                           fontSize: '0.8rem'
                         }}>
@@ -708,8 +708,8 @@ const MASAgentGrid: React.FC<MASAgentGridProps> = ({
                     </Stack>
 
                     {agent.currentTask && (
-                      <Typography variant="caption" sx={{ 
-                        color: nexusColors.nebula, 
+                      <Typography variant="caption" sx={{
+                        color: nexusColors.nebula,
                         display: 'block',
                         mb: 1,
                         minHeight: '2em',

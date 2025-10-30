@@ -1,12 +1,15 @@
-from pydantic import BaseModel, Field, EmailStr, validator, root_validator
-from typing import List, Optional, Dict, Any, Union
-from datetime import datetime
 import re
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
+
+from pydantic import BaseModel, EmailStr, Field, root_validator, validator
+
 
 # Base models with common fields
 class BaseSchema(BaseModel):
     class Config:
         orm_mode = True
+
 
 # Authentication and User schemas
 class TokenSchema(BaseModel):
@@ -14,22 +17,27 @@ class TokenSchema(BaseModel):
     token_type: str
     expires_in: int
 
+
 class TokenPayload(BaseModel):
     sub: Optional[str] = None
     exp: Optional[int] = None
     permissions: List[str] = []
 
+
 class RoleBase(BaseSchema):
     name: str
     description: Optional[str] = None
 
+
 class RoleCreate(RoleBase):
     pass
+
 
 class RoleResponse(RoleBase):
     id: int
     created_at: datetime
     updated_at: Optional[datetime] = None
+
 
 class UserBase(BaseSchema):
     username: str
@@ -37,40 +45,43 @@ class UserBase(BaseSchema):
     full_name: Optional[str] = None
     is_active: bool = True
 
+
 class UserCreate(UserBase):
     password: str
-    
-    @validator('password')
+
+    @validator("password")
     def password_strength(cls, v):
         if len(v) < 8:
-            raise ValueError('Password must be at least 8 characters long')
-        if not re.search(r'[A-Z]', v):
-            raise ValueError('Password must contain at least one uppercase letter')
-        if not re.search(r'[a-z]', v):
-            raise ValueError('Password must contain at least one lowercase letter')
-        if not re.search(r'[0-9]', v):
-            raise ValueError('Password must contain at least one digit')
+            raise ValueError("Password must be at least 8 characters long")
+        if not re.search(r"[A-Z]", v):
+            raise ValueError("Password must contain at least one uppercase letter")
+        if not re.search(r"[a-z]", v):
+            raise ValueError("Password must contain at least one lowercase letter")
+        if not re.search(r"[0-9]", v):
+            raise ValueError("Password must contain at least one digit")
         return v
+
 
 class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     full_name: Optional[str] = None
     is_active: Optional[bool] = None
     password: Optional[str] = None
-    
-    @validator('password')
+
+    @validator("password")
     def password_strength(cls, v):
         if v is None:
             return v
         if len(v) < 8:
-            raise ValueError('Password must be at least 8 characters long')
-        if not re.search(r'[A-Z]', v):
-            raise ValueError('Password must contain at least one uppercase letter')
-        if not re.search(r'[a-z]', v):
-            raise ValueError('Password must contain at least one lowercase letter')
-        if not re.search(r'[0-9]', v):
-            raise ValueError('Password must contain at least one digit')
+            raise ValueError("Password must be at least 8 characters long")
+        if not re.search(r"[A-Z]", v):
+            raise ValueError("Password must contain at least one uppercase letter")
+        if not re.search(r"[a-z]", v):
+            raise ValueError("Password must contain at least one lowercase letter")
+        if not re.search(r"[0-9]", v):
+            raise ValueError("Password must contain at least one digit")
         return v
+
 
 class UserResponse(UserBase):
     id: int
@@ -78,6 +89,7 @@ class UserResponse(UserBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
     last_login: Optional[datetime] = None
+
 
 # Tender schemas
 class TenderBase(BaseSchema):
@@ -94,8 +106,10 @@ class TenderBase(BaseSchema):
     award_date: Optional[datetime] = None
     metadata: Optional[Dict[str, Any]] = None
 
+
 class TenderCreate(TenderBase):
     pass
+
 
 class TenderUpdate(BaseModel):
     title: Optional[str] = None
@@ -113,6 +127,7 @@ class TenderUpdate(BaseModel):
     risk_score: Optional[float] = None
     risk_factors: Optional[Dict[str, Any]] = None
 
+
 class TenderResponse(TenderBase):
     id: int
     winner_id: Optional[int] = None
@@ -121,9 +136,11 @@ class TenderResponse(TenderBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
 
+
 class TenderDetailResponse(TenderResponse):
-    companies: List['CompanyResponse'] = []
-    winner: Optional['CompanyResponse'] = None
+    companies: List["CompanyResponse"] = []
+    winner: Optional["CompanyResponse"] = None
+
 
 # Company schemas
 class CompanyBase(BaseSchema):
@@ -139,8 +156,10 @@ class CompanyBase(BaseSchema):
     phone: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
 
+
 class CompanyCreate(CompanyBase):
     pass
+
 
 class CompanyUpdate(BaseModel):
     name: Optional[str] = None
@@ -156,6 +175,7 @@ class CompanyUpdate(BaseModel):
     risk_score: Optional[float] = None
     risk_factors: Optional[Dict[str, Any]] = None
 
+
 class CompanyResponse(CompanyBase):
     id: int
     risk_score: Optional[float] = None
@@ -163,9 +183,11 @@ class CompanyResponse(CompanyBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
 
+
 class CompanyDetailResponse(CompanyResponse):
     tenders: List[TenderResponse] = []
-    persons: List['PersonResponse'] = []
+    persons: List["PersonResponse"] = []
+
 
 # Person schemas
 class PersonBase(BaseSchema):
@@ -177,8 +199,10 @@ class PersonBase(BaseSchema):
     position: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
 
+
 class PersonCreate(PersonBase):
     pass
+
 
 class PersonUpdate(BaseModel):
     name: Optional[str] = None
@@ -190,6 +214,7 @@ class PersonUpdate(BaseModel):
     risk_score: Optional[float] = None
     risk_factors: Optional[Dict[str, Any]] = None
 
+
 class PersonResponse(PersonBase):
     id: int
     risk_score: Optional[float] = None
@@ -197,26 +222,32 @@ class PersonResponse(PersonBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
 
+
 class PersonDetailResponse(PersonResponse):
     companies: List[CompanyResponse] = []
-    connections: List['PersonConnectionResponse'] = []
+    connections: List["PersonConnectionResponse"] = []
+
 
 class PersonConnectionResponse(BaseModel):
     person: PersonResponse
     connection_type: str
     strength: float
 
+
 # Analysis schemas
 class AnalysisRequest(BaseModel):
     analysis_type: str = Field(..., description="Type of analysis to perform")
-    parameters: Dict[str, Any] = Field(default_factory=dict, description="Parameters for the analysis")
-    
-    @validator('analysis_type')
+    parameters: Dict[str, Any] = Field(
+        default_factory=dict, description="Parameters for the analysis"
+    )
+
+    @validator("analysis_type")
     def validate_analysis_type(cls, v):
-        valid_types = ['tender_collusion', 'lobbying_influence', 'customs_scheme', 'network_graph']
+        valid_types = ["tender_collusion", "lobbying_influence", "customs_scheme", "network_graph"]
         if v not in valid_types:
             raise ValueError(f"Analysis type must be one of: {', '.join(valid_types)}")
         return v
+
 
 class AnalysisResponse(BaseModel):
     id: int
@@ -229,18 +260,22 @@ class AnalysisResponse(BaseModel):
     created_at: datetime
     updated_at: Optional[datetime] = None
 
+
 class NetworkGraphRequest(BaseModel):
     name: str
     description: Optional[str] = None
     graph_type: str = Field(..., description="Type of network graph to create")
-    parameters: Dict[str, Any] = Field(default_factory=dict, description="Parameters for graph creation")
-    
-    @validator('graph_type')
+    parameters: Dict[str, Any] = Field(
+        default_factory=dict, description="Parameters for graph creation"
+    )
+
+    @validator("graph_type")
     def validate_graph_type(cls, v):
-        valid_types = ['tender_network', 'company_network', 'person_network', 'mixed_network']
+        valid_types = ["tender_network", "company_network", "person_network", "mixed_network"]
         if v not in valid_types:
             raise ValueError(f"Graph type must be one of: {', '.join(valid_types)}")
         return v
+
 
 class NetworkGraphResponse(BaseModel):
     id: int
@@ -253,6 +288,7 @@ class NetworkGraphResponse(BaseModel):
     created_by: int
     created_at: datetime
     updated_at: Optional[datetime] = None
+
 
 # Update forward references for nested models
 TenderDetailResponse.update_forward_refs()

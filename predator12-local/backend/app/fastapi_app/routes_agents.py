@@ -1,12 +1,11 @@
-from typing import Dict, Any, Optional
-import uuid
 import asyncio
+import uuid
+from typing import Any, Dict, Optional
 
 import aiohttp
 from aiohttp import ClientSession, TCPConnector
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
-from pydantic import model_validator
+from pydantic import BaseModel, model_validator
 
 MAX_CONNECTIONS = 100
 TIMEOUT = aiohttp.ClientTimeout(total=30)
@@ -54,7 +53,14 @@ def _validate_workflow_dependencies(analyses: list[str]) -> bool:
     s = set(analyses)
 
     # Base allowed components
-    allowed = {"ingest", "data_quality", "anomaly", "synthetic", "security_privacy", "self_healing"}
+    allowed = {
+        "ingest",
+        "data_quality",
+        "anomaly",
+        "synthetic",
+        "security_privacy",
+        "self_healing",
+    }
     if not s.issubset(allowed):
         return False
 
@@ -129,7 +135,10 @@ async def agents_analyses() -> Dict[str, Any]:
 @router.post("/agents/execute")
 async def agents_execute(payload: Dict[str, Any]) -> Dict[str, Any]:
     """Validate and queue workflow execution (stub)."""
-    WorkflowRequest(dataset_id=str(payload.get("dataset_id", "")), analyses=list(payload.get("analyses", [])))
+    WorkflowRequest(
+        dataset_id=str(payload.get("dataset_id", "")),
+        analyses=list(payload.get("analyses", [])),
+    )
     return {"task_id": str(uuid.uuid4()), "status": "queued"}
 
 
@@ -157,12 +166,70 @@ async def agents_workflow_cancel(task_id: str) -> Dict[str, Any]:
     return {"task_id": task_id, "status": "cancelled"}
 
 
+# ===================== Observability / Self-heal endpoints =====================
+@router.post("/observability/errors")
+async def observability_errors(payload: Dict[str, Any]):
+    """Receive frontend/backend error reports and trigger auto-heal actions.
+
+    Expected payload: {"errors": [{"component":"web","message":"stack..."}, ...]}
+    """
+    try:
+        # Import health components (use absolute import to avoid package issues)
+        from backend.app.health_monitor import self_healing_manager
+
+        errors = payload.get("errors", [])
+
+        # Construct a minimal health_report indicating critical failures
+        health_report = {
+            "overall_status": "critical",
+            "health_score": 0.0,
+            "system_metrics": {},
+            "healing_actions": [],
+            "failures": [],
+            "component_health": {},
+        }
+
+        for e in errors:
+            health_report["failures"].append(
+                {
+                    "service": e.get("component") or e.get("service") or "frontend",
+                    "failure_reason": e.get("message") or e.get("error") or "reported",
+                    "recovery_action": e.get("recovery_action", "restart_service"),
+                }
+            )
+
+        res = await self_healing_manager.auto_heal_issues(health_report)
+        return {"status": "ok", "healing_results": res.get("healing_results", [])}
+
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@router.post("/agents/self_heal/run")
+async def agents_self_heal_run() -> Dict[str, Any]:
+    """Trigger a one-off comprehensive health check and run auto-heal."""
+    try:
+        from backend.app.health_monitor import health_checker, self_healing_manager
+
+        report = await health_checker.run_comprehensive_health_check()
+        res = await self_healing_manager.auto_heal_issues(report)
+        return {
+            "status": "ok",
+            "health_report": report,
+            "healing_results": res.get("healing_results", []),
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
 # ===================== HTTP Session helpers & existing route =====================
 async def get_http_session() -> ClientSession:
     """Return a shared aiohttp ClientSession backed by a single TCPConnector."""
     global _connector, _session
     if _session is None or _session.closed:
-        _connector = TCPConnector(limit=MAX_CONNECTIONS, force_close=False, enable_cleanup_closed=True)
+        _connector = TCPConnector(
+            limit=MAX_CONNECTIONS, force_close=False, enable_cleanup_closed=True
+        )
         _session = ClientSession(connector=_connector, timeout=TIMEOUT)
     return _session
 

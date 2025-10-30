@@ -157,7 +157,7 @@ const accounts: ProviderAccount[] = [
       <Chip label={`${stats.active} active`} />
     </Stack>
   </AccordionSummary>
-  
+
   <AccordionDetails>
     <List>
       {accounts.map(account => (
@@ -270,11 +270,11 @@ const API_ENDPOINTS = {
   addAccount: '/api/providers/accounts',
   updateAccount: '/api/providers/accounts/:id',
   deleteAccount: '/api/providers/accounts/:id',
-  
+
   // Models
   getModels: '/api/models',
   addModel: '/api/models',
-  
+
   // Categories
   getCategories: '/api/models/categories',
   getCategoryModels: '/api/models/categories/:id'
@@ -331,21 +331,21 @@ handleDeleteAccount(accountId);
 ```typescript
 const providerStats = useMemo(() => {
   const stats = new Map();
-  
+
   providerAccounts.forEach(account => {
     const current = stats.get(account.providerName) || {
       accounts: 0,
       active: 0,
       requests: 0
     };
-    
+
     current.accounts++;
     if (account.isActive) current.active++;
     current.requests += account.requestCount || 0;
-    
+
     stats.set(account.providerName, current);
   });
-  
+
   return stats;
 }, [providerAccounts]);
 ```
@@ -366,8 +366,8 @@ const providerStats = useMemo(() => {
 const [showApiKey, setShowApiKey] = useState(false);
 
 // 2. Захист від витоку
-const maskedKey = showApiKey 
-  ? account.apiKey 
+const maskedKey = showApiKey
+  ? account.apiKey
   : '••••••••••••••••••••••••••';
 
 // 3. Валідація формату
@@ -427,14 +427,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 describe('ModelProviderManager', () => {
   it('should switch between models and agents', () => {
     const { getByText } = render(<ModelProviderManager />);
-    
+
     fireEvent.click(getByText('👥 Agents'));
     expect(getByText('Core Agents')).toBeInTheDocument();
   });
 
   it('should add new provider account', () => {
     const { getByText, getByLabelText } = render(<ModelProviderManager />);
-    
+
     fireEvent.click(getByText('Add Provider Account'));
     fireEvent.change(getByLabelText('Account Name'), {
       target: { value: 'Test Account' }
@@ -445,7 +445,7 @@ describe('ModelProviderManager', () => {
   it('should toggle account active status', () => {
     const account = { id: '1', isActive: true };
     const { getByRole } = render(<AccountListItem account={account} />);
-    
+
     fireEvent.click(getByRole('switch'));
     expect(account.isActive).toBe(false);
   });

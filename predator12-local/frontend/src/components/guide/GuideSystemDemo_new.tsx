@@ -23,7 +23,7 @@ const GuideSystemDemo: React.FC<Props> = ({
       <Typography variant="h5" sx={{ color: nexusColors.frost, mb: 2 }}>
         Guide System Demo
       </Typography>
-      
+
       {/* Кнопка відкриття чату */}
       {!chatVisible && (
         <IconButton
@@ -47,10 +47,10 @@ const GuideSystemDemo: React.FC<Props> = ({
         </IconButton>
       )}
 
-      <ContextualChat 
-        visible={chatVisible} 
-        module={currentModule} 
-        systemHealth={systemHealth} 
+      <ContextualChat
+        visible={chatVisible}
+        module={currentModule}
+        systemHealth={systemHealth}
         agentsData={agentsData}
         onClose={() => setChatVisible(false)}
         closable={true}

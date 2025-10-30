@@ -58,4 +58,4 @@ To set up alerts:
 This dashboard works in conjunction with:
 - The `/ws/health` endpoint, which provides basic health status of the WebSocket service.
 - The `/ws/metrics` endpoint, which provides the raw Prometheus metrics used by this dashboard.
-- Other Predator Analytics monitoring dashboards, giving a complete picture of system health. 
+- Other Predator Analytics monitoring dashboards, giving a complete picture of system health.

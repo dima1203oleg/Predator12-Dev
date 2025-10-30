@@ -13,12 +13,19 @@ class ModelSDKClient:
     Reads base URL and API key from env vars.
     """
 
-    def __init__(self, base_url: Optional[str] = None, api_key: Optional[str] = None, timeout: float = 30.0):
+    def __init__(
+        self,
+        base_url: Optional[str] = None,
+        api_key: Optional[str] = None,
+        timeout: float = 30.0,
+    ):
         self.base_url = base_url or os.getenv("MODEL_SDK_BASE_URL", "http://localhost:3010/v1")
         self.api_key = api_key or os.getenv("MODEL_SDK_KEY", "")
         self.timeout = timeout
 
-    async def chat_completion(self, model: str, messages: list[dict[str, Any]], **kwargs) -> Dict[str, Any]:
+    async def chat_completion(
+        self, model: str, messages: list[dict[str, Any]], **kwargs
+    ) -> Dict[str, Any]:
         url = f"{self.base_url}/chat/completions"
         headers = {"Content-Type": "application/json"}
         if self.api_key:

@@ -3,17 +3,18 @@ DataOps API endpoints for Nexus Core
 Provides data management, ETL pipeline control, and synthetic data generation
 """
 
-from fastapi import APIRouter, HTTPException, UploadFile, File, BackgroundTasks
-from typing import List, Dict, Any, Optional
-from datetime import datetime, timedelta
-from pydantic import BaseModel
-import math
-import uuid
-import random
 import asyncio
-import pandas as pd
 import io
 import json
+import math
+import random
+import uuid
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
+
+import pandas as pd
+from fastapi import APIRouter, BackgroundTasks, File, HTTPException, UploadFile
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/v1/dataops", tags=["dataops"])
 
@@ -75,7 +76,7 @@ class ETLJobRequest(BaseModel):
 # Initialize sample data
 def initialize_sample_data():
     """Initialize sample datasets and pipelines"""
-    
+
     # Sample datasets
     sample_datasets = [
         {
@@ -91,7 +92,7 @@ def initialize_sample_data():
             "metadata": {
                 "description": "User behavior analytics from web application",
                 "tags": ["analytics", "user_behavior", "web"],
-                "owner": "analytics_team"
+                "owner": "analytics_team",
             },
             "schema": {
                 "user_id": "string",
@@ -101,8 +102,8 @@ def initialize_sample_data():
                 "duration": "float",
                 "device_type": "string",
                 "location": "string",
-                "conversion": "boolean"
-            }
+                "conversion": "boolean",
+            },
         },
         {
             "id": "dataset_2",
@@ -117,7 +118,7 @@ def initialize_sample_data():
             "metadata": {
                 "description": "Security event logs from monitoring system",
                 "tags": ["security", "logs", "monitoring"],
-                "owner": "security_team"
+                "owner": "security_team",
             },
             "schema": {
                 "event_id": "string",
@@ -127,14 +128,14 @@ def initialize_sample_data():
                 "event_type": "string",
                 "description": "string",
                 "user_agent": "string",
-                "status": "string"
-            }
-        }
+                "status": "string",
+            },
+        },
     ]
-    
+
     for dataset_data in sample_datasets:
         datasets[dataset_data["id"]] = dataset_data
-    
+
     # Sample ETL pipelines
     sample_pipelines = [
         {
@@ -150,9 +151,9 @@ def initialize_sample_data():
                 "source_connection": "postgresql://analytics_db",
                 "destination_connection": "warehouse://main",
                 "batch_size": 1000,
-                "parallel_workers": 4
+                "parallel_workers": 4,
             },
-            "schedule": "0 8 * * *"  # Daily at 8 AM
+            "schedule": "0 8 * * *",  # Daily at 8 AM
         },
         {
             "id": "pipeline_2",
@@ -166,12 +167,12 @@ def initialize_sample_data():
             "config": {
                 "source_connection": "kafka://security-events",
                 "destination_connection": "opensearch://security-index",
-                "real_time": True
+                "real_time": True,
             },
-            "schedule": None
-        }
+            "schedule": None,
+        },
     ]
-    
+
     for pipeline_data in sample_pipelines:
         etl_pipelines[pipeline_data["id"]] = pipeline_data
 
@@ -182,27 +183,25 @@ initialize_sample_data()
 
 @router.get("/datasets", response_model=List[Dataset])
 async def list_datasets(
-    status: Optional[str] = None,
-    data_type: Optional[str] = None,
-    limit: int = 50
+    status: Optional[str] = None, data_type: Optional[str] = None, limit: int = 50
 ) -> List[Dataset]:
     """
     List all datasets with optional filters
     """
     result = []
-    
+
     for dataset_data in datasets.values():
         # Apply filters
         if status and dataset_data["status"] != status:
             continue
         if data_type and dataset_data["type"] != data_type:
             continue
-        
+
         result.append(Dataset(**dataset_data))
-    
+
     # Sort by last modified (newest first)
     result.sort(key=lambda x: x.last_modified, reverse=True)
-    
+
     return result[:limit]
 
 
@@ -213,7 +212,7 @@ async def get_dataset(dataset_id: str) -> Dataset:
     """
     if dataset_id not in datasets:
         raise HTTPException(status_code=404, detail="Dataset not found")
-    
+
     return Dataset(**datasets[dataset_id])
 
 
@@ -222,37 +221,37 @@ async def upload_dataset(
     file: UploadFile = File(...),
     name: Optional[str] = None,
     description: Optional[str] = None,
-    tags: Optional[str] = None
+    tags: Optional[str] = None,
 ):
     """
     Upload a new dataset file
     """
     dataset_id = str(uuid.uuid4())
-    
+
     # Determine file type
-    file_extension = file.filename.split('.')[-1].lower() if file.filename else 'unknown'
-    
+    file_extension = file.filename.split(".")[-1].lower() if file.filename else "unknown"
+
     # Read file content
     content = await file.read()
     file_size = len(content)
-    
+
     # Analyze file structure (simplified)
     rows, columns = 0, 0
     schema = {}
-    
+
     try:
-        if file_extension == 'csv':
-            df = pd.read_csv(io.StringIO(content.decode('utf-8')))
+        if file_extension == "csv":
+            df = pd.read_csv(io.StringIO(content.decode("utf-8")))
             rows, columns = df.shape
             schema = {col: str(df[col].dtype) for col in df.columns}
-        elif file_extension in ['xlsx', 'xls']:
+        elif file_extension in ["xlsx", "xls"]:
             # Excel parsing using openpyxl/xlrd engines
             excel_buffer = io.BytesIO(content)
             df = pd.read_excel(excel_buffer)
             rows, columns = df.shape
             schema = {col: str(df[col].dtype) for col in df.columns}
-        elif file_extension == 'json':
-            data = json.loads(content.decode('utf-8'))
+        elif file_extension == "json":
+            data = json.loads(content.decode("utf-8"))
             if isinstance(data, list) and data:
                 rows = len(data)
                 columns = len(data[0]) if isinstance(data[0], dict) else 1
@@ -261,7 +260,7 @@ async def upload_dataset(
     except Exception as e:
         # If analysis fails, use defaults
         pass
-    
+
     # Create dataset record
     dataset_data = {
         "id": dataset_id,
@@ -275,15 +274,15 @@ async def upload_dataset(
         "source": "upload",
         "metadata": {
             "description": description or f"Uploaded file: {file.filename}",
-            "tags": tags.split(',') if tags else [],
+            "tags": tags.split(",") if tags else [],
             "original_filename": file.filename,
-            "upload_timestamp": datetime.now().isoformat()
+            "upload_timestamp": datetime.now().isoformat(),
         },
-        "schema": schema
+        "schema": schema,
     }
-    
+
     datasets[dataset_id] = dataset_data
-    
+
     return {
         "dataset_id": dataset_id,
         "message": "Dataset uploaded successfully",
@@ -291,8 +290,8 @@ async def upload_dataset(
             "name": dataset_data["name"],
             "size": file_size,
             "rows": rows,
-            "columns": columns
-        }
+            "columns": columns,
+        },
     }
 
 
@@ -302,15 +301,15 @@ async def generate_synthetic_dataset(request: SyntheticDataRequest):
     Generate synthetic dataset based on specifications
     """
     dataset_id = str(uuid.uuid4())
-    
+
     # Set random seed if provided
     if request.seed:
         random.seed(request.seed)
-    
+
     # Generate synthetic data based on type
     synthetic_data = []
     schema = {}
-    
+
     if request.data_type == "numerical":
         # Generate numerical data
         for i in range(request.rows):
@@ -320,10 +319,16 @@ async def generate_synthetic_dataset(request: SyntheticDataRequest):
                 row[col_name] = random.gauss(100, 25)
                 schema[col_name] = "float"
             synthetic_data.append(row)
-    
+
     elif request.data_type == "categorical":
         # Generate categorical data
-        categories = ["Category_A", "Category_B", "Category_C", "Category_D", "Category_E"]
+        categories = [
+            "Category_A",
+            "Category_B",
+            "Category_C",
+            "Category_D",
+            "Category_E",
+        ]
         for i in range(request.rows):
             row = {}
             for j in range(request.columns):
@@ -331,24 +336,24 @@ async def generate_synthetic_dataset(request: SyntheticDataRequest):
                 row[col_name] = random.choice(categories)
                 schema[col_name] = "string"
             synthetic_data.append(row)
-    
+
     elif request.data_type == "timeseries":
         # Generate time series data
         start_date = datetime.now() - timedelta(days=request.rows)
         for i in range(request.rows):
             row = {
                 "timestamp": (start_date + timedelta(days=i)).isoformat(),
-                "value": 100 + random.gauss(0, 10) + 5 * math.sin(i * 0.1)
+                "value": 100 + random.gauss(0, 10) + 5 * math.sin(i * 0.1),
             }
             for j in range(request.columns - 2):
                 col_name = f"metric_{j+1}"
                 row[col_name] = random.uniform(0, 100)
             synthetic_data.append(row)
-        
+
         schema = {"timestamp": "datetime", "value": "float"}
         for j in range(request.columns - 2):
             schema[f"metric_{j+1}"] = "float"
-    
+
     else:  # mixed
         # Generate mixed data types
         for i in range(request.rows):
@@ -357,29 +362,29 @@ async def generate_synthetic_dataset(request: SyntheticDataRequest):
                 "numeric_value": random.gauss(50, 15),
                 "category": random.choice(["A", "B", "C"]),
                 "boolean_flag": random.choice([True, False]),
-                "timestamp": (datetime.now() - timedelta(days=random.randint(0, 365))).isoformat()
+                "timestamp": (datetime.now() - timedelta(days=random.randint(0, 365))).isoformat(),
             }
-            
+
             # Add additional columns
             for j in range(max(0, request.columns - 5)):
                 col_name = f"extra_col_{j+1}"
                 row[col_name] = random.uniform(0, 1000)
-            
+
             synthetic_data.append(row)
-        
+
         schema = {
             "id": "string",
             "numeric_value": "float",
             "category": "string",
             "boolean_flag": "boolean",
-            "timestamp": "datetime"
+            "timestamp": "datetime",
         }
         for j in range(max(0, request.columns - 5)):
             schema[f"extra_col_{j+1}"] = "float"
-    
+
     # Calculate size estimate (rough)
     estimated_size = len(json.dumps(synthetic_data[:10])) * (request.rows // 10)
-    
+
     # Create dataset record
     dataset_data = {
         "id": dataset_id,
@@ -395,13 +400,13 @@ async def generate_synthetic_dataset(request: SyntheticDataRequest):
             "description": f"Synthetically generated {request.data_type} dataset",
             "tags": ["synthetic", request.data_type],
             "generation_parameters": request.parameters or {},
-            "seed": request.seed
+            "seed": request.seed,
         },
-        "schema": schema
+        "schema": schema,
     }
-    
+
     datasets[dataset_id] = dataset_data
-    
+
     return {
         "dataset_id": dataset_id,
         "message": "Synthetic dataset generated successfully",
@@ -409,8 +414,8 @@ async def generate_synthetic_dataset(request: SyntheticDataRequest):
             "name": request.name,
             "rows": request.rows,
             "columns": request.columns,
-            "data_type": request.data_type
-        }
+            "data_type": request.data_type,
+        },
     }
 
 
@@ -421,31 +426,28 @@ async def delete_dataset(dataset_id: str):
     """
     if dataset_id not in datasets:
         raise HTTPException(status_code=404, detail="Dataset not found")
-    
+
     del datasets[dataset_id]
-    
+
     return {"message": "Dataset deleted successfully"}
 
 
 @router.get("/pipelines", response_model=List[ETLPipeline])
-async def list_etl_pipelines(
-    status: Optional[str] = None,
-    limit: int = 50
-) -> List[ETLPipeline]:
+async def list_etl_pipelines(status: Optional[str] = None, limit: int = 50) -> List[ETLPipeline]:
     """
     List all ETL pipelines
     """
     result = []
-    
+
     for pipeline_data in etl_pipelines.values():
         if status and pipeline_data["status"] != status:
             continue
-        
+
         result.append(ETLPipeline(**pipeline_data))
-    
+
     # Sort by last run (newest first)
     result.sort(key=lambda x: x.last_run, reverse=True)
-    
+
     return result[:limit]
 
 
@@ -456,7 +458,7 @@ async def get_etl_pipeline(pipeline_id: str) -> ETLPipeline:
     """
     if pipeline_id not in etl_pipelines:
         raise HTTPException(status_code=404, detail="Pipeline not found")
-    
+
     return ETLPipeline(**etl_pipelines[pipeline_id])
 
 
@@ -467,20 +469,20 @@ async def start_etl_pipeline(pipeline_id: str, background_tasks: BackgroundTasks
     """
     if pipeline_id not in etl_pipelines:
         raise HTTPException(status_code=404, detail="Pipeline not found")
-    
+
     pipeline = etl_pipelines[pipeline_id]
-    
+
     if pipeline["status"] == "running":
         raise HTTPException(status_code=400, detail="Pipeline is already running")
-    
+
     # Start pipeline
     pipeline["status"] = "running"
     pipeline["progress"] = 0.0
     pipeline["last_run"] = datetime.now()
-    
+
     # Add background task to simulate pipeline execution
     background_tasks.add_task(simulate_pipeline_execution, pipeline_id)
-    
+
     return {"message": "Pipeline started successfully"}
 
 
@@ -491,14 +493,14 @@ async def stop_etl_pipeline(pipeline_id: str):
     """
     if pipeline_id not in etl_pipelines:
         raise HTTPException(status_code=404, detail="Pipeline not found")
-    
+
     pipeline = etl_pipelines[pipeline_id]
-    
+
     if pipeline["status"] != "running":
         raise HTTPException(status_code=400, detail="Pipeline is not running")
-    
+
     pipeline["status"] = "stopped"
-    
+
     return {"message": "Pipeline stopped successfully"}
 
 
@@ -507,32 +509,32 @@ async def simulate_pipeline_execution(pipeline_id: str):
     Simulate ETL pipeline execution
     """
     pipeline = etl_pipelines[pipeline_id]
-    
+
     try:
         # Simulate pipeline steps
         steps = ["extracting", "transforming", "loading", "validating"]
-        
+
         for i, step in enumerate(steps):
             # Simulate processing time
             await asyncio.sleep(random.uniform(2, 5))
-            
+
             # Update progress
             progress = (i + 1) / len(steps) * 100
             pipeline["progress"] = progress
-            
+
             # Check if pipeline was stopped
             if pipeline["status"] != "running":
                 return
-        
+
         # Complete pipeline
         pipeline["status"] = "completed"
         pipeline["progress"] = 100.0
-        
+
         # Schedule next run if it's a scheduled pipeline
         if pipeline.get("schedule"):
             # Simple scheduling logic (in production, use proper cron parser)
             pipeline["next_run"] = datetime.now() + timedelta(hours=24)
-    
+
     except Exception as e:
         pipeline["status"] = "error"
         pipeline["error_message"] = str(e)
@@ -548,33 +550,27 @@ async def get_dataops_stats() -> Dict[str, Any]:
     dataset_types = {}
     total_size = 0
     total_rows = 0
-    
+
     for dataset in datasets.values():
         dataset_types[dataset["type"]] = dataset_types.get(dataset["type"], 0) + 1
         total_size += dataset["size"]
         total_rows += dataset["rows"]
-    
+
     # Pipeline statistics
     total_pipelines = len(etl_pipelines)
     pipeline_statuses = {}
-    
+
     for pipeline in etl_pipelines.values():
         status = pipeline["status"]
         pipeline_statuses[status] = pipeline_statuses.get(status, 0) + 1
-    
+
     # Recent activity
-    recent_datasets = sorted(
-        datasets.values(),
-        key=lambda x: x["last_modified"],
-        reverse=True
-    )[:5]
-    
+    recent_datasets = sorted(datasets.values(), key=lambda x: x["last_modified"], reverse=True)[:5]
+
     recent_pipeline_runs = sorted(
-        etl_pipelines.values(),
-        key=lambda x: x["last_run"],
-        reverse=True
+        etl_pipelines.values(), key=lambda x: x["last_run"], reverse=True
     )[:5]
-    
+
     return {
         "datasets": {
             "total": total_datasets,
@@ -585,10 +581,10 @@ async def get_dataops_stats() -> Dict[str, Any]:
                 {
                     "id": ds["id"],
                     "name": ds["name"],
-                    "last_modified": ds["last_modified"]
+                    "last_modified": ds["last_modified"],
                 }
                 for ds in recent_datasets
-            ]
+            ],
         },
         "pipelines": {
             "total": total_pipelines,
@@ -598,16 +594,16 @@ async def get_dataops_stats() -> Dict[str, Any]:
                     "id": pl["id"],
                     "name": pl["name"],
                     "status": pl["status"],
-                    "last_run": pl["last_run"]
+                    "last_run": pl["last_run"],
                 }
                 for pl in recent_pipeline_runs
-            ]
+            ],
         },
         "system": {
             "uptime": "99.8%",
             "avg_processing_time": "2.3 minutes",
-            "success_rate": "97.5%"
-        }
+            "success_rate": "97.5%",
+        },
     }
 
 
@@ -618,13 +614,13 @@ async def preview_dataset(dataset_id: str, limit: int = 10) -> Dict[str, Any]:
     """
     if dataset_id not in datasets:
         raise HTTPException(status_code=404, detail="Dataset not found")
-    
+
     dataset = datasets[dataset_id]
-    
+
     # Generate sample data based on schema
     sample_data = []
     schema = dataset.get("schema", {})
-    
+
     for i in range(min(limit, dataset["rows"])):
         row = {}
         for col_name, col_type in schema.items():
@@ -635,16 +631,18 @@ async def preview_dataset(dataset_id: str, limit: int = 10) -> Dict[str, Any]:
             elif col_type == "boolean":
                 row[col_name] = random.choice([True, False])
             elif col_type == "datetime":
-                row[col_name] = (datetime.now() - timedelta(days=random.randint(0, 365))).isoformat()
+                row[col_name] = (
+                    datetime.now() - timedelta(days=random.randint(0, 365))
+                ).isoformat()
             else:  # string
                 row[col_name] = f"sample_value_{i+1}"
         sample_data.append(row)
-    
+
     return {
         "dataset_id": dataset_id,
         "dataset_name": dataset["name"],
         "total_rows": dataset["rows"],
         "preview_rows": len(sample_data),
         "schema": schema,
-        "sample_data": sample_data
+        "sample_data": sample_data,
     }

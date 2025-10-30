@@ -178,19 +178,19 @@ const RealitySimulatorUI = () => {
         <div style={panelStyle}>
             <h2 style={{ color: '#00FFC6', borderBottom: '1px solid #00FFC6', paddingBottom: '10px' }}>
                 Reality Simulator
-                <WebSocketStatus 
+                <WebSocketStatus
                     wsEndpoint="/ws/simulation-updates"
                     connectionStatus={connectionStatus}
                     minimal={true}
                     style={{ float: 'right', marginTop: '5px' }}
                 />
             </h2>
-            
+
             <h3>Configure Simulation</h3>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-                <select 
-                    value={selectedScenario} 
-                    onChange={(e) => setSelectedScenario(e.target.value)} 
+                <select
+                    value={selectedScenario}
+                    onChange={(e) => setSelectedScenario(e.target.value)}
                     style={inputStyle}
                     disabled={isRunning}
                 >
@@ -199,9 +199,9 @@ const RealitySimulatorUI = () => {
                         <option key={scenario.id} value={scenario.id}>{scenario.name}</option>
                     ))}
                 </select>
-                <select 
-                    value={sentimentImpact} 
-                    onChange={(e) => setSentimentImpact(e.target.value)} 
+                <select
+                    value={sentimentImpact}
+                    onChange={(e) => setSentimentImpact(e.target.value)}
                     style={inputStyle}
                     disabled={isRunning}
                 >
@@ -209,9 +209,9 @@ const RealitySimulatorUI = () => {
                         <option key={impact.id} value={impact.id}>{impact.name}</option>
                     ))}
                 </select>
-                <select 
-                    value={region} 
-                    onChange={(e) => setRegion(e.target.value)} 
+                <select
+                    value={region}
+                    onChange={(e) => setRegion(e.target.value)}
                     style={inputStyle}
                     disabled={isRunning}
                 >
@@ -220,9 +220,9 @@ const RealitySimulatorUI = () => {
                     ))}
                 </select>
             </div>
-            <button 
-                onClick={runSimulation} 
-                style={buttonStyle} 
+            <button
+                onClick={runSimulation}
+                style={buttonStyle}
                 disabled={isRunning || !selectedScenario}
             >
                 {isRunning ? 'Simulating...' : 'Run Simulation'}
@@ -245,4 +245,4 @@ const RealitySimulatorUI = () => {
     );
 };
 
-export default RealitySimulatorUI; 
+export default RealitySimulatorUI;

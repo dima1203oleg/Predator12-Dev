@@ -185,7 +185,7 @@ echo ""
 # Перевірка чи сервер запущено
 if lsof -Pi :5090 -sTCP:LISTEN -t >/dev/null 2>&1; then
     test_result "PASS" "Сервер запущено на порту 5090"
-    
+
     # Спроба отримати HTTP відповідь
     if command -v curl &> /dev/null; then
         HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5090 2>/dev/null || echo "000")
@@ -214,20 +214,20 @@ echo ""
 
 if [ -d "predator12-local/frontend/node_modules" ]; then
     test_result "PASS" "node_modules існує"
-    
+
     # Перевірка критичних залежностей
     if [ -d "predator12-local/frontend/node_modules/react" ]; then
         test_result "PASS" "React встановлено"
     else
         test_result "FAIL" "React НЕ ВСТАНОВЛЕНО"
     fi
-    
+
     if [ -d "predator12-local/frontend/node_modules/three" ]; then
         test_result "PASS" "Three.js встановлено"
     else
         test_result "WARN" "Three.js НЕ ВСТАНОВЛЕНО (потрібно для 3D)"
     fi
-    
+
     if [ -d "predator12-local/frontend/node_modules/vite" ]; then
         test_result "PASS" "Vite встановлено"
     else
@@ -273,7 +273,7 @@ echo ""
 if command -v git &> /dev/null; then
     if [ -d ".git" ]; then
         test_result "PASS" "Git репозиторій ініціалізовано"
-        
+
         # Перевірка незакомічених змін
         UNCOMMITTED=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
         if [ "$UNCOMMITTED" -eq 0 ]; then
@@ -281,7 +281,7 @@ if command -v git &> /dev/null; then
         else
             test_result "WARN" "$UNCOMMITTED файлів не закомічено"
         fi
-        
+
         # Перевірка поточної гілки
         BRANCH=$(git branch --show-current 2>/dev/null || echo "unknown")
         if [ "$BRANCH" != "unknown" ]; then

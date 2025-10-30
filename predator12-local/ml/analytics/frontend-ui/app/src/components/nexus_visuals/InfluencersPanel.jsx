@@ -85,7 +85,7 @@ const InfluencersPanel = () => {
     };
 
     // Basic styling - can be replaced with Tailwind or Material-UI specific classes
-    const panelStyle = { 
+    const panelStyle = {
         backgroundColor: 'rgba(10, 25, 47, 0.85)', // Dark blue, semi-transparent
         border: '1px solid #00FFC6', // Neon cyan border
         borderRadius: '8px',
@@ -128,7 +128,7 @@ const InfluencersPanel = () => {
     return (
         <div style={panelStyle}>
             <h2 style={{ color: '#00FFC6', borderBottom: '1px solid #00FFC6', paddingBottom: '10px' }}>Social Media Influencers Analysis</h2>
-            
+
             <h3>Filter Influencers</h3>
             <form onSubmit={(e) => { e.preventDefault(); fetchInfluencers(); }}>
                 <input type="text" name="platform" placeholder="Platform (e.g., Twitter)" value={filters.platform} onChange={handleFilterChange} style={inputStyle} />
@@ -169,29 +169,29 @@ const InfluencersPanel = () => {
 
             <h3 style={{ marginTop: '30px' }}>Analyze Influencer Impact</h3>
             <form onSubmit={handleFetchImpact}>
-                <input 
-                    type="text" 
-                    name="influencer_ids" 
-                    placeholder="Influencer IDs (comma-separated, e.g., tw_elon,tg_durov)" 
+                <input
+                    type="text"
+                    name="influencer_ids"
+                    placeholder="Influencer IDs (comma-separated, e.g., tw_elon,tg_durov)"
                     value={impactRequest.influencer_ids.join(',')}
-                    onChange={handleImpactRequestChange} 
+                    onChange={handleImpactRequestChange}
                     style={{...inputStyle, width: 'calc(100% - 24px)'}}
                     required
                 />
-                <input 
-                    type="text" 
-                    name="keywords" 
-                    placeholder="Keywords (comma-separated, optional)" 
+                <input
+                    type="text"
+                    name="keywords"
+                    placeholder="Keywords (comma-separated, optional)"
                     value={impactRequest.keywords.join(',')}
-                    onChange={handleImpactRequestChange} 
+                    onChange={handleImpactRequestChange}
                     style={{...inputStyle, width: 'calc(60% - 20px)'}}
                 />
-                <input 
-                    type="number" 
-                    name="time_period_days" 
-                    placeholder="Time Period (days)" 
+                <input
+                    type="number"
+                    name="time_period_days"
+                    placeholder="Time Period (days)"
                     value={impactRequest.time_period_days}
-                    onChange={handleImpactRequestChange} 
+                    onChange={handleImpactRequestChange}
                     style={{...inputStyle, width: 'calc(30% - 20px)'}}
                 />
                 <select
@@ -225,4 +225,4 @@ const InfluencersPanel = () => {
     );
 };
 
-export default InfluencersPanel; 
+export default InfluencersPanel;

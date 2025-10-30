@@ -41,7 +41,7 @@ routing_strategies:
   - Tier 1: Найпотужніші (70B+)
   - Tier 2: Середні (14B-32B)
   - Tier 3: Швидкі (3B-8B)
-  
+
 specialization по мовах програмування:
   - Python: DeepSeek + Qwen Coder
   - JavaScript: StarCoder2 + Replit

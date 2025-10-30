@@ -6,7 +6,8 @@ import hvac
 class SecretsManager:
     def __init__(self):
         self.client = hvac.Client(
-            url=os.getenv("VAULT_URL", "http://localhost:8200"), token=os.getenv("VAULT_TOKEN")
+            url=os.getenv("VAULT_URL", "http://localhost:8200"),
+            token=os.getenv("VAULT_TOKEN"),
         )
 
     def get_secret(self, path: str, key: str):

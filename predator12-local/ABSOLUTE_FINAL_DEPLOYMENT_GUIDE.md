@@ -359,7 +359,7 @@ docker volume prune -f
 
 The Predator Analytics – Nexus Core platform is now fully operational and ready for enterprise deployment. All components have been automatically implemented, tested, and validated without any manual intervention.
 
-**Next Steps**: 
+**Next Steps**:
 1. Deploy to production environment
 2. Configure custom business rules
 3. Add domain-specific agents

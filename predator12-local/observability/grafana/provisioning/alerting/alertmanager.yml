@@ -9,7 +9,7 @@ configs:
     api_timeout: 10s
     # Whether to automatically resolve alerts when they are no longer firing
     resolve_timeout: 5m
-    
+
     # Default contact points
     contact_points:
       - name: email-default
@@ -19,7 +19,7 @@ configs:
           singleEmail: true
           message: '{{ template "default.message" . }}'
           subject: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }} for {{ .CommonLabels.job }}'
-          
+
     # Default notification policies
     notification_policies:
       - receiver: email-default
@@ -27,9 +27,9 @@ configs:
         group_wait: 30s
         group_interval: 5m
         repeat_interval: 4h
-        
+
     # Default mute time intervals
     mute_time_intervals: []
-    
+
     # Default group by labels
     group_by: ['alertname', 'severity', 'instance']

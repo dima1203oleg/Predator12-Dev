@@ -1,6 +1,7 @@
-import time
 import threading
-from websocket import create_connection, WebSocketException
+import time
+
+from websocket import WebSocketException, create_connection
 
 # Configuration
 API_WS_URL = "ws://localhost:8000/ws/sentiment-updates"
@@ -10,6 +11,7 @@ DURATION_SECONDS = 60  # How long to run the test
 # Counter for received messages
 total_messages_received = 0
 lock = threading.Lock()
+
 
 def client_simulation(client_id):
     global total_messages_received
@@ -27,17 +29,16 @@ def client_simulation(client_id):
                 with lock:
                     total_messages_received += 1
                 if messages_received % 10 == 0:  # Print every 10 messages
-                    print(f"Client {client_id} received "
-                          f"{messages_received} messages.")
+                    print(f"Client {client_id} received " f"{messages_received} messages.")
             except WebSocketException as e:
                 print(f"Client {client_id} error: {e}")
                 break
 
-        print(f"Client {client_id} disconnecting after "
-              f"{messages_received} messages.")
+        print(f"Client {client_id} disconnecting after " f"{messages_received} messages.")
         ws.close()
     except Exception as e:
         print(f"Client {client_id} failed: {e}")
+
 
 def run_stress_test():
     threads = []
@@ -55,15 +56,17 @@ def run_stress_test():
         thread.join(timeout=DURATION_SECONDS - (time.time() - start_time))
 
     end_time = time.time()
-    print(f"\nStress Test Completed.\nDuration: "
-          f"{end_time - start_time:.2f} seconds")
+    print(f"\nStress Test Completed.\nDuration: " f"{end_time - start_time:.2f} seconds")
     print(f"Total Messages Received: {total_messages_received}")
-    print(f"Average Messages per Second: "
-          f"{total_messages_received / (end_time - start_time):.2f}")
-    print(f"Average Messages per Client: "
-          f"{total_messages_received / NUM_CLIENTS:.2f}")
+    print(
+        f"Average Messages per Second: " f"{total_messages_received / (end_time - start_time):.2f}"
+    )
+    print(f"Average Messages per Client: " f"{total_messages_received / NUM_CLIENTS:.2f}")
+
 
 if __name__ == "__main__":
-    print(f"Starting WebSocket stress test with {NUM_CLIENTS} clients "
-          f"for {DURATION_SECONDS} seconds...")
-    run_stress_test() 
+    print(
+        f"Starting WebSocket stress test with {NUM_CLIENTS} clients "
+        f"for {DURATION_SECONDS} seconds..."
+    )
+    run_stress_test()

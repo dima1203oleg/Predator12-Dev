@@ -280,7 +280,7 @@ const SuperETLModule: React.FC = () => {
       }
       return pipeline;
     }));
-    
+
     alert(`Дія "${action}" виконана для пайплайну ${pipelineId}`);
   };
 
@@ -291,12 +291,12 @@ const SuperETLModule: React.FC = () => {
       }
       return source;
     }));
-    
+
     setTimeout(() => {
       setDataSources(prev => prev.map(source => {
         if (source.id === sourceId) {
-          return { 
-            ...source, 
+          return {
+            ...source,
             status: Math.random() > 0.2 ? 'connected' : 'error',
             lastTest: 'Щойно'
           };
@@ -348,7 +348,7 @@ const SuperETLModule: React.FC = () => {
             Керування потоками даних та трансформаціями
           </Typography>
         </Box>
-        
+
         <Box sx={{ display: 'flex', gap: 1 }}>
           <Button
             variant="contained"
@@ -446,32 +446,32 @@ const SuperETLModule: React.FC = () => {
                               {pipeline.source} → {pipeline.target}
                             </Typography>
                           </Box>
-                          <Chip 
+                          <Chip
                             label={pipeline.status}
-                            sx={{ 
+                            sx={{
                               bgcolor: getStatusColor(pipeline.status),
                               color: 'white',
                               textTransform: 'capitalize'
                             }}
                           />
                         </Box>
-                        
+
                         <Box sx={{ display: 'flex', gap: 1 }}>
-                          <IconButton 
-                            color="success" 
+                          <IconButton
+                            color="success"
                             onClick={() => handlePipelineAction(pipeline.id, 'start')}
                             disabled={pipeline.status === 'running'}
                           >
                             <PlayIcon />
                           </IconButton>
-                          <IconButton 
+                          <IconButton
                             color="warning"
                             onClick={() => handlePipelineAction(pipeline.id, 'stop')}
                             disabled={pipeline.status === 'stopped'}
                           >
                             <PauseIcon />
                           </IconButton>
-                          <IconButton 
+                          <IconButton
                             color="info"
                             onClick={() => handlePipelineAction(pipeline.id, 'restart')}
                           >
@@ -485,7 +485,7 @@ const SuperETLModule: React.FC = () => {
                           </IconButton>
                         </Box>
                       </Box>
-                      
+
                       {pipeline.status === 'running' && (
                         <Box sx={{ mb: 2 }}>
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -499,7 +499,7 @@ const SuperETLModule: React.FC = () => {
                           <LinearProgress variant="determinate" value={pipeline.progress} />
                         </Box>
                       )}
-                      
+
                       <Grid container spacing={2}>
                         <Grid item xs={6} sm={3}>
                           <Typography variant="caption" color="text.secondary">
@@ -560,9 +560,9 @@ const SuperETLModule: React.FC = () => {
                         <Chip label={source.type} variant="outlined" size="small" />
                       </TableCell>
                       <TableCell>
-                        <Chip 
+                        <Chip
                           label={source.status}
-                          sx={{ 
+                          sx={{
                             bgcolor: getStatusColor(source.status),
                             color: 'white'
                           }}
@@ -577,8 +577,8 @@ const SuperETLModule: React.FC = () => {
                       <TableCell>{source.lastTest}</TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', gap: 1 }}>
-                          <Button 
-                            size="small" 
+                          <Button
+                            size="small"
                             onClick={() => handleTestConnection(source.id)}
                           >
                             Тест
@@ -662,7 +662,7 @@ const SuperETLModule: React.FC = () => {
                   </CardContent>
                 </Card>
               </Grid>
-              
+
               <Grid item xs={12} md={4}>
                 <Card>
                   <CardContent>

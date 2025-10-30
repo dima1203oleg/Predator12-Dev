@@ -40,7 +40,7 @@ npm start
 # Якщо npm start не спрацює, пробуємо альтернативні команди
 if [ $? -ne 0 ]; then
   echo "npm start не спрацював, пробуємо альтернативні команди..."
-  
+
   if grep -q "\"dev\"" package.json; then
     npm run dev
   elif grep -q "\"serve\"" package.json; then

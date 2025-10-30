@@ -10,19 +10,19 @@ class NetworkGraph {
         this.nodes = [];
         this.links = [];
         this.selectedNode = null;
-        
+
         // Розміри
         this.width = this.container.clientWidth;
         this.height = this.container.clientHeight;
-        
+
         // Кольори за типом ризику
         this.riskColors = {
             low: '#80ff00',      // Зелений
-            medium: '#ffff00',   // Жовтий  
+            medium: '#ffff00',   // Жовтий
             high: '#ff0080',     // Пурпурний
             critical: '#ff0000'  // Червоний
         };
-        
+
         this.init();
     }
 
@@ -31,36 +31,36 @@ class NetworkGraph {
         this.loadSampleData();
         this.setupForceSimulation();
         this.render();
-        
+
         console.log('Network Graph initialized');
     }
 
     createSVG() {
         // Очистити контейнер
         this.container.innerHTML = '';
-        
+
         // Створити SVG
         this.svg = d3.select(this.container)
             .append('svg')
             .attr('width', this.width)
             .attr('height', this.height)
             .attr('class', 'network-svg');
-            
+
         // Додати градієнти для свічення
         const defs = this.svg.append('defs');
-        
+
         // Градієнт для високого ризику
         const highRiskGradient = defs.append('radialGradient')
             .attr('id', 'highRiskGlow')
             .attr('cx', '50%')
             .attr('cy', '50%')
             .attr('r', '50%');
-            
+
         highRiskGradient.append('stop')
             .attr('offset', '0%')
             .attr('stop-color', '#ff0080')
             .attr('stop-opacity', 1);
-            
+
         highRiskGradient.append('stop')
             .attr('offset', '100%')
             .attr('stop-color', '#ff0080')
@@ -145,7 +145,7 @@ class NetworkGraph {
             .force('charge', d3.forceManyBody()
                 .strength(-300))
             .force('center', d3.forceCenter(
-                this.width / 2, 
+                this.width / 2,
                 this.height / 2
             ))
             .force('collision', d3.forceCollide()
@@ -260,14 +260,14 @@ class NetworkGraph {
         // Встановити новий вибір
         this.selectedNode = node;
         this.highlightNode(node, true);
-        
+
         // Оновити панель деталей
         this.updateNodeDetails(node);
-        
+
         // Анімація пульсації
         const nodeElement = this.svg.select(`.node`)
             .filter(d => d.id === node.id);
-            
+
         nodeElement
             .transition()
             .duration(300)
@@ -282,7 +282,7 @@ class NetworkGraph {
     highlightNode(node, highlight) {
         const nodeElement = this.svg.select(`.node`)
             .filter(d => d.id === node.id);
-            
+
         if (highlight) {
             nodeElement
                 .style('stroke-width', 4)
@@ -329,11 +329,11 @@ class NetworkGraph {
     addNode(nodeData) {
         // Додати новий вузол
         this.nodes.push(nodeData);
-        
+
         // Перезапустити симуляцію
         this.simulation.nodes(this.nodes);
         this.simulation.alpha(1).restart();
-        
+
         // Оновити відображення
         this.updateVisualization();
     }
@@ -341,14 +341,14 @@ class NetworkGraph {
     addLink(linkData) {
         // Додати новий зв'язок
         this.links.push(linkData);
-        
+
         // Оновити force simulation
         this.simulation
             .force('link')
             .links(this.links);
-            
+
         this.simulation.alpha(1).restart();
-        
+
         // Оновити відображення
         this.updateVisualization();
     }
@@ -358,7 +358,7 @@ class NetworkGraph {
         this.svg.selectAll('.links').remove();
         this.svg.selectAll('.nodes').remove();
         this.svg.selectAll('.labels').remove();
-        
+
         this.render();
     }
 
@@ -420,14 +420,14 @@ class NetworkGraph {
     resize() {
         this.width = this.container.clientWidth;
         this.height = this.container.clientHeight;
-        
+
         this.svg
             .attr('width', this.width)
             .attr('height', this.height);
-            
+
         this.simulation
             .force('center', d3.forceCenter(
-                this.width / 2, 
+                this.width / 2,
                 this.height / 2
             ));
     }
@@ -435,7 +435,7 @@ class NetworkGraph {
     reset() {
         this.selectedNode = null;
         this.simulation.alpha(1).restart();
-        
+
         // Скинути деталі
         const detailsContainer = document.getElementById('nodeDetails');
         if (detailsContainer) {
@@ -447,11 +447,11 @@ class NetworkGraph {
         if (this.simulation) {
             this.simulation.stop();
         }
-        
+
         if (this.svg) {
             this.svg.remove();
         }
-        
+
         console.log('Network Graph destroyed');
     }
 }

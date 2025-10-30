@@ -5,17 +5,19 @@
 """
 
 import asyncio
-import aiohttp
 import json
-import pandas as pd
-import numpy as np
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass
-import structlog
 import os
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple
+
+import aiohttp
+import numpy as np
+import pandas as pd
+import structlog
 
 logger = structlog.get_logger(__name__)
+
 
 @dataclass
 class ForecastRequest:
@@ -24,6 +26,7 @@ class ForecastRequest:
     forecast_horizon: int
     confidence_intervals: List[float]
     algorithms: List[str]
+
 
 @dataclass
 class ForecastResult:
@@ -34,26 +37,27 @@ class ForecastResult:
     algorithm_used: str
     model_performance: Dict[str, Any]
 
+
 class ForecastModelSelector:
     """Інтелектуальний вибір моделей для прогнозування"""
 
     def __init__(self):
         # Спеціалізовані моделі для прогнозування
         self.time_series_models = {
-            "primary": "meta/meta-llama-3.1-70b-instruct",      # Довгий контекст для TS
-            "secondary": "mistral/mixtral-8x22b-instruct",       # Альтернативний аналіз
-            "pattern_detection": "qwen/qwen2.5-32b-instruct"    # Виявлення паттернів
+            "primary": "meta/meta-llama-3.1-70b-instruct",  # Довгий контекст для TS
+            "secondary": "mistral/mixtral-8x22b-instruct",  # Альтернативний аналіз
+            "pattern_detection": "qwen/qwen2.5-32b-instruct",  # Виявлення паттернів
         }
 
         self.seasonality_models = {
             "advanced": "microsoft/phi-3-medium-128k-instruct",  # Складна сезонність
-            "basic": "qwen/qwen2.5-14b-instruct"                 # Базова сезонність
+            "basic": "qwen/qwen2.5-14b-instruct",  # Базова сезонність
         }
 
         self.scenario_models = {
-            "what_if": "microsoft/phi-3-medium-4k-instruct",     # Сценарії "що якщо"
-            "sensitivity": "qwen/qwen2.5-14b-instruct",          # Аналіз чутливості
-            "monte_carlo": "meta/meta-llama-3.1-8b-instruct"     # Монте-Карло
+            "what_if": "microsoft/phi-3-medium-4k-instruct",  # Сценарії "що якщо"
+            "sensitivity": "qwen/qwen2.5-14b-instruct",  # Аналіз чутливості
+            "monte_carlo": "meta/meta-llama-3.1-8b-instruct",  # Монте-Карло
         }
 
     def select_for_time_series(self, data_points: int, complexity: float) -> str:
@@ -76,12 +80,13 @@ class ForecastModelSelector:
         """Вибір моделі для сценарного моделювання"""
         return self.scenario_models.get(scenario_type, self.scenario_models["what_if"])
 
+
 class ForecastAgent:
     """AI-powered агент прогнозування з ensemble методами"""
 
     def __init__(self):
         self.model_selector = ForecastModelSelector()
-        self.sdk_base_url = os.getenv('MODEL_SDK_BASE_URL', 'http://modelsdk:3010/v1')
+        self.sdk_base_url = os.getenv("MODEL_SDK_BASE_URL", "http://modelsdk:3010/v1")
         self.algorithms = ["Prophet", "ARIMA", "LSTM", "Transformer", "N-BEATS"]
         self.session: Optional[aiohttp.ClientSession] = None
 
@@ -99,13 +104,13 @@ class ForecastAgent:
                 "model": model_name,
                 "messages": messages,
                 "max_tokens": 4000,
-                "temperature": 0.1  # Низька температура для точності
+                "temperature": 0.1,  # Низька температура для точності
             }
 
             async with session.post(f"{self.sdk_base_url}/chat/completions", json=payload) as resp:
                 if resp.status == 200:
                     data = await resp.json()
-                    return data['choices'][0]['message']['content']
+                    return data["choices"][0]["message"]["content"]
                 else:
                     logger.warning(f"Model query failed: {resp.status}")
                     return "Model unavailable"
@@ -119,11 +124,11 @@ class ForecastAgent:
         try:
             # Підготовка даних для AI аналізу
             data_stats = {
-                'length': len(data),
-                'mean': np.mean(data),
-                'std': np.std(data),
-                'min': np.min(data),
-                'max': np.max(data)
+                "length": len(data),
+                "mean": np.mean(data),
+                "std": np.std(data),
+                "min": np.min(data),
+                "max": np.max(data),
             }
 
             # Спрощений аналіз автокореляції (mock)
@@ -132,28 +137,34 @@ class ForecastAgent:
                 seasonal_patterns += 1
             if len(data) > 12:  # Місячна сезонність
                 seasonal_patterns += 1
-            if len(data) > 7:   # Тижнева сезонність
+            if len(data) > 7:  # Тижнева сезонність
                 seasonal_patterns += 1
 
             model = self.model_selector.select_for_seasonality(seasonal_patterns)
 
             messages = [
-                {"role": "system", "content": "You are a time series analysis expert. Detect seasonality patterns and trends."},
-                {"role": "user", "content": f"Time series data statistics: {json.dumps(data_stats)}. Data length: {len(data)} points. Identify seasonal patterns and trends."}
+                {
+                    "role": "system",
+                    "content": "You are a time series analysis expert. Detect seasonality patterns and trends.",
+                },
+                {
+                    "role": "user",
+                    "content": f"Time series data statistics: {json.dumps(data_stats)}. Data length: {len(data)} points. Identify seasonal patterns and trends.",
+                },
             ]
 
             ai_analysis = await self.query_model(model, messages)
 
             return {
-                'seasonal_patterns_detected': seasonal_patterns,
-                'data_statistics': data_stats,
-                'ai_analysis': ai_analysis,
-                'recommended_algorithms': self._recommend_algorithms(seasonal_patterns, len(data))
+                "seasonal_patterns_detected": seasonal_patterns,
+                "data_statistics": data_stats,
+                "ai_analysis": ai_analysis,
+                "recommended_algorithms": self._recommend_algorithms(seasonal_patterns, len(data)),
             }
 
         except Exception as e:
             logger.error(f"Seasonality detection failed: {e}")
-            return {'error': str(e)}
+            return {"error": str(e)}
 
     def _recommend_algorithms(self, seasonal_patterns: int, data_length: int) -> List[str]:
         """Рекомендація алгоритмів на основі характеристик даних"""
@@ -186,16 +197,22 @@ class ForecastAgent:
 
             # Підготовка контексту для AI
             context = {
-                'target_column': request.target_column,
-                'data_length': len(mock_data),
-                'forecast_horizon': request.forecast_horizon,
-                'seasonality': seasonality_info,
-                'algorithms_available': request.algorithms or self.algorithms
+                "target_column": request.target_column,
+                "data_length": len(mock_data),
+                "forecast_horizon": request.forecast_horizon,
+                "seasonality": seasonality_info,
+                "algorithms_available": request.algorithms or self.algorithms,
             }
 
             messages = [
-                {"role": "system", "content": "You are a forecasting expert. Analyze time series and recommend the best forecasting approach."},
-                {"role": "user", "content": f"Time series forecasting task: {json.dumps(context, indent=2)}. Recommend the best algorithm and parameters."}
+                {
+                    "role": "system",
+                    "content": "You are a forecasting expert. Analyze time series and recommend the best forecasting approach.",
+                },
+                {
+                    "role": "user",
+                    "content": f"Time series forecasting task: {json.dumps(context, indent=2)}. Recommend the best algorithm and parameters.",
+                },
             ]
 
             ai_recommendation = await self.query_model(model, messages)
@@ -220,10 +237,10 @@ class ForecastAgent:
 
             # Розрахунок метрик точності (mock)
             accuracy_metrics = {
-                'mape': np.random.uniform(5, 15),      # Mean Absolute Percentage Error
-                'rmse': np.random.uniform(2, 8),       # Root Mean Square Error
-                'mae': np.random.uniform(1, 5),        # Mean Absolute Error
-                'r2_score': np.random.uniform(0.7, 0.95)  # R-squared
+                "mape": np.random.uniform(5, 15),  # Mean Absolute Percentage Error
+                "rmse": np.random.uniform(2, 8),  # Root Mean Square Error
+                "mae": np.random.uniform(1, 5),  # Mean Absolute Error
+                "r2_score": np.random.uniform(0.7, 0.95),  # R-squared
             }
 
             result = ForecastResult(
@@ -233,11 +250,11 @@ class ForecastAgent:
                 accuracy_metrics=accuracy_metrics,
                 algorithm_used="Ensemble (Prophet + LSTM)",
                 model_performance={
-                    'ai_model_used': model,
-                    'ai_recommendation': ai_recommendation,
-                    'seasonality_detected': seasonality_info,
-                    'training_time_seconds': np.random.uniform(10, 30)
-                }
+                    "ai_model_used": model,
+                    "ai_recommendation": ai_recommendation,
+                    "seasonality_detected": seasonality_info,
+                    "training_time_seconds": np.random.uniform(10, 30),
+                },
             )
 
             logger.info(f"Forecast generated successfully for dataset {request.dataset_id}")
@@ -247,7 +264,9 @@ class ForecastAgent:
             logger.error(f"Forecast generation failed: {e}")
             raise
 
-    async def what_if_analysis(self, base_forecast: ForecastResult, scenarios: List[Dict[str, Any]]) -> Dict[str, Any]:
+    async def what_if_analysis(
+        self, base_forecast: ForecastResult, scenarios: List[Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """Сценарний аналіз "що якщо" """
         try:
             logger.info(f"Running what-if analysis with {len(scenarios)} scenarios")
@@ -257,41 +276,48 @@ class ForecastAgent:
             scenario_results = {}
 
             for i, scenario in enumerate(scenarios):
-                scenario_name = scenario.get('name', f'scenario_{i+1}')
+                scenario_name = scenario.get("name", f"scenario_{i+1}")
 
                 messages = [
-                    {"role": "system", "content": "You are a scenario modeling expert. Analyze how external factors affect forecasts."},
-                    {"role": "user", "content": f"Base forecast: {base_forecast.forecast_values[:5]}... Scenario parameters: {scenario}. How would this scenario change the forecast?"}
+                    {
+                        "role": "system",
+                        "content": "You are a scenario modeling expert. Analyze how external factors affect forecasts.",
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Base forecast: {base_forecast.forecast_values[:5]}... Scenario parameters: {scenario}. How would this scenario change the forecast?",
+                    },
                 ]
 
                 ai_analysis = await self.query_model(model, messages)
 
                 # Mock модифікація прогнозу на основі сценарію
-                impact_factor = scenario.get('impact_factor', 1.0)
+                impact_factor = scenario.get("impact_factor", 1.0)
                 modified_forecast = [v * impact_factor for v in base_forecast.forecast_values]
 
                 scenario_results[scenario_name] = {
-                    'modified_forecast': modified_forecast,
-                    'impact_factor': impact_factor,
-                    'ai_analysis': ai_analysis,
-                    'confidence_change': scenario.get('confidence_impact', 0.0)
+                    "modified_forecast": modified_forecast,
+                    "impact_factor": impact_factor,
+                    "ai_analysis": ai_analysis,
+                    "confidence_change": scenario.get("confidence_impact", 0.0),
                 }
 
             return {
-                'base_forecast': base_forecast.forecast_values,
-                'scenarios': scenario_results,
-                'analysis_model': model,
-                'timestamp': datetime.utcnow().isoformat()
+                "base_forecast": base_forecast.forecast_values,
+                "scenarios": scenario_results,
+                "analysis_model": model,
+                "timestamp": datetime.utcnow().isoformat(),
             }
 
         except Exception as e:
             logger.error(f"What-if analysis failed: {e}")
-            return {'error': str(e)}
+            return {"error": str(e)}
 
     async def close(self):
         """Закрити HTTP сесію"""
         if self.session and not self.session.closed:
             await self.session.close()
+
 
 async def main():
     """Тестування ForecastAgent"""
@@ -307,33 +333,44 @@ async def main():
             target_column="revenue",
             forecast_horizon=30,
             confidence_intervals=[0.8, 0.95],
-            algorithms=["Prophet", "LSTM"]
+            algorithms=["Prophet", "LSTM"],
         )
 
         print("🔮 Generating forecast...")
         forecast = await agent.generate_forecast(request)
 
         print(f"✅ Forecast generated using: {forecast.algorithm_used}")
-        print(f"📊 Accuracy metrics: MAPE={forecast.accuracy_metrics['mape']:.1f}%, R²={forecast.accuracy_metrics['r2_score']:.3f}")
+        print(
+            f"📊 Accuracy metrics: MAPE={forecast.accuracy_metrics['mape']:.1f}%, R²={forecast.accuracy_metrics['r2_score']:.3f}"
+        )
         print(f"🎯 First 5 forecast values: {forecast.forecast_values[:5]}")
 
         # Тестування what-if сценаріїв
         scenarios = [
-            {'name': 'economic_growth', 'impact_factor': 1.2, 'description': 'Economic growth scenario'},
-            {'name': 'market_decline', 'impact_factor': 0.8, 'description': 'Market decline scenario'}
+            {
+                "name": "economic_growth",
+                "impact_factor": 1.2,
+                "description": "Economic growth scenario",
+            },
+            {
+                "name": "market_decline",
+                "impact_factor": 0.8,
+                "description": "Market decline scenario",
+            },
         ]
 
         print("\n🎭 Running what-if analysis...")
         what_if_results = await agent.what_if_analysis(forecast, scenarios)
 
         print(f"📈 Scenarios analyzed: {len(what_if_results.get('scenarios', {}))}")
-        for scenario_name in what_if_results.get('scenarios', {}):
+        for scenario_name in what_if_results.get("scenarios", {}):
             print(f"  - {scenario_name}")
 
         print("✅ Forecast Agent працює коректно!")
 
     finally:
         await agent.close()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

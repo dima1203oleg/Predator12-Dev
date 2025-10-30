@@ -51,22 +51,22 @@ const elements = {
  */
 function init() {
     console.log('🚀 Ініціалізація Predator Analytics Hero...');
-    
+
     // Налаштування обробників подій
     setupEventListeners();
-    
+
     // Ініціалізація голосового розпізнавання
     initVoiceRecognition();
-    
+
     // Підключення до SSE для подій агентів
     connectToEventStream();
-    
+
     // Анімація очей
     startEyeAnimation();
-    
+
     // Перше повідомлення
     updateStatus('Готовий до роботи', 'ready');
-    
+
     console.log('✅ Predator Analytics готовий!');
 }
 
@@ -82,10 +82,10 @@ function setupEventListeners() {
             sendMessage();
         }
     });
-    
+
     // Голосове введення
     elements.chatVoice.addEventListener('click', toggleVoiceRecognition);
-    
+
     // Фокус на input при завантаженні
     elements.chatInput.focus();
 }
@@ -96,17 +96,17 @@ function setupEventListeners() {
 async function sendMessage() {
     const text = elements.chatInput.value.trim();
     if (!text || state.isProcessing) return;
-    
+
     // Додати повідомлення користувача
     addMessage(text, 'user');
     elements.chatInput.value = '';
-    
+
     // Оновити статус
     state.isProcessing = true;
     updateStatus('Обробляю запит...', 'processing');
     setEmotion('thinking');
     showLoading(true);
-    
+
     try {
         // Відправити запит на бекенд
         const response = await fetch(`${CONFIG.apiUrl}${CONFIG.endpoints.chat}`, {
@@ -117,31 +117,31 @@ async function sendMessage() {
                 trace: true
             })
         });
-        
+
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        
+
         const data = await response.json();
-        
+
         // Додати відповідь AI
         const reply = data.reply || data.response || 'Отримано відповідь від системи.';
         addMessage(reply, 'assistant');
-        
+
         // Голосова відповідь
         if (CONFIG.voice.enabled) {
             speakText(reply);
         }
-        
+
         // Оновити граф якщо є дані
         if (data.networkData) {
             updateNetwork(data.networkData);
         }
-        
+
         // Успішний статус
         setEmotion('happy');
         updateStatus('Відповідь готова', 'ready');
-        
+
     } catch (error) {
         console.error('Помилка відправки повідомлення:', error);
         addMessage('⚠️ Не вдалося зв\'язатися з системою. Перевірте підключення.', 'system');
@@ -165,10 +165,10 @@ function addMessage(text, type = 'user') {
     const messageDiv = document.createElement('div');
     messageDiv.className = `msg ${type}`;
     messageDiv.textContent = text;
-    
+
     elements.chatFeed.appendChild(messageDiv);
     elements.chatFeed.scrollTop = elements.chatFeed.scrollHeight;
-    
+
     state.messages.push({ text, type, timestamp: Date.now() });
 }
 
@@ -179,7 +179,7 @@ function setEmotion(emotion) {
     const emotions = ['neutral', 'happy', 'thinking', 'speaking', 'sad', 'surprised'];
     elements.aiFace.classList.remove(...emotions);
     elements.aiFace.classList.add(emotion);
-    
+
     // Оновити підказку
     const hints = {
         neutral: 'Готовий відповісти... 🤖',
@@ -198,16 +198,16 @@ function setEmotion(emotion) {
 function updateStatus(text, status = 'ready') {
     const statusText = elements.aiStatus.querySelector('.status-text');
     const statusDot = elements.aiStatus.querySelector('.status-dot');
-    
+
     statusText.textContent = text;
-    
+
     // Колір точки
     const colors = {
         ready: '#00FF88',
         processing: '#18FFFF',
         error: '#FF4444'
     };
-    
+
     statusDot.style.background = colors[status] || colors.ready;
     statusDot.style.boxShadow = `0 0 10px ${colors[status] || colors.ready}`;
 }
@@ -230,30 +230,30 @@ function showLoading(show) {
  */
 function speakText(text) {
     if (!state.synthesis) return;
-    
+
     // Зупинити попереднє мовлення
     state.synthesis.cancel();
-    
+
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = CONFIG.voice.lang;
     utterance.rate = 0.95;
     utterance.pitch = 1.0;
-    
+
     utterance.onstart = () => {
         state.isSpeaking = true;
         setEmotion('speaking');
     };
-    
+
     utterance.onend = () => {
         state.isSpeaking = false;
         setEmotion('neutral');
     };
-    
+
     utterance.onerror = () => {
         state.isSpeaking = false;
         setEmotion('neutral');
     };
-    
+
     state.synthesis.speak(utterance);
 }
 
@@ -262,32 +262,32 @@ function speakText(text) {
  */
 function initVoiceRecognition() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    
+
     if (!SpeechRecognition) {
         console.warn('Голосове розпізнавання не підтримується браузером');
         elements.chatVoice.disabled = true;
         elements.chatVoice.title = 'Не підтримується браузером';
         return;
     }
-    
+
     state.recognition = new SpeechRecognition();
     state.recognition.lang = CONFIG.voice.lang;
     state.recognition.interimResults = false;
     state.recognition.maxAlternatives = 1;
-    
+
     state.recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         elements.chatInput.value = transcript;
         sendMessage();
     };
-    
+
     state.recognition.onerror = (event) => {
         console.error('Помилка розпізнавання:', event.error);
         state.isListening = false;
         elements.chatVoice.textContent = '🎙️';
         updateStatus('Готовий до роботи', 'ready');
     };
-    
+
     state.recognition.onend = () => {
         state.isListening = false;
         elements.chatVoice.textContent = '🎙️';
@@ -299,7 +299,7 @@ function initVoiceRecognition() {
  */
 function toggleVoiceRecognition() {
     if (!state.recognition) return;
-    
+
     if (state.isListening) {
         state.recognition.stop();
         state.isListening = false;
@@ -323,20 +323,20 @@ function toggleVoiceRecognition() {
 function connectToEventStream() {
     try {
         const eventSource = new EventSource(`${CONFIG.apiUrl}${CONFIG.endpoints.events}`);
-        
+
         eventSource.onmessage = (event) => {
             const data = event.data;
             addAgentEvent(data);
         };
-        
+
         eventSource.onerror = (error) => {
             console.warn('SSE з\'єднання закрито або помилка:', error);
             eventSource.close();
-            
+
             // Спроба перепідключення через 5 секунд
             setTimeout(connectToEventStream, 5000);
         };
-        
+
         console.log('✅ Підключено до потоку подій агентів');
     } catch (error) {
         console.error('Не вдалося підключитися до SSE:', error);
@@ -349,14 +349,14 @@ function connectToEventStream() {
 function addAgentEvent(eventText) {
     const li = document.createElement('li');
     li.textContent = eventText;
-    
+
     elements.agentEvents.insertBefore(li, elements.agentEvents.firstChild);
-    
+
     // Зберігати тільки останні 10 подій
     while (elements.agentEvents.children.length > 10) {
         elements.agentEvents.removeChild(elements.agentEvents.lastChild);
     }
-    
+
     state.events.push({ text: eventText, timestamp: Date.now() });
 }
 
@@ -366,7 +366,7 @@ function addAgentEvent(eventText) {
 function updateNetwork(networkData) {
     // TODO: Інтеграція з Cytoscape або D3.js
     console.log('Оновлення мережі:', networkData);
-    
+
     // Поки що показуємо повідомлення
     elements.networkCanvas.innerHTML = `
         <div class="network-placeholder">

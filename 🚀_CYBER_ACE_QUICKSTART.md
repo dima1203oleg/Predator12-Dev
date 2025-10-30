@@ -86,10 +86,10 @@ import { useTranslation } from 'react-i18next';
 
 function Component() {
   const { i18n } = useTranslation();
-  
+
   // Переключити на англійську
   i18n.changeLanguage('en-US');
-  
+
   // Переключити на українську
   i18n.changeLanguage('uk-UA');
 }

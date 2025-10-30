@@ -91,7 +91,7 @@ socket.on('model_metrics', (data) => {
 // Example API Service
 export const agentService = {
   getAll: () => fetch('/api/agents').then(r => r.json()),
-  execute: (id: string, params: any) => 
+  execute: (id: string, params: any) =>
     fetch(`/api/agents/${id}/execute`, {
       method: 'POST',
       body: JSON.stringify(params)

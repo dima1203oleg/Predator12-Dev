@@ -73,7 +73,7 @@ window.speechSynthesis.speak(utterance);
 ```javascript
 // В консолі браузера
 const voices = speechSynthesis.getVoices();
-console.log('Доступні українські голоси:', 
+console.log('Доступні українські голоси:',
   voices.filter(v => v.lang.includes('uk')));
 ```
 

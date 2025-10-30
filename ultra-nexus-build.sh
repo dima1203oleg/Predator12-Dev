@@ -31,12 +31,12 @@ if [ $? -eq 0 ]; then
     echo "📁 Файли в папці: frontend/dist/"
     echo "🌐 Готово до деплою!"
     echo "✅ ==============================================="
-    
+
     echo "📊 Статистика білду:"
     du -sh dist/
     find dist/ -name "*.js" | wc -l | xargs echo "JS файлів:"
     find dist/ -name "*.css" | wc -l | xargs echo "CSS файлів:"
-    
+
     echo ""
     echo "🚀 Наступні кроки:"
     echo "1. Скопіюйте dist/ на ваш веб-сервер"

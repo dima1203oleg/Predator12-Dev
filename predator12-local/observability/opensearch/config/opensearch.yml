@@ -27,7 +27,7 @@ bootstrap.memory_lock: true
 # Thread pool
 thread_pool.write.queue_size: 1000
 
-# Indices settings  
+# Indices settings
 indices.recovery.max_bytes_per_sec: 40mb
 
 # Performance

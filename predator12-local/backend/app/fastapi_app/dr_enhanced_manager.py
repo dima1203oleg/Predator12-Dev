@@ -388,7 +388,10 @@ class DisasterRecoveryManager:
                     "indices": "customs_*,companies_*,osint_*",
                     "ignore_unavailable": True,
                     "include_global_state": False,
-                    "metadata": {"taken_by": "dr_manager", "taken_because": "scheduled_backup"},
+                    "metadata": {
+                        "taken_by": "dr_manager",
+                        "taken_because": "scheduled_backup",
+                    },
                 }
 
                 # Здесь был бы реальный HTTP-запрос к OpenSearch
@@ -745,7 +748,7 @@ class DisasterRecoveryManager:
             "timestamp": datetime.now().isoformat(),
             "backup_status": {
                 name: {
-                    "last_backup": target.last_backup.isoformat() if target.last_backup else None
+                    "last_backup": (target.last_backup.isoformat() if target.last_backup else None)
                 }
                 for name, target in self.backup_targets.items()
             },
@@ -766,7 +769,10 @@ class DisasterRecoveryManager:
         checks = {}
         for prereq in prerequisites:
             # Mock проверка - в продакшне здесь были бы реальные проверки
-            checks[prereq] = {"status": "available", "details": f"Mock check for {prereq}"}
+            checks[prereq] = {
+                "status": "available",
+                "details": f"Mock check for {prereq}",
+            }
 
         return {"prerequisites": checks, "all_satisfied": True}
 
@@ -844,7 +850,7 @@ class DREnhancedManager(DisasterRecoveryManager):
             },
             "dr_drills": {
                 "total_drills": len(self.dr_drills_history),
-                "last_drill": self.dr_drills_history[-1] if self.dr_drills_history else None,
+                "last_drill": (self.dr_drills_history[-1] if self.dr_drills_history else None),
                 "success_rate": self._calculate_drill_success_rate(),
             },
         }
@@ -903,7 +909,10 @@ class DREnhancedManager(DisasterRecoveryManager):
 
         except Exception as e:
             logger.error(f"❌ Backup trigger failed: {str(e)}")
-            return {"error": str(e), "triggered_backups": results.get("triggered_backups", {})}
+            return {
+                "error": str(e),
+                "triggered_backups": results.get("triggered_backups", {}),
+            }
 
     async def trigger_failover(self, target_environment: str = "secondary") -> Dict[str, Any]:
         """Тригер DR failover процедури"""
@@ -946,7 +955,7 @@ class DREnhancedManager(DisasterRecoveryManager):
             failover_result = {
                 "failover_id": failover_id,
                 "target_environment": target_environment,
-                "status": "completed" if health_check.get("healthy", False) else "failed",
+                "status": ("completed" if health_check.get("healthy", False) else "failed"),
                 "steps_completed": failover_steps,
                 "final_backup": final_backup["summary"],
                 "health_validation": health_check,

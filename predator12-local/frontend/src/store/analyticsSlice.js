@@ -1,4 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+"use strict";
+var _a;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.setActiveAgents = exports.updateSystemStatus = exports.addGeoEvent = void 0;
+const toolkit_1 = require("@reduxjs/toolkit");
 const initialState = {
     geoEvents: [
         { lat: 50.4501, lon: 30.5234, intensity: 0.8, timestamp: new Date(), type: 'anomaly' },
@@ -8,7 +12,7 @@ const initialState = {
     systemStatus: 'healthy',
     activeAgents: 8,
 };
-const analyticsSlice = createSlice({
+const analyticsSlice = (0, toolkit_1.createSlice)({
     name: 'analytics',
     initialState,
     reducers: {
@@ -23,5 +27,5 @@ const analyticsSlice = createSlice({
         },
     },
 });
-export const { addGeoEvent, updateSystemStatus, setActiveAgents } = analyticsSlice.actions;
-export default analyticsSlice.reducer;
+_a = analyticsSlice.actions, exports.addGeoEvent = _a.addGeoEvent, exports.updateSystemStatus = _a.updateSystemStatus, exports.setActiveAgents = _a.setActiveAgents;
+exports.default = analyticsSlice.reducer;

@@ -12,7 +12,7 @@ export default function AIFace() {
         el.style.opacity = el.style.opacity === '1' ? '0.35' : '1';
       });
     }, 1800) as unknown as number;
-    
+
     return () => clearInterval(id);
   }, []);
 

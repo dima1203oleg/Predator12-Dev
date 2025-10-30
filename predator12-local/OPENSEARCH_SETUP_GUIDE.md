@@ -374,10 +374,10 @@ async def main():
         use_ssl=False,
         verify_certs=False
     )
-    
+
     info = await client.info()
     print(f"Connected: {info['version']['number']}")
-    
+
     await client.close()
 
 asyncio.run(main())

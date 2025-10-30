@@ -84,7 +84,7 @@ const startListening = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     console.log('✅ Доступ до мікрофона надано');
     stream.getTracks().forEach(track => track.stop());
-    
+
     // Тепер запускаємо recognition
     recognitionRef.current.start();
   } catch (error) {
@@ -101,7 +101,7 @@ const startListening = async () => {
 ```typescript
 recognitionRef.current.onerror = (event: any) => {
   console.error('❌ Speech recognition ERROR:', event.error);
-  
+
   let errorMessage = 'Помилка розпізнавання: ';
   switch (event.error) {
     case 'no-speech':
@@ -119,7 +119,7 @@ recognitionRef.current.onerror = (event: any) => {
     default:
       errorMessage += event.error;
   }
-  
+
   alert(errorMessage);
   setIsListening(false);
   setIsConnected(false);
@@ -441,18 +441,18 @@ cd /Users/dima/Documents/Predator12/predator12-local
 3. **Корисні команди:**
    ```javascript
    // У DevTools Console:
-   
+
    // Перевірка доступу до мікрофона:
    navigator.mediaDevices.getUserMedia({ audio: true })
      .then(s => console.log('✅ OK', s))
      .catch(e => console.error('❌ Error', e));
-   
+
    // Перевірка Web Speech API:
-   console.log('SpeechRecognition:', 
+   console.log('SpeechRecognition:',
      'webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
-   
+
    // Список голосів:
-   speechSynthesis.getVoices().forEach(v => 
+   speechSynthesis.getVoices().forEach(v =>
      console.log(v.name, v.lang));
    ```
 
@@ -518,7 +518,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 
 ## 💬 КОРОТКИЙ ПІДСУМОК
 
-**Проблему ВИПРАВЛЕНО!** 
+**Проблему ВИПРАВЛЕНО!**
 
 Основна причина - конфлікт у `useEffect`, який перестворював recognition при кожній зміні налаштувань. Також не було явного запиту доступу до мікрофона.
 

@@ -20,7 +20,7 @@ repos:
     rev: v8.46.0
     hooks:
       - id: eslint
-        files: "^frontend/.*\.(js|jsx|ts|tsx)$"
+        files: '^frontend/.*\\.(js|jsx|ts|tsx)$'
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0

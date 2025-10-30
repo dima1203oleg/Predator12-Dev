@@ -51,7 +51,7 @@ async def get_dashboard_stats(
 ):
     """
     Get dashboard statistics
-    
+
     Returns:
         - total_models: Total number of AI models
         - active_requests: Current active requests
@@ -65,10 +65,10 @@ async def get_dashboard_stats(
         "SELECT COUNT(*) FROM ai_models WHERE is_active = true"
     )
     total_models = models_count.scalar_one()
-    
+
     # Get requests stats
     from app.models.request import RequestLog
-    
+
     # Active requests (last 5 minutes)
     five_minutes_ago = datetime.utcnow() - timedelta(minutes=5)
     active_requests_count = await db.execute(
@@ -76,7 +76,7 @@ async def get_dashboard_stats(
         {"time": five_minutes_ago}
     )
     active_requests = active_requests_count.scalar_one()
-    
+
     # Total requests (last 24 hours)
     twenty_four_hours_ago = datetime.utcnow() - timedelta(hours=24)
     total_requests_count = await db.execute(
@@ -84,7 +84,7 @@ async def get_dashboard_stats(
         {"time": twenty_four_hours_ago}
     )
     total_requests = total_requests_count.scalar_one()
-    
+
     # Success rate
     success_requests_count = await db.execute(
         "SELECT COUNT(*) FROM request_logs WHERE created_at > :time AND status = 'success'",
@@ -92,11 +92,11 @@ async def get_dashboard_stats(
     )
     success_requests = success_requests_count.scalar_one()
     success_rate = (success_requests / total_requests * 100) if total_requests > 0 else 100
-    
+
     # System uptime
     from app.core.config import settings
     uptime_seconds = int((datetime.utcnow() - settings.START_TIME).total_seconds())
-    
+
     return DashboardStats(
         total_models=total_models,
         active_requests=active_requests,
@@ -111,7 +111,7 @@ async def get_dashboard_stats(
 async def get_system_status():
     """
     Get system status information
-    
+
     Returns:
         - services: Status of all services
         - resources: CPU, Memory, Disk usage
@@ -124,18 +124,18 @@ async def get_system_status():
         "qdrant": await check_qdrant(),
         "keycloak": await check_keycloak(),
     }
-    
+
     # System resources
     cpu_usage = psutil.cpu_percent(interval=1)
     memory = psutil.virtual_memory()
     disk = psutil.disk_usage('/')
-    
+
     resources = {
         "cpu_usage": cpu_usage,
         "memory_used": memory.percent,
         "disk_used": disk.percent
     }
-    
+
     return SystemStatus(
         services=services,
         resources=resources
@@ -204,7 +204,7 @@ class DashboardStats(BaseModel):
     uptime_seconds: int = Field(..., description="System uptime in seconds")
     total_requests: int = Field(..., description="Total requests in last 24h")
     success_rate: float = Field(..., description="Success rate percentage")
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -221,7 +221,7 @@ class SystemStatus(BaseModel):
     """System status"""
     services: Dict[str, str] = Field(..., description="Status of services")
     resources: Dict[str, float] = Field(..., description="System resources")
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -296,7 +296,7 @@ redis_client = Redis(
 def cache_response(expire: int = 60):
     """
     Cache decorator for API responses
-    
+
     Args:
         expire: Cache expiration in seconds
     """
@@ -305,22 +305,22 @@ def cache_response(expire: int = 60):
         async def wrapper(*args, **kwargs):
             # Generate cache key
             cache_key = f"{func.__module__}:{func.__name__}:{hashlib.md5(str(kwargs).encode()).hexdigest()}"
-            
+
             # Try to get from cache
             cached = await redis_client.get(cache_key)
             if cached:
                 return json.loads(cached)
-            
+
             # Execute function
             result = await func(*args, **kwargs)
-            
+
             # Save to cache
             await redis_client.setex(
                 cache_key,
                 expire,
                 json.dumps(result.dict() if hasattr(result, 'dict') else result)
             )
-            
+
             return result
         return wrapper
     return decorator
@@ -371,7 +371,7 @@ class APIClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
-    
+
     try {
       const response = await fetch(url, {
         ...options,
@@ -527,7 +527,7 @@ const App = () => {
           <div style={{ fontSize: '16px', opacity: 0.9 }}>
             Unable to connect to backend API
           </div>
-          <button 
+          <button
             onClick={() => window.location.reload()}
             style={{
               marginTop: '20px',
@@ -553,7 +553,7 @@ const App = () => {
     const days = Math.floor(seconds / 86400);
     const hours = Math.floor((seconds % 86400) / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    
+
     if (days > 0) return `${days}d ${hours}h`;
     if (hours > 0) return `${hours}h ${minutes}m`;
     return `${minutes}m`;
@@ -584,7 +584,7 @@ const App = () => {
         }}>
           Enterprise-Grade AI Infrastructure
         </p>
-        
+
         {/* Success Rate Badge */}
         <div style={{
           display: 'inline-block',
@@ -607,25 +607,25 @@ const App = () => {
         maxWidth: '1200px',
         margin: '0 auto 50px'
       }}>
-        <StatCard 
+        <StatCard
           icon="🤖"
           title="Total Models"
           value={stats?.total_models || 0}
           color="#0066cc"
         />
-        <StatCard 
+        <StatCard
           icon="⚡"
           title="Active Requests"
           value={stats?.active_requests || 0}
           color="#00cc66"
         />
-        <StatCard 
+        <StatCard
           icon="⏱️"
           title="Uptime"
           value={formatUptime(stats?.uptime_seconds || 0)}
           color="#cc6600"
         />
-        <StatCard 
+        <StatCard
           icon="📊"
           title="Total Requests (24h)"
           value={stats?.total_requests || 0}
@@ -646,8 +646,8 @@ const App = () => {
           <h2 style={{ marginBottom: '20px', color: '#333' }}>
             🖥️ System Status
           </h2>
-          
-          <div style={{ 
+
+          <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
             gap: '15px'
@@ -684,17 +684,17 @@ const App = () => {
               📈 Resource Usage
             </h3>
             <div style={{ display: 'grid', gap: '10px' }}>
-              <ResourceBar 
+              <ResourceBar
                 label="CPU"
                 value={systemStatus.resources.cpu_usage}
                 color="#2196f3"
               />
-              <ResourceBar 
+              <ResourceBar
                 label="Memory"
                 value={systemStatus.resources.memory_used}
                 color="#ff9800"
               />
-              <ResourceBar 
+              <ResourceBar
                 label="Disk"
                 value={systemStatus.resources.disk_used}
                 color="#4caf50"
@@ -733,7 +733,7 @@ const StatCard = ({ icon, title, value, color }) => (
 // Resource Bar Component
 const ResourceBar = ({ label, value, color }) => (
   <div>
-    <div style={{ 
+    <div style={{
       display: 'flex',
       justifyContent: 'space-between',
       marginBottom: '5px',

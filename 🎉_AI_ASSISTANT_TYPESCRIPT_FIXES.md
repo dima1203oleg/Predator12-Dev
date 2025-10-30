@@ -21,11 +21,11 @@ if (response) {
 }
 ```
 
-**Проблема**: 
+**Проблема**:
 - `executeIntent` очікує 2 аргументи (intent, entities)
 - `response` міг бути `null`
 
-**Рішення**: 
+**Рішення**:
 - Додано другий аргумент `[]` (порожній масив entities)
 - Додана перевірка `if (response)`
 
@@ -42,11 +42,11 @@ asr.supported === 'browser'
 tts.supported === 'browser'
 ```
 
-**Проблема**: 
+**Проблема**:
 - Типи `ASRMode` та `TTSMode` мають значення `'browser' | 'fallback' | 'none'`
 - Значення `'native'` не існує
 
-**Рішення**: 
+**Рішення**:
 - Змінено на правильне значення `'browser'`
 
 ---
@@ -62,11 +62,11 @@ tts.supported === 'browser'
 "exclude": ["node_modules", "dist", "build"]
 ```
 
-**Проблема**: 
+**Проблема**:
 - TypeScript не включав жодних файлів проекту
 - Це блокувало перевірку типів
 
-**Рішення**: 
+**Рішення**:
 - Додано правильні шляхи до `include`
 - Виключено лише папки збірки
 
@@ -82,7 +82,7 @@ export { default as RiskBanner } from './RiskBanner';
 export { default as MicStatus } from './MicStatus';
 ```
 
-**Переваги**: 
+**Переваги**:
 - Зручні імпорти: `import { Head3D, ChatPanel } from './components'`
 - Централізований експорт компонентів
 
@@ -93,12 +93,12 @@ export { default as MicStatus } from './MicStatus';
 **Файл**: `AssistantPage.tsx`  
 **Помилка**: `Cannot find module './components/Head3D'`
 
-**Причина**: 
+**Причина**:
 - Це помилка кешу VS Code TypeScript Language Server
 - Файли існують та імпортуються коректно (перевірено в test-imports.ts)
 - Реальна компіляція не має цих помилок
 
-**Рішення**: 
+**Рішення**:
 1. Перезавантажити VS Code
 2. Або виконати команду: `TypeScript: Restart TS Server` (Cmd+Shift+P)
 3. Або видалити кеш: `rm -rf node_modules/.cache`

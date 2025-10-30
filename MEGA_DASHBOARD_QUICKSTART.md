@@ -66,12 +66,12 @@ predator12-local/frontend/src/main.tsx
   - Real-time updates
   - Animated progress bars
   - Trend indicators (↗/↘)
-  
+
 - ✅ **6 Service Cards** - Status моніторинг
   - Backend API, PostgreSQL, Redis
   - Qdrant, Celery, MinIO
   - Pulse animations, uptime tracking
-  
+
 - ✅ **Performance Chart** - Canvas line chart з gradient fill
 - ✅ **Quick Stats** - Requests, Response Time, Error Rate
 - ✅ **Live Status Badge** - System online indicator

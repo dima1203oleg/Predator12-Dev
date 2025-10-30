@@ -26,7 +26,7 @@ const [connectionStatus, setConnectionStatus] = useState('disconnected');
 
 return (
   <div>
-    <WebSocketStatus 
+    <WebSocketStatus
       wsEndpoint="/ws/sentiment-updates"
       connectionStatus={connectionStatus}
       onReconnect={handleReconnect}
@@ -40,7 +40,7 @@ return (
 Use the minimal mode when space is limited or when you need a less obtrusive indicator:
 
 ```jsx
-<WebSocketStatus 
+<WebSocketStatus
   wsEndpoint="/ws/data-stream"
   connectionStatus={connectionStatus}
   minimal={true}
@@ -82,15 +82,15 @@ const ws = useRef(null);
 const connectWebSocket = () => {
   setConnectionStatus('connecting');
   ws.current = new WebSocket(wsUrl);
-  
+
   ws.current.onopen = () => {
     setConnectionStatus('connected');
   };
-  
+
   ws.current.onclose = () => {
     setConnectionStatus('disconnected');
   };
-  
+
   ws.current.onerror = () => {
     setConnectionStatus('disconnected');
   };
@@ -98,7 +98,7 @@ const connectWebSocket = () => {
 
 // Use the WebSocketStatus component
 return (
-  <WebSocketStatus 
+  <WebSocketStatus
     wsEndpoint={wsUrl}
     connectionStatus={connectionStatus}
     onReconnect={connectWebSocket}
@@ -112,4 +112,4 @@ return (
 2. Include the component near the top of any UI panel that relies on WebSocket data
 3. Use the minimal mode in dashboards with multiple WebSocket-powered widgets
 4. Add specific error handling for connection failures
-5. Consider using a global WebSocket connection state manager for complex applications 
+5. Consider using a global WebSocket connection state manager for complex applications

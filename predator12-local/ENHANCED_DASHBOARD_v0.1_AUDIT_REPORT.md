@@ -54,7 +54,7 @@
 #### Event Bus та Zustand Store
 ```typescript
 // AppEventStore з повною функціональністю
-type AppEvent = 
+type AppEvent =
   | { type: 'HEALTH_UNKNOWN'; source: 'prometheus' | 'backend'; hint?: string }
   | { type: 'AGENT_DOWN'; agentId: string }
   | { type: 'NETWORK_OFFLINE' }

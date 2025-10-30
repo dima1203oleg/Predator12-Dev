@@ -239,11 +239,11 @@ const BusinessIntelligenceDashboard: React.FC<BusinessIntelligenceDashboardProps
                     <XAxis dataKey="time" />
                     <YAxis />
                     <Tooltip />
-                    <Area 
-                      type="monotone" 
-                      dataKey="suspiciousVolume" 
-                      stroke="#f44336" 
-                      fill="#f44336" 
+                    <Area
+                      type="monotone"
+                      dataKey="suspiciousVolume"
+                      stroke="#f44336"
+                      fill="#f44336"
                       fillOpacity={0.3}
                       name="Підозрілий обсяг"
                     />
@@ -321,7 +321,7 @@ const BusinessIntelligenceDashboard: React.FC<BusinessIntelligenceDashboardProps
                           <TableCell>{row.tender}</TableCell>
                           <TableCell>{row.amount}</TableCell>
                           <TableCell>
-                            <Chip 
+                            <Chip
                               label={row.risk}
                               color={row.risk === 'Критичний' ? 'error' : row.risk === 'Високий' ? 'warning' : 'info'}
                               size="small"
@@ -381,17 +381,17 @@ const BusinessIntelligenceDashboard: React.FC<BusinessIntelligenceDashboardProps
                     <XAxis dataKey="time" />
                     <YAxis />
                     <Tooltip />
-                    <Line 
-                      type="monotone" 
-                      dataKey="riskScore" 
-                      stroke="#2196f3" 
+                    <Line
+                      type="monotone"
+                      dataKey="riskScore"
+                      stroke="#2196f3"
                       strokeWidth={2}
                       name="Ризик-скор"
                     />
-                    <Line 
-                      type="monotone" 
-                      dataKey="compliance" 
-                      stroke="#4caf50" 
+                    <Line
+                      type="monotone"
+                      dataKey="compliance"
+                      stroke="#4caf50"
                       strokeWidth={2}
                       name="Відповідність"
                     />
@@ -433,7 +433,7 @@ const BusinessIntelligenceDashboard: React.FC<BusinessIntelligenceDashboardProps
                             <Chip label={investigation.status} size="small" />
                           </TableCell>
                           <TableCell>
-                            <Chip 
+                            <Chip
                               label={investigation.priority}
                               color={investigation.priority === 'Критична' ? 'error' : investigation.priority === 'Висока' ? 'warning' : 'default'}
                               size="small"

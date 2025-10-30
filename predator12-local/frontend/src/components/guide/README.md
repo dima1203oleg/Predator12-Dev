@@ -87,9 +87,9 @@ function App() {
   return (
     <GuideProvider onAction={handleGuideAction}>
       <YourMainContent />
-      <GuideFloatingButton 
-        module="dashboard" 
-        position="bottom-right" 
+      <GuideFloatingButton
+        module="dashboard"
+        position="bottom-right"
       />
     </GuideProvider>
   );
@@ -102,7 +102,7 @@ import { useModuleGuide } from '@/components/guide';
 
 function ETLModule() {
   const { showGuide, executeAction } = useModuleGuide('etl');
-  
+
   return (
     <div>
       <button onClick={showGuide}>Показати гід</button>
@@ -150,7 +150,7 @@ const handleGuideAction = (action: string, module: string) => {
 const getOptimalQuality = () => {
   const gpu = getGPUInfo();
   const memory = navigator.deviceMemory || 4;
-  
+
   if (gpu.tier >= 3 && memory >= 8) return 'high';
   if (gpu.tier >= 2 && memory >= 4) return 'medium';
   return 'low';

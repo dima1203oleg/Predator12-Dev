@@ -24,7 +24,7 @@ const namesToFunctions = {
 };
 
 export async function main() {
-  
+
   const tool = {
     "type": "function",
     "function": {
@@ -40,7 +40,7 @@ export async function main() {
             "description": "The name of the city where the flight originates",
           },
           "destinationCity": {
-            "type": "string", 
+            "type": "string",
             "description": "The flight destination city",
           },
         },
@@ -51,23 +51,23 @@ export async function main() {
       }
     }
   };
-  
+
   const client = new OpenAI({ baseURL: endpoint, apiKey: token });
-  
+
   let messages=[
       {role: "system", content: "You an assistant that helps users find flight information."},
       {role: "user", content: "I'm interested in going to Miami. What is the next flight there from Seattle?"},
   ];
-  
+
   let response = await client.chat.completions.create({
     messages: messages,
     tools: [tool],
     model: modelName
   });
-  
+
   // We expect the model to ask for a tool call
   if (response.choices[0].finish_reason === "tool_calls"){
-  
+
     // Append the model response to the chat history
     messages.push(response.choices[0].message);
 
@@ -84,7 +84,7 @@ export async function main() {
         const callableFunc = namesToFunctions[toolCall.function.name];
         const functionReturn = callableFunc(functionArgs);
         console.log(`Function returned = ${functionReturn}`);
-      
+
         // Append the function call result fo the chat history
         messages.push(
           {

@@ -92,14 +92,14 @@ GET    /api/providers/stats/overall      // Загальна статистик�
   providers: ProviderAccount[];
   loading: boolean;
   error: string | null;
-  
+
   // Actions
   fetchProviders: () => Promise<void>;
   addProvider: (data) => Promise<void>;
   updateProvider: (id, data) => Promise<void>;
   deleteProvider: (id) => Promise<void>;
   toggleProviderStatus: (id) => Promise<void>;
-  
+
   // Real-time
   subscribeToUpdates: () => void;
   unsubscribeFromUpdates: () => void;

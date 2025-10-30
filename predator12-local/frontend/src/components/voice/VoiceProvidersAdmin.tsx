@@ -1,3 +1,21 @@
+/* Temporary stub of VoiceProvidersAdmin to unblock dev server. Replace with full implementation later. */
+import React from 'react'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material'
+const VoiceProvidersAdmin = ({ open = false, onClose = () => {} }: any) => {
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+      <DialogTitle>Voice Providers (stub)</DialogTitle>
+      <DialogContent>
+        <div>Temporary stub component — full admin panel is being refactored.</div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Close</Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
+
+export default VoiceProvidersAdmin
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import {
@@ -210,7 +228,7 @@ const VoiceProvidersAdmin: React.FC<{open?: boolean, onClose?: () => void}> = ({
     };
 
     setSettings(defaultSettings);
-  // Збереження налаштувань провайдера
+  };
   const handleSaveProvider = async (provider: ProviderConfig) => {
     setSaveStatus(prev => ({ ...prev, [provider.id]: 'saving' }));
 
@@ -825,7 +843,7 @@ const VoiceProvidersAdmin: React.FC<{open?: boolean, onClose?: () => void}> = ({
             value={currentTab}
             onChange={(_, value) => setCurrentTab(value)}
             sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}
-          >
+          />
       <Box mb={3}>
         <Typography variant="h4" gutterBottom display="flex" alignItems="center">
           <SettingsIcon sx={{ mr: 2, color: '#1976d2' }} />

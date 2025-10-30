@@ -71,7 +71,7 @@ If Vite says "Port 5092 is in use", it will try another port (5093, 5094, etc.)
 ### Issue 2: Module Not Found
 Error: `Failed to resolve import...`
 
-**Solution**: 
+**Solution**:
 ```bash
 # Reinstall dependencies
 rm -rf node_modules package-lock.json
@@ -132,7 +132,7 @@ Navigate to the URL shown in terminal (e.g., http://localhost:5092)
 Press F12 or Cmd+Option+I
 
 ### Step 4: Check Console Tab
-Look for red error messages. 
+Look for red error messages.
 
 **If you see errors, note:**
 - Error message

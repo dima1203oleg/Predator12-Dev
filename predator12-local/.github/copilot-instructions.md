@@ -19,6 +19,9 @@ This file gives focused, actionable context for an AI coding agent (Copilot-styl
     - Run frontend dev server: `npm run dev` in `frontend/`.
   - Run supervisor locally: `python agents/supervisor.py --mode test` (or `--mode daemon|interactive`).
   - Tests: `pytest` (backend tests live under `backend/tests/`), frontend: `npm test` in `frontend/`.
+  - Автогенерація патчів:
+    - Dry run (sandbox): VS Code task **"🤖 Agents: Auto Propose (dry-run)"** → викликає `scripts/auto_propose.sh` (див. `docs/autogen-integration.md`).
+    - Повністю автономно: VS Code task **"🤖 Agents: Auto Approve (commit)"** → виконує `scripts/auto_approve_and_commit.sh` з тестом `pytest backend/tests`. Guardrails описані у `docs/ai-tooling-integration.md`.
 
 - Files and examples to cite when making changes:
   - `agents/supervisor.py` — production supervisor (competition / thermal logic)
@@ -31,9 +34,10 @@ This file gives focused, actionable context for an AI coding agent (Copilot-styl
   - New agents: add implementation under `backend/app/agents/handlers/`, register in `registry.yaml`, add policies in `policies.yaml`, and include tests under `tests/agents/`.
   - ETL/ingest contracts: chunked uploads must follow `POST /ingest/upload` and `POST /ingest/commit` flows described in `backend/app/README.md`.
   - Observability and alerts are configured in `observability/prometheus/rules/` — changing metric names requires updates to alerts and dashboards.
+  - Повністю автономні зміни повинні залишатися у гілках `auto/*` (див. `scripts/auto_approve_and_commit.sh`); не мерджити в `main` без review.
 
 - When editing code, favored approach:
-  1. Point to the smallest files that show the pattern (quote 1–2 function names). Example: "See `ProductionSupervisor.run_model_competition` — keep ThreadPoolExecutor-based evaluation and timeout semantics." 
+  1. Point to the smallest files that show the pattern (quote 1–2 function names). Example: "See `ProductionSupervisor.run_model_competition` — keep ThreadPoolExecutor-based evaluation and timeout semantics."
   2. Run unit tests for the module you touched (e.g., `pytest backend/tests/agents/ -k <name>`).
   3. If you change metric names, also update `observability/` rules and Grafana dashboards.
 
@@ -77,7 +81,13 @@ thermal_limits:
 - "🐍 Backend: Run Migrations" — runs alembic upgrade in `backend`.
 - "🧪 Backend: Run Tests" — runs `pytest backend/tests/` with coverage.
 - "🌐 Frontend: Dev Server" — runs `npm run dev` in `frontend` (background).
+- "🤖 Agents: Auto Propose (dry-run)" — запускає `scripts/auto_propose.sh` у sandbox і залишає звіт у `.auto_propose_report.txt`.
+- "🤖 Agents: Auto Approve (commit)" — застосовує `suggested.patch`, проганяє `pytest backend/tests`, комітить і опційно пушить (див. `docs/ai-tooling-integration.md`).
 
 When suggesting commands, prefer invoking these tasks rather than raw docker-compose commands so the developer can run them via VS Code UI.
+
+-- Додаткові довідники:
+- `docs/autogen-integration.md` — інтеграція генераторів патчів і guardrails.
+- `docs/ai-tooling-integration.md` — повний план налаштування локальних LLM, VS Code плагінів та автономних сценаріїв.
 
 — End of file —

@@ -290,11 +290,11 @@ Response: { intent: string, entities: Entity[], confidence: number }
 ```
 POST /api/assistant/execute
 Body: { intent: string, entities: Entity[] }
-Response: { 
-  answer: string, 
-  actions?: Action[], 
-  graph?: Graph, 
-  alerts?: Alert[] 
+Response: {
+  answer: string,
+  actions?: Action[],
+  graph?: Graph,
+  alerts?: Alert[]
 }
 ```
 
@@ -612,7 +612,7 @@ const keycloak = new Keycloak({
 });
 
 // PKCE flow
-await keycloak.init({ 
+await keycloak.init({
   onLoad: 'login-required',
   pkceMethod: 'S256'
 });
@@ -732,9 +732,9 @@ describe('useASR', () => {
 describe('AssistantPage', () => {
   it('should handle voice command', async () => {
     render(<AssistantPage />);
-    
+
     fireEvent.click(screen.getByLabelText('Почати запис'));
-    
+
     // Simulate ASR result
     await waitFor(() => {
       expect(screen.getByText(/привіт/i)).toBeInTheDocument();
@@ -747,17 +747,17 @@ describe('AssistantPage', () => {
 ```typescript
 test('AI Assistant flow', async ({ page }) => {
   await page.goto('/assistant');
-  
+
   // Wait for load
   await page.waitForSelector('.assistant-page');
-  
+
   // Click mic
   await page.click('[aria-label="Почати запис"]');
-  
+
   // Type in chat
   await page.fill('#chat-input', 'Покажи зв\'язки компанії X');
   await page.press('#chat-input', 'Enter');
-  
+
   // Check graph appeared
   await page.waitForSelector('.network-panel .vis-network');
 });
@@ -826,18 +826,18 @@ EXPOSE 80
 server {
   listen 80;
   root /usr/share/nginx/html;
-  
+
   location / {
     try_files $uri $uri/ /index.html;
   }
-  
+
   location /api {
     proxy_pass http://backend:8000;
   }
-  
+
   # CSP
   add_header Content-Security-Policy "default-src 'self'; ...";
-  
+
   # Compression
   gzip on;
   gzip_types text/css application/javascript;

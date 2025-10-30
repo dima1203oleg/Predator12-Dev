@@ -2,6 +2,7 @@
 It is leveraging your endpoint and key. The call is synchronous."""
 
 import os
+
 from openai import OpenAI
 
 token = os.environ["GITHUB_TOKEN"]
@@ -28,9 +29,9 @@ response = client.chat.completions.create(
     ],
     model=model_name,
     # Optional parameters
-    temperature=1.,
+    temperature=1.0,
     max_tokens=1000,
-    top_p=1.    
+    top_p=1.0,
 )
 
 print(response.choices[0].message.content)

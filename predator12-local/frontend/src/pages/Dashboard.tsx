@@ -49,9 +49,9 @@ const Dashboard: React.FC = () => {
         transition={{ duration: 0.6 }}
       >
         <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Typography 
-            variant="h3" 
-            sx={{ 
+          <Typography
+            variant="h3"
+            sx={{
               background: `linear-gradient(45deg, ${nexusColors.sapphire}, ${nexusColors.quantum})`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
@@ -110,10 +110,10 @@ const Dashboard: React.FC = () => {
                       {stat.label}
                     </Typography>
                   </Box>
-                  <Typography 
-                    variant="h4" 
-                    sx={{ 
-                      color: stat.color, 
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      color: stat.color,
                       fontWeight: 700,
                       textShadow: `0 0 10px ${stat.color}50`
                     }}
@@ -121,7 +121,7 @@ const Dashboard: React.FC = () => {
                     {stat.value}{stat.unit}
                   </Typography>
                 </CardContent>
-                
+
                 {/* Glow effect */}
                 <Box
                   sx={{
@@ -158,7 +158,7 @@ const Dashboard: React.FC = () => {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
           }
-          
+
           @keyframes glow {
             0%, 100% { opacity: 0.5; transform: translateX(-100%); }
             50% { opacity: 1; transform: translateX(100%); }

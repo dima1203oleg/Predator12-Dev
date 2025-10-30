@@ -3,7 +3,7 @@ import React from 'react';
 // Простий тестовий компонент для діагностики
 function TestApp() {
   console.log('🟢 TestApp компонент завантажений');
-  
+
   return (
     <div style={{
       background: '#0a0a0a',
@@ -19,7 +19,7 @@ function TestApp() {
       <h1>🟢 PREDATOR11 TEST APP</h1>
       <p>Якщо ви бачите це повідомлення - React працює!</p>
       <p>Час: {new Date().toLocaleTimeString()}</p>
-      
+
       <div style={{marginTop: '20px', padding: '10px', border: '1px solid #00ff00'}}>
         <h3>Діагностична інформація:</h3>
         <ul style={{textAlign: 'left', marginTop: '10px'}}>
@@ -29,8 +29,8 @@ function TestApp() {
           <li>✅ CSS: Застосовано</li>
         </ul>
       </div>
-      
-      <button 
+
+      <button
         onClick={() => alert('React події працюють!')}
         style={{
           marginTop: '20px',

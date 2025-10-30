@@ -416,7 +416,7 @@ free_models_catalog:
       free: true
       performance: 76
 
-  gen: # 4 models 
+  gen: # 4 models
     - id: meta/meta-llama-3.1-8b-instruct
       free: true
       performance: 82
@@ -436,17 +436,17 @@ arbiter_competitions:
   reasoning_premium:
     models: ["gpt-5", "phi-4-reasoning", "qwen/qwen2.5-72b-instruct"]
     tasks: ["complex_analysis", "multi_step_reasoning", "logical_deduction"]
-    
-  # Scenario 2: Code generation specialists  
+
+  # Scenario 2: Code generation specialists
   coding_showdown:
     models: ["codestral-2501", "deepseek/deepseek-coder-v2", "phind/phind-codellama-34b-v2"]
     tasks: ["algorithm_design", "code_optimization", "bug_fixing"]
-    
+
   # Scenario 3: Quick response models
   speed_test:
     models: ["phi-3-mini-4k-instruct", "ministral-3b", "gemma-2-2b-it"]
     tasks: ["classification", "simple_qa", "sentiment_analysis"]
-    
+
   # Scenario 4: Multilingual capabilities
   language_masters:
     models: ["qwen/qwen2.5-14b-instruct", "gemma-2-9b-it", "llama-3.1-8b-instruct"]
@@ -455,7 +455,7 @@ arbiter_competitions:
 # Agent-to-model assignments (default routing)
 agent_model_assignments:
   ChiefOrchestrator: "gpt-5"
-  QueryPlanner: "phi-4-reasoning" 
+  QueryPlanner: "phi-4-reasoning"
   ModelRouter: "ministral-3b"
   Arbiter: "phi-4-reasoning"
   NexusGuide: "gpt-5"

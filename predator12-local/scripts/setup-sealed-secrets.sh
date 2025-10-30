@@ -12,14 +12,14 @@ echo ""
 if ! kubectl get crd sealedsecrets.bitnami.com &>/dev/null; then
     echo "❌ SealedSecrets CRD not found!"
     echo "Installing Sealed Secrets controller..."
-    
+
     helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
     helm repo update
-    
+
     helm install sealed-secrets sealed-secrets/sealed-secrets \
         --namespace kube-system \
         --set-string fullnameOverride=sealed-secrets-controller
-    
+
     echo "✅ Sealed Secrets controller installed"
     echo ""
 fi
@@ -36,9 +36,9 @@ seal_secret() {
     local secret_name=$2
     local secret_file=$3
     local output_file=$4
-    
+
     echo "🔒 Sealing secret: $secret_name in namespace $namespace"
-    
+
     kubectl create secret generic "$secret_name" \
         --from-env-file="$secret_file" \
         --namespace="$namespace" \
@@ -48,7 +48,7 @@ seal_secret() {
         --format yaml \
         --cert /tmp/sealed-secrets-pub.pem \
         > "$output_file"
-    
+
     echo "✅ Sealed secret saved to $output_file"
 }
 

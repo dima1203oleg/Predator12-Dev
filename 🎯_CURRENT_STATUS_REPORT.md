@@ -21,11 +21,11 @@
 1. **AIVoiceInterface.tsx** ✅
    - Локація: `predator12-local/frontend/src/components/voice/`
    - Статус: Готовий до використання
-   
+
 2. **premiumFreeVoiceAPI.ts** ✅
    - Локація: `predator12-local/frontend/src/services/`
    - Статус: Інтегровано
-   
+
 3. **VoiceWaveform.tsx** ✅
    - Локація: `predator12-local/frontend/src/components/voice/`
    - Статус: Візуалізація активна

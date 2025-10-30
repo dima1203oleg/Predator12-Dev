@@ -226,8 +226,8 @@ nexusColors = {
 ### Градієнти
 ```css
 background: linear-gradient(
-  135deg, 
-  rgba(0,242,255,0.05) 0%, 
+  135deg,
+  rgba(0,242,255,0.05) 0%,
   rgba(138,43,226,0.05) 100%
 )
 ```
@@ -264,7 +264,7 @@ exit={{ opacity: 0, y: -20 }}
    ```tsx
    // Додати вкладку
    <Tab label="⚙️ Provider Manager" />
-   
+
    // Додати панель
    <TabPanel value={activeTab} index={3}>
      <ModelProviderManager />

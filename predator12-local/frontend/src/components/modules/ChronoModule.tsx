@@ -80,10 +80,10 @@ const ChronoModule: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography 
-        variant="h4" 
-        sx={{ 
-          mb: 3, 
+      <Typography
+        variant="h4"
+        sx={{
+          mb: 3,
           color: nexusColors.frost,
           textAlign: 'center',
           background: `linear-gradient(45deg, ${nexusColors.amethyst}, ${nexusColors.sapphire})`,
@@ -93,7 +93,7 @@ const ChronoModule: React.FC = () => {
       >
         🕐 Хроно-Аналіз 4D
       </Typography>
-      
+
       <Grid container spacing={3}>
         {/* Головний граф */}
         <Grid item xs={12} lg={8}>
@@ -108,7 +108,7 @@ const ChronoModule: React.FC = () => {
             <Typography variant="h6" sx={{ color: nexusColors.frost, mb: 2 }}>
               📈 Тренди імпорту/експорту (24 години)
             </Typography>
-            
+
             <Box sx={{ width: '100%', height: 300 }}>
               <LineChart
                 width={800}
@@ -144,7 +144,7 @@ const ChronoModule: React.FC = () => {
             </Box>
           </Card>
         </Grid>
-        
+
         {/* Таймлайн подій */}
         <Grid item xs={12} lg={4}>
           <Card
@@ -160,7 +160,7 @@ const ChronoModule: React.FC = () => {
             <Typography variant="h6" sx={{ color: nexusColors.frost, mb: 2 }}>
               🎯 Хронологія подій
             </Typography>
-            
+
             <Timeline sx={{ p: 0 }}>
               {events.map((event, index) => (
                 <TimelineItem key={event.id}>
@@ -198,7 +198,7 @@ const ChronoModule: React.FC = () => {
             </Timeline>
           </Card>
         </Grid>
-        
+
         {/* Статистика */}
         <Grid item xs={12}>
           <Grid container spacing={2}>
@@ -211,7 +211,7 @@ const ChronoModule: React.FC = () => {
                 <Typography variant="caption" sx={{ color: nexusColors.nebula }}>За останні 24 години</Typography>
               </Card>
             </Grid>
-            
+
             <Grid item xs={12} sm={6} md={3}>
               <Card sx={{ background: `linear-gradient(45deg, ${nexusColors.error}20, ${nexusColors.crimson}10)`, border: `1px solid ${nexusColors.error}40`, p: 2 }}>
                 <Typography variant="h6" sx={{ color: nexusColors.error }}>
@@ -221,7 +221,7 @@ const ChronoModule: React.FC = () => {
                 <Typography variant="caption" sx={{ color: nexusColors.nebula }}>Виявлено сьогодні</Typography>
               </Card>
             </Grid>
-            
+
             <Grid item xs={12} sm={6} md={3}>
               <Card sx={{ background: `linear-gradient(45deg, ${nexusColors.sapphire}20, ${nexusColors.amethyst}10)`, border: `1px solid ${nexusColors.sapphire}40`, p: 2 }}>
                 <Typography variant="h6" sx={{ color: nexusColors.sapphire }}>
@@ -231,7 +231,7 @@ const ChronoModule: React.FC = () => {
                 <Typography variant="caption" sx={{ color: nexusColors.nebula }}>Транзакцій/годину</Typography>
               </Card>
             </Grid>
-            
+
             <Grid item xs={12} sm={6} md={3}>
               <Card sx={{ background: `linear-gradient(45deg, ${nexusColors.warning}20, ${nexusColors.emerald}10)`, border: `1px solid ${nexusColors.warning}40`, p: 2 }}>
                 <Typography variant="h6" sx={{ color: nexusColors.warning }}>

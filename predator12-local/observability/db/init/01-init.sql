@@ -25,7 +25,7 @@ CREATE INDEX IF NOT EXISTS idx_agent_name ON agent_tasks(agent_name);
 CREATE INDEX IF NOT EXISTS idx_status ON agent_tasks(status);
 
 -- Create initial admin user (will be updated by application)
-INSERT INTO users (username, email, is_active, is_superuser, created_at) 
+INSERT INTO users (username, email, is_active, is_superuser, created_at)
 VALUES ('admin', 'admin@predator11.local', true, true, NOW())
 ON CONFLICT (username) DO NOTHING;
 

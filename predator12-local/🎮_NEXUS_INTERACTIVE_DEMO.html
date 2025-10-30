@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0a0f1a 0%, #1a2332 100%);
@@ -18,19 +18,19 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        
+
         .demo-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-        
+
         .header {
             text-align: center;
             margin-bottom: 40px;
             animation: glow 2s ease-in-out infinite alternate;
         }
-        
+
         @keyframes glow {
             from {
                 text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88, 0 0 30px #00ff88;
@@ -39,14 +39,14 @@
                 text-shadow: 0 0 20px #0088ff, 0 0 30px #0088ff, 0 0 40px #0088ff;
             }
         }
-        
+
         .demo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             margin-bottom: 40px;
         }
-        
+
         .demo-card {
             background: rgba(16, 32, 64, 0.8);
             border: 2px solid #00ff88;
@@ -57,13 +57,13 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
         }
-        
+
         .demo-card:hover {
             transform: translateY(-10px);
             border-color: #0088ff;
             box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
         }
-        
+
         .demo-card::before {
             content: '';
             position: absolute;
@@ -74,11 +74,11 @@
             background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
             transition: 0.5s;
         }
-        
+
         .demo-card:hover::before {
             left: 100%;
         }
-        
+
         .card-title {
             font-size: 24px;
             margin-bottom: 15px;
@@ -87,13 +87,13 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .card-description {
             margin-bottom: 20px;
             line-height: 1.6;
             color: #b0c4de;
         }
-        
+
         .demo-button {
             background: linear-gradient(45deg, #00ff88, #0088ff);
             border: none;
@@ -106,16 +106,16 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .demo-button:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
         }
-        
+
         .demo-button:active {
             transform: scale(0.95);
         }
-        
+
         .status-indicator {
             display: inline-block;
             width: 12px;
@@ -124,30 +124,30 @@
             margin-right: 8px;
             animation: pulse 2s infinite;
         }
-        
+
         .status-active {
             background: #00ff88;
         }
-        
+
         .status-testing {
             background: #ffa500;
         }
-        
+
         .status-ready {
             background: #0088ff;
         }
-        
+
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
-        
+
         .quick-access {
             text-align: center;
             margin-top: 40px;
         }
-        
+
         .quick-buttons {
             display: flex;
             justify-content: center;
@@ -155,7 +155,7 @@
             margin-top: 20px;
             flex-wrap: wrap;
         }
-        
+
         .quick-btn {
             background: rgba(0, 136, 255, 0.1);
             border: 2px solid #0088ff;
@@ -168,25 +168,25 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        
+
         .quick-btn:hover {
             background: #0088ff;
             color: #0a0f1a;
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(0, 136, 255, 0.4);
         }
-        
+
         .features-list {
             list-style: none;
             padding: 0;
         }
-        
+
         .features-list li {
             padding: 8px 0;
             padding-left: 25px;
             position: relative;
         }
-        
+
         .features-list li::before {
             content: '✓';
             position: absolute;
@@ -203,7 +203,7 @@
             <h2>Кібер-інтерфейс з 3D голографічними компонентами</h2>
             <p>Інтерактивна демонстрація всіх можливостей</p>
         </div>
-        
+
         <div class="demo-grid">
             <div class="demo-card">
                 <div class="card-title">
@@ -224,7 +224,7 @@
                     Тестувати Guide
                 </button>
             </div>
-            
+
             <div class="demo-card">
                 <div class="card-title">
                     🌌 DataFlowMap
@@ -244,7 +244,7 @@
                     Переглянути Map
                 </button>
             </div>
-            
+
             <div class="demo-card">
                 <div class="card-title">
                     🔥 MASupervisor
@@ -264,7 +264,7 @@
                     Запустити MAS
                 </button>
             </div>
-            
+
             <div class="demo-card">
                 <div class="card-title">
                     ⚡ NexusCore Dashboard
@@ -285,7 +285,7 @@
                 </button>
             </div>
         </div>
-        
+
         <div class="quick-access">
             <h3>🚀 Швидкий доступ до системи</h3>
             <div class="quick-buttons">
@@ -303,7 +303,7 @@
                 </a>
             </div>
         </div>
-        
+
         <div style="text-align: center; margin-top: 50px; padding: 30px; border-top: 2px solid #00ff88;">
             <h3>🎊 Трансформація завершена!</h3>
             <p style="margin-top: 15px; color: #b0c4de;">
@@ -312,12 +312,12 @@
             </p>
         </div>
     </div>
-    
+
     <script>
         function openNexus(module) {
             const baseUrl = 'http://localhost:5173';
             let url = baseUrl;
-            
+
             switch(module) {
                 case 'holographic':
                     url = `${baseUrl}/#/dashboard`;
@@ -332,25 +332,25 @@
                     url = `${baseUrl}/#/dashboard`;
                     break;
             }
-            
+
             window.open(url, '_blank');
         }
-        
+
         // Додавання інтерактивних ефектів
         document.addEventListener('DOMContentLoaded', function() {
             const cards = document.querySelectorAll('.demo-card');
-            
+
             cards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-10px) rotateX(5deg)';
                 });
-                
+
                 card.addEventListener('mouseleave', function() {
                     this.style.transform = 'translateY(0) rotateX(0)';
                 });
             });
         });
-        
+
         // Функція для перевірки статусу сервера
         async function checkServerStatus() {
             try {
@@ -366,7 +366,7 @@
                 });
             }
         }
-        
+
         // Перевірка статусу при завантаженні
         checkServerStatus();
         setInterval(checkServerStatus, 5000);

@@ -49,9 +49,9 @@ const MinimalApp: React.FC = () => {
   return (
     <ThemeProvider theme={nexusTheme}>
       <CssBaseline />
-      
+
       {/* Nexus Visual Effects */}
-      <NexusVisualEffects 
+      <NexusVisualEffects
         showCosmicDust={true}
         showHolographicFrames={true}
         showScanLines={true}

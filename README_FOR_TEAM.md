@@ -64,11 +64,11 @@ import { useNexusTheme } from '../contexts/ThemeContext';
 
 const MyComponent = () => {
   const { colors } = useNexusTheme();
-  
+
   return (
-    <Box sx={{ 
+    <Box sx={{
       background: colors.background.paper,
-      color: colors.text.primary 
+      color: colors.text.primary
     }}>
       Контент
     </Box>
@@ -177,12 +177,12 @@ const { toggleTheme } = useNexusTheme();
 ### Використати колір зі статусів
 
 ```tsx
-<Chip 
+<Chip
   label="Успіх"
-  sx={{ 
+  sx={{
     background: colors.status.success,
-    color: '#fff' 
-  }} 
+    color: '#fff'
+  }}
 />
 ```
 

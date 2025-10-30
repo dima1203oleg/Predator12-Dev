@@ -56,7 +56,7 @@ export function ChatInterface({ onTranscript, onProcessingChange }: ChatInterfac
     try {
       // Simulate AI response (replace with actual API call)
       const response = await sendMessage(input);
-      
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -107,7 +107,7 @@ export function ChatInterface({ onTranscript, onProcessingChange }: ChatInterfac
                 <Bot className="w-5 h-5 text-white" />
               </div>
             )}
-            
+
             <div
               className={`max-w-[70%] p-4 rounded-2xl ${
                 message.role === 'user'

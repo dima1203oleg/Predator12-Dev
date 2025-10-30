@@ -15,18 +15,18 @@ const useNotificationBatching = (options = {}) => {
     flushInterval = 500,
     onBatchProcess
   } = options;
-  
+
   // Стан і референція для менеджера
   const [isActive, setIsActive] = useState(false);
   const batchManagerRef = useRef(null);
-  
+
   // Створюємо обробник для готового пакету
   const handleBatchReady = useCallback((batch) => {
     if (onBatchProcess && batch.length > 0) {
       onBatchProcess(batch);
     }
   }, [onBatchProcess]);
-  
+
   // Ініціалізуємо менеджер під час монтування компонента
   useEffect(() => {
     batchManagerRef.current = new NotificationBatchManager({
@@ -34,7 +34,7 @@ const useNotificationBatching = (options = {}) => {
       flushInterval,
       onBatchReady: handleBatchReady
     });
-    
+
     return () => {
       // Зупиняємо менеджер при розмонтуванні компонента
       if (batchManagerRef.current) {
@@ -42,7 +42,7 @@ const useNotificationBatching = (options = {}) => {
       }
     };
   }, [maxBatchSize, flushInterval, handleBatchReady]);
-  
+
   // Оновлюємо статус активності, коли він змінюється
   useEffect(() => {
     if (batchManagerRef.current) {
@@ -53,41 +53,41 @@ const useNotificationBatching = (options = {}) => {
       }
     }
   }, [isActive]);
-  
+
   // Додавання сповіщення до черги
   const addNotification = useCallback((notification) => {
     if (batchManagerRef.current) {
       batchManagerRef.current.add(notification);
     }
   }, []);
-  
+
   // Примусове надсилання всіх сповіщень у черзі
   const flushNotifications = useCallback(() => {
     if (batchManagerRef.current) {
       batchManagerRef.current.flush();
     }
   }, []);
-  
+
   // Перемикання стану активності менеджера
   const toggleActive = useCallback(() => {
     setIsActive(prev => !prev);
   }, []);
-  
+
   // Явний запуск менеджера
   const startBatching = useCallback(() => {
     setIsActive(true);
   }, []);
-  
+
   // Явна зупинка менеджера
   const stopBatching = useCallback(() => {
     setIsActive(false);
   }, []);
-  
+
   // Отримання кількості сповіщень у поточній черзі
   const getCurrentBatchSize = useCallback(() => {
     return batchManagerRef.current ? batchManagerRef.current.size() : 0;
   }, []);
-  
+
   return {
     addNotification,
     flushNotifications,
@@ -99,4 +99,4 @@ const useNotificationBatching = (options = {}) => {
   };
 };
 
-export default useNotificationBatching; 
+export default useNotificationBatching;

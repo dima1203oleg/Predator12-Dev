@@ -1,20 +1,20 @@
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                🤖 PREDATOR ANALYTICS SPECIALIZED REGISTRY 🤖                   
-#                    58 Free Models Correctly Distributed                        
-#                       Based on Agent Specializations                           
+#                🤖 PREDATOR ANALYTICS SPECIALIZED REGISTRY 🤖
+#                    58 Free Models Correctly Distributed
+#                       Based on Agent Specializations
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 agents:
   # ═══════════════════════════════════════════════════════════════════════════════
-  #                        🔍 ANOMALY DETECTION AGENT                            
+  #                        🔍 ANOMALY DETECTION AGENT
   # ═══════════════════════════════════════════════════════════════════════════════
-  
+
   AnomalyAgent:
     # 🎯 Specialization: Anomaly detection, statistical analysis, ML detection
     description: "Detects anomalies in data, performs statistical analysis of deviations"
     primary_model: deepseek/deepseek-r1          # Best reasoning for anomalies
     primary_models:
-      flagship: deepseek/deepseek-r1              # Best reasoning for anomalies  
+      flagship: deepseek/deepseek-r1              # Best reasoning for anomalies
       premium: openai/o1                          # OpenAI reasoning
       standard: microsoft/phi-4-reasoning         # Microsoft reasoning
     fallback_models:
@@ -70,7 +70,7 @@ agents:
       - mistral-ai/codestral-2501
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  #                           🛡️ SECURITY & OPERATIONS                          
+  #                           🛡️ SECURITY & OPERATIONS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   SecurityAgent:
@@ -113,7 +113,7 @@ agents:
       - xai/grok-3-mini
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  #                           🎯 COORDINATION & MANAGEMENT                       
+  #                           🎯 COORDINATION & MANAGEMENT
   # ═══════════════════════════════════════════════════════════════════════════════
 
   CoreOrchestrator:
@@ -156,7 +156,7 @@ agents:
       - xai/grok-3-mini
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  #                           🔍 SEARCH & INTELLIGENCE                          
+  #                           🔍 SEARCH & INTELLIGENCE
   # ═══════════════════════════════════════════════════════════════════════════════
 
   OSINTAgent:
@@ -186,7 +186,7 @@ agents:
       - meta/llama-3.2-11b-vision-instruct
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  #                           🚀 SPECIALIZED UTILITY AGENTS                     
+  #                           🚀 SPECIALIZED UTILITY AGENTS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   RedTeamAgent:

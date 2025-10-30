@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                          🤖 PREDATOR11 AGENTS REGISTRY 🤖                      
-#                     Complete Multi-Agent System Configuration                   
+#                          🤖 PREDATOR11 AGENTS REGISTRY 🤖
+#                     Complete Multi-Agent System Configuration
 #                           58 FREE/OPEN MODELS + Self-* Capabilities
 # ═══════════════════════════════════════════════════════════════════════════════════
 
@@ -9,7 +9,7 @@ registry_name: "Predator11 Agents"
 description: "Enterprise multi-agent system with 58 FREE models, advanced routing, and compliance"
 
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                           🎯 ORCHESTRATION & ROUTING                            
+#                           🎯 ORCHESTRATION & ROUTING
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 orchestration:
@@ -18,7 +18,7 @@ orchestration:
     role: "Main orchestrator - single point of dialogue (UI/Telegram)"
     capabilities:
       - task_decomposition
-      - agent_coordination  
+      - agent_coordination
       - response_aggregation
       - user_dialogue
     endpoints:
@@ -57,7 +57,7 @@ orchestration:
     events:
       publishes: ["chief.task_created", "chief.task_completed"]
       subscribes: ["*.task_completed", "*.error"]
-    
+
   ModelRouterAgent:
     port: 9002
     role: "Routes requests to 58 FREE models via SDK with advanced fallbacks"
@@ -158,7 +158,7 @@ orchestration:
         - bias_detection_enabled: true
 
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                             📊 DATA & ETL LAYER                                
+#                             📊 DATA & ETL LAYER
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 data_layer:
@@ -341,7 +341,7 @@ data_layer:
       publishes: ["synthetic.generated", "synthetic.validated"]
 
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                            🧠 ANALYTICS & ML LAYER                             
+#                            🧠 ANALYTICS & ML LAYER
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 analytics_layer:
@@ -355,7 +355,7 @@ analytics_layer:
       - adaptive_thresholding
     algorithms:
       - "RandomCutForest"
-      - "IsolationForest" 
+      - "IsolationForest"
       - "SeasonalESD"
       - "LSTM-Autoencoder"
       - "Variational-Autoencoder"
@@ -550,7 +550,7 @@ analytics_layer:
         insight_extraction: "microsoft/phi-3-medium-4k-instruct" # Вилучення інсайтів
 
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                              🎯 LLM/UX LAYER                                  
+#                              🎯 LLM/UX LAYER
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 llm_ux_layer:
@@ -634,7 +634,7 @@ llm_ux_layer:
         opensearch: "qwen/qwen2.5-coder-7b-instruct"     # OpenSearch дашборди
 
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                            🛡️ OPERATIONAL LAYER                               
+#                            🛡️ OPERATIONAL LAYER
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 operational_layer:
@@ -701,7 +701,7 @@ operational_layer:
     events:
       publishes: ["healing.action_taken", "system_health_report", "healing.learned"]
       subscribes: ["diagnosis.incident_detected", "anomaly.detected"]
-    
+
   AutoTrainAgent:
     port: 9042
     role: "AI-powered automated model retraining and deployment"

@@ -2,8 +2,9 @@
 for running specific actions depending on the context of the conversation.
 This sample demonstrates how to define a function tool and how to act on a request from the model to invoke it."""
 
-import os
 import json
+import os
+
 from openai import OpenAI
 
 token = os.environ["GITHUB_TOKEN"]
@@ -83,10 +84,7 @@ if response.choices[0].finish_reason == "tool_calls":
     messages.append(response.choices[0].message)
 
     # We expect a single tool call
-    if (
-        response.choices[0].message.tool_calls
-        and len(response.choices[0].message.tool_calls) == 1
-    ):
+    if response.choices[0].message.tool_calls and len(response.choices[0].message.tool_calls) == 1:
 
         tool_call = response.choices[0].message.tool_calls[0]
 
@@ -95,9 +93,7 @@ if response.choices[0].finish_reason == "tool_calls":
 
             # Parse the function call arguments and call the function
             function_args = json.loads(tool_call.function.arguments.replace("'", '"'))
-            print(
-                f"Calling function `{tool_call.function.name}` with arguments {function_args}"
-            )
+            print(f"Calling function `{tool_call.function.name}` with arguments {function_args}")
             callable_func = locals()[tool_call.function.name]
             function_return = callable_func(**function_args)
             print(f"Function returned = {function_return}")

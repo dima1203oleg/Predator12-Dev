@@ -52,10 +52,10 @@ DO $$
 DECLARE
     t text;
 BEGIN
-    FOR t IN 
-        SELECT table_name 
-        FROM information_schema.columns 
-        WHERE column_name = 'updated_at' 
+    FOR t IN
+        SELECT table_name
+        FROM information_schema.columns
+        WHERE column_name = 'updated_at'
         AND table_schema = 'public'
     LOOP
         EXECUTE format('CREATE TRIGGER update_%s_updated_at

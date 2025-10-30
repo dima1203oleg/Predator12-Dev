@@ -279,7 +279,7 @@ if speech_probs > 0.5:
 ```javascript
 import { pipeline } from '@xenova/transformers';
 
-const transcriber = await pipeline('automatic-speech-recognition', 
+const transcriber = await pipeline('automatic-speech-recognition',
   'Xenova/whisper-tiny');
 const result = await transcriber(audioData);
 ```
@@ -482,13 +482,13 @@ production:
     primary: piper-tts
     quality: styletts2  # optional
     fallback: web-speech-api
-  
+
   stt:
     primary: whisper-cpp
     turbo: whisper-large-v3-turbo
     vad: silero-vad
     fallback: web-speech-api
-  
+
   optimizations:
     - silero-vad (pre-filtering)
     - whisper.cpp (speed)

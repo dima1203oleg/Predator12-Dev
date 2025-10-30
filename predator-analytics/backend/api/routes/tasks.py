@@ -1,22 +1,24 @@
 """
 Tasks API Routes
 """
-from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
-from sqlalchemy.orm import Session
-from typing import List, Optional
-from pydantic import BaseModel
-from datetime import datetime
+
 import uuid
+from datetime import datetime
+from typing import List, Optional
 
 from core.database import get_db
-from models.task import Task, TaskStatus, TaskPriority
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from models.task import Task, TaskPriority, TaskStatus
+from pydantic import BaseModel
 from services.celery_service import submit_task
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
 
 class TaskCreate(BaseModel):
     """Task creation model"""
+
     agent_type: str
     task_type: str
     priority: TaskPriority = TaskPriority.MEDIUM
@@ -25,22 +27,21 @@ class TaskCreate(BaseModel):
 
 class TaskResponse(BaseModel):
     """Task response model"""
+
     id: str
     agent_type: str
     task_type: str
     status: TaskStatus
     priority: TaskPriority
     created_at: datetime
-    
+
     class Config:
         from_attributes = True
 
 
 @router.post("/tasks", response_model=TaskResponse)
 async def create_task(
-    task: TaskCreate,
-    background_tasks: BackgroundTasks,
-    db: Session = Depends(get_db)
+    task: TaskCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)
 ):
     """
     Create a new task
@@ -52,16 +53,16 @@ async def create_task(
         task_type=task.task_type,
         status=TaskStatus.PENDING,
         priority=task.priority,
-        input_data=task.input_data
+        input_data=task.input_data,
     )
-    
+
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
-    
+
     # Submit to Celery
     background_tasks.add_task(submit_task, db_task.id, task.dict())
-    
+
     return db_task
 
 
@@ -70,18 +71,18 @@ async def list_tasks(
     status: Optional[TaskStatus] = None,
     agent_type: Optional[str] = None,
     limit: int = 100,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """
     List tasks with optional filters
     """
     query = db.query(Task)
-    
+
     if status:
         query = query.filter(Task.status == status)
     if agent_type:
         query = query.filter(Task.agent_type == agent_type)
-    
+
     tasks = query.order_by(Task.created_at.desc()).limit(limit).all()
     return tasks
 
@@ -105,12 +106,12 @@ async def get_task_result(task_id: str, db: Session = Depends(get_db)):
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    
+
     return {
         "task_id": task.id,
         "status": task.status,
         "result": task.result_data,
-        "error": task.error_message
+        "error": task.error_message,
     }
 
 
@@ -122,11 +123,11 @@ async def cancel_task(task_id: str, db: Session = Depends(get_db)):
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    
+
     if task.status in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
         raise HTTPException(status_code=400, detail="Task cannot be cancelled")
-    
+
     task.status = TaskStatus.CANCELLED
     db.commit()
-    
+
     return {"message": "Task cancelled successfully"}

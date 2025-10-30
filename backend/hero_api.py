@@ -3,14 +3,15 @@ FastAPI бекенд для Hero Interface - Predator Analytics
 Забезпечує API для чату, подій агентів та даних мережі
 """
 
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
 import asyncio
 import json
 from datetime import datetime
 from typing import AsyncGenerator
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 
 app = FastAPI(title="Predator Analytics Hero API", version="1.0.0")
 
@@ -26,12 +27,14 @@ app.add_middleware(
 
 class ChatMessage(BaseModel):
     """Модель повідомлення чату"""
+
     message: str
     trace: bool = False
 
 
 class NetworkData(BaseModel):
     """Модель даних мережі"""
+
     nodes: list[dict]
     edges: list[dict]
 
@@ -43,7 +46,7 @@ async def chat(msg: ChatMessage):
     Обробляє повідомлення користувача та повертає відповідь AI
     """
     user_msg = msg.message.lower()
-    
+
     # Проста логіка відповідей (можна замінити на реальний AI)
     if "контрагент" in user_msg or "компанія" in user_msg:
         reply = (
@@ -91,7 +94,7 @@ async def chat(msg: ChatMessage):
             "- Перевіркою ризиків\n\n"
             "Задайте конкретне запитання!"
         )
-    
+
     return {"reply": reply, "timestamp": datetime.now().isoformat()}
 
 
@@ -112,11 +115,11 @@ async def agent_events_generator() -> AsyncGenerator[str, None]:
         "🎯 Router Agent: Запит оброблено успішно",
         "📈 Analytics Agent: Оновлення статистики",
     ]
-    
+
     for event in events:
         yield f"data: {json.dumps({'message': event, 'timestamp': datetime.now().isoformat()})}\n\n"
         await asyncio.sleep(3)  # Подія кожні 3 секунди
-    
+
     # Після першого циклу - рандомні події
     while True:
         await asyncio.sleep(10)
@@ -136,7 +139,7 @@ async def events():
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
             "X-Accel-Buffering": "no",
-        }
+        },
     )
 
 
@@ -166,10 +169,10 @@ async def get_network():
             "total_nodes": 6,
             "total_edges": 5,
             "risk_score": 6.5,
-            "last_updated": datetime.now().isoformat()
-        }
+            "last_updated": datetime.now().isoformat(),
+        },
     }
-    
+
     return network_data
 
 
@@ -181,7 +184,7 @@ async def health():
         "status": "healthy",
         "service": "Predator Analytics Hero API",
         "version": "1.0.0",
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
     }
 
 
@@ -196,14 +199,15 @@ async def root():
             "chat": "POST /api/chat",
             "events": "GET /api/events (SSE)",
             "network": "GET /api/network",
-            "health": "GET /health"
+            "health": "GET /health",
         },
-        "docs": "/docs"
+        "docs": "/docs",
     }
 
 
 if __name__ == "__main__":
     import uvicorn
+
     print("🚀 Запуск Predator Analytics Hero API...")
     print("📡 API: http://localhost:8000")
     print("📚 Docs: http://localhost:8000/docs")

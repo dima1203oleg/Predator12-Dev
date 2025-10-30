@@ -192,7 +192,7 @@ argocd app get predator-backend-dev
    ```bash
    git clone <repository-url> predator11
    cd predator11
-   
+
    # Автоматичне налаштування системи
    make setup
    ```
@@ -202,7 +202,7 @@ argocd app get predator-backend-dev
    ```bash
    # Відредагуйте .env файл з вашими токенами
    nano .env
-   
+
    # Встановіть обов'язкові змінні:
    # GITHUB_TOKEN, OPENAI_API_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
    ```
@@ -212,7 +212,7 @@ argocd app get predator-backend-dev
    ```bash
    # Запуск всіх сервісів
    make start
-   
+
    # Перевірка системи  
    make test-system
    ```
@@ -434,8 +434,8 @@ edrpou: "12345678" => edrpou_mask: "e1f2g3h4"
 Всі доступи до PII логуються у `audit_pii_access`:
 
 ```sql
-SELECT user_id, accessed_at, data_type, purpose 
-FROM audit_pii_access 
+SELECT user_id, accessed_at, data_type, purpose
+FROM audit_pii_access
 WHERE accessed_at > NOW() - INTERVAL '24 hours';
 ```
 
@@ -532,7 +532,7 @@ helm upgrade predator11 ./infra/helm/predator11
 
 - [Архітектура системи](docs/architecture.md)
 - [Конфігурація агентів](docs/agents.md)
-- [ETL процеси](docs/etl.md) 
+- [ETL процеси](docs/etl.md)
 - [Безпека та PII](docs/security.md)
 - [Моніторинг та алерти](docs/monitoring.md)
 - [MCP інтеграція](docs/mcp.md)

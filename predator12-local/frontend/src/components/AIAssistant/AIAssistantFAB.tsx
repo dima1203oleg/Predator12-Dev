@@ -44,7 +44,7 @@ export const AIAssistantFAB: React.FC<AIAssistantFABProps> = ({
           <Fab
             onClick={onClick}
             sx={{
-              background: isActive 
+              background: isActive
                 ? `linear-gradient(45deg, ${nexusColors.emerald}, ${nexusColors.sapphire})`
                 : `linear-gradient(45deg, ${nexusColors.emerald}80, ${nexusColors.sapphire}80)`,
               color: nexusColors.frost,

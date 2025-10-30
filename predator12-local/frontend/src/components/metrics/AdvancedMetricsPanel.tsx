@@ -77,7 +77,7 @@ export const AdvancedMetricsPanel: React.FC = () => {
         // const response = await fetch('/api/metrics');
         // const data = await response.json();
         // setMetrics(data);
-        
+
         setMetrics({
           totalRequests: 0,
           avgResponseTime: 0,
@@ -185,7 +185,7 @@ export const AdvancedMetricsPanel: React.FC = () => {
         <Typography variant="h6" style={{ color: '#00d4ff', marginBottom: 16 }}>
           Тенденції системи
         </Typography>
-        
+
         <div style={{ marginBottom: 24 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
             <Typography variant="body2" style={{ color: '#ffffff' }}>

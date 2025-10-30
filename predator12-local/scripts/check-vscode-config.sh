@@ -35,7 +35,7 @@ if [ -f "$VSCODE_DIR/settings.json" ]; then
     else
         echo -e "${GREEN}✅ settings.json is valid${NC}"
     fi
-    
+
     # Check for extraPaths
     if grep -q "python.analysis.extraPaths" "$VSCODE_DIR/settings.json"; then
         echo -e "${GREEN}✅ extraPaths configured for Pylance${NC}"
@@ -56,7 +56,7 @@ if [ -f "$VSCODE_DIR/launch.json" ]; then
     else
         echo -e "${GREEN}✅ No deprecated 'type: python' found${NC}"
     fi
-    
+
     # Check for deprecated "type": "pwa-node"
     if grep -q '"type"[[:space:]]*:[[:space:]]*"pwa-node"' "$VSCODE_DIR/launch.json"; then
         echo -e "${RED}❌ Found deprecated 'type: pwa-node' in launch.json${NC}"

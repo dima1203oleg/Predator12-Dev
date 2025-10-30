@@ -543,7 +543,7 @@ class MLOpsEnhancedManager:
                 "status": canary.status.value,
                 "requests_served": canary.requests_served,
                 "success_rate": canary.success_rate,
-                "start_time": canary.start_time.isoformat() if canary.start_time else None,
+                "start_time": (canary.start_time.isoformat() if canary.start_time else None),
                 "end_time": canary.end_time.isoformat() if canary.end_time else None,
             }
 

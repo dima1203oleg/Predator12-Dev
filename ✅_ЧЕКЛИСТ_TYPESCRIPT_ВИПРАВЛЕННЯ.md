@@ -3,7 +3,7 @@
 ## 🔴 КРИТИЧНО ВАЖЛИВО (зробити зараз!)
 
 ### [ ] 1. Перезапустити TypeScript Server
-**Як**: 
+**Як**:
 - Натисніть `Cmd+Shift+P` (або `F1`)
 - Введіть: `TypeScript: Restart TS Server`
 - Натисніть Enter

@@ -50,7 +50,7 @@ agents:
     - mistralai/mistral-7b-instruct-v0.3
     llm_profile: specialized_tier3
     load_balancing: code_quality_score
-    max_concurrent: 3
+    max_concurrent: 4
     priority: normal
     thermal_protection: true
   BillingGate:
@@ -426,9 +426,9 @@ agents:
     - qwen/qwen2.5-32b-instruct
     - microsoft/phi-3-small-128k-instruct
     - google/gemma-2-27b-it
-    llm_profile: specialized_tier3
+    llm_profile: balanced_tier2
     load_balancing: learning_efficiency
-    max_concurrent: 2
+    max_concurrent: 3
     priority: normal
     thermal_protection: true
   Simulator:

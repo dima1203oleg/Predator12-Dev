@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import uuid
 
-from app.fastapi_app.routes_ws import progress_manager, alerts_manager
+from app.fastapi_app.routes_ws import alerts_manager, progress_manager
 
 
 class AgentHub:
@@ -28,13 +28,9 @@ class AgentHub:
         # 5 progress ticks
         for i in range(1, 6):
             await asyncio.sleep(0.6)
-            await progress_manager.broadcast(
-                f"task={task_id} type={task_type} progress={i*20}%"
-            )
+            await progress_manager.broadcast(f"task={task_id} type={task_type} progress={i*20}%")
         # final done message and alert
-        await progress_manager.broadcast(
-            f"task={task_id} type={task_type} status=done"
-        )
+        await progress_manager.broadcast(f"task={task_id} type={task_type} status=done")
         await alerts_manager.broadcast(
             f"alert: task {task_id} ({task_type}) completed successfully"
         )

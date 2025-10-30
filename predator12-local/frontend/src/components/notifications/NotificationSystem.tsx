@@ -54,9 +54,9 @@ interface NotificationSystemProps {
   onSoundToggle: () => void;
 }
 
-const NotificationSystem: React.FC<NotificationSystemProps> = ({ 
-  soundEnabled, 
-  onSoundToggle 
+const NotificationSystem: React.FC<NotificationSystemProps> = ({
+  soundEnabled,
+  onSoundToggle
 }) => {
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
   const [showPanel, setShowPanel] = useState(false);
@@ -130,13 +130,13 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
           const gain2 = ctx.createGain();
           osc2.connect(gain2);
           gain2.connect(ctx.destination);
-          
+
           osc2.frequency.setValueAtTime(659, ctx.currentTime); // E5
           osc2.type = 'sine';
           gain2.gain.setValueAtTime(0, ctx.currentTime);
           gain2.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 0.01);
           gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-          
+
           osc2.start(ctx.currentTime);
           osc2.stop(ctx.currentTime + 0.3);
         }, 200);
@@ -155,15 +155,15 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
     };
 
     setNotifications(prev => [newNotification, ...prev].slice(0, 50)); // Максимум 50 нотифікацій
-    
+
     // Програвання звуку
     playNotificationSound(notification.type, notification.priority);
 
     // Автоматичне приховування
     if (autoHide && !notification.persistent) {
-      const hideDelay = notification.priority === 'critical' ? 8000 : 
+      const hideDelay = notification.priority === 'critical' ? 8000 :
                       notification.priority === 'high' ? 6000 : 4000;
-      
+
       setTimeout(() => {
         removeNotification(newNotification.id);
       }, hideDelay);
@@ -290,11 +290,11 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
             position: 'fixed',
             bottom: 80,
             right: 24,
-            background: unreadCount > 0 
+            background: unreadCount > 0
               ? 'linear-gradient(45deg, #ff9800, #ffc107)'
               : 'linear-gradient(45deg, #2196f3, #03dac6)',
             '&:hover': {
-              background: unreadCount > 0 
+              background: unreadCount > 0
                 ? 'linear-gradient(45deg, #f57c00, #ffb300)'
                 : 'linear-gradient(45deg, #1976d2, #0097a7)',
               transform: 'scale(1.1)',
@@ -345,7 +345,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
                     <CloseIcon />
                   </IconButton>
                 </Box>
-                
+
                 <Box display="flex" alignItems="center" justifyContent="space-between" gap={2}>
                   <FormControlLabel
                     control={
@@ -362,7 +362,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
                       </Box>
                     }
                   />
-                  
+
                   <FormControlLabel
                     control={
                       <Switch
@@ -376,7 +376,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
                     }
                   />
                 </Box>
-                
+
                 {notifications.length > 0 && (
                   <Box display="flex" gap={1} mt={2}>
                     <Chip
@@ -438,7 +438,7 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
                               >
                                 {getNotificationIcon(notification)}
                               </Avatar>
-                              
+
                               <Box flex={1}>
                                 <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
                                   <Typography
@@ -455,16 +455,16 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
                                     <CloseIcon fontSize="small" />
                                   </IconButton>
                                 </Box>
-                                
+
                                 <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.8)', mb: 1 }}>
                                   {notification.message}
                                 </Typography>
-                                
+
                                 <Box display="flex" alignItems="center" justifyContent="space-between">
                                   <Typography variant="caption" color="textSecondary">
                                     {notification.timestamp.toLocaleTimeString()}
                                   </Typography>
-                                  
+
                                   <Box display="flex" gap={1}>
                                     <Chip
                                       label={notification.priority.toUpperCase()}
@@ -472,13 +472,13 @@ const NotificationSystem: React.FC<NotificationSystemProps> = ({
                                       sx={{
                                         fontSize: '0.6rem',
                                         height: 20,
-                                        background: notification.priority === 'critical' ? nexusColors.error.main : 
+                                        background: notification.priority === 'critical' ? nexusColors.error.main :
                                                   notification.priority === 'high' ? nexusColors.warning.main :
                                                   nexusColors.grey[600],
                                         color: 'white'
                                       }}
                                     />
-                                    
+
                                     {notification.xp && (
                                       <Chip
                                         label={`+${notification.xp} XP`}

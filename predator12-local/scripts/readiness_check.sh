@@ -17,7 +17,7 @@ NC='\033[0m'
 
 echo -e "${BLUE}📁 Project Structure:${NC}"
 echo "✅ Backend configuration ready"
-echo "✅ Frontend configuration ready"  
+echo "✅ Frontend configuration ready"
 echo "✅ Agent system configured (16 agents)"
 echo "✅ ETL scripts prepared"
 echo "✅ ML pipeline structure ready"
@@ -37,7 +37,7 @@ echo -e "${BLUE}🤖 Agent Configuration:${NC}"
 agents_count=$(grep -c "Agent:" backend/app/agents/registry.yaml 2>/dev/null || echo "0")
 echo "✅ $agents_count agents configured in registry.yaml"
 
-models_count=$(grep -c "cost:" backend/app/agents/policies.yaml 2>/dev/null || echo "0") 
+models_count=$(grep -c "cost:" backend/app/agents/policies.yaml 2>/dev/null || echo "0")
 echo "✅ $models_count models configured with policies"
 echo ""
 

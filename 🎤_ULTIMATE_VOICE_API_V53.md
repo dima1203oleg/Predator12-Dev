@@ -352,7 +352,7 @@ const speakText = async (text: string) => {
       language: 'uk',
       provider: 'auto'
     });
-    
+
     console.log(`Озвучено через: ${response.provider}`);
   } catch (error) {
     console.error('TTS error:', error);
@@ -367,7 +367,7 @@ const recognizeSpeech = async (audioBlob: Blob) => {
       'uk',
       'auto'
     );
-    
+
     console.log(`Розпізнано: ${response.text}`);
     return response.text;
   } catch (error) {

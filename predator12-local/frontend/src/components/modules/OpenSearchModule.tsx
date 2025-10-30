@@ -1,10 +1,10 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Button, 
+import {
+  Box,
+  Typography,
+  Paper,
+  Button,
   Alert,
   CircularProgress,
   Tabs,
@@ -27,8 +27,8 @@ import {
   LinearProgress
 } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
-import { 
-  Search as SearchIcon, 
+import {
+  Search as SearchIcon,
   Dashboard as DashboardIcon,
   Analytics as AnalyticsIcon,
   Security as SecurityIcon,
@@ -130,11 +130,11 @@ export const OpenSearchModule: React.FC = () => {
     // In production, this would generate the actual OpenSearch Dashboard URL
     const baseUrl = 'http://localhost:5601'; // OpenSearch Dashboard URL
     const dashboard = dashboards.find(d => d.id === selectedDashboard);
-    
+
     if (dashboard) {
       return `${baseUrl}/app/dashboards#/view/${dashboard.id}`;
     }
-    
+
     return `${baseUrl}/app/home`;
   };
 
@@ -147,10 +147,10 @@ export const OpenSearchModule: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            mb: 3, 
+        <Typography
+          variant="h4"
+          sx={{
+            mb: 3,
             color: nexusColors.info,
             fontFamily: 'Orbitron',
             textShadow: `0 0 10px ${nexusColors.info}`
@@ -169,7 +169,7 @@ export const OpenSearchModule: React.FC = () => {
                   <DashboardIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
                   Панель Управління
                 </Typography>
-                
+
                 <FormControl fullWidth sx={{ mb: 2 }}>
                   <InputLabel sx={{ color: nexusColors.nebula }}>Дашборд</InputLabel>
                   <Select
@@ -247,7 +247,7 @@ export const OpenSearchModule: React.FC = () => {
                 <Typography variant="subtitle2" sx={{ color: nexusColors.amethyst, mb: 1 }}>
                   Налаштування Інтеграції
                 </Typography>
-                
+
                 <FormControlLabel
                   control={
                     <Switch
@@ -263,7 +263,7 @@ export const OpenSearchModule: React.FC = () => {
                   label="SSO Authentication"
                   sx={{ color: nexusColors.nebula, display: 'block', mb: 1 }}
                 />
-                
+
                 <FormControlLabel
                   control={
                     <Switch
@@ -279,7 +279,7 @@ export const OpenSearchModule: React.FC = () => {
                   label="Embedded Mode"
                   sx={{ color: nexusColors.nebula, display: 'block', mb: 1 }}
                 />
-                
+
                 <FormControlLabel
                   control={
                     <Switch
@@ -305,7 +305,7 @@ export const OpenSearchModule: React.FC = () => {
                   <FilterIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
                   Швидкий Пошук
                 </Typography>
-                
+
                 <FormControl fullWidth sx={{ mb: 2 }}>
                   <InputLabel sx={{ color: nexusColors.nebula }}>Індекс</InputLabel>
                   <Select
@@ -336,8 +336,8 @@ export const OpenSearchModule: React.FC = () => {
                   <InputLabel sx={{ color: nexusColors.nebula }}>Часовий діапазон</InputLabel>
                   <Select
                     value={searchQuery.timeRange.from}
-                    onChange={(e) => setSearchQuery(prev => ({ 
-                      ...prev, 
+                    onChange={(e) => setSearchQuery(prev => ({
+                      ...prev,
                       timeRange: { ...prev.timeRange, from: e.target.value }
                     }))}
                     sx={{ color: nexusColors.frost }}
@@ -365,7 +365,7 @@ export const OpenSearchModule: React.FC = () => {
                       Додати
                     </Button>
                   </Box>
-                  
+
                   {searchQuery.filters.map((filter, index) => (
                     <Chip
                       key={index}
@@ -424,7 +424,7 @@ export const OpenSearchModule: React.FC = () => {
                     </Typography>
                   </Box>
                 </Box>
-                
+
                 {isLoading && (
                   <Box sx={{ mb: 2 }}>
                     <LinearProgress
@@ -450,7 +450,7 @@ export const OpenSearchModule: React.FC = () => {
                       borderRadius: 2,
                       overflow: 'hidden',
                       position: 'relative',
-                      background: customTheme 
+                      background: customTheme
                         ? `linear-gradient(135deg, ${nexusColors.obsidian}, ${nexusColors.darkMatter})`
                         : '#ffffff'
                     }}
@@ -466,9 +466,9 @@ export const OpenSearchModule: React.FC = () => {
                       }}
                     >
                       {/* Header */}
-                      <Box sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
+                      <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
                         alignItems: 'center',
                         mb: 2,
                         pb: 1,
@@ -486,8 +486,8 @@ export const OpenSearchModule: React.FC = () => {
                       {/* Mock Dashboard Content */}
                       <Grid container spacing={2} sx={{ flex: 1 }}>
                         <Grid item xs={6}>
-                          <Box sx={{ 
-                            height: 200, 
+                          <Box sx={{
+                            height: 200,
                             border: `1px solid ${nexusColors.quantum}`,
                             borderRadius: 1,
                             p: 2,
@@ -496,10 +496,10 @@ export const OpenSearchModule: React.FC = () => {
                             <Typography variant="subtitle2" sx={{ color: customTheme ? nexusColors.frost : '#333', mb: 1 }}>
                               Events Over Time
                             </Typography>
-                            <Box sx={{ 
-                              height: '80%', 
-                              display: 'flex', 
-                              alignItems: 'end', 
+                            <Box sx={{
+                              height: '80%',
+                              display: 'flex',
+                              alignItems: 'end',
                               justifyContent: 'space-around',
                               gap: 1
                             }}>
@@ -517,10 +517,10 @@ export const OpenSearchModule: React.FC = () => {
                             </Box>
                           </Box>
                         </Grid>
-                        
+
                         <Grid item xs={6}>
-                          <Box sx={{ 
-                            height: 200, 
+                          <Box sx={{
+                            height: 200,
                             border: `1px solid ${nexusColors.quantum}`,
                             borderRadius: 1,
                             p: 2,
@@ -543,10 +543,10 @@ export const OpenSearchModule: React.FC = () => {
                             </Box>
                           </Box>
                         </Grid>
-                        
+
                         <Grid item xs={12}>
-                          <Box sx={{ 
-                            height: 250, 
+                          <Box sx={{
+                            height: 250,
                             border: `1px solid ${nexusColors.quantum}`,
                             borderRadius: 1,
                             p: 2,
@@ -557,8 +557,8 @@ export const OpenSearchModule: React.FC = () => {
                             </Typography>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, height: '90%', overflow: 'auto' }}>
                               {Array.from({ length: 8 }, (_, i) => (
-                                <Box key={i} sx={{ 
-                                  display: 'flex', 
+                                <Box key={i} sx={{
+                                  display: 'flex',
                                   justifyContent: 'space-between',
                                   p: 1,
                                   border: `1px solid ${nexusColors.quantum}40`,
@@ -570,12 +570,12 @@ export const OpenSearchModule: React.FC = () => {
                                   <Typography variant="body2" sx={{ color: customTheme ? nexusColors.frost : '#333' }}>
                                     Event {i + 1} - Sample log entry
                                   </Typography>
-                                  <Chip 
-                                    label={['INFO', 'WARN', 'ERROR'][i % 3]} 
+                                  <Chip
+                                    label={['INFO', 'WARN', 'ERROR'][i % 3]}
                                     size="small"
                                     sx={{
-                                      backgroundColor: ['INFO', 'WARN', 'ERROR'][i % 3] === 'ERROR' 
-                                        ? nexusColors.crimson 
+                                      backgroundColor: ['INFO', 'WARN', 'ERROR'][i % 3] === 'ERROR'
+                                        ? nexusColors.crimson
                                         : ['INFO', 'WARN', 'ERROR'][i % 3] === 'WARN'
                                         ? nexusColors.warning
                                         : nexusColors.emerald,
@@ -625,10 +625,10 @@ export const OpenSearchModule: React.FC = () => {
                   </Box>
                 ) : (
                   <Alert severity="info" sx={{ mb: 2 }}>
-                    Embedded mode disabled. 
-                    <Button 
-                      href={generateOpenSearchUrl()} 
-                      target="_blank" 
+                    Embedded mode disabled.
+                    <Button
+                      href={generateOpenSearchUrl()}
+                      target="_blank"
                       sx={{ ml: 1, color: nexusColors.sapphire }}
                     >
                       Open in new tab

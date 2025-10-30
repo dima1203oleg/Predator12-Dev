@@ -3,22 +3,24 @@
 🆓 ХМАРНИЙ MODEL SDK ДЛЯ PREDATOR11 (БЕЗ ЛОКАЛЬНИХ МОДЕЛЕЙ)
 Тільки безкоштовні хмарні API провайдери
 """
-import os
-import httpx
 import asyncio
-from typing import Dict, List, Optional, Any
+import logging
+import os
+from typing import Any, Dict, List, Optional
+
+import httpx
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import uvicorn
-import logging
 
 logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Predator Cloud Model SDK",
     description="40+ безкоштовних хмарних AI моделей",
-    version="3.1.0"
+    version="3.1.0",
 )
+
 
 class ChatRequest(BaseModel):
     model: str
@@ -26,10 +28,12 @@ class ChatRequest(BaseModel):
     max_tokens: Optional[int] = 1000
     temperature: Optional[float] = 0.7
 
+
 class ChatResponse(BaseModel):
     choices: List[Dict[str, Any]]
     model: str
     usage: Dict[str, int]
+
 
 class CloudModelSDK:
     """SDK для безкоштовних хмарних AI моделей"""
@@ -58,10 +62,9 @@ class CloudModelSDK:
                     "sentence-transformers/all-MiniLM-L6-v2",
                     "sentence-transformers/all-mpnet-base-v2",
                     "BAAI/bge-small-en-v1.5",
-                    "BAAI/bge-base-en-v1.5"
-                ]
+                    "BAAI/bge-base-en-v1.5",
+                ],
             },
-
             # Together AI (безкоштовний рівень до 1M токенів)
             "together": {
                 "base_url": "https://api.together.xyz/inference",
@@ -73,10 +76,9 @@ class CloudModelSDK:
                     "EleutherAI/llemma_7b",
                     "NousResearch/Nous-Hermes-13b",
                     "WizardLM/WizardLM-13B-V1.2",
-                    "teknium/OpenHermes-2.5-Mistral-7B"
-                ]
+                    "teknium/OpenHermes-2.5-Mistral-7B",
+                ],
             },
-
             # Replicate (безкоштовні моделі)
             "replicate": {
                 "base_url": "https://api.replicate.com/v1",
@@ -85,21 +87,15 @@ class CloudModelSDK:
                     "meta/llama-2-7b-chat",
                     "meta/llama-2-13b-chat",
                     "mistralai/mistral-7b-instruct-v0.1",
-                    "mistralai/mixtral-8x7b-instruct-v0.1"
-                ]
+                    "mistralai/mixtral-8x7b-instruct-v0.1",
+                ],
             },
-
             # Groq (безкоштовний високошвидкісний інференс)
             "groq": {
                 "base_url": "https://api.groq.com/openai/v1",
                 "headers": {"Content-Type": "application/json"},
-                "models": [
-                    "llama2-70b-4096",
-                    "mixtral-8x7b-32768",
-                    "gemma-7b-it"
-                ]
+                "models": ["llama2-70b-4096", "mixtral-8x7b-32768", "gemma-7b-it"],
             },
-
             # OpenRouter безкоштовні моделі
             "openrouter": {
                 "base_url": "https://openrouter.ai/api/v1",
@@ -108,10 +104,9 @@ class CloudModelSDK:
                     "google/palm-2-chat-bison",
                     "anthropic/claude-instant-v1",
                     "meta-llama/llama-2-70b-chat",
-                    "mistralai/mistral-7b-instruct"
-                ]
+                    "mistralai/mistral-7b-instruct",
+                ],
             },
-
             # Симуляція топових моделей (для демонстрації)
             "premium_demo": {
                 "base_url": "internal",
@@ -122,9 +117,9 @@ class CloudModelSDK:
                     "meta/llama-3.1-70b-instruct",
                     "qwen/qwen2.5-72b-instruct",
                     "deepseek/deepseek-coder-v2",
-                    "nvidia/nemotron-4-340b-instruct"
-                ]
-            }
+                    "nvidia/nemotron-4-340b-instruct",
+                ],
+            },
         }
 
         self.model_routing = self._build_model_routing()
@@ -142,7 +137,7 @@ class CloudModelSDK:
                     "endpoint": model,
                     "base_url": config["base_url"],
                     "available": True,
-                    "type": "cloud"
+                    "type": "cloud",
                 }
 
         # Додаємо популярні алиаси
@@ -154,7 +149,7 @@ class CloudModelSDK:
             "llama-3.1-70b": "meta/llama-3.1-70b-instruct",
             "mistral-7b": "mistralai/mistral-7b-instruct",
             "codellama": "deepseek/deepseek-coder-v2",
-            "gemini-pro": "google/gemini-1.5-pro"
+            "gemini-pro": "google/gemini-1.5-pro",
         }
 
         for alias, target in aliases.items():
@@ -172,7 +167,7 @@ class CloudModelSDK:
             if config["base_url"] != "internal":
                 clients[provider] = httpx.AsyncClient(
                     timeout=45.0,  # Збільшив timeout для хмарних API
-                    headers=config.get("headers", {})
+                    headers=config.get("headers", {}),
                 )
 
         return clients
@@ -214,9 +209,9 @@ class CloudModelSDK:
 
         # Формуємо промпт для HF моделей
         if len(request.messages) > 0:
-            last_message = request.messages[-1].get('content', '')
+            last_message = request.messages[-1].get("content", "")
         else:
-            last_message = ''
+            last_message = ""
 
         payload = {
             "inputs": last_message,
@@ -224,8 +219,8 @@ class CloudModelSDK:
                 "max_new_tokens": min(request.max_tokens, 500),
                 "temperature": request.temperature,
                 "return_full_text": False,
-                "do_sample": True
-            }
+                "do_sample": True,
+            },
         }
 
         try:
@@ -246,19 +241,18 @@ class CloudModelSDK:
                     return await self._smart_demo_response(request)
 
                 return ChatResponse(
-                    choices=[{
-                        "message": {
-                            "role": "assistant",
-                            "content": generated_text
-                        },
-                        "finish_reason": "stop"
-                    }],
+                    choices=[
+                        {
+                            "message": {"role": "assistant", "content": generated_text},
+                            "finish_reason": "stop",
+                        }
+                    ],
                     model=request.model,
                     usage={
                         "prompt_tokens": len(last_message.split()),
                         "completion_tokens": len(generated_text.split()),
-                        "total_tokens": len(last_message.split()) + len(generated_text.split())
-                    }
+                        "total_tokens": len(last_message.split()) + len(generated_text.split()),
+                    },
                 )
             else:
                 raise Exception(f"HF API error: {response.status_code}")
@@ -323,19 +317,15 @@ class CloudModelSDK:
             content = self._generate_general_response(user_message, model_name)
 
         return ChatResponse(
-            choices=[{
-                "message": {
-                    "role": "assistant",
-                    "content": content
-                },
-                "finish_reason": "stop"
-            }],
+            choices=[
+                {"message": {"role": "assistant", "content": content}, "finish_reason": "stop"}
+            ],
             model=request.model,
             usage={
                 "prompt_tokens": len(user_message.split()),
                 "completion_tokens": len(content.split()),
-                "total_tokens": len(user_message.split()) + len(content.split())
-            }
+                "total_tokens": len(user_message.split()) + len(content.split()),
+            },
         )
 
     def _generate_gpt4_style_response(self, user_message: str) -> str:
@@ -387,7 +377,7 @@ User Query: {user_message[:100]}...
 Based on your request about Predator11 system optimization, here are my findings:
 
 - System has 43 agents and 25 containers
-- Model SDK provides 40+ free cloud AI models  
+- Model SDK provides 40+ free cloud AI models
 - No duplicated container functions detected
 - 3 agents already connected to centralized SDK
 
@@ -409,17 +399,17 @@ class PredatorAgent:
     def __init__(self, name: str, model_sdk_url: str = "http://localhost:3010"):
         self.name = name
         self.model_sdk = ModelSDKClient(model_sdk_url)
-    
+
     async def process_task(self, task: str):
         # Вибираємо найкращу модель для завдання
         best_model = await self.model_sdk.get_best_model_for_task(task)
-        
+
         # Виконуємо запит до AI моделі
         response = await self.model_sdk.chat_completion(
             model=best_model,
             messages=[{"role": "user", "content": task}]
         )
-        
+
         return response
 
 # Використання:
@@ -445,7 +435,7 @@ result = await agent.process_task("{user_message}")
 ```
 Predator11 System
 ├── 43 AI Agents 🤖
-├── 25 Containers 🐳  
+├── 25 Containers 🐳
 ├── Model SDK (40+ models) 🧠
 └── Monitoring & Analytics 📊
 ```
@@ -491,26 +481,31 @@ Predator11 System
             if info.get("is_alias"):
                 continue
 
-            models.append({
-                "id": model_id,
-                "object": "model",
-                "created": 1677610602,
-                "owned_by": info["provider"],
-                "available": info["available"],
-                "type": info.get("type", "cloud"),
-                "cost": "free",
-                "description": f"Безкоштовна хмарна модель через {info['provider']}"
-            })
+            models.append(
+                {
+                    "id": model_id,
+                    "object": "model",
+                    "created": 1677610602,
+                    "owned_by": info["provider"],
+                    "available": info["available"],
+                    "type": info.get("type", "cloud"),
+                    "cost": "free",
+                    "description": f"Безкоштовна хмарна модель через {info['provider']}",
+                }
+            )
 
         return models
 
+
 # Глобальний екземпляр
 cloud_model_sdk = CloudModelSDK()
+
 
 @app.post("/v1/chat/completions", response_model=ChatResponse)
 async def chat_completions(request: ChatRequest):
     """Чат з безкоштовними хмарними моделями"""
     return await cloud_model_sdk.route_request(request)
+
 
 @app.get("/v1/models")
 async def list_models():
@@ -518,17 +513,23 @@ async def list_models():
     models = cloud_model_sdk.get_available_models()
     return {"data": models, "total": len(models)}
 
+
 @app.get("/models")
 async def list_models_simple():
     """Простий список моделей"""
     models = cloud_model_sdk.get_available_models()
     return {"models": [{"id": m["id"], "owned_by": m["owned_by"]} for m in models]}
 
+
 @app.get("/health")
 async def health_check():
     """Здоров'я сервісу"""
     models = cloud_model_sdk.get_available_models()
-    cloud_providers = [p for p, config in cloud_model_sdk.cloud_providers.items() if config["base_url"] != "internal"]
+    cloud_providers = [
+        p
+        for p, config in cloud_model_sdk.cloud_providers.items()
+        if config["base_url"] != "internal"
+    ]
 
     return {
         "status": "healthy",
@@ -536,8 +537,9 @@ async def health_check():
         "cloud_providers": cloud_providers,
         "local_models": 0,
         "type": "cloud_only",
-        "cost": "100% FREE"
+        "cost": "100% FREE",
     }
+
 
 @app.get("/")
 async def root():
@@ -547,8 +549,9 @@ async def root():
         "version": "3.1.0",
         "description": "40+ безкоштовних хмарних AI моделей",
         "type": "CLOUD ONLY - NO LOCAL DEPENDENCIES",
-        "providers": ["HuggingFace", "Together", "Replicate", "Groq", "OpenRouter", "Demo"]
+        "providers": ["HuggingFace", "Together", "Replicate", "Groq", "OpenRouter", "Demo"],
     }
+
 
 if __name__ == "__main__":
     uvicorn.run("free_model_server:app", host="0.0.0.0", port=3010, reload=False)

@@ -33,7 +33,7 @@ agents:
       - mistral/mistral-large-2411
       - microsoft/phi-4
     embedding_model: cohere/cohere-embed-v3-multilingual
-    
+
   DatasetIngestAgent:
     primary_model: microsoft/phi-4-reasoning
     fallback_models:

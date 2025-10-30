@@ -127,7 +127,7 @@ import { AIVoiceInterface } from './components/voice/AIVoiceInterface';
 
 **2. Додайте в ваш компонент:**
 ```typescript
-<AIVoiceInterface 
+<AIVoiceInterface
   onCommand={handleVoiceCommand}
   language="uk-UA"
 />

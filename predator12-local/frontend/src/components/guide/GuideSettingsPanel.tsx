@@ -82,45 +82,45 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
   const { t } = useI18n();
   const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [testingSpeech, setTestingSpeech] = useState(false);
-  
+
   // Load available voices
   useEffect(() => {
     const loadVoices = () => {
       const voices = speechSynthesis.getVoices();
-      setAvailableVoices(voices.filter(voice => 
+      setAvailableVoices(voices.filter(voice =>
         voice.lang.startsWith('uk') || voice.lang.startsWith('en')
       ));
     };
-    
+
     loadVoices();
     speechSynthesis.onvoiceschanged = loadVoices;
   }, []);
-  
+
   // Test TTS
   const testSpeech = () => {
     if (!voiceSettings.ttsEnabled || testingSpeech) return;
-    
+
     setTestingSpeech(true);
     const utterance = new SpeechSynthesisUtterance(
       t('guide.settings.testSpeech', 'Це тест озвучування. Як вам звучить мій голос?')
     );
-    
+
     utterance.lang = voiceSettings.language;
     utterance.rate = voiceSettings.rate;
     utterance.pitch = voiceSettings.pitch;
     utterance.volume = voiceSettings.volume;
-    
+
     if (voiceSettings.voice) {
       const voice = availableVoices.find(v => v.name === voiceSettings.voice);
       if (voice) utterance.voice = voice;
     }
-    
+
     utterance.onend = () => setTestingSpeech(false);
     utterance.onerror = () => setTestingSpeech(false);
-    
+
     speechSynthesis.speak(utterance);
   };
-  
+
   // Export settings
   const exportSettings = () => {
     const settings = {
@@ -130,7 +130,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
       privacySettings,
       exportDate: new Date().toISOString()
     };
-    
+
     const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -139,22 +139,22 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
     a.click();
     URL.revokeObjectURL(url);
   };
-  
+
   // Import settings
   const importSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    
+
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
         const settings = JSON.parse(e.target?.result as string);
-        
+
         if (settings.guideMode) onModeChange(settings.guideMode);
         if (settings.voiceSettings) onVoiceSettingsChange(settings.voiceSettings);
         if (settings.performanceSettings) onPerformanceSettingsChange(settings.performanceSettings);
         if (settings.privacySettings) onPrivacySettingsChange(settings.privacySettings);
-        
+
         console.log('Settings imported successfully');
       } catch (error) {
         console.error('Failed to import settings:', error);
@@ -162,7 +162,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
     };
     reader.readAsText(file);
   };
-  
+
   // Reset to defaults
   const resetToDefaults = () => {
     onModeChange('passive');
@@ -228,10 +228,10 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               <Chip
                 key={mode}
                 label={
-                  mode === 'passive' 
+                  mode === 'passive'
                     ? t('guide.modes.passive', 'Пасивний')
-                    : mode === 'guide' 
-                    ? t('guide.modes.guide', 'Активний') 
+                    : mode === 'guide'
+                    ? t('guide.modes.guide', 'Активний')
                     : t('guide.modes.silent', 'Вимкнений')
                 }
                 variant={guideMode === mode ? 'filled' : 'outlined'}
@@ -265,7 +265,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               {t('guide.settings.voice', 'Голосові функції')}
             </Typography>
           </Box>
-          
+
           <Stack spacing={2}>
             <FormControlLabel
               control={
@@ -278,7 +278,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               label={t('guide.settings.tts', 'Озвучування відповідей')}
               sx={{ '& .MuiFormControlLabel-label': { color: nexusColors.frost, fontSize: '0.875rem' } }}
             />
-            
+
             <FormControlLabel
               control={
                 <Switch
@@ -290,7 +290,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               label={t('guide.settings.stt', 'Голосовий ввід')}
               sx={{ '& .MuiFormControlLabel-label': { color: nexusColors.frost, fontSize: '0.875rem' } }}
             />
-            
+
             {voiceSettings.ttsEnabled && (
               <>
                 <FormControl size="small" fullWidth>
@@ -310,7 +310,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
                     <MenuItem value="en-US">{t('guide.settings.lang.en', 'English')}</MenuItem>
                   </Select>
                 </FormControl>
-                
+
                 {availableVoices.length > 0 && (
                   <FormControl size="small" fullWidth>
                     <InputLabel sx={{ color: nexusColors.frost }}>
@@ -333,7 +333,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
                     </Select>
                   </FormControl>
                 )}
-                
+
                 <Box>
                   <Typography variant="caption" sx={{ color: nexusColors.frost }}>
                     {t('guide.settings.rate', 'Швидкість')}: {voiceSettings.rate.toFixed(1)}
@@ -348,7 +348,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
                     sx={{ color: nexusColors.sapphire }}
                   />
                 </Box>
-                
+
                 <Box>
                   <Typography variant="caption" sx={{ color: nexusColors.frost }}>
                     {t('guide.settings.volume', 'Гучність')}: {Math.round(voiceSettings.volume * 100)}%
@@ -363,7 +363,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
                     sx={{ color: nexusColors.sapphire }}
                   />
                 </Box>
-                
+
                 <Button
                   size="small"
                   variant="outlined"
@@ -392,7 +392,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               {t('guide.settings.performance', 'Продуктивність')}
             </Typography>
           </Box>
-          
+
           <Stack spacing={2}>
             <FormControl size="small" fullWidth>
               <InputLabel sx={{ color: nexusColors.frost }}>
@@ -400,8 +400,8 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               </InputLabel>
               <Select
                 value={performanceSettings.mode}
-                onChange={(e) => onPerformanceSettingsChange({ 
-                  ...performanceSettings, 
+                onChange={(e) => onPerformanceSettingsChange({
+                  ...performanceSettings,
                   mode: e.target.value as 'high' | 'medium' | 'low'
                 })}
                 sx={{
@@ -415,14 +415,14 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
                 <MenuItem value="low">{t('guide.settings.quality.low', 'Низька')}</MenuItem>
               </Select>
             </FormControl>
-            
+
             <FormControlLabel
               control={
                 <Switch
                   checked={performanceSettings.fallbackMode}
-                  onChange={(e) => onPerformanceSettingsChange({ 
-                    ...performanceSettings, 
-                    fallbackMode: e.target.checked 
+                  onChange={(e) => onPerformanceSettingsChange({
+                    ...performanceSettings,
+                    fallbackMode: e.target.checked
                   })}
                   size="small"
                 />
@@ -430,14 +430,14 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               label={t('guide.settings.fallbackMode', 'Режим сумісності (Canvas)')}
               sx={{ '& .MuiFormControlLabel-label': { color: nexusColors.frost, fontSize: '0.875rem' } }}
             />
-            
+
             <FormControlLabel
               control={
                 <Switch
                   checked={performanceSettings.enableCollisionAvoidance}
-                  onChange={(e) => onPerformanceSettingsChange({ 
-                    ...performanceSettings, 
-                    enableCollisionAvoidance: e.target.checked 
+                  onChange={(e) => onPerformanceSettingsChange({
+                    ...performanceSettings,
+                    enableCollisionAvoidance: e.target.checked
                   })}
                   size="small"
                 />
@@ -445,7 +445,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               label={t('guide.settings.collisionAvoidance', 'Уникнення колізій')}
               sx={{ '& .MuiFormControlLabel-label': { color: nexusColors.frost, fontSize: '0.875rem' } }}
             />
-            
+
             <Box>
               <Typography variant="caption" sx={{ color: nexusColors.frost }}>
                 {t('guide.settings.currentFps', 'Поточний FPS')}: {performanceSettings.fps}
@@ -458,7 +458,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
                   borderRadius: 2,
                   backgroundColor: nexusColors.quantum + '40',
                   '& .MuiLinearProgress-bar': {
-                    backgroundColor: performanceSettings.fps >= 50 ? nexusColors.emerald : 
+                    backgroundColor: performanceSettings.fps >= 50 ? nexusColors.emerald :
                                    performanceSettings.fps >= 30 ? '#FFA726' : nexusColors.crimson
                   }
                 }}
@@ -477,15 +477,15 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               {t('guide.settings.privacy', 'Приватність')}
             </Typography>
           </Box>
-          
+
           <Stack spacing={2}>
             <FormControlLabel
               control={
                 <Switch
                   checked={privacySettings.microphoneAccess}
-                  onChange={(e) => onPrivacySettingsChange({ 
-                    ...privacySettings, 
-                    microphoneAccess: e.target.checked 
+                  onChange={(e) => onPrivacySettingsChange({
+                    ...privacySettings,
+                    microphoneAccess: e.target.checked
                   })}
                   size="small"
                 />
@@ -493,14 +493,14 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               label={t('guide.settings.micAccess', 'Доступ до мікрофону')}
               sx={{ '& .MuiFormControlLabel-label': { color: nexusColors.frost, fontSize: '0.875rem' } }}
             />
-            
+
             <FormControlLabel
               control={
                 <Switch
                   checked={privacySettings.contextualHints}
-                  onChange={(e) => onPrivacySettingsChange({ 
-                    ...privacySettings, 
-                    contextualHints: e.target.checked 
+                  onChange={(e) => onPrivacySettingsChange({
+                    ...privacySettings,
+                    contextualHints: e.target.checked
                   })}
                   size="small"
                 />
@@ -508,14 +508,14 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               label={t('guide.settings.contextualHints', 'Контекстні підказки')}
               sx={{ '& .MuiFormControlLabel-label': { color: nexusColors.frost, fontSize: '0.875rem' } }}
             />
-            
+
             <FormControlLabel
               control={
                 <Switch
                   checked={privacySettings.dataCollection}
-                  onChange={(e) => onPrivacySettingsChange({ 
-                    ...privacySettings, 
-                    dataCollection: e.target.checked 
+                  onChange={(e) => onPrivacySettingsChange({
+                    ...privacySettings,
+                    dataCollection: e.target.checked
                   })}
                   size="small"
                 />
@@ -544,7 +544,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
             >
               {t('guide.settings.export', 'Експорт')}
             </Button>
-            
+
             <Button
               size="small"
               variant="outlined"
@@ -565,7 +565,7 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
               />
             </Button>
           </Stack>
-          
+
           <Button
             size="small"
             variant="outlined"
@@ -583,10 +583,10 @@ const GuideSettingsPanel: React.FC<GuideSettingsPanelProps> = ({
 
         {/* Warning for microphone access */}
         {voiceSettings.sttEnabled && !privacySettings.microphoneAccess && (
-          <Alert 
-            severity="warning" 
-            sx={{ 
-              mt: 2, 
+          <Alert
+            severity="warning"
+            sx={{
+              mt: 2,
               backgroundColor: '#FFA72620',
               color: nexusColors.frost,
               '& .MuiAlert-icon': { color: '#FFA726' }

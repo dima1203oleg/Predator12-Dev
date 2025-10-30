@@ -1,9 +1,10 @@
-from fastapi import FastAPI, Request, HTTPException
-import httpx
-import os
 import asyncio
 import logging
-from typing import Dict, Any
+import os
+from typing import Any, Dict
+
+import httpx
+from fastapi import FastAPI, HTTPException, Request
 
 app = FastAPI(title="PredatorAnalytics AutoHeal Webhook")
 
@@ -22,18 +23,16 @@ ACTIONS = {
     "OpenSearchClusterRed": [
         "scale:opensearch:up",
         "restart:opensearch_exporter",
-        "notify:devops"
+        "notify:devops",
     ],
     "NodeLowMemory": [
         "evict:pods:best-effort",
         "scale:service:celery:down",
-        "notify:devops"
+        "notify:devops",
     ],
-    "ContainerRestarts": [
-        "restart:container",
-        "notify:devops"
-    ]
+    "ContainerRestarts": ["restart:container", "notify:devops"],
 }
+
 
 @app.post("/alert")
 @app.post("/webhook")
@@ -61,23 +60,28 @@ async def alertmanager_webhook(payload: Dict[str, Any]):
         for action in actions:
             try:
                 result = await execute_action(action, alert)
-                results.append({
-                    "alert": alert_name,
-                    "instance": instance,
-                    "action": action,
-                    "result": result
-                })
+                results.append(
+                    {
+                        "alert": alert_name,
+                        "instance": instance,
+                        "action": action,
+                        "result": result,
+                    }
+                )
                 logger.info(f"Action {action} completed: {result}")
             except Exception as e:
                 logger.error(f"Action {action} failed: {e}")
-                results.append({
-                    "alert": alert_name,
-                    "instance": instance,
-                    "action": action,
-                    "result": f"error: {str(e)}"
-                })
+                results.append(
+                    {
+                        "alert": alert_name,
+                        "instance": instance,
+                        "action": action,
+                        "result": f"error: {str(e)}",
+                    }
+                )
 
     return {"status": "ok", "results": results}
+
 
 async def execute_action(action: str, alert: Dict[str, Any]) -> str:
     """
@@ -95,6 +99,7 @@ async def execute_action(action: str, alert: Dict[str, Any]) -> str:
         return await evict_pods(params[0])
     else:
         return f"unknown action: {action}"
+
 
 async def notify_devops(action: str, alert: Dict[str, Any]) -> str:
     """
@@ -122,11 +127,14 @@ async def notify_devops(action: str, alert: Dict[str, Any]) -> str:
         try:
             async with httpx.AsyncClient() as client:
                 url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-                await client.post(url, json={
-                    "chat_id": TELEGRAM_CHAT_ID,
-                    "text": message,
-                    "parse_mode": "HTML"
-                })
+                await client.post(
+                    url,
+                    json={
+                        "chat_id": TELEGRAM_CHAT_ID,
+                        "text": message,
+                        "parse_mode": "HTML",
+                    },
+                )
             notifications.append("Telegram")
         except Exception as e:
             logger.error(f"Telegram notification failed: {e}")
@@ -136,6 +144,7 @@ async def notify_devops(action: str, alert: Dict[str, Any]) -> str:
     else:
         return "No notification channels configured"
 
+
 async def restart_service(service: str) -> str:
     """
     Restart a specific service
@@ -144,9 +153,12 @@ async def restart_service(service: str) -> str:
         # Restart the OpenSearch exporter container
         try:
             import subprocess
-            result = subprocess.run([
-                "docker", "restart", "opensearch_exporter"
-            ], capture_output=True, text=True)
+
+            result = subprocess.run(
+                ["docker", "restart", "opensearch_exporter"],
+                capture_output=True,
+                text=True,
+            )
 
             if result.returncode == 0:
                 return "OpenSearch exporter restarted successfully"
@@ -157,6 +169,7 @@ async def restart_service(service: str) -> str:
     else:
         return f"Unknown service to restart: {service}"
 
+
 async def scale_service(service: str, direction: str) -> str:
     """
     Scale a service up or down
@@ -165,12 +178,14 @@ async def scale_service(service: str, direction: str) -> str:
     # For Docker Compose, we could restart with different replica counts
     return f"Scaling {service} {direction} - placeholder implementation"
 
+
 async def evict_pods(priority: str) -> str:
     """
     Evict pods by priority class
     """
     # Placeholder for K8s pod eviction
     return f"Evicting {priority} pods - placeholder implementation"
+
 
 @app.get("/health")
 async def health_check():
@@ -179,6 +194,8 @@ async def health_check():
     """
     return {"status": "healthy", "service": "autoheal-webhook"}
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8088)

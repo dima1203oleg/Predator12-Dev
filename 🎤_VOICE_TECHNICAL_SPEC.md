@@ -87,10 +87,10 @@ const synthRef = useRef<SpeechSynthesis | null>(null);
 useEffect(() => {
   // 1. Ініціалізація Premium FREE Voice API
   initVoiceAPI();
-  
+
   // 2. Ініціалізація Web Speech API
   initWebSpeechAPI();
-  
+
   // 3. Cleanup при розмонтуванні
   return () => {
     if (recognitionRef.current) {
@@ -107,13 +107,13 @@ const initVoiceAPI = async () => {
   try {
     // Перевірка здоров'я API
     const isHealthy = await premiumFreeVoiceAPI.checkHealth();
-    
+
     if (isHealthy) {
       // Отримання можливостей
       const capabilities = await premiumFreeVoiceAPI.getCapabilities();
       setVoiceCapabilities(capabilities);
       setCurrentProvider(capabilities.recommended_tts);
-      
+
       console.log('✅ Premium FREE Voice API готовий');
     } else {
       console.warn('⚠️  API недоступний. Browser fallback.');
@@ -133,23 +133,23 @@ const initWebSpeechAPI = () => {
     console.error('❌ Web Speech API недоступний');
     return;
   }
-  
+
   // 2. Створення екземпляру
   const SpeechRecognition = window.webkitSpeechRecognition;
   recognitionRef.current = new SpeechRecognition();
-  
+
   // 3. Налаштування
   recognitionRef.current.continuous = true;
   recognitionRef.current.interimResults = true;
   recognitionRef.current.lang = 'uk-UA';
   recognitionRef.current.maxAlternatives = 1;
-  
+
   // 4. Обробники подій
   recognitionRef.current.onstart = handleRecognitionStart;
   recognitionRef.current.onresult = handleRecognitionResult;
   recognitionRef.current.onerror = handleRecognitionError;
   recognitionRef.current.onend = handleRecognitionEnd;
-  
+
   // 5. Ініціалізація Speech Synthesis
   if ('speechSynthesis' in window) {
     synthRef.current = window.speechSynthesis;
@@ -205,12 +205,12 @@ const startListening = async () => {
     alert('Голосове розпізнавання недоступне');
     return;
   }
-  
+
   if (isListening) {
     console.warn('Вже слухаємо');
     return;
   }
-  
+
   // 2. Запит дозволу на мікрофон
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -219,7 +219,7 @@ const startListening = async () => {
     alert('Доступ до мікрофона заборонено');
     return;
   }
-  
+
   // 3. Запуск розпізнавання
   try {
     recognitionRef.current.start();
@@ -248,12 +248,12 @@ const stopListening = () => {
 const handleRecognitionResult = (event: SpeechRecognitionEvent) => {
   let finalTranscript = '';
   let interimTranscript = '';
-  
+
   // Обробка результатів
   for (let i = event.resultIndex; i < event.results.length; i++) {
     const transcript = event.results[i][0].transcript;
     const confidence = event.results[i][0].confidence;
-    
+
     if (event.results[i].isFinal) {
       finalTranscript += transcript;
       processVoiceCommand(transcript, confidence);
@@ -261,7 +261,7 @@ const handleRecognitionResult = (event: SpeechRecognitionEvent) => {
       interimTranscript += transcript;
     }
   }
-  
+
   // Оновлення UI
   setCurrentCommand(interimTranscript || finalTranscript);
   setConfidence(event.results[0]?.[0]?.confidence * 100 || 0);
@@ -276,7 +276,7 @@ const handleRecognitionResult = (event: SpeechRecognitionEvent) => {
 
 ```typescript
 const processVoiceCommand = async (
-  transcript: string, 
+  transcript: string,
   confidence: number
 ) => {
   // 1. Створення об'єкта команди
@@ -289,23 +289,23 @@ const processVoiceCommand = async (
     timestamp: new Date(),
     executed: false
   };
-  
+
   // 2. Додавання до історії
   setRecentCommands(prev => [command, ...prev.slice(0, 9)]);
   setIsProcessing(true);
-  
+
   // 3. Симуляція обробки
   await new Promise(resolve => setTimeout(resolve, 1000));
-  
+
   // 4. Генерація відповіді
   const response = generateAIResponse(transcript);
   setAiResponse(response);
-  
+
   // 5. Озвучування відповіді
   if (settings.autoSpeak && voiceEnabled) {
     speakResponseBrowser(response);
   }
-  
+
   // 6. Оновлення статусу
   command.executed = true;
   setRecentCommands(prev =>
@@ -315,7 +315,7 @@ const processVoiceCommand = async (
         : cmd
     )
   );
-  
+
   setIsProcessing(false);
   setCurrentCommand('');
 };
@@ -326,7 +326,7 @@ const processVoiceCommand = async (
 ```typescript
 const generateAIResponse = (command: string): string => {
   const lowerCommand = command.toLowerCase();
-  
+
   // Маппінг команд на відповіді
   const commandMap: Record<string, string> = {
     'дашборд': 'Відкриваю головний дашборд...',
@@ -334,14 +334,14 @@ const generateAIResponse = (command: string): string => {
     'безпека': 'Відкриваю центр кібербезпеки...',
     // ... інші команди
   };
-  
+
   // Пошук відповідності
   for (const [keyword, response] of Object.entries(commandMap)) {
     if (lowerCommand.includes(keyword)) {
       return response;
     }
   }
-  
+
   // Дефолтна відповідь
   return `Ви сказали: "${command}". Аналізую команду...`;
 };
@@ -374,17 +374,17 @@ Fallback to Browser API
 ```typescript
 const speakResponsePremiumFree = async (text: string) => {
   if (!voiceEnabled) return;
-  
+
   try {
     const lang = settings.language.startsWith('uk') ? 'uk' : 'en';
-    
+
     await premiumFreeVoiceAPI.textToSpeech({
       text,
       language: lang,
       speed: settings.speed,
       provider: 'auto'
     });
-    
+
     console.log('✅ TTS успішно (Premium FREE)');
   } catch (error) {
     console.error('❌ Помилка Premium FREE TTS:', error);
@@ -398,32 +398,32 @@ const speakResponsePremiumFree = async (text: string) => {
 ```typescript
 const speakResponseBrowser = (text: string) => {
   if (!synthRef.current || !voiceEnabled) return;
-  
+
   // 1. Зупинка попереднього озвучування
   synthRef.current.cancel();
-  
+
   // 2. Створення utterance
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = settings.language;
   utterance.rate = settings.speed;
   utterance.pitch = settings.pitch;
   utterance.volume = settings.volume;
-  
+
   // 3. Вибір голосу
   const voices = synthRef.current.getVoices();
-  const selectedVoice = voices.find(v => 
+  const selectedVoice = voices.find(v =>
     v.lang === settings.language || v.name === settings.voice
   );
-  
+
   if (selectedVoice) {
     utterance.voice = selectedVoice;
   }
-  
+
   // 4. Обробники подій
   utterance.onstart = () => console.log('🔊 TTS START');
   utterance.onend = () => console.log('✅ TTS END');
   utterance.onerror = (e) => console.error('❌ TTS ERROR:', e);
-  
+
   // 5. Озвучування
   synthRef.current.speak(utterance);
 };
@@ -441,22 +441,22 @@ const speakResponseBrowser = (text: string) => {
   <Typography variant="h4">
     🎤 AI Voice Interface
   </Typography>
-  
+
   {/* Головна Кнопка Мікрофона */}
   <VoicePulseButton />
-  
+
   {/* Статус і Метрики */}
   <StatusMetrics />
-  
+
   {/* Поточна Команда і Відповідь */}
   <CommandResponse />
-  
+
   {/* Історія Команд */}
   <RecentCommands />
-  
+
   {/* Контрольні Кнопки */}
   <ControlButtons />
-  
+
   {/* Діалог Налаштувань */}
   <SettingsDialog />
 </Box>
@@ -468,13 +468,13 @@ const speakResponseBrowser = (text: string) => {
 <motion.div
   animate={{
     scale: isListening ? [1, 1.2, 1] : 1,
-    boxShadow: isListening 
+    boxShadow: isListening
       ? ['0 0 0 0 rgba(0, 255, 157, 0.7)', '0 0 0 20px rgba(0, 255, 157, 0)']
       : '0 0 0 0 rgba(0, 255, 157, 0)'
   }}
-  transition={{ 
-    duration: 1.5, 
-    repeat: isListening ? Infinity : 0 
+  transition={{
+    duration: 1.5,
+    repeat: isListening ? Infinity : 0
   }}
 >
   <IconButton
@@ -482,7 +482,7 @@ const speakResponseBrowser = (text: string) => {
     sx={{
       width: 120,
       height: 120,
-      background: isListening 
+      background: isListening
         ? `linear-gradient(45deg, ${nexusColors.accent.main}, ${nexusColors.success.main})`
         : `linear-gradient(45deg, ${nexusColors.primary.main}, ${nexusColors.accent.main})`,
     }}
@@ -501,12 +501,12 @@ const speakResponseBrowser = (text: string) => {
     label={isConnected ? 'Connected' : 'Disconnected'}
     color={isConnected ? 'success' : 'error'}
   />
-  
+
   <Chip
     icon={<AccessTime />}
     label={formatTime(listeningTime)}
   />
-  
+
   <Chip
     icon={<TrendingUp />}
     label={`Confidence: ${confidence.toFixed(0)}%`}
@@ -550,23 +550,23 @@ const speakResponseBrowser = (text: string) => {
 ```tsx
 <Dialog open={settingsOpen} onClose={() => setSettingsOpen(false)}>
   <DialogTitle>⚙️ Voice Settings</DialogTitle>
-  
+
   <DialogContent>
     {/* Мова */}
     <FormControl fullWidth>
       <InputLabel>Language</InputLabel>
       <Select
         value={settings.language}
-        onChange={(e) => setSettings(prev => ({ 
-          ...prev, 
-          language: e.target.value 
+        onChange={(e) => setSettings(prev => ({
+          ...prev,
+          language: e.target.value
         }))}
       >
         <MenuItem value="uk-UA">🇺🇦 Українська</MenuItem>
         <MenuItem value="en-US">🇬🇧 English</MenuItem>
       </Select>
     </FormControl>
-    
+
     {/* Швидкість */}
     <Box>
       <Typography>Speed: {settings.speed}</Typography>
@@ -575,13 +575,13 @@ const speakResponseBrowser = (text: string) => {
         min={0.5}
         max={2}
         step={0.1}
-        onChange={(e, value) => setSettings(prev => ({ 
-          ...prev, 
-          speed: value as number 
+        onChange={(e, value) => setSettings(prev => ({
+          ...prev,
+          speed: value as number
         }))}
       />
     </Box>
-    
+
     {/* Висота */}
     <Box>
       <Typography>Pitch: {settings.pitch}</Typography>
@@ -590,13 +590,13 @@ const speakResponseBrowser = (text: string) => {
         min={0.5}
         max={2}
         step={0.1}
-        onChange={(e, value) => setSettings(prev => ({ 
-          ...prev, 
-          pitch: value as number 
+        onChange={(e, value) => setSettings(prev => ({
+          ...prev,
+          pitch: value as number
         }))}
       />
     </Box>
-    
+
     {/* Гучність */}
     <Box>
       <Typography>Volume: {settings.volume}</Typography>
@@ -605,28 +605,28 @@ const speakResponseBrowser = (text: string) => {
         min={0}
         max={1}
         step={0.1}
-        onChange={(e, value) => setSettings(prev => ({ 
-          ...prev, 
-          volume: value as number 
+        onChange={(e, value) => setSettings(prev => ({
+          ...prev,
+          volume: value as number
         }))}
       />
     </Box>
-    
+
     {/* Автоозвучування */}
     <FormControlLabel
       control={
         <Switch
           checked={settings.autoSpeak}
-          onChange={(e) => setSettings(prev => ({ 
-            ...prev, 
-            autoSpeak: e.target.checked 
+          onChange={(e) => setSettings(prev => ({
+            ...prev,
+            autoSpeak: e.target.checked
           }))}
         />
       }
       label="Auto-speak responses"
     />
   </DialogContent>
-  
+
   <DialogActions>
     <Button onClick={() => setSettingsOpen(false)}>Close</Button>
     <Button variant="contained">Save</Button>
@@ -645,7 +645,7 @@ const speakResponseBrowser = (text: string) => {
 
 class PremiumFreeVoiceAPI {
   private baseUrl: string = 'http://localhost:5094';
-  
+
   async checkHealth(): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseUrl}/health`);
@@ -654,39 +654,39 @@ class PremiumFreeVoiceAPI {
       return false;
     }
   }
-  
+
   async getCapabilities(): Promise<VoiceCapabilities> {
     const response = await fetch(`${this.baseUrl}/api/capabilities`);
     return await response.json();
   }
-  
+
   async textToSpeech(request: TTSRequest): Promise<void> {
     const response = await fetch(`${this.baseUrl}/api/tts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(request)
     });
-    
+
     if (!response.ok) {
       throw new Error(`TTS failed: ${response.statusText}`);
     }
-    
+
     const audioBlob = await response.blob();
     const audioUrl = URL.createObjectURL(audioBlob);
     const audio = new Audio(audioUrl);
     await audio.play();
   }
-  
+
   async speechToText(audio: Blob, language: string): Promise<STTResponse> {
     const formData = new FormData();
     formData.append('audio', audio);
     formData.append('language', language);
-    
+
     const response = await fetch(`${this.baseUrl}/api/stt`, {
       method: 'POST',
       body: formData
     });
-    
+
     return await response.json();
   }
 }
@@ -705,15 +705,15 @@ describe('AIVoiceInterface', () => {
   it('should initialize Web Speech API', () => {
     // Test initialization
   });
-  
+
   it('should start/stop listening', () => {
     // Test voice recognition
   });
-  
+
   it('should process voice commands', () => {
     // Test command processing
   });
-  
+
   it('should speak responses', () => {
     // Test TTS
   });
@@ -728,7 +728,7 @@ describe('Voice API Integration', () => {
     const isHealthy = await premiumFreeVoiceAPI.checkHealth();
     expect(isHealthy).toBe(true);
   });
-  
+
   it('should get capabilities', async () => {
     const capabilities = await premiumFreeVoiceAPI.getCapabilities();
     expect(capabilities.tts_providers).toBeDefined();
@@ -803,10 +803,10 @@ const requestMicrophonePermission = async () => {
 const validateCommand = (command: string): boolean => {
   // Перевірка на XSS
   const sanitized = DOMPurify.sanitize(command);
-  
+
   // Перевірка довжини
   if (command.length > 500) return false;
-  
+
   // Перевірка на шкідливі команди
   const blacklist = ['<script>', 'javascript:', 'onerror='];
   return !blacklist.some(item => command.toLowerCase().includes(item));
@@ -827,10 +827,10 @@ const handleRecognitionError = (event: SpeechRecognitionError) => {
     'not-allowed': 'Доступ до мікрофона заборонено',
     'network': 'Проблема з мережею'
   };
-  
+
   const message = errorMessages[event.error] || event.error;
   alert(message);
-  
+
   setIsListening(false);
   setIsConnected(false);
 };
@@ -843,7 +843,7 @@ try {
   await speakResponsePremiumFree(text);
 } catch (error) {
   console.error('Premium FREE TTS failed:', error);
-  
+
   // Fallback to browser API
   try {
     speakResponseBrowser(text);

@@ -107,13 +107,13 @@ fi
 case "$KDM_TYPE" in
     conda)
         info "Відключаю Conda KDM..."
-        
+
         # Деактивувати
         conda deactivate 2>/dev/null || true
-        
+
         # Вимкнути автоактивацію
         conda config --set auto_activate_base false
-        
+
         # Запитати чи видаляти
         read -p "Видалити KDM Conda environment? (y/N): " -n 1 -r
         echo ""
@@ -122,13 +122,13 @@ case "$KDM_TYPE" in
             success "KDM Conda environment видалено"
         fi
         ;;
-        
+
     pyenv)
         info "Відключаю Pyenv KDM..."
-        
+
         # Деактивувати
         pyenv deactivate 2>/dev/null || true
-        
+
         # Видалити
         read -p "Видалити KDM Pyenv virtualenv? (y/N): " -n 1 -r
         echo ""
@@ -138,14 +138,14 @@ case "$KDM_TYPE" in
             success "KDM Pyenv environment видалено"
         fi
         ;;
-        
+
     venv)
         info "Знайдено venv/virtualenv KDM..."
-        
+
         echo "Директорії:"
         echo "$KDM_LOCATION"
         echo ""
-        
+
         read -p "Видалити ці директорії? (y/N): " -n 1 -r
         echo ""
         if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -170,14 +170,14 @@ CONFIGS=(~/.zshrc ~/.bashrc ~/.bash_profile ~/.zprofile)
 for config in "${CONFIGS[@]}"; do
     if [ -f "$config" ] && grep -q "kdm\|KDM" "$config"; then
         warning "Знайдено KDM в $config"
-        
+
         # Backup
         cp "$config" "$config.backup.$(date +%Y%m%d_%H%M%S)"
-        
+
         # Закоментувати рядки з KDM
         sed -i.tmp '/kdm\|KDM/s/^/# DISABLED_KDM: /' "$config"
         rm "$config.tmp" 2>/dev/null || true
-        
+
         success "KDM рядки закоментовано в $config"
         echo "   Backup: $config.backup.*"
     fi
@@ -210,7 +210,7 @@ echo ""
 
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    
+
     if [ -f "$SCRIPT_DIR/setup-venv.sh" ]; then
         info "Запускаю setup-venv.sh..."
         bash "$SCRIPT_DIR/setup-venv.sh"

@@ -15,7 +15,7 @@
 
 ### ✅ Agent Registry (registry.yaml)
 - **Оновлено**: Замінено всі платні моделі на безкоштовні
-- **Профілі моделей**: 
+- **Профілі моделей**:
   - `reasoning_primary`: meta/meta-llama-3.1-70b-instruct (FREE)
   - `reasoning_backup`: qwen/qwen2.5-72b-instruct (FREE)  
   - `codegen_primary`: deepseek/deepseek-coder-v2 (FREE)

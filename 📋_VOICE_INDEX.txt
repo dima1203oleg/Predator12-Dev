@@ -91,7 +91,7 @@ production:
     primary: piper-tts          # 100x швидше
     quality: styletts2          # опціонально
     fallback: web-speech-api    # браузер
-  
+
   stt:
     primary: whisper-turbo      # найточніше
     fast: faster-whisper        # оптимізовано
@@ -137,7 +137,7 @@ production:
 
 1. Огляд рішень
    📄 🔥_КРАЩІ_АЛЬТЕРНАТИВИ_VOICE_TECH.md
-   
+
    Розділи:
    • Piper TTS детально
    • Whisper Turbo benchmark
@@ -147,7 +147,7 @@ production:
 
 2. Інструкції зі встановлення
    📄 ⚡_НОВИЙ_VOICE_STACK_QUICKSTART.txt
-   
+
    Розділи:
    • Покрокове встановлення
    • Тестування системи
@@ -157,7 +157,7 @@ production:
 
 3. Executive Summary
    📄 🎉_ФІНАЛЬНИЙ_ЗВІТ_КРАЩІ_VOICE_TECH.md
-   
+
    Розділи:
    • Економічний аналіз
    • ROI calculation
@@ -167,7 +167,7 @@ production:
 
 4. Поточна система
    📄 🎤_VOICE_TECHNOLOGIES_GUIDE.md
-   
+
    Розділи:
    • Coqui TTS (поточне)
    • Whisper base/small (поточне)

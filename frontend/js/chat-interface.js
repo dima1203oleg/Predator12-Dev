@@ -9,22 +9,22 @@ class ChatInterface {
         this.inputField = document.getElementById('chatInput');
         this.sendButton = document.getElementById('sendButton');
         this.aiFace = options.aiFace || null;
-        
+
         this.messages = [];
         this.isProcessing = false;
         this.conversationId = this.generateId();
-        
+
         // Налаштування голосового синтезу
         this.speechSynthesis = window.speechSynthesis;
         this.voiceEnabled = options.voiceEnabled || false;
-        
+
         this.init();
     }
 
     init() {
         this.setupEventListeners();
         this.displayWelcomeMessage();
-        
+
         console.log('Chat Interface initialized');
     }
 
@@ -64,9 +64,9 @@ class ChatInterface {
             timestamp: new Date(),
             type: 'welcome'
         };
-        
+
         this.addMessage(welcomeMessage);
-        
+
         // Показати емоцію привітання на обличчі
         if (this.aiFace) {
             this.aiFace.setEmotion('happy');
@@ -78,12 +78,12 @@ class ChatInterface {
 
     async sendMessage() {
         const messageText = this.inputField.value.trim();
-        
+
         if (!messageText || this.isProcessing) return;
-        
+
         // Очистити поле вводу
         this.inputField.value = '';
-        
+
         // Додати повідомлення користувача
         const userMessage = {
             text: messageText,
@@ -91,16 +91,16 @@ class ChatInterface {
             timestamp: new Date(),
             type: 'message'
         };
-        
+
         this.addMessage(userMessage);
-        
+
         // Показати що AI обробляє
         this.setProcessingState(true);
-        
+
         try {
             // Відправити на обробку AI
             const response = await this.processWithAI(messageText);
-            
+
             // Додати відповідь AI
             const aiMessage = {
                 text: response.text,
@@ -109,24 +109,24 @@ class ChatInterface {
                 type: 'response',
                 metadata: response.metadata || {}
             };
-            
+
             this.addMessage(aiMessage);
-            
+
             // Синтезувати голос якщо увімкнено
             if (this.voiceEnabled) {
                 this.speakText(response.text);
             }
-            
+
         } catch (error) {
             console.error('Error processing message:', error);
-            
+
             const errorMessage = {
                 text: "Вибачте, виникла помилка при обробці запиту. Спробуйте ще раз.",
                 sender: 'ai',
                 timestamp: new Date(),
                 type: 'error'
             };
-            
+
             this.addMessage(errorMessage);
         } finally {
             this.setProcessingState(false);
@@ -145,7 +145,7 @@ class ChatInterface {
 
     generateResponse(input) {
         const inputLower = input.toLowerCase();
-        
+
         // Аналіз команд
         if (inputLower.includes('аналіз') || inputLower.includes('проаналізуй')) {
             return {
@@ -162,7 +162,7 @@ class ChatInterface {
                 }
             };
         }
-        
+
         if (inputLower.includes('статус') || inputLower.includes('стан')) {
             return {
                 text: "Система активна. Режим: analytical\nCPU: 45% | RAM: 62%\nМережа: online\nВиконано аналізів: 127\n\nВсе працює в штатному режимі.",
@@ -172,7 +172,7 @@ class ChatInterface {
                 }
             };
         }
-        
+
         if (inputLower.includes('мережа') || inputLower.includes("зв'язки")) {
             return {
                 text: "Виявлено зв'язків: 3\nІдентифіковано: 4 суб'єкти\nЗнайдено 1 високоризиковий об'єкт\n\n⚠️ Контрагент X пов'язаний із санкційною фірмою",
@@ -187,7 +187,7 @@ class ChatInterface {
                 }
             };
         }
-        
+
         if (inputLower.includes('ризик') || inputLower.includes('загроза')) {
             return {
                 text: "ВИЯВЛЕНО РИЗИКИ: 1\n\n⚠️ Контрагент X: Пов'язаний із санкційною фірмою\n   Деталі: Хабар 5000$ реєстр Prozorro\n\nРекомендую детальну перевірку.",
@@ -204,7 +204,7 @@ class ChatInterface {
                 }
             };
         }
-        
+
         if (inputLower.includes('допомога') || inputLower.includes('команди')) {
             return {
                 text: "Доступні команди:\n\n• аналіз - Запустити аналіз даних\n• статус - Показати статус системи\n• мережа - Показати мережеві зв'язки\n• ризики - Виявити ризики\n• звіт - Згенерувати звіт\n• допомога - Ця довідка",
@@ -214,7 +214,7 @@ class ChatInterface {
                 }
             };
         }
-        
+
         // Загальна відповідь
         const genericResponses = [
             "Розумію. Аналізую ваш запит...",
@@ -223,7 +223,7 @@ class ChatInterface {
             "Хороше питання. Дозвольте перевірити...",
             "Аналізую дані за вашим запитом..."
         ];
-        
+
         return {
             text: genericResponses[Math.floor(Math.random() * genericResponses.length)],
             metadata: {
@@ -235,23 +235,23 @@ class ChatInterface {
 
     addMessage(message) {
         this.messages.push(message);
-        
+
         const messageElement = this.createMessageElement(message);
         this.messagesContainer.appendChild(messageElement);
-        
+
         // Автоскрол вниз
         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-        
+
         // Анімація появи
         setTimeout(() => {
             messageElement.classList.add('show');
         }, 10);
-        
+
         // Оновити емоцію AI обличчя
         if (message.sender === 'ai' && this.aiFace && message.metadata) {
             const emotion = message.metadata.emotion || 'neutral';
             this.aiFace.setEmotion(emotion);
-            
+
             if (message.metadata.action === 'analysis') {
                 this.aiFace.startProcessing();
                 setTimeout(() => {
@@ -264,55 +264,55 @@ class ChatInterface {
     createMessageElement(message) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${message.sender}-message`;
-        
+
         const contentDiv = document.createElement('div');
         contentDiv.className = 'message-content';
         contentDiv.textContent = message.text;
-        
+
         const metaDiv = document.createElement('div');
         metaDiv.className = 'message-meta';
-        
+
         const senderSpan = document.createElement('span');
         senderSpan.className = 'sender';
         senderSpan.textContent = message.sender === 'ai' ? 'AI Assistant' : 'Користувач';
-        
+
         const timeSpan = document.createElement('span');
         timeSpan.className = 'time';
         timeSpan.textContent = this.formatTime(message.timestamp);
-        
+
         metaDiv.appendChild(senderSpan);
         metaDiv.appendChild(timeSpan);
-        
+
         messageDiv.appendChild(contentDiv);
         messageDiv.appendChild(metaDiv);
-        
+
         return messageDiv;
     }
 
     setProcessingState(isProcessing) {
         this.isProcessing = isProcessing;
-        
+
         if (isProcessing) {
             // Показати індикатор набору
             this.showTypingIndicator();
-            
+
             // AI думає
             if (this.aiFace) {
                 this.aiFace.startThinking();
             }
-            
+
             // Заблокувати інтерфейс
             this.inputField.disabled = true;
             this.sendButton.disabled = true;
         } else {
             // Приховати індикатор
             this.hideTypingIndicator();
-            
+
             // AI перестає думати
             if (this.aiFace) {
                 this.aiFace.stopThinking();
             }
-            
+
             // Розблокувати інтерфейс
             this.inputField.disabled = false;
             this.sendButton.disabled = false;
@@ -323,7 +323,7 @@ class ChatInterface {
     showTypingIndicator() {
         const existingIndicator = document.querySelector('.typing-indicator');
         if (existingIndicator) return;
-        
+
         const typingDiv = document.createElement('div');
         typingDiv.className = 'message ai-message typing-indicator';
         typingDiv.innerHTML = `
@@ -335,7 +335,7 @@ class ChatInterface {
                 </div>
             </div>
         `;
-        
+
         this.messagesContainer.appendChild(typingDiv);
         this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
     }
@@ -349,29 +349,29 @@ class ChatInterface {
 
     speakText(text) {
         if (!this.speechSynthesis) return;
-        
+
         // Зупинити попереднє мовлення
         this.speechSynthesis.cancel();
-        
+
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'uk-UA';
         utterance.rate = 0.9;
         utterance.pitch = 1.1;
         utterance.volume = 0.8;
-        
+
         // Анімація губ під час мовлення
         utterance.onstart = () => {
             if (this.aiFace) {
                 this.aiFace.speak(text);
             }
         };
-        
+
         utterance.onend = () => {
             if (this.aiFace) {
                 this.aiFace.setEmotion('neutral');
             }
         };
-        
+
         this.speechSynthesis.speak(utterance);
     }
 
@@ -404,10 +404,10 @@ class ChatInterface {
             timestamp: new Date().toISOString(),
             messages: this.messages
         };
-        
+
         const dataStr = JSON.stringify(conversation, null, 2);
         const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        
+
         const link = document.createElement('a');
         link.href = URL.createObjectURL(dataBlob);
         link.download = `conversation_${this.conversationId}.json`;

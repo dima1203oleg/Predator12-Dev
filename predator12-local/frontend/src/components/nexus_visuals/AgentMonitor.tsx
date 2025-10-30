@@ -14,14 +14,14 @@ export default function AgentMonitor() {
       const data = await agentsAPI.getAllAgentsStatus();
       useAgentStore.getState().updateAgents(data);
     };
-    
+
     const interval = setInterval(fetchAgents, 5000);
     fetchAgents(); // Первинне завантаження
-    
+
     return () => clearInterval(interval);
   }, []);
 
-  const filteredAgents = agents.filter(agent => 
+  const filteredAgents = agents.filter(agent =>
     agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     agent.status.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -35,13 +35,13 @@ export default function AgentMonitor() {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      
+
       {filteredAgents.length === 0 && (
         <Typography sx={{ mt: 2 }}>
           {t('agentMonitor.noAgentsFound')}
         </Typography>
       )}
-      
+
       {filteredAgents.length > 0 && (
         <Box sx={{ maxHeight: 300, overflowY: 'auto', pr: 1, mt: 2 }}>
           {filteredAgents.map(agent => (
@@ -68,8 +68,8 @@ export default function AgentMonitor() {
                 flexShrink: 0
               }} />
               <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                <Typography sx={{ 
-                  color: nexusColors.frost, 
+                <Typography sx={{
+                  color: nexusColors.frost,
                   fontWeight: 'bold',
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
@@ -77,20 +77,20 @@ export default function AgentMonitor() {
                 }}>
                   {agent.name}
                 </Typography>
-                <Typography variant="body2" sx={{ 
+                <Typography variant="body2" sx={{
                   color: nexusColors.quantum,
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis'
                 }}>
-                  {t('agentMonitor.agentStatus', { 
-                    status: agent.type, 
-                    time: agent.lastActive.toLocaleTimeString() 
+                  {t('agentMonitor.agentStatus', {
+                    status: agent.type,
+                    time: agent.lastActive.toLocaleTimeString()
                   })}
                 </Typography>
               </Box>
-              <IconButton 
-                size="small" 
+              <IconButton
+                size="small"
                 sx={{ color: nexusColors.quantum }}
               >
                 <MoreVertIcon />

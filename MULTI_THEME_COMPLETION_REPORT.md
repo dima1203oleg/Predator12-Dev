@@ -279,13 +279,13 @@ import { useNexusTheme } from '../contexts/ThemeContext';
 
 const MyComponent = () => {
   const { colors, currentTheme, setTheme } = useNexusTheme();
-  
+
   return (
-    <Box sx={{ 
+    <Box sx={{
       background: colors.background.paper,
       border: `1px solid ${colors.border.light}`,
     }}>
-      <Typography sx={{ 
+      <Typography sx={{
         background: colors.gradients.primary,
         backgroundClip: 'text',
         WebkitTextFillColor: 'transparent',

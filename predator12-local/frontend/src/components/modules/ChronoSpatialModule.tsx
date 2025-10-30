@@ -50,7 +50,7 @@ export const ChronoSpatialModule: React.FC<ChronoSpatialModuleProps> = ({
   const sceneRef = useRef<THREE.Scene>();
   const rendererRef = useRef<THREE.WebGLRenderer>();
   const animationIdRef = useRef<number>();
-  
+
   // Time controls
   const [currentTime, setCurrentTime] = useState(0);
   const [timeRange, setTimeRange] = useState([0, 100]);
@@ -100,20 +100,20 @@ export const ChronoSpatialModule: React.FC<ChronoSpatialModuleProps> = ({
 
     // Create event markers
     const eventMarkers: THREE.Mesh[] = [];
-    
+
     allEvents.forEach((event) => {
       if (event.timestamp <= currentTime) {
         const phi = (90 - event.lat) * (Math.PI / 180);
         const theta = (event.lon + 180) * (Math.PI / 180);
         const radius = 5.2;
-        
+
         const x = radius * Math.sin(phi) * Math.cos(theta);
         const y = radius * Math.cos(phi);
         const z = radius * Math.sin(phi) * Math.sin(theta);
 
         const markerGeometry = new THREE.SphereGeometry(0.1 * event.intensity, 16, 16);
         let markerColor: string;
-        
+
         switch (event.type) {
           case 'incident':
             markerColor = nexusColors.crimson;
@@ -160,20 +160,20 @@ export const ChronoSpatialModule: React.FC<ChronoSpatialModuleProps> = ({
     let time = 0;
     const animate = () => {
       time += 0.01;
-      
+
       // Rotate Earth
       earth.rotation.y += 0.005;
-      
+
       // Animate markers
       eventMarkers.forEach((marker, index) => {
         marker.rotation.x += 0.02;
         marker.rotation.y += 0.02;
-        
+
         // Pulse effect
         const scale = 1 + Math.sin(time * 3 + index) * 0.2;
         marker.scale.setScalar(scale);
       });
-      
+
       renderer.render(scene, camera);
       animationIdRef.current = requestAnimationFrame(animate);
     };
@@ -206,11 +206,11 @@ export const ChronoSpatialModule: React.FC<ChronoSpatialModuleProps> = ({
     return () => clearInterval(interval);
   }, [isPlaying, playbackSpeed, timeRange]);
 
-  const filteredEvents = allEvents.filter(event => 
+  const filteredEvents = allEvents.filter(event =>
     selectedEventType === 'all' || event.type === selectedEventType
   );
 
-  const currentEvents = filteredEvents.filter(event => 
+  const currentEvents = filteredEvents.filter(event =>
     Math.abs(event.timestamp - currentTime) < 5
   );
 
@@ -221,10 +221,10 @@ export const ChronoSpatialModule: React.FC<ChronoSpatialModuleProps> = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            mb: 3, 
+        <Typography
+          variant="h4"
+          sx={{
+            mb: 3,
             color: nexusColors.emerald,
             fontFamily: 'Orbitron',
             textShadow: `0 0 10px ${nexusColors.emerald}`
@@ -260,7 +260,7 @@ export const ChronoSpatialModule: React.FC<ChronoSpatialModuleProps> = ({
                     sx={{ color: nexusColors.nebula }}
                   />
                 </Box>
-                
+
                 {show3D ? (
                   <Box
                     ref={mountRef}
@@ -302,7 +302,7 @@ export const ChronoSpatialModule: React.FC<ChronoSpatialModuleProps> = ({
                 <Typography variant="h6" sx={{ mb: 2, color: nexusColors.sapphire }}>
                   Часові Контроли
                 </Typography>
-                
+
                 <Box sx={{ mb: 3 }}>
                   <Typography variant="body2" sx={{ mb: 1, color: nexusColors.nebula }}>
                     Поточний час: {currentTime.toFixed(1)}
@@ -385,7 +385,7 @@ export const ChronoSpatialModule: React.FC<ChronoSpatialModuleProps> = ({
                 <Typography variant="h6" sx={{ mb: 2, color: nexusColors.amethyst }}>
                   Поточні Події
                 </Typography>
-                
+
                 {currentEvents.length === 0 ? (
                   <Typography variant="body2" sx={{ color: nexusColors.shadow }}>
                     Немає подій в поточному часовому проміжку
@@ -412,8 +412,8 @@ export const ChronoSpatialModule: React.FC<ChronoSpatialModuleProps> = ({
                         {event.description}
                       </Typography>
                       <Typography variant="caption" sx={{ color: nexusColors.shadow }}>
-                        Координати: {event.lat.toFixed(2)}, {event.lon.toFixed(2)} | 
-                        Час: {event.timestamp} | 
+                        Координати: {event.lat.toFixed(2)}, {event.lon.toFixed(2)} |
+                        Час: {event.timestamp} |
                         Інтенсивність: {(event.intensity * 100).toFixed(0)}%
                       </Typography>
                     </Box>

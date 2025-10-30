@@ -66,7 +66,7 @@ echo "" >> "$OUTPUT_FILE"
 # Перевірка порту 5090
 if lsof -Pi :5090 -sTCP:LISTEN -t >/dev/null 2>&1; then
     echo "✅ Сервер ЗАПУЩЕНО на порту 5090" >> "$OUTPUT_FILE"
-    
+
     # Спроба отримати HTTP відповідь
     HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5090 2>/dev/null)
     if [ "$HTTP_CODE" = "200" ]; then
@@ -92,7 +92,7 @@ echo "" >> "$OUTPUT_FILE"
 
 if [ -d "predator12-local/frontend/node_modules" ]; then
     echo "✅ node_modules існує" >> "$OUTPUT_FILE"
-    
+
     # Перевірка ключових пакетів
     PACKAGES=("react" "three" "vite")
     for pkg in "${PACKAGES[@]}"; do
@@ -158,7 +158,7 @@ if [ -f "predator12-local/frontend/src/main-full.tsx" ]; then
     else
         echo "⚠️  Знайдено $INLINE_STYLES inline styles" >> "$OUTPUT_FILE"
     fi
-    
+
     # ARIA labels
     ARIA_LABELS=$(grep -c 'aria-label' predator12-local/frontend/src/main-full.tsx 2>/dev/null || echo "0")
     if [ "$ARIA_LABELS" -gt 5 ]; then
@@ -166,7 +166,7 @@ if [ -f "predator12-local/frontend/src/main-full.tsx" ]; then
     else
         echo "⚠️  ARIA labels: $ARIA_LABELS (мало)" >> "$OUTPUT_FILE"
     fi
-    
+
     # console.log
     CONSOLE_LOGS=$(grep -c 'console\.log' predator12-local/frontend/src/main-full.tsx 2>/dev/null || echo "0")
     if [ "$CONSOLE_LOGS" -eq 0 ]; then
@@ -191,7 +191,7 @@ if [ -f "predator12-local/frontend/src/styles/cosmic-enhancements.css" ]; then
     else
         echo "❌ backdrop-filter не знайдено" >> "$OUTPUT_FILE"
     fi
-    
+
     # Градієнти
     GRADIENTS=$(grep -c 'linear-gradient\|radial-gradient' predator12-local/frontend/src/styles/cosmic-enhancements.css 2>/dev/null || echo "0")
     if [ "$GRADIENTS" -gt 5 ]; then
@@ -199,7 +199,7 @@ if [ -f "predator12-local/frontend/src/styles/cosmic-enhancements.css" ]; then
     else
         echo "⚠️  Градієнти: $GRADIENTS (мало)" >> "$OUTPUT_FILE"
     fi
-    
+
     # Анімації
     ANIMATIONS=$(grep -c '@keyframes\|animation:' predator12-local/frontend/src/styles/cosmic-enhancements.css 2>/dev/null || echo "0")
     if [ "$ANIMATIONS" -gt 3 ]; then

@@ -108,7 +108,7 @@ echo "📊 Відновлено таблиць: $TABLE_COUNT"
 
 if [ "$TABLE_COUNT" -gt 0 ]; then
     echo "✅ Відновлення перевірено!"
-    
+
     # Показати список таблиць
     echo "📋 Список таблиць:"
     PGPASSWORD=$POSTGRES_PASSWORD psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER -d $POSTGRES_DB -c "\\dt"
@@ -119,12 +119,12 @@ fi
 # Обновлення послідовностей (sequences)
 echo "🔄 Оновлення послідовностей..."
 PGPASSWORD=$POSTGRES_PASSWORD psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER -d $POSTGRES_DB -c "
-SELECT setval(sequencename, (SELECT max(id) FROM \$\$\" || tablename || \"\$\$)) 
+SELECT setval(sequencename, (SELECT max(id) FROM \$\$\" || tablename || \"\$\$))
 FROM (
-    SELECT 
+    SELECT
         schemaname||'.'||sequencename as sequencename,
         replace(sequencename, '_id_seq', '') as tablename
-    FROM pg_sequences 
+    FROM pg_sequences
     WHERE schemaname = 'public'
 ) s;
 " || echo "⚠️ Помилка оновлення послідовностей (можливо, немає послідовностей)"

@@ -73,7 +73,7 @@ data_integrity:
   verification_queries:
     - collection: "documents"
       expected_min_count: 1000
-    - collection: "embeddings" 
+    - collection: "embeddings"
       expected_min_count: 5000
     - similarity_search: "test_vector"
       expected_results: "> 0"

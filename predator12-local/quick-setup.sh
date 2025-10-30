@@ -22,7 +22,7 @@ print_color() {
 # Функція для перевірки команди
 check_command() {
     local cmd=$1
-    
+
     # Спеціальна перевірка для python3.11
     if [ "$cmd" = "python3.11" ]; then
         if /opt/homebrew/bin/python3.11 --version &> /dev/null; then
@@ -36,7 +36,7 @@ check_command() {
             return 1
         fi
     fi
-    
+
     if command -v $cmd &> /dev/null; then
         print_color "$GREEN" "✅ $cmd встановлено"
         return 0

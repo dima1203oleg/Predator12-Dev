@@ -6,53 +6,42 @@ Multi-agent system with self-healing, optimization, and modernization capabiliti
 Implements Plan-then-Execute pattern with fallback mechanisms and telemetry.
 """
 
-from .base import BaseAgent, AgentTask, AgentResult, AgentStatus
-from .router import AgentRouter, ModelSelector
-from .registry import AgentRegistry, ModelRegistry
-from .supervisor import AgentSupervisor
-from .telemetry import AgentTelemetry
-
-# Self-healing agents
-from .self_heal import (
-    SystemRecoveryAgent,
-    ServiceRestartAgent,
-    DependencyFixAgent,
-    ConfigurationHealAgent,
-    PerformanceRecoveryAgent,
-    SecurityPatchAgent,
-    DataIntegrityAgent,
-    NetworkHealAgent,
-    BackupRestoreAgent,
-    MonitoringRepairAgent
-)
-
-# Optimization agents
-from .optimize import (
-    PerformanceOptimizer,
-    ResourceOptimizer,
-    DatabaseOptimizer,
-    CacheOptimizer,
-    NetworkOptimizer,
-    CodeOptimizer,
-    WorkflowOptimizer,
-    CostOptimizer,
-    EnergyOptimizer,
-    ScalingOptimizer
-)
+from .base import AgentResult, AgentStatus, AgentTask, BaseAgent
 
 # Modernization agents
 from .modernize import (
-    ArchitectureModernizer,
-    TechStackUpgrader,
-    SecurityModernizer,
-    APIModernizer,
-    DatabaseModernizer,
-    InfrastructureModernizer,
-    DevOpsModernizer,
-    ComplianceModernizer,
     AccessibilityModernizer,
-    DocumentationModernizer
+    APIModernizer,
+    ArchitectureModernizer,
+    ComplianceModernizer,
+    DatabaseModernizer,
+    DevOpsModernizer,
+    DocumentationModernizer,
+    InfrastructureModernizer,
+    SecurityModernizer,
+    TechStackUpgrader,
 )
+
+# Optimization agents
+from .optimize import OptimizationAgent
+from .registry import AgentRegistry, ModelRegistry
+from .router import AgentRouter, ModelSelector
+
+# Self-healing agents
+from .self_heal import (
+    BackupRestoreAgent,
+    ConfigurationHealAgent,
+    DataIntegrityAgent,
+    DependencyFixAgent,
+    MonitoringRepairAgent,
+    NetworkHealAgent,
+    PerformanceRecoveryAgent,
+    SecurityPatchAgent,
+    ServiceRestartAgent,
+    SystemRecoveryAgent,
+)
+from .supervisor import AgentSupervisor
+from .telemetry import AgentTelemetry
 
 # Agent collections
 SELF_HEAL_AGENTS = [
@@ -65,20 +54,11 @@ SELF_HEAL_AGENTS = [
     DataIntegrityAgent,
     NetworkHealAgent,
     BackupRestoreAgent,
-    MonitoringRepairAgent
+    MonitoringRepairAgent,
 ]
 
 OPTIMIZE_AGENTS = [
-    PerformanceOptimizer,
-    ResourceOptimizer,
-    DatabaseOptimizer,
-    CacheOptimizer,
-    NetworkOptimizer,
-    CodeOptimizer,
-    WorkflowOptimizer,
-    CostOptimizer,
-    EnergyOptimizer,
-    ScalingOptimizer
+    OptimizationAgent,
 ]
 
 MODERNIZE_AGENTS = [
@@ -91,7 +71,7 @@ MODERNIZE_AGENTS = [
     DevOpsModernizer,
     ComplianceModernizer,
     AccessibilityModernizer,
-    DocumentationModernizer
+    DocumentationModernizer,
 ]
 
 ALL_AGENTS = SELF_HEAL_AGENTS + OPTIMIZE_AGENTS + MODERNIZE_AGENTS
@@ -102,7 +82,7 @@ __author__ = "Predator Analytics Team"
 __all__ = [
     # Core classes
     "BaseAgent",
-    "AgentTask", 
+    "AgentTask",
     "AgentResult",
     "AgentStatus",
     "AgentRouter",
@@ -111,13 +91,11 @@ __all__ = [
     "ModelRegistry",
     "AgentSupervisor",
     "AgentTelemetry",
-    
     # Agent collections
     "SELF_HEAL_AGENTS",
-    "OPTIMIZE_AGENTS", 
+    "OPTIMIZE_AGENTS",
     "MODERNIZE_AGENTS",
     "ALL_AGENTS",
-    
     # Individual agents
     "SystemRecoveryAgent",
     "ServiceRestartAgent",
@@ -129,16 +107,7 @@ __all__ = [
     "NetworkHealAgent",
     "BackupRestoreAgent",
     "MonitoringRepairAgent",
-    "PerformanceOptimizer",
-    "ResourceOptimizer",
-    "DatabaseOptimizer",
-    "CacheOptimizer",
-    "NetworkOptimizer",
-    "CodeOptimizer",
-    "WorkflowOptimizer",
-    "CostOptimizer",
-    "EnergyOptimizer",
-    "ScalingOptimizer",
+    "OptimizationAgent",
     "ArchitectureModernizer",
     "TechStackUpgrader",
     "SecurityModernizer",
@@ -148,5 +117,5 @@ __all__ = [
     "DevOpsModernizer",
     "ComplianceModernizer",
     "AccessibilityModernizer",
-    "DocumentationModernizer"
+    "DocumentationModernizer",
 ]

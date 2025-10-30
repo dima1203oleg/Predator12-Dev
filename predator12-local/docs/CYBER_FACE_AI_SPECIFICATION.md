@@ -100,18 +100,18 @@
   --cyber-void: #05070A;
   --cyber-dark: #0A0E14;
   --cyber-surface: #141820;
-  
+
   /* Neon Accents */
   --neon-cyan: #00FFC6;
   --neon-blue: #0A75FF;
   --neon-purple: #A020F0;
   --neon-red: #FF0033;
   --neon-gold: #FFD700;
-  
+
   /* Gradients */
   --gradient-cyber: linear-gradient(135deg, #00FFC6, #0A75FF, #A020F0);
   --gradient-alert: linear-gradient(90deg, #FF0033, #FFD700);
-  
+
   /* Glows */
   --glow-cyan: 0 0 20px #00FFC6, 0 0 40px #00FFC6;
   --glow-red: 0 0 20px #FF0033, 0 0 40px #FF0033;
@@ -151,7 +151,7 @@ const iridescenceMaterial = new THREE.ShaderMaterial({
   vertexShader: `
     varying vec3 vNormal;
     varying vec3 vPosition;
-    
+
     void main() {
       vNormal = normalize(normalMatrix * normal);
       vPosition = position;
@@ -162,7 +162,7 @@ const iridescenceMaterial = new THREE.ShaderMaterial({
     uniform float time;
     varying vec3 vNormal;
     varying vec3 vPosition;
-    
+
     void main() {
       float fresnel = pow(1.0 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
       vec3 iridescent = vec3(
@@ -206,34 +206,34 @@ interface CyberFaceProps {
   emotionTracking?: boolean;
 }
 
-export function CyberFace({ 
-  theme = 'analytical', 
+export function CyberFace({
+  theme = 'analytical',
   voiceEnabled = true,
-  emotionTracking = false 
+  emotionTracking = false
 }: CyberFaceProps) {
   const [currentEmotion, setCurrentEmotion] = useState<Emotion>('neutral');
   const [isListening, setIsListening] = useState(false);
   const [dialogue, setDialogue] = useState<Message[]>([]);
-  
+
   const { transcript, startListening, stopListening } = useSpeechRecognition();
   const { speak, isSpeaking } = useSpeechSynthesis();
   const { sendCommand, agentStatus } = useAgentOrchestration();
-  
+
   useEffect(() => {
     // Initialize greeting
     speak("Welcome, Commander. Nexus Core is online. How may I assist you?");
   }, []);
-  
+
   useEffect(() => {
     if (transcript) {
       handleUserInput(transcript);
     }
   }, [transcript]);
-  
+
   const handleUserInput = async (input: string) => {
     // Add user message
     setDialogue(prev => [...prev, { role: 'user', content: input }]);
-    
+
     // Process with LLM
     const response = await fetch('/api/v1/cyber_face/chat', {
       method: 'POST',
@@ -247,26 +247,26 @@ export function CyberFace({
         }
       })
     });
-    
+
     const { message, emotion, action } = await response.json();
-    
+
     // Update emotion
     setCurrentEmotion(emotion);
-    
+
     // Add assistant message
     setDialogue(prev => [...prev, { role: 'assistant', content: message }]);
-    
+
     // Speak response
     if (voiceEnabled) {
       speak(message);
     }
-    
+
     // Execute action if needed
     if (action) {
       await executeAction(action);
     }
   };
-  
+
   const executeAction = async (action: Action) => {
     switch (action.type) {
       case 'agent_command':
@@ -280,7 +280,7 @@ export function CyberFace({
         break;
     }
   };
-  
+
   return (
     <div className="cyber-face-container">
       {/* 3D Avatar */}
@@ -288,18 +288,18 @@ export function CyberFace({
         <ambientLight intensity={0.3} />
         <pointLight position={[10, 10, 10]} intensity={1} color="#00FFC6" />
         <pointLight position={[-10, -10, 10]} intensity={0.5} color="#A020F0" />
-        
+
         <FaceMesh emotion={currentEmotion} theme={theme} />
         <ParticleSwarm agentStatus={agentStatus} />
-        
-        <OrbitControls 
+
+        <OrbitControls
           enableZoom={false}
           enablePan={false}
           minPolarAngle={Math.PI / 3}
           maxPolarAngle={Math.PI / 1.5}
         />
       </Canvas>
-      
+
       {/* Voice Controls */}
       <div className="voice-controls">
         <button
@@ -315,14 +315,14 @@ export function CyberFace({
         >
           {isListening ? '🎤 Listening...' : '🎤 Speak'}
         </button>
-        
+
         {isSpeaking && (
           <div className="speaking-indicator">
             <span className="pulse">Speaking...</span>
           </div>
         )}
       </div>
-      
+
       {/* Dialogue History */}
       <div className="dialogue-panel">
         {dialogue.map((msg, idx) => (
@@ -334,7 +334,7 @@ export function CyberFace({
           </div>
         ))}
       </div>
-      
+
       {/* Agent Status Bar */}
       <div className="agent-status-bar">
         {Object.entries(agentStatus).map(([agent, status]) => (
@@ -366,7 +366,7 @@ interface FaceMeshProps {
 export function FaceMesh({ emotion, theme }: FaceMeshProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const { nodes, materials } = useGLTF('/models/cyber-face.glb');
-  
+
   // Emotion-based morph targets
   const emotionMorphs = {
     neutral: { smile: 0, frown: 0, surprise: 0 },
@@ -375,16 +375,16 @@ export function FaceMesh({ emotion, theme }: FaceMeshProps) {
     calm: { smile: 0.3, frown: 0, surprise: 0 },
     concerned: { smile: 0, frown: 0.7, surprise: 0.3 }
   };
-  
+
   // Breathing animation
   useFrame((state) => {
     if (meshRef.current) {
       const time = state.clock.getElapsedTime();
-      
+
       // Breathing scale
       const breathScale = 1 + Math.sin(time * 2) * 0.02;
       meshRef.current.scale.set(breathScale, breathScale, breathScale);
-      
+
       // Morph targets
       const mesh = meshRef.current as THREE.Mesh;
       if (mesh.morphTargetInfluences) {
@@ -392,13 +392,13 @@ export function FaceMesh({ emotion, theme }: FaceMeshProps) {
         mesh.morphTargetInfluences[1] = emotionMorphs[emotion].frown;
         mesh.morphTargetInfluences[2] = emotionMorphs[emotion].surprise;
       }
-      
+
       // Eye glow pulsing
       const eyeMaterial = materials.eyeGlow as THREE.MeshStandardMaterial;
       eyeMaterial.emissiveIntensity = 0.5 + Math.sin(time * 4) * 0.3;
     }
   });
-  
+
   return (
     <group>
       <mesh
@@ -417,7 +417,7 @@ export function FaceMesh({ emotion, theme }: FaceMeshProps) {
           envMapIntensity={1}
         />
       </mesh>
-      
+
       {/* Eye screens */}
       <mesh geometry={nodes.leftEye.geometry} position={[-0.15, 0.1, 0.3]}>
         <meshStandardMaterial
@@ -433,7 +433,7 @@ export function FaceMesh({ emotion, theme }: FaceMeshProps) {
           emissiveIntensity={2}
         />
       </mesh>
-      
+
       {/* Neon veins */}
       <NeonVeins theme={theme} />
     </group>
@@ -455,39 +455,39 @@ interface ParticleSwarmProps {
 
 export function ParticleSwarm({ agentStatus }: ParticleSwarmProps) {
   const particlesRef = useRef<THREE.Points>(null);
-  
+
   const particlesCount = Object.keys(agentStatus).length;
-  
+
   const [positions, colors] = useMemo(() => {
     const positions = new Float32Array(particlesCount * 3);
     const colors = new Float32Array(particlesCount * 3);
-    
+
     Object.values(agentStatus).forEach((status, i) => {
       // Position in circular pattern
       const angle = (i / particlesCount) * Math.PI * 2;
       const radius = 3;
-      
+
       positions[i * 3] = Math.cos(angle) * radius;
       positions[i * 3 + 1] = Math.sin(angle) * radius;
       positions[i * 3 + 2] = Math.random() * 0.5 - 0.25;
-      
+
       // Color based on status
       const color = getStatusColor(status.state);
       colors[i * 3] = color.r;
       colors[i * 3 + 1] = color.g;
       colors[i * 3 + 2] = color.b;
     });
-    
+
     return [positions, colors];
   }, [agentStatus]);
-  
+
   useFrame((state) => {
     if (particlesRef.current) {
       const time = state.clock.getElapsedTime();
-      
+
       // Rotate swarm
       particlesRef.current.rotation.y = time * 0.1;
-      
+
       // Pulse
       const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
       for (let i = 0; i < particlesCount; i++) {
@@ -497,7 +497,7 @@ export function ParticleSwarm({ agentStatus }: ParticleSwarmProps) {
       particlesRef.current.geometry.attributes.position.needsUpdate = true;
     }
   });
-  
+
   return (
     <points ref={particlesRef}>
       <bufferGeometry>
@@ -550,45 +550,45 @@ export function useSpeechRecognition() {
   const [transcript, setTranscript] = useState('');
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
       const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
       const recognition = new SpeechRecognition();
-      
+
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = 'uk-UA'; // Ukrainian
-      
+
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         setTranscript(transcript);
         setIsListening(false);
       };
-      
+
       recognition.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
       };
-      
+
       recognitionRef.current = recognition;
     }
   }, []);
-  
+
   const startListening = () => {
     if (recognitionRef.current) {
       recognitionRef.current.start();
       setIsListening(true);
     }
   };
-  
+
   const stopListening = () => {
     if (recognitionRef.current) {
       recognitionRef.current.stop();
       setIsListening(false);
     }
   };
-  
+
   return { transcript, isListening, startListening, stopListening };
 }
 ```
@@ -602,36 +602,36 @@ import { useState, useRef } from 'react';
 export function useSpeechSynthesis() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const synthRef = useRef<SpeechSynthesis | null>(null);
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       synthRef.current = window.speechSynthesis;
     }
   }, []);
-  
+
   const speak = (text: string, options?: SpeechOptions) => {
     if (!synthRef.current) return;
-    
+
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = options?.lang || 'uk-UA';
     utterance.rate = options?.rate || 1.0;
     utterance.pitch = options?.pitch || 1.0;
     utterance.volume = options?.volume || 1.0;
-    
+
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
-    
+
     synthRef.current.speak(utterance);
   };
-  
+
   const cancel = () => {
     if (synthRef.current) {
       synthRef.current.cancel();
       setIsSpeaking(false);
     }
   };
-  
+
   return { speak, cancel, isSpeaking };
 }
 ```
@@ -649,7 +649,7 @@ router = APIRouter(prefix="/cyber_face", tags=["cyber_face"])
 class ChatRequest(BaseModel):
     message: str
     context: dict
-    
+
 class ChatResponse(BaseModel):
     message: str
     emotion: str
@@ -658,10 +658,10 @@ class ChatResponse(BaseModel):
 @router.post("/chat", response_model=ChatResponse)
 async def cyber_face_chat(request: ChatRequest):
     """Process user input through Cyber Face AI."""
-    
+
     # Build prompt with context
     prompt = f"""You are Nexus, a cyber entity managing Predator Analytics.
-    
+
 Current Context:
 - Agent Status: {request.context.get('agentStatus', {})}
 - Current Emotion: {request.context.get('currentEmotion', 'neutral')}
@@ -669,7 +669,7 @@ Current Context:
 
 User: {request.message}
 
-Respond as Nexus would: concise, informative, proactive. If user asks about agents, 
+Respond as Nexus would: concise, informative, proactive. If user asks about agents,
 provide status. If anomalies detected, suggest actions. Maintain cyberpunk personality.
 
 Response format:
@@ -677,32 +677,32 @@ Response format:
 - emotion: neutral/happy/alert/calm/concerned
 - action: {{type: 'agent_command'/'navigate'/'simulate', details: ...}} or null
 """
-    
+
     # Call LLM (GPT-4o)
     llm_response = await call_llm(prompt)
-    
+
     # Parse response
     response = parse_llm_response(llm_response)
-    
+
     # Execute action if needed
     if response.action:
         await execute_cyber_action(response.action)
-    
+
     return response
 
 @router.websocket("/ws/stream")
 async def cyber_face_stream(websocket: WebSocket):
     """Real-time stream of agent events to Cyber Face."""
     await websocket.accept()
-    
+
     try:
         while True:
             # Listen for agent events
             event = await listen_to_kafka_events()
-            
+
             # Format for Cyber Face
             message = format_event_for_face(event)
-            
+
             # Send to frontend
             await websocket.send_json(message)
     except Exception as e:
@@ -899,18 +899,18 @@ interface CyberFaceMetrics {
   speech_recognition_ms: number;
   speech_synthesis_ms: number;
   agent_command_ms: number;
-  
+
   // User Engagement
   voice_interactions_count: number;
   text_interactions_count: number;
   proactive_suggestions_count: number;
   user_confirmations_count: number;
-  
+
   // System Health
   websocket_latency_ms: number;
   frame_rate_fps: number;
   memory_usage_mb: number;
-  
+
   // AI Quality
   llm_hallucination_rate: number;
   emotion_accuracy: number;
@@ -924,13 +924,13 @@ const metrics = {
     help: 'Time to respond to user input',
     buckets: [0.1, 0.5, 1, 2, 5]
   }),
-  
+
   cyber_face_interactions: new Counter({
     name: 'cyber_face_interactions_total',
     help: 'Total interactions with Cyber Face',
     labelNames: ['type', 'outcome']
   }),
-  
+
   cyber_face_frame_rate: new Gauge({
     name: 'cyber_face_frame_rate_fps',
     help: 'Current frame rate of 3D rendering'
@@ -1067,4 +1067,3 @@ open http://localhost:3000/cyber-face
 ---
 
 🤖 **"Welcome, Commander. I am Nexus. Together, we will unlock the full potential of Predator Analytics."**
-

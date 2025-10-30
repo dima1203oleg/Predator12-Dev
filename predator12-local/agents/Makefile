@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                         🤖 PREDATOR11 AGENTS MAKEFILE 🤖                     
-#                    Multi-Agent System Management Commands                     
+#                         🤖 PREDATOR11 AGENTS MAKEFILE 🤖
+#                    Multi-Agent System Management Commands
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 .PHONY: help up down build logs status test health clean restart scale
@@ -12,7 +12,7 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#                              🚀 DEPLOYMENT                                  
+#                              🚀 DEPLOYMENT
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 up: ## Start all agents and infrastructure
@@ -22,7 +22,7 @@ up: ## Start all agents and infrastructure
 	sleep 30
 	@make health
 
-down: ## Stop all agents and infrastructure  
+down: ## Stop all agents and infrastructure
 	@echo "🛑 Stopping Predator11 Agents Stack..."
 	docker-compose -f docker-compose.agents.yml down
 
@@ -37,7 +37,7 @@ restart: ## Restart all agents
 	@make up
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#                            📊 MONITORING & STATUS                           
+#                            📊 MONITORING & STATUS
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 status: ## Show status of all containers
@@ -80,7 +80,7 @@ health: ## Check health of all agents
 	@curl -s http://localhost:9041/healing/health | jq '.' || echo "❌ Not responding"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#                               🧪 TESTING                                   
+#                               🧪 TESTING
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 test: ## Run basic functionality tests
@@ -116,7 +116,7 @@ test-anomaly: ## Test Anomaly Agent
 		-d '{"index": "test_index", "field": "amount", "method": "z_score"}' | jq '.'
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#                            🔧 INDIVIDUAL AGENTS                            
+#                            🔧 INDIVIDUAL AGENTS
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 restart-chief: ## Restart Chief Orchestrator
@@ -141,10 +141,10 @@ restart-healing: ## Restart Self-Healing Agent
 	docker-compose -f docker-compose.agents.yml restart self-healing-agent
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#                              🗄️ DATA & STORAGE                             
+#                              🗄️ DATA & STORAGE
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-seed: ## Seed test data  
+seed: ## Seed test data
 	@echo "🌱 Seeding test data..."
 	@echo "Creating test dataset via Ingest Agent..."
 	curl -X POST http://localhost:9010/ingest/upload \
@@ -166,7 +166,7 @@ minio-ui: ## Open MinIO UI
 	@echo "Credentials: minioadmin / minioadmin"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#                             📈 MONITORING ACCESS                           
+#                             📈 MONITORING ACCESS
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 grafana: ## Open Grafana dashboard
@@ -176,7 +176,7 @@ grafana: ## Open Grafana dashboard
 prometheus: ## Open Prometheus
 	@echo "📊 Prometheus available at: http://localhost:9090"
 
-traefik: ## Open Traefik dashboard  
+traefik: ## Open Traefik dashboard
 	@echo "🌐 Traefik dashboard available at: http://localhost:8080"
 
 keycloak: ## Open Keycloak admin
@@ -184,7 +184,7 @@ keycloak: ## Open Keycloak admin
 	@echo "Credentials: admin / admin"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#                               🧹 CLEANUP                                   
+#                               🧹 CLEANUP
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 clean: ## Clean up containers and volumes (WARNING: destroys data)
@@ -204,7 +204,7 @@ reset: ## Complete reset (WARNING: destroys all data)
 	@echo "🔥 Complete reset done!"
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#                            🔧 DEVELOPMENT UTILS                            
+#                            🔧 DEVELOPMENT UTILS
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 dev-setup: ## Setup development environment
@@ -230,7 +230,7 @@ scale: ## Scale agent replicas (usage: make scale AGENT=chief REPLICAS=3)
 	docker-compose -f docker-compose.agents.yml up -d --scale $(AGENT)=$(REPLICAS)
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#                              📋 INFORMATION                               
+#                              📋 INFORMATION
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 info: ## Show system information
@@ -244,7 +244,7 @@ info: ## Show system information
 	@echo ""
 	@echo "Available agents:"
 	@echo "  • Chief Orchestrator (port 9001)"
-	@echo "  • Model Router (port 9002)"  
+	@echo "  • Model Router (port 9002)"
 	@echo "  • Ingest Agent (port 9010)"
 	@echo "  • Data Quality Agent (port 9012)"
 	@echo "  • Anomaly Agent (port 9020)"

@@ -232,7 +232,7 @@ metadata:
     component: backend
 spec:
   project: default
-  
+
   source:
     repoURL: https://github.com/your-org/predator12.git
     targetRevision: HEAD
@@ -240,11 +240,11 @@ spec:
     helm:
       valueFiles:
         - ../../overlays/dev/backend-values.yaml
-  
+
   destination:
     server: https://kubernetes.default.svc
     namespace: dev
-  
+
   syncPolicy:
     automated:
       prune: true
@@ -276,7 +276,7 @@ spec:
             namespace: prod
             replicas: "5"
             autoSync: "false"
-  
+
   template:
     metadata:
       name: 'predator-backend-{{env}}'

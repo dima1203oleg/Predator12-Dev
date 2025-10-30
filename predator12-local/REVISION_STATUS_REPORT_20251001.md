@@ -55,7 +55,7 @@
 - ⚠️ **backend/playbooks/autoheal/*.yml** — потребують створення
 - ⚠️ Інтеграція з Alertmanager для автоматичних дій
 
-#### 2. 🧠 Самодіагностика (SelfDiagnosis) 
+#### 2. 🧠 Самодіагностика (SelfDiagnosis)
 - ✅ Агент SelfDiagnosis у registry.yaml
 - ⚠️ Правила діагностики на основі Loki/Tempo/Prometheus
 - ⚠️ Фабрика інцидентів
@@ -113,13 +113,13 @@
 
 ### Агенти (24 total):
 ```
-Core (16): ChiefOrchestrator, QueryPlanner, ModelRouter, 
+Core (16): ChiefOrchestrator, QueryPlanner, ModelRouter,
           Arbiter, NexusGuide, DatasetIngest, DataQuality,
           SchemaMapper, ETLOrchestrator, Indexer, Embedding,
           OSINTCrawler, GraphBuilder, Anomaly, Forecast, Simulator
 
 Надсервісні (8): SyntheticData, ReportExport, BillingGate,
-                PIIGuardian, AutoHeal, SelfDiagnosis, 
+                PIIGuardian, AutoHeal, SelfDiagnosis,
                 SelfImprovement, RedTeam
 ```
 

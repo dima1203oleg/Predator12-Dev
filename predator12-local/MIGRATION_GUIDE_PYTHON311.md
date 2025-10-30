@@ -70,7 +70,7 @@ from pydantic import BaseModel
 class User(BaseModel):
     name: str
     age: int
-    
+
     class Config:
         orm_mode = True
 
@@ -85,7 +85,7 @@ from pydantic import BaseModel, ConfigDict
 
 class User(BaseModel):
     model_config = ConfigDict(from_attributes=True)  # замість orm_mode
-    
+
     name: str
     age: int
 
@@ -113,7 +113,7 @@ from sqlalchemy.orm import Session
 
 class User(Base):
     __tablename__ = "users"
-    
+
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
@@ -128,7 +128,7 @@ from sqlalchemy.orm import Mapped, mapped_column, Session
 
 class User(Base):
     __tablename__ = "users"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
 

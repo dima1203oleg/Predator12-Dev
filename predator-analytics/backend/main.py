@@ -1,22 +1,22 @@
 """
 Predator Analytics - Main FastAPI Application
 """
+
+import logging
+from contextlib import asynccontextmanager
+
+from api.routes import agents, analytics, tasks, voice
+from core.config import settings
+from core.database import Base, engine
+from core.monitoring import setup_monitoring
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from prometheus_client import make_asgi_app
-import logging
-from contextlib import asynccontextmanager
-
-from api.routes import agents, tasks, analytics, voice
-from core.config import settings
-from core.database import engine, Base
-from core.monitoring import setup_monitoring
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -25,17 +25,17 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
     logger.info("🚀 Starting Predator Analytics...")
-    
+
     # Create database tables
     Base.metadata.create_all(bind=engine)
     logger.info("✅ Database initialized")
-    
+
     # Setup monitoring
     setup_monitoring()
     logger.info("✅ Monitoring configured")
-    
+
     yield
-    
+
     logger.info("👋 Shutting down Predator Analytics...")
 
 
@@ -46,7 +46,7 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
     docs_url="/api/docs",
-    redoc_url="/api/redoc"
+    redoc_url="/api/redoc",
 )
 
 # CORS middleware
@@ -71,8 +71,8 @@ async def global_exception_handler(request: Request, exc: Exception):
         status_code=500,
         content={
             "error": "Internal server error",
-            "detail": str(exc) if settings.DEBUG else "An unexpected error occurred"
-        }
+            "detail": str(exc) if settings.DEBUG else "An unexpected error occurred",
+        },
     )
 
 
@@ -80,25 +80,14 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.get("/health", tags=["Health"])
 async def health_check():
     """Health check endpoint"""
-    return {
-        "status": "healthy",
-        "service": "predator-analytics",
-        "version": "1.0.0"
-    }
+    return {"status": "healthy", "service": "predator-analytics", "version": "1.0.0"}
 
 
 @app.get("/ready", tags=["Health"])
 async def readiness_check():
     """Readiness check endpoint"""
     # TODO: Add database and Redis connectivity checks
-    return {
-        "status": "ready",
-        "checks": {
-            "database": "ok",
-            "redis": "ok",
-            "agents": "ok"
-        }
-    }
+    return {"status": "ready", "checks": {"database": "ok", "redis": "ok", "agents": "ok"}}
 
 
 # API Routes
@@ -117,15 +106,11 @@ async def root():
         "version": "1.0.0",
         "docs": "/api/docs",
         "health": "/health",
-        "metrics": "/metrics"
+        "metrics": "/metrics",
     }
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(
-        "main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=settings.DEBUG
-    )
+
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=settings.DEBUG)

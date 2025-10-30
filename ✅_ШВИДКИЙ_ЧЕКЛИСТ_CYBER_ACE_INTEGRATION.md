@@ -190,10 +190,10 @@ curl http://localhost:8000/api/cyber-ace/agents
 1. **API Keys** — потрібні справжні ключі
    - OpenAI API Key
    - Azure Speech Key
-   
+
 2. **CORS** — можливі проблеми з CORS
    - Додати CORS middleware в FastAPI
-   
+
 3. **Dependencies** — можливі конфлікти
    - Перевірити версії Python/Node.js
 

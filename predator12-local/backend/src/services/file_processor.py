@@ -3,14 +3,16 @@
 Process uploaded files: CSV, XLSX, PDF, Images, Videos
 """
 
-from typing import BinaryIO, Dict, Any, List
-import pandas as pd
-import io
-from datetime import datetime
 import hashlib
+import io
 import mimetypes
+from datetime import datetime
+from typing import Any, BinaryIO, Dict, List
+
+import pandas as pd
 
 # ============= BASE PROCESSOR =============
+
 
 class FileProcessor:
     """Base class for file processors"""
@@ -30,7 +32,9 @@ class FileProcessor:
         """Process file and return metadata + extracted data"""
         raise NotImplementedError
 
+
 # ============= CSV PROCESSOR =============
+
 
 class CSVProcessor(FileProcessor):
     """Process CSV files"""
@@ -49,7 +53,7 @@ class CSVProcessor(FileProcessor):
                 "dtypes": df.dtypes.astype(str).to_dict(),
                 "memoryUsage": df.memory_usage(deep=True).sum(),
                 "hasNulls": df.isnull().any().any(),
-                "nullCounts": df.isnull().sum().to_dict()
+                "nullCounts": df.isnull().sum().to_dict(),
             }
 
             # Sample data (first 10 rows)
@@ -57,13 +61,13 @@ class CSVProcessor(FileProcessor):
 
             # Statistics
             stats = {}
-            for col in df.select_dtypes(include=['number']).columns:
+            for col in df.select_dtypes(include=["number"]).columns:
                 stats[col] = {
                     "min": float(df[col].min()),
                     "max": float(df[col].max()),
                     "mean": float(df[col].mean()),
                     "median": float(df[col].median()),
-                    "std": float(df[col].std())
+                    "std": float(df[col].std()),
                 }
 
             return {
@@ -72,17 +76,15 @@ class CSVProcessor(FileProcessor):
                 "sample": sample,
                 "statistics": stats,
                 "hash": self.hash,
-                "processedAt": datetime.now().isoformat()
+                "processedAt": datetime.now().isoformat(),
             }
 
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "hash": self.hash
-            }
+            return {"success": False, "error": str(e), "hash": self.hash}
+
 
 # ============= EXCEL PROCESSOR =============
+
 
 class ExcelProcessor(FileProcessor):
     """Process XLSX files"""
@@ -100,31 +102,29 @@ class ExcelProcessor(FileProcessor):
                     "rows": len(df),
                     "columns": len(df.columns),
                     "columnNames": df.columns.tolist(),
-                    "sample": df.head(5).to_dict(orient="records")
+                    "sample": df.head(5).to_dict(orient="records"),
                 }
 
             metadata = {
                 "type": "xlsx",
                 "sheetCount": len(excel_file.sheet_names),
                 "sheetNames": excel_file.sheet_names,
-                "sheets": sheets
+                "sheets": sheets,
             }
 
             return {
                 "success": True,
                 "metadata": metadata,
                 "hash": self.hash,
-                "processedAt": datetime.now().isoformat()
+                "processedAt": datetime.now().isoformat(),
             }
 
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "hash": self.hash
-            }
+            return {"success": False, "error": str(e), "hash": self.hash}
+
 
 # ============= PDF PROCESSOR =============
+
 
 class PDFProcessor(FileProcessor):
     """Process PDF files"""
@@ -143,7 +143,7 @@ class PDFProcessor(FileProcessor):
                 "pages": 0,  # TODO: Extract from PDF
                 "hasText": True,
                 "hasImages": False,
-                "extractionMethod": "pdfplumber"
+                "extractionMethod": "pdfplumber",
             }
 
             return {
@@ -151,17 +151,15 @@ class PDFProcessor(FileProcessor):
                 "metadata": metadata,
                 "text": "",  # TODO: Extract text
                 "hash": self.hash,
-                "processedAt": datetime.now().isoformat()
+                "processedAt": datetime.now().isoformat(),
             }
 
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "hash": self.hash
-            }
+            return {"success": False, "error": str(e), "hash": self.hash}
+
 
 # ============= IMAGE PROCESSOR =============
+
 
 class ImageProcessor(FileProcessor):
     """Process image files"""
@@ -179,7 +177,7 @@ class ImageProcessor(FileProcessor):
                 "width": 0,  # TODO: Extract from image
                 "height": 0,
                 "mode": "",  # RGB, RGBA, etc.
-                "hasAlpha": False
+                "hasAlpha": False,
             }
 
             # TODO: Generate thumbnail
@@ -192,17 +190,15 @@ class ImageProcessor(FileProcessor):
                 "exif": {},
                 "captions": [],
                 "hash": self.hash,
-                "processedAt": datetime.now().isoformat()
+                "processedAt": datetime.now().isoformat(),
             }
 
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "hash": self.hash
-            }
+            return {"success": False, "error": str(e), "hash": self.hash}
+
 
 # ============= VIDEO PROCESSOR =============
+
 
 class VideoProcessor(FileProcessor):
     """Process video files"""
@@ -221,7 +217,7 @@ class VideoProcessor(FileProcessor):
                 "width": 0,
                 "height": 0,
                 "codec": "",
-                "frameCount": 0
+                "frameCount": 0,
             }
 
             # TODO: Extract frames at intervals
@@ -233,17 +229,15 @@ class VideoProcessor(FileProcessor):
                 "metadata": metadata,
                 "frames": [],  # Key frame data
                 "hash": self.hash,
-                "processedAt": datetime.now().isoformat()
+                "processedAt": datetime.now().isoformat(),
             }
 
         except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "hash": self.hash
-            }
+            return {"success": False, "error": str(e), "hash": self.hash}
+
 
 # ============= PROCESSOR FACTORY =============
+
 
 def get_processor(content: bytes, filename: str) -> FileProcessor:
     """Get appropriate processor based on file type"""
@@ -251,7 +245,10 @@ def get_processor(content: bytes, filename: str) -> FileProcessor:
 
     if content_type == "text/csv":
         return CSVProcessor(content, filename)
-    elif content_type in ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]:
+    elif content_type in [
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ]:
         return ExcelProcessor(content, filename)
     elif content_type == "application/pdf":
         return PDFProcessor(content, filename)
@@ -262,12 +259,12 @@ def get_processor(content: bytes, filename: str) -> FileProcessor:
     else:
         raise ValueError(f"Unsupported file type: {content_type}")
 
+
 # ============= MAIN PROCESSING FUNCTION =============
 
+
 async def process_uploaded_file(
-    content: bytes,
-    filename: str,
-    dataset: str = "default"
+    content: bytes, filename: str, dataset: str = "default"
 ) -> Dict[str, Any]:
     """
     Main entry point for file processing
@@ -294,8 +291,4 @@ async def process_uploaded_file(
         return result
 
     except Exception as e:
-        return {
-            "success": False,
-            "error": str(e),
-            "filename": filename
-        }
+        return {"success": False, "error": str(e), "filename": filename}

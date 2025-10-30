@@ -7,9 +7,9 @@ echo "========================================"
 check_port() {
     local port=$1
     local service_name=$2
-    
+
     echo -n "Перевірка порту $port ($service_name)... "
-    
+
     if lsof -i :$port > /dev/null 2>&1; then
         echo "✅ ЗАЙНЯТИЙ"
         lsof -i :$port | head -2
@@ -21,9 +21,9 @@ check_port() {
 check_service_health() {
     local url=$1
     local service_name=$2
-    
+
     echo -n "Перевірка $service_name ($url)... "
-    
+
     if curl -s -f "$url" > /dev/null 2>&1; then
         echo "✅ ДОСТУПНИЙ"
     else

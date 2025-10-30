@@ -1,6 +1,7 @@
 import asyncio
-import pytest
 from unittest.mock import AsyncMock
+
+import pytest
 
 from backend.app.services.model_router.router_core import ModelRouter
 
@@ -35,7 +36,7 @@ async def test_ensemble_arbiter_picks_best(tmp_path):
     # Use real registry but override client and Redis
     registry_path = "backend/model_registry.yaml"
     router = ModelRouter(registry_path=registry_path)
-    
+
     # Mock Redis to avoid connection dependency
     mock_redis = AsyncMock()
     mock_redis.incr.return_value = 1
@@ -63,24 +64,26 @@ async def test_ensemble_arbiter_picks_best(tmp_path):
 @pytest.mark.asyncio
 async def test_ensemble_timeout_fallback(tmp_path):
     registry_path = "backend/model_registry.yaml"
-    
+
     # Mock Prometheus registry to avoid duplicates
     from prometheus_client import CollectorRegistry
+
     test_registry = CollectorRegistry()
-    
+
     # Patch the default registry temporarily
     import prometheus_client
+
     original_registry = prometheus_client.REGISTRY
     prometheus_client.REGISTRY = test_registry
-    
+
     try:
         router = ModelRouter(registry_path=registry_path)
         router._metrics_registry = test_registry  # Set custom registry before init
-        
+
         # Reinitialize with test registry
         router = ModelRouter(registry_path=registry_path)
         router._metrics_registry = test_registry
-        
+
         # Mock Redis
         mock_redis = AsyncMock()
         mock_redis.incr.return_value = 1
@@ -100,7 +103,9 @@ async def test_ensemble_timeout_fallback(tmp_path):
     # Temporarily tighten ensemble deadline via params override
     messages = [{"role": "user", "content": "Explain difference between caches."}]
     # Provide a smaller deadline through params to trigger timeout
-    res = await router.reason(messages=messages, request_key=None, force_ensemble=True, deadline_ms=100)
+    res = await router.reason(
+        messages=messages, request_key=None, force_ensemble=True, deadline_ms=100
+    )
 
     # Either returns a winner (if quorum somehow met) or falls back to sequential result structure
     assert isinstance(res, dict)

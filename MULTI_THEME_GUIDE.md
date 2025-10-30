@@ -119,7 +119,7 @@ import { useNexusTheme } from '../contexts/ThemeContext';
 
 const MyComponent = () => {
   const { colors, currentTheme } = useNexusTheme();
-  
+
   return (
     <Box
       sx={{
@@ -167,14 +167,14 @@ interface ThemeContextValue {
 import { useNexusTheme } from '../contexts/ThemeContext';
 
 const MyComponent = () => {
-  const { 
+  const {
     currentTheme,    // Поточна тема
     currentThemeId,  // ID теми
     setTheme,        // Функція зміни теми
     toggleTheme,     // Функція toggle
     colors           // Колірна палітра
   } = useNexusTheme();
-  
+
   return (
     <button onClick={() => setTheme('matrix')}>
       Switch to Matrix
@@ -346,7 +346,7 @@ useEffect(() => {
   const unsubscribe = onThemeChange((theme) => {
     console.log('Theme changed to:', theme.name);
   });
-  
+
   return unsubscribe;
 }, []);
 ```
@@ -384,7 +384,7 @@ import { useNexusTheme } from '../contexts/ThemeContext';
 
 const ThemedCard = () => {
   const { colors, currentTheme } = useNexusTheme();
-  
+
   return (
     <Card
       sx={{
@@ -428,7 +428,7 @@ import { useNexusTheme } from '../contexts/ThemeContext';
 
 const ThemeToggle = () => {
   const { currentTheme, toggleTheme } = useNexusTheme();
-  
+
   return (
     <IconButton onClick={toggleTheme}>
       {currentTheme.type === 'dark' ? <Brightness7 /> : <Brightness4 />}
@@ -447,7 +447,7 @@ import { allThemes } from '../theme/themes';
 
 const ThemeSelector = () => {
   const { currentThemeId, setTheme } = useNexusTheme();
-  
+
   return (
     <Select
       value={currentThemeId}

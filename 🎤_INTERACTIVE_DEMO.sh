@@ -18,7 +18,7 @@ NC='\033[0m' # No Color
 print_animated() {
     local text="$1"
     local delay=${2:-0.02}
-    
+
     for (( i=0; i<${#text}; i++ )); do
         echo -n "${text:$i:1}"
         sleep $delay
@@ -93,7 +93,7 @@ case $choice in
         echo -e "  ✓ Автоматична пунктуація"
         echo ""
         ;;
-    
+
     2)
         clear
         echo -e "${CYAN}══════════════════════════════════════════════════════════${NC}"
@@ -124,7 +124,7 @@ case $choice in
         echo -e "  ✓ Вибір голосу"
         echo ""
         ;;
-    
+
     3)
         clear
         echo -e "${CYAN}══════════════════════════════════════════════════════════${NC}"
@@ -167,7 +167,7 @@ case $choice in
         done
         echo ""
         ;;
-    
+
     4)
         clear
         echo -e "${CYAN}══════════════════════════════════════════════════════════${NC}"
@@ -198,7 +198,7 @@ case $choice in
         echo -e "  ✓ Локалізація інтерфейсу"
         echo ""
         ;;
-    
+
     5)
         clear
         echo -e "${CYAN}══════════════════════════════════════════════════════════${NC}"
@@ -228,7 +228,7 @@ case $choice in
         echo -e "${GREEN}💡 Порада:${NC} Почніть з безкоштовних провайдерів!"
         echo ""
         ;;
-    
+
     6)
         clear
         echo -e "${CYAN}══════════════════════════════════════════════════════════${NC}"
@@ -269,7 +269,7 @@ case $choice in
         echo -e "  • FPS візуалізації: 60"
         echo ""
         ;;
-    
+
     7)
         clear
         echo -e "${CYAN}══════════════════════════════════════════════════════════${NC}"
@@ -280,7 +280,7 @@ case $choice in
         echo ""
         echo -e "URL: ${BLUE}http://localhost:5090/${NC}"
         echo ""
-        
+
         # Відкрити браузер
         if command -v open &> /dev/null; then
             open http://localhost:5090/
@@ -290,7 +290,7 @@ case $choice in
             echo -e "${YELLOW}⚠️  Не вдалося відкрити браузер автоматично${NC}"
             echo -e "Будь ласка, відкрийте вручну: ${BLUE}http://localhost:5090/${NC}"
         fi
-        
+
         echo ""
         echo -e "${GREEN}✅ Готово! Інтерфейс відкрито в браузері${NC}"
         echo ""
@@ -301,7 +301,7 @@ case $choice in
         echo -e "  4. Змініть налаштування ⚙️"
         echo ""
         ;;
-    
+
     8)
         clear
         echo -e "${CYAN}══════════════════════════════════════════════════════════${NC}"
@@ -338,7 +338,7 @@ case $choice in
         echo -e "  • ./📚_VIEW_DOCS.sh"
         echo ""
         ;;
-    
+
     9)
         clear
         echo -e "${CYAN}══════════════════════════════════════════════════════════${NC}"
@@ -347,7 +347,7 @@ case $choice in
         echo ""
         echo -e "${GREEN}🔍 Перевірка системи...${NC}"
         echo ""
-        
+
         # Перевірка сервера
         echo -n "  🌐 Сервер на localhost:5090... "
         if curl -s http://localhost:5090/ > /dev/null 2>&1; then
@@ -355,7 +355,7 @@ case $choice in
         else
             echo -e "${RED}✗${NC}"
         fi
-        
+
         # Перевірка файлів
         echo -n "  📁 AIVoiceInterface.tsx... "
         if [ -f "predator12-local/frontend/src/components/voice/AIVoiceInterface.tsx" ]; then
@@ -363,21 +363,21 @@ case $choice in
         else
             echo -e "${RED}✗${NC}"
         fi
-        
+
         echo -n "  📁 premiumFreeVoiceAPI.ts... "
         if [ -f "predator12-local/frontend/src/services/premiumFreeVoiceAPI.ts" ]; then
             echo -e "${GREEN}✓${NC}"
         else
             echo -e "${RED}✗${NC}"
         fi
-        
+
         echo -n "  📁 VoiceWaveform.tsx... "
         if [ -f "predator12-local/frontend/src/components/voice/VoiceWaveform.tsx" ]; then
             echo -e "${GREEN}✓${NC}"
         else
             echo -e "${RED}✗${NC}"
         fi
-        
+
         # Перевірка документації
         echo -n "  📚 Документація... "
         if [ -f "📖_VOICE_INTERFACE_MAIN_README.md" ]; then
@@ -385,7 +385,7 @@ case $choice in
         else
             echo -e "${RED}✗${NC}"
         fi
-        
+
         # Перевірка скриптів
         echo -n "  🚀 Скрипти запуску... "
         if [ -f "🚀_LAUNCH_VOICE_INTERFACE.sh" ] && [ -x "🚀_LAUNCH_VOICE_INTERFACE.sh" ]; then
@@ -393,7 +393,7 @@ case $choice in
         else
             echo -e "${RED}✗${NC}"
         fi
-        
+
         echo ""
         echo -e "${GREEN}✅ Тест завершено!${NC}"
         echo ""
@@ -404,7 +404,7 @@ case $choice in
         echo -e "  • Перегляньте документацію"
         echo ""
         ;;
-    
+
     0)
         clear
         echo ""
@@ -423,7 +423,7 @@ case $choice in
         echo ""
         exit 0
         ;;
-    
+
     *)
         echo ""
         echo -e "${RED}❌ Невірний вибір. Будь ласка, виберіть опцію від 0 до 9.${NC}"

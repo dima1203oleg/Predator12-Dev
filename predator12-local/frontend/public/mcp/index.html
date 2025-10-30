@@ -10,24 +10,24 @@
     pre { background:#f6f8fa; padding:1rem; overflow:auto }
     .row { display:flex; gap:1rem }
     .col { flex:1 }
-    
+
     .tabs { display:flex; border-bottom: 1px solid #ddd; margin-bottom: 1rem }
     .tab { padding: 0.5rem 1rem; cursor: pointer; border: none; background: none }
     .tab.active { background: #007acc; color: white }
     .tab-content { display: none }
     .tab-content.active { display: block }
-    
+
     #simpleChat { max-height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem }
     .message { margin-bottom: 0.5rem; padding: 0.25rem }
     .user { color: #0066cc; font-weight: bold }
     .assistant { color: #006600 }
     .error { color: #cc0000; background: #ffe6e6; padding: 0.5rem; border-radius: 4px }
     .loading { color: #666; font-style: italic }
-    
+
     .model-status { font-size: 0.8em; margin-left: 0.5rem }
     .working { color: #006600 }
     .error-status { color: #cc0000 }
-    
+
     .clear-btn { background: #ff6b6b; color: white; border: none; padding: 0.25rem 0.5rem; margin-left: 0.5rem; border-radius: 3px; cursor: pointer }
     .test-btn { background: #4ecdc4; color: white; border: none; padding: 0.25rem 0.5rem; margin-left: 0.5rem; border-radius: 3px; cursor: pointer }
   </style>
@@ -125,9 +125,9 @@
       <button class="clear-btn" id="clearChat">Clear</button>
       <button class="test-btn" id="testModel">Test Model</button>
     </label>
-    
+
     <div id="simpleChat"></div>
-    
+
     <div class="row">
       <div class="col">
         <input id="simpleInput" placeholder="Type your message..." style="width:100%; padding:0.5rem" />
@@ -142,7 +142,7 @@
   <div id="tools-tab" class="tab-content">
     <h2>🛠️ Code Generator</h2>
     <p>Generate ready-to-use code examples for different programming languages and scenarios.</p>
-    
+
     <div class="row">
       <div class="col">
         <label>Programming Language
@@ -152,7 +152,7 @@
             <option value="bash">Shell/Bash</option>
           </select>
         </label>
-        
+
         <label>Code Type
           <select id="codeType" required>
             <option value="basic">Basic Chat Example</option>
@@ -160,7 +160,7 @@
             <option value="benchmark">Performance Benchmark</option>
           </select>
         </label>
-        
+
         <label>Model to Use
           <select id="codeModel" required>
             <option value="gpt-4o-mini">gpt-4o-mini (fastest)</option>
@@ -171,11 +171,11 @@
             <option value="Cohere-command-r-plus">Cohere-command-r-plus</option>
           </select>
         </label>
-        
+
         <label>Custom Prompt (optional)
           <input id="codePrompt" placeholder="e.g., Write a joke about programming" style="width:100%; padding:0.5rem" />
         </label>
-        
+
         <div style="margin-top: 1rem;">
           <button id="generateCode" style="background: #28a745; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; margin-right: 0.5rem;">
             🚀 Generate Code
@@ -186,14 +186,14 @@
         </div>
       </div>
     </div>
-    
+
     <div style="margin-top: 2rem;">
       <h3>Generated Code:</h3>
       <pre id="codeOutput" style="background: #f8f9fa; border: 1px solid #dee2e6; padding: 1rem; min-height: 200px; white-space: pre-wrap; font-family: 'Courier New', monospace;">
 Click "Generate Code" to create a ready-to-use example...
       </pre>
     </div>
-    
+
     <div style="margin-top: 1rem; background: #e7f3ff; padding: 1rem; border-radius: 4px;">
       <h4>💡 Quick Tips:</h4>
       <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
@@ -202,7 +202,7 @@ Click "Generate Code" to create a ready-to-use example...
         <li><strong>Shell:</strong> Uses curl with both simple and OpenAI APIs</li>
         <li><strong>Download:</strong> Get the code as a file to run locally</li>
       </ul>
-      
+
       <p style="margin: 0.5rem 0;"><strong>Terminal Usage:</strong></p>
       <code style="background: #2d3748; color: #e2e8f0; padding: 0.25rem 0.5rem; border-radius: 3px;">
         node code-generator.mjs basic js gpt-4o-mini "Your prompt here"
@@ -253,17 +253,17 @@ Click "Generate Code" to create a ready-to-use example...
     async function testCurrentModel() {
       const model = simpleModel.value;
       const loadingMsg = addMessage('loading', `Testing ${model}...`);
-      
+
       try {
         const response = await fetch('/v1/simple-chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ model, message: "Test" })
         });
-        
+
         const data = await response.json();
         loadingMsg.remove();
-        
+
         if (data.error) {
           addMessage('error', `${model} - ${data.error}`);
         } else {
@@ -278,18 +278,18 @@ Click "Generate Code" to create a ready-to-use example...
     async function sendSimpleMessage() {
       const message = simpleInput.value.trim();
       if (!message) return;
-      
+
       const model = simpleModel.value;
       addMessage('user', message);
       simpleInput.value = '';
-      
+
       try {
         const response = await fetch('/v1/simple-chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ model, message })
         });
-        
+
         const data = await response.json();
         if (data.error) {
           addMessage('error', data.error);
@@ -305,7 +305,7 @@ Click "Generate Code" to create a ready-to-use example...
     simpleInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') sendSimpleMessage();
     });
-    
+
     clearChat.addEventListener('click', clearChatHistory);
     testModel.addEventListener('click', testCurrentModel);
 
@@ -380,17 +380,17 @@ Click "Generate Code" to create a ready-to-use example...
       const type = document.getElementById('codeType').value;
       const model = document.getElementById('codeModel').value;
       const prompt = document.getElementById('codePrompt').value || 'Hello, world!';
-      
+
       const output = document.getElementById('codeOutput');
       output.textContent = 'Generating...';
-      
+
       try {
         const response = await fetch('/api/generate-code', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ language, type, model, prompt })
         });
-        
+
         const result = await response.json();
         if (result.error) {
           output.textContent = result.error;
@@ -406,10 +406,10 @@ Click "Generate Code" to create a ready-to-use example...
       const code = document.getElementById('codeOutput').textContent;
       const language = document.getElementById('codeLanguage').value;
       const type = document.getElementById('codeType').value;
-      
+
       const extensions = { js: 'mjs', python: 'py', bash: 'sh' };
       const filename = `generated-${type}.${extensions[language] || 'txt'}`;
-      
+
       const blob = new Blob([code], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');

@@ -141,7 +141,7 @@ PGPASSWORD=changeme psql -h 127.0.0.1 -U predator_user -d predator -c "\dt"
 
 # 2. Перевірити кількість записів
 PGPASSWORD=changeme psql -h 127.0.0.1 -U predator_user -d predator -c "
-SELECT 
+SELECT
   schemaname,
   tablename,
   n_live_tup as row_count

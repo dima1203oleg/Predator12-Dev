@@ -11,13 +11,13 @@ from __future__ import annotations
 
 import argparse
 import difflib
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 
 def make_suggestion(original: str) -> str:
-    note = f"\n\n<!-- auto-suggestion: {datetime.utcnow().isoformat()}Z -->\n"
-    return original + note
+    note = f"<!-- auto-suggestion: {datetime.utcnow().isoformat()}Z -->\n"
+    return note + original
 
 
 def main() -> int:
@@ -25,8 +25,15 @@ def main() -> int:
     parser.add_argument("--target", default="docs/auto-improvement-plan.md")
     args = parser.parse_args()
 
-    repo_root = Path(__file__).resolve().parents[1]
-    target_path = repo_root / args.target
+    script_dir = Path(__file__).resolve().parent
+    repo_root = script_dir.parent
+
+    # If we're in a workdir (has .git), use relative path from there
+    # Otherwise use repo_root
+    if Path(".git").exists():
+        target_path = Path(args.target)
+    else:
+        target_path = repo_root / args.target
 
     if not target_path.exists():
         print(f"Target file {target_path} not found. Creating a minimal suggestion file.")
@@ -37,13 +44,27 @@ def main() -> int:
     suggested = make_suggestion(original)
 
     # Create unified diff
-    orig_lines = original.splitlines(keepends=True)
-    sug_lines = suggested.splitlines(keepends=True)
+    orig_lines = original.splitlines()
+    sug_lines = suggested.splitlines()
 
-    diff = difflib.unified_diff(orig_lines, sug_lines, fromfile=str(target_path), tofile=str(target_path), lineterm="")
-    patch_text = "\n".join(list(diff))
+    relative_path = args.target
+    diff = list(
+        difflib.unified_diff(
+            orig_lines,
+            sug_lines,
+            fromfile=f"a/{relative_path}",
+            tofile=f"b/{relative_path}",
+            lineterm="",
+        )
+    )
 
-    patch_file = repo_root / "suggested.patch"
+    if not diff:
+        print("No changes detected; suggested.patch not written.")
+        return 0
+
+    patch_text = "\n".join(diff) + "\n"
+
+    patch_file = Path("suggested.patch")
     patch_file.write_text(patch_text, encoding="utf-8")
 
     print(f"Wrote suggested patch to {patch_file}")

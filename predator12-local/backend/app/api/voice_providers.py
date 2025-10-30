@@ -11,18 +11,19 @@
 - Централізоване логування використання
 """
 
-from fastapi import APIRouter, HTTPException, Depends, Security, BackgroundTasks
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from pydantic import BaseModel, Field
-from typing import Dict, List, Optional, Any, Literal
-from datetime import datetime, timedelta
-import json
-import os
-import logging
-from cryptography.fernet import Fernet
 import asyncio
-import aiohttp
+import json
+import logging
+import os
+from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any, Dict, List, Literal, Optional
+
+import aiohttp
+from cryptography.fernet import Fernet
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Security
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from pydantic import BaseModel, Field
 
 # Налаштування логування
 logging.basicConfig(level=logging.INFO)
@@ -32,11 +33,12 @@ logger = logging.getLogger(__name__)
 router = APIRouter(
     prefix="/api/voice-providers",
     tags=["voice-providers"],
-    responses={404: {"description": "Not found"}}
+    responses={404: {"description": "Not found"}},
 )
 
 # Security
 security = HTTPBearer()
+
 
 # Моделі даних
 class ProviderConfig(BaseModel):
@@ -63,12 +65,14 @@ class ProviderConfig(BaseModel):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
 
+
 class ProviderTest(BaseModel):
     provider_id: str
     test_type: Literal["tts", "stt"]
     text: Optional[str] = None
     audio_url: Optional[str] = None
     language: str = "uk-UA"
+
 
 class ProviderUsage(BaseModel):
     provider_id: str
@@ -77,6 +81,7 @@ class ProviderUsage(BaseModel):
     success: bool
     duration_ms: int
     error_message: Optional[str] = None
+
 
 class VoiceSettings(BaseModel):
     default_tts_provider: str = "coqui_tts"
@@ -87,6 +92,7 @@ class VoiceSettings(BaseModel):
     usage_analytics: bool = True
     language_preference: str = "uk-UA"
     quality_preference: Literal["speed", "quality", "balanced"] = "balanced"
+
 
 # Шифрування для API ключів
 def get_encryption_key() -> bytes:
@@ -101,14 +107,17 @@ def get_encryption_key() -> bytes:
         logger.warning("🔐 Створено новий ключ шифрування для API ключів")
         return key
 
+
 ENCRYPTION_KEY = get_encryption_key()
 cipher_suite = Fernet(ENCRYPTION_KEY)
+
 
 def encrypt_api_key(api_key: str) -> str:
     """Зашифрувати API ключ"""
     if not api_key:
         return ""
     return cipher_suite.encrypt(api_key.encode()).decode()
+
 
 def decrypt_api_key(encrypted_key: str) -> str:
     """Розшифрувати API ключ"""
@@ -119,6 +128,7 @@ def decrypt_api_key(encrypted_key: str) -> str:
     except Exception as e:
         logger.error(f"❌ Помилка розшифрування API ключа: {e}")
         return ""
+
 
 # Зберігання даних
 VOICE_CONFIG_DIR = Path("voice_configs")
@@ -140,11 +150,16 @@ DEFAULT_PROVIDERS = [
         "speed": 3,
         "languages": ["uk-UA", "en-US", "ru-RU"],
         "description": "Локальний open-source TTS з підтримкою української мови",
-        "features": ["Офлайн робота", "Висока якість", "Мультимовність", "Кастомізація голосу"],
+        "features": [
+            "Офлайн робота",
+            "Висока якість",
+            "Мультимовність",
+            "Кастомізація голосу",
+        ],
         "limits": {"free": "Необмежено (локально)"},
         "pricing": {"free": True},
         "test_phrase": "Привіт! Це тест голосового синтезу.",
-        "usage_count": 0
+        "usage_count": 0,
     },
     {
         "id": "gtts",
@@ -160,7 +175,7 @@ DEFAULT_PROVIDERS = [
         "limits": {"free": "Без ліміту (при розумному використанні)"},
         "pricing": {"free": True},
         "test_phrase": "Привіт! Це тест голосового синтезу.",
-        "usage_count": 0
+        "usage_count": 0,
     },
     {
         "id": "pyttsx3",
@@ -176,7 +191,7 @@ DEFAULT_PROVIDERS = [
         "limits": {"free": "Необмежено"},
         "pricing": {"free": True},
         "test_phrase": "Привіт! Це тест голосового синтезу.",
-        "usage_count": 0
+        "usage_count": 0,
     },
     {
         "id": "faster_whisper",
@@ -192,7 +207,7 @@ DEFAULT_PROVIDERS = [
         "limits": {"free": "Необмежено (локально)"},
         "pricing": {"free": True},
         "test_phrase": "Скажіть будь-що українською або англійською",
-        "usage_count": 0
+        "usage_count": 0,
     },
     {
         "id": "whisper",
@@ -208,7 +223,7 @@ DEFAULT_PROVIDERS = [
         "limits": {"free": "Необмежено (локально)"},
         "pricing": {"free": True},
         "test_phrase": "Скажіть будь-що українською або англійською",
-        "usage_count": 0
+        "usage_count": 0,
     },
     {
         "id": "vosk",
@@ -224,16 +239,17 @@ DEFAULT_PROVIDERS = [
         "limits": {"free": "Необмежено (локально)"},
         "pricing": {"free": True},
         "test_phrase": "Скажіть будь-що українською або англійською",
-        "usage_count": 0
-    }
+        "usage_count": 0,
+    },
 ]
+
 
 # Utility функції
 def load_providers() -> List[Dict]:
     """Завантажити конфігурації провайдерів"""
     if PROVIDERS_FILE.exists():
         try:
-            with open(PROVIDERS_FILE, 'r', encoding='utf-8') as f:
+            with open(PROVIDERS_FILE, "r", encoding="utf-8") as f:
                 return json.load(f)
         except Exception as e:
             logger.error(f"❌ Помилка завантаження провайдерів: {e}")
@@ -242,15 +258,16 @@ def load_providers() -> List[Dict]:
     save_providers(DEFAULT_PROVIDERS)
     return DEFAULT_PROVIDERS
 
+
 def save_providers(providers: List[Dict]) -> None:
     """Зберегти конфігурації провайдерів"""
     try:
         # Шифруємо API ключі перед збереженням
         for provider in providers:
-            if provider.get('api_key'):
-                provider['api_key'] = encrypt_api_key(provider['api_key'])
+            if provider.get("api_key"):
+                provider["api_key"] = encrypt_api_key(provider["api_key"])
 
-        with open(PROVIDERS_FILE, 'w', encoding='utf-8') as f:
+        with open(PROVIDERS_FILE, "w", encoding="utf-8") as f:
             json.dump(providers, f, ensure_ascii=False, indent=2, default=str)
 
         logger.info(f"✅ Збережено {len(providers)} провайдерів")
@@ -258,35 +275,38 @@ def save_providers(providers: List[Dict]) -> None:
         logger.error(f"❌ Помилка збереження провайдерів: {e}")
         raise HTTPException(status_code=500, detail=f"Помилка збереження: {e}")
 
+
 def load_settings() -> Dict:
     """Завантажити глобальні налаштування"""
     default_settings = VoiceSettings().dict()
 
     if SETTINGS_FILE.exists():
         try:
-            with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
+            with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
                 return {**default_settings, **json.load(f)}
         except Exception as e:
             logger.error(f"❌ Помилка завантаження налаштувань: {e}")
 
     return default_settings
 
+
 def save_settings(settings: Dict) -> None:
     """Зберегти глобальні налаштування"""
     try:
-        with open(SETTINGS_FILE, 'w', encoding='utf-8') as f:
+        with open(SETTINGS_FILE, "w", encoding="utf-8") as f:
             json.dump(settings, f, ensure_ascii=False, indent=2)
         logger.info("✅ Налаштування збережено")
     except Exception as e:
         logger.error(f"❌ Помилка збереження налаштувань: {e}")
         raise HTTPException(status_code=500, detail=f"Помилка збереження: {e}")
 
+
 def log_usage(usage: ProviderUsage) -> None:
     """Логування використання провайдера"""
     try:
         usage_data = []
         if USAGE_FILE.exists():
-            with open(USAGE_FILE, 'r', encoding='utf-8') as f:
+            with open(USAGE_FILE, "r", encoding="utf-8") as f:
                 usage_data = json.load(f)
 
         usage_data.append(usage.dict())
@@ -295,12 +315,14 @@ def log_usage(usage: ProviderUsage) -> None:
         if len(usage_data) > 1000:
             usage_data = usage_data[-1000:]
 
-        with open(USAGE_FILE, 'w', encoding='utf-8') as f:
+        with open(USAGE_FILE, "w", encoding="utf-8") as f:
             json.dump(usage_data, f, ensure_ascii=False, indent=2, default=str)
     except Exception as e:
         logger.error(f"❌ Помилка логування: {e}")
 
+
 # API Endpoints
+
 
 @router.get("/providers", response_model=List[ProviderConfig])
 async def get_providers():
@@ -310,8 +332,8 @@ async def get_providers():
 
         # Розшифровуємо API ключі для відображення
         for provider in providers_data:
-            if provider.get('api_key'):
-                provider['api_key'] = decrypt_api_key(provider['api_key'])
+            if provider.get("api_key"):
+                provider["api_key"] = decrypt_api_key(provider["api_key"])
 
         providers = [ProviderConfig(**provider) for provider in providers_data]
         logger.info(f"📋 Повернуто {len(providers)} провайдерів")
@@ -320,6 +342,7 @@ async def get_providers():
         logger.error(f"❌ Помилка отримання провайдерів: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.post("/providers", response_model=ProviderConfig)
 async def create_provider(provider: ProviderConfig):
     """Створити новий провайдер"""
@@ -327,12 +350,12 @@ async def create_provider(provider: ProviderConfig):
         providers = load_providers()
 
         # Перевірити унікальність ID
-        if any(p['id'] == provider.id for p in providers):
+        if any(p["id"] == provider.id for p in providers):
             raise HTTPException(status_code=400, detail=f"Провайдер з ID '{provider.id}' вже існує")
 
         provider_dict = provider.dict()
-        provider_dict['created_at'] = datetime.now()
-        provider_dict['updated_at'] = datetime.now()
+        provider_dict["created_at"] = datetime.now()
+        provider_dict["updated_at"] = datetime.now()
 
         providers.append(provider_dict)
         save_providers(providers)
@@ -343,6 +366,7 @@ async def create_provider(provider: ProviderConfig):
         logger.error(f"❌ Помилка створення провайдера: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.put("/providers/{provider_id}", response_model=ProviderConfig)
 async def update_provider(provider_id: str, provider: ProviderConfig):
     """Оновити конфігурацію провайдера"""
@@ -352,7 +376,7 @@ async def update_provider(provider_id: str, provider: ProviderConfig):
         # Знайти провайдер
         provider_index = None
         for i, p in enumerate(providers):
-            if p['id'] == provider_id:
+            if p["id"] == provider_id:
                 provider_index = i
                 break
 
@@ -360,7 +384,7 @@ async def update_provider(provider_id: str, provider: ProviderConfig):
             raise HTTPException(status_code=404, detail=f"Провайдер '{provider_id}' не знайдено")
 
         provider_dict = provider.dict()
-        provider_dict['updated_at'] = datetime.now()
+        provider_dict["updated_at"] = datetime.now()
 
         providers[provider_index] = provider_dict
         save_providers(providers)
@@ -371,6 +395,7 @@ async def update_provider(provider_id: str, provider: ProviderConfig):
         logger.error(f"❌ Помилка оновлення провайдера: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.delete("/providers/{provider_id}")
 async def delete_provider(provider_id: str):
     """Видалити провайдер"""
@@ -378,7 +403,7 @@ async def delete_provider(provider_id: str):
         providers = load_providers()
 
         # Знайти і видалити провайдер
-        updated_providers = [p for p in providers if p['id'] != provider_id]
+        updated_providers = [p for p in providers if p["id"] != provider_id]
 
         if len(updated_providers) == len(providers):
             raise HTTPException(status_code=404, detail=f"Провайдер '{provider_id}' не знайдено")
@@ -391,6 +416,7 @@ async def delete_provider(provider_id: str):
         logger.error(f"❌ Помилка видалення провайдера: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.post("/providers/{provider_id}/test")
 async def test_provider(provider_id: str, test_data: ProviderTest):
     """Тестувати провайдер"""
@@ -400,7 +426,7 @@ async def test_provider(provider_id: str, test_data: ProviderTest):
         # Знайти провайдер
         provider = None
         for p in providers:
-            if p['id'] == provider_id:
+            if p["id"] == provider_id:
                 provider = p
                 break
 
@@ -439,14 +465,14 @@ async def test_provider(provider_id: str, test_data: ProviderTest):
             operation=test_data.test_type,
             success=success,
             duration_ms=duration_ms,
-            error_message=error_message
+            error_message=error_message,
         )
         log_usage(usage)
 
         # Оновлення last_tested
         for p in providers:
-            if p['id'] == provider_id:
-                p['last_tested'] = datetime.now()
+            if p["id"] == provider_id:
+                p["last_tested"] = datetime.now()
                 break
         save_providers(providers)
 
@@ -456,12 +482,13 @@ async def test_provider(provider_id: str, test_data: ProviderTest):
             "success": success,
             "result": result,
             "duration_ms": duration_ms,
-            "timestamp": datetime.now()
+            "timestamp": datetime.now(),
         }
 
     except Exception as e:
         logger.error(f"❌ Помилка тестування провайдера: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.get("/settings", response_model=VoiceSettings)
 async def get_settings():
@@ -472,6 +499,7 @@ async def get_settings():
     except Exception as e:
         logger.error(f"❌ Помилка отримання налаштувань: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.put("/settings", response_model=VoiceSettings)
 async def update_settings(settings: VoiceSettings):
@@ -484,6 +512,7 @@ async def update_settings(settings: VoiceSettings):
         logger.error(f"❌ Помилка оновлення налаштувань: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.get("/usage/stats")
 async def get_usage_stats():
     """Отримати статистику використання провайдерів"""
@@ -491,7 +520,7 @@ async def get_usage_stats():
         if not USAGE_FILE.exists():
             return {"total_requests": 0, "providers": {}, "success_rate": 0}
 
-        with open(USAGE_FILE, 'r', encoding='utf-8') as f:
+        with open(USAGE_FILE, "r", encoding="utf-8") as f:
             usage_data = json.load(f)
 
         stats = {
@@ -500,39 +529,39 @@ async def get_usage_stats():
             "success_rate": 0,
             "last_24h": 0,
             "tts_requests": 0,
-            "stt_requests": 0
+            "stt_requests": 0,
         }
 
         successful_requests = 0
         last_24h_time = datetime.now() - timedelta(days=1)
 
         for entry in usage_data:
-            provider_id = entry['provider_id']
+            provider_id = entry["provider_id"]
 
             if provider_id not in stats["providers"]:
                 stats["providers"][provider_id] = {
                     "total": 0,
                     "success": 0,
                     "errors": 0,
-                    "avg_duration": 0
+                    "avg_duration": 0,
                 }
 
             stats["providers"][provider_id]["total"] += 1
 
-            if entry['success']:
+            if entry["success"]:
                 successful_requests += 1
                 stats["providers"][provider_id]["success"] += 1
             else:
                 stats["providers"][provider_id]["errors"] += 1
 
             # Підрахунок за типами
-            if entry['operation'] == 'tts':
+            if entry["operation"] == "tts":
                 stats["tts_requests"] += 1
-            elif entry['operation'] == 'stt':
+            elif entry["operation"] == "stt":
                 stats["stt_requests"] += 1
 
             # Підрахунок за останні 24 години
-            entry_time = datetime.fromisoformat(entry['timestamp'].replace('Z', '+00:00'))
+            entry_time = datetime.fromisoformat(entry["timestamp"].replace("Z", "+00:00"))
             if entry_time > last_24h_time:
                 stats["last_24h"] += 1
 
@@ -545,6 +574,7 @@ async def get_usage_stats():
         logger.error(f"❌ Помилка отримання статистики: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.post("/usage/log")
 async def log_provider_usage(usage: ProviderUsage):
     """Логування використання провайдера"""
@@ -554,6 +584,7 @@ async def log_provider_usage(usage: ProviderUsage):
     except Exception as e:
         logger.error(f"❌ Помилка логування: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.get("/health")
 async def health_check():
@@ -569,17 +600,14 @@ async def health_check():
             "config_files": {
                 "providers": PROVIDERS_FILE.exists(),
                 "settings": SETTINGS_FILE.exists(),
-                "usage": USAGE_FILE.exists()
+                "usage": USAGE_FILE.exists(),
             },
-            "encryption": "enabled"
+            "encryption": "enabled",
         }
     except Exception as e:
         logger.error(f"❌ Помилка health check: {e}")
-        return {
-            "status": "unhealthy",
-            "error": str(e),
-            "timestamp": datetime.now()
-        }
+        return {"status": "unhealthy", "error": str(e), "timestamp": datetime.now()}
+
 
 # Ініціалізація при запуску
 @router.on_event("startup")

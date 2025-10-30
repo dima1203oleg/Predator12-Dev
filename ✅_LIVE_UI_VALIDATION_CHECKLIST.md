@@ -28,7 +28,7 @@ Based on the live screenshots:
 - [x] **Category jump buttons working**
   - ✓ Sticky navigation bar (position: sticky, top: 0)
   - ✓ Glassmorphism background with gradient
-  - ✓ Category chips displayed: 
+  - ✓ Category chips displayed:
     - 📊 Mon (Monitoring)
     - 🚀 Core (Core Services)
   - ✓ Proper spacing and padding (8px gap, 10px 14px padding)

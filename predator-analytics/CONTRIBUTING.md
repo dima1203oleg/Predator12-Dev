@@ -126,10 +126,10 @@ docs(readme): update installation instructions
 def process_data(data: Dict[str, Any]) -> Dict[str, Any]:
     """
     Process input data and return results.
-    
+
     Args:
         data: Input data dictionary
-        
+
     Returns:
         Processed data dictionary
     """

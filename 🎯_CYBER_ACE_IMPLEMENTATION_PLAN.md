@@ -436,7 +436,7 @@ interface Context {
 ## 🚨 Risks & Mitigation
 
 ### Risk 1: OpenAI API Costs
-**Mitigation**: 
+**Mitigation**:
 - Кешування responses
 - Rate limiting
 - Fallback на локальні моделі

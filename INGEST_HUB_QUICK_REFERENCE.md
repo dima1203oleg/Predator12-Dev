@@ -149,7 +149,7 @@ const ws = new WebSocket('ws://backend/ws/ingest');
 // Events
 ws.onmessage = (event) => {
   const data = JSON.parse(event.data);
-  
+
   switch (data.type) {
     case 'task.created':
       // { id, type, name, status: 'pending' }
@@ -243,11 +243,11 @@ interface TaskStreamProps {
 }
 
 // Usage
-<TaskStream 
+<TaskStream
   onTaskCountChange={(count) => {
     // Update badge count, etc.
     setBadgeCount(count);
-  }} 
+  }}
 />
 ```
 

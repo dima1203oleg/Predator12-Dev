@@ -408,12 +408,12 @@
   .brand {
     font-size: 1.8rem;
   }
-  
+
   .chat-feed,
   .network-canvas {
     height: 250px;
   }
-  
+
   .ai-hint {
     font-size: 10px;
     bottom: 45px;
@@ -425,20 +425,20 @@
     padding: 10px;
     gap: 15px;
   }
-  
+
   .risk-ticker {
     font-size: 0.85rem;
     padding: 8px 12px;
   }
-  
+
   .chat-controls {
     flex-wrap: wrap;
   }
-  
+
   .chat-controls input {
     width: 100%;
   }
-  
+
   .chat-controls button {
     flex: 1;
   }

@@ -8,7 +8,7 @@ spec:
     - name: service-name
     - name: threshold
       value: "0.95"  # 95% success rate
-  
+
   metrics:
     - name: success-rate
       interval: 1m
@@ -24,8 +24,8 @@ spec:
                 service="{{args.service-name}}",
                 status=~"2.."
               }[5m]
-            )) 
-            / 
+            ))
+            /
             sum(rate(
               http_requests_total{
                 service="{{args.service-name}}"
@@ -42,7 +42,7 @@ spec:
     - name: service-name
     - name: threshold
       value: "500"  # 500ms P95 latency
-  
+
   metrics:
     - name: p95-latency
       interval: 1m
@@ -71,7 +71,7 @@ spec:
     - name: service-name
     - name: threshold
       value: "0.05"  # 5% error rate max
-  
+
   metrics:
     - name: error-rate
       interval: 1m
@@ -87,8 +87,8 @@ spec:
                 service="{{args.service-name}}",
                 status=~"5.."
               }[5m]
-            )) 
-            / 
+            ))
+            /
             sum(rate(
               http_requests_total{
                 service="{{args.service-name}}"
@@ -103,7 +103,7 @@ metadata:
 spec:
   args:
     - name: service-name
-  
+
   metrics:
     - name: success-rate
       interval: 1m
@@ -119,8 +119,8 @@ spec:
                 service="{{args.service-name}}",
                 status=~"2.."
               }[5m]
-            )) 
-            / 
+            ))
+            /
             sum(rate(
               http_requests_total{
                 service="{{args.service-name}}"
@@ -137,7 +137,7 @@ spec:
     - name: service-name
     - name: threshold
       value: "80"  # 80% CPU max
-  
+
   metrics:
     - name: cpu-usage
       interval: 1m
@@ -164,7 +164,7 @@ spec:
     - name: service-name
     - name: threshold
       value: "85"  # 85% memory max
-  
+
   metrics:
     - name: memory-usage
       interval: 1m
@@ -177,8 +177,8 @@ spec:
           query: |
             (sum(container_memory_working_set_bytes{
               pod=~"{{args.service-name}}-.*"
-            }) by (pod) 
-            / 
+            }) by (pod)
+            /
             sum(container_spec_memory_limit_bytes{
               pod=~"{{args.service-name}}-.*"
             }) by (pod)) * 100
@@ -193,7 +193,7 @@ spec:
     - name: service-name
     - name: threshold
       value: "80"  # 80% of max connections
-  
+
   metrics:
     - name: db-connections
       interval: 1m
@@ -218,7 +218,7 @@ spec:
     - name: service-name
     - name: threshold
       value: "1000"  # Max 1000 tasks in queue
-  
+
   metrics:
     - name: queue-length
       interval: 1m
@@ -241,7 +241,7 @@ metadata:
 spec:
   args:
     - name: service-name
-  
+
   metrics:
     - name: agent-health
       interval: 1m
@@ -254,8 +254,8 @@ spec:
           query: |
             sum(ai_agent_healthy{
               service="{{args.service-name}}"
-            }) 
-            / 
+            })
+            /
             sum(ai_agent_total{
               service="{{args.service-name}}"
             })

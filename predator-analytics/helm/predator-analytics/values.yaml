@@ -2,18 +2,18 @@
 global:
   domain: predator-analytics.local
   environment: production
-  
+
   # Image registry
   imageRegistry: docker.io
   imagePullSecrets: []
-  
+
   # Storage class
   storageClass: standard
-  
+
   # Security
   enableRBAC: true
   enablePSP: false
-  
+
   # Monitoring
   monitoring:
     enabled: true
@@ -27,16 +27,16 @@ global:
 backend:
   enabled: true
   replicaCount: 3
-  
+
   image:
     repository: predator-analytics/backend
     tag: "1.0.0"
     pullPolicy: IfNotPresent
-  
+
   service:
     type: ClusterIP
     port: 8000
-  
+
   ingress:
     enabled: true
     className: nginx
@@ -49,7 +49,7 @@ backend:
       - secretName: api-tls
         hosts:
           - api.predator-analytics.local
-  
+
   resources:
     limits:
       cpu: 2000m
@@ -57,14 +57,14 @@ backend:
     requests:
       cpu: 500m
       memory: 1Gi
-  
+
   autoscaling:
     enabled: true
     minReplicas: 3
     maxReplicas: 10
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
-  
+
   env:
     - name: DEBUG
       value: "false"
@@ -77,16 +77,16 @@ backend:
 frontend:
   enabled: true
   replicaCount: 2
-  
+
   image:
     repository: predator-analytics/frontend
     tag: "1.0.0"
     pullPolicy: IfNotPresent
-  
+
   service:
     type: ClusterIP
     port: 3000
-  
+
   ingress:
     enabled: true
     className: nginx
@@ -99,7 +99,7 @@ frontend:
       - secretName: frontend-tls
         hosts:
           - predator-analytics.local
-  
+
   resources:
     limits:
       cpu: 1000m
@@ -107,7 +107,7 @@ frontend:
     requests:
       cpu: 250m
       memory: 512Mi
-  
+
   autoscaling:
     enabled: true
     minReplicas: 2
@@ -118,12 +118,12 @@ frontend:
 arbiter-agent:
   enabled: true
   replicaCount: 2
-  
+
   image:
     repository: predator-analytics/arbiter-agent
     tag: "1.0.0"
     pullPolicy: IfNotPresent
-  
+
   resources:
     limits:
       cpu: 1000m
@@ -136,12 +136,12 @@ arbiter-agent:
 dataset-inspector-agent:
   enabled: true
   replicaCount: 2
-  
+
   image:
     repository: predator-analytics/dataset-inspector-agent
     tag: "1.0.0"
     pullPolicy: IfNotPresent
-  
+
   resources:
     limits:
       cpu: 2000m
@@ -158,7 +158,7 @@ redis:
     enabled: true
     existingSecret: redis-secret
     existingSecretPasswordKey: password
-  
+
   master:
     resources:
       limits:
@@ -167,7 +167,7 @@ redis:
       requests:
         cpu: 250m
         memory: 512Mi
-    
+
     persistence:
       enabled: true
       size: 10Gi
@@ -180,7 +180,7 @@ postgresql:
     username: predator
     database: predator_analytics
     existingSecret: postgresql-secret
-  
+
   primary:
     resources:
       limits:
@@ -189,7 +189,7 @@ postgresql:
       requests:
         cpu: 500m
         memory: 1Gi
-    
+
     persistence:
       enabled: true
       size: 50Gi
@@ -199,7 +199,7 @@ postgresql:
 qdrant:
   enabled: true
   replicaCount: 1
-  
+
   resources:
     limits:
       cpu: 2000m
@@ -207,7 +207,7 @@ qdrant:
     requests:
       cpu: 1000m
       memory: 2Gi
-  
+
   persistence:
     size: 100Gi
     storageClass: standard

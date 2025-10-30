@@ -1,15 +1,16 @@
 """
 Agents API Routes
 """
-from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.orm import Session
-from typing import List, Dict, Any
-from pydantic import BaseModel
 
-from core.database import get_db
-from models.agent import Agent
+from typing import Any, Dict, List
+
 from agents.arbiter_agent import ArbiterAgent
 from agents.dataset_inspector_agent import DatasetInspectorAgent
+from core.database import get_db
+from fastapi import APIRouter, Depends, HTTPException
+from models.agent import Agent
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
@@ -23,6 +24,7 @@ arbiter.register_agent(dataset_inspector)
 
 class AgentResponse(BaseModel):
     """Agent response model"""
+
     id: str
     name: str
     agent_type: str
@@ -63,7 +65,7 @@ async def get_system_status():
 async def execute_agent_task(task_data: Dict[str, Any]):
     """
     Execute a task through the Arbiter agent
-    
+
     Request body:
     {
         "task_type": "analyze_dataset",

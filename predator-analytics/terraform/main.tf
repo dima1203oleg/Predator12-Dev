@@ -5,7 +5,7 @@
 
 terraform {
   required_version = ">= 1.6.0"
-  
+
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -20,7 +20,7 @@ terraform {
       version = "~> 3.6"
     }
   }
-  
+
   backend "s3" {
     bucket = "predator-analytics-terraform-state"
     key    = "production/terraform.tfstate"
@@ -32,7 +32,7 @@ terraform {
 locals {
   project_name = "predator-analytics"
   environment  = var.environment
-  
+
   common_tags = {
     Project     = local.project_name
     Environment = local.environment
@@ -56,7 +56,7 @@ provider "helm" {
 resource "kubernetes_namespace" "predator_analytics" {
   metadata {
     name = "${local.project_name}-${local.environment}"
-    
+
     labels = merge(
       local.common_tags,
       {
@@ -72,12 +72,12 @@ resource "kubernetes_secret" "postgresql" {
     name      = "postgresql-secret"
     namespace = kubernetes_namespace.predator_analytics.metadata[0].name
   }
-  
+
   data = {
     username = var.db_username
     password = var.db_password
   }
-  
+
   type = "Opaque"
 }
 
@@ -86,11 +86,11 @@ resource "kubernetes_secret" "redis" {
     name      = "redis-secret"
     namespace = kubernetes_namespace.predator_analytics.metadata[0].name
   }
-  
+
   data = {
     password = random_password.redis_password.result
   }
-  
+
   type = "Opaque"
 }
 
@@ -104,26 +104,26 @@ resource "helm_release" "predator_analytics" {
   name       = local.project_name
   namespace  = kubernetes_namespace.predator_analytics.metadata[0].name
   chart      = "../helm/predator-analytics"
-  
+
   values = [
     file("${path.module}/values-${local.environment}.yaml")
   ]
-  
+
   set {
     name  = "global.environment"
     value = local.environment
   }
-  
+
   set_sensitive {
     name  = "postgresql.auth.existingSecret"
     value = kubernetes_secret.postgresql.metadata[0].name
   }
-  
+
   set_sensitive {
     name  = "redis.auth.existingSecret"
     value = kubernetes_secret.redis.metadata[0].name
   }
-  
+
   depends_on = [
     kubernetes_namespace.predator_analytics,
     kubernetes_secret.postgresql,

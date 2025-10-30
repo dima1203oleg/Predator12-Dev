@@ -24,11 +24,11 @@ test_endpoint() {
     local name=$1
     local url=$2
     local expected_code=$3
-    
+
     echo -n "Testing ${name}... "
-    
+
     http_code=$(curl -s -o /dev/null -w "%{http_code}" "${url}")
-    
+
     if [ "$http_code" -eq "$expected_code" ]; then
         echo -e "${GREEN}✓ PASSED${NC} (HTTP $http_code)"
         ((PASSED++))
@@ -41,9 +41,9 @@ test_endpoint() {
 # Function to test container
 test_container() {
     local name=$1
-    
+
     echo -n "Checking container ${name}... "
-    
+
     if docker ps --format '{{.Names}}' | grep -q "${name}"; then
         status=$(docker ps --filter "name=${name}" --format '{{.Status}}')
         echo -e "${GREEN}✓ RUNNING${NC} ($status)"

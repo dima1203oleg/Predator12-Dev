@@ -45,7 +45,7 @@ const GuideDock: React.FC<GuideDockProps> = ({
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [micEnabled, setMicEnabled] = useState(false);
   const [position, setPosition] = useState({ bottom: 24, right: 24 });
-  
+
   const dockRef = useRef<HTMLDivElement>(null);
   const settingsAnchorRef = useRef<HTMLButtonElement>(null);
 
@@ -56,15 +56,15 @@ const GuideDock: React.FC<GuideDockProps> = ({
 
       const dockRect = dockRef.current.getBoundingClientRect();
       const elements = document.querySelectorAll('button, [role="button"], .fab, .floating');
-      
+
       let hasCollision = false;
       elements.forEach(element => {
         if (element === dockRef.current || dockRef.current?.contains(element)) return;
         const rect = element.getBoundingClientRect();
         const collision = !(
-          rect.right < dockRect.left || 
-          rect.left > dockRect.right || 
-          rect.bottom < dockRect.top || 
+          rect.right < dockRect.left ||
+          rect.left > dockRect.right ||
+          rect.bottom < dockRect.top ||
           rect.top > dockRect.bottom
         );
         if (collision) hasCollision = true;
@@ -102,7 +102,7 @@ const GuideDock: React.FC<GuideDockProps> = ({
 
   const getGuideMessage = (): string => {
     if (guide.mode === 'silent') return '';
-    
+
     switch (systemHealth) {
       case 'unknown':
         return '🔍 Статус системи невідомий. Натисніть "Перевірити" або відкрийте журнали для діагностики.';
@@ -223,11 +223,11 @@ const GuideDock: React.FC<GuideDockProps> = ({
               }}
             >
               <motion.div
-                animate={{ 
+                animate={{
                   rotate: guide.isActive ? 360 : 0,
                   scale: guide.isActive ? [1, 1.1, 1] : 1
                 }}
-                transition={{ 
+                transition={{
                   rotate: { duration: 0.5 },
                   scale: { duration: 1, repeat: guide.isActive ? Infinity : 0, repeatType: 'reverse' }
                 }}
@@ -309,7 +309,7 @@ const GuideDock: React.FC<GuideDockProps> = ({
             <Typography variant="subtitle2" sx={{ color: nexusColors.frost, mb: 1 }}>
               Голосові функції
             </Typography>
-            
+
             <FormControlLabel
               control={
                 <Switch

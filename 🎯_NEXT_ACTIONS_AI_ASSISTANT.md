@@ -144,7 +144,7 @@ const executeIntent = async (text: string) => {
 
 useEffect(() => {
   const ws = new WebSocket(`${WS_BASE}/alerts`);
-  
+
   ws.onmessage = (event) => {
     const alert = JSON.parse(event.data);
     useAssistantStore.getState().setAlerts([
@@ -175,11 +175,11 @@ import { useAssistantStore } from '../state/assistantStore';
 describe('assistantStore', () => {
   it('should push message', () => {
     const { result } = renderHook(() => useAssistantStore());
-    
+
     act(() => {
       result.current.pushMessage({ role: 'user', text: 'Hello' });
     });
-    
+
     expect(result.current.chat.history).toHaveLength(1);
     expect(result.current.chat.history[0].text).toBe('Hello');
   });
@@ -196,13 +196,13 @@ import ChatPanel from '../components/ChatPanel';
 describe('ChatPanel Integration', () => {
   it('should send message and receive response', async () => {
     render(<ChatPanel />);
-    
+
     const input = screen.getByPlaceholderText(/type a message/i);
     const button = screen.getByRole('button', { name: /send/i });
-    
+
     fireEvent.change(input, { target: { value: 'Test message' } });
     fireEvent.click(button);
-    
+
     await waitFor(() => {
       expect(screen.getByText('Test message')).toBeInTheDocument();
     });
@@ -218,16 +218,16 @@ import { test, expect } from '@playwright/test';
 
 test('voice interaction flow', async ({ page }) => {
   await page.goto('http://localhost:5173/assistant');
-  
+
   // Grant mic permissions
   await page.context().grantPermissions(['microphone']);
-  
+
   // Click mic button
   await page.click('button[aria-label="Start recording"]');
-  
+
   // Wait for ASR
   await page.waitForTimeout(2000);
-  
+
   // Check transcript
   const transcript = await page.textContent('.chat-message.user');
   expect(transcript).toBeTruthy();

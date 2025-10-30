@@ -244,7 +244,7 @@ if [ $success_count -eq $total_checks ]; then
     echo ""
     echo -e "${BLUE}🚀 Ready for deployment commands:${NC}"
     echo "  Development: make dev-up"
-    echo "  Staging:     make staging-deploy" 
+    echo "  Staging:     make staging-deploy"
     echo "  Production:  make prod-deploy"
     echo ""
     echo -e "${BLUE}🌐 Access URLs:${NC}"

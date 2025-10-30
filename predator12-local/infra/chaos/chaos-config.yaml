@@ -13,11 +13,11 @@ data:
     interval = 300
     # Логування
     log_level = "info"
-    
+
     [targets]
     # Цілі для хаос експериментів
     namespaces = ["predator-system"]
-    
+
     # Ймовірність атак на різні типи ресурсів
     [attacks]
     # Вимкнення подів
@@ -28,12 +28,12 @@ data:
     # Мережеві збої
     network_delay = 0.03
     network_loss = 0.02
-    
+
     # Виключення критичних сервісів
     [exclusions]
     deployments = ["keycloak", "postgres", "redis"]
     labels = ["app=critical", "tier=database"]
-    
+
     [notifications]
     # Сповіщення про експерименти
     webhook_url = "http://alertmanager:9093/api/v1/alerts"

@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Orbitron', 'Fira Code', monospace;
             background: linear-gradient(135deg, #05070A 0%, #0F121A 50%, #1A2332 100%);
@@ -19,26 +19,26 @@
             overflow-x: hidden;
             position: relative;
         }
-        
+
         .cyber-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 radial-gradient(circle at 20% 80%, #00FFC620 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, #0A75FF20 0%, transparent 50%),
                 radial-gradient(circle at 40% 40%, #A020F020 0%, transparent 50%);
             z-index: -1;
             animation: pulse 4s ease-in-out infinite;
         }
-        
+
         @keyframes pulse {
             0%, 100% { opacity: 0.3; }
             50% { opacity: 0.6; }
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -46,7 +46,7 @@
             position: relative;
             z-index: 1;
         }
-        
+
         .header {
             text-align: center;
             margin-bottom: 40px;
@@ -56,25 +56,25 @@
             border-radius: 15px;
             backdrop-filter: blur(10px);
         }
-        
+
         .header h1 {
             font-size: 3em;
             margin-bottom: 10px;
             text-shadow: 0 0 20px #00FFC6;
             animation: glow 2s ease-in-out infinite alternate;
         }
-        
+
         @keyframes glow {
             from { text-shadow: 0 0 20px #00FFC6; }
             to { text-shadow: 0 0 30px #00FFC6, 0 0 40px #0A75FF; }
         }
-        
+
         .subtitle {
             font-size: 1.2em;
             color: #0A75FF;
             margin-bottom: 20px;
         }
-        
+
         .status {
             display: inline-block;
             padding: 8px 16px;
@@ -84,19 +84,19 @@
             font-weight: bold;
             animation: pulse-status 3s infinite;
         }
-        
+
         @keyframes pulse-status {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        
+
         .demo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
             margin-bottom: 40px;
         }
-        
+
         .demo-card {
             background: rgba(10, 117, 255, 0.1);
             border: 2px solid #0A75FF40;
@@ -107,7 +107,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .demo-card::before {
             content: '';
             position: absolute;
@@ -118,34 +118,34 @@
             background: linear-gradient(90deg, transparent, rgba(0, 255, 198, 0.2), transparent);
             transition: left 0.5s;
         }
-        
+
         .demo-card:hover::before {
             left: 100%;
         }
-        
+
         .demo-card:hover {
             border-color: #0A75FF;
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 255, 198, 0.3);
         }
-        
+
         .demo-card h3 {
             color: #00FFC6;
             margin-bottom: 15px;
             font-size: 1.3em;
         }
-        
+
         .demo-card p {
             color: #C5D1E6;
             line-height: 1.6;
             margin-bottom: 15px;
         }
-        
+
         .command-list {
             list-style: none;
             padding: 0;
         }
-        
+
         .command-list li {
             background: rgba(0, 255, 198, 0.1);
             margin: 8px 0;
@@ -154,7 +154,7 @@
             border-left: 3px solid #00FFC6;
             font-family: 'Fira Code', monospace;
         }
-        
+
         .launch-button {
             display: block;
             width: 300px;
@@ -170,13 +170,13 @@
             transition: all 0.3s ease;
             box-shadow: 0 5px 20px rgba(0, 255, 198, 0.4);
         }
-        
+
         .launch-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 30px rgba(0, 255, 198, 0.6);
             background: linear-gradient(45deg, #0A75FF, #A020F0);
         }
-        
+
         .tech-specs {
             background: rgba(160, 32, 240, 0.1);
             border: 2px solid #A020F040;
@@ -184,25 +184,25 @@
             padding: 25px;
             margin-top: 30px;
         }
-        
+
         .tech-specs h3 {
             color: #A020F0;
             margin-bottom: 15px;
         }
-        
+
         .tech-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
         }
-        
+
         .tech-item {
             background: rgba(160, 32, 240, 0.1);
             padding: 10px;
             border-radius: 8px;
             border-left: 3px solid #A020F0;
         }
-        
+
         .warning {
             background: rgba(255, 51, 51, 0.1);
             border: 2px solid #FF333340;
@@ -211,7 +211,7 @@
             margin: 20px 0;
             color: #FF6B6B;
         }
-        
+
         .success {
             background: rgba(0, 255, 198, 0.1);
             border: 2px solid #00FFC640;
@@ -224,14 +224,14 @@
 </head>
 <body>
     <div class="cyber-bg"></div>
-    
+
     <div class="container">
         <div class="header">
             <h1>🤖 CYBERFACE AI</h1>
             <div class="subtitle">Інтерактивний 3D Кібер-Асистент</div>
             <div class="status">✅ СИСТЕМА АКТИВНА</div>
         </div>
-        
+
         <div class="demo-grid">
             <div class="demo-card">
                 <h3>🎯 Основні можливості</h3>
@@ -244,7 +244,7 @@
                     <li>✅ Команди навігації</li>
                 </ul>
             </div>
-            
+
             <div class="demo-card">
                 <h3>🎙️ Голосові команди</h3>
                 <p>Скажіть одну з цих фраз для навігації системою:</p>
@@ -256,7 +256,7 @@
                     <li>"Привіт" / "Вітаю"</li>
                 </ul>
             </div>
-            
+
             <div class="demo-card">
                 <h3>💬 Текстові команди</h3>
                 <p>Або напишіть у чаті:</p>
@@ -268,7 +268,7 @@
                     <li>привіт / вітаю</li>
                 </ul>
             </div>
-            
+
             <div class="demo-card">
                 <h3>🎨 Візуальні ефекти</h3>
                 <p>Насолоджуйтесь неймовірними 3D ефектами:</p>
@@ -281,15 +281,15 @@
                 </ul>
             </div>
         </div>
-        
+
         <a href="http://localhost:5090" class="launch-button" target="_blank">
             🚀 ЗАПУСТИТИ NEXUS CORE
         </a>
-        
+
         <div class="success">
             <strong>✅ Система готова!</strong> Фронтенд працює на порті 5090, бекенд на порті 8000.
         </div>
-        
+
         <div class="tech-specs">
             <h3>⚡ Технічні характеристики</h3>
             <div class="tech-grid">
@@ -313,12 +313,12 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="warning">
-            <strong>⚠️ Важливо:</strong> Для роботи голосового інтерфейсу потрібен HTTPS або localhost. 
+            <strong>⚠️ Важливо:</strong> Для роботи голосового інтерфейсу потрібен HTTPS або localhost.
             Переконайтеся, що браузер має дозвіл на використання мікрофона.
         </div>
-        
+
         <div class="demo-card" style="margin-top: 30px;">
             <h3>🎮 Інструкції для тестування</h3>
             <p><strong>Крок 1:</strong> Відкрийте Nexus Core за посиланням вище</p>
@@ -328,27 +328,27 @@
             <p><strong>Крок 5:</strong> Насолоджуйтесь 3D анімаціями та навігацією!</p>
         </div>
     </div>
-    
+
     <script>
         // Додаємо інтерактивності
         document.addEventListener('DOMContentLoaded', function() {
             const cards = document.querySelectorAll('.demo-card');
-            
+
             cards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-10px) rotateX(5deg)';
                 });
-                
+
                 card.addEventListener('mouseleave', function() {
                     this.style.transform = 'translateY(0) rotateX(0)';
                 });
             });
-            
+
             // Анімація появи карток
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(50px)';
-                
+
                 setTimeout(() => {
                     card.style.transition = 'all 0.6s ease';
                     card.style.opacity = '1';

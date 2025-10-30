@@ -565,24 +565,24 @@ body {
         gap: 20px;
         padding: 20px;
     }
-    
+
     .brand {
         font-size: 2rem;
     }
-    
+
     .tech-nav {
         bottom: 10px;
         padding: 8px 12px;
     }
-    
+
     .nav-link {
         padding: 6px 12px;
     }
-    
+
     .nav-icon {
         font-size: 1.2rem;
     }
-    
+
     .nav-text {
         font-size: 0.7rem;
     }
@@ -592,25 +592,25 @@ body {
     .hero-grid {
         padding: 15px;
     }
-    
+
     .brand {
         font-size: 1.5rem;
     }
-    
+
     .ai-face {
         padding: 12px;
     }
-    
+
     .chat-feed,
     .network-canvas {
         height: 250px;
     }
-    
+
     .tech-nav {
         flex-wrap: wrap;
         justify-content: center;
     }
-    
+
     .ai-hint {
         font-size: 0.75rem;
         bottom: 50px;
@@ -622,15 +622,15 @@ body {
         padding: 10px;
         gap: 15px;
     }
-    
+
     .chat-controls {
         flex-wrap: wrap;
     }
-    
+
     .chat-controls input {
         width: 100%;
     }
-    
+
     .chat-controls button {
         flex: 1;
     }

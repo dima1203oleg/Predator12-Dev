@@ -7,9 +7,9 @@ from __future__ import annotations
 import asyncio
 import uuid
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 
 import structlog
 from pydantic import BaseModel
@@ -37,29 +37,35 @@ class AgentTask(BaseModel):
     payload: dict[str, Any]
     priority: TaskPriority = TaskPriority.MEDIUM
     created_at: datetime
-    started_at: datetime | None = None
-    completed_at: datetime | None = None
+    started_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
     status: AgentStatus = AgentStatus.IDLE
-    result: dict[str, Any] | None = None
-    error: str | None = None
+    result: Optional[dict[str, Any]] = None
+    error: Optional[str] = None
 
 
 class BaseAgent(ABC):
     """Базовий клас для всіх агентів системи"""
-    
-    def __init__(self, name: str, config: dict[str, Any] | None = None):
+
+    def __init__(self, name: str, config: Optional[dict[str, Any]] = None):
         self.name = name
         self.config = config or {}
         self.status = AgentStatus.IDLE
         self.tasks: dict[str, AgentTask] = {}
+        # store background asyncio.Task handles to avoid premature GC
+        self._background_tasks: dict[str, asyncio.Task] = {}
         self.logger = logger.bind(agent=name)
-        
+
     def generate_task_id(self) -> str:
         """Генерує унікальний ID завдання"""
         return str(uuid.uuid4())
-        
-    async def submit_task(self, task_type: str, payload: dict[str, Any], 
-                         priority: TaskPriority = TaskPriority.MEDIUM) -> str:
+
+    async def submit_task(
+        self,
+        task_type: str,
+        payload: dict[str, Any],
+        priority: TaskPriority = TaskPriority.MEDIUM,
+    ) -> str:
         """Підтверджує завдання для виконання"""
         task_id = self.generate_task_id()
         task = AgentTask(
@@ -67,50 +73,51 @@ class BaseAgent(ABC):
             type=task_type,
             payload=payload,
             priority=priority,
-            created_at=datetime.utcnow()
+            created_at=datetime.now(timezone.utc),
         )
-        
+
         self.tasks[task_id] = task
         self.logger.info("Task submitted", task_id=task_id, task_type=task_type)
-        
-        # Запускаємо завдання асинхронно
-        asyncio.create_task(self._execute_task(task_id))
+
+        # Запускаємо завдання асинхронно і зберігаємо handle, щоб уникнути GC
+        _handle = asyncio.create_task(self._execute_task(task_id))
+        self._background_tasks[task_id] = _handle
         return task_id
-        
+
     async def _execute_task(self, task_id: str):
         """Виконує завдання"""
         if task_id not in self.tasks:
             self.logger.error("Task not found", task_id=task_id)
             return
-            
+
         task = self.tasks[task_id]
         task.status = AgentStatus.RUNNING
-        task.started_at = datetime.utcnow()
+        task.started_at = datetime.now(timezone.utc)
         self.status = AgentStatus.RUNNING
-        
+
         try:
             self.logger.info("Executing task", task_id=task_id, task_type=task.type)
             result = await self.execute(task.type, task.payload)
-            
+
             task.result = result
             task.status = AgentStatus.COMPLETED
-            task.completed_at = datetime.utcnow()
+            task.completed_at = datetime.now(timezone.utc)
             self.status = AgentStatus.IDLE
-            
+
             self.logger.info("Task completed", task_id=task_id)
-            
+
         except Exception as e:
             self.logger.error("Task failed", task_id=task_id, error=str(e))
             task.error = str(e)
             task.status = AgentStatus.ERROR
-            task.completed_at = datetime.utcnow()
+            task.completed_at = datetime.now(timezone.utc)
             self.status = AgentStatus.ERROR
-    
-    def get_task_status(self, task_id: str) -> dict[str, Any] | None:
+
+    def get_task_status(self, task_id: str) -> Optional[dict[str, Any]]:
         """Повертає статус завдання"""
         if task_id not in self.tasks:
             return None
-            
+
         task = self.tasks[task_id]
         return {
             "id": task.id,
@@ -118,35 +125,37 @@ class BaseAgent(ABC):
             "status": task.status.value,
             "created_at": task.created_at.isoformat(),
             "started_at": task.started_at.isoformat() if task.started_at else None,
-            "completed_at": task.completed_at.isoformat() if task.completed_at else None,
+            "completed_at": (task.completed_at.isoformat() if task.completed_at else None),
             "result": task.result,
-            "error": task.error
+            "error": task.error,
         }
-    
+
     def get_all_tasks(self) -> list[dict[str, Any]]:
         """Повертає всі завдання агента"""
         return [self.get_task_status(task_id) for task_id in self.tasks.keys()]
-    
+
     def get_capabilities(self) -> list[str]:
         """Повертає список можливостей агента"""
         return self.capabilities()
-    
+
     @abstractmethod
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
         """Виконує конкретне завдання (має бути реалізовано в дочірньому класі)"""
         ...
-    
+
     @abstractmethod
     def capabilities(self) -> list[str]:
         """Повертає список типів завдань, які може виконувати агент"""
         ...
-    
+
     def health_check(self) -> dict[str, Any]:
         """Перевіряє стан агента"""
         return {
             "name": self.name,
             "status": self.status.value,
-            "active_tasks": len([t for t in self.tasks.values() if t.status == AgentStatus.RUNNING]),
+            "active_tasks": len(
+                [t for t in self.tasks.values() if t.status == AgentStatus.RUNNING]
+            ),
             "total_tasks": len(self.tasks),
-            "capabilities": self.capabilities()
+            "capabilities": self.capabilities(),
         }

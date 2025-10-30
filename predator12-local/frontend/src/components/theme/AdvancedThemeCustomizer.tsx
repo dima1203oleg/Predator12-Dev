@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Box,
@@ -23,7 +22,8 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  GlobalStyles
 } from '@mui/material';
 import {
   Palette,
@@ -724,12 +724,12 @@ export const AdvancedThemeCustomizer: React.FC<AdvancedThemeCustomizerProps> = (
       </Dialog>
 
       {/* CSS Animation Styles */}
-      <style jsx global>{`
+      <GlobalStyles styles={`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-10px); }
         }
-      `}</style>
+      `} />
     </Box>
   );
 };

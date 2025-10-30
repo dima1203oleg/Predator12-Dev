@@ -313,7 +313,10 @@ async def check_compliance_endpoint(
                     "Train staff on security policies",
                 ]
                 if compliance_result["compliance_percentage"] < 100
-                else ["Maintain current compliance status", "Monitor for security updates"]
+                else [
+                    "Maintain current compliance status",
+                    "Monitor for security updates",
+                ]
             ),
             "checked_at": compliance_result["checked_at"],
         }
@@ -324,7 +327,9 @@ async def check_compliance_endpoint(
 
 
 @router.get("/dashboard")
-async def get_security_dashboard(security_manager: SecurityManager = Depends(get_security_manager)):
+async def get_security_dashboard(
+    security_manager: SecurityManager = Depends(get_security_manager),
+):
     """
     Get comprehensive security dashboard data.
 
@@ -431,7 +436,9 @@ async def get_security_tools_status(
 
 
 @router.get("/health")
-async def security_health_check(security_manager: SecurityManager = Depends(get_security_manager)):
+async def security_health_check(
+    security_manager: SecurityManager = Depends(get_security_manager),
+):
     """
     Health check for security service.
     """
@@ -468,4 +475,8 @@ async def security_health_check(security_manager: SecurityManager = Depends(get_
 
     except Exception as e:
         logger.error(f"Security health check failed: {e}")
-        return {"status": "unhealthy", "error": str(e), "timestamp": datetime.now().isoformat()}
+        return {
+            "status": "unhealthy",
+            "error": str(e),
+            "timestamp": datetime.now().isoformat(),
+        }

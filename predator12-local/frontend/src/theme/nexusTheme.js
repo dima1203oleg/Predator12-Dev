@@ -1,6 +1,9 @@
-import { createTheme } from '@mui/material/styles';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.nexusTheme = exports.nexusColors = void 0;
+const styles_1 = require("@mui/material/styles");
 // Nexus Core Color Palette
-export const nexusColors = {
+exports.nexusColors = {
     // Backgrounds
     void: '#000000',
     obsidian: '#0F121A',
@@ -23,40 +26,61 @@ export const nexusColors = {
     warning: '#FFB800',
     error: '#FF0033',
     info: '#0A75FF',
+    // Modern structure for theme usage
+    primary: {
+        main: '#00FFC6',
+        dark: '#00CC9F',
+        light: '#33FFD1',
+    },
+    secondary: {
+        main: '#0A75FF',
+        dark: '#0856CC',
+        light: '#3D8EFF',
+    },
+    accent: {
+        main: '#A020F0',
+        dark: '#7B1FA2',
+        light: '#D1A3FF',
+    },
+    text: {
+        primary: '#F0F8FF',
+        secondary: '#C5D1E6',
+        disabled: '#7A8B9A',
+    },
 };
-export const nexusTheme = createTheme({
+exports.nexusTheme = (0, styles_1.createTheme)({
     palette: {
         mode: 'dark',
         primary: {
-            main: nexusColors.emerald,
+            main: exports.nexusColors.emerald,
             dark: '#00CC9F',
             light: '#33FFD1',
         },
         secondary: {
-            main: nexusColors.sapphire,
+            main: exports.nexusColors.sapphire,
             dark: '#0856CC',
             light: '#3D8EFF',
         },
         background: {
-            default: nexusColors.void,
-            paper: nexusColors.obsidian,
+            default: exports.nexusColors.void,
+            paper: exports.nexusColors.obsidian,
         },
         text: {
-            primary: nexusColors.frost,
-            secondary: nexusColors.nebula,
-            disabled: nexusColors.shadow,
+            primary: exports.nexusColors.frost,
+            secondary: exports.nexusColors.nebula,
+            disabled: exports.nexusColors.shadow,
         },
         error: {
-            main: nexusColors.crimson,
+            main: exports.nexusColors.crimson,
         },
         warning: {
-            main: nexusColors.warning,
+            main: exports.nexusColors.warning,
         },
         info: {
-            main: nexusColors.sapphire,
+            main: exports.nexusColors.sapphire,
         },
         success: {
-            main: nexusColors.success,
+            main: exports.nexusColors.success,
         },
     },
     typography: {
@@ -72,21 +96,21 @@ export const nexusTheme = createTheme({
             fontFamily: 'Orbitron, sans-serif',
             fontWeight: 700,
             fontSize: '2.5rem',
-            textShadow: `0 0 10px ${nexusColors.emerald}`,
+            textShadow: `0 0 10px ${exports.nexusColors.emerald}`,
             letterSpacing: '0.1em',
         },
         h2: {
             fontFamily: 'Orbitron, sans-serif',
             fontWeight: 600,
             fontSize: '2rem',
-            textShadow: `0 0 8px ${nexusColors.sapphire}`,
+            textShadow: `0 0 8px ${exports.nexusColors.sapphire}`,
             letterSpacing: '0.08em',
         },
         h3: {
             fontFamily: 'Orbitron, sans-serif',
             fontWeight: 500,
             fontSize: '1.5rem',
-            textShadow: `0 0 6px ${nexusColors.amethyst}`,
+            textShadow: `0 0 6px ${exports.nexusColors.amethyst}`,
             letterSpacing: '0.06em',
         },
         body1: {
@@ -111,12 +135,12 @@ export const nexusTheme = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: '8px',
-                    border: `1px solid ${nexusColors.emerald}`,
-                    background: `linear-gradient(45deg, ${nexusColors.quantum}, transparent)`,
+                    border: `1px solid ${exports.nexusColors.emerald}`,
+                    background: `linear-gradient(45deg, ${exports.nexusColors.quantum}, transparent)`,
                     backdropFilter: 'blur(10px)',
                     transition: 'all 0.3s ease',
                     '&:hover': {
-                        boxShadow: `0 0 20px ${nexusColors.emerald}`,
+                        boxShadow: `0 0 20px ${exports.nexusColors.emerald}`,
                         transform: 'translateY(-2px)',
                     },
                 },
@@ -125,9 +149,9 @@ export const nexusTheme = createTheme({
         MuiPaper: {
             styleOverrides: {
                 root: {
-                    background: `linear-gradient(135deg, ${nexusColors.obsidian}CC, ${nexusColors.darkMatter}99)`,
+                    background: `linear-gradient(135deg, ${exports.nexusColors.obsidian}CC, ${exports.nexusColors.darkMatter}99)`,
                     backdropFilter: 'blur(15px)',
-                    border: `1px solid ${nexusColors.quantum}`,
+                    border: `1px solid ${exports.nexusColors.quantum}`,
                     borderRadius: '12px',
                 },
             },
@@ -135,15 +159,15 @@ export const nexusTheme = createTheme({
         MuiCard: {
             styleOverrides: {
                 root: {
-                    background: `linear-gradient(135deg, ${nexusColors.obsidian}E6, ${nexusColors.darkMatter}B3)`,
+                    background: `linear-gradient(135deg, ${exports.nexusColors.obsidian}E6, ${exports.nexusColors.darkMatter}B3)`,
                     backdropFilter: 'blur(20px)',
-                    border: `1px solid ${nexusColors.hologram}`,
+                    border: `1px solid ${exports.nexusColors.hologram}`,
                     borderRadius: '16px',
-                    boxShadow: `0 8px 32px ${nexusColors.quantum}`,
+                    boxShadow: `0 8px 32px ${exports.nexusColors.quantum}`,
                     transition: 'all 0.3s ease',
                     '&:hover': {
                         transform: 'translateY(-4px)',
-                        boxShadow: `0 12px 48px ${nexusColors.energy}`,
+                        boxShadow: `0 12px 48px ${exports.nexusColors.energy}`,
                     },
                 },
             },
@@ -152,18 +176,18 @@ export const nexusTheme = createTheme({
             styleOverrides: {
                 root: {
                     '& .MuiOutlinedInput-root': {
-                        background: `${nexusColors.darkMatter}80`,
+                        background: `${exports.nexusColors.darkMatter}80`,
                         backdropFilter: 'blur(10px)',
                         '& fieldset': {
-                            borderColor: nexusColors.quantum,
+                            borderColor: exports.nexusColors.quantum,
                         },
                         '&:hover fieldset': {
-                            borderColor: nexusColors.emerald,
-                            boxShadow: `0 0 10px ${nexusColors.emerald}30`,
+                            borderColor: exports.nexusColors.emerald,
+                            boxShadow: `0 0 10px ${exports.nexusColors.emerald}30`,
                         },
                         '&.Mui-focused fieldset': {
-                            borderColor: nexusColors.emerald,
-                            boxShadow: `0 0 15px ${nexusColors.emerald}50`,
+                            borderColor: exports.nexusColors.emerald,
+                            boxShadow: `0 0 15px ${exports.nexusColors.emerald}50`,
                         },
                     },
                 },

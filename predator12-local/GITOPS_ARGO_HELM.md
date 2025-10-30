@@ -62,7 +62,7 @@ predator12-local/
   - Python interpreter: `.venv/bin/python`
   - `python.analysis.extraPaths` для Pylance
   - Formatters: Black, Prettier
-  
+
 - **`.vscode/launch.json`**:
   - 🐍 Python: FastAPI Backend Debug (`type: debugpy`)
   - 🌐 Node: Frontend Debug (`type: node`)
@@ -142,7 +142,7 @@ resources:
 celery:
   enabled: true
   workers: 2
-  
+
 env:
   DATABASE_URL: postgresql://user:pass@postgres:5432/predator
   REDIS_URL: redis://redis:6379/0
@@ -480,10 +480,10 @@ policy.csv: |
   p, role:developer, applications, get, */*, allow
   p, role:developer, applications, sync, dev/*, allow
   p, role:developer, applications, sync, staging/*, allow
-  
+
   # DevOps: full access
   p, role:devops, applications, *, */*, allow
-  
+
   # Bind roles to groups
   g, developers-team, role:developer
   g, devops-team, role:devops
@@ -639,7 +639,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  
+
   source:
     repoURL: https://github.com/your-org/predator12.git
     targetRevision: HEAD
@@ -653,11 +653,11 @@ spec:
         - name: replicaCount
           value: "1"
       releaseName: predator-backend
-  
+
   destination:
     server: https://kubernetes.default.svc
     namespace: dev
-  
+
   syncPolicy:
     automated:
       prune: true
@@ -672,9 +672,9 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
-  
+
   revisionHistoryLimit: 10
-  
+
   ignoreDifferences:
     - group: apps
       kind: Deployment
@@ -706,7 +706,7 @@ spec:
               limits:
                 cpu: "500m"
                 memory: "1Gi"
-          
+
           - env: staging
             namespace: staging
             replicas: "2"
@@ -719,7 +719,7 @@ spec:
               limits:
                 cpu: "1000m"
                 memory: "2Gi"
-          
+
           - env: prod
             namespace: prod
             replicas: "5"
@@ -732,7 +732,7 @@ spec:
               limits:
                 cpu: "2000m"
                 memory: "4Gi"
-  
+
   template:
     metadata:
       name: 'predator-backend-{{env}}'
@@ -741,10 +741,10 @@ spec:
         managed-by: argocd
       annotations:
         notifications.argoproj.io/subscribe.on-sync-failed.slack: predator-alerts
-    
+
     spec:
       project: default
-      
+
       source:
         repoURL: https://github.com/your-org/predator12.git
         targetRevision: '{{branch}}'
@@ -763,11 +763,11 @@ spec:
               value: '{{resources.limits.cpu}}'
             - name: resources.limits.memory
               value: '{{resources.limits.memory}}'
-      
+
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{namespace}}'
-      
+
       syncPolicy:
         automated:
           prune: '{{autoSync}}'
@@ -775,7 +775,7 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - ApplyOutOfSyncOnly=true
-      
+
       revisionHistoryLimit: 10
 ```
 
@@ -789,7 +789,7 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  
+
   source:
     repoURL: https://github.com/your-org/predator12.git
     targetRevision: HEAD
@@ -797,11 +797,11 @@ spec:
     helm:
       valueFiles:
         - ../../overlays/dev/frontend-values.yaml
-  
+
   destination:
     server: https://kubernetes.default.svc
     namespace: dev
-  
+
   syncPolicy:
     automated:
       prune: true
@@ -1092,7 +1092,7 @@ FastAPIInstrumentor.instrument_app(app)
 6. **Безпека** з RBAC, secrets management
 7. **Масштабованість** з HPA, resource limits
 
-**Статус:** 
+**Статус:**
 - ✅ Локальний dev environment готовий
 - 🔄 GitOps infrastructure потрібно налаштувати
 - 📝 Документація повна

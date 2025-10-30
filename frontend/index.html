@@ -4,36 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Predator12 - AI Система Обробки Даних</title>
-    
+
     <!-- Мета дані -->
     <meta name="description" content="Predator12 - детермінована платформа обробки даних з AI інтерфейсом">
     <meta name="keywords" content="AI, аналіз даних, машинне навчання, візуалізація">
     <meta name="author" content="Predator12 Team">
-    
+
     <!-- Іконки -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    
+
     <!-- Стилі -->
     <link rel="stylesheet" href="css/predator-ui.css">
     <link rel="stylesheet" href="css/ai-face.css">
     <link rel="stylesheet" href="css/chat-interface.css">
     <link rel="stylesheet" href="css/network-graph.css">
-    
+
     <!-- Зовнішні бібліотеки -->
     <!-- Three.js для 3D обличчя -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
+
     <!-- D3.js для візуалізації мережі -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    
+
     <!-- Web Speech API fallback -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
 </head>
 <body>
     <!-- Головний контейнер -->
     <div id="app" class="predator-app">
-        
+
         <!-- Заголовок -->
         <header class="app-header">
             <div class="header-content">
@@ -42,33 +42,33 @@
                     <h1>Predator12</h1>
                     <span class="tagline">AI Система Обробки Даних</span>
                 </div>
-                
+
                 <div class="header-controls">
                     <div class="status-indicator" id="system-status">
                         <span class="status-dot"></span>
                         <span class="status-text">Ініціалізація...</span>
                     </div>
-                    
+
                     <button class="help-btn" onclick="window.Predator12?.showHelp()" title="Довідка (F1)">
                         ❓
                     </button>
                 </div>
             </div>
         </header>
-        
+
         <!-- Основний контент -->
         <main class="app-main">
-            
+
             <!-- Лівий блок: AI Обличчя та Чат -->
             <div class="left-panel">
-                
+
                 <!-- AI Обличчя -->
                 <section class="ai-face-section">
                     <div class="section-header">
                         <h2>🎭 AI Помічник</h2>
                         <div class="emotion-indicator" id="emotion-display">😐</div>
                     </div>
-                    
+
                     <div id="ai-face-container" class="ai-face-container">
                         <!-- AI Face компонент буде тут -->
                         <div class="ai-face-fallback">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </section>
-                
+
                 <!-- Чат Інтерфейс -->
                 <section class="chat-section">
                     <div class="section-header">
@@ -89,7 +89,7 @@
                             <button class="clear-chat" id="clear-chat" title="Очистити чат">🗑️</button>
                         </div>
                     </div>
-                    
+
                     <div id="chat-container" class="chat-container">
                         <!-- Chat Interface компонент буде тут -->
                         <div class="chat-fallback">
@@ -101,18 +101,18 @@
                         </div>
                     </div>
                 </section>
-                
+
             </div>
-            
+
             <!-- Правий блок: Мережа та Аналіз -->
             <div class="right-panel">
-                
+
                 <!-- Завантаження Файлу -->
                 <section class="upload-section">
                     <div class="section-header">
                         <h2>📁 Завантаження Даних</h2>
                     </div>
-                    
+
                     <div class="upload-area" id="upload-area">
                         <div class="upload-content">
                             <div class="upload-icon">📤</div>
@@ -122,13 +122,13 @@
                             </div>
                             <input type="file" id="file-input" accept=".json,.csv,.txt,.xml" style="display: none;">
                         </div>
-                        
+
                         <div class="supported-formats">
                             <small>Підтримувані формати: JSON, CSV, TXT, XML</small>
                         </div>
                     </div>
                 </section>
-                
+
                 <!-- Візуалізація Мережі -->
                 <section class="network-section">
                     <div class="section-header">
@@ -139,7 +139,7 @@
                             <button class="reset-view" id="reset-view" title="Скинути вид">🎯</button>
                         </div>
                     </div>
-                    
+
                     <div id="network-container" class="network-container">
                         <!-- Network Graph компонент буде тут -->
                         <div class="network-fallback">
@@ -150,14 +150,14 @@
                         </div>
                     </div>
                 </section>
-                
+
                 <!-- Результати Аналізу -->
                 <section class="results-section">
                     <div class="section-header">
                         <h2>📊 Результати</h2>
                         <button class="export-btn" id="export-results" title="Експорт результатів">💾</button>
                     </div>
-                    
+
                     <div id="results-container" class="results-container">
                         <div class="results-placeholder">
                             <div class="placeholder-icon">📈</div>
@@ -165,11 +165,11 @@
                         </div>
                     </div>
                 </section>
-                
+
             </div>
-            
+
         </main>
-        
+
         <!-- Футер -->
         <footer class="app-footer">
             <div class="footer-content">
@@ -180,7 +180,7 @@
                     <span>•</span>
                     <span>Гарантія ідентичності результатів</span>
                 </div>
-                
+
                 <div class="footer-stats" id="footer-stats">
                     <span>Оброблено запитів: <span id="requests-count">0</span></span>
                     <span>•</span>
@@ -188,11 +188,11 @@
                 </div>
             </div>
         </footer>
-        
+
     </div>
-    
+
     <!-- Модальні вікна -->
-    
+
     <!-- Модальне вікно помилки -->
     <div id="error-modal" class="modal">
         <div class="modal-content">
@@ -205,7 +205,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Модальне вікно завантаження -->
     <div id="loading-modal" class="modal">
         <div class="modal-content loading-content">
@@ -213,17 +213,17 @@
             <div class="loading-text" id="loading-text">Завантаження...</div>
         </div>
     </div>
-    
+
     <!-- JavaScript модулі -->
-    
+
     <!-- Основні компоненти -->
     <script src="js/ai-face.js"></script>
     <script src="js/chat-interface.js"></script>
     <script src="js/network-graph.js"></script>
-    
+
     <!-- Головний модуль -->
     <script src="js/main.js"></script>
-    
+
     <!-- Додаткові обробники -->
     <script>
         // Обробник завантаження файлів
@@ -231,37 +231,37 @@
             const uploadArea = document.getElementById('upload-area');
             const fileInput = document.getElementById('file-input');
             const uploadBtn = document.getElementById('upload-btn');
-            
+
             // Клік на кнопку вибору файлу
             uploadBtn.addEventListener('click', () => fileInput.click());
-            
+
             // Drag & Drop
             uploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 uploadArea.classList.add('drag-over');
             });
-            
+
             uploadArea.addEventListener('dragleave', () => {
                 uploadArea.classList.remove('drag-over');
             });
-            
+
             uploadArea.addEventListener('drop', (e) => {
                 e.preventDefault();
                 uploadArea.classList.remove('drag-over');
-                
+
                 const files = e.dataTransfer.files;
                 if (files.length > 0) {
                     handleFileUpload(files[0]);
                 }
             });
-            
+
             // Вибір файлу через input
             fileInput.addEventListener('change', (e) => {
                 if (e.target.files.length > 0) {
                     handleFileUpload(e.target.files[0]);
                 }
             });
-            
+
             // Функція обробки завантаження файлу
             function handleFileUpload(file) {
                 if (window.Predator12) {
@@ -270,30 +270,30 @@
                     console.error('Predator12 не ініціалізовано');
                 }
             }
-            
+
             // Оновлення статистики в футері
             let requestCount = 0;
             let startTime = Date.now();
-            
+
             function updateStats() {
                 const uptime = Math.floor((Date.now() - startTime) / 1000);
                 const hours = Math.floor(uptime / 3600).toString().padStart(2, '0');
                 const minutes = Math.floor((uptime % 3600) / 60).toString().padStart(2, '0');
                 const seconds = (uptime % 60).toString().padStart(2, '0');
-                
+
                 document.getElementById('uptime').textContent = `${hours}:${minutes}:${seconds}`;
                 document.getElementById('requests-count').textContent = requestCount;
             }
-            
+
             // Оновлення кожну секунду
             setInterval(updateStats, 1000);
-            
+
             // Оновлення індикатора стану системи
             function updateSystemStatus() {
                 const statusElement = document.getElementById('system-status');
                 const statusDot = statusElement.querySelector('.status-dot');
                 const statusText = statusElement.querySelector('.status-text');
-                
+
                 if (window.Predator12) {
                     const status = window.Predator12.getSystemStatus();
                     if (status.initialized) {
@@ -308,7 +308,7 @@
                     statusText.textContent = 'Помилка';
                 }
             }
-            
+
             // Перевірка стану кожні 2 секунди
             setInterval(updateSystemStatus, 2000);
         });

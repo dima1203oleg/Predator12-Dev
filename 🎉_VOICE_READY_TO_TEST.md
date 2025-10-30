@@ -236,4 +236,3 @@ Result 0: {transcript: "Привіт", confidence: 0.9234, isFinal: true}
 **Швидкий тест:** `./🎤_TEST_VOICE_QUICK.sh`
 
 **Приємного тестування!** 🎊
-

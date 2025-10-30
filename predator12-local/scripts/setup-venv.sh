@@ -57,16 +57,16 @@ info "=== Крок 2: Перевірка існуючого venv ==="
 
 if [ -d "$VENV_DIR" ]; then
     warning "Знайдено існуючий venv"
-    
+
     # Перевірка версії Python у venv
     if [ -f "$VENV_DIR/bin/python" ]; then
         OLD_VERSION=$("$VENV_DIR/bin/python" --version 2>&1 || echo "unknown")
         info "Поточна версія у venv: $OLD_VERSION"
     fi
-    
+
     read -p "Видалити існуючий venv та створити новий? (y/N): " -n 1 -r
     echo ""
-    
+
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         BACKUP_DIR="$BACKEND_DIR/venv.backup.$(date +%Y%m%d_%H%M%S)"
         info "Створюю backup: $BACKUP_DIR"

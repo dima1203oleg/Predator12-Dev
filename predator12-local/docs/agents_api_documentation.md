@@ -24,7 +24,7 @@ Returns the health status of all agents in the system.
       "details": {...}
     },
     "model_router": {
-      "status": "healthy", 
+      "status": "healthy",
       "details": {...}
     },
     "ingest": {
@@ -48,7 +48,7 @@ Returns list of available analyses and their dependencies.
 ```json
 {
   "available_analyses": [
-    "ingest", "data_quality", "anomaly", 
+    "ingest", "data_quality", "anomaly",
     "synthetic", "security_privacy", "self_healing"
   ],
   "dependencies": {

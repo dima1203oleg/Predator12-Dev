@@ -5,7 +5,7 @@ RainGuard Hiking Jacket, price $110,
 MountainStyle
 
 Main Category: APPAREL
-Sub Category: MEN'S CLOTHING 
+Sub Category: MEN'S CLOTHING
 Product Type: JACKETS & VESTS
 
 ## Features

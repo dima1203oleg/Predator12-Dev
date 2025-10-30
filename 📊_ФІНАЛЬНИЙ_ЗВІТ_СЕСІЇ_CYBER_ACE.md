@@ -446,7 +446,7 @@ FPS:                   60 (desktop), 30-45 (mobile)
 
 ### Thank You!
 
-Дякую за можливість працювати над цим проектом! 
+Дякую за можливість працювати над цим проектом!
 
 **Let's make AI assistance intelligent, beautiful, and accessible!** 🚀
 

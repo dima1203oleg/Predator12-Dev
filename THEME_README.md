@@ -32,7 +32,7 @@ import { useNexusTheme } from '../contexts/ThemeContext';
 
 const MyComponent = () => {
   const { colors, currentTheme } = useNexusTheme();
-  
+
   return (
     <Box sx={{ background: colors.background.paper }}>
       <Typography sx={{ color: colors.text.primary }}>
@@ -83,10 +83,10 @@ setTheme('matrix'); // Switch to Matrix theme
 ```tsx
 const { colors } = useNexusTheme();
 
-<Button sx={{ 
+<Button sx={{
   background: colors.gradients.primary,
-  '&:hover': { 
-    boxShadow: `0 0 20px ${colors.primary.glow}` 
+  '&:hover': {
+    boxShadow: `0 0 20px ${colors.primary.glow}`
   }
 }}>
   Click Me

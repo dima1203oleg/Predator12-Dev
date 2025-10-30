@@ -76,7 +76,9 @@ def main() -> None:
 
     report["cluster"] = check_cluster_health()
 
-    desired_templates = sorted([p.stem for p in TEMPLATES_DIR.glob("*.json")]) if TEMPLATES_DIR.exists() else []
+    desired_templates = (
+        sorted([p.stem for p in TEMPLATES_DIR.glob("*.json")]) if TEMPLATES_DIR.exists() else []
+    )
     existing_templates = set(list_existing_templates())
     report["templates"]["desired"] = desired_templates
     report["templates"]["missing"] = [t for t in desired_templates if t not in existing_templates]

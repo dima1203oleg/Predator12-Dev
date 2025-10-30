@@ -50,16 +50,16 @@
 ```
 🎨 Glassmorphism Design
    └─ Frosted glass cards з blur(20px)
-   
+
 🌈 Gradient Backgrounds
    └─ Multi-color gradients на всіх елементах
-   
+
 ✨ Hover Animations
    └─ Lift, glow, and color transitions
-   
+
 💫 Pulse Effects
    └─ Live status indicators
-   
+
 🎭 Fade-in Animations
    └─ Staggered entrance effects
 ```

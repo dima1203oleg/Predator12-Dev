@@ -232,8 +232,8 @@ export const AdminModule: React.FC = () => {
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Редагувати">
-                        <IconButton 
-                          size="small" 
+                        <IconButton
+                          size="small"
                           sx={{ color: nexusColors.warning }}
                           onClick={() => {
                             setSelectedUser(user);
@@ -324,7 +324,7 @@ export const AdminModule: React.FC = () => {
                       {key.key}
                     </Typography>
                     <Typography variant="caption" sx={{ color: nexusColors.shadow }}>
-                      Permissions: {key.permissions.join(', ')} | 
+                      Permissions: {key.permissions.join(', ')} |
                       Created: {key.createdAt.toLocaleDateString()} |
                       {key.lastUsed && ` Last used: ${key.lastUsed.toLocaleString()}`}
                     </Typography>
@@ -414,7 +414,7 @@ export const AdminModule: React.FC = () => {
                       sx={{
                         backgroundColor: nexusColors.darkMatter,
                         '& .MuiLinearProgress-bar': {
-                          backgroundColor: service.cpu > 80 ? nexusColors.crimson : 
+                          backgroundColor: service.cpu > 80 ? nexusColors.crimson :
                                          service.cpu > 50 ? nexusColors.warning : nexusColors.emerald,
                         },
                       }}
@@ -436,7 +436,7 @@ export const AdminModule: React.FC = () => {
                       sx={{
                         backgroundColor: nexusColors.darkMatter,
                         '& .MuiLinearProgress-bar': {
-                          backgroundColor: service.memory > 80 ? nexusColors.crimson : 
+                          backgroundColor: service.memory > 80 ? nexusColors.crimson :
                                          service.memory > 50 ? nexusColors.warning : nexusColors.sapphire,
                         },
                       }}
@@ -501,7 +501,7 @@ export const AdminModule: React.FC = () => {
               <SecurityIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
               Налаштування Безпеки
             </Typography>
-            
+
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <FormControlLabel
                 control={<Switch defaultChecked />}
@@ -535,7 +535,7 @@ export const AdminModule: React.FC = () => {
               <PerformanceIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
               Налаштування Продуктивності
             </Typography>
-            
+
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <TextField
                 label="Максимальна кількість з'єднань"
@@ -577,10 +577,10 @@ export const AdminModule: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            mb: 3, 
+        <Typography
+          variant="h4"
+          sx={{
+            mb: 3,
             color: nexusColors.crimson,
             fontFamily: 'Orbitron',
             textShadow: `0 0 10px ${nexusColors.crimson}`
@@ -657,8 +657,8 @@ export const AdminModule: React.FC = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setUserDialogOpen(false)}>Скасувати</Button>
-            <Button 
-              variant="contained" 
+            <Button
+              variant="contained"
               sx={{ backgroundColor: nexusColors.emerald }}
               onClick={() => setUserDialogOpen(false)}
             >
@@ -683,9 +683,9 @@ export const AdminModule: React.FC = () => {
                 label="Дозволи"
                 select
                 fullWidth
-                SelectProps={{ 
+                SelectProps={{
                   native: true,
-                  multiple: true 
+                  multiple: true
                 }}
               >
                 <option value="read">Read</option>
@@ -702,8 +702,8 @@ export const AdminModule: React.FC = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setKeyDialogOpen(false)}>Скасувати</Button>
-            <Button 
-              variant="contained" 
+            <Button
+              variant="contained"
               sx={{ backgroundColor: nexusColors.sapphire }}
               onClick={() => setKeyDialogOpen(false)}
             >

@@ -13,11 +13,17 @@ security = HTTPBearer()
 
 # Rate limiter setup
 limiter = Limiter(
-    key_func=get_remote_address, storage_uri="redis://localhost:6379", strategy="fixed-window"
+    key_func=get_remote_address,
+    storage_uri="redis://localhost:6379",
+    strategy="fixed-window",
 )
 
 # Rate limits (requests per minute)
-RATE_LIMITS = {"default": "10/minute", "agent_status": "30/minute", "agent_command": "5/minute"}
+RATE_LIMITS = {
+    "default": "10/minute",
+    "agent_status": "30/minute",
+    "agent_command": "5/minute",
+}
 
 
 @router.get("/agents/{agent_id}/status")

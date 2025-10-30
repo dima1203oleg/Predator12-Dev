@@ -429,27 +429,27 @@
         padding: 0.75rem;
         gap: 0.5rem;
     }
-    
+
     .chat-message {
         max-width: 90%;
     }
-    
+
     .message-avatar {
         width: 28px;
         height: 28px;
         font-size: 0.9rem;
         margin: 0 0.25rem;
     }
-    
+
     .message-bubble {
         padding: 0.5rem 0.75rem;
         font-size: 0.9rem;
     }
-    
+
     .chat-input-area {
         padding: 0.75rem;
     }
-    
+
     .chat-send-btn,
     .chat-voice-btn,
     .chat-attach-btn {
@@ -457,7 +457,7 @@
         height: 36px;
         font-size: 1rem;
     }
-    
+
     .quick-reply {
         font-size: 0.75rem;
         padding: 0.4rem 0.6rem;
@@ -468,23 +468,23 @@
     .chat-messages {
         padding: 0.5rem;
     }
-    
+
     .message-avatar {
         width: 24px;
         height: 24px;
         font-size: 0.8rem;
     }
-    
+
     .message-bubble {
         padding: 0.5rem;
         font-size: 0.85rem;
     }
-    
+
     .chat-input {
         font-size: 0.85rem;
         padding: 0.6rem 0.8rem;
     }
-    
+
     .chat-send-btn,
     .chat-voice-btn,
     .chat-attach-btn {
@@ -492,7 +492,7 @@
         height: 32px;
         font-size: 0.9rem;
     }
-    
+
     .quick-replies {
         padding: 0.5rem;
     }
@@ -507,11 +507,11 @@
         opacity: 1;
         transform: none;
     }
-    
+
     .typing-dot {
         animation: none;
     }
-    
+
     .chat-voice-btn.recording {
         animation: none;
     }

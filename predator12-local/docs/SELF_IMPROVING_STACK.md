@@ -211,7 +211,7 @@ spec:
       prometheus:
         address: http://prometheus-server.prometheus:80
         query: |
-          histogram_quantile(0.95, 
+          histogram_quantile(0.95,
             sum(rate(http_server_requests_seconds_bucket{
               service="{{args.svc}}"
             }[1m])) by (le)
@@ -271,7 +271,7 @@ spec:
         summary: "High 5xx error rate (>5%)"
         description: "Backend error rate is {{ $value | humanizePercentage }}"
         runbook_url: "https://docs.predator12.io/runbooks/self-healing"
-    
+
     - alert: PredatorHighLatency
       expr: |
         histogram_quantile(0.95,
@@ -287,7 +287,7 @@ spec:
         summary: "High P95 latency (>500ms)"
         description: "P95 latency is {{ $value }}s"
         runbook_url: "https://docs.predator12.io/runbooks/latency"
-    
+
     - alert: PredatorAgentDown
       expr: |
         up{job="predator-agents"} == 0
@@ -415,7 +415,7 @@ class AutoscaleAgent:
         self.prom = PrometheusConnect(url=prometheus_url, disable_ssl=True)
         self.lookback = lookback_minutes
         self.predict_ahead = predict_minutes
-    
+
     async def fetch_historical_load(self, service: str) -> np.ndarray:
         """Fetch historical load from Prometheus."""
         query = f'''
@@ -423,20 +423,20 @@ class AutoscaleAgent:
         '''
         end_time = datetime.now()
         start_time = end_time - timedelta(minutes=self.lookback)
-        
+
         result = self.prom.custom_query_range(
             query=query,
             start_time=start_time,
             end_time=end_time,
             step='1m'
         )
-        
+
         if not result:
             return np.array([])
-        
+
         values = [float(r['value'][1]) for r in result[0]['values']]
         return np.array(values)
-    
+
     def simple_forecast(self, data: np.ndarray) -> float:
         """
         Simple exponential moving average forecast.
@@ -444,31 +444,31 @@ class AutoscaleAgent:
         """
         if len(data) < 2:
             return 0.0
-        
+
         # EMA with alpha=0.3
         alpha = 0.3
         ema = data[0]
         for value in data[1:]:
             ema = alpha * value + (1 - alpha) * ema
-        
+
         # Add 10% buffer for safety
         return ema * 1.1
-    
+
     async def fetch_celery_queue(self, queue: str = "default") -> int:
         """Fetch Celery queue length from Redis/metrics."""
         query = f'celery_queue_length{{queue="{queue}"}}'
         result = self.prom.custom_query(query=query)
-        
+
         if not result:
             return 0
-        
+
         return int(float(result[0]['value'][1]))
-    
+
     async def run(self):
         """Main loop."""
         logger.info("Starting autoscale agent...")
         start_http_server(9090)  # Expose metrics
-        
+
         while True:
             try:
                 # Predict backend load
@@ -477,14 +477,14 @@ class AutoscaleAgent:
                     predicted = self.simple_forecast(historical)
                     PREDICTED_LOAD.labels(service="backend").set(predicted)
                     logger.info(f"Predicted load: {predicted:.2f} req/s")
-                
+
                 # Fetch Celery queue
                 queue_len = await self.fetch_celery_queue()
                 CELERY_QUEUE_LENGTH.labels(queue="default").set(queue_len)
                 logger.info(f"Celery queue length: {queue_len}")
-                
+
                 await asyncio.sleep(30)  # Update every 30s
-                
+
             except Exception as e:
                 logger.error(f"Error in autoscale loop: {e}")
                 await asyncio.sleep(60)
@@ -514,30 +514,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
-      
+
       - name: Install dependencies
         run: |
           pip install -r predator12-local/backend/requirements-311-modern.txt
           pip install ruff pytest pytest-cov pytest-asyncio
-      
+
       - name: Ruff lint
         run: ruff check predator12-local/backend --output-format=github
-      
+
       - name: Run tests
         run: |
           cd predator12-local
           pytest backend/tests/ -v --cov=backend --cov-report=xml
-      
+
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:
@@ -547,35 +547,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      
+
       - name: Install tools
         run: |
           pip install pyyaml jsonschema
           curl -LO https://dl.k8s.io/release/v1.28.0/bin/linux/amd64/kubectl
           chmod +x kubectl && sudo mv kubectl /usr/local/bin/
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-      
+
       - name: Helm values sanity
         run: |
           python scripts/ci/values_sanity.py helm/values.yaml
-      
+
       - name: Helm lint
         run: |
           helm lint helm/predator-backend
-      
+
       - name: Kubeval validation
         run: |
           helm template predator-backend helm/predator-backend | \
           kubeval --strict --ignore-missing-schemas
-      
+
       - name: Log anomaly detection
         run: |
           python scripts/ci/logs_heuristics.py artifacts/build.log || true
-      
+
       - name: Security scan
         uses: aquasecurity/trivy-action@master
         with:
@@ -583,7 +583,7 @@ jobs:
           scan-ref: 'helm/'
           format: 'sarif'
           output: 'trivy-results.sarif'
-      
+
       - name: Upload Trivy results
         uses: github/codeql-action/upload-sarif@v2
         with:
@@ -596,15 +596,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      
+
       - name: Install AI reviewer
         run: |
           pip install openai anthropic
-      
+
       - name: AI code review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -651,7 +651,7 @@ class QueryOptimizer:
     def __init__(self, db_url: str):
         self.db_url = db_url
         self.pool: Optional[asyncpg.Pool] = None
-    
+
     async def connect(self):
         """Establish database connection."""
         self.pool = await asyncpg.create_pool(
@@ -662,7 +662,7 @@ class QueryOptimizer:
         # Enable pg_stat_statements
         async with self.pool.acquire() as conn:
             await conn.execute("CREATE EXTENSION IF NOT EXISTS pg_stat_statements")
-    
+
     async def fetch_slow_queries(
         self,
         min_calls: int = 10,
@@ -683,11 +683,11 @@ class QueryOptimizer:
         ORDER BY total_exec_time DESC
         LIMIT 20
         """
-        
+
         async with self.pool.acquire() as conn:
             rows = await conn.fetch(query, min_calls, min_time_ms)
             return [dict(row) for row in rows]
-    
+
     async def analyze_query(self, query: str) -> Dict:
         """Get EXPLAIN ANALYZE for query."""
         try:
@@ -697,7 +697,7 @@ class QueryOptimizer:
         except Exception as e:
             logger.error(f"Error analyzing query: {e}")
             return {"error": str(e)}
-    
+
     def suggest_indexes(self, query: str, plan: Dict) -> List[str]:
         """
         Suggest indexes based on query and execution plan.
@@ -705,7 +705,7 @@ class QueryOptimizer:
         """
         suggestions = []
         query_lower = query.lower()
-        
+
         # Look for sequential scans
         plan_text = str(plan)
         if "seq scan" in plan_text.lower():
@@ -719,7 +719,7 @@ class QueryOptimizer:
                     suggestions.append(
                         f"CREATE INDEX idx_{table}_{col} ON {table}({col});"
                     )
-        
+
         # Look for JOINs without indexes
         if " join " in query_lower:
             join_cols = re.findall(r'on\s+\w+\.(\w+)\s*=\s*\w+\.(\w+)', query_lower)
@@ -727,24 +727,24 @@ class QueryOptimizer:
                 suggestions.append(
                     f"-- Consider composite index for JOIN: ({col1}, {col2})"
                 )
-        
+
         return suggestions
-    
+
     async def generate_report(self) -> str:
         """Generate optimization report."""
         slow_queries = await self.fetch_slow_queries()
-        
+
         report = ["# Database Query Optimization Report\n"]
         report.append(f"Generated: {datetime.now().isoformat()}\n")
         report.append(f"Total slow queries: {len(slow_queries)}\n\n")
-        
+
         for i, q in enumerate(slow_queries[:10], 1):
             report.append(f"## Query {i}\n")
             report.append(f"```sql\n{q['query'][:500]}\n```\n")
             report.append(f"- Calls: {q['calls']}")
             report.append(f"- Mean time: {q['mean_exec_time']:.2f}ms")
             report.append(f"- Total time: {q['total_exec_time']:.2f}ms\n")
-            
+
             # Analyze and suggest
             plan = await self.analyze_query(q['query'])
             if 'error' not in plan:
@@ -754,15 +754,15 @@ class QueryOptimizer:
                     for sug in suggestions:
                         report.append(f"```sql\n{sug}\n```\n")
             report.append("\n---\n\n")
-        
+
         return "".join(report)
-    
+
     async def create_pr_comment(self, report: str):
         """Create GitHub PR comment with optimization suggestions."""
         # TODO: Integrate with GitHub API
         logger.info("Optimization report generated")
         logger.info(report)
-        
+
         # Save to file for manual review
         with open("optimization_report.md", "w") as f:
             f.write(report)
@@ -770,7 +770,7 @@ class QueryOptimizer:
 async def main():
     DB_URL = "postgresql://user:pass@localhost:5432/predator"
     optimizer = QueryOptimizer(DB_URL)
-    
+
     await optimizer.connect()
     report = await optimizer.generate_report()
     await optimizer.create_pr_comment(report)
@@ -896,15 +896,15 @@ async def restart_agent(agent_id: str):
     """Restart an agent."""
     if agent_id not in AGENTS:
         return {"error": "Agent not found"}, 404
-    
+
     AGENTS[agent_id]["status"] = AgentStatus.STARTING
     await manager.broadcast({"type": "agent_update", "agent_id": agent_id})
-    
+
     # Simulate restart
     await asyncio.sleep(2)
     AGENTS[agent_id]["status"] = AgentStatus.RUNNING
     await manager.broadcast({"type": "agent_update", "agent_id": agent_id})
-    
+
     return {"message": "Agent restarted"}
 
 @app.websocket("/ws")
@@ -1086,7 +1086,7 @@ DASHBOARD_HTML = """
             <h1>🤖 Predator12 Agent Dashboard</h1>
             <div class="subtitle">Real-time monitoring of 26+ AI agents</div>
         </header>
-        
+
         <div class="stats">
             <div class="stat-card">
                 <h3>Total Agents</h3>
@@ -1105,18 +1105,18 @@ DASHBOARD_HTML = """
                 <div class="value" id="cpu-usage">0%</div>
             </div>
         </div>
-        
+
         <div id="agents-container" class="agents-grid">
             <div class="loading">Loading agents...</div>
         </div>
     </div>
-    
+
     <script>
         let ws;
-        
+
         function connectWebSocket() {
             ws = new WebSocket('ws://localhost:8080/ws');
-            
+
             ws.onmessage = function(event) {
                 const data = JSON.parse(event.data);
                 if (data.type === 'heartbeat') {
@@ -1125,17 +1125,17 @@ DASHBOARD_HTML = """
                     loadAgents();
                 }
             };
-            
+
             ws.onerror = function(error) {
                 console.error('WebSocket error:', error);
             };
-            
+
             ws.onclose = function() {
                 console.log('WebSocket closed, reconnecting...');
                 setTimeout(connectWebSocket, 3000);
             };
         }
-        
+
         async function loadAgents() {
             try {
                 const response = await fetch('/api/agents');
@@ -1145,18 +1145,18 @@ DASHBOARD_HTML = """
                 console.error('Error loading agents:', error);
             }
         }
-        
+
         function renderAgents(agents) {
             const container = document.getElementById('agents-container');
             const agentsList = Object.entries(agents);
-            
+
             // Update stats
             document.getElementById('total-agents').textContent = agentsList.length;
-            document.getElementById('running-agents').textContent = 
+            document.getElementById('running-agents').textContent =
                 agentsList.filter(([_, a]) => a.status === 'running').length;
-            document.getElementById('error-agents').textContent = 
+            document.getElementById('error-agents').textContent =
                 agentsList.filter(([_, a]) => a.status === 'error').length;
-            
+
             // Render agent cards
             container.innerHTML = agentsList.map(([id, agent]) => `
                 <div class="agent-card">
@@ -1183,7 +1183,7 @@ DASHBOARD_HTML = """
                 </div>
             `).join('');
         }
-        
+
         async function restartAgent(agentId) {
             try {
                 const response = await fetch(`/api/agents/${agentId}/restart`, {
@@ -1195,11 +1195,11 @@ DASHBOARD_HTML = """
                 console.error('Error restarting agent:', error);
             }
         }
-        
+
         function viewLogs(agentId) {
             alert(`Viewing logs for ${agentId} (not implemented yet)`);
         }
-        
+
         // Initialize
         connectWebSocket();
         loadAgents();
@@ -1211,4 +1211,3 @@ DASHBOARD_HTML = """
 ```
 
 Продовжую створення файлів...
-

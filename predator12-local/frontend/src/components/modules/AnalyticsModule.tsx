@@ -62,10 +62,10 @@ const AnalyticsModule: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography 
-        variant="h4" 
-        sx={{ 
-          mb: 3, 
+      <Typography
+        variant="h4"
+        sx={{
+          mb: 3,
           color: nexusColors.frost,
           textAlign: 'center',
           background: `linear-gradient(45deg, ${nexusColors.sapphire}, ${nexusColors.emerald})`,
@@ -75,23 +75,23 @@ const AnalyticsModule: React.FC = () => {
       >
         🔍 Аналітична Палуба OpenSearch
       </Typography>
-      
+
       {/* Статус з'єднання */}
-      <Alert 
-        severity={isConnected ? "success" : "error"} 
-        sx={{ 
+      <Alert
+        severity={isConnected ? "success" : "error"}
+        sx={{
           mb: 3,
           background: isConnected ? `${nexusColors.success}20` : `${nexusColors.error}20`,
           border: `1px solid ${isConnected ? nexusColors.success : nexusColors.error}40`,
           color: nexusColors.frost
         }}
       >
-        {isConnected ? 
-          `✅ З'єднання з OpenSearch активне (${dashboardUrl})` : 
+        {isConnected ?
+          `✅ З'єднання з OpenSearch активне (${dashboardUrl})` :
           `❌ Немає з'єднання з OpenSearch`
         }
       </Alert>
-      
+
       <Grid container spacing={3}>
         {/* Швидкий доступ */}
         <Grid item xs={12} md={6}>
@@ -107,11 +107,11 @@ const AnalyticsModule: React.FC = () => {
             <Typography variant="h5" sx={{ color: nexusColors.frost, mb: 2 }}>
               🚀 Швидкий доступ
             </Typography>
-            
+
             <Typography variant="body1" sx={{ color: nexusColors.nebula, mb: 3 }}>
               Відкрити повнофункціональну OpenSearch Dashboard для глибокого аналізу даних
             </Typography>
-            
+
             <Button
               variant="contained"
               size="large"
@@ -129,13 +129,13 @@ const AnalyticsModule: React.FC = () => {
             >
               Відкрити OpenSearch Dashboard
             </Button>
-            
+
             <Typography variant="caption" sx={{ color: nexusColors.shadow, display: 'block', mt: 2 }}>
               {dashboardUrl}
             </Typography>
           </Card>
         </Grid>
-        
+
         {/* Швидкі пошуки */}
         <Grid item xs={12} md={6}>
           <Card
@@ -149,7 +149,7 @@ const AnalyticsModule: React.FC = () => {
             <Typography variant="h6" sx={{ color: nexusColors.frost, mb: 2 }}>
               ⚡ Швидкі пошуки
             </Typography>
-            
+
             {searches.map((search) => (
               <Box key={search.id} sx={{ mb: 2, p: 1.5, background: `${nexusColors.obsidian}80`, borderRadius: 1 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
@@ -174,7 +174,7 @@ const AnalyticsModule: React.FC = () => {
                 </Typography>
               </Box>
             ))}
-            
+
             <Button
               variant="outlined"
               fullWidth
@@ -193,7 +193,7 @@ const AnalyticsModule: React.FC = () => {
             </Button>
           </Card>
         </Grid>
-        
+
         {/* Індекси */}
         <Grid item xs={12}>
           <Card
@@ -207,7 +207,7 @@ const AnalyticsModule: React.FC = () => {
             <Typography variant="h6" sx={{ color: nexusColors.frost, mb: 2 }}>
               📚 Стан індексів
             </Typography>
-            
+
             <Grid container spacing={2}>
               {indices.map((index) => (
                 <Grid item xs={12} sm={6} md={3} key={index.name}>
@@ -232,14 +232,14 @@ const AnalyticsModule: React.FC = () => {
                         {index.name}
                       </Typography>
                     </Box>
-                    
+
                     <Typography variant="caption" sx={{ color: nexusColors.nebula, display: 'block' }}>
                       📄 Документів: {index.docs.toLocaleString()}
                     </Typography>
                     <Typography variant="caption" sx={{ color: nexusColors.nebula, display: 'block' }}>
                       💾 Розмір: {index.size}
                     </Typography>
-                    
+
                     <Chip
                       size="small"
                       label={index.status}
@@ -256,7 +256,7 @@ const AnalyticsModule: React.FC = () => {
             </Grid>
           </Card>
         </Grid>
-        
+
         {/* Додаткові дії */}
         <Grid item xs={12}>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -274,7 +274,7 @@ const AnalyticsModule: React.FC = () => {
             >
               Створити візуалізацію
             </Button>
-            
+
             <Button
               variant="outlined"
               startIcon={<FilterList />}
@@ -289,7 +289,7 @@ const AnalyticsModule: React.FC = () => {
             >
               Налаштувати фільтри
             </Button>
-            
+
             <Button
               variant="outlined"
               startIcon={<Refresh />}

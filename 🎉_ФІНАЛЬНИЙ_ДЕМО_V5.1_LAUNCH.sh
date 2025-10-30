@@ -62,7 +62,7 @@ else
     npm run dev > ../demo_server.log 2>&1 &
     SERVER_PID=$!
     echo $SERVER_PID > ../demo_server.pid
-    
+
     # Чекаємо запуску сервера
     for i in {1..15}; do
         if nc -z localhost 5094 2>/dev/null; then

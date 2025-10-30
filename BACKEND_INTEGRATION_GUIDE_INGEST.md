@@ -422,21 +422,21 @@ async def process_file_task(self, task_id: str, file_path: str):
     try:
         # Update status
         await update_task_status(task_id, "processing")
-        
+
         # Process file
         result = await process_file(file_path)
-        
+
         # Store results
         await store_file_results(task_id, result)
-        
+
         # Update status
         await update_task_status(task_id, "success")
-        
+
         # Broadcast
         await broadcast_task_update(task_id, "task.completed", {
             "status": "success"
         })
-        
+
     except Exception as e:
         await update_task_status(task_id, "error", error=str(e))
         await broadcast_task_update(task_id, "task.failed", {
@@ -507,23 +507,23 @@ from fastapi.testclient import TestClient
 
 def test_upload_file():
     client = TestClient(app)
-    
+
     files = {"file": ("test.csv", b"col1,col2\n1,2", "text/csv")}
     response = client.post("/api/ingest/upload", files=files)
-    
+
     assert response.status_code == 200
     assert "id" in response.json()
 
 def test_crawl_link():
     client = TestClient(app)
-    
+
     data = {
         "url": "https://example.com",
         "type": "url",
         "depth": 1
     }
     response = client.post("/api/ingest/crawl", json=data)
-    
+
     assert response.status_code == 200
 ```
 
@@ -538,9 +538,9 @@ from services.file_processor import CSVProcessor
 async def test_csv_processor():
     content = b"col1,col2\n1,2\n3,4"
     processor = CSVProcessor(content, "test.csv")
-    
+
     result = await processor.process()
-    
+
     assert result["success"] is True
     assert result["metadata"]["rows"] == 2
     assert result["metadata"]["columns"] == 2
@@ -570,13 +570,13 @@ logger = logging.getLogger("ingest")
 @router.post("/upload")
 async def upload_file(file: UploadFile):
     logger.info(f"File upload started: {file.filename}")
-    
+
     try:
         # Process
         logger.debug(f"Processing {file.filename}")
-        
+
         logger.info(f"File upload completed: {file.filename}")
-        
+
     except Exception as e:
         logger.error(f"File upload failed: {file.filename}", exc_info=True)
 ```

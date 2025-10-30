@@ -68,11 +68,11 @@ read -p "🚀 Запустити браузер для тестування? (y/
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     print_status "Запускаю браузер..."
-    
+
     # Перевірка чи працює сервер
     if curl -s http://localhost:5094 > /dev/null 2>&1; then
         print_status "Сервер доступний на http://localhost:5094"
-        
+
         # Відкриваємо прямо голосовий інтерфейс
         if command -v open > /dev/null; then
             open "http://localhost:5094#voice-interface"  # macOS
@@ -83,7 +83,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         else
             echo "🌐 Відкрийте браузер: http://localhost:5094#voice-interface"
         fi
-        
+
         echo ""
         print_status "Голосовий інтерфейс запущено!"
         echo ""
@@ -97,7 +97,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo "6️⃣  Перевірте якість озвучування"
         echo ""
         print_warning "Якщо голос не чути, натисніть кнопку 'Тест голосу'"
-        
+
     else
         print_warning "Сервер не доступний. Запустіть dev server:"
         echo "cd predator12-local/frontend && npm run dev -- --port 5094"

@@ -79,7 +79,7 @@ import { useCyberAceStore } from './modules/cyber-ace/state/cyberAceStore';
 
 function MyComponent() {
   const { agents, currentAgent, setCurrentAgent } = useCyberAceStore();
-  
+
   return (
     <div>
       {agents.map(agent => (
@@ -112,11 +112,11 @@ addTask({
 ### Робота з Агентами
 
 ```tsx
-const { 
-  agents, 
-  getAgentById, 
+const {
+  agents,
+  getAgentById,
   updateAgent,
-  delegateTask 
+  delegateTask
 } = useCyberAceStore();
 
 // Отримати агента
@@ -199,7 +199,7 @@ import { useTranslation } from 'react-i18next';
 
 function LanguageSwitcher() {
   const { i18n } = useTranslation();
-  
+
   return (
     <button onClick={() => i18n.changeLanguage('en-US')}>
       Switch to English

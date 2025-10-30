@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 /**
  * Custom hook for managing WebSocket connections with standardized status handling
- * 
+ *
  * @param {string} url - The WebSocket endpoint URL
  * @param {Object} options - Configuration options
  * @param {function} options.onMessage - Callback for handling incoming messages
@@ -62,7 +62,7 @@ const useWebSocket = (
       wsRef.current.onclose = (event) => {
         console.log(`WebSocket disconnected from ${url}:`, event.code, event.reason);
         setConnectionStatus('disconnected');
-        
+
         // Handle reconnection if enabled
         if (autoReconnect && reconnectAttempts < maxReconnectAttempts) {
           console.log(`Attempting to reconnect (${reconnectAttempts + 1}/${maxReconnectAttempts})...`);
@@ -94,7 +94,7 @@ const useWebSocket = (
       wsRef.current.close();
       wsRef.current = null;
     }
-    
+
     setConnectionStatus('disconnected');
   }, []);
 
@@ -133,4 +133,4 @@ const useWebSocket = (
   };
 };
 
-export default useWebSocket; 
+export default useWebSocket;
