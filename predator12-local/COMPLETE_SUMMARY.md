@@ -71,7 +71,7 @@
   - Observability stack
   - Secrets management
   - CI/CD pipeline examples
-  
+
 - ✅ `GITOPS_QUICKSTART.md` - Швидкий старт за 10 хвилин
 
 #### Автоматизація (2 скрипти)

@@ -166,7 +166,7 @@ echo -e "\n3️⃣ Перевірка web-інтерфейсу..."
 curl -s -o /dev/null -w "Frontend: %{http_code}\n" http://localhost:3001
 curl -s -o /dev/null -w "Backend: %{http_code}\n" http://localhost:8000/health
 
-echo -e "\n🎯 СИСТЕМА ГОТОВА ДО ПРОДАКШН!" 
+echo -e "\n🎯 СИСТЕМА ГОТОВА ДО ПРОДАКШН!"
 ```
 
 **Очікуваний результат**: Всі тести пройдені, система operational! 🚀

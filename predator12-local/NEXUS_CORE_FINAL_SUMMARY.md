@@ -92,7 +92,7 @@
 ### Автоматично активні ефекти:
 ```typescript
 // У MinimalApp.tsx вже інтегровано:
-<NexusVisualEffects 
+<NexusVisualEffects
   showCosmicDust={true}
   showHolographicFrames={true}
   showScanLines={true}
@@ -102,7 +102,7 @@
 ### Налаштування:
 ```typescript
 // Можна вимкнути окремі ефекти:
-<NexusVisualEffects 
+<NexusVisualEffects
   showCosmicDust={false}        // Вимкнути частинки
   showHolographicFrames={true}  // Залишити рамки
   showScanLines={true}          // Залишити сканування

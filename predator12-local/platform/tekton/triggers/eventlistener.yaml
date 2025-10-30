@@ -1,0 +1,12 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: git-webhook-listener
+spec:
+  serviceAccountName: tekton-triggers-sa
+  triggers:
+    - name: github-push-trigger
+      binding:
+        ref: git-push-binding
+      template:
+        ref: git-push-template

@@ -4,6 +4,7 @@ conversation and send the latest messages to the model.
 """
 
 import os
+
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import AssistantMessage, SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential

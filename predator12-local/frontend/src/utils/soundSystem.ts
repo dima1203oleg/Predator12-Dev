@@ -38,7 +38,7 @@ class NexusSoundSystem {
 
     for (let channel = 0; channel < 2; channel++) {
       const data = buffer.getChannelData(channel);
-      
+
       for (let i = 0; i < data.length; i++) {
         const t = i / sampleRate;
         // Ambient drone with harmonics
@@ -46,7 +46,7 @@ class NexusSoundSystem {
         const harmonic1 = Math.sin(2 * Math.PI * 120 * t) * 0.3;
         const harmonic2 = Math.sin(2 * Math.PI * 180 * t) * 0.2;
         const noise = (Math.random() - 0.5) * 0.05;
-        
+
         data[i] = (fundamental + harmonic1 + harmonic2 + noise) * 0.1;
       }
     }
@@ -63,14 +63,14 @@ class NexusSoundSystem {
 
     for (let channel = 0; channel < 2; channel++) {
       const data = buffer.getChannelData(channel);
-      
+
       for (let i = 0; i < data.length; i++) {
         const t = i / sampleRate;
         // Sweep up with envelope
         const frequency = 200 + (t / duration) * 600;
         const envelope = Math.exp(-t * 5);
         const signal = Math.sin(2 * Math.PI * frequency * t) * envelope;
-        
+
         data[i] = signal * 0.3;
       }
     }
@@ -87,12 +87,12 @@ class NexusSoundSystem {
 
     for (let channel = 0; channel < 2; channel++) {
       const data = buffer.getChannelData(channel);
-      
+
       for (let i = 0; i < data.length; i++) {
         const t = i / sampleRate;
         const envelope = Math.exp(-t * 40);
         const signal = (Math.random() - 0.5) * envelope;
-        
+
         data[i] = signal * 0.2;
       }
     }
@@ -109,14 +109,14 @@ class NexusSoundSystem {
 
     for (let channel = 0; channel < 2; channel++) {
       const data = buffer.getChannelData(channel);
-      
+
       for (let i = 0; i < data.length; i++) {
         const t = i / sampleRate;
         // Pulsing alert
         const pulse = Math.sin(2 * Math.PI * 3 * t) > 0 ? 1 : 0;
         const tone = Math.sin(2 * Math.PI * 800 * t);
         const envelope = Math.exp(-t * 2);
-        
+
         data[i] = tone * pulse * envelope * 0.3;
       }
     }

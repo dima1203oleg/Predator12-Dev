@@ -281,4 +281,3 @@
 - **✅ Мікросегментація** мережевого трафіку
 - **✅ Ingress Controller** з NGINX та rate limiting
 - **✅ TLS everywhere** - шифрування всього трафіку
-

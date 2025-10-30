@@ -193,7 +193,7 @@ from app.routes_agents_real import get_agents_status as real_agents_status
 **Проблема:**
 ```python
 REGISTRY_PATH = os.path.join(
-    os.path.dirname(__file__), 
+    os.path.dirname(__file__),
     "../../agents/registry.yaml"
 )
 ```
@@ -203,7 +203,7 @@ REGISTRY_PATH = os.path.join(
 **Виправлення:**
 ```python
 REGISTRY_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 
+    os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
     "agents/registry.yaml"
 )
 ```

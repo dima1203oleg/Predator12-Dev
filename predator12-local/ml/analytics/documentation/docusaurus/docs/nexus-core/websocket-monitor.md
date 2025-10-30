@@ -93,4 +93,4 @@ The WebSocket Monitoring Dashboard is part of the comprehensive monitoring syste
 - Grafana dashboards for connection visualization
 - System logs for detailed troubleshooting
 
-For more information on the overall monitoring architecture, see the [Monitoring & Observability](/docs/monitoring/overview) documentation. 
+For more information on the overall monitoring architecture, see the [Monitoring & Observability](/docs/monitoring/overview) documentation.

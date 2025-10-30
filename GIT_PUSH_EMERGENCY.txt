@@ -174,4 +174,3 @@ Repository:  https://github.com/dima1203oleg/Predator12-Dev.git
 Дата: 6 жовтня 2025
 Статус: ⏳ ОЧІКУЄ PUSH
 Рішення: Shallow Clone (рекомендовано)
-

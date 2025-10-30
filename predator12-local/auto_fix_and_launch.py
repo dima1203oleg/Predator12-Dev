@@ -3,15 +3,17 @@
 🔧 АВТОМАТИЧНЕ ВИПРАВЛЕННЯ ТА ЗАПУСК СИСТЕМИ PREDATOR11
 Скрипт для автоматичного запуску всіх компонентів системи
 """
-import subprocess
-import time
-import requests
 import asyncio
 import logging
+import subprocess
+import time
 from pathlib import Path
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+import requests
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
+
 
 class SystemLauncher:
     def __init__(self):
@@ -20,7 +22,7 @@ class SystemLauncher:
     def check_docker(self):
         """Перевіряє статус Docker"""
         try:
-            result = subprocess.run(['docker', 'ps'], capture_output=True, text=True, timeout=5)
+            result = subprocess.run(["docker", "ps"], capture_output=True, text=True, timeout=5)
             return result.returncode == 0
         except:
             return False
@@ -29,7 +31,7 @@ class SystemLauncher:
         """Запускає Docker Desktop"""
         logger.info("🐳 Запускаю Docker Desktop...")
         try:
-            subprocess.run(['open', '-a', 'Docker'], check=False)
+            subprocess.run(["open", "-a", "Docker"], check=False)
             # Чекаємо поки Docker запуститься
             for i in range(30):
                 if self.check_docker():
@@ -56,9 +58,7 @@ class SystemLauncher:
 
         # Запускаємо новий процес
         try:
-            subprocess.Popen([
-                'python3', 'standalone_model_server.py'
-            ], cwd=self.base_path)
+            subprocess.Popen(["python3", "standalone_model_server.py"], cwd=self.base_path)
 
             # Чекаємо запуску
             for i in range(10):
@@ -79,9 +79,9 @@ class SystemLauncher:
         """Запускає Docker Compose"""
         logger.info("🐋 Запускаю Docker Compose...")
         try:
-            result = subprocess.run([
-                'docker-compose', 'up', '-d'
-            ], cwd=self.base_path, capture_output=True, text=True)
+            result = subprocess.run(
+                ["docker-compose", "up", "-d"], cwd=self.base_path, capture_output=True, text=True
+            )
 
             if result.returncode == 0:
                 logger.info("✅ Docker Compose запущений!")
@@ -100,7 +100,7 @@ class SystemLauncher:
         agents = [
             "agents/self-healing/self_healing_agent.py",
             "agents/self-improvement/self_improvement_agent.py",
-            "agents/self-diagnosis/self_diagnosis_agent.py"
+            "agents/self-diagnosis/self_diagnosis_agent.py",
         ]
 
         started_agents = 0
@@ -108,9 +108,7 @@ class SystemLauncher:
             try:
                 agent_path = self.base_path / agent
                 if agent_path.exists():
-                    subprocess.Popen([
-                        'python3', str(agent_path)
-                    ], cwd=self.base_path)
+                    subprocess.Popen(["python3", str(agent_path)], cwd=self.base_path)
                     logger.info(f"✅ Запущено: {agent}")
                     started_agents += 1
                     time.sleep(2)
@@ -188,9 +186,11 @@ class SystemLauncher:
 
         return True
 
+
 def main():
     launcher = SystemLauncher()
     launcher.launch_full_system()
+
 
 if __name__ == "__main__":
     main()

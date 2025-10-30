@@ -153,7 +153,7 @@ const AdvancedComponent = () => {
   // Register a message handler for a specific endpoint
   useEffect(() => {
     const unregister = registerMessageHandler('my-endpoint', handleMessage);
-    
+
     // Clean up when unmounting
     return () => unregister();
   }, []);
@@ -180,15 +180,15 @@ Components can connect to multiple WebSocket endpoints if needed:
 
 ```jsx
 // Connect to real-time data feed
-const { 
-  connectionStatus: dataStatus, 
-  lastMessage: dataMessage 
+const {
+  connectionStatus: dataStatus,
+  lastMessage: dataMessage
 } = useGlobalWebSocket('data-feed');
 
 // Connect to notification channel
-const { 
-  connectionStatus: notifyStatus, 
-  lastMessage: notification 
+const {
+  connectionStatus: notifyStatus,
+  lastMessage: notification
 } = useGlobalWebSocket('notifications');
 ```
 
@@ -201,7 +201,7 @@ const { connectionStatus, connect } = useGlobalWebSocket('sentiment-updates');
 
 return (
   <div>
-    <WebSocketStatus 
+    <WebSocketStatus
       wsEndpoint="/ws/sentiment-updates"
       connectionStatus={connectionStatus}
       onReconnect={connect}
@@ -217,4 +217,4 @@ return (
 2. **Use the Hook**: Prefer `useGlobalWebSocket` over direct context access for most use cases.
 3. **Cleanup**: The hooks handle cleanup automatically, but be cautious when manually registering message handlers.
 4. **Message Handling**: Keep message handling logic separate from connection management.
-5. **Connection Sharing**: Take advantage of connection sharing to optimize performance. 
+5. **Connection Sharing**: Take advantage of connection sharing to optimize performance.

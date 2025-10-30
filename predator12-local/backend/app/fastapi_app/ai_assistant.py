@@ -28,7 +28,9 @@ class AIAnalyticsAssistant:
                     embeddings=self.embeddings,
                 )
                 self.qa_chain = RetrievalQA.from_chain_type(
-                    llm=self.llm, chain_type="stuff", retriever=self.vectorstore.as_retriever()
+                    llm=self.llm,
+                    chain_type="stuff",
+                    retriever=self.vectorstore.as_retriever(),
                 )
             except Exception as e:
                 print(f"Не вдалося ініціалізувати повну AI систему, переходжу в mock режим: {e}")

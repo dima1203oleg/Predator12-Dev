@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Використання:
+#   cn-drum -p "Твій промпт"
+# або:
+#   cn-drum -- some extra args to pass as-is to cn
+
+# Порядок провайдерів (можете змінити на свій розсуд):
+ORDER=("groq" "mistral" "gemini" "hf" "fireworks")
+
+# Мапа провайдер -> конфіг
+declare -A CFG=(
+  ["groq"]="$HOME/.continue/config-groq.yaml"
+  ["mistral"]="$HOME/.continue/config-mistral.yaml"
+  ["gemini"]="$HOME/.continue/config-gemini.yaml"
+  ["hf"]="$HOME/.continue/config-hf.yaml"
+  ["fireworks"]="$HOME/.continue/config-fireworks.yaml"
+)
+
+# Якщо хочете примусово обрати провайдера:
+#   CN_DRUM_ONLY=gemini cn-drum -p "..."
+if [[ -n "$CN_DRUM_ONLY" ]]; then
+  ORDER=("$CN_DRUM_ONLY")
+fi
+
+# Прокидуємо усі аргументи в cn як є:
+ARGS=( "$@" )
+
+for prov in "${ORDER[@]}"; do
+  cfg="${CFG[$prov]}"
+  if [[ ! -f "$cfg" ]]; then
+    echo "[cn-drum] Пропускаю '$prov': немає конфига $cfg" >&2
+    continue
+  fi
+
+  echo "[cn-drum] Спроба провайдера: $prov ($cfg)" >&2
+  # Запуск cn; якщо exit code 0 — зупиняємось
+  cn --config "$cfg" "${ARGS[@]}"
+  code=$?
+
+  if [[ $code -eq 0 ]]; then
+    exit 0
+  else
+    echo "[cn-drum] Провайдер '$prov' відхилився (код $code). Переходимо до наступного..." >&2
+  fi
+done
+
+echo "[cn-drum] Усі провайдери недоступні або повернули помилку." >&2
+exit 1

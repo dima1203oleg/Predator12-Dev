@@ -6,35 +6,35 @@ import { useWebSocketContext } from '../../context/WebSocketContext';
  * within the application
  */
 const WebSocketMonitor = () => {
-  const { 
-    connections, 
-    connect, 
+  const {
+    connections,
+    connect,
     disconnect,
     getConnectionStatus
   } = useWebSocketContext();
-  
+
   const [refreshTimestamp, setRefreshTimestamp] = useState(new Date());
   const [customEndpoint, setCustomEndpoint] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  
+
   // Refresh the view every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setRefreshTimestamp(new Date());
     }, 5000);
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   // Handle manual connection
   const handleConnect = (e) => {
     e.preventDefault();
-    
+
     if (!customEndpoint.trim()) {
       setErrorMessage('Please enter an endpoint name');
       return;
     }
-    
+
     try {
       connect(customEndpoint, { autoReconnect: true });
       setCustomEndpoint('');
@@ -43,7 +43,7 @@ const WebSocketMonitor = () => {
       setErrorMessage(`Connection error: ${error.message}`);
     }
   };
-  
+
   // Safely disconnect a connection
   const handleDisconnect = (endpoint) => {
     try {
@@ -52,7 +52,7 @@ const WebSocketMonitor = () => {
       setErrorMessage(`Disconnect error: ${error.message}`);
     }
   };
-  
+
   // Get status indicator color
   const getStatusColor = (status) => {
     switch (status) {
@@ -62,7 +62,7 @@ const WebSocketMonitor = () => {
       default: return '#888888'; // Gray
     }
   };
-  
+
   return (
     <div className="bg-gray-900 bg-opacity-90 rounded-lg shadow-lg border border-gray-700 p-6 text-gray-100">
       <div className="flex justify-between items-center mb-6">
@@ -71,28 +71,28 @@ const WebSocketMonitor = () => {
           Last updated: {refreshTimestamp.toLocaleTimeString()}
         </div>
       </div>
-      
+
       {/* Connection summary */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
           <div className="text-3xl font-bold text-blue-300">{Object.keys(connections).length}</div>
           <div className="text-xs text-gray-400">Total Connections</div>
         </div>
-        
+
         <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
           <div className="text-3xl font-bold text-green-300">
             {Object.values(connections).filter(c => c.status === 'connected').length}
           </div>
           <div className="text-xs text-gray-400">Connected</div>
         </div>
-        
+
         <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
           <div className="text-3xl font-bold text-yellow-300">
             {Object.values(connections).filter(c => c.status === 'connecting').length}
           </div>
           <div className="text-xs text-gray-400">Connecting</div>
         </div>
-        
+
         <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
           <div className="text-3xl font-bold text-red-300">
             {Object.values(connections).filter(c => c.status === 'disconnected').length}
@@ -100,7 +100,7 @@ const WebSocketMonitor = () => {
           <div className="text-xs text-gray-400">Disconnected</div>
         </div>
       </div>
-      
+
       {/* Add new connection */}
       <div className="mb-6 bg-gray-800 p-4 rounded-lg border border-gray-700">
         <h3 className="text-sm font-bold text-gray-300 mb-3">Add Connection</h3>
@@ -123,7 +123,7 @@ const WebSocketMonitor = () => {
           <div className="mt-2 text-red-400 text-sm">{errorMessage}</div>
         )}
       </div>
-      
+
       {/* Connection list */}
       <div className="overflow-auto max-h-96 bg-gray-800 rounded-lg border border-gray-700">
         <table className="min-w-full">
@@ -150,8 +150,8 @@ const WebSocketMonitor = () => {
                     <td className="py-2 px-4 text-gray-400 font-mono text-xs">{details.url}</td>
                     <td className="py-2 px-4">
                       <div className="flex items-center">
-                        <div 
-                          className="w-3 h-3 rounded-full mr-2" 
+                        <div
+                          className="w-3 h-3 rounded-full mr-2"
                           style={{ backgroundColor: getStatusColor(status) }}
                         />
                         {status}
@@ -179,4 +179,4 @@ const WebSocketMonitor = () => {
   );
 };
 
-export default WebSocketMonitor; 
+export default WebSocketMonitor;

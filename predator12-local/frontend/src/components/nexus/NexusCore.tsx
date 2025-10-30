@@ -41,10 +41,10 @@ const ModuleRenderer: React.FC = () => {
     switch (activeModule) {
       case 'dashboard':
         return <SuperEnhancedDashboard />;
-        
+
       case 'mas':
         return (
-          <MASupervisor 
+          <MASupervisor
             agents={[
               {
                 id: 'etl-1',
@@ -73,22 +73,22 @@ const ModuleRenderer: React.FC = () => {
             }}
           />
         );
-        
+
       case 'etl':
         return <ETLModule />;
-        
+
       case 'chrono':
         return <ChronoModule />;
-        
+
       case 'simulator':
         return <SimulatorModule />;
-        
+
       case 'opensearch':
         return <OpenSearchModule />;
-        
+
       case 'admin':
         return <AdminModule />;
-        
+
       case 'self-improvement':
         return <SelfImprovementDashboard />;
 
@@ -508,7 +508,7 @@ const ModuleRenderer: React.FC = () => {
             autoResponse={false}
           />
         );
-        
+
       default:
         return <EnhancedDashboard />;
     }
@@ -624,13 +624,13 @@ const NexusLayout: React.FC = () => {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <CssBaseline />
-      
+
       {/* Офлайн індикатор */}
       <OfflineIndicator />
-      
+
       {/* Навігаційна панель */}
       <NexusNavigation />
-      
+
       {/* Основний контент */}
       <Box
         component="main"
@@ -672,7 +672,7 @@ const NexusLayout: React.FC = () => {
               <LanguageIcon />
             </IconButton>
           </Tooltip>
-          
+
           <Box
             sx={{
               display: 'flex',
@@ -690,13 +690,13 @@ const NexusLayout: React.FC = () => {
             {language}
           </Box>
         </Box>
-        
+
         {/* Модуль контент */}
         <ModuleRenderer />
-        
+
         {/* Notification Hub */}
         <NotificationHub />
-        
+
         {/* CyberFace AI Assistant */}
         <CyberFaceAI
           onCommand={handleAICommand}
@@ -717,7 +717,7 @@ export const NexusCore: React.FC<{
   userRole?: 'Admin' | 'Analyst' | 'Viewer';
   defaultModule?: NexusModule;
   defaultLanguage?: 'UA' | 'EN';
-}> = ({ 
+}> = ({
   userRole = 'Analyst',
   defaultModule = 'dashboard',
   defaultLanguage = 'UA'
@@ -725,7 +725,7 @@ export const NexusCore: React.FC<{
   return (
     <ThemeProvider theme={nexusTheme}>
       <I18nProvider defaultLanguage={defaultLanguage}>
-        <NexusProvider 
+        <NexusProvider
           userRole={userRole}
           defaultModule={defaultModule}
         >

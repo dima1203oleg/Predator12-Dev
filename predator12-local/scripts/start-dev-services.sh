@@ -77,28 +77,28 @@ main() {
     echo ""
     info "=== PREDATOR12 Development Services Startup ==="
     echo ""
-    
+
     # Запускаємо всі сервіси
     start_postgres
     start_redis
     start_opensearch
     start_opensearch_dashboards
-    
+
     echo ""
     success "=== Всі сервіси запущено! ==="
     echo ""
-    
+
     info "Доступні URL:"
     echo "  PostgreSQL:  localhost:5432"
     echo "  Redis:       localhost:6379"
     echo "  OpenSearch:  http://localhost:9200"
     echo "  Dashboards:  http://localhost:5601"
     echo ""
-    
+
     info "Перевірка портів:"
     bash "$(dirname "$0")/manage-ports.sh" check
     echo ""
-    
+
     info "Для зупинки сервісів:"
     echo "  brew services stop postgresql@14"
     echo "  brew services stop redis"

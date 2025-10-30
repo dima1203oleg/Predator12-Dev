@@ -328,7 +328,7 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ onSpeakingChange }) => {
                           <IconButton
                             size="small"
                             onClick={() => speakText(message.text)}
-                            sx={{ 
+                            sx={{
                               color: nexusColors.emerald,
                               ml: 1,
                               '&:hover': { backgroundColor: nexusColors.emerald + '20' }

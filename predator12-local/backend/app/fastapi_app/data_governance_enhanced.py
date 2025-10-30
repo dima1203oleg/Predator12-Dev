@@ -122,13 +122,25 @@ class DataGovernanceManager:
         # Митні декларації
         customs_pii = [
             PIIField(
-                "declarant.name", PIIType.NAME, DataClassification.PII, "***MASKED***", 2555
+                "declarant.name",
+                PIIType.NAME,
+                DataClassification.PII,
+                "***MASKED***",
+                2555,
             ),  # 7 років
             PIIField(
-                "declarant.email", PIIType.EMAIL, DataClassification.PII, "****@*****.***", 2555
+                "declarant.email",
+                PIIType.EMAIL,
+                DataClassification.PII,
+                "****@*****.***",
+                2555,
             ),
             PIIField(
-                "declarant.phone", PIIType.PHONE, DataClassification.PII, "+38*********", 2555
+                "declarant.phone",
+                PIIType.PHONE,
+                DataClassification.PII,
+                "+38*********",
+                2555,
             ),
             PIIField(
                 "declarant.address",
@@ -145,7 +157,11 @@ class DataGovernanceManager:
                 2555,
             ),
             PIIField(
-                "declarant.tax_id", PIIType.TAX_ID, DataClassification.PII, "**MASKED**", 2555
+                "declarant.tax_id",
+                PIIType.TAX_ID,
+                DataClassification.PII,
+                "**MASKED**",
+                2555,
             ),
             PIIField(
                 "bank_details.account_number",
@@ -159,19 +175,43 @@ class DataGovernanceManager:
         # Податкові дані
         tax_pii = [
             PIIField(
-                "taxpayer.name", PIIType.NAME, DataClassification.PII, "***MASKED***", 1825
+                "taxpayer.name",
+                PIIType.NAME,
+                DataClassification.PII,
+                "***MASKED***",
+                1825,
             ),  # 5 років
-            PIIField("taxpayer.tin", PIIType.TAX_ID, DataClassification.PII, "**MASKED**", 1825),
             PIIField(
-                "contact.email", PIIType.EMAIL, DataClassification.PII, "****@*****.***", 1825
+                "taxpayer.tin",
+                PIIType.TAX_ID,
+                DataClassification.PII,
+                "**MASKED**",
+                1825,
             ),
-            PIIField("contact.phone", PIIType.PHONE, DataClassification.PII, "+38*********", 1825),
+            PIIField(
+                "contact.email",
+                PIIType.EMAIL,
+                DataClassification.PII,
+                "****@*****.***",
+                1825,
+            ),
+            PIIField(
+                "contact.phone",
+                PIIType.PHONE,
+                DataClassification.PII,
+                "+38*********",
+                1825,
+            ),
         ]
 
         # OSINT дані
         osint_pii = [
             PIIField(
-                "author.username", PIIType.NAME, DataClassification.CONFIDENTIAL, "***USER***", 90
+                "author.username",
+                PIIType.NAME,
+                DataClassification.CONFIDENTIAL,
+                "***USER***",
+                90,
             ),  # 3 місяці
             PIIField(
                 "metadata.ip_address",
@@ -181,7 +221,11 @@ class DataGovernanceManager:
                 30,
             ),
             PIIField(
-                "content.phone_numbers", PIIType.PHONE, DataClassification.PII, "+XX*********", 90
+                "content.phone_numbers",
+                PIIType.PHONE,
+                DataClassification.PII,
+                "+XX*********",
+                90,
             ),
         ]
 
@@ -199,7 +243,11 @@ class DataGovernanceManager:
                 "retention_period_days": 2555,  # 7 років
                 "archive_after_days": 1095,  # 3 роки - в архів
                 "delete_after_days": 2555,  # 7 років - видалення
-                "applies_to": ["customs_declarations", "customs_payments", "customs_certificates"],
+                "applies_to": [
+                    "customs_declarations",
+                    "customs_payments",
+                    "customs_certificates",
+                ],
             },
             "tax_legal": {
                 "description": "Податкові дані - законні вимоги",

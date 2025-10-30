@@ -157,11 +157,11 @@ frontend:
 #### Зміст:
 - **Overview**: 10 Self-Heal + 10 Optimize + 10 Modernize
 - **Agent Architecture**: Plan-then-Execute, HITL, Sandboxing
-- **Self-Heal Agents (10)**: 
+- **Self-Heal Agents (10)**:
   - PortCollisionHealer, OOMKillerAgent, EnvVarFixer, DockerRestarter, etc.
-- **Optimize Agents (10)**: 
+- **Optimize Agents (10)**:
   - CodeRefactorer, QueryOptimizer, CacheOptimizer, BundleSizeReducer, etc.
-- **Modernize Agents (10)**: 
+- **Modernize Agents (10)**:
   - DependencyUpgrader, APIVersionMigrator, SecurityPatcher, FeatureFlagMigrator, etc.
 - **Agent Configs**: YAML з role, dependencies, triggers, metrics, LLM selection
 - **Orchestration Code**: Python приклади CrewAI/LangGraph supervisor
@@ -174,7 +174,7 @@ agent:
   category: self_heal
   priority: critical
   role: "Kill/restart services on occupied ports (8000/3000/5432)"
-  
+
   dependencies:
     tools:
       - psutil
@@ -182,19 +182,19 @@ agent:
     external:
       - Docker API
       - systemd
-  
+
   triggers:
     - type: alert
       source: prometheus
       query: 'up{job="backend"} == 0'
     - type: schedule
       cron: "*/5 * * * *"
-  
+
   metrics:
     success_rate: '>= 95%'
     response_time: '<= 30s'
     false_positive_rate: '<= 5%'
-  
+
   llm_selection:
     primary: llama-3.3-70b-versatile
     fallbacks:
@@ -452,12 +452,12 @@ roles:
     - modify_agents
     - unlock_pii
     - view_billing
-  
+
   analyst:
     - view_self_heal_agents
     - view_optimize_agents
     - view_masked_data
-  
+
   viewer:
     - view_dashboards
     - view_public_data

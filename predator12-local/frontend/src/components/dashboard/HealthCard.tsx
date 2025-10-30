@@ -112,13 +112,13 @@ const HealthCard: React.FC<HealthCardProps> = ({
     ];
 
     const explanation = reasons.length > 0 ? reasons : commonReasons.slice(0, 2);
-    
+
     return {
       title: 'Чому статус невідомий?',
       reasons: explanation,
       suggestedActions: [
-        { 
-          label: 'Перевірити підключення', 
+        {
+          label: 'Перевірити підключення',
           action: () => addEvent(
             { type: 'ACTION_REQUIRED', cta: { label: 'Перевірити мережу', run: () => {} } },
             'Перевірка підключення',
@@ -127,14 +127,14 @@ const HealthCard: React.FC<HealthCardProps> = ({
           ),
           primary: true
         },
-        { 
-          label: 'Переглянути логи', 
-          action: onOpenLogs || (() => {}), 
+        {
+          label: 'Переглянути логи',
+          action: onOpenLogs || (() => {}),
           icon: <LogsIcon fontSize="small" />
         },
-        { 
-          label: 'Налаштування', 
-          action: onOpenSettings || (() => {}), 
+        {
+          label: 'Налаштування',
+          action: onOpenSettings || (() => {}),
           icon: <SettingsIcon fontSize="small" />
         }
       ]
@@ -343,8 +343,8 @@ const HealthCard: React.FC<HealthCardProps> = ({
                       minHeight: 44, // WCAG 2.2 AA compliance
                       minWidth: 44,
                       '&:hover': {
-                        backgroundColor: action.primary 
-                          ? `${nexusColors.sapphire}CC` 
+                        backgroundColor: action.primary
+                          ? `${nexusColors.sapphire}CC`
                           : `${nexusColors.quantum}20`,
                         borderColor: action.primary ? nexusColors.sapphire : nexusColors.quantum
                       }
@@ -359,10 +359,10 @@ const HealthCard: React.FC<HealthCardProps> = ({
 
           {/* Last updated timestamp */}
           {lastUpdated && (
-            <Typography 
-              variant="caption" 
-              sx={{ 
-                color: nexusColors.nebula, 
+            <Typography
+              variant="caption"
+              sx={{
+                color: nexusColors.nebula,
                 opacity: 0.7,
                 display: 'block',
                 textAlign: 'right',

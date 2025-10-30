@@ -1,0 +1,13 @@
+version: 1
+prod_requirements:
+  test_pass: true
+  coverage_min: 70
+  trivy_critical: 0
+  opa_policy: "pass"
+  sbom_signed: true
+  perf_p95_ms: "<=300"
+  sla_error_rate: "<=0.5%"
+approval:
+  mode: "one_click_or_timebox"
+  timebox_hours: 12
+  approvers: ["owner:dima","role:ops-lead"]

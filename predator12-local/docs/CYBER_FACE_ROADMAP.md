@@ -167,7 +167,7 @@ cyber_face/
 ```python
 class EmotionDetector:
     """Advanced emotion detection with multiple models"""
-    
+
     def __init__(self):
         self.models = {
             'primary': self.load_tensorflow_model(),
@@ -176,7 +176,7 @@ class EmotionDetector:
         }
         self.confidence_threshold = 0.75
         self.smoothing_buffer = deque(maxlen=5)
-    
+
     async def detect_emotions(self, frame: np.ndarray) -> EmotionResult:
         """Detect emotions with ensemble voting"""
         results = []
@@ -186,9 +186,9 @@ class EmotionDetector:
                 results.append(result)
             except Exception as e:
                 logger.warning(f"Model {model_name} failed: {e}")
-        
+
         return self.ensemble_vote(results)
-    
+
     def ensemble_vote(self, results: List[EmotionResult]) -> EmotionResult:
         """Combine multiple model predictions"""
         # Implementation of weighted voting system
@@ -199,7 +199,7 @@ class EmotionDetector:
 ```python
 class ConversationEngine:
     """Multi-LLM conversation management"""
-    
+
     def __init__(self):
         self.models = {
             'gpt4': OpenAIClient(),
@@ -208,27 +208,27 @@ class ConversationEngine:
         }
         self.context_manager = ContextManager()
         self.personality = PersonalityManager()
-    
-    async def generate_response(self, 
+
+    async def generate_response(self,
                               user_input: str,
                               emotion_context: EmotionResult,
                               system_context: Dict) -> ConversationResponse:
         """Generate contextually aware response"""
-        
+
         # Select optimal model based on query type
         model = await self.select_model(user_input, emotion_context)
-        
+
         # Build context-rich prompt
         prompt = await self.build_prompt(
-            user_input, 
-            emotion_context, 
+            user_input,
+            emotion_context,
             system_context
         )
-        
+
         # Generate and validate response
         response = await model.generate(prompt)
         return await self.validate_response(response)
-    
+
     async def select_model(self, input_text: str, emotion: EmotionResult) -> LLMClient:
         """Intelligent model selection based on context"""
         # Implementation of model selection logic
@@ -239,25 +239,25 @@ class ConversationEngine:
 ```python
 class AvatarRenderer:
     """3D avatar with real-time expressions"""
-    
+
     def __init__(self):
         self.scene = THREE.Scene()
         self.camera = THREE.PerspectiveCamera()
         self.renderer = THREE.WebGLRenderer()
         self.avatar_model = None
         self.animation_mixer = None
-    
+
     async def load_avatar(self, config: AvatarConfig):
         """Load and configure 3D avatar"""
         self.avatar_model = await self.load_gltf_model(config.model_path)
         self.setup_animations(config.expressions)
         self.setup_lighting()
-    
+
     def update_expression(self, emotion: EmotionResult):
         """Update avatar expression based on detected emotion"""
         target_expression = self.map_emotion_to_expression(emotion)
         self.animate_to_expression(target_expression, duration=0.5)
-    
+
     def render_frame(self) -> HTMLCanvasElement:
         """Render current frame"""
         self.animation_mixer.update(self.clock.getDelta())
@@ -270,7 +270,7 @@ class AvatarRenderer:
 **WebSocket Message Types:**
 ```typescript
 interface CyberFaceMessage {
-  type: 'emotion_update' | 'voice_command' | 'ai_response' | 
+  type: 'emotion_update' | 'voice_command' | 'ai_response' |
         'system_alert' | 'user_interaction' | 'performance_metric';
   timestamp: number;
   data: any;
@@ -341,22 +341,22 @@ const CyberFaceWidget: React.FC<CyberFaceWidgetProps> = ({
   const [currentEmotion, setCurrentEmotion] = useState<EmotionResult>();
   const [isListening, setIsListening] = useState(false);
   const [avatarState, setAvatarState] = useState<AvatarState>();
-  
+
   // WebSocket connection for real-time updates
   const { sendMessage, lastMessage } = useWebSocket('/ws/cyber-face');
-  
+
   // Camera and emotion detection
   const { stream, emotions } = useEmotionDetection({
     enabled: emotionTracking,
     onEmotionUpdate: setCurrentEmotion
   });
-  
+
   // Voice interaction
   const { startListening, stopListening, transcript } = useVoiceRecognition({
     enabled: voiceEnabled,
     onCommand: handleVoiceCommand
   });
-  
+
   return (
     <div className={`cyber-face-widget ${mode}`}>
       <AvatarCanvas
@@ -364,16 +364,16 @@ const CyberFaceWidget: React.FC<CyberFaceWidgetProps> = ({
         personality={personality}
         state={avatarState}
       />
-      
+
       <EmotionDisplay emotion={currentEmotion} />
-      
+
       <VoiceControls
         isListening={isListening}
         onStartListening={startListening}
         onStopListening={stopListening}
         transcript={transcript}
       />
-      
+
       <ConversationPanel
         onUserMessage={handleUserMessage}
         aiResponses={aiResponses}
@@ -388,7 +388,7 @@ const CyberFaceWidget: React.FC<CyberFaceWidgetProps> = ({
 const CommandCenterWithCyberFace: React.FC = () => {
   const [layout, setLayout] = useState<LayoutConfig>();
   const [cyberFaceMode, setCyberFaceMode] = useState<CyberFaceMode>('sidebar');
-  
+
   return (
     <div className="command-center-container">
       <Header>
@@ -396,7 +396,7 @@ const CommandCenterWithCyberFace: React.FC = () => {
         <SystemStatus />
         <UserProfile />
       </Header>
-      
+
       <MainContent layout={layout}>
         <CyberFaceWidget
           mode={cyberFaceMode}
@@ -405,21 +405,21 @@ const CommandCenterWithCyberFace: React.FC = () => {
           voiceEnabled={userPreferences.voiceEnabled}
           onInteraction={handleCyberFaceInteraction}
         />
-        
+
         <Dashboard>
           <MetricsPanel />
           <AgentMonitor />
           <AlertsPanel />
           <AnalyticsView />
         </Dashboard>
-        
+
         <Sidebar>
           <QuickActions />
           <RecentActivities />
           <SystemHealth />
         </Sidebar>
       </MainContent>
-      
+
       <Footer>
         <StatusBar />
         <PerformanceMetrics />
@@ -439,19 +439,19 @@ personalities:
     response_style: "concise"
     proactivity: "low"
     emotional_range: "neutral"
-    
+
   friendly:
     tone: "casual"
     response_style: "conversational"
     proactivity: "medium"
     emotional_range: "positive"
-    
+
   analytical:
     tone: "technical"
     response_style: "detailed"
     proactivity: "high"
     emotional_range: "focused"
-    
+
   custom:
     tone: "${user_preference}"
     response_style: "${user_preference}"
@@ -470,7 +470,7 @@ class CyberFaceFeatures:
     STRESS_MONITORING = "stress_monitoring"
     FATIGUE_DETECTION = "fatigue_detection"
     ATTENTION_TRACKING = "attention_tracking"
-    
+
     @classmethod
     def is_enabled(cls, feature: str) -> bool:
         return FeatureToggle.is_enabled(f"cyber_face.{feature}")
@@ -487,13 +487,13 @@ class CyberFaceMetrics:
         self.avatar_render_fps = Gauge('avatar_render_fps')
         self.memory_usage = Gauge('cyber_face_memory_bytes')
         self.user_satisfaction = Counter('user_satisfaction_ratings')
-    
+
     def record_emotion_detection(self, duration: float):
         self.emotion_detection_latency.observe(duration)
-    
+
     def record_voice_response(self, duration: float):
         self.voice_response_time.observe(duration)
-    
+
     def update_render_fps(self, fps: float):
         self.avatar_render_fps.set(fps)
 ```

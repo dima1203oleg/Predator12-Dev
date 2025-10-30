@@ -9,12 +9,12 @@ type AppMode = 'test' | 'minimal' | 'full';
 
 function AppSwitcher() {
   const [mode, setMode] = useState<AppMode>('minimal');
-  
+
   const handleModeChange = (newMode: AppMode) => {
     console.log(`🔄 Переключение на режим: ${newMode}`);
     setMode(newMode);
   };
-  
+
   return (
     <Provider store={store}>
       {/* Debug Controls */}
@@ -32,7 +32,7 @@ function AppSwitcher() {
           DEBUG MODE: {mode.toUpperCase()}
         </div>
         <div style={{ display: 'flex', gap: '5px' }}>
-          <button 
+          <button
             onClick={() => handleModeChange('test')}
             style={{
               padding: '5px 10px',
@@ -46,7 +46,7 @@ function AppSwitcher() {
           >
             TEST
           </button>
-          <button 
+          <button
             onClick={() => handleModeChange('minimal')}
             style={{
               padding: '5px 10px',
@@ -60,7 +60,7 @@ function AppSwitcher() {
           >
             MINIMAL
           </button>
-          <button 
+          <button
             onClick={() => handleModeChange('full')}
             style={{
               padding: '5px 10px',
@@ -76,7 +76,7 @@ function AppSwitcher() {
           </button>
         </div>
       </div>
-      
+
       {/* App Content */}
       {mode === 'test' && <TestApp />}
       {mode === 'minimal' && <MinimalApp />}

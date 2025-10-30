@@ -1,79 +1,88 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { CssBaseline, Box, Button, Typography, AppBar, Toolbar } from '@mui/material';
-// Мінімальна тема
-const minimalTheme = createTheme({
-    palette: {
-        mode: 'dark',
-        background: {
-            default: '#000000',
-            paper: '#111111'
-        },
-        text: {
-            primary: '#E8F4FD'
-        },
-        primary: {
-            main: '#38BDF8'
-        }
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
     }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
 });
-function MinimalApp() {
-    const [currentView, setCurrentView] = useState('main');
-    console.log('🟡 MinimalApp завантажено');
-    return (_jsxs(ThemeProvider, { theme: minimalTheme, children: [_jsx(CssBaseline, {}), _jsxs(Box, { sx: {
-                    minHeight: '100vh',
-                    background: 'linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%)',
-                    color: '#E8F4FD',
-                    display: 'flex',
-                    flexDirection: 'column'
-                }, children: [_jsx(AppBar, { position: "static", sx: { background: 'rgba(0,0,0,0.8)' }, children: _jsxs(Toolbar, { children: [_jsx(Typography, { variant: "h6", sx: { flexGrow: 1, color: '#38BDF8' }, children: "\uD83D\uDE80 PREDATOR11 - Minimal Interface" }), _jsx(Button, { color: "primary", variant: "outlined", onClick: () => setCurrentView(currentView === 'main' ? 'test' : 'main'), children: "\u041F\u0435\u0440\u0435\u043C\u043A\u043D\u0443\u0442\u0438 \u0432\u0438\u0433\u043B\u044F\u0434" })] }) }), _jsx(Box, { sx: {
-                            flex: 1,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            padding: 3
-                        }, children: currentView === 'main' ? (_jsxs(Box, { sx: { textAlign: 'center', maxWidth: 800 }, children: [_jsx(Typography, { variant: "h2", gutterBottom: true, sx: {
-                                        background: 'linear-gradient(45deg, #38BDF8, #06B6D4)',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                        marginBottom: 3
-                                    }, children: "Predator Analytics Nexus" }), _jsx(Typography, { variant: "h5", gutterBottom: true, sx: { color: '#94A3B8', marginBottom: 4 }, children: "Multi-Agent System v1.0" }), _jsxs(Box, { sx: { display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }, children: [_jsx(Button, { variant: "contained", size: "large", onClick: () => setCurrentView('agents'), sx: {
-                                                background: 'linear-gradient(45deg, #38BDF8, #06B6D4)',
-                                                '&:hover': { background: 'linear-gradient(45deg, #0EA5E9, #0891B2)' }
-                                            }, children: "\uD83E\uDD16 MAS \u0410\u0433\u0435\u043D\u0442\u0438" }), _jsx(Button, { variant: "outlined", size: "large", onClick: () => setCurrentView('dashboard'), sx: { borderColor: '#38BDF8', color: '#38BDF8' }, children: "\uD83D\uDCCA Dashboard" }), _jsx(Button, { variant: "outlined", size: "large", onClick: () => setCurrentView('guide'), sx: { borderColor: '#06B6D4', color: '#06B6D4' }, children: "\uD83C\uDFAF 3D Guide" })] })] })) : currentView === 'agents' ? (_jsxs(Box, { sx: { textAlign: 'center' }, children: [_jsx(Typography, { variant: "h4", gutterBottom: true, sx: { color: '#38BDF8' }, children: "\uD83E\uDD16 MAS Agent System" }), _jsx(Box, { sx: {
-                                        display: 'grid',
-                                        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                                        gap: 2,
-                                        marginTop: 3,
-                                        maxWidth: 800
-                                    }, children: ['AutoHeal', 'SelfImprovement', 'SelfDiagnosis', 'ChiefOrchestrator'].map(agent => (_jsxs(Box, { sx: {
-                                            background: 'rgba(56, 189, 248, 0.1)',
-                                            border: '1px solid rgba(56, 189, 248, 0.3)',
-                                            borderRadius: 2,
-                                            padding: 2,
-                                            '&:hover': { background: 'rgba(56, 189, 248, 0.2)' }
-                                        }, children: [_jsx(Typography, { variant: "h6", sx: { color: '#38BDF8', marginBottom: 1 }, children: agent }), _jsx(Typography, { variant: "body2", sx: { color: '#94A3B8' }, children: "\u2705 \u0410\u043A\u0442\u0438\u0432\u043D\u0438\u0439 \u2022 \uD83D\uDD0B 100%" })] }, agent))) }), _jsx(Button, { variant: "outlined", onClick: () => setCurrentView('main'), sx: { marginTop: 3, borderColor: '#94A3B8', color: '#94A3B8' }, children: "\u2190 \u041F\u043E\u0432\u0435\u0440\u043D\u0443\u0442\u0438\u0441\u044F" })] })) : (_jsxs(Box, { sx: { textAlign: 'center' }, children: [_jsx(Typography, { variant: "h4", gutterBottom: true, sx: { color: '#06B6D4' }, children: "\uD83D\uDCCA System Dashboard" }), _jsx(Box, { sx: {
-                                        display: 'grid',
-                                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                                        gap: 2,
-                                        marginTop: 3,
-                                        maxWidth: 600
-                                    }, children: [
-                                        { title: 'CPU', value: '45%', color: '#10B981' },
-                                        { title: 'Memory', value: '67%', color: '#F59E0B' },
-                                        { title: 'Active Agents', value: '24/24', color: '#38BDF8' },
-                                        { title: 'Models', value: '48 Free', color: '#06B6D4' }
-                                    ].map(metric => (_jsxs(Box, { sx: {
-                                            background: 'rgba(0,0,0,0.5)',
-                                            border: `1px solid ${metric.color}`,
-                                            borderRadius: 2,
-                                            padding: 2
-                                        }, children: [_jsx(Typography, { variant: "body2", sx: { color: '#94A3B8' }, children: metric.title }), _jsx(Typography, { variant: "h5", sx: { color: metric.color }, children: metric.value })] }, metric.title))) }), _jsx(Button, { variant: "outlined", onClick: () => setCurrentView('main'), sx: { marginTop: 3, borderColor: '#94A3B8', color: '#94A3B8' }, children: "\u2190 \u041F\u043E\u0432\u0435\u0440\u043D\u0443\u0442\u0438\u0441\u044F" })] })) }), _jsx(Box, { sx: {
-                            textAlign: 'center',
-                            padding: 2,
-                            borderTop: '1px solid rgba(148, 163, 184, 0.1)'
-                        }, children: _jsxs(Typography, { variant: "caption", sx: { color: '#64748B' }, children: ["Predator11 \u2022 Minimal Interface \u2022 ", new Date().toLocaleTimeString()] }) })] })] }));
-}
-export default MinimalApp;
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = __importStar(require("react"));
+const styles_1 = require("@mui/material/styles");
+const material_1 = require("@mui/material");
+const react_router_dom_1 = require("react-router-dom");
+const nexusTheme_1 = require("./theme/nexusTheme");
+const MainLayout_1 = __importDefault(require("./layout/MainLayout"));
+const Dashboard_1 = __importDefault(require("./pages/Dashboard"));
+const Agents_1 = __importDefault(require("./pages/Agents"));
+const DataOps_1 = __importDefault(require("./pages/DataOps"));
+const Security_1 = __importDefault(require("./pages/Security"));
+const NexusVisualEffects_1 = require("./components/effects/NexusVisualEffects");
+const loaderBackground = [
+    'radial-gradient(circle at top, rgba(10, 255, 200, 0.08), transparent 60%)',
+    'radial-gradient(circle at bottom, rgba(10, 117, 255, 0.12), transparent 55%)',
+    '#010409'
+].join(', ');
+const LoaderOverlay = () => (<material_1.Box sx={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: loaderBackground
+    }}>
+    <material_1.CircularProgress sx={{ color: '#38bdf8' }} size={48} thickness={4}/>
+    <material_1.Typography variant="subtitle1" sx={{ color: '#93c5fd', mt: 3 }}>
+      Ініціалізація Predator Nexus UI...
+    </material_1.Typography>
+  </material_1.Box>);
+const NotFoundPage = () => (<material_1.Box sx={{ p: 6, textAlign: 'center' }}>
+    <material_1.Typography variant="h2" sx={{ color: '#fca5a5', fontWeight: 700 }}>
+      404
+    </material_1.Typography>
+    <material_1.Typography variant="h5" sx={{ color: '#bfdbfe', mt: 2 }}>
+      Розділ у розробці. Повернімося на головну панель.
+    </material_1.Typography>
+  </material_1.Box>);
+const MinimalApp = () => {
+    return (<styles_1.ThemeProvider theme={nexusTheme_1.nexusTheme}>
+      <material_1.CssBaseline />
+
+      {/* Nexus Visual Effects */}
+      <NexusVisualEffects_1.NexusVisualEffects showCosmicDust={true} showHolographicFrames={true} showScanLines={true}/>
+      <react_router_dom_1.BrowserRouter>
+        <react_1.Suspense fallback={<LoaderOverlay />}>
+          <react_router_dom_1.Routes>
+            <react_router_dom_1.Route path="/" element={<MainLayout_1.default />}>
+              <react_router_dom_1.Route index element={<react_router_dom_1.Navigate to="/dashboard" replace/>}/>
+              <react_router_dom_1.Route path="dashboard" element={<Dashboard_1.default />}/>
+              <react_router_dom_1.Route path="agents" element={<Agents_1.default />}/>
+              <react_router_dom_1.Route path="dataops" element={<DataOps_1.default />}/>
+              <react_router_dom_1.Route path="security" element={<Security_1.default />}/>
+              <react_router_dom_1.Route path="*" element={<NotFoundPage />}/>
+            </react_router_dom_1.Route>
+          </react_router_dom_1.Routes>
+        </react_1.Suspense>
+      </react_router_dom_1.BrowserRouter>
+    </styles_1.ThemeProvider>);
+};
+exports.default = MinimalApp;

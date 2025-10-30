@@ -95,11 +95,11 @@ const AIVoiceInterface: React.FC = () => {
   const synthRef = useRef<any>(null);
 
   const [settings, setSettings] = useState<VoiceSettings>({
-    language: 'uk-UA',
-    voice: 'Lesya',
+    language: 'uk-UA', // Українська за замовчуванням
+    voice: 'uk-UA', // Український голос
     speed: 1,
     pitch: 1,
-    volume: 0.8,
+    volume: 1.0,
     autoSpeak: true,
     continuousListening: false,
     wakeWord: 'Нексус'
@@ -155,7 +155,7 @@ const AIVoiceInterface: React.FC = () => {
         lang: 'uk-UA',
         maxAlternatives: 1
       });
-      
+
       console.log('🇺🇦 УКРАЇНСЬКА МОВА встановлена для розпізнавання!');
 
       recognitionRef.current.onstart = () => {
@@ -226,7 +226,7 @@ const AIVoiceInterface: React.FC = () => {
         setIsListening(false);
         // НЕ перезапускаємо автоматично - користувач має контроль
       };    console.log('✅ Web Speech API налаштовано успішно!');
-    
+
     // Опціональний автотест TTS (розкоментуйте для тестування)
     // setTimeout(() => {
     //   console.log('🧪 Автотест TTS...');
@@ -241,19 +241,19 @@ const AIVoiceInterface: React.FC = () => {
     if ('speechSynthesis' in window) {
       synthRef.current = window.speechSynthesis;
       console.log('✅ Speech Synthesis доступний');
-      
+
       // Завантаження голосів
       const loadVoices = () => {
         const voices = synthRef.current.getVoices();
         console.log('🎤 Завантажено голосів:', voices.length);
         if (voices.length > 0) {
-          console.log('📋 Перші 5 голосів:', 
+          console.log('📋 Перші 5 голосів:',
             voices.slice(0, 5).map(v => `${v.name} (${v.lang})`));
           const ukVoices = voices.filter(v => v.lang.includes('uk'));
           console.log('🇺🇦 Українські голоси:', ukVoices.map(v => v.name));
         }
       };
-      
+
       // Голоси можуть завантажуватися асинхронно
       loadVoices();
       synthRef.current.addEventListener('voiceschanged', loadVoices);
@@ -302,16 +302,16 @@ const AIVoiceInterface: React.FC = () => {
     // Аналіз команди та генерація відповіді
     const response = generateAIResponse(transcript);
     setAiResponse(response);
-    
+
     console.log(`🤖 AI відповідь: "${response}"`);
 
     if (settings.autoSpeak && voiceEnabled) {
       console.log('🔊 Початок озвучування відповіді...');
-      
+
       // Спочатку пробуємо Browser API (він завжди доступний)
       console.log('🌐 Використовуємо Browser Speech API...');
       speakResponseBrowser(response);
-      
+
       // Потім можна спробувати Premium FREE API як покращення (якщо доступний)
       // try {
       //   await speakResponsePremiumFree(response);
@@ -325,7 +325,7 @@ const AIVoiceInterface: React.FC = () => {
     // Відмічаємо команду як виконану
     command.executed = true;
     setIsProcessing(false);
-    
+
     console.log('✅ Обробка команди завершена');
   };
 
@@ -467,111 +467,169 @@ const AIVoiceInterface: React.FC = () => {
 
   // Покращена функція озвучування з додатковими налаштуваннями (Browser fallback)
   const speakResponseBrowser = (text: string) => {
-    console.log('🌐 Fallback до Browser Speech API...');
-    
+    console.log('🔊 Browser Speech API TTS...');
+
     if (!synthRef.current) {
       console.error('❌ speechSynthesis недоступний');
+      alert('Озвучування недоступне в цьому браузері. Спробуйте Chrome або Edge.');
       return;
     }
-    
+
     if (!voiceEnabled) {
-      console.log('🔇 Озвучування вимкнено');
+      console.log('🔇 Озвучування вимкнено користувачем');
       return;
     }
 
-    console.log(`🔊 Browser TTS: "${text.substring(0, 50)}..."`);
+    console.log(`🎤 Озвучую: "${text.substring(0, 60)}..."`);
 
-    // Зупиняємо попереднє відтворення
+    // ВАЖЛИВО: Зупиняємо попереднє відтворення
     synthRef.current.cancel();
 
+    // Створюємо висловлювання
     const utterance = new SpeechSynthesisUtterance(text);
+
+    // Отримуємо список доступних голосів
+    const voices = synthRef.current.getVoices();
+    console.log(`🎵 Доступно голосів: ${voices.length}`);
+
+    // Логуємо всі доступні голоси для дебагу
+    if (voices.length > 0) {
+      console.log('📋 Доступні голоси:', voices.map(v => `${v.name} (${v.lang})`).join(', '));
+    }
+
+    // РОЗШИРЕНИЙ ПОШУК УКРАЇНСЬКОГО ГОЛОСУ
+    let selectedVoice = null;
+
+    if (settings.language === 'uk-UA' || settings.language.startsWith('uk')) {
+      console.log('🇺🇦 Пошук українського голосу...');
+
+      // Пріоритет 1: Точна відповідність uk-UA
+      selectedVoice = voices.find((voice: any) => voice.lang === 'uk-UA');
+
+      // Пріоритет 2: Будь-який uk-*
+      if (!selectedVoice) {
+        selectedVoice = voices.find((voice: any) => voice.lang === 'uk');
+      }
+
+      // Пріоритет 3: Пошук за назвою (Google, Microsoft)
+      if (!selectedVoice) {
+        selectedVoice = voices.find((voice: any) =>
+          voice.name.toLowerCase().includes('ukrain') ||
+          voice.name.toLowerCase().includes('lesya') ||
+          voice.name.toLowerCase().includes('maxim') ||
+          voice.name.toLowerCase().includes('ukrainian')
+        );
+      }
+
+      // Пріоритет 4: Російський як близька мова (якщо нема українського)
+      if (!selectedVoice) {
+        console.warn('⚠️ Український голос не знайдено, пробую російський...');
+        selectedVoice = voices.find((voice: any) =>
+          voice.lang === 'ru-RU' || voice.lang === 'ru'
+        );
+      }
+
+      if (selectedVoice) {
+        console.log(`✅ Знайдено голос: ${selectedVoice.name} (${selectedVoice.lang})`);
+      } else {
+        console.warn('⚠️ Жодного підходящого голосу не знайдено! Використовую системний за замовчуванням.');
+      }
+    } else if (settings.language === 'en-US' || settings.language.startsWith('en')) {
+      console.log('🇺🇸 Пошук англійського голосу...');
+
+      // Пріоритет для якісних голосів
+      selectedVoice = voices.find((voice: any) =>
+        voice.lang === 'en-US' && (
+          voice.name.includes('Google') ||
+          voice.name.includes('Microsoft') ||
+          voice.name.includes('Neural') ||
+          voice.name.includes('Premium')
+        )
+      );
+
+      if (!selectedVoice) {
+        selectedVoice = voices.find((voice: any) => voice.lang === 'en-US');
+      }
+
+      if (!selectedVoice) {
+        selectedVoice = voices.find((voice: any) => voice.lang.startsWith('en'));
+      }
+    }
+
+    // Fallback на будь-який голос
+    if (!selectedVoice && voices.length > 0) {
+      selectedVoice = voices[0];
+      console.log(`⚠️ Використовую перший доступний голос: ${selectedVoice.name}`);
+    }
+
+    // Встановлюємо голос та параметри
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+      console.log(`🎵 Встановлено голос: ${selectedVoice.name} (${selectedVoice.lang})`);
+    }
+
     utterance.lang = settings.language;
     utterance.rate = settings.speed;
     utterance.pitch = settings.pitch;
     utterance.volume = settings.volume;
 
-    console.log('⚙️ Browser TTS налаштування:', {
+    console.log('⚙️ Параметри TTS:', {
+      voice: selectedVoice?.name || 'системний',
       lang: utterance.lang,
       rate: utterance.rate,
       pitch: utterance.pitch,
       volume: utterance.volume
     });
 
-    // Отримуємо список доступних голосів
-    const voices = synthRef.current.getVoices();
-    console.log('🎤 Доступно голосів:', voices.length);
-
-    // Розширений пошук підходящого голосу
-    let selectedVoice = null;
-
-    if (settings.language === 'uk-UA') {
-      // Пріоритет українських голосів
-      selectedVoice = voices.find((voice: any) =>
-        voice.lang === 'uk-UA' || voice.lang === 'uk'
-      ) || voices.find((voice: any) =>
-        voice.name.toLowerCase().includes('ukrainian') ||
-        voice.name.toLowerCase().includes('lesya') ||
-        voice.name.toLowerCase().includes('maxim') ||
-        voice.name.toLowerCase().includes('oleksandr')
-      );
-    } else if (settings.language === 'en-US') {
-      // Пошук якісних англійських голосів
-      selectedVoice = voices.find((voice: any) =>
-        voice.lang === 'en-US' && (
-          voice.name.includes('Google') ||
-          voice.name.includes('Microsoft') ||
-          voice.name.includes('Neural')
-        )
-      ) || voices.find((voice: any) => voice.lang === 'en-US');
-    }
-
-    // Загальний fallback
-    if (!selectedVoice) {
-      selectedVoice = voices.find((voice: any) =>
-        voice.name.includes(settings.voice)
-      ) || voices[0];
-    }
-
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-      console.log('🎵 Використовується голос:', selectedVoice.name, selectedVoice.lang);
-    } else {
-      console.log('⚠️ Голос не знайдено, використовується системний за замовчуванням');
-    }
-
-    // Розширені обробники подій
+    // Обробники подій
     utterance.onstart = () => {
-      console.log('🔊 Browser TTS ПОЧАТОК:', text.substring(0, 50) + '...');
+      console.log('▶️  ОЗВУЧУВАННЯ ПОЧАЛОСЬ');
     };
 
     utterance.onend = () => {
-      console.log('✅ Browser TTS ЗАВЕРШЕНО');
+      console.log('✅ ОЗВУЧУВАННЯ ЗАВЕРШЕНО');
     };
 
-    utterance.onerror = (event) => {
-      console.error('❌ Browser TTS ПОМИЛКА:', event.error);
-    };
-
-    utterance.onpause = () => {
-      console.log('⏸️ Browser TTS призупинено');
-    };
-
-    utterance.onresume = () => {
-      console.log('▶️ Browser TTS відновлено');
-    };
-
-    // Додаємо затримку для забезпечення завантаження голосів
-    const speakWithDelay = () => {
-      if (synthRef.current && synthRef.current.getVoices().length > 0) {
-        console.log('🚀 Запуск Browser TTS...');
-        synthRef.current.speak(utterance);
+    utterance.onerror = (event: any) => {
+      console.error('❌ Помилка озвучування:', event.error);
+      if (event.error === 'interrupted') {
+        console.log('⚠️ Озвучування перервано (це нормально)');
       } else {
-        console.log('⏳ Очікування завантаження голосів...');
-        setTimeout(speakWithDelay, 100);
+        alert(`Помилка озвучування: ${event.error}`);
       }
     };
 
-    speakWithDelay();
+    utterance.onpause = () => {
+      console.log('⏸️ Озвучування призупинено');
+    };
+
+    utterance.onresume = () => {
+      console.log('▶️ Озвучування відновлено');
+    };
+
+    // ВАЖЛИВО: Запускаємо озвучування з затримкою для завантаження голосів
+    const speakWithRetry = (retries = 3) => {
+      const voices = synthRef.current.getVoices();
+
+      if (voices.length > 0) {
+        console.log('🚀 ЗАПУСК ОЗВУЧУВАННЯ!');
+        try {
+          synthRef.current.speak(utterance);
+          console.log('✅ Команда speak() виконана успішно');
+        } catch (error) {
+          console.error('❌ Помилка при виклику speak():', error);
+        }
+      } else if (retries > 0) {
+        console.log(`⏳ Голоси ще не завантажені, спроба ${4 - retries}/3...`);
+        setTimeout(() => speakWithRetry(retries - 1), 200);
+      } else {
+        console.error('❌ Голоси не завантажились після 3 спроб');
+        alert('Озвучування недоступне. Спробуйте перезавантажити сторінку.');
+      }
+    };
+
+    // Невелика затримка перед запуском
+    setTimeout(() => speakWithRetry(), 100);
   };
 
   const startListening = async () => {
@@ -694,13 +752,17 @@ const AIVoiceInterface: React.FC = () => {
                 WebkitTextFillColor: 'transparent'
               }}
             >
-              🎤 AI Голосовий Інтерфейс
+              {settings.language === 'uk-UA'
+                ? '🎤 AI Голосовий Інтерфейс'
+                : '🎤 AI Voice Interface'}
             </Typography>
             <Typography
               variant="h6"
               sx={{ color: nexusColors.text.secondary }}
             >
-              Голосове управління та AI асистент
+              {settings.language === 'uk-UA'
+                ? 'Голосове управління та AI асистент'
+                : 'Voice Control and AI Assistant'}
             </Typography>
           </Box>
         </Box>
@@ -769,7 +831,9 @@ const AIVoiceInterface: React.FC = () => {
                 fontWeight: 'bold'
               }}
             >
-              {isListening ? '🎧 Слухаю...' : '🔇 Натисніть для активації'}
+              {isListening
+                ? (settings.language === 'uk-UA' ? '🎧 Слухаю...' : '🎧 Listening...')
+                : (settings.language === 'uk-UA' ? '🔇 Натисніть для активації' : '🔇 Click to activate')}
             </Typography>
 
             {currentCommand && (
@@ -1111,18 +1175,23 @@ const AIVoiceInterface: React.FC = () => {
         <DialogContent sx={{ pt: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <FormControl fullWidth>
-              <InputLabel sx={{ color: nexusColors.text.secondary }}>Мова</InputLabel>
+              <InputLabel sx={{ color: nexusColors.text.secondary }}>
+                {settings.language === 'uk-UA' ? 'Мова інтерфейсу' : 'Interface Language'}
+              </InputLabel>
               <Select
                 value={settings.language}
-                onChange={(e) => setSettings(prev => ({ ...prev, language: e.target.value }))}
+                onChange={(e) => {
+                  const newLang = e.target.value;
+                  setSettings(prev => ({ ...prev, language: newLang }));
+                  console.log(`🌐 Мову змінено на: ${newLang}`);
+                }}
                 sx={{
                   color: nexusColors.text.primary,
                   '& .MuiOutlinedInput-notchedOutline': { borderColor: `${nexusColors.accent.main}50` }
                 }}
               >
-                <MenuItem value="uk-UA">🇺🇦 Українська</MenuItem>
+                <MenuItem value="uk-UA">🇺🇦 Українська (за замовчуванням)</MenuItem>
                 <MenuItem value="en-US">🇺🇸 English</MenuItem>
-                <MenuItem value="ru-RU">🇷🇺 Русский</MenuItem>
               </Select>
             </FormControl>
 

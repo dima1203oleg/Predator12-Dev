@@ -1,0 +1,133 @@
+🎤 PREDATOR12 NEXUS - ШВИДКИЙ СТАРТ ГОЛОСОВИХ ТЕХНОЛОГІЙ
+
+═══════════════════════════════════════════════════════════════
+                    10-ХВИЛИННА ІНСТРУКЦІЯ
+═══════════════════════════════════════════════════════════════
+
+🚀 КРОК 1: ВСТАНОВЛЕННЯ (5 хвилин)
+
+cd predator12-local
+./install-voice-tech.sh
+
+Що встановиться:
+✅ Coqui TTS - український нейронний голос
+✅ Whisper - розпізнавання української мови
+✅ faster-whisper - оптимізована версія
+✅ Всі залежності автоматично
+
+─────────────────────────────────────────────────────────────
+
+🧪 КРОК 2: ТЕСТУВАННЯ (2 хвилини)
+
+source voice-env/bin/activate
+python test_voice_system.py
+
+Перевірить:
+✅ TTS - озвучування українською
+✅ STT - розпізнавання мовлення
+✅ Якість та швидкість
+
+─────────────────────────────────────────────────────────────
+
+🌐 КРОК 3: ЗАПУСК API (1 хвилина)
+
+python voice_api.py
+
+API буде доступний:
+📍 http://localhost:8000
+📚 Документація: http://localhost:8000/docs
+
+─────────────────────────────────────────────────────────────
+
+🎯 КРОК 4: ВИКОРИСТАННЯ (2 хвилини)
+
+A) З PYTHON:
+```python
+from TTS.api import TTS
+tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2")
+tts.tts_to_file(text="Привіт!", file_path="out.wav", language="uk")
+```
+
+B) З API:
+```bash
+curl -X POST "http://localhost:8000/api/tts" \
+  -H "Content-Type: application/json" \
+  -d '{"text":"Привіт!","language":"uk"}'
+```
+
+C) З FRONTEND:
+```typescript
+import { voiceAPI } from './services/voiceAPI';
+const audio = await voiceAPI.textToSpeech("Привіт!", "uk");
+await voiceAPI.playAudio(audio);
+```
+
+═══════════════════════════════════════════════════════════════
+
+📊 ЩО ВИ ОТРИМАЛИ:
+
+✅ TTS Локальна    - Coqui XTTS v2 (українська + англійська)
+✅ TTS API         - REST endpoint для озвучування
+✅ STT Локальна    - Whisper Large v3 (95%+ точність)
+✅ STT API         - REST endpoint для розпізнавання
+✅ TypeScript SDK  - Готова інтеграція для фронтенду
+✅ Fallback        - Web Speech API як резерв
+
+═══════════════════════════════════════════════════════════════
+
+🎤 ШВИДКІ КОМАНДИ:
+
+# Активувати середовище
+source voice-env/bin/activate
+
+# Запустити API
+python voice_api.py
+
+# Тестувати систему
+python test_voice_system.py
+
+# Згенерувати аудіо
+python -c "from TTS.api import TTS; TTS('tts_models/multilingual/multi-dataset/xtts_v2').tts_to_file('Тест', 'test.wav', language='uk')"
+
+# Розпізнати аудіо
+python -c "from faster_whisper import WhisperModel; print(WhisperModel('base').transcribe('test.wav')[0])"
+
+═══════════════════════════════════════════════════════════════
+
+🔗 КОРИСНІ ПОСИЛАННЯ:
+
+📖 Повний гайд:   🎤_VOICE_TECHNOLOGIES_GUIDE.md
+🌐 API сервер:    voice_api.py
+🧪 Тести:         test_voice_system.py
+📦 Залежності:    voice-requirements.txt
+⚙️ Встановлення:  install-voice-tech.sh
+💻 Frontend SDK:  frontend/src/services/voiceAPI.ts
+
+═══════════════════════════════════════════════════════════════
+
+⚡ ШВИДКИЙ ТЕСТ:
+
+1. cd predator12-local
+2. source voice-env/bin/activate
+3. python -c "from TTS.api import TTS; TTS('tts_models/multilingual/multi-dataset/xtts_v2').tts_to_file('Привіт! Я працюю!', 'hello.wav', language='uk')"
+4. Відкрийте hello.wav
+
+Якщо почуєте голос - все працює! 🎉
+
+═══════════════════════════════════════════════════════════════
+
+🆘 ПІДТРИМКА:
+
+Проблеми? Виконайте:
+1. pip install --upgrade pip
+2. pip install -r voice-requirements.txt
+3. python test_voice_system.py
+
+Все ще не працює?
+Перегляньте 🎤_VOICE_TECHNOLOGIES_GUIDE.md розділ Troubleshooting
+
+═══════════════════════════════════════════════════════════════
+
+🎉 ГОТОВО! Тепер у вас є повноцінна голосова система!
+
+Створено PREDATOR12 Team 🚀

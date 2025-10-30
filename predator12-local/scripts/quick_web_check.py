@@ -15,13 +15,7 @@ print(f"   Корінь: {project_root.exists()}")
 print(f"   Frontend: {frontend_dir.exists()}")
 
 # Ключові файли frontend'у
-key_files = [
-    "package.json",
-    "vite.config.ts", 
-    "index.html",
-    "src/main.tsx",
-    "src/App.tsx"
-]
+key_files = ["package.json", "vite.config.ts", "index.html", "src/main.tsx", "src/App.tsx"]
 
 print("\n📄 Ключові файли frontend'у:")
 for file in key_files:
@@ -48,7 +42,7 @@ print("\n🐳 Docker конфігурація:")
 docker_files = [
     project_root / "docker-compose.yml",
     frontend_dir / "Dockerfile",
-    frontend_dir / "nginx.conf"
+    frontend_dir / "nginx.conf",
 ]
 
 for file in docker_files:
@@ -59,10 +53,7 @@ for file in docker_files:
 
 # Перевірка .env файлів
 print("\n⚙️  Змінні оточення:")
-env_files = [
-    project_root / ".env",
-    project_root / ".env.example"
-]
+env_files = [project_root / ".env", project_root / ".env.example"]
 
 for file in env_files:
     if file.exists():
@@ -84,18 +75,18 @@ if not (project_root / ".env").exists():
 # Спроба перевірити порти (простий спосіб)
 try:
     import socket
-    
+
     def check_port(port, name):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(1)
-        result = sock.connect_ex(('localhost', port))
+        result = sock.connect_ex(("localhost", port))
         sock.close()
         return result == 0
-    
+
     print("\n📡 Перевірка портів:")
-    
+
     ports = {3000: "Frontend", 8000: "Backend", 5432: "PostgreSQL", 6379: "Redis"}
-    
+
     for port, name in ports.items():
         if check_port(port, name):
             print(f"   ✅ Порт {port} ({name}): ЗАЙНЯТИЙ")
@@ -126,7 +117,7 @@ print("cd frontend")
 print("npm install")
 print()
 print("# 2. Запуск через Docker:")
-print("cd /Users/dima/Documents/Predator11")  
+print("cd /Users/dima/Documents/Predator11")
 print("docker compose up -d")
 print()
 print("# 3. АБО запуск frontend окремо:")

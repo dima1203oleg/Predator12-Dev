@@ -9,12 +9,12 @@ metadata:
 spec:
   replicas: 3
   revisionHistoryLimit: 5
-  
+
   selector:
     matchLabels:
       app: predator12
       component: backend
-  
+
   template:
     metadata:
       labels:
@@ -27,12 +27,12 @@ spec:
         prometheus.io/path: "/metrics"
     spec:
       serviceAccountName: predator12-backend
-      
+
       containers:
         - name: backend
           image: predator12/backend:latest
           imagePullPolicy: Always
-          
+
           ports:
             - name: http
               containerPort: 8000
@@ -40,7 +40,7 @@ spec:
             - name: metrics
               containerPort: 9090
               protocol: TCP
-          
+
           env:
             - name: ENVIRONMENT
               value: "production"
@@ -48,7 +48,7 @@ spec:
               value: "INFO"
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: "http://otel-collector:4317"
-          
+
           livenessProbe:
             httpGet:
               path: /health/live
@@ -57,7 +57,7 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 3
-          
+
           readinessProbe:
             httpGet:
               path: /health/ready
@@ -67,7 +67,7 @@ spec:
             timeoutSeconds: 3
             successThreshold: 1
             failureThreshold: 3
-          
+
           resources:
             requests:
               cpu: 500m
@@ -75,7 +75,7 @@ spec:
             limits:
               cpu: 2000m
               memory: 4Gi
-          
+
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -84,7 +84,7 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
-  
+
   # Progressive Delivery Strategy
   strategy:
     canary:
@@ -92,7 +92,7 @@ spec:
       canaryService: predator12-backend-canary
       # Stable Service
       stableService: predator12-backend-stable
-      
+
       # Traffic Management (Istio/NGINX)
       trafficRouting:
         nginx:
@@ -100,14 +100,14 @@ spec:
           additionalIngressAnnotations:
             canary-by-header: X-Canary
             canary-by-header-value: "true"
-      
+
       # Canary Steps
       steps:
         # 1. Start with 10% traffic
         - setWeight: 10
         - pause:
             duration: 2m
-        
+
         # 2. Run analysis
         - analysis:
             templates:
@@ -116,24 +116,24 @@ spec:
             args:
               - name: service-name
                 value: predator12-backend-canary
-        
+
         # 3. Increase to 25%
         - setWeight: 25
         - pause:
             duration: 5m
-        
+
         # 4. Run analysis again
         - analysis:
             templates:
               - templateName: success-rate
               - templateName: latency
               - templateName: error-rate
-        
+
         # 5. Increase to 50%
         - setWeight: 50
         - pause:
             duration: 5m
-        
+
         # 6. Final analysis
         - analysis:
             templates:
@@ -143,16 +143,16 @@ spec:
             args:
               - name: service-name
                 value: predator12-backend-canary
-        
+
         # 7. Full rollout
         - setWeight: 100
-      
+
       # Anti-affinity for canary pods
       antiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution: {}
         preferredDuringSchedulingIgnoredDuringExecution:
           weight: 100
-      
+
       # Analysis during entire rollout
       analysis:
         templates:
@@ -161,10 +161,10 @@ spec:
         args:
           - name: service-name
             value: predator12-backend-canary
-      
+
       # Max surge/unavailable
       maxSurge: "25%"
       maxUnavailable: 0
-      
+
       # Abort conditions
       abortScaleDownDelaySeconds: 30

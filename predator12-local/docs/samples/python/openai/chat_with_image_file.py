@@ -1,8 +1,9 @@
 """This model supports using images as inputs. To run a chat completion using
 a local image file, use the following sample."""
 
-import os
 import base64
+import os
+
 from openai import OpenAI
 
 token = os.environ["GITHUB_TOKEN"]

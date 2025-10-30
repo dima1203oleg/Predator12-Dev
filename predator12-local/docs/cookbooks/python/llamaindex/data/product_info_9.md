@@ -188,7 +188,7 @@ For any warranty-related inquiries or to initiate a warranty claim, please conta
 ## Return Policy
 - If Membership status "None":	Returns are accepted within 30 days of purchase, provided the backpack is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
 - If Membership status "Gold":	Returns are accepted within 60 days of purchase, provided the backpack is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Platinum":	Returns are accepted within 90 days of purchase, provided the backpack is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.                      
+- If Membership status "Platinum":	Returns are accepted within 90 days of purchase, provided the backpack is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.  
 
 ## Reviews
 ## FAQ

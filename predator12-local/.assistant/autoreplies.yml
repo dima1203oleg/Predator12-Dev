@@ -1,0 +1,13 @@
+version: 1
+templates:
+  success_deploy: "✅ Реліз {service} {version} у {env} — УСПІХ. p95={p95}ms, err={err_rate}%."
+  rollback_done:  "↩️ Rollback {service} у {env} до {version}. Причина: {reason}."
+  autoheal:       "🛠️ AutoHeal активовано ({component}). Метрика: {metric}, поріг: {threshold}."
+  etl_done:       "📦 ETL {dataset}:{job} завершено. Рядків={rows}, аномалій={anoms}."
+  i18n_fixed:     "🌐 Автопереклад UI (uk-UA) згенеровано. PR: {url}."
+  blocked_by_policy: "⛔ Зупинено політикою: {policy_id}. Ескалація на HumanInterventionAgent."
+channels:
+  - "github:checks"
+  - "issues:comment"
+  - "telegram:webhook"
+  - "email:ops@predator.local"

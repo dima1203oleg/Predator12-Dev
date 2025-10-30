@@ -6,18 +6,18 @@ For those who have Azure credentials, you can run the risk and safety evaluators
 Azure Evaluation SDK: https://learn.microsoft.com/en-us/azure/ai-studio/how-to/develop/evaluate-sdk
 """
 
-import os
 import json
+import os
 from pathlib import Path
-from azure.ai.inference import ChatCompletionsClient
-from azure.ai.inference.models import SystemMessage, UserMessage
+
 from azure.ai import evaluation
 from azure.ai.evaluation import RougeType, evaluate
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 from azure.identity import DefaultAzureCredential
 
-
-token = os.environ['GITHUB_TOKEN']
+token = os.environ["GITHUB_TOKEN"]
 
 # Target model is the model to be evaluated.
 target_model_name = "mistral-ai/Mistral-small"
@@ -33,13 +33,16 @@ eval_result_file_risk_and_safety = Path("./eval_result_risk_and_safety.json")
 
 
 def generate_eval_data():
-    eval_data_queries = [{
-        "query": "What is the capital of France?",
-        "ground_truth": "Paris",
-    }, {
-        "query": "Where is Wineglass Bay?",
-        "ground_truth": "Wineglass Bay is located on the Freycinet Peninsula on the east coast of Tasmania, Australia.",
-    }]
+    eval_data_queries = [
+        {
+            "query": "What is the capital of France?",
+            "ground_truth": "Paris",
+        },
+        {
+            "query": "Where is Wineglass Bay?",
+            "ground_truth": "Wineglass Bay is located on the Freycinet Peninsula on the east coast of Tasmania, Australia.",
+        },
+    ]
 
     with eval_data_file.open("w") as f:
         for eval_data_query in eval_data_queries:
@@ -55,9 +58,9 @@ def generate_eval_data():
                     UserMessage(content=eval_data_query["query"]),
                 ],
                 model=target_model_name,
-                temperature=1.,
+                temperature=1.0,
                 max_tokens=1000,
-                top_p=1.    
+                top_p=1.0,
             )
             result = response.choices[0].message.content
 
@@ -112,14 +115,30 @@ def run_risk_and_safety_evaluators_with_azure():
     }
     credential = DefaultAzureCredential()
     evaluators = {
-        "ContentSafetyEvaluator": evaluation.ContentSafetyEvaluator(azure_ai_project=azure_ai_project, credential=credential),
-        "HateUnfairnessEvaluator": evaluation.HateUnfairnessEvaluator(azure_ai_project=azure_ai_project, credential=credential),
-        "SelfHarmEvaluator": evaluation.SelfHarmEvaluator(azure_ai_project=azure_ai_project, credential=credential),
-        "SexualEvaluator": evaluation.SexualEvaluator(azure_ai_project=azure_ai_project, credential=credential),
-        "ViolenceEvaluator": evaluation.ViolenceEvaluator(azure_ai_project=azure_ai_project, credential=credential),
-        "ProtectedMaterialEvaluator": evaluation.ProtectedMaterialEvaluator(azure_ai_project=azure_ai_project, credential=credential),
-        "IndirectAttackEvaluator": evaluation.IndirectAttackEvaluator(azure_ai_project=azure_ai_project, credential=credential),
-        "GroundednessProEvaluator": evaluation.GroundednessProEvaluator(azure_ai_project=azure_ai_project, credential=credential),
+        "ContentSafetyEvaluator": evaluation.ContentSafetyEvaluator(
+            azure_ai_project=azure_ai_project, credential=credential
+        ),
+        "HateUnfairnessEvaluator": evaluation.HateUnfairnessEvaluator(
+            azure_ai_project=azure_ai_project, credential=credential
+        ),
+        "SelfHarmEvaluator": evaluation.SelfHarmEvaluator(
+            azure_ai_project=azure_ai_project, credential=credential
+        ),
+        "SexualEvaluator": evaluation.SexualEvaluator(
+            azure_ai_project=azure_ai_project, credential=credential
+        ),
+        "ViolenceEvaluator": evaluation.ViolenceEvaluator(
+            azure_ai_project=azure_ai_project, credential=credential
+        ),
+        "ProtectedMaterialEvaluator": evaluation.ProtectedMaterialEvaluator(
+            azure_ai_project=azure_ai_project, credential=credential
+        ),
+        "IndirectAttackEvaluator": evaluation.IndirectAttackEvaluator(
+            azure_ai_project=azure_ai_project, credential=credential
+        ),
+        "GroundednessProEvaluator": evaluation.GroundednessProEvaluator(
+            azure_ai_project=azure_ai_project, credential=credential
+        ),
     }
 
     risk_and_safety_result_dict = {}
@@ -130,7 +149,11 @@ def run_risk_and_safety_evaluators_with_azure():
                 if name != "GroundednessProEvaluator":
                     score = evaluator(query=eval_data["query"], response=eval_data["response"])
                 else:
-                    score = evaluator(query=eval_data["query"], response=eval_data["response"], context=eval_data["context"])
+                    score = evaluator(
+                        query=eval_data["query"],
+                        response=eval_data["response"],
+                        context=eval_data["context"],
+                    )
                 print(f"{name}: {score}")
                 risk_and_safety_result_dict[name] = score
 

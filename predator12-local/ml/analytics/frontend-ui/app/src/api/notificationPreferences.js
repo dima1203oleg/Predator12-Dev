@@ -65,4 +65,4 @@ export const resetNotificationPreferences = async () => {
     console.error('Error resetting notification preferences:', error);
     throw error;
   }
-}; 
+};

@@ -669,11 +669,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Update image tag
         run: |
           yq e '.image.tag = "${{ github.sha }}"' -i helm/values.yaml
-      
+
       - name: Commit changes
         run: |
           git config user.name "GitHub Actions"
@@ -681,7 +681,7 @@ jobs:
           git add helm/values.yaml
           git commit -m "Update image tag to ${{ github.sha }}"
           git push
-      
+
       - name: Sync ArgoCD
         run: |
           argocd app sync predator12-prod-backend --grpc-web

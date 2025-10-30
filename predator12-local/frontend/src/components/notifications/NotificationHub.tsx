@@ -64,7 +64,7 @@ const NotificationHub: React.FC = () => {
   const formatTimeAgo = (timestamp: Date): string => {
     const now = new Date();
     const diff = Math.floor((now.getTime() - timestamp.getTime()) / 1000);
-    
+
     if (diff < 60) return `${diff}с тому`;
     if (diff < 3600) return `${Math.floor(diff / 60)}хв тому`;
     if (diff < 86400) return `${Math.floor(diff / 3600)}год тому`;
@@ -134,7 +134,7 @@ const NotificationHub: React.FC = () => {
               }}
             />
           </Box>
-          
+
           <Divider sx={{ borderColor: nexusColors.quantum, mb: 2 }} />
 
           {events.length === 0 ? (
@@ -170,12 +170,12 @@ const NotificationHub: React.FC = () => {
                       <ListItemIcon sx={{ minWidth: 36 }}>
                         {getEventIcon(event.level)}
                       </ListItemIcon>
-                      
+
                       <ListItemText
                         primary={
-                          <Typography 
-                            variant="body2" 
-                            sx={{ 
+                          <Typography
+                            variant="body2"
+                            sx={{
                               color: nexusColors.frost,
                               fontWeight: !event.isRead ? 'bold' : 'normal'
                             }}

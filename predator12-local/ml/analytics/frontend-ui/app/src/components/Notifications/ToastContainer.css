@@ -498,7 +498,7 @@
   .toast {
     width: calc(100vw - 2rem);
   }
-  
+
   .toast-container.top-right,
   .toast-container.top-left {
     top: 0.5rem;
@@ -506,7 +506,7 @@
     left: 0.5rem;
     align-items: stretch;
   }
-  
+
   .toast-container.bottom-right,
   .toast-container.bottom-left {
     bottom: 0.5rem;
@@ -514,4 +514,4 @@
     left: 0.5rem;
     align-items: stretch;
   }
-} 
+}

@@ -1,0 +1,169 @@
+{
+  "dashboard": {
+    "title": "Predator Analytics - Overview",
+    "tags": ["predator-analytics", "overview"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "API Latency (p95/p99)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "predator:api:latency:p95",
+            "legendFormat": "p95"
+          },
+          {
+            "expr": "predator:api:latency:p99",
+            "legendFormat": "p99"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "s",
+            "label": "Latency"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "title": "Request Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(predator_http_requests_total[5m])",
+            "legendFormat": "{{ method }} {{ endpoint }}"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "reqps",
+            "label": "Requests/s"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      },
+      {
+        "title": "Success Rate",
+        "type": "singlestat",
+        "targets": [
+          {
+            "expr": "predator:api:success_rate"
+          }
+        ],
+        "format": "percentunit",
+        "valueName": "current",
+        "thresholds": "0.999,0.9999",
+        "colors": ["#d44a3a", "#e0b400", "#299c46"],
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 0,
+          "y": 8
+        }
+      },
+      {
+        "title": "Active Tasks",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "predator_active_tasks",
+            "legendFormat": "{{ agent_type }}"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "short",
+            "label": "Tasks"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 12
+        }
+      },
+      {
+        "title": "Celery Queue Length",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "predator_celery_queue_length",
+            "legendFormat": "{{ queue_name }}"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "short",
+            "label": "Queue Size"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 12
+        }
+      },
+      {
+        "title": "Task Execution Time (p95)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "predator:tasks:execution_time:p95",
+            "legendFormat": "{{ agent_type }}"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "s",
+            "label": "Execution Time"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 20
+        }
+      },
+      {
+        "title": "Agent Errors",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(predator_agent_errors_total[5m])",
+            "legendFormat": "{{ agent_type }} - {{ error_type }}"
+          }
+        ],
+        "yaxes": [
+          {
+            "format": "short",
+            "label": "Errors/s"
+          }
+        ],
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 20
+        }
+      }
+    ],
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "refresh": "30s"
+  }
+}

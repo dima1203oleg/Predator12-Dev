@@ -4,6 +4,7 @@ conversation and send the latest messages to the model.
 """
 
 import os
+
 from openai import OpenAI
 
 token = os.environ["GITHUB_TOKEN"]

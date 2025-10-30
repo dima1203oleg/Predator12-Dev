@@ -26,25 +26,25 @@ LOG_FILE="/tmp/predator-migration-scheduler.log"
 # Метрики для вибору оптимального часу
 check_system_metrics() {
     local cpu_usage memory_usage disk_usage network_load user_activity
-    
+
     # CPU використання
     cpu_usage=$(top -l 1 | grep "CPU usage" | awk '{print $3}' | sed 's/%//')
-    
-    # Memory використання  
+
+    # Memory використання
     memory_usage=$(memory_pressure | grep "System-wide memory free percentage" | awk '{print 100-$5}')
-    
+
     # Disk I/O
     disk_usage=$(iostat -d 1 2 | tail -1 | awk '{print $3+$4}')
-    
+
     # Network активність (приблизно)
     network_load=$(netstat -ib | awk 'NR>1 {sum+=$7+$10} END {print sum/1024/1024}' 2>/dev/null || echo "0")
-    
+
     # Активність користувача (кількість процесів)
     user_activity=$(ps aux | wc -l)
-    
+
     # Час доби (0-23)
     current_hour=$(date +%H)
-    
+
     echo "$cpu_usage $memory_usage $disk_usage $network_load $user_activity $current_hour"
 }
 
@@ -57,28 +57,28 @@ calculate_migration_score() {
     local network=${metrics[3]:-50}
     local processes=${metrics[4]:-200}
     local hour=${metrics[5]:-12}
-    
+
     local score=100
-    
+
     # CPU навантаження (чим менше, тим краще)
     if (( $(echo "$cpu > 70" | bc -l) )); then
         score=$((score - 30))
     elif (( $(echo "$cpu > 50" | bc -l) )); then
         score=$((score - 15))
     fi
-    
+
     # Memory використання
     if (( $(echo "$memory > 80" | bc -l) )); then
         score=$((score - 25))
     elif (( $(echo "$memory > 60" | bc -l) )); then
         score=$((score - 10))
     fi
-    
+
     # Disk I/O активність
     if (( $(echo "$disk > 100" | bc -l) )); then
         score=$((score - 20))
     fi
-    
+
     # Час доби (кращий час: 2-6 ранку або 14-16)
     if [[ $hour -ge 2 && $hour -le 6 ]]; then
         score=$((score + 20))  # Ніч - найкращий час
@@ -87,29 +87,29 @@ calculate_migration_score() {
     elif [[ $hour -ge 9 && $hour -le 18 ]]; then
         score=$((score - 15))  # Робочий час - гірше
     fi
-    
+
     # День тижня
     local weekday=$(date +%u)  # 1=Monday, 7=Sunday
     if [[ $weekday -eq 6 || $weekday -eq 7 ]]; then
         score=$((score + 15))  # Вихідні - краще
     fi
-    
+
     # Кількість активних процесів
     if [[ $processes -gt 300 ]]; then
         score=$((score - 10))
     fi
-    
+
     # Обмеження score
     if [[ $score -lt 0 ]]; then score=0; fi
     if [[ $score -gt 100 ]]; then score=100; fi
-    
+
     echo $score
 }
 
 # Перевірка готовності системи
 check_system_readiness() {
     local issues=0
-    
+
     # Перевірка наявності необхідних інструментів
     for tool in kubectl helm docker; do
         if ! command -v $tool &> /dev/null; then
@@ -117,26 +117,26 @@ check_system_readiness() {
             ((issues++))
         fi
     done
-    
+
     # Перевірка доступу до Kubernetes
     if ! kubectl cluster-info &> /dev/null; then
         warning "Немає доступу до Kubernetes кластера"
         ((issues++))
     fi
-    
+
     # Перевірка Docker
     if ! docker info &> /dev/null; then
         warning "Docker не запущений"
         ((issues++))
     fi
-    
+
     # Перевірка вільного місця на диску
     local free_space=$(df / | tail -1 | awk '{print $4}')
     if [[ $free_space -lt 10000000 ]]; then  # Менше 10GB
         warning "Недостатньо вільного місця на диску"
         ((issues++))
     fi
-    
+
     return $issues
 }
 
@@ -144,15 +144,15 @@ check_system_readiness() {
 send_notification() {
     local message="$1"
     local level="$2"  # info, warning, error
-    
+
     # Лог
     echo "[$(date)] [$level] $message" >> "$LOG_FILE"
-    
+
     # Terminal notification (macOS)
     if command -v osascript &> /dev/null; then
         osascript -e "display notification \"$message\" with title \"Predator Analytics Migration\""
     fi
-    
+
     # Slack notification (якщо налаштовано)
     if [[ -n "${SLACK_WEBHOOK_URL:-}" ]]; then
         curl -X POST -H 'Content-type: application/json' \
@@ -167,10 +167,10 @@ monitor_and_schedule() {
     local best_score=0
     local wait_count=0
     local max_wait_cycles=$((MAX_WAIT_TIME / MONITORING_INTERVAL))
-    
+
     log "🔍 Початок моніторингу для вибору оптимального моменту міграції"
     log "📊 Перевірка кожні $MONITORING_INTERVAL секунд, максимум $MAX_WAIT_TIME секунд"
-    
+
     while true; do
         # Перевірка готовності системи
         if ! check_system_readiness; then
@@ -178,13 +178,13 @@ monitor_and_schedule() {
             sleep $MONITORING_INTERVAL
             continue
         fi
-        
+
         # Збір метрик
         local metrics=$(check_system_metrics)
         local score=$(calculate_migration_score "$metrics")
-        
+
         log "📈 Поточний score: $score/100 (CPU: $(echo $metrics | cut -d' ' -f1)%, Memory: $(echo $metrics | cut -d' ' -f2)%, Hour: $(echo $metrics | cut -d' ' -f6))"
-        
+
         # Перевірка порогів для запуску міграції
         if [[ $score -ge 85 ]]; then
             success "🎯 Відмінні умови для міграції (score: $score)!"
@@ -196,23 +196,23 @@ monitor_and_schedule() {
             warning "⏰ Запускаємо міграцію через тривале очікування (score: $score)"
             return 0
         fi
-        
+
         # Оновлення найкращого score
         if [[ $score -gt $best_score ]]; then
             best_score=$score
         fi
-        
+
         # Перевірка максимального часу очікування
         wait_count=$((wait_count + 1))
         if [[ $wait_count -ge $max_wait_cycles ]]; then
             warning "⏱️ Досягнуто максимальний час очікування, запускаємо міграцію"
             return 0
         fi
-        
+
         # Прогнозування наступного оптимального вікна
         local current_hour=$(date +%H)
         local next_optimal=""
-        
+
         if [[ $current_hour -lt 2 ]]; then
             next_optimal="02:00 сьогодні"
         elif [[ $current_hour -lt 6 ]]; then
@@ -222,14 +222,14 @@ monitor_and_schedule() {
         else
             next_optimal="02:00 завтра"
         fi
-        
+
         log "⏳ Очікування... Наступне оптимальне вікно: $next_optimal (найкращий score: $best_score)"
-        
+
         # Сповіщення кожні 30 хвилин
         if [[ $((wait_count % 6)) -eq 0 ]]; then
             send_notification "Очікування оптимального моменту для міграції. Score: $score/100" "info"
         fi
-        
+
         sleep $MONITORING_INTERVAL
     done
 }
@@ -237,9 +237,9 @@ monitor_and_schedule() {
 # Виконання міграції
 execute_migration() {
     log "🚀 Розпочинаємо міграцію на Kubernetes..."
-    
+
     send_notification "Розпочинаємо автоматичну міграцію Predator Analytics на Kubernetes" "info"
-    
+
     # Запуск міграції з правильними параметрами
     if [[ -x "$MIGRATION_SCRIPT" ]]; then
         "$MIGRATION_SCRIPT" \
@@ -254,7 +254,7 @@ execute_migration() {
 # Головна функція
 main() {
     log "🤖 Predator Analytics - Intelligent Migration Scheduler"
-    
+
     # Обробка параметрів
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -299,14 +299,14 @@ main() {
                 ;;
         esac
     done
-    
+
     # Початкова перевірка
     log "🔍 Початкова перевірка системи..."
     if ! check_system_readiness; then
         error "Система не готова для міграції"
         exit 1
     fi
-    
+
     # Моніторинг та планування
     if monitor_and_schedule; then
         execute_migration
@@ -329,10 +329,10 @@ if [[ "${1:-}" == "--daemon" ]]; then
     log "🔄 Запуск у фоновому режимі..."
     # Створення PID файлу
     echo $$ > /tmp/predator-migration-scheduler.pid
-    
+
     # Перенаправлення логів
     exec > >(tee -a "$LOG_FILE") 2>&1
-    
+
     # Запуск
     main "${@:2}"
 else

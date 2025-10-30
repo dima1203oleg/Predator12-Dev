@@ -443,7 +443,7 @@ from agents.self_heal.port_collision_healer import PortCollisionHealer
 def test_heal_port_collision():
     healer = PortCollisionHealer()
     script = healer.heal(port=8000, service="backend")
-    
+
     assert "lsof -ti:8000" in script
     assert "kill -15" in script
     assert script.endswith("restart backend")
@@ -451,7 +451,7 @@ def test_heal_port_collision():
 def test_model_selection():
     healer = PortCollisionHealer()
     model, fallbacks = healer.select_model()
-    
+
     assert model == "llama-3.3-70b-versatile"
     assert "gpt-4o-mini-self-heal" in fallbacks
 ```
@@ -464,13 +464,13 @@ def test_self_heal_workflow():
     # 1. Trigger port collision
     start_service_on_port(8000)
     start_service_on_port(8000)  # Collision
-    
+
     # 2. Agent should detect and heal
     wait_for_agent_execution("PortCollisionHealer", timeout=30)
-    
+
     # 3. Verify port is free
     assert is_port_free(8000)
-    
+
     # 4. Verify service restarted
     assert is_service_running("backend")
 ```

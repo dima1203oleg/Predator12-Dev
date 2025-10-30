@@ -39,11 +39,11 @@ create_backup_dir() {
 # Backup PostgreSQL database
 backup_postgres() {
     log_info "Backing up PostgreSQL database..."
-    
+
     if command -v kubectl &> /dev/null; then
         # Kubernetes deployment
         kubectl exec deployment/postgres -- pg_dumpall -U predator_user > postgres_backup.sql
-        
+
         # Also backup individual database with custom format
         kubectl exec deployment/postgres -- pg_dump -U predator_user -Fc predator_nexus > predator_nexus.pgdump
     else
@@ -51,14 +51,14 @@ backup_postgres() {
         docker exec predator_postgres pg_dumpall -U predator_user > postgres_backup.sql
         docker exec predator_postgres pg_dump -U predator_user -Fc predator_nexus > predator_nexus.pgdump
     fi
-    
+
     log_info "PostgreSQL backup completed ✅"
 }
 
 # Backup Redis data
 backup_redis() {
     log_info "Backing up Redis data..."
-    
+
     if command -v kubectl &> /dev/null; then
         # Kubernetes deployment
         kubectl exec deployment/redis -- redis-cli --rdb redis_backup.rdb
@@ -68,14 +68,14 @@ backup_redis() {
         docker exec predator_redis redis-cli --rdb /data/redis_backup.rdb
         docker cp predator_redis:/data/redis_backup.rdb ./redis_backup.rdb
     fi
-    
+
     log_info "Redis backup completed ✅"
 }
 
 # Backup OpenSearch indices
 backup_opensearch() {
     log_info "Backing up OpenSearch indices..."
-    
+
     # Create snapshot repository if it doesn't exist
     curl -X PUT "opensearch-node:9200/_snapshot/backup_repo" -H 'Content-Type: application/json' -d'
     {
@@ -85,7 +85,7 @@ backup_opensearch() {
             "compress": true
         }
     }' 2>/dev/null || true
-    
+
     # Create snapshot
     curl -X PUT "opensearch-node:9200/_snapshot/backup_repo/snapshot_$TIMESTAMP" -H 'Content-Type: application/json' -d'
     {
@@ -93,7 +93,7 @@ backup_opensearch() {
         "ignore_unavailable": true,
         "include_global_state": false
     }'
-    
+
     # Wait for completion and download
     sleep 30
     if command -v kubectl &> /dev/null; then
@@ -103,14 +103,14 @@ backup_opensearch() {
         docker exec opensearch-node tar -czf /tmp/opensearch_backup.tar.gz -C /usr/share/opensearch/backup .
         docker cp opensearch-node:/tmp/opensearch_backup.tar.gz ./opensearch_backup.tar.gz
     fi
-    
+
     log_info "OpenSearch backup completed ✅"
 }
 
 # Backup MLflow artifacts
 backup_mlflow() {
     log_info "Backing up MLflow artifacts..."
-    
+
     if command -v kubectl &> /dev/null; then
         kubectl exec deployment/mlflow -- tar -czf /tmp/mlflow_backup.tar.gz -C /mlflow .
         kubectl cp deployment/mlflow:/tmp/mlflow_backup.tar.gz ./mlflow_backup.tar.gz
@@ -118,24 +118,24 @@ backup_mlflow() {
         docker exec mlflow tar -czf /tmp/mlflow_backup.tar.gz -C /mlflow .
         docker cp mlflow:/tmp/mlflow_backup.tar.gz ./mlflow_backup.tar.gz
     fi
-    
+
     log_info "MLflow backup completed ✅"
 }
 
 # Backup Qdrant collections
 backup_qdrant() {
     log_info "Backing up Qdrant collections..."
-    
+
     # Get list of collections
     collections=$(curl -s "http://qdrant:6333/collections" | jq -r '.result.collections[].name' 2>/dev/null || echo "")
-    
+
     if [ -n "$collections" ]; then
         mkdir -p qdrant_backup
         for collection in $collections; do
             log_info "Backing up Qdrant collection: $collection"
             curl -s "http://qdrant:6333/collections/$collection/snapshots" -X POST > "qdrant_backup/${collection}_snapshot.json"
         done
-        
+
         # Copy snapshot files
         if command -v kubectl &> /dev/null; then
             kubectl exec deployment/qdrant -- tar -czf /tmp/qdrant_backup.tar.gz -C /qdrant/storage .
@@ -145,16 +145,16 @@ backup_qdrant() {
             docker cp qdrant:/tmp/qdrant_backup.tar.gz ./qdrant_backup.tar.gz
         fi
     fi
-    
+
     log_info "Qdrant backup completed ✅"
 }
 
 # Backup application configurations
 backup_configs() {
     log_info "Backing up application configurations..."
-    
+
     mkdir -p configs
-    
+
     if command -v kubectl &> /dev/null; then
         # Kubernetes configs
         kubectl get configmaps -o yaml > configs/configmaps.yaml
@@ -167,17 +167,17 @@ backup_configs() {
         cp -r ../docker-compose.yml configs/ 2>/dev/null || true
         cp -r ../.env configs/ 2>/dev/null || true
     fi
-    
+
     log_info "Configuration backup completed ✅"
 }
 
 # Backup monitoring data
 backup_monitoring() {
     log_info "Backing up monitoring data..."
-    
+
     # Prometheus data (lightweight export)
     curl -s "http://prometheus:9090/api/v1/label/__name__/values" > prometheus_metrics.json 2>/dev/null || true
-    
+
     # Grafana dashboards
     mkdir -p grafana_dashboards
     if command -v kubectl &> /dev/null; then
@@ -186,14 +186,14 @@ backup_monitoring() {
     else
         docker cp grafana:/var/lib/grafana/dashboards ./grafana_dashboards 2>/dev/null || true
     fi
-    
+
     log_info "Monitoring backup completed ✅"
 }
 
 # Create backup manifest
 create_manifest() {
     log_info "Creating backup manifest..."
-    
+
     cat > backup_manifest.json <<EOF
 {
     "backup_name": "$BACKUP_NAME",
@@ -237,17 +237,17 @@ EOF
 # Compress backup
 compress_backup() {
     log_info "Compressing backup..."
-    
+
     cd "$BACKUP_DIR"
     tar -czf "${BACKUP_NAME}.tar.gz" "$BACKUP_NAME/"
-    
+
     # Calculate final size and checksum
     FINAL_SIZE=$(du -sh "${BACKUP_NAME}.tar.gz" | cut -f1)
     FINAL_CHECKSUM=$(sha256sum "${BACKUP_NAME}.tar.gz" | cut -d' ' -f1)
-    
+
     log_info "Backup compressed: ${BACKUP_NAME}.tar.gz ($FINAL_SIZE)"
     log_info "Checksum: $FINAL_CHECKSUM"
-    
+
     # Update manifest with final info
     echo "$FINAL_CHECKSUM" > "${BACKUP_NAME}.tar.gz.sha256"
 }
@@ -255,11 +255,11 @@ compress_backup() {
 # Clean old backups
 cleanup_old_backups() {
     log_info "Cleaning up backups older than $RETENTION_DAYS days..."
-    
+
     find "$BACKUP_DIR" -name "predator_backup_*.tar.gz" -mtime +$RETENTION_DAYS -delete 2>/dev/null || true
     find "$BACKUP_DIR" -name "predator_backup_*.tar.gz.sha256" -mtime +$RETENTION_DAYS -delete 2>/dev/null || true
     find "$BACKUP_DIR" -type d -name "predator_backup_*" -mtime +$RETENTION_DAYS -exec rm -rf {} \; 2>/dev/null || true
-    
+
     log_info "Old backups cleaned up ✅"
 }
 
@@ -267,7 +267,7 @@ cleanup_old_backups() {
 send_notification() {
     local status=$1
     local message=$2
-    
+
     # Webhook notification
     if [ -n "$WEBHOOK_URL" ]; then
         curl -X POST "$WEBHOOK_URL" \
@@ -284,7 +284,7 @@ send_notification() {
                 }]
             }" 2>/dev/null || true
     fi
-    
+
     # Email notification (if configured)
     if [ -n "$EMAIL_TO" ] && command -v mail &> /dev/null; then
         echo "$message" | mail -s "Predator Analytics Backup - $status" "$EMAIL_TO" 2>/dev/null || true
@@ -294,11 +294,11 @@ send_notification() {
 # Main backup function
 run_backup() {
     log_info "🔄 Starting Predator Analytics backup ($TIMESTAMP)"
-    
+
     local start_time=$(date +%s)
-    
+
     create_backup_dir
-    
+
     # Run backup components
     backup_postgres || log_warn "PostgreSQL backup failed"
     backup_redis || log_warn "Redis backup failed"
@@ -307,31 +307,31 @@ run_backup() {
     backup_qdrant || log_warn "Qdrant backup failed"
     backup_configs || log_warn "Config backup failed"
     backup_monitoring || log_warn "Monitoring backup failed"
-    
+
     create_manifest
     compress_backup
     cleanup_old_backups
-    
+
     local end_time=$(date +%s)
     local duration=$((end_time - start_time))
-    
+
     log_info "✅ Backup completed in ${duration}s"
     log_info "📦 Backup file: ${BACKUP_DIR}/${BACKUP_NAME}.tar.gz"
-    
+
     send_notification "success" "Backup completed successfully in ${duration}s. File: ${BACKUP_NAME}.tar.gz"
 }
 
 # Restore function
 restore_backup() {
     local backup_file=$1
-    
+
     if [ -z "$backup_file" ] || [ ! -f "$backup_file" ]; then
         log_error "Backup file not found: $backup_file"
         exit 1
     fi
-    
+
     log_info "🔄 Starting restore from: $backup_file"
-    
+
     # Verify checksum
     if [ -f "${backup_file}.sha256" ]; then
         log_info "Verifying backup checksum..."
@@ -341,14 +341,14 @@ restore_backup() {
         fi
         log_info "Checksum verified ✅"
     fi
-    
+
     # Extract backup
     local restore_dir="/tmp/restore_$(date +%s)"
     mkdir -p "$restore_dir"
     tar -xzf "$backup_file" -C "$restore_dir"
-    
+
     cd "$restore_dir"/predator_backup_*/
-    
+
     # Restore PostgreSQL
     if [ -f "postgres_backup.sql" ]; then
         log_info "Restoring PostgreSQL..."
@@ -359,7 +359,7 @@ restore_backup() {
         fi
         log_info "PostgreSQL restored ✅"
     fi
-    
+
     # Restore Redis
     if [ -f "redis_backup.rdb" ]; then
         log_info "Restoring Redis..."
@@ -372,11 +372,11 @@ restore_backup() {
         fi
         log_info "Redis restored ✅"
     fi
-    
+
     # Add more restore operations as needed...
-    
+
     log_info "✅ Restore completed"
-    
+
     # Cleanup
     rm -rf "$restore_dir"
 }

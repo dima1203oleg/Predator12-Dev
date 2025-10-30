@@ -28,7 +28,9 @@ def stream_pg_rows(query: str, fetch_size: int = 1000) -> Iterable[dict[str, Any
                 yield dict(zip(colnames, row))
 
 
-def index_bulk(index: str, docs: Iterable[dict[str, Any]], id_field: str | None = None) -> tuple[int, int]:
+def index_bulk(
+    index: str, docs: Iterable[dict[str, Any]], id_field: str | None = None
+) -> tuple[int, int]:
     client = _os_client()
     actions = (
         {

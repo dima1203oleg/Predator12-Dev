@@ -1,14 +1,14 @@
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                    🤖 OPTIMIZED AGENT MODELS REGISTRY 🤖                      
-#                      58 Free Models Specialized Distribution                    
-#                         Predator Analytics Nexus Core                          
+#                    🤖 OPTIMIZED AGENT MODELS REGISTRY 🤖
+#                      58 Free Models Specialized Distribution
+#                         Predator Analytics Nexus Core
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 agents:
   # ═══════════════════════════════════════════════════════════════════════════════
-  #                           🔍 DATA & ANALYTICS AGENTS                         
+  #                           🔍 DATA & ANALYTICS AGENTS
   # ═══════════════════════════════════════════════════════════════════════════════
-  
+
   AnomalyAgent:
     # Спеціалізація: Виявлення аномалій, статистичний аналіз, ML детекція
     primary_model: deepseek/deepseek-r1  # Найкращий для аналітичних задач
@@ -62,7 +62,7 @@ agents:
       - mistral-ai/codestral-2501         # Для структурованих даних
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  #                           🛡️ SECURITY & OPERATIONS AGENTS                   
+  #                           🛡️ SECURITY & OPERATIONS AGENTS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   SecurityAgent:
@@ -105,7 +105,7 @@ agents:
       - xai/grok-3-mini                   # Компактна Grok
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  #                           🎯 COORDINATION & MANAGEMENT AGENTS                
+  #                           🎯 COORDINATION & MANAGEMENT AGENTS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   CoreOrchestrator:
@@ -148,7 +148,7 @@ agents:
       - xai/grok-3-mini                   # Альтернативна думка
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  #                           🔍 SEARCH & ANALYSIS AGENTS                        
+  #                           🔍 SEARCH & ANALYSIS AGENTS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   OSINTAgent:
@@ -178,7 +178,7 @@ agents:
       - meta/llama-3.2-11b-vision-instruct # Візуальне планування
 
   # ═══════════════════════════════════════════════════════════════════════════════
-  #                           🚀 SPECIALIZED UTILITY AGENTS                      
+  #                           🚀 SPECIALIZED UTILITY AGENTS
   # ═══════════════════════════════════════════════════════════════════════════════
 
   RedTeamAgent:
@@ -221,7 +221,7 @@ agents:
       - openai/text-embedding-3-small    # Компактні embedding'и
 
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                              🎯 MODEL OPTIMIZATION CONFIG                        
+#                              🎯 MODEL OPTIMIZATION CONFIG
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 model_optimization:
@@ -232,14 +232,14 @@ model_optimization:
     - mistral-ai/mistral-large-2411      # Потужна Mistral
     - deepseek/deepseek-r1               # Reasoning
     - openai/o3                          # Найновіша O-серія
-    
+
   medium_performance:
     - microsoft/phi-4                    # Нова Phi-4
     - meta/llama-3.3-70b-instruct       # Середня Llama
     - openai/gpt-4.1                    # Покращена GPT-4
     - xai/grok-3                        # Потужна Grok
     - mistral-ai/mistral-medium-2505     # Середня Mistral
-    
+
   fast_response:
     - openai/gpt-4o-mini               # Швидка GPT
     - microsoft/phi-4-mini-instruct    # Компактна Phi
@@ -253,12 +253,12 @@ model_optimization:
       - microsoft/phi-3.5-vision-instruct
       - meta/llama-3.2-11b-vision-instruct
       - microsoft/phi-4-multimodal-instruct
-    
+
     code:
       - mistral-ai/codestral-2501
       - microsoft/mai-ds-r1
       - deepseek/deepseek-v3-0324
-    
+
     embedding:
       - cohere/cohere-embed-v3-multilingual
       - cohere/cohere-embed-v3-english
@@ -266,7 +266,7 @@ model_optimization:
       - openai/text-embedding-3-small
 
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                                🔄 FALLBACK STRATEGY                             
+#                                🔄 FALLBACK STRATEGY
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 fallback_strategy:
@@ -274,7 +274,7 @@ fallback_strategy:
   primary_failure: fallback_models
   fallback_failure: specialized_models
   all_failure: basic_models
-  
+
   basic_models:
     - openai/gpt-4o-mini              # Надійна базова
     - microsoft/phi-3-mini-128k-instruct # Стабільна
@@ -282,16 +282,16 @@ fallback_strategy:
     - mistral-ai/ministral-3b         # Легка
 
 # ═══════════════════════════════════════════════════════════════════════════════════
-#                               📊 USAGE STATISTICS                               
+#                               📊 USAGE STATISTICS
 # ═══════════════════════════════════════════════════════════════════════════════════
 
 usage_tracking:
   total_models: 58
-  models_per_agent: 
+  models_per_agent:
     primary: 1
     fallback: 3-4
     specialized: 3-6
-  
+
   distribution_by_provider:
     openai: 14        # 24.1%
     microsoft: 13     # 22.4%

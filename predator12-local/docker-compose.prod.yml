@@ -4,7 +4,7 @@ services:
   # ============================================================================
   # CORE SERVICES
   # ============================================================================
-  
+
   db:
     image: postgres:15
     container_name: predator-postgres
@@ -42,7 +42,7 @@ services:
   # ============================================================================
   # APPLICATION SERVICES
   # ============================================================================
-  
+
   backend:
     build:
       context: ./backend
@@ -106,7 +106,7 @@ services:
   # ============================================================================
   # WORKER SERVICES (CELERY)
   # ============================================================================
-  
+
   worker:
     build:
       context: ./backend
@@ -181,7 +181,7 @@ services:
   # ============================================================================
   # MESSAGE BROKER (REDPANDA)
   # ============================================================================
-  
+
   redpanda:
     image: redpandadata/redpanda:v24.1.2
     container_name: predator-redpanda
@@ -211,7 +211,7 @@ services:
   # ============================================================================
   # VECTOR DATABASE
   # ============================================================================
-  
+
   qdrant:
     image: qdrant/qdrant:latest
     container_name: predator-qdrant
@@ -233,7 +233,7 @@ services:
   # ============================================================================
   # SEARCH & STORAGE
   # ============================================================================
-  
+
   opensearch:
     image: opensearchproject/opensearch:2.9.0
     container_name: predator-opensearch
@@ -295,14 +295,14 @@ services:
       echo 'Waiting for OpenSearch to be ready...';
       sleep 30;
       echo 'Creating ISM policies...';
-      curl -X PUT -H 'Content-Type: application/json' 
-           http://opensearch:9200/_plugins/_ism/policies/logs_policy 
+      curl -X PUT -H 'Content-Type: application/json'
+           http://opensearch:9200/_plugins/_ism/policies/logs_policy
            -d @/policies/logs_policy.json;
-      curl -X PUT -H 'Content-Type: application/json' 
-           http://opensearch:9200/_index_template/logs_template 
+      curl -X PUT -H 'Content-Type: application/json'
+           http://opensearch:9200/_index_template/logs_template
            -d @/policies/logs_template.json;
-      curl -X PUT -H 'Content-Type: application/json' 
-           http://opensearch:9200/logs-000001 
+      curl -X PUT -H 'Content-Type: application/json'
+           http://opensearch:9200/logs-000001
            -d '{\"aliases\":{\"logs_current\":{\"is_write_index\":true}}}';
       echo 'OpenSearch setup completed';
       "
@@ -332,7 +332,7 @@ services:
   # ============================================================================
   # AUTHENTICATION
   # ============================================================================
-  
+
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.0
     container_name: predator-keycloak
@@ -361,7 +361,7 @@ services:
   # ============================================================================
   # OBSERVABILITY STACK
   # ============================================================================
-  
+
   prometheus:
     image: prom/prometheus:v2.47.0
     container_name: predator-prometheus
@@ -477,7 +477,7 @@ services:
   # ============================================================================
   # PROMETHEUS EXPORTERS
   # ============================================================================
-  
+
   node-exporter:
     image: prom/node-exporter:v1.6.1
     container_name: predator-node-exporter

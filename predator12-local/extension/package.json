@@ -1,0 +1,39 @@
+{
+  "name": "predator-autodeploy",
+  "displayName": "Predator Autonomous Argo Deploy",
+  "publisher": "dima1203oleg",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "activationEvents": [
+    "onCommand:extension.autodeploy.toProd"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "tsc -p ./",
+    "watch": "tsc -w -p ./",
+    "pretest": "npm run build",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "typescript": "~5.0.0",
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.85.0"
+  },
+  "dependencies": {
+    "simple-git": "^3.19.1",
+    "axios": "^1.4.0",
+    "js-yaml": "^4.1.0",
+    "@octokit/rest": "^19.0.7"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.autodeploy.toProd",
+        "title": "Autonomous Argo CD Deploy & Execute"
+      }
+    ]
+  }
+}

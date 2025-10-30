@@ -6,10 +6,10 @@ import time
 from dataclasses import dataclass
 from typing import Any
 
-import yaml
 import httpx
-from redis import asyncio as aioredis
+import yaml
 from prometheus_client import Counter
+from redis import asyncio as aioredis
 
 from .client import ModelSDKClient
 
@@ -23,19 +23,30 @@ class ModelEntry:
     type: Optional[str] = None  # e.g., "embedding"
     free: bool = False  # Whether model is free/open source
 
+
 class ModelRegistry:
     def __init__(self, path: str):
         self.path = path
-        self.routing_weights: Dict[str, float] = {"cost": 0.3, "latency": 0.3, "quality": 0.4}
-        self.defaults: Dict[str, int] = {"timeout_seconds": 300, "cache_ttl_seconds": 60}
+        self.routing_weights: Dict[str, float] = {
+            "cost": 0.3,
+            "latency": 0.3,
+            "quality": 0.4,
+        }
+        self.defaults: Dict[str, int] = {
+            "timeout_seconds": 300,
+            "cache_ttl_seconds": 60,
+        }
         self.limits: Dict[str, Dict[str, int]] = {}
         self.backoff: Dict[str, int | str] = {
-            "strategy": "exponential", "base_seconds": 1, 
-            "max_seconds": 30, "max_retries": 3
+            "strategy": "exponential",
+            "base_seconds": 1,
+            "max_seconds": 30,
+            "max_retries": 3,
         }
         self.cache_cfg: Dict[str, Any] = {
-            "enabled": True, "ttl_seconds": 120, 
-            "idempotency_key": "request_key"
+            "enabled": True,
+            "ttl_seconds": 120,
+            "idempotency_key": "request_key",
         }
         self.task_overrides: Dict[str, Dict[str, Any]] = {}
         self.pii_editor: Dict[str, Any] = {"enabled": False, "mode": "redact"}
@@ -47,7 +58,7 @@ class ModelRegistry:
             "length_weight": 0.2,
             "safety_penalty": 0.2,
         }
-        #ensemble/quorum and policies
+        # ensemble/quorum and policies
         self.ensemble_cfg: Dict[str, Any] = {
             "enabled": False,
             "tasks": {},  # per-task overrides: enabled, candidates, quorum, deadline_ms
@@ -133,72 +144,82 @@ class ModelRouter:
     ):
         self.registry = ModelRegistry(registry_path)
         self.client = sdk_client or ModelSDKClient(
-            base_url=os.getenv("MODEL_SDK_BASE_URL"), api_key=os.getenv("MODEL_SDK_KEY"), timeout=float(self.registry.defaults.get("timeout_seconds", 300))
+            base_url=os.getenv("MODEL_SDK_BASE_URL"),
+            api_key=os.getenv("MODEL_SDK_KEY"),
+            timeout=float(self.registry.defaults.get("timeout_seconds", 300)),
         )
-        self.redis = aioredis.from_url(redis_url or os.getenv("REDIS_URL", "redis://localhost:6379/0"), encoding=None, decode_responses=False)
+        self.redis = aioredis.from_url(
+            redis_url or os.getenv("REDIS_URL", "redis://localhost:6379/0"),
+            encoding=None,
+            decode_responses=False,
+        )
         self.rate_limiter = SimpleRateLimiter(
             self.redis,
             rpm=int(os.getenv("MODEL_ROUTER_RPM", "600")),
         )
-        self.cache_ttl = int(self.registry.cache_cfg.get("ttl_seconds", self.registry.defaults.get("cache_ttl_seconds", 60)))
+        self.cache_ttl = int(
+            self.registry.cache_cfg.get(
+                "ttl_seconds", self.registry.defaults.get("cache_ttl_seconds", 60)
+            )
+        )
         self.idempotency_key_name = self.registry.cache_cfg.get("idempotency_key", "request_key")
 
         # Prometheus metrics (use custom registry in tests)
-        registry = getattr(self, '_metrics_registry', None)
+        registry = getattr(self, "_metrics_registry", None)
         self.req_ctr = Counter(
             "model_router_requests_total",
             "Total model router requests",
             labelnames=["task", "model", "status"],
-            registry=registry
+            registry=registry,
         )
         self.retry_ctr = Counter(
             "model_router_retries_total",
             "Retries during model routing",
             labelnames=["task", "model"],
-            registry=registry
+            registry=registry,
         )
         self.fallback_ctr = Counter(
             "model_router_fallbacks_total",
             "Fallback occurrences between models",
             labelnames=["task", "from_model", "to_model"],
-            registry=registry
+            registry=registry,
         )
         self.ensemble_runs = Counter(
             "model_router_ensemble_runs_total",
             "Ensemble runs executed",
             labelnames=["task"],
-            registry=registry
+            registry=registry,
         )
         self.ensemble_winner = Counter(
             "model_router_ensemble_winner_total",
             "Winners selected by arbiter",
             labelnames=["task", "model"],
-            registry=registry
+            registry=registry,
         )
         self.ensemble_timeouts = Counter(
             "model_router_ensemble_timeouts_total",
             "Timeouts within ensemble parallel calls",
             labelnames=["task"],
-            registry=registry
+            registry=registry,
         )
         # Canary metrics
         self.canary_runs = Counter(
             "model_router_canary_runs_total",
             "Canary shadow runs executed",
             labelnames=["task"],
-            registry=registry
+            registry=registry,
         )
         self.canary_wins = Counter(
             "model_router_canary_wins_total",
             "Canary beats primary (would have been better)",
             labelnames=["task", "model"],
-            registry=registry
+            registry=registry,
         )
         self.canary_errors = Counter(
             "model_router_canary_errors_total",
             "Canary shadow errors",
             labelnames=["task"],
-            registry=registry
+            registry=registry,
         )
 
     async def _cache_get(self, key: str) -> Optional[dict]:
@@ -217,7 +238,9 @@ class ModelRouter:
 
         await self.redis.set(key, json.dumps(value), ex=ttl)
 
-    async def _call_with_fallbacks(self, task: str, payload: dict, request_key: Optional[str] = None) -> dict:
+    async def _call_with_fallbacks(
+        self, task: str, payload: dict, request_key: Optional[str] = None
+    ) -> dict:
         primary, fallbacks = self.registry.get_primary_and_fallback(task)
         candidates: List[ModelEntry] = [m for m in [primary] if m] + fallbacks
         last_err: Optional[Exception] = None
@@ -235,7 +258,11 @@ class ModelRouter:
         task_limits = self.registry.limits.get(task, {})
         if task_limits:
             # Temporarily construct a per-call limiter instance honoring rpm
-            limiter = SimpleRateLimiter(self.redis, rps=self.rate_limiter.rps, rpm=int(task_limits.get("rpm", self.rate_limiter.rpm or 0)) or None)
+            limiter = SimpleRateLimiter(
+                self.redis,
+                rps=self.rate_limiter.rps,
+                rpm=int(task_limits.get("rpm", self.rate_limiter.rpm or 0)) or None,
+            )
             allowed = await limiter.allow(f"task:{task}")
         else:
             allowed = await self.rate_limiter.allow(f"task:{task}")
@@ -250,19 +277,25 @@ class ModelRouter:
                     params = payload.get("params", {})
                     # Apply task overrides (e.g., timeout) if present
                     params = {**params, **self.registry.task_overrides.get(task, {})}
-                    resp = await self.client.chat_completion(model=model_id, messages=payload["messages"], **params)
+                    resp = await self.client.chat_completion(
+                        model=model_id, messages=payload["messages"], **params
+                    )
                     result = {"model": model_id, "response": resp}
                 elif task == "embed":
                     model_id = m.id
                     params = payload.get("params", {})
                     params = {**params, **self.registry.task_overrides.get(task, {})}
-                    resp = await self.client.embeddings(model=model_id, input_texts=payload["input"], **params)
+                    resp = await self.client.embeddings(
+                        model=model_id, input_texts=payload["input"], **params
+                    )
                     result = {"model": model_id, "response": resp}
                 else:
                     raise ValueError(f"Unsupported task: {task}")
 
                 # Optional PII post-processing (very light stub)
-                if self.registry.pii_editor.get("enabled") and self.registry.pii_editor.get("mode") in {"redact", "mask"}:
+                if self.registry.pii_editor.get("enabled") and self.registry.pii_editor.get(
+                    "mode"
+                ) in {"redact", "mask"}:
                     result = self._apply_pii_policy(result)
 
                 # Cache success if request_key present
@@ -288,12 +321,14 @@ class ModelRouter:
                 if strat == "linear":
                     delay = min(base * (idx + 1), maxs)
                 else:  # exponential by default
-                    delay = min(base * (2 ** idx), maxs)
+                    delay = min(base * (2**idx), maxs)
                 # Retry/fallback metrics
                 try:
                     self.retry_ctr.labels(task=task, model=m.id).inc()
                     if idx + 1 < len(candidates):
-                        self.fallback_ctr.labels(task=task, from_model=m.id, to_model=candidates[idx + 1].id).inc()
+                        self.fallback_ctr.labels(
+                            task=task, from_model=m.id, to_model=candidates[idx + 1].id
+                        ).inc()
                 except Exception:
                     pass
                 await asyncio.sleep(delay)
@@ -302,7 +337,9 @@ class ModelRouter:
         # If reached here, all attempts failed
         raise last_err or RuntimeError("Model routing failed with no candidates available")
 
-    async def _call_ensemble(self, task: str, payload: dict, request_key: Optional[str] = None) -> dict:
+    async def _call_ensemble(
+        self, task: str, payload: dict, request_key: Optional[str] = None
+    ) -> dict:
         """Run multiple models in parallel and arbitrate the winner.
         Falls back to sequential routing if quorum not met or on full failure."""
         primary, fallbacks = self.registry.get_primary_and_fallback(task)
@@ -319,21 +356,48 @@ class ModelRouter:
 
         self.ensemble_runs.labels(task=task).inc()
 
-        async def _invoke(m: ModelEntry) -> Tuple[ModelEntry, Optional[dict], Optional[Exception], float]:
+        async def _invoke(
+            m: ModelEntry,
+        ) -> Tuple[ModelEntry, Optional[dict], Optional[Exception], float]:
             t0 = time.perf_counter()
             try:
                 if task in {"reason", "code", "vision", "quick"}:
-                    params = {**payload.get("params", {}), **self.registry.task_overrides.get(task, {})}
-                    resp = await self.client.chat_completion(model=m.id, messages=payload["messages"], **params)
+                    params = {
+                        **payload.get("params", {}),
+                        **self.registry.task_overrides.get(task, {}),
+                    }
+                    resp = await self.client.chat_completion(
+                        model=m.id, messages=payload["messages"], **params
+                    )
                 elif task == "embed":
-                    params = {**payload.get("params", {}), **self.registry.task_overrides.get(task, {})}
-                    resp = await self.client.embeddings(model=m.id, input_texts=payload["input"], **params)
+                    params = {
+                        **payload.get("params", {}),
+                        **self.registry.task_overrides.get(task, {}),
+                    }
+                    resp = await self.client.embeddings(
+                        model=m.id, input_texts=payload["input"], **params
+                    )
                 else:
                     raise ValueError(f"Unsupported task: {task}")
                 lat = time.perf_counter() - t0
                 # Success metric
                 self.req_ctr.labels(task=task, model=m.id, status="success").inc()
-                return m, {"model": m.id, "response": resp, "metrics": {"latency": lat, "quality": resp.get("quality", 0.5) if isinstance(resp, dict) else 0.5, "cost": resp.get("cost", 1.0) if isinstance(resp, dict) else 1.0}}, None, lat
+                return (
+                    m,
+                    {
+                        "model": m.id,
+                        "response": resp,
+                        "metrics": {
+                            "latency": lat,
+                            "quality": (
+                                resp.get("quality", 0.5) if isinstance(resp, dict) else 0.5
+                            ),
+                            "cost": (resp.get("cost", 1.0) if isinstance(resp, dict) else 1.0),
+                        },
+                    },
+                    None,
+                    lat,
+                )
             except Exception as e:
                 # Failure metric
                 try:
@@ -345,7 +409,9 @@ class ModelRouter:
         # Launch parallel calls with a deadline
         timeout = deadline_ms / 1000.0
         tasks = [asyncio.create_task(_invoke(m)) for m in selected]
-        done, pending = await asyncio.wait(tasks, timeout=timeout, return_when=asyncio.ALL_COMPLETED)
+        done, pending = await asyncio.wait(
+            tasks, timeout=timeout, return_when=asyncio.ALL_COMPLETED
+        )
         if pending:
             self.ensemble_timeouts.labels(task=task).inc()
             for p in pending:
@@ -379,22 +445,38 @@ class ModelRouter:
         return await self._call_with_fallbacks(task, payload, request_key)
 
     # Public API used by FastAPI routes
-    async def reason(self, messages: List[dict], request_key: Optional[str] = None, **params) -> dict:
+    async def reason(
+        self, messages: List[dict], request_key: Optional[str] = None, **params
+    ) -> dict:
         if self._ensemble_enabled("reason", params):
-            return await self._call_ensemble("reason", {"messages": messages, "params": params}, request_key)
-        return await self._call_with_fallbacks("reason", {"messages": messages, "params": params}, request_key)
+            return await self._call_ensemble(
+                "reason", {"messages": messages, "params": params}, request_key
+            )
+        return await self._call_with_fallbacks(
+            "reason", {"messages": messages, "params": params}, request_key
+        )
 
     async def code(self, messages: List[dict], request_key: Optional[str] = None, **params) -> dict:
         if self._ensemble_enabled("code", params):
-            return await self._call_ensemble("code", {"messages": messages, "params": params}, request_key)
-        return await self._call_with_fallbacks("code", {"messages": messages, "params": params}, request_key)
+            return await self._call_ensemble(
+                "code", {"messages": messages, "params": params}, request_key
+            )
+        return await self._call_with_fallbacks(
+            "code", {"messages": messages, "params": params}, request_key
+        )
 
-    async def quick(self, messages: List[dict], request_key: Optional[str] = None, **params) -> dict:
+    async def quick(
+        self, messages: List[dict], request_key: Optional[str] = None, **params
+    ) -> dict:
         # Primary visible result
         if self._ensemble_enabled("quick", params):
-            visible = await self._call_ensemble("quick", {"messages": messages, "params": params}, request_key)
+            visible = await self._call_ensemble(
+                "quick", {"messages": messages, "params": params}, request_key
+            )
         else:
-            visible = await self._call_with_fallbacks("quick", {"messages": messages, "params": params}, request_key)
+            visible = await self._call_with_fallbacks(
+                "quick", {"messages": messages, "params": params}, request_key
+            )
 
         # Shadow canary (does not affect user-visible result)
         try:
@@ -412,12 +494,16 @@ class ModelRouter:
                         try:
                             t0 = time.perf_counter()
                             resp = await self.client.chat_completion(
-                                model=canary_model.id, messages=messages, **(params or {})
+                                model=canary_model.id,
+                                messages=messages,
+                                **(params or {}),
                             )
                             lat = time.perf_counter() - t0
                             # Compare simple heuristic with visible
                             # If canary has explicit quality, compare; else use latency as tiebreaker
-                            canary_quality = resp.get("quality", 0.5) if isinstance(resp, dict) else 0.5
+                            canary_quality = (
+                                resp.get("quality", 0.5) if isinstance(resp, dict) else 0.5
+                            )
                             vis_quality = 0.5
                             vresp = visible.get("response") if isinstance(visible, dict) else None
                             if isinstance(vresp, dict):
@@ -430,7 +516,9 @@ class ModelRouter:
 
                     import random
 
-                    sample_rate = float(params.get("canary_sample_rate", self._canary_sample_rate("quick")))
+                    sample_rate = float(
+                        params.get("canary_sample_rate", self._canary_sample_rate("quick"))
+                    )
                     if random.random() < sample_rate:
                         asyncio.create_task(_run_canary())
         except Exception:
@@ -438,19 +526,30 @@ class ModelRouter:
             pass
         return visible
 
-    async def vision(self, messages: List[dict], request_key: Optional[str] = None, **params) -> dict:
+    async def vision(
+        self, messages: List[dict], request_key: Optional[str] = None, **params
+    ) -> dict:
         if self._ensemble_enabled("vision", params):
-            return await self._call_ensemble("vision", {"messages": messages, "params": params}, request_key)
-        return await self._call_with_fallbacks("vision", {"messages": messages, "params": params}, request_key)
+            return await self._call_ensemble(
+                "vision", {"messages": messages, "params": params}, request_key
+            )
+        return await self._call_with_fallbacks(
+            "vision", {"messages": messages, "params": params}, request_key
+        )
 
     async def embed(self, inputs: List[str], request_key: Optional[str] = None, **params) -> dict:
         if self._ensemble_enabled("embed", params):
-            return await self._call_ensemble("embed", {"input": inputs, "params": params}, request_key)
-        return await self._call_with_fallbacks("embed", {"input": inputs, "params": params}, request_key)
+            return await self._call_ensemble(
+                "embed", {"input": inputs, "params": params}, request_key
+            )
+        return await self._call_with_fallbacks(
+            "embed", {"input": inputs, "params": params}, request_key
+        )
 
     def _ensemble_enabled(self, task: Dict[str, Any] | str, params: Dict[str, Any]) -> bool:
         """Decide if ensemble should be used based on registry config and per-request override.
-        params may include force_ensemble=True to enable, or disable_ensemble=True to skip."""
+        params may include force_ensemble=True to enable, or disable_ensemble=True to skip.
+        """
         # tolerate calling with (task, params) or (params only) in some routes
         if isinstance(task, dict):
             # misordered usage guard
@@ -503,7 +602,8 @@ class ModelRouter:
 
     async def arbiter(self, candidates: List[dict]) -> dict:
         """Arbiter picks best candidate using quality/latency/cost + content heuristics.
-        Expected candidate shape: {"model": str, "metrics": {"quality", "latency", "cost"}, "response": {...}}"""
+        Expected candidate shape: {"model": str, "metrics": {"quality", "latency", "cost"}, "response": {...}}
+        """
         best = None
         best_score = -1.0
         for c in candidates:
@@ -538,6 +638,7 @@ class ModelRouter:
             length_score = 1.0 / (1.0 + abs(l - target_len) / max(1.0, target_len))
             # keyword score in [0,1]
             import re
+
             task_keywords = {}
             try:
                 # optional per-task keywords
@@ -560,12 +661,15 @@ class ModelRouter:
             keyword_score = min(1.0, kw_hits / 3.0) if kws else 0.0
             # safety penalty (very naive)
             unsafe = 0
-            if any(tok in text.lower() for tok in ["undefined", "<?", "<script", "\ntraceback", "error:"]):
+            if any(
+                tok in text.lower()
+                for tok in ["undefined", "<?", "<script", "\ntraceback", "error:"]
+            ):
                 unsafe = 1
 
             score = base
-            score *= (1.0 + kw_weight * keyword_score)
-            score *= (1.0 + len_weight * (length_score - 0.5) * 2.0)
+            score *= 1.0 + kw_weight * keyword_score
+            score *= 1.0 + len_weight * (length_score - 0.5) * 2.0
             if unsafe:
                 score *= max(0.0, 1.0 - safety_pen)
 
@@ -591,10 +695,12 @@ class ModelRouter:
         Masks emails and phone-like numbers in string responses.
         """
         import re
+
         def _mask(s: str) -> str:
             s = re.sub(r"[\w\.-]+@[\w\.-]+", "[redacted-email]", s)
             s = re.sub(r"\b\+?\d[\d\s\-]{7,}\b", "[redacted-phone]", s)
             return s
+
         resp = result.get("response")
         if isinstance(resp, str):
             result["response"] = _mask(resp)

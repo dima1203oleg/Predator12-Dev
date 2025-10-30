@@ -13,7 +13,7 @@ receivers:
     auth_username: 'alertmanager'
     auth_password: 'yourpassword'
     send_resolved: true
-    
+
   slack_configs:
   - api_url: 'https://hooks.slack.com/services/YOUR_WEBHOOK'
     channel: '#alerts'

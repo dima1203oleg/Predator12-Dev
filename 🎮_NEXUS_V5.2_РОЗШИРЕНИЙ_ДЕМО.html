@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 PREDATOR12 NEXUS CORE V5.2 - Розширений Демо</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #ff6b6b 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            width: 95%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .feature-description {
+            opacity: 0.9;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .feature-list li {
+            padding: 0.2rem 0;
+            opacity: 0.8;
+        }
+
+        .feature-list li::before {
+            content: "✅ ";
+            margin-right: 0.5rem;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .instructions {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .instruction-step {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid #00ff88;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(-100vh) rotate(180deg); opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles Background -->
+    <div class="floating-particles" id="particles"></div>
+
+    <div class="demo-container">
+        <div class="header">
+            <h1 class="title">🌟 PREDATOR12 NEXUS CORE</h1>
+            <p class="subtitle">Версія 5.2 - Розширений Інтерфейс ШІ</p>
+            <span class="status-badge pulse">✅ ГОТОВО ДО ТЕСТУВАННЯ</span>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card" onclick="openModule('voice-interface')">
+                <div class="feature-title">
+                    <span class="feature-icon">🎤</span>
+                    Голосовий Інтерфейс ШІ
+                </div>
+                <div class="feature-description">
+                    Революційний голосовий контроль з підтримкою української та англійської мов
+                </div>
+                <ul class="feature-list">
+                    <li>Розпізнавання мови в реальному часі</li>
+                    <li>Голосові команди навігації</li>
+                    <li>AI асистент з інтелектуальними відповідями</li>
+                    <li>Звуковий фідбек та візуалізація</li>
+                </ul>
+            </div>
+
+            <div class="feature-card" onclick="openModule('3d-visualizer')">
+                <div class="feature-title">
+                    <span class="feature-icon">🌐</span>
+                    3D/VR Візуалізатор
+                </div>
+                <div class="feature-description">
+                    Імерсивна 3D візуалізація даних з підтримкою VR та AI аналітикою
+                </div>
+                <ul class="feature-list">
+                    <li>Інтерактивні 3D ноди та зв'язки</li>
+                    <li>Canvas рендеринг з оптимізацією</li>
+                    <li>VR режим для повного занурення</li>
+                    <li>AI асистент для аналізу сцени</li>
+                </ul>
+            </div>
+
+            <div class="feature-card" onclick="openModule('collaboration')">
+                <div class="feature-title">
+                    <span class="feature-icon">👥</span>
+                    Колаборація в Реальному Часі
+                </div>
+                <div class="feature-description">
+                    Повноцінна платформа для командної роботи з відео та чатом
+                </div>
+                <ul class="feature-list">
+                    <li>Чат з емодзі та реакціями</li>
+                    <li>Відео дзвінки для команди</li>
+                    <li>Спільний доступ до екрану</li>
+                    <li>Розумні сповіщення</li>
+                </ul>
+            </div>
+
+            <div class="feature-card" onclick="openDashboard()">
+                <div class="feature-title">
+                    <span class="feature-icon">🎮</span>
+                    Ігровий Інтерфейс
+                </div>
+                <div class="feature-description">
+                    Геймифікований досвід з досягненнями, XP та інтерактивними елементами
+                </div>
+                <ul class="feature-list">
+                    <li>Система XP та рівнів</li>
+                    <li>Інтерактивні досягнення</li>
+                    <li>Нейронна мережа міні-гра</li>
+                    <li>Звукові та візуальні ефекти</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>🚀 Інструкції для Тестування V5.2:</h3>
+
+            <div class="instruction-step">
+                <strong>1. Голосовий Інтерфейс:</strong> Натисніть кнопку мікрофону та спробуйте команди: "відкрий дашборд", "показати агентів", "статус системи"
+            </div>
+
+            <div class="instruction-step">
+                <strong>2. 3D Візуалізатор:</strong> Використовуйте мишу для обертання, коліщатко для масштабування, активуйте AI асистент для розумного аналізу
+            </div>
+
+            <div class="instruction-step">
+                <strong>3. Колаборація:</strong> Створіть кімнату, протестуйте чат, спробуйте емодзі та реакції, симулюйте відео дзвінки
+            </div>
+
+            <div class="instruction-step">
+                <strong>4. Ігровий Режим:</strong> Активуйте для отримання XP, виконуйте досягнення, грайте в нейронну мережу
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3>Готові до тестування?</h3>
+            <p style="margin: 1rem 0; opacity: 0.9;">
+                Запустіть повний інтерфейс та дослідіть всі нові можливості V5.2
+            </p>
+
+            <button class="cta-button" onclick="launchFullInterface()">
+                🚀 ЗАПУСТИТИ ПОВНИЙ ІНТЕРФЕЙС
+            </button>
+
+            <button class="cta-button secondary" onclick="quickDemo()">
+                ⚡ ШВИДКЕ ДЕМО
+            </button>
+
+            <button class="cta-button secondary" onclick="showDocumentation()">
+                📖 ДОКУМЕНТАЦІЯ
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Створюємо анімовані частинки
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Функції для кнопок
+        function openModule(moduleId) {
+            const url = `http://localhost:5094#${moduleId}`;
+            window.open(url, '_blank');
+        }
+
+        function openDashboard() {
+            const url = 'http://localhost:5094';
+            window.open(url, '_blank');
+        }
+
+        function launchFullInterface() {
+            const url = 'http://localhost:5094';
+            window.open(url, '_blank');
+
+            // Показуємо додаткову інформацію
+            setTimeout(() => {
+                alert('🎉 Інтерфейс запущено!\n\n' +
+                      '✅ Протестуйте всі нові модулі\n' +
+                      '🎤 Спробуйте голосові команди\n' +
+                      '🌐 Обертайте 3D сцену\n' +
+                      '👥 Тестуйте колаборацію\n' +
+                      '🎮 Активуйте ігровий режим');
+            }, 1000);
+        }
+
+        function quickDemo() {
+            const features = [
+                '🎤 Голосовий інтерфейс з AI',
+                '🌐 3D/VR візуалізація',
+                '👥 Колаборація в реальному часі',
+                '🎮 Ігровий режим з XP',
+                '♿ Покращена доступність',
+                '🎨 Динамічні теми',
+                '🔔 Розумні сповіщення'
+            ];
+
+            alert('⚡ ШВИДКЕ ДЕМО V5.2:\n\n' + features.join('\n') +
+                  '\n\n🚀 Всі функції готові до тестування!');
+        }
+
+        function showDocumentation() {
+            const docs = `📖 ДОКУМЕНТАЦІЯ V5.2:
+
+🎤 ГОЛОСОВИЙ ІНТЕРФЕЙС:
+• Команди: "відкрий [модуль]", "статус", "допомога"
+• Підтримка: українська, англійська
+• AI: розумні відповіді та аналіз
+
+🌐 3D ВІЗУАЛІЗАТОР:
+• Управління: миша + коліщатко
+• AI асистент: аналіз сцени та підказки
+• VR: повне занурення в дані
+
+👥 КОЛАБОРАЦІЯ:
+• Чат: емодзі, реакції, файли
+• Відео: HD дзвінки, запис
+• Екран: спільний доступ
+
+🎮 ІГРОВИЙ РЕЖИМ:
+• XP система з рівнями
+• Досягнення за активність
+• Міні-ігри та челенджі
+
+🔧 ТЕХНІЧНІ ДЕТАЛІ:
+• React + TypeScript + Material-UI
+• Three.js для 3D
+• WebRTC для колаборації
+• Web Speech API для голосу`;
+
+            alert(docs);
+        }
+
+        // Ініціалізація
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+
+            // Анімація появи карток
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = (index * 0.2) + 's';
+                card.style.animation = 'fadeInUp 0.8s ease forwards';
+            });
+        });
+
+        // CSS анімація для карток
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .feature-card {
+                opacity: 0;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

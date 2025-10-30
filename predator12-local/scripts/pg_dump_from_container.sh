@@ -27,10 +27,10 @@ echo "  Output: $DUMP_FILE"
 # Перевірка чи контейнер існує та запущений
 if ! docker ps | grep -q $CONTAINER_NAME; then
     echo "🔍 Пошук контейнера по іменах що містять 'postgres' або 'db'..."
-    
+
     # Автоматичний пошук postgres контейнера
     FOUND_CONTAINER=$(docker ps --format "table {{.Names}}" | grep -E "(postgres|db|predator)" | head -1)
-    
+
     if [ -n "$FOUND_CONTAINER" ]; then
         CONTAINER_NAME=$FOUND_CONTAINER
         echo "✅ Знайдено контейнер: $CONTAINER_NAME"
@@ -46,30 +46,30 @@ fi
 echo "📤 Спроба створення дампу методом 1 (pg_dump)..."
 if docker exec $CONTAINER_NAME pg_dump -U $CONTAINER_USER -d $CONTAINER_DB > $DUMP_FILE 2>/dev/null; then
     echo "✅ Дамп створено успішно (pg_dump)!"
-    
+
 # Метод 2: Спроба pg_dumpall
 elif docker exec $CONTAINER_NAME pg_dumpall -U $CONTAINER_USER > $DUMP_FILE 2>/dev/null; then
     echo "✅ Дамп створено успішно (pg_dumpall)!"
-    
+
 # Метод 3: Бінарний дамп
 else
     echo "🔄 Спроба створення бінарного дампу..."
     BINARY_DUMP="backups/predator_dump_$(date +%Y%m%d_%H%M%S).dump"
-    
+
     if docker exec $CONTAINER_NAME pg_dump -U $CONTAINER_USER -F c -d $CONTAINER_DB > $BINARY_DUMP; then
         echo "✅ Бінарний дамп створено: $BINARY_DUMP"
         DUMP_FILE=$BINARY_DUMP
     else
         echo "❌ Не вдалося створити дамп!"
-        
+
         # Діагностика
         echo "🔍 Діагностична інформація:"
         echo "Бази даних в контейнері:"
         docker exec $CONTAINER_NAME psql -U $CONTAINER_USER -l || true
-        
+
         echo "Користувачі в контейнері:"
         docker exec $CONTAINER_NAME psql -U $CONTAINER_USER -c "\\du" || true
-        
+
         exit 1
     fi
 fi

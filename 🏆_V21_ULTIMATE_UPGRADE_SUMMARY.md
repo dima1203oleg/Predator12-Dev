@@ -124,7 +124,7 @@
 FilterChip: "All Services", "Core", "Database"...
 
 // Після  
-FilterChip: "🌟 All Services (28)", "🚀 Core (5)", 
+FilterChip: "🌟 All Services (28)", "🚀 Core (5)",
            "💾 Database (4)", "🔍 Search (2)",
            "📨 Messaging (1)", "🤖 AI/ML (1)",
            "📊 Monitoring (7)", "📈 Metrics (2)",

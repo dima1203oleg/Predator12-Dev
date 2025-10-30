@@ -3,7 +3,7 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import { persist } from 'zustand/middleware';
 
 // Типи подій згідно з ТЗ п.11
-type AppEvent = 
+type AppEvent =
   | { type: 'HEALTH_UNKNOWN'; source?: 'prometheus' | 'backend' | 'opensearch'; hint?: string; ts?: string }
   | { type: 'AGENT_DOWN'; agentId: string; ts?: string }
   | { type: 'NETWORK_OFFLINE'; ts?: string }
@@ -37,19 +37,19 @@ interface AppEventStore {
   // Notifications
   events: NotificationEvent[];
   unreadCount: number;
-  
+
   // Guide
   guide: GuideState;
-  
+
   // WebSocket connection
   wsConnected: boolean;
-  
+
   // Actions
   addEvent: (
-    event: AppEvent, 
+    event: AppEvent,
     title: string,
-    message: string, 
-    level: NotificationEvent['level'], 
+    message: string,
+    level: NotificationEvent['level'],
     actions?: NotificationEvent['actions'],
     source?: NotificationEvent['source']
   ) => void;
@@ -67,7 +67,7 @@ export const useAppEventStore = create<AppEventStore>((set, get) => ({
   events: [],
   unreadCount: 0,
   wsConnected: false,
-  
+
   guide: {
     mode: 'passive',
     isActive: false,
@@ -97,7 +97,7 @@ export const useAppEventStore = create<AppEventStore>((set, get) => ({
 
   markAsRead: (eventId) => {
     set(state => ({
-      events: state.events.map(event => 
+      events: state.events.map(event =>
         event.id === eventId ? { ...event, isRead: true } : event
       ),
       unreadCount: Math.max(0, state.unreadCount - 1)

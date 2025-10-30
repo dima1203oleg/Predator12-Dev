@@ -36,8 +36,8 @@ edrpou: "12345678" -> edrpou_mask: "e1f2g3h4"
 Всі доступи до PII логуються:
 
 ```sql
-SELECT user_id, accessed_at, data_type, purpose 
-FROM audit_pii_access 
+SELECT user_id, accessed_at, data_type, purpose
+FROM audit_pii_access
 WHERE accessed_at > NOW() - INTERVAL '24 hours';
 ```
 

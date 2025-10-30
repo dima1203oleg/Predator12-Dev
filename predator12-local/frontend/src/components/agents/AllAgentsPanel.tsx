@@ -16,5 +16,3 @@ const AllAgentsPanel: React.FC = () => {
 };
 
 export default AllAgentsPanel;
-
-

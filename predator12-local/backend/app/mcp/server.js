@@ -21,7 +21,7 @@ app.use(express.json());
 // ===== Global process resilience =====
 let FATAL_ERROR_COUNT = 0;
 process.on('uncaughtException', (err)=>{
-  FATAL_ERROR_COUNT++; 
+  FATAL_ERROR_COUNT++;
   console.error('[FATAL] uncaughtException', err);
   if(FATAL_ERROR_COUNT > 3){
     console.error('[FATAL] Too many fatal errors, exiting to allow supervisor restart');
@@ -34,7 +34,7 @@ process.on('unhandledRejection', (reason)=>{
 
 function gracefulShutdown(signal){
   console.log(`[SHUTDOWN] Received ${signal}, closing server...`);
-  try { if(typeof server !== 'undefined' && server && typeof server.close === 'function'){ server.close(()=>{ console.log('[SHUTDOWN] Closed HTTP server'); process.exit(0); }); } else { console.log('[SHUTDOWN] No HTTP server to close'); process.exit(0); } } catch(e){ console.error('Error closing server', e); process.exit(1);} 
+  try { if(typeof server !== 'undefined' && server && typeof server.close === 'function'){ server.close(()=>{ console.log('[SHUTDOWN] Closed HTTP server'); process.exit(0); }); } else { console.log('[SHUTDOWN] No HTTP server to close'); process.exit(0); } } catch(e){ console.error('Error closing server', e); process.exit(1);}
   setTimeout(()=>process.exit(1), 8000).unref();
 }
 ['SIGINT','SIGTERM'].forEach(sig=> process.on(sig, ()=>gracefulShutdown(sig)));
@@ -164,14 +164,14 @@ function getCircuitBreaker(model) {
 function checkCircuitBreaker(model) {
   const breaker = getCircuitBreaker(model);
   const now = Date.now();
-  
+
   // Reset if timeout passed
   if (breaker.isOpen && (now - breaker.lastFailure) > CIRCUIT_BREAKER_TIMEOUT) {
     breaker.isOpen = false;
     breaker.failures = 0;
     console.log(`[CIRCUIT-BREAKER] Reset for model: ${model}`);
   }
-  
+
   return !breaker.isOpen;
 }
 
@@ -179,7 +179,7 @@ function recordFailure(model) {
   const breaker = getCircuitBreaker(model);
   breaker.failures++;
   breaker.lastFailure = Date.now();
-  
+
   if (breaker.failures >= CIRCUIT_BREAKER_THRESHOLD) {
     breaker.isOpen = true;
     console.log(`[CIRCUIT-BREAKER] Opened for model: ${model} (${breaker.failures} failures)`);
@@ -199,11 +199,11 @@ async function retryWithBackoff(fn, attempts = RETRY_ATTEMPTS, delay = RETRY_DEL
     } catch (error) {
       const isLastAttempt = i === attempts - 1;
       const isRetryableError = error?.status === 429 || error?.status === 502 || error?.status === 503 || error?.status === 504;
-      
+
       if (isLastAttempt || !isRetryableError) {
         throw error;
       }
-      
+
       const backoffDelay = delay * Math.pow(2, i) + Math.random() * 1000; // Add jitter
       console.log(`[RETRY] Attempt ${i + 1}/${attempts} failed, retrying in ${Math.round(backoffDelay)}ms:`, error?.message);
       await new Promise(resolve => setTimeout(resolve, backoffDelay));
@@ -222,24 +222,24 @@ function acquireSlot(model = 'unknown', priority = 0){
       activeUpstream += 1;
       let released = false;
       const releaseSlot = () => {
-        if(!released){ 
-          released = true; 
-          activeUpstream = Math.max(0, activeUpstream-1); 
-          pumpQueue(); 
+        if(!released){
+          released = true;
+          activeUpstream = Math.max(0, activeUpstream-1);
+          pumpQueue();
         }
       };
       resolve(releaseSlot);
     };
-    
+
     if(activeUpstream < UPSTREAM_MAX_CONCURRENT){
       grant();
     } else {
       if(waitQueue.length >= QUEUE_MAX_LENGTH){
         return reject(new Error('queue_overflow'));
       }
-      
+
       const item = { resolve: grant, reject, startedAt: Date.now(), priority, model };
-      
+
       // Insert based on priority (higher priority first)
       let insertIndex = waitQueue.length;
       for (let i = 0; i < waitQueue.length; i++) {
@@ -249,7 +249,7 @@ function acquireSlot(model = 'unknown', priority = 0){
         }
       }
       waitQueue.splice(insertIndex, 0, item);
-      
+
       // Enhanced timeout handling with cleanup
       const timeoutId = setTimeout(()=>{
         const idx = waitQueue.indexOf(item);
@@ -258,7 +258,7 @@ function acquireSlot(model = 'unknown', priority = 0){
           item.reject(new Error(`queue_timeout_after_${QUEUE_WAIT_TIMEOUT_MS}ms`));
         }
       }, QUEUE_WAIT_TIMEOUT_MS);
-      
+
       // Store timeout ID for cleanup
       item.timeoutId = timeoutId;
     }
@@ -281,17 +281,17 @@ async function executeUpstream(task, model = 'unknown', priority = 0){
   if (!checkCircuitBreaker(model)) {
     throw new Error(`Circuit breaker open for model: ${model}`);
   }
-  
+
   const release = await acquireSlot(model, priority);
-  try { 
+  try {
     const result = await retryWithBackoff(task);
     recordSuccess(model);
     return result;
   } catch (error) {
     recordFailure(model);
     throw error;
-  } finally { 
-    release(); 
+  } finally {
+    release();
   }
 }
 
@@ -305,23 +305,23 @@ const MAX_REQUEST_SIZE = 10 * 1024 * 1024; // 10MB
 function checkDDoSProtection(req) {
   const clientIP = req.ip || req.connection.remoteAddress || req.headers['x-forwarded-for']?.split(',')[0];
   if (!clientIP) return { allowed: true };
-  
+
   const now = Date.now();
   let entry = requestCounts.get(clientIP);
-  
+
   if (!entry || (now - entry.windowStart) >= DDOS_WINDOW_MS) {
     entry = { count: 0, windowStart: now };
   }
-  
+
   entry.count += 1;
   requestCounts.set(clientIP, entry);
-  
+
   if (entry.count > DDOS_THRESHOLD) {
     suspiciousIPs.add(clientIP);
     console.log(`[DDOS-PROTECTION] Blocked suspicious IP: ${clientIP} (${entry.count} requests)`);
     return { allowed: false, reason: 'ddos_protection' };
   }
-  
+
   return { allowed: true };
 }
 
@@ -347,7 +347,7 @@ app.use('/v1', validateRequestSize);
 app.use(async (req,res,next)=>{
   // Only guard API routes under /v1/* (exclude /health, static)
   if(!/\/v1\//.test(req.path)) return next();
-  
+
   // DDoS protection
   const ddosCheck = checkDDoSProtection(req);
   if (!ddosCheck.allowed) {
@@ -360,7 +360,7 @@ app.use(async (req,res,next)=>{
       }
     });
   }
-  
+
   const apiKey = getApiKeyFromRequest(req) || 'anon';
   const model = req.body?.model || 'general';
   const rateKey = `${apiKey}:${model}`;
@@ -1003,7 +1003,7 @@ if (ENABLE_TTS_PROXY) {
         console.error('[TTS] Stream error:', e?.message || e);
       });
       nodeStream.pipe(res);
-      
+
     } catch (err) {
       console.error('[TTS] Помилка:', err.message);
       const message = err?.message || String(err);
@@ -1078,10 +1078,10 @@ if (!STRICT_OPENAI_API) {
 app.post("/v1/proxy", async (req, res) => {
   const { model, input, type = "chat", options = {} } = req.body;
   if (!model) return res.status(400).send({ error: "model is required" });
-  
+
   console.log(`[PROXY] ${type} request for model: "${model}"`);
   const startTime = Date.now();
-  
+
   try {
   const client = getClient(req);
   if (type === "chat") {
@@ -1092,11 +1092,11 @@ app.post("/v1/proxy", async (req, res) => {
         messages,
         ...options
       });
-      
+
       // Log successful usage
       const responseTime = Date.now() - startTime;
       limitsHandler.logUsage(model, response.usage, responseTime);
-      
+
       return res.send(response);
     } else {
       const response = await client.responses.create({
@@ -1108,11 +1108,11 @@ app.post("/v1/proxy", async (req, res) => {
     }
   } catch (err) {
     console.error("proxy error", err);
-    
+
     // Log error usage
     const responseTime = Date.now() - startTime;
     limitsHandler.logUsage(model, { total_tokens: 0, prompt_tokens: 0, completion_tokens: 0 }, responseTime, err);
-    
+
     const statusCode = err?.status || err?.response?.status || 500;
     return res.status(statusCode).json({
       error: {
@@ -1133,7 +1133,7 @@ app.post('/v1/test-model', async (req, res) => {
   }
 
   console.log(`[TEST] Testing model: "${model}"`);
-  
+
   try {
   const client = getClient(req);
   const response = await client.chat.completions.create({
@@ -1145,7 +1145,7 @@ app.post('/v1/test-model', async (req, res) => {
 
     const reply = response.choices?.[0]?.message?.content || "No response";
     res.send({ working: true, model, response: reply });
-    
+
   } catch (err) {
     console.error("model test error", err);
     const message = err?.message || String(err);
@@ -1162,7 +1162,7 @@ app.post('/v1/simple-chat', async (req, res) => {
   }
 
   console.log(`[SIMPLE] Chat request for model: "${model}" - "${message.substring(0, 50)}..."`);
-  
+
   try {
   const client = getClient(req);
   const response = await client.chat.completions.create({
@@ -1176,7 +1176,7 @@ app.post('/v1/simple-chat', async (req, res) => {
 
     const reply = response.choices?.[0]?.message?.content || "No response";
     res.send({ message: reply });
-    
+
   } catch (err) {
     console.error("simple chat error", err);
     const message = err?.message || String(err);
@@ -1656,7 +1656,7 @@ async function handleChatCompletions(req, res) {
   }
 }
 
-// Alias for compatibility with UIs expecting /api/* paths (only in non-strict mode)  
+// Alias for compatibility with UIs expecting /api/* paths (only in non-strict mode)
 if (!STRICT_OPENAI_API) {
   app.post('/api/chat/completions', handleChatCompletions);
 }
@@ -1809,7 +1809,7 @@ app.post("/v1/check-context", (req, res) => {
     if (!text || !model) {
       return res.status(400).json({ error: "text and model are required" });
     }
-    
+
     const contextCheck = limitsHandler.checkContextLimit(text, model);
     res.json(contextCheck);
   } catch (error) {
@@ -1821,14 +1821,14 @@ app.post("/v1/check-context", (req, res) => {
 app.post("/api/generate-code", async (req, res) => {
   try {
     const { language, type, model, prompt } = req.body;
-    
+
     if (!language || !type) {
       return res.status(400).json({ error: "language and type are required" });
     }
 
     // Import CodeGenerator dynamically
     const { default: CodeGeneratorModule } = await import('./code-generator.mjs');
-    
+
     // Create a simple generator class
     class SimpleCodeGenerator {
       generateBasicJS(model, prompt) {
@@ -1874,13 +1874,13 @@ client = OpenAI(
 def main():
     model = "${model || 'gpt-4o-mini'}"
     prompt = "${prompt || 'Hello, world!'}"
-    
+
     print(f"🤖 Testing model: {model}")
     print(f"💬 Prompt: {prompt}")
     print("=" * 50)
-    
+
     start_time = time.time()
-    
+
     try:
         response = client.chat.completions.create(
             model=model,
@@ -1891,15 +1891,15 @@ def main():
             temperature=0.7,
             max_tokens=1000
         )
-        
+
         duration = time.time() - start_time
         content = response.choices[0].message.content
-        
+
         print("✅ Response received!")
         print(f"📄 Content: {content}")
         print(f"⏱️  Duration: {duration:.2f}s")
         print(f"📊 Usage: {response.usage}")
-        
+
     except Exception as error:
         print(f"❌ Error: {error}")
 
@@ -1939,7 +1939,7 @@ curl -s -X POST "http://localhost:3010/v1/chat/completions" \\
 
       generateCode(type, language, options = {}) {
         const { model, prompt } = options;
-        
+
         switch (language) {
           case 'js':
             return this.generateBasicJS(model, prompt);
@@ -1955,7 +1955,7 @@ curl -s -X POST "http://localhost:3010/v1/chat/completions" \\
 
     const generator = new SimpleCodeGenerator();
     const code = generator.generateCode(type, language, { model, prompt });
-    
+
     res.json({ code });
   } catch (error) {
     res.status(500).json({ error: error.message });

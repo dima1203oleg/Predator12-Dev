@@ -104,7 +104,7 @@ else
             brew services start opensearch
             sleep 3
             success "OpenSearch запущено"
-            
+
             # Dashboards
             if command -v opensearch-dashboards >/dev/null 2>&1; then
                 read "REPLY?Запустити OpenSearch Dashboards? (y/N): "
@@ -186,7 +186,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     CELERY_PID=$!
     echo $CELERY_PID > "$PROJECT_ROOT/.celery.pid"
     success "Celery Worker запущено (PID: $CELERY_PID)"
-    
+
     # Flower
     read "REPLY?Запустити Celery Flower (monitoring)? (y/N): "
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -208,12 +208,12 @@ if [ -d "$PROJECT_ROOT/frontend" ]; then
     read "REPLY?Запустити Frontend? (y/N): "
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         cd "$PROJECT_ROOT/frontend"
-        
+
         if [ ! -d "node_modules" ]; then
             info "Встановлюю npm залежності..."
             npm install
         fi
-        
+
         info "Запускаю Frontend..."
         nohup npm run dev > "$PROJECT_ROOT/logs/frontend.log" 2>&1 &
         FRONTEND_PID=$!
@@ -252,13 +252,13 @@ cat << 'EOF'
   # Переглянути логи
   tail -f logs/backend.log
   tail -f logs/celery.log
-  
+
   # Зупинити сервіси
   ./scripts/stop-all.sh
-  
+
   # Перевірити статус
   ./scripts/manage-ports.sh check
-  
+
   # Health check
   python scripts/health-check.py
 

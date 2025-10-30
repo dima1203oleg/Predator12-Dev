@@ -13,6 +13,8 @@ import {
 } from './components/AIComponents';
 import type { AIAgent, AIModel, TrainingPipeline } from './components/AIComponents';
 import { AIAgentsSection } from './components/ai/AIAgentsSection';
+import './styles/global.css';
+import { initGlobalErrorReporting, triggerSelfHeal as apiTriggerSelfHeal } from './utils/selfHeal';
 
 // ============= TYPES =============
 interface SystemMetrics {
@@ -845,57 +847,43 @@ const App: React.FC = () => {
     return () => clearInterval(interval);
   }, [metrics]);
 
+  // Initialize global error reporting (reports to /observability/errors)
+  useEffect(() => {
+    try {
+      initGlobalErrorReporting({ sampleRate: 1.0 });
+    } catch (e) {
+      // ignore init errors
+      console.warn('initGlobalErrorReporting failed', e);
+    }
+  }, []);
+
+  const [lastHealReport, setLastHealReport] = useState<any | null>(null);
+  const [isHealing, setIsHealing] = useState(false);
+
+  const handleTriggerSelfHeal = async () => {
+    setIsHealing(true);
+    try {
+      const report = await apiTriggerSelfHeal();
+      setLastHealReport(report);
+      // also show a toast alert
+      setAlerts((s) => [
+        ...s,
+        { id: Date.now().toString(), type: 'info', message: 'Self-heal: ' + (report?.health_before || 'done'), timestamp: new Date().toLocaleTimeString() }
+      ]);
+    } catch (err: any) {
+      setLastHealReport({ error: String(err) });
+      setAlerts((s) => [
+        ...s,
+        { id: Date.now().toString(), type: 'error', message: 'Self-heal failed: ' + (err?.message || String(err)), timestamp: new Date().toLocaleTimeString() }
+      ]);
+    } finally {
+      setIsHealing(false);
+    }
+  };
+
   return (
     <>
       <AnimatedBackground />
-
-      {/* Global Styles */}
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(100px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-        }
-
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-          background: linear-gradient(135deg, #0a0a14 0%, #1a1a2e 50%, #0f0f1e 100%);
-          color: #fff;
-          overflow-x: hidden;
-        }
-
-        ::-webkit-scrollbar {
-          width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.05);
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: rgba(139, 92, 246, 0.5);
-          border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-          background: rgba(139, 92, 246, 0.8);
-        }
-      `}</style>
 
       <div style={{ position: 'relative', zIndex: 1, minHeight: '100vh', padding: '40px 20px' }}>
         {/* Header */}
@@ -924,32 +912,72 @@ const App: React.FC = () => {
             Ultra-Modern AI System Dashboard · Real-Time Monitoring
           </div>
 
-          {/* Live Status Badge */}
+          {/* Live Status Badge + Self-heal button */}
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px',
+              gap: '12px',
               marginTop: '16px',
-              background: 'rgba(16, 185, 129, 0.1)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
-              padding: '8px 16px',
-              borderRadius: '20px',
             }}
           >
-            <div
-              style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '50%',
-                background: '#10B981',
-                boxShadow: '0 0 10px #10B981',
-                animation: 'pulse 2s infinite',
-              }}
-            />
-            <span style={{ color: '#10B981', fontSize: '14px', fontWeight: '600' }}>
-              System Online · 25 Services · 24 OK · 1 Warning (Qdrant)
-            </span>
+            <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'rgba(16, 185, 129, 0.1)',
+                border: '1px solid rgba(16, 185, 129, 0.3)',
+                padding: '8px 12px',
+                borderRadius: '20px'
+              }}>
+              <div
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  background: '#10B981',
+                  boxShadow: '0 0 10px #10B981',
+                  animation: 'pulse 2s infinite',
+                }}
+              />
+              <span style={{ color: '#10B981', fontSize: '14px', fontWeight: '600' }}>
+                System Online · 25 Services · 24 OK · 1 Warning (Qdrant)
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button
+                onClick={handleTriggerSelfHeal}
+                disabled={isHealing}
+                style={{
+                  background: isHealing ? '#555' : '#00bfa5',
+                  color: '#012',
+                  padding: '8px 12px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  cursor: isHealing ? 'wait' : 'pointer',
+                  fontWeight: 700
+                }}
+                title="Запустити health check та auto-heal"
+              >
+                {isHealing ? '🩺 В роботі...' : '🩺 Перевірити систему'}
+              </button>
+
+              {lastHealReport && (
+                <div style={{
+                  background: 'rgba(0,0,0,0.5)',
+                  color: '#fff',
+                  padding: '8px 12px',
+                  borderRadius: '12px',
+                  fontSize: '12px',
+                  maxWidth: '320px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}>
+                  <strong>Останній звіт:</strong> {lastHealReport?.health_before || lastHealReport?.error || '—'}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

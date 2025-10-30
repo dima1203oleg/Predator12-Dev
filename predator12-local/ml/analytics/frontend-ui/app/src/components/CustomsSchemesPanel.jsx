@@ -58,7 +58,7 @@ const CustomsSchemesPanel = () => {
     return (
         <div className="p-6 bg-gray-900 text-white rounded-lg shadow-lg max-w-md mx-auto">
             <h2 className="text-2xl font-bold mb-4">Customs Schemes Analysis</h2>
-            <textarea 
+            <textarea
                 className="w-full p-2 mb-4 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -66,7 +66,7 @@ const CustomsSchemesPanel = () => {
                 rows={4}
                 disabled={isLoading}
             />
-            <button 
+            <button
                 onClick={handleAnalyze}
                 className={`w-full py-2 ${isLoading ? 'bg-gray-500' : 'bg-blue-600 hover:bg-blue-700'} text-white rounded-md transition duration-200`}
                 disabled={isLoading}
@@ -89,4 +89,4 @@ const CustomsSchemesPanel = () => {
     );
 };
 
-export default CustomsSchemesPanel; 
+export default CustomsSchemesPanel;

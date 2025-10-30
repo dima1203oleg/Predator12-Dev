@@ -59,7 +59,10 @@ class SecretRotationPolicy:
     """Политика ротации секретов"""
 
     def __init__(
-        self, secret_name: str, rotation_interval_days: int, backup_retention_days: int = 30
+        self,
+        secret_name: str,
+        rotation_interval_days: int,
+        backup_retention_days: int = 30,
     ):
         self.secret_name = secret_name
         self.rotation_interval_days = rotation_interval_days
@@ -105,7 +108,10 @@ class SupplyChainSecurityManager:
         logger.info(f"✅ Initialized {len(policies)} secret rotation policies")
 
     async def generate_sbom(
-        self, image_name: str, image_tag: str = "latest", format_type: SBOMFormat = SBOMFormat.SYFT
+        self,
+        image_name: str,
+        image_tag: str = "latest",
+        format_type: SBOMFormat = SBOMFormat.SYFT,
     ) -> Dict[str, Any]:
         """Генерация SBOM для container image"""
         try:
@@ -187,7 +193,12 @@ class SupplyChainSecurityManager:
                     "type": "python-package",
                     "foundBy": "syft",
                 },
-                {"name": "ubuntu", "version": "22.04", "type": "os-package", "foundBy": "syft"},
+                {
+                    "name": "ubuntu",
+                    "version": "22.04",
+                    "type": "os-package",
+                    "foundBy": "syft",
+                },
             ],
             "sbom_hash": hashlib.sha256(f"mock_sbom_{image_ref}".encode()).hexdigest(),
         }
@@ -547,7 +558,10 @@ class SupplyChainSecurityManager:
         """Проверка доступности инструмента"""
         try:
             process = await asyncio.create_subprocess_exec(
-                "which", tool_name, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                "which",
+                tool_name,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
             )
 
             await process.communicate()

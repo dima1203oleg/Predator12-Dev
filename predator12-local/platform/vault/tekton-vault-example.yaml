@@ -1,0 +1,33 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: tekton-vault-fetch-secret
+  namespace: tekton-pipelines
+spec:
+  description: "Example Task that authenticates to Vault using a token passed via a Kubernetes Secret and fetches a secret to a file. Replace with Vault Agent/CSI in production."
+  params:
+    - name: vault-addr
+      type: string
+    - name: secret-path
+      type: string
+  workspaces:
+    - name: source
+  steps:
+    - name: install-vault
+      image: alpine:3.18
+      script: |
+        #!/bin/sh
+        set -e
+        apk add --no-cache curl jq
+        # fetch secret using token from mounted secret at /var/run/secrets/vault/token
+        VAULT_TOKEN_FILE="/var/run/secrets/vault/token"
+        if [ ! -f "$VAULT_TOKEN_FILE" ]; then
+          echo "Vault token file missing" >&2; exit 1;
+        fi
+        VAULT_TOKEN=$(cat "$VAULT_TOKEN_FILE")
+        export VAULT_TOKEN
+        curl -sS --header "X-Vault-Token: $VAULT_TOKEN" "$$(params.vault-addr)/v1/$(params.secret-path)" | jq -r '.data' > /tekton/results/secret.json || exit 1
+
+  # NOTES:
+  # - Mount a Kubernetes Secret at /var/run/secrets/vault containing the token (key 'token').
+  # - Prefer using the Kubernetes auth method with a service account and Vault role instead of static tokens.

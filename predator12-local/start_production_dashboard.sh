@@ -66,7 +66,7 @@ if lsof -i :5090 &> /dev/null; then
         error "Aborted by user"
         exit 1
     fi
-    
+
     log "Stopping processes on port 5090..."
     sudo lsof -ti:5090 | xargs sudo kill -9 2>/dev/null || true
     sleep 2
@@ -120,14 +120,14 @@ if docker-compose -f docker-compose.dashboard.yml ps | grep -q "Up"; then
     echo "📝 View logs: docker-compose -f docker-compose.dashboard.yml logs -f"
     echo "🛑 Stop dashboard: docker-compose -f docker-compose.dashboard.yml down"
     echo ""
-    
+
     # Перевірка доступності
     log "Testing dashboard accessibility..."
     sleep 10
-    
+
     if curl -s http://localhost:5090 > /dev/null; then
         success "Dashboard is accessible at http://localhost:5090"
-        
+
         # Відкриття в браузері (macOS)
         if command -v open &> /dev/null; then
             log "Opening dashboard in browser..."
@@ -137,7 +137,7 @@ if docker-compose -f docker-compose.dashboard.yml ps | grep -q "Up"; then
         warning "Dashboard might still be starting up..."
         echo "Please wait a moment and check http://localhost:5090"
     fi
-    
+
 else
     error "Failed to start Production Dashboard"
     echo ""

@@ -12,28 +12,29 @@ Features:
 """
 
 import asyncio
-import aiohttp
-import structlog
-import yaml
-import signal
-import uuid
-import os
-import time
 import contextvars
-import ssl as ssl_module  # Renamed to avoid conflict
-from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Dict, List, Optional, Literal, Union
-
-from pydantic import BaseModel, validator  # Removed Field
-from prometheus_client import start_http_server, Histogram, Counter, Gauge
+import os
+import signal
 import socket
+import ssl as ssl_module  # Renamed to avoid conflict
+import time
+import uuid
+from concurrent.futures import ThreadPoolExecutor
+from typing import Any, Dict, List, Literal, Optional, Union
+
+import aiohttp
 import asyncpg
+import structlog
 import tenacity
-from watchdog.observers import Observer
+import yaml
+from prometheus_client import Counter, Gauge, Histogram, start_http_server
+from pydantic import BaseModel, validator  # Removed Field
 from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
 
 try:
-    from kubernetes_asyncio import client as k8s_client, config as k8s_config
+    from kubernetes_asyncio import client as k8s_client
+    from kubernetes_asyncio import config as k8s_config
 except ImportError:
     k8s_client = None
     k8s_config = None
@@ -131,7 +132,7 @@ class ServiceConfig(BaseModel):
         HTTPHealthCheckConfig,
         TCPHealthCheckConfig,
         PostgresHealthCheckConfig,
-        Neo4jHealthCheckConfig
+        Neo4jHealthCheckConfig,
     ]
     recovery: RecoveryActionConfig
     recovery_action: Literal["K8S_POD_RESTART", "K8S_DEPLOYMENT_ROLLING"]
@@ -199,7 +200,7 @@ class HealthChecker:
         self,
         config: ServiceConfig,
         ssl_verify: Union[bool, str],
-        health_pool: Optional["AsyncThreadPool"] = None  # String literal
+        health_pool: Optional["AsyncThreadPool"] = None,  # String literal
     ):
         self.config = config
         self.name = config.name
@@ -217,13 +218,11 @@ class HttpHealthChecker(HealthChecker):
             timeout = aiohttp.ClientTimeout(total=hc.timeout)
             ssl_context = None
             if isinstance(self.ssl_verify, str):
-                ssl_context = ssl_module.create_default_context(
-                    cafile=self.ssl_verify
-                )
+                ssl_context = ssl_module.create_default_context(cafile=self.ssl_verify)
                 ssl_context.minimum_version = ssl_module.TLSVersion.TLSv1_2
             elif self.ssl_verify is False:
                 ssl_context = False  # Explicitly disable SSL for aiohttp
-            
+
             async with aiohttp.ClientSession(timeout=timeout) as session:
                 async with session.request(
                     hc.method, hc.url, headers=hc.headers, ssl=ssl_context
@@ -235,7 +234,7 @@ class HttpHealthChecker(HealthChecker):
                 "HTTP healthcheck failed",
                 service=self.name,
                 error=str(e),
-                correlation_id=correlation_id_ctx.get()
+                correlation_id=correlation_id_ctx.get(),
             )
             return False
 
@@ -248,24 +247,19 @@ class TcpHealthChecker(HealthChecker):
                 logger.error(
                     "Health pool not available for TCP check",
                     service=self.name,
-                    correlation_id=correlation_id_ctx.get()
+                    correlation_id=correlation_id_ctx.get(),
                 )
                 loop = asyncio.get_event_loop()
                 fut = loop.run_in_executor(
-                    None,
-                    lambda: socket.create_connection(
-                        (hc.host, hc.port), timeout=hc.timeout
-                    )
+                    None, lambda: socket.create_connection((hc.host, hc.port), timeout=hc.timeout)
                 )
                 await asyncio.wait_for(fut, timeout=hc.timeout + 1)
             else:
                 await asyncio.wait_for(
                     self.health_pool.run(
-                        socket.create_connection,
-                        (hc.host, hc.port),
-                        timeout=hc.timeout
+                        socket.create_connection, (hc.host, hc.port), timeout=hc.timeout
                     ),
-                    timeout=hc.timeout + 1  # Outer timeout
+                    timeout=hc.timeout + 1,  # Outer timeout
                 )
             return True
         except Exception as e:
@@ -273,7 +267,7 @@ class TcpHealthChecker(HealthChecker):
                 "TCP healthcheck failed",
                 service=self.name,
                 error=str(e),
-                correlation_id=correlation_id_ctx.get()
+                correlation_id=correlation_id_ctx.get(),
             )
             return False
 
@@ -282,10 +276,7 @@ class PostgresHealthChecker(HealthChecker):
     async def check(self) -> bool:
         hc: PostgresHealthCheckConfig = self.config.healthcheck
         try:
-            conn = await asyncio.wait_for(
-                asyncpg.connect(hc.dsn),
-                timeout=hc.timeout
-            )
+            conn = await asyncio.wait_for(asyncpg.connect(hc.dsn), timeout=hc.timeout)
             await conn.close()
             return True
         except Exception as e:
@@ -293,7 +284,7 @@ class PostgresHealthChecker(HealthChecker):
                 "Postgres healthcheck failed",
                 service=self.name,
                 error=str(e),
-                correlation_id=correlation_id_ctx.get()
+                correlation_id=correlation_id_ctx.get(),
             )
             return False
 
@@ -303,22 +294,21 @@ class Neo4jHealthChecker(HealthChecker):
         hc: Neo4jHealthCheckConfig = self.config.healthcheck
         try:
             import base64  # Moved import here as it's only used here
+
             auth_str = f"{hc.user}:{hc.password}"
             auth = base64.b64encode(auth_str.encode()).decode()
             headers = {"Authorization": f"Basic {auth}"}
             async with aiohttp.ClientSession(
                 timeout=aiohttp.ClientTimeout(total=hc.timeout)
             ) as session:
-                async with session.get(
-                    f"{hc.uri}/db/neo4j/", headers=headers
-                ) as resp:
+                async with session.get(f"{hc.uri}/db/neo4j/", headers=headers) as resp:
                     return resp.status == 200
         except Exception as e:
             logger.warning(
                 "Neo4j healthcheck failed",
                 service=self.name,
                 error=str(e),
-                correlation_id=correlation_id_ctx.get()
+                correlation_id=correlation_id_ctx.get(),
             )
             return False
 
@@ -328,7 +318,7 @@ class RecoveryAction:
         self,
         config: ServiceConfig,
         kube_core_v1_api: Optional["k8s_client.CoreV1Api"] = None,
-        kube_apps_v1_api: Optional["k8s_client.AppsV1Api"] = None
+        kube_apps_v1_api: Optional["k8s_client.AppsV1Api"] = None,
     ):
         self.config = config
         self.kube_core_v1_api = kube_core_v1_api
@@ -348,9 +338,7 @@ class RecoveryAction:
         elif self.action == "K8S_DEPLOYMENT_ROLLING":
             await self._rolling_restart_deployment(correlation_id)
         else:
-            raise NotImplementedError(
-                f"Unknown recovery_action: {self.action}"
-            )
+            raise NotImplementedError(f"Unknown recovery_action: {self.action}")
 
     async def _restart_pod(self, correlation_id: str):
         if not self.kube_core_v1_api:
@@ -358,29 +346,23 @@ class RecoveryAction:
         ns = self.recovery.namespace
         selector = self.recovery.selector
         if not ns or not selector:
-            raise ValueError(
-                "Missing namespace or selector in recovery config"
-            )
-        pods = await self.kube_core_v1_api.list_namespaced_pod(
-            ns, label_selector=selector
-        )
+            raise ValueError("Missing namespace or selector in recovery config")
+        pods = await self.kube_core_v1_api.list_namespaced_pod(ns, label_selector=selector)
         for pod in pods.items:
             if pod.metadata and pod.metadata.name:
-                await self.kube_core_v1_api.delete_namespaced_pod(
-                    pod.metadata.name, ns
-                )
+                await self.kube_core_v1_api.delete_namespaced_pod(pod.metadata.name, ns)
                 logger.info(
                     "K8S pod deleted for restart",
                     pod=pod.metadata.name,
                     service=self.name,
-                    correlation_id=correlation_id
+                    correlation_id=correlation_id,
                 )
             else:
                 logger.warning(
                     "Pod metadata or name missing, cannot delete",
                     pod_info=str(pod),
                     service=self.name,
-                    correlation_id=correlation_id
+                    correlation_id=correlation_id,
                 )
 
     async def _rolling_restart_deployment(self, correlation_id: str):
@@ -389,9 +371,7 @@ class RecoveryAction:
         ns = self.recovery.namespace
         deployment = self.recovery.deployment
         if not ns or not deployment:
-            raise ValueError(
-                "Missing namespace or deployment in recovery config"
-            )
+            raise ValueError("Missing namespace or deployment in recovery config")
         patch = {
             "spec": {
                 "template": {
@@ -413,7 +393,7 @@ class RecoveryAction:
                 "K8S deployment rolling restart triggered",
                 deployment=deployment,
                 service=self.name,
-                correlation_id=correlation_id
+                correlation_id=correlation_id,
             )
         except Exception as e:
             logger.error(
@@ -421,21 +401,14 @@ class RecoveryAction:
                 error=str(e),
                 deployment=deployment,
                 service=self.name,
-                correlation_id=correlation_id
+                correlation_id=correlation_id,
             )
             raise
 
 
-@tenacity.retry(
-    wait=tenacity.wait_fixed(2),
-    stop=tenacity.stop_after_attempt(3),
-    reraise=True
-)
+@tenacity.retry(wait=tenacity.wait_fixed(2), stop=tenacity.stop_after_attempt(3), reraise=True)
 async def send_slack_alert(
-    webhook_url: str,
-    message: str,
-    correlation_id: str,
-    ssl_verify: Union[bool, str]
+    webhook_url: str, message: str, correlation_id: str, ssl_verify: Union[bool, str]
 ):
     ssl_context = None
     if isinstance(ssl_verify, str):
@@ -445,15 +418,13 @@ async def send_slack_alert(
         ssl_context = False  # Explicitly disable SSL for aiohttp
 
     async with aiohttp.ClientSession() as session:
-        resp = await session.post(
-            webhook_url, json={"text": message}, ssl=ssl_context
-        )
+        resp = await session.post(webhook_url, json={"text": message}, ssl=ssl_context)
         if resp.status >= 300:
             logger.error(
                 "Slack webhook failed",
                 status=resp.status,
                 text=await resp.text(),
-                correlation_id=correlation_id
+                correlation_id=correlation_id,
             )
         else:
             logger.info("Slack webhook sent", correlation_id=correlation_id)
@@ -465,25 +436,15 @@ class KafkaLogger:
         self.topic = topic
         self._started = False
 
-    @tenacity.retry(
-        wait=tenacity.wait_fixed(2),
-        stop=tenacity.stop_after_attempt(3),
-        reraise=False
-    )
+    @tenacity.retry(wait=tenacity.wait_fixed(2), stop=tenacity.stop_after_attempt(3), reraise=False)
     async def start(self):
         if not self.broker or not self.topic:
             logger.info("Kafka logging not configured")
             return
         self._started = True
-        logger.info(
-            "KafkaLogger started", broker=self.broker, topic=self.topic
-        )
+        logger.info("KafkaLogger started", broker=self.broker, topic=self.topic)
 
-    @tenacity.retry(
-        wait=tenacity.wait_fixed(2),
-        stop=tenacity.stop_after_attempt(3),
-        reraise=False
-    )
+    @tenacity.retry(wait=tenacity.wait_fixed(2), stop=tenacity.stop_after_attempt(3), reraise=False)
     async def log(self, message: Dict[str, Any]):
         if self._started:
             # Actual Kafka client integration would go here
@@ -496,12 +457,11 @@ class KafkaLogger:
 async def check_k8s_rbac(
     namespace: Optional[str],
     core_v1_api: Optional["k8s_client.CoreV1Api"] = None,  # String literal
-    apps_v1_api: Optional["k8s_client.AppsV1Api"] = None  # String literal
+    apps_v1_api: Optional["k8s_client.AppsV1Api"] = None,  # String literal
 ):
     if not k8s_config or not k8s_client:
         logger.warning(
-            "Kubernetes client library not fully available, "
-            "skipping RBAC check early."
+            "Kubernetes client library not fully available, " "skipping RBAC check early."
         )
         return
 
@@ -512,26 +472,20 @@ async def check_k8s_rbac(
     try:
         if not _core_v1_api:
             _core_v1_api = k8s_client.CoreV1Api()
-        
+
         await _core_v1_api.list_namespaced_pod(namespace or "default", limit=1)
         logger.info("K8S RBAC pod list: OK", correlation_id=cid)
     except Exception as e:
-        logger.error(
-            "K8S RBAC pod list: FAIL", error=str(e), correlation_id=cid
-        )
-    
+        logger.error("K8S RBAC pod list: FAIL", error=str(e), correlation_id=cid)
+
     try:
         if not _apps_v1_api:
             _apps_v1_api = k8s_client.AppsV1Api()
 
-        await _apps_v1_api.list_namespaced_deployment(
-            namespace or "default", limit=1
-        )
+        await _apps_v1_api.list_namespaced_deployment(namespace or "default", limit=1)
         logger.info("K8S RBAC deployment list: OK", correlation_id=cid)
     except Exception as e:
-        logger.error(
-            "K8S RBAC deployment list: FAIL", error=str(e), correlation_id=cid
-        )
+        logger.error("K8S RBAC deployment list: FAIL", error=str(e), correlation_id=cid)
 
 
 class AsyncThreadPool:
@@ -540,9 +494,7 @@ class AsyncThreadPool:
         self.loop = asyncio.get_event_loop()
 
     async def run(self, func, *args, **kwargs):
-        return await self.loop.run_in_executor(
-            self.executor, lambda: func(*args, **kwargs)
-        )
+        return await self.loop.run_in_executor(self.executor, lambda: func(*args, **kwargs))
 
     async def close(self):
         self.executor.shutdown(wait=True)
@@ -570,17 +522,13 @@ class ConfigReloader(FileSystemEventHandler):
 
     def on_modified(self, event):
         if event.src_path.endswith(self.agent.config.config_path):
-            logger.info(
-                "Config file modified, triggering reload", path=event.src_path
-            )
+            logger.info("Config file modified, triggering reload", path=event.src_path)
             self._reload_event.set()
 
     async def watch(self):
         observer = Observer()
         observer.schedule(
-            self,
-            path=os.path.dirname(self.agent.config.config_path) or ".",
-            recursive=False
+            self, path=os.path.dirname(self.agent.config.config_path) or ".", recursive=False
         )
         observer.start()
         try:
@@ -599,9 +547,7 @@ class PredatorAutoRecoveryAgent:
         self._stopping = asyncio.Event()
         self.health_pool = AsyncThreadPool(config.healthcheck_concurrency)
         self.recovery_pool = AsyncThreadPool(config.recovery_concurrency)
-        self.kafka_logger = KafkaLogger(
-            config.kafka_broker, config.kafka_topic
-        )
+        self.kafka_logger = KafkaLogger(config.kafka_broker, config.kafka_topic)
         self.kube_core_v1_api: Optional["k8s_client.CoreV1Api"] = None
         self.kube_apps_v1_api: Optional["k8s_client.AppsV1Api"] = None
         self.prometheus_task = None
@@ -621,24 +567,21 @@ class PredatorAutoRecoveryAgent:
             try:
                 # Or load_kube_config()
                 await k8s_config.load_incluster_config()
-                
+
                 self.kube_core_v1_api = k8s_client.CoreV1Api()
                 self.kube_apps_v1_api = k8s_client.AppsV1Api()
-                logger.info(
-                    "Kubernetes API clients initialized.", correlation_id=cid
-                )
-                
+                logger.info("Kubernetes API clients initialized.", correlation_id=cid)
+
                 await check_k8s_rbac(
                     self.config.kubernetes_namespace,
                     core_v1_api=self.kube_core_v1_api,
-                    apps_v1_api=self.kube_apps_v1_api
+                    apps_v1_api=self.kube_apps_v1_api,
                 )
             except Exception as e:
                 logger.error(
-                    "Failed to initialize Kubernetes API clients "
-                    "or run RBAC check",
+                    "Failed to initialize Kubernetes API clients " "or run RBAC check",
                     error=str(e),
-                    correlation_id=cid
+                    correlation_id=cid,
                 )
                 self.kube_core_v1_api = None
                 self.kube_apps_v1_api = None
@@ -646,22 +589,17 @@ class PredatorAutoRecoveryAgent:
             logger.warning(
                 "Kubernetes client libraries not found. "
                 "K8s recovery actions will not be available.",
-                correlation_id=cid
+                correlation_id=cid,
             )
-            
+
         logger.info(
-            "PredatorAutoRecoveryAgent started",
-            agent_version=AGENT_VERSION,
-            correlation_id=cid
+            "PredatorAutoRecoveryAgent started", agent_version=AGENT_VERSION, correlation_id=cid
         )
         self._reload_task = asyncio.create_task(self._watch_config())
 
     async def _start_prometheus(self):
         start_http_server(self.config.prometheus_port)
-        logger.info(
-            "Prometheus metrics server started",
-            port=self.config.prometheus_port
-        )
+        logger.info("Prometheus metrics server started", port=self.config.prometheus_port)
 
     async def teardown(self):
         logger.info("Shutting down agent...")
@@ -675,35 +613,23 @@ class PredatorAutoRecoveryAgent:
             except asyncio.CancelledError:
                 pass
         # Close K8s API clients (good practice with kubernetes_asyncio)
-        if self.kube_core_v1_api and hasattr(
-            self.kube_core_v1_api.api_client, 'close'
-        ):
+        if self.kube_core_v1_api and hasattr(self.kube_core_v1_api.api_client, "close"):
             await self.kube_core_v1_api.api_client.close()
-        if self.kube_apps_v1_api and hasattr(
-            self.kube_apps_v1_api.api_client, 'close'
-        ):
+        if self.kube_apps_v1_api and hasattr(self.kube_apps_v1_api.api_client, "close"):
             await self.kube_apps_v1_api.api_client.close()
         logger.info("Shutdown complete")
 
     async def reload_config(self):
         async with self._config_lock:
-            logger.info(
-                "Reloading config from disk", path=self.config.config_path
-            )
+            logger.info("Reloading config from disk", path=self.config.config_path)
             try:
                 new_config = AppConfig.from_yaml(self.config.config_path)
                 self.config = new_config
                 self.ssl_verify = new_config.ssl_verify
                 # Consider re-init pools/loggers if config changed
-                logger.info(
-                    "Config reloaded", config_path=self.config.config_path
-                )
+                logger.info("Config reloaded", config_path=self.config.config_path)
             except Exception as e:
-                logger.error(
-                    "Failed to reload config",
-                    error=str(e),
-                    path=self.config.config_path
-                )
+                logger.error("Failed to reload config", error=str(e), path=self.config.config_path)
 
     async def _watch_config(self):
         reloader = ConfigReloader(self)
@@ -715,9 +641,7 @@ class PredatorAutoRecoveryAgent:
             while not self._stopping.is_set():
                 correlation_id = str(uuid.uuid4())
                 token = correlation_id_ctx.set(correlation_id)
-                with cycle_duration_seconds.labels(
-                    correlation_id=correlation_id
-                ).time():
+                with cycle_duration_seconds.labels(correlation_id=correlation_id).time():
                     await self._run_cycle(correlation_id)
                 correlation_id_ctx.reset(token)
                 await asyncio.sleep(self.config.cycle_interval_seconds)
@@ -728,36 +652,32 @@ class PredatorAutoRecoveryAgent:
 
     async def _run_cycle(self, correlation_id: str):
         sem = asyncio.Semaphore(self.config.healthcheck_concurrency)
-        
+
         ordered_svcs_for_check = self._get_services_in_dependency_order()
 
         tasks = [
             self._perform_healthcheck(svc_config, sem, correlation_id)
             for svc_config in ordered_svcs_for_check
         ]
-        
-        health_check_results = await asyncio.gather(
-            *tasks, return_exceptions=True
-        )
-        
+
+        health_check_results = await asyncio.gather(*tasks, return_exceptions=True)
+
         processed_results = []
         for res_item in health_check_results:
             if isinstance(res_item, Exception):
                 logger.error(
                     "Healthcheck exception in gather",
                     error=str(res_item),
-                    correlation_id=correlation_id
+                    correlation_id=correlation_id,
                 )
             else:
                 processed_results.append(res_item)
-        
+
         recovery_tasks = []
         for svc_to_recover, is_healthy in processed_results:
             if not is_healthy:
-                recovery_tasks.append(
-                    self._recover(svc_to_recover, correlation_id)
-                )
-        
+                recovery_tasks.append(self._recover(svc_to_recover, correlation_id))
+
         if recovery_tasks:
             await asyncio.gather(*recovery_tasks, return_exceptions=True)
 
@@ -782,10 +702,7 @@ class PredatorAutoRecoveryAgent:
         return ordered_svcs
 
     async def _perform_healthcheck(
-        self,
-        svc_config: ServiceConfig,
-        semaphore: asyncio.Semaphore,
-        correlation_id: str
+        self, svc_config: ServiceConfig, semaphore: asyncio.Semaphore, correlation_id: str
     ) -> tuple[ServiceConfig, bool]:
         async with semaphore:
             checker = self._make_checker(svc_config)
@@ -793,17 +710,15 @@ class PredatorAutoRecoveryAgent:
             healthy = await checker.check()
             dt = time.monotonic() - t0
             status = "healthy" if healthy else "unhealthy"
-            
+
             healthcheck_duration_seconds.labels(
-                service=svc_config.name,
-                status=status,
-                correlation_id=correlation_id
+                service=svc_config.name, status=status, correlation_id=correlation_id
             ).observe(dt)
-            
+
             service_health_status.labels(
                 service=svc_config.name, correlation_id=correlation_id
             ).set(1 if healthy else 0)
-            
+
             return svc_config, healthy
 
     def _make_checker(self, svc: ServiceConfig) -> HealthChecker:
@@ -811,13 +726,9 @@ class PredatorAutoRecoveryAgent:
         if t == "http":
             return HttpHealthChecker(svc, self.ssl_verify)
         elif t == "tcp":
-            return TcpHealthChecker(
-                svc, self.ssl_verify, health_pool=self.health_pool
-            )
+            return TcpHealthChecker(svc, self.ssl_verify, health_pool=self.health_pool)
         elif t == "postgres":
-            return PostgresHealthChecker(
-                svc, self.ssl_verify, health_pool=self.health_pool
-            )
+            return PostgresHealthChecker(svc, self.ssl_verify, health_pool=self.health_pool)
         elif t == "neo4j":
             return Neo4jHealthChecker(svc, self.ssl_verify)  # Uses aiohttp
         else:
@@ -827,12 +738,10 @@ class PredatorAutoRecoveryAgent:
         logger.warning(
             "Service unhealthy, triggering recovery",
             service=svc.name,
-            correlation_id=correlation_id
+            correlation_id=correlation_id,
         )
         action = RecoveryAction(
-            svc,
-            kube_core_v1_api=self.kube_core_v1_api,
-            kube_apps_v1_api=self.kube_apps_v1_api
+            svc, kube_core_v1_api=self.kube_core_v1_api, kube_apps_v1_api=self.kube_apps_v1_api
         )
         result = "success"
         try:
@@ -841,15 +750,17 @@ class PredatorAutoRecoveryAgent:
                 "Recovery succeeded",
                 service=svc.name,
                 action=svc.recovery_action,
-                correlation_id=correlation_id
+                correlation_id=correlation_id,
             )
-            await self.kafka_logger.log({
-                "event": "recovery",
-                "service": svc.name,
-                "action": svc.recovery_action,
-                "correlation_id": correlation_id,
-                "ts": time.time(),
-            })
+            await self.kafka_logger.log(
+                {
+                    "event": "recovery",
+                    "service": svc.name,
+                    "action": svc.recovery_action,
+                    "correlation_id": correlation_id,
+                    "ts": time.time(),
+                }
+            )
             if svc.slack_webhook:
                 cooldown = svc.slack_cooldown or 300
                 if await self.cooldown_tracker.can_alert(svc.name, cooldown):
@@ -859,7 +770,7 @@ class PredatorAutoRecoveryAgent:
                         f"recovered ({svc.recovery_action}) "
                         f"[id: {correlation_id}]",
                         correlation_id,
-                        self.ssl_verify
+                        self.ssl_verify,
                     )
                     webhook_alerts_total.labels(
                         service=svc.name, correlation_id=correlation_id
@@ -867,10 +778,7 @@ class PredatorAutoRecoveryAgent:
         except Exception as e:
             result = "failure"
             logger.error(
-                "Recovery failed",
-                error=str(e),
-                service=svc.name,
-                correlation_id=correlation_id
+                "Recovery failed", error=str(e), service=svc.name, correlation_id=correlation_id
             )
         finally:
             recovery_actions_total.labels(
@@ -885,30 +793,26 @@ def signal_handler(agent: PredatorAutoRecoveryAgent):
     def handler(*_):
         logger.info("Signal received, shutting down...")
         agent._stopping.set()
+
     return handler
 
 
 async def main():
-    config_path = os.environ.get(
-        "PREDATOR_AUTOHEAL_CONFIG", "auto_recovery_config.yaml"
-    )
+    config_path = os.environ.get("PREDATOR_AUTOHEAL_CONFIG", "auto_recovery_config.yaml")
     try:
         config = AppConfig.from_yaml(config_path)
     except Exception as e:
-        logger.error(
-            "Failed to load initial configuration",
-            error=str(e),
-            path=config_path
-        )
+        logger.error("Failed to load initial configuration", error=str(e), path=config_path)
         return  # Exit if config fails to load
 
     agent = PredatorAutoRecoveryAgent(config)
-    
+
     loop = asyncio.get_running_loop()
     for sig in (signal.SIGINT, signal.SIGTERM):
         loop.add_signal_handler(sig, signal_handler(agent))
-        
+
     await agent.run()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

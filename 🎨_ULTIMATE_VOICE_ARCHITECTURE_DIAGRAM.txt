@@ -1,0 +1,373 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                                                                  ║
+║   🎨 PREDATOR12 ULTIMATE VOICE V5.3 - ARCHITECTURE DIAGRAM     ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+
+ТРИСТУПЕНЕВА АРХІТЕКТУРА З АВТОМАТИЧНИМ FALLBACK
+═══════════════════════════════════════════════════════════════════
+
+
+┌─────────────────────────────────────────────────────────────────┐
+│                         USER / CLIENT                           │
+│                                                                 │
+│  🖥️  Web Browser                                                │
+│  📱 Mobile App                                                  │
+│  🎮 Voice Interface                                             │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             │ HTTP/REST
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    FRONTEND (React + TypeScript)                │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  📦 voiceAPIUltimate.ts                                         │
+│     • VoiceAPIUltimate class                                    │
+│     • textToSpeech() method                                     │
+│     • speechToText() method                                     │
+│     • loadCapabilities()                                        │
+│     • Auto fallback logic                                       │
+│                                                                 │
+│  🎨 AIVoiceInterface.tsx                                        │
+│     • Voice UI Component                                        │
+│     • Microphone controls                                       │
+│     • Audio playback                                            │
+│     • Voice settings                                            │
+│                                                                 │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             │ Fetch API
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  VOICE API SERVER (FastAPI)                     │
+│                    voice_api_ultimate.py                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  🔌 API Endpoints:                                              │
+│     • POST /api/tts       → Text-to-Speech                     │
+│     • POST /api/stt       → Speech-to-Text                     │
+│     • GET  /api/capabilities → System info                     │
+│     • GET  /health        → Health check                       │
+│     • GET  /audio/{file}  → Serve audio                        │
+│                                                                 │
+│  🎯 Fallback Orchestrator:                                      │
+│     • Provider selection logic                                  │
+│     • Error handling                                            │
+│     • Retry mechanism                                           │
+│     • Cache management                                          │
+│                                                                 │
+└──┬──────────────────────┬──────────────────────┬───────────────┘
+   │                      │                      │
+   │ Level 1: API        │ Level 2: Local       │ Level 3: Browser
+   │                      │                      │
+   ▼                      ▼                      ▼
+┌──────────────┐   ┌──────────────┐   ┌──────────────────┐
+│  🌐 API      │   │  💻 LOCAL    │   │  🌐 BROWSER      │
+│  SERVICES    │   │  MODELS      │   │  WEB SPEECH      │
+└──────────────┘   └──────────────┘   └──────────────────┘
+
+
+
+
+═══════════════════════════════════════════════════════════════════
+LEVEL 1: API SERVICES (Cloud, Best Quality)
+═══════════════════════════════════════════════════════════════════
+
+┌───────────────────────────────────────────────────────────────┐
+│                     🌐 API SERVICES LAYER                     │
+├───────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  ElevenLabs API                                     │     │
+│  │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │     │
+│  │  🎤 Neural TTS                                      │     │
+│  │  🌍 28+ languages (включаючи українську)           │     │
+│  │  ⚡ Латентність: 0.5-1s                            │     │
+│  │  💰 Free tier: 10K chars/month                     │     │
+│  │  📊 Якість: ⭐⭐⭐⭐⭐                                  │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                            │                                  │
+│                            │ If unavailable                   │
+│                            ▼                                  │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  Google Cloud Text-to-Speech                        │     │
+│  │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │     │
+│  │  🎤 Wavenet Ukrainian                               │     │
+│  │  🌍 40+ languages, 220+ voices                      │     │
+│  │  ⚡ Латентність: 0.3-0.7s                          │     │
+│  │  💰 Free tier: 1M chars/month                      │     │
+│  │  📊 Якість: ⭐⭐⭐⭐⭐                                  │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                            │                                  │
+│                            │ If unavailable                   │
+│                            ▼                                  │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  Azure Speech Services                              │     │
+│  │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │     │
+│  │  🎤 Neural voices (OstapNeural, PolinaNeural)      │     │
+│  │  🌍 110+ languages, 400+ voices                     │     │
+│  │  ⚡ Латентність: 0.5-1s                            │     │
+│  │  💰 Free tier: 0.5M chars/month                    │     │
+│  │  📊 Якість: ⭐⭐⭐⭐⭐                                  │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                                                               │
+└───────────────────────────┬───────────────────────────────────┘
+                            │
+                            │ All API services failed?
+                            │ Auto fallback to Level 2
+                            ▼
+
+
+
+
+═══════════════════════════════════════════════════════════════════
+LEVEL 2: LOCAL MODELS (Offline, Privacy)
+═══════════════════════════════════════════════════════════════════
+
+┌───────────────────────────────────────────────────────────────┐
+│                    💻 LOCAL MODELS LAYER                      │
+├───────────────────────────────────────────────────────────────┤
+│                                                               │
+│  📥 TTS Models:                                               │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  Coqui TTS (XTTS v2)                                │     │
+│  │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │     │
+│  │  🎤 Multilingual TTS                                │     │
+│  │  🌍 Українська + 16 інших мов                       │     │
+│  │  💾 Розмір: ~1.8 GB                                 │     │
+│  │  ⚡ Швидкість: 2-5s для 1s аудіо                   │     │
+│  │  📊 Якість: ⭐⭐⭐⭐                                    │     │
+│  │  🔒 100% offline, privacy-friendly                  │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                            │                                  │
+│                            │ If unavailable                   │
+│                            ▼                                  │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  Piper TTS                                          │     │
+│  │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │     │
+│  │  🎤 Fast neural TTS                                 │     │
+│  │  🌍 40+ languages                                   │     │
+│  │  💾 Розмір: 50-200 MB                               │     │
+│  │  ⚡ Швидкість: 0.5-1s для 1s аудіо                 │     │
+│  │  📊 Якість: ⭐⭐⭐⭐                                    │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                                                               │
+│  📥 STT Models:                                               │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  faster-whisper                                     │     │
+│  │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │     │
+│  │  🎧 Optimized Whisper                               │     │
+│  │  🌍 99 languages                                    │     │
+│  │  💾 Розмір: 150 MB - 3 GB                           │     │
+│  │  ⚡ Швидкість: 4x faster than Whisper              │     │
+│  │  📊 Точність: ~99%                                  │     │
+│  │  📊 Якість: ⭐⭐⭐⭐⭐                                  │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                            │                                  │
+│                            │ If unavailable                   │
+│                            ▼                                  │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  Whisper (OpenAI)                                   │     │
+│  │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │     │
+│  │  🎧 State-of-the-art STT                            │     │
+│  │  🌍 99 languages                                    │     │
+│  │  💾 Моделі: tiny → large (150MB - 3GB)            │     │
+│  │  ⚡ Швидкість: Depends on model                    │     │
+│  │  📊 Точність: ~99%                                  │     │
+│  │  📊 Якість: ⭐⭐⭐⭐⭐                                  │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                                                               │
+└───────────────────────────┬───────────────────────────────────┘
+                            │
+                            │ Local models unavailable?
+                            │ Auto fallback to Level 3
+                            ▼
+
+
+
+
+═══════════════════════════════════════════════════════════════════
+LEVEL 3: BROWSER WEB SPEECH API (Always Available)
+═══════════════════════════════════════════════════════════════════
+
+┌───────────────────────────────────────────────────────────────┐
+│                  🌐 BROWSER WEB SPEECH API                    │
+├───────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  SpeechSynthesis (TTS)                              │     │
+│  │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │     │
+│  │  🎤 Browser built-in TTS                            │     │
+│  │  🌍 System voices (українська доступна)            │     │
+│  │  💾 No download required                            │     │
+│  │  ⚡ Instant response                                │     │
+│  │  📊 Якість: ⭐⭐⭐ (depends on OS)                    │     │
+│  │  ✨ Zero setup, works everywhere                    │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                                                               │
+│  ┌─────────────────────────────────────────────────────┐     │
+│  │  SpeechRecognition (STT)                            │     │
+│  │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │     │
+│  │  🎧 Browser built-in STT                            │     │
+│  │  🌍 50+ languages                                   │     │
+│  │  💾 Uses Google Speech API                          │     │
+│  │  ⚡ Real-time recognition                           │     │
+│  │  📊 Точність: ~85-95%                               │     │
+│  │  ✨ Always available in modern browsers             │     │
+│  └─────────────────────────────────────────────────────┘     │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+
+
+
+
+═══════════════════════════════════════════════════════════════════
+DATA FLOW: TTS REQUEST EXAMPLE
+═══════════════════════════════════════════════════════════════════
+
+User Input: "Привіт! Як справи?"
+│
+├──▶ Frontend: voiceAPIUltimate.textToSpeech()
+│    │
+│    ├──▶ Try Level 1: API Services
+│    │    │
+│    │    ├──▶ ElevenLabs API
+│    │    │    ├─✅ Success → Return audio URL
+│    │    │    │
+│    │    │    └─❌ Fail → Try next
+│    │    │         │
+│    │    ├─────────▶ Google Cloud TTS
+│    │    │         ├─✅ Success → Return audio URL
+│    │    │         │
+│    │    │         └─❌ Fail → Try next
+│    │    │              │
+│    │    └──────────────▶ Azure Speech
+│    │                   ├─✅ Success → Return audio URL
+│    │                   │
+│    │                   └─❌ Fail → Fallback to Level 2
+│    │
+│    ├──▶ Try Level 2: Local Models
+│    │    │
+│    │    ├──▶ Coqui TTS (XTTS v2)
+│    │    │    ├─✅ Success → Generate audio locally
+│    │    │    │
+│    │    │    └─❌ Fail → Try next
+│    │    │         │
+│    │    └─────────▶ Piper TTS
+│    │              ├─✅ Success → Generate audio locally
+│    │              │
+│    │              └─❌ Fail → Fallback to Level 3
+│    │
+│    └──▶ Try Level 3: Browser API
+│         │
+│         └──▶ SpeechSynthesis
+│              ├─✅ Success → Play in browser
+│              │
+│              └─❌ Fail → Show error message
+│
+└──▶ Audio Output: 🔊
+
+
+
+
+═══════════════════════════════════════════════════════════════════
+CACHING LAYER
+═══════════════════════════════════════════════════════════════════
+
+┌───────────────────────────────────────────────────────────────┐
+│                      💾 CACHE SYSTEM                          │
+├───────────────────────────────────────────────────────────────┤
+│                                                               │
+│  Request Hash: MD5(text + language + speed)                  │
+│                                                               │
+│  Cache Hit?                                                   │
+│    ├─✅ Yes → Return cached audio (instant)                  │
+│    │                                                          │
+│    └─❌ No  → Process request through fallback chain         │
+│              → Cache result for future                        │
+│                                                               │
+│  Cache Storage:                                               │
+│    • Location: static/audio/                                  │
+│    • Format: WAV/MP3                                          │
+│    • TTL: Configurable                                        │
+│    • Size limit: 1 GB                                         │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+
+
+
+
+═══════════════════════════════════════════════════════════════════
+MONITORING & LOGGING
+═══════════════════════════════════════════════════════════════════
+
+┌───────────────────────────────────────────────────────────────┐
+│                   📊 MONITORING LAYER                         │
+├───────────────────────────────────────────────────────────────┤
+│                                                               │
+│  Health Checks:                                               │
+│    • /health endpoint                                         │
+│    • Provider availability                                    │
+│    • Model status                                             │
+│    • System resources                                         │
+│                                                               │
+│  Metrics:                                                     │
+│    • Request count per provider                               │
+│    • Latency per level                                        │
+│    • Error rate                                               │
+│    • Cache hit rate                                           │
+│    • Fallback frequency                                       │
+│                                                               │
+│  Logging:                                                     │
+│    • Request/Response logging                                 │
+│    • Error logging                                            │
+│    • Performance logging                                      │
+│    • Audit trail                                              │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+
+
+
+
+═══════════════════════════════════════════════════════════════════
+DEPLOYMENT ARCHITECTURE
+═══════════════════════════════════════════════════════════════════
+
+DEVELOPMENT:
+   Frontend (localhost:3000) ──▶ Backend API (localhost:8000)
+
+PRODUCTION:
+   Users ──▶ CDN ──▶ Load Balancer ──▶ Multiple API Instances
+                                  │
+                                  ├──▶ Instance 1 (API + Local)
+                                  ├──▶ Instance 2 (API + Local)
+                                  └──▶ Instance N (API + Local)
+                                  │
+                                  └──▶ Shared Cache (Redis)
+                                  │
+                                  └──▶ Monitoring (Prometheus/Grafana)
+
+
+
+
+═══════════════════════════════════════════════════════════════════
+
+🎯 KEY FEATURES OF THIS ARCHITECTURE:
+
+✅ Redundancy - 3 levels забезпечують 99.9% uptime
+✅ Scalability - Легко додати нові провайдери
+✅ Performance - Кешування + async operations
+✅ Privacy - Local fallback для sensitive data
+✅ Reliability - Automatic fallback на кожному рівні
+✅ Monitoring - Повна видимість стану системи
+
+═══════════════════════════════════════════════════════════════════
+
+Made with ❤️ by PREDATOR12 Team
+Version: 5.3 Ultimate | October 2025

@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { 
-  Sphere, 
-  Box, 
+import {
+  Sphere,
+  Box,
   Cylinder,
   Cone,
   Text,
@@ -102,16 +102,16 @@ const ThreatVisualization: React.FC<{
   useFrame(({ clock }) => {
     if (threatRef.current) {
       const time = clock.getElapsedTime();
-      
+
       // Pulsing based on severity with биолюмінесценція
-      const severity = threat.severity === 'critical' ? 4 : 
-                      threat.severity === 'high' ? 3 : 
+      const severity = threat.severity === 'critical' ? 4 :
+                      threat.severity === 'high' ? 3 :
                       threat.severity === 'medium' ? 2 : 1;
-      
+
       const pulse = 1 + Math.sin(time * severity) * 0.2;
       const breathe = 1 + Math.sin(time * 0.5) * 0.1;
       threatRef.current.scale.setScalar(pulse * breathe);
-      
+
       // Rotation based on type
       if (threat.type === 'ddos') {
         threatRef.current.rotation.z = time * 2;
@@ -123,7 +123,7 @@ const ThreatVisualization: React.FC<{
         threatRef.current.rotation.x = time * 0.5;
         threatRef.current.rotation.y = time * 0.8;
       }
-      
+
       // Іридесценція effect - shimmer
       const shimmer = Math.abs(Math.sin(time * 3 + Math.random()));
       if (threatRef.current.children[0]) {
@@ -201,15 +201,15 @@ const ThreatVisualization: React.FC<{
   };
 
   return (
-    <group 
-      ref={threatRef} 
+    <group
+      ref={threatRef}
       position={threat.position}
       onPointerEnter={() => setIsHovered(true)}
       onPointerLeave={() => setIsHovered(false)}
       onClick={() => onSelect?.(threat.id)}
     >
       {getThreatShape()}
-      
+
       {/* Threat aura based on impact */}
       <Sphere args={[threat.size * 2, 16, 16]}>
         <meshStandardMaterial
@@ -220,7 +220,7 @@ const ThreatVisualization: React.FC<{
           emissiveIntensity={0.1}
         />
       </Sphere>
-      
+
       {/* Sparkles for active threats */}
       {threat.status === 'active' && (
         <Sparkles
@@ -231,7 +231,7 @@ const ThreatVisualization: React.FC<{
           color={getThreatColor()}
         />
       )}
-      
+
       {/* Threat label */}
       <Html position={[0, threat.size + 0.5, 0]} center>
         <div style={{
@@ -267,10 +267,10 @@ const SecurityShield: React.FC<{
   useFrame(({ clock }) => {
     if (shieldRef.current) {
       const time = clock.getElapsedTime();
-      
+
       // Shield rotation
       shieldRef.current.rotation.y = time * 0.2;
-      
+
       // Pulsing when under attack
       if (activeThreats > 0) {
         const pulse = 1 + Math.sin(time * 5) * 0.1;
@@ -299,7 +299,7 @@ const SecurityShield: React.FC<{
           side={THREE.DoubleSide}
         />
       </Sphere>
-      
+
       {/* Shield grid pattern */}
       {Array.from({ length: 16 }).map((_, i) => (
         <group key={i} rotation={[0, (i / 16) * Math.PI * 2, 0]}>
@@ -314,7 +314,7 @@ const SecurityShield: React.FC<{
           </Cylinder>
         </group>
       ))}
-      
+
       {/* Shield core */}
       <Sphere args={[0.5, 16, 16]}>
         <meshStandardMaterial
@@ -354,8 +354,8 @@ const ThreatIntelligencePanel: React.FC<{
     }
   };
 
-  const filteredThreats = selectedSeverity === 'all' 
-    ? threats 
+  const filteredThreats = selectedSeverity === 'all'
+    ? threats
     : threats.filter(t => t.severity === selectedSeverity);
 
   const activeThreatCount = threats.filter(t => t.status === 'active').length;
@@ -391,7 +391,7 @@ const ThreatIntelligencePanel: React.FC<{
               <Security sx={{ color: nexusColors.error }} />
             </Badge>
           </MuiBox>
-          
+
           {/* Severity filter */}
           <MuiBox display="flex" gap={1} mb={2} flexWrap="wrap">
             {['all', 'critical', 'high', 'medium', 'low'].map((severity) => (
@@ -401,11 +401,11 @@ const ThreatIntelligencePanel: React.FC<{
                 size="small"
                 onClick={() => setSelectedSeverity(severity)}
                 sx={{
-                  backgroundColor: selectedSeverity === severity 
-                    ? `${getSeverityColor(severity)}30` 
+                  backgroundColor: selectedSeverity === severity
+                    ? `${getSeverityColor(severity)}30`
                     : 'transparent',
-                  color: selectedSeverity === severity 
-                    ? getSeverityColor(severity) 
+                  color: selectedSeverity === severity
+                    ? getSeverityColor(severity)
                     : nexusColors.text.secondary,
                   border: `1px solid ${getSeverityColor(severity)}40`,
                   '&:hover': {
@@ -415,12 +415,12 @@ const ThreatIntelligencePanel: React.FC<{
               />
             ))}
           </MuiBox>
-          
+
           {/* Active threat alert */}
           {activeThreatCount > 0 && (
-            <Alert 
-              severity="error" 
-              sx={{ 
+            <Alert
+              severity="error"
+              sx={{
                 mb: 2,
                 backgroundColor: `${nexusColors.error}20`,
                 border: `1px solid ${nexusColors.error}`,
@@ -431,7 +431,7 @@ const ThreatIntelligencePanel: React.FC<{
               {activeThreatCount} active threat{activeThreatCount > 1 ? 's' : ''} requiring immediate attention
             </Alert>
           )}
-          
+
           {/* Threats list */}
           <List dense>
             {filteredThreats.map((threat) => (
@@ -465,11 +465,11 @@ const ThreatIntelligencePanel: React.FC<{
                         }}
                       />
                     </MuiBox>
-                    
+
                     <Typography variant="caption" sx={{ color: nexusColors.text.secondary, display: 'block', mb: 1 }}>
                       {threat.details}
                     </Typography>
-                    
+
                     <MuiBox display="flex" justifyContent="space-between" alignItems="center" mb={1}>
                       <Typography variant="caption" sx={{ color: nexusColors.text.secondary }}>
                         Confidence: {threat.confidence}% • Impact: {threat.impact}%
@@ -478,7 +478,7 @@ const ThreatIntelligencePanel: React.FC<{
                         {threat.source} → {threat.target}
                       </Typography>
                     </MuiBox>
-                    
+
                     {threat.status === 'active' && (
                       <MuiBox display="flex" gap={1} mt={1}>
                         <IconButton
@@ -569,7 +569,7 @@ const SecurityMetricsDashboard: React.FC<{
               <Refresh />
             </IconButton>
           </MuiBox>
-          
+
           <Grid container spacing={2}>
             {metrics.map((metric) => (
               <Grid item xs={6} key={metric.id}>
@@ -587,11 +587,11 @@ const SecurityMetricsDashboard: React.FC<{
                         {metric.name}
                       </Typography>
                     </MuiBox>
-                    
+
                     <Typography variant="h6" sx={{ color: getStatusColor(metric.status), mb: 1 }}>
                       {metric.value.toFixed(1)}{metric.unit}
                     </Typography>
-                    
+
                     <LinearProgress
                       variant="determinate"
                       value={(metric.value / metric.threshold) * 100}
@@ -635,9 +635,9 @@ const CyberSecurityMonitor: React.FC<CyberSecurityMonitorProps> = ({
     const avgMetricStatus = metrics.reduce((sum, metric) => {
       return sum + (metric.status === 'safe' ? 100 : metric.status === 'warning' ? 60 : 20);
     }, 0) / metrics.length;
-    
+
     const threatImpact = Math.max(0, 100 - (activeThreatCount * 15));
-    
+
     setShieldStrength(Math.min(avgMetricStatus, threatImpact));
   }, [metrics, activeThreatCount]);
 
@@ -663,12 +663,12 @@ const CyberSecurityMonitor: React.FC<CyberSecurityMonitorProps> = ({
         <ambientLight intensity={0.2} />
         <pointLight position={[10, 10, 10]} intensity={0.8} color="#ff4444" />
         <pointLight position={[-10, -10, -10]} intensity={0.5} color="#00ff88" />
-        
+
         <Environment preset="night" />
-        
+
         {/* Security Shield */}
         <SecurityShield strength={shieldStrength} activeThreats={activeThreatCount} />
-        
+
         {/* Threat Visualizations */}
         {threats.map((threat) => (
           <ThreatVisualization
@@ -677,13 +677,13 @@ const CyberSecurityMonitor: React.FC<CyberSecurityMonitorProps> = ({
             onSelect={handleThreatSelect}
           />
         ))}
-        
+
         {/* Post-processing effects - ENHANCED */}
         <EffectComposer multisampling={8}>
-          <Bloom 
-            luminanceThreshold={0.2} 
-            luminanceSmoothing={0.95} 
-            height={400} 
+          <Bloom
+            luminanceThreshold={0.2}
+            luminanceSmoothing={0.95}
+            height={400}
             intensity={1.5}
             radius={0.85}
           />
@@ -716,13 +716,13 @@ const CyberSecurityMonitor: React.FC<CyberSecurityMonitorProps> = ({
           />
         </EffectComposer>
       </Canvas>
-      
+
       {/* Threat Intelligence Panel */}
       <ThreatIntelligencePanel threats={threats} onThreatAction={onThreatAction} />
-      
+
       {/* Security Metrics Dashboard */}
       <SecurityMetricsDashboard metrics={metrics} onMetricAlert={onMetricAlert} />
-      
+
       {/* System Status */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -737,8 +737,8 @@ const CyberSecurityMonitor: React.FC<CyberSecurityMonitorProps> = ({
         <Card
           sx={{
             background: 'rgba(10, 15, 26, 0.95)',
-            border: `2px solid ${shieldStrength > 80 ? nexusColors.success : 
-                                 shieldStrength > 60 ? nexusColors.warning : 
+            border: `2px solid ${shieldStrength > 80 ? nexusColors.success :
+                                 shieldStrength > 60 ? nexusColors.warning :
                                  nexusColors.error}40`,
             backdropFilter: 'blur(10px)',
             minWidth: 250
@@ -748,16 +748,16 @@ const CyberSecurityMonitor: React.FC<CyberSecurityMonitorProps> = ({
             <Typography variant="h6" sx={{ color: nexusColors.quantum, mb: 1 }}>
               🛡️ Security Status
             </Typography>
-            
-            <Typography variant="h4" sx={{ 
-              color: shieldStrength > 80 ? nexusColors.success : 
-                     shieldStrength > 60 ? nexusColors.warning : 
+
+            <Typography variant="h4" sx={{
+              color: shieldStrength > 80 ? nexusColors.success :
+                     shieldStrength > 60 ? nexusColors.warning :
                      nexusColors.error,
               mb: 1
             }}>
               {shieldStrength.toFixed(0)}%
             </Typography>
-            
+
             <LinearProgress
               variant="determinate"
               value={shieldStrength}
@@ -765,13 +765,13 @@ const CyberSecurityMonitor: React.FC<CyberSecurityMonitorProps> = ({
                 mb: 2,
                 backgroundColor: `${nexusColors.quantum}20`,
                 '& .MuiLinearProgress-bar': {
-                  backgroundColor: shieldStrength > 80 ? nexusColors.success : 
-                                   shieldStrength > 60 ? nexusColors.warning : 
+                  backgroundColor: shieldStrength > 80 ? nexusColors.success :
+                                   shieldStrength > 60 ? nexusColors.warning :
                                    nexusColors.error
                 }
               }}
             />
-            
+
             <MuiBox display="flex" justifyContent="space-between" mb={1}>
               <Typography variant="body2" sx={{ color: nexusColors.frost }}>
                 Active Threats
@@ -780,7 +780,7 @@ const CyberSecurityMonitor: React.FC<CyberSecurityMonitorProps> = ({
                 {activeThreatCount}
               </Typography>
             </MuiBox>
-            
+
             <MuiBox display="flex" justifyContent="space-between">
               <Typography variant="body2" sx={{ color: nexusColors.frost }}>
                 Shield Strength

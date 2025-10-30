@@ -22,7 +22,7 @@
    - Комплексні розслідування
    - Карти мережі зв'язків
 
-2. **📱 SocialSentimentAnalyst** 
+2. **📱 SocialSentimentAnalyst**
    - Аналіз настроїв в соцмережах
    - Детекція маніпуляцій думкою
    - Репутаційні ризики
@@ -57,14 +57,14 @@
 - **Automated model fine-tuning**
 
 #### 🔄 Розширена автоматизація:
-- **Auto-investigation pipelines** 
+- **Auto-investigation pipelines**
 - **Smart alerting system**
 - **Predictive maintenance**
 - **Self-optimizing workflows**
 
 #### 🎯 Нові алгоритми:
 - **Advanced pattern recognition**
-- **Behavioral analytics** 
+- **Behavioral analytics**
 - **Anomaly detection 2.0**
 - **Predictive risk modeling**
 

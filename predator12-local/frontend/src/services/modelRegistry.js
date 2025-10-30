@@ -1,5 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.formatModelName = exports.getRandomCompetitionScenario = exports.simulateCompetitionResults = exports.getTotalModelsCount = exports.getModelPerformance = exports.getModelsByCategory = exports.getModelById = exports.getAllFreeModels = exports.AGENT_MODEL_ASSIGNMENTS = exports.COMPETITION_SCENARIOS = exports.FREE_MODELS_CATALOG = void 0;
 // 48 Free Models - matches backend model_registry.yaml
-export const FREE_MODELS_CATALOG = {
+exports.FREE_MODELS_CATALOG = {
     reasoning: [
         { id: 'meta/meta-llama-3.1-70b-instruct', free: true, performance: 95, category: 'reasoning' },
         { id: 'meta/meta-llama-3.1-8b-instruct', free: true, performance: 82, category: 'reasoning' },
@@ -62,7 +65,7 @@ export const FREE_MODELS_CATALOG = {
     ]
 };
 // Competition Scenarios - matches backend arbiter_competitions
-export const COMPETITION_SCENARIOS = [
+exports.COMPETITION_SCENARIOS = [
     {
         name: 'reasoning_premium',
         title: '🏆 Преміум розумування',
@@ -100,8 +103,8 @@ export const COMPETITION_SCENARIOS = [
         tasks: ['image_understanding', 'ocr_extraction', 'visual_reasoning']
     }
 ];
-// Agent-to-Model assignments - ALL FREE models only 
-export const AGENT_MODEL_ASSIGNMENTS = {
+// Agent-to-Model assignments - ALL FREE models only
+exports.AGENT_MODEL_ASSIGNMENTS = {
     ChiefOrchestrator: 'qwen/qwen2.5-72b-instruct',
     QueryPlanner: 'microsoft/phi-4-reasoning',
     ModelRouter: 'mistral/ministral-3b',
@@ -130,40 +133,48 @@ export const AGENT_MODEL_ASSIGNMENTS = {
     PerformanceOptimizer: 'qwen/qwen2.5-14b-instruct'
 };
 // Utility functions
-export const getAllFreeModels = () => {
-    return Object.values(FREE_MODELS_CATALOG).flat();
+const getAllFreeModels = () => {
+    return Object.values(exports.FREE_MODELS_CATALOG).flat();
 };
-export const getModelById = (id) => {
-    return getAllFreeModels().find(model => model.id === id);
+exports.getAllFreeModels = getAllFreeModels;
+const getModelById = (id) => {
+    return (0, exports.getAllFreeModels)().find(model => model.id === id);
 };
-export const getModelsByCategory = (category) => {
-    return FREE_MODELS_CATALOG[category] || [];
+exports.getModelById = getModelById;
+const getModelsByCategory = (category) => {
+    return exports.FREE_MODELS_CATALOG[category] || [];
 };
-export const getModelPerformance = (modelId) => {
-    const model = getModelById(modelId);
-    return model?.performance || 75; // Default performance
+exports.getModelsByCategory = getModelsByCategory;
+const getModelPerformance = (modelId) => {
+    const model = (0, exports.getModelById)(modelId);
+    return (model === null || model === void 0 ? void 0 : model.performance) || 75; // Default performance
 };
-export const getTotalModelsCount = () => {
-    return getAllFreeModels().length;
+exports.getModelPerformance = getModelPerformance;
+const getTotalModelsCount = () => {
+    return (0, exports.getAllFreeModels)().length;
 };
+exports.getTotalModelsCount = getTotalModelsCount;
 // Simulate competition results with realistic variance
-export const simulateCompetitionResults = (scenario) => {
+const simulateCompetitionResults = (scenario) => {
     const results = {};
     scenario.models.forEach(modelId => {
-        const basePerformance = getModelPerformance(modelId);
+        const basePerformance = (0, exports.getModelPerformance)(modelId);
         const variance = (Math.random() - 0.5) * 20; // ±10 points variance
         const finalScore = Math.max(0, Math.min(100, basePerformance + variance));
         results[modelId] = Math.round(finalScore * 100) / 100; // Round to 2 decimal places
     });
     return results;
 };
-export const getRandomCompetitionScenario = () => {
-    return COMPETITION_SCENARIOS[Math.floor(Math.random() * COMPETITION_SCENARIOS.length)];
+exports.simulateCompetitionResults = simulateCompetitionResults;
+const getRandomCompetitionScenario = () => {
+    return exports.COMPETITION_SCENARIOS[Math.floor(Math.random() * exports.COMPETITION_SCENARIOS.length)];
 };
-export const formatModelName = (modelId) => {
+exports.getRandomCompetitionScenario = getRandomCompetitionScenario;
+const formatModelName = (modelId) => {
     // Extract readable name from model ID
     const parts = modelId.split('/');
     const name = parts[parts.length - 1];
     return name.replace(/-/g, ' ').replace(/_/g, ' ').toLowerCase()
         .replace(/\b\w/g, l => l.toUpperCase());
 };
+exports.formatModelName = formatModelName;

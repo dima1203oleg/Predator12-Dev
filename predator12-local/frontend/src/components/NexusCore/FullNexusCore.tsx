@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, AppBar, Toolbar, Typography, IconButton, Fab, Dialog, DialogContent, Switch, FormControlLabel } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   Dashboard as DashboardIcon,
   Psychology as AIIcon,
   Storage as DataIcon,
@@ -223,26 +223,26 @@ export const FullNexusCore: React.FC = () => {
   };
 
   return (
-    <Box sx={{ 
-      height: '100vh', 
-      display: 'flex', 
-      background: `linear-gradient(135deg, ${nexusColors.void} 0%, ${nexusColors.obsidian} 50%, ${nexusColors.darkMatter} 100%)`, 
+    <Box sx={{
+      height: '100vh',
+      display: 'flex',
+      background: `linear-gradient(135deg, ${nexusColors.void} 0%, ${nexusColors.obsidian} 50%, ${nexusColors.darkMatter} 100%)`,
       overflow: 'hidden',
       position: 'relative'
     }}>
       {/* Nexus Visual Effects */}
-      <NexusVisualEffects 
+      <NexusVisualEffects
         showCosmicDust={true}
         showHolographicFrames={true}
         showScanLines={true}
       />
 
-      <AppBar position="fixed" sx={{ 
-        zIndex: 1300, 
-        background: `linear-gradient(90deg, ${nexusColors.obsidian}E6, ${nexusColors.darkMatter}CC)`, 
-        backdropFilter: 'blur(20px)', 
-        borderBottom: `1px solid ${nexusColors.quantum}`, 
-        boxShadow: `0 4px 20px ${nexusColors.quantum}` 
+      <AppBar position="fixed" sx={{
+        zIndex: 1300,
+        background: `linear-gradient(90deg, ${nexusColors.obsidian}E6, ${nexusColors.darkMatter}CC)`,
+        backdropFilter: 'blur(20px)',
+        borderBottom: `1px solid ${nexusColors.quantum}`,
+        boxShadow: `0 4px 20px ${nexusColors.quantum}`
       }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" onClick={() => setSidebarOpen(!sidebarOpen)} sx={{ mr: 2 }}>
@@ -279,41 +279,41 @@ export const FullNexusCore: React.FC = () => {
               }
               sx={{ mr: 2 }}
             />
-            <Box sx={{ 
-              width: 12, 
-              height: 12, 
-              borderRadius: '50%', 
-              backgroundColor: nexusColors.success, 
-              boxShadow: `0 0 10px ${nexusColors.success}`, 
-              animation: 'pulse 2s infinite' 
+            <Box sx={{
+              width: 12,
+              height: 12,
+              borderRadius: '50%',
+              backgroundColor: nexusColors.success,
+              boxShadow: `0 0 10px ${nexusColors.success}`,
+              animation: 'pulse 2s infinite'
             }} />
           </Box>
         </Toolbar>
       </AppBar>
 
-      <NexusSidebar 
-        open={sidebarOpen} 
-        modules={nexusModules} 
-        activeModule={activeModule} 
-        onModuleSelect={handleModuleChange} 
+      <NexusSidebar
+        open={sidebarOpen}
+        modules={nexusModules}
+        activeModule={activeModule}
+        onModuleSelect={handleModuleChange}
       />
 
-      <Box component="main" sx={{ 
-        flexGrow: 1, 
-        pt: 8, 
-        pl: sidebarOpen ? '280px' : '80px', 
-        transition: 'padding-left 0.3s ease', 
-        height: '100vh', 
-        overflow: 'hidden', 
-        position: 'relative' 
+      <Box component="main" sx={{
+        flexGrow: 1,
+        pt: 8,
+        pl: sidebarOpen ? '280px' : '80px',
+        transition: 'padding-left 0.3s ease',
+        height: '100vh',
+        overflow: 'hidden',
+        position: 'relative'
       }}>
         <AnimatePresence mode="wait">
-          <motion.div 
-            key={activeModule} 
-            initial={{ opacity: 0, x: 20 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            exit={{ opacity: 0, x: -20 }} 
-            transition={{ duration: 0.3 }} 
+          <motion.div
+            key={activeModule}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
             style={{ height: '100%' }}
           >
             {renderModule()}
@@ -321,44 +321,44 @@ export const FullNexusCore: React.FC = () => {
         </AnimatePresence>
       </Box>
 
-      <Fab sx={{ 
-        position: 'fixed', 
-        bottom: 24, 
-        right: 24, 
-        backgroundColor: nexusColors.amethyst, 
-        color: nexusColors.frost, 
-        '&:hover': { 
-          backgroundColor: nexusColors.amethyst, 
-          boxShadow: `0 0 20px ${nexusColors.amethyst}60` 
-        }, 
-        '&::before': { 
-          content: '""', 
-          position: 'absolute', 
-          top: -2, 
-          left: -2, 
-          right: -2, 
-          bottom: -2, 
-          background: `linear-gradient(45deg, ${nexusColors.amethyst}, ${nexusColors.sapphire})`, 
-          borderRadius: '50%', 
-          zIndex: -1, 
-          opacity: 0.7, 
-          animation: 'pulse 2s infinite' 
-        } 
+      <Fab sx={{
+        position: 'fixed',
+        bottom: 24,
+        right: 24,
+        backgroundColor: nexusColors.amethyst,
+        color: nexusColors.frost,
+        '&:hover': {
+          backgroundColor: nexusColors.amethyst,
+          boxShadow: `0 0 20px ${nexusColors.amethyst}60`
+        },
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: -2,
+          left: -2,
+          right: -2,
+          bottom: -2,
+          background: `linear-gradient(45deg, ${nexusColors.amethyst}, ${nexusColors.sapphire})`,
+          borderRadius: '50%',
+          zIndex: -1,
+          opacity: 0.7,
+          animation: 'pulse 2s infinite'
+        }
       }} onClick={() => setAiAssistantOpen(true)}>
         <AIIcon />
       </Fab>
 
-      <Dialog 
-        open={aiAssistantOpen} 
-        onClose={() => setAiAssistantOpen(false)} 
-        maxWidth="md" 
-        fullWidth 
-        PaperProps={{ 
-          sx: { 
-            backgroundColor: 'transparent', 
-            boxShadow: 'none', 
-            maxHeight: '80vh' 
-          } 
+      <Dialog
+        open={aiAssistantOpen}
+        onClose={() => setAiAssistantOpen(false)}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+            maxHeight: '80vh'
+          }
         }}
       >
         <DialogContent sx={{ p: 0 }}>

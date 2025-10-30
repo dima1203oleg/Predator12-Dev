@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { 
-  Sphere, 
-  Box, 
+import {
+  Sphere,
+  Box,
   Cone,
   Text,
   Html,
@@ -93,18 +93,18 @@ const DataParticle: React.FC<{
   useFrame(({ clock }) => {
     if (particleRef.current) {
       const time = clock.getElapsedTime();
-      
+
       // Move particle along stream velocity
       particleRef.current.position.x += stream.velocity[0] * 0.01;
       particleRef.current.position.y += stream.velocity[1] * 0.01;
       particleRef.current.position.z += stream.velocity[2] * 0.01;
-      
+
       // Reset position if too far
       if (particleRef.current.position.length() > 20) {
         const [x, y, z] = position;
         particleRef.current.position.set(x, y, z);
       }
-      
+
       // Pulsing based on intensity
       const scale = 0.05 + stream.intensity * 0.1 + Math.sin(time * stream.frequency + index) * 0.02;
       particleRef.current.scale.setScalar(scale);
@@ -166,30 +166,30 @@ const DataFlowVisualization: React.FC<{ streams: DataStream[] }> = ({ streams })
           emissiveIntensity={0.2}
         />
       </Sphere>
-      
+
       {/* Data Streams */}
       {streams.map((stream) => (
         <group key={stream.id}>
           {/* Stream source */}
           <Box args={[0.3, 0.3, 0.3]} position={stream.position}>
             <meshStandardMaterial
-              color={stream.type === 'metrics' ? '#00ff88' : 
+              color={stream.type === 'metrics' ? '#00ff88' :
                     stream.type === 'logs' ? '#ffaa00' :
                     stream.type === 'events' ? '#00aaff' :
                     stream.type === 'predictions' ? '#ff44aa' : '#ff4444'}
-              emissive={stream.type === 'metrics' ? '#00ff88' : 
+              emissive={stream.type === 'metrics' ? '#00ff88' :
                        stream.type === 'logs' ? '#ffaa00' :
                        stream.type === 'events' ? '#00aaff' :
                        stream.type === 'predictions' ? '#ff44aa' : '#ff4444'}
               emissiveIntensity={0.3}
             />
           </Box>
-          
+
           {/* Data particles */}
           {Array.from({ length: Math.floor(stream.intensity * 20) }).map((_, i) => (
             <DataParticle key={`${stream.id}-${i}`} stream={stream} index={i} />
           ))}
-          
+
           {/* Stream label */}
           <Html position={[stream.position[0], stream.position[1] + 0.5, stream.position[2]]} center>
             <div style={{
@@ -207,7 +207,7 @@ const DataFlowVisualization: React.FC<{ streams: DataStream[] }> = ({ streams })
           </Html>
         </group>
       ))}
-      
+
       {/* Sparkles for active processing */}
       <Sparkles
         count={50}
@@ -255,8 +255,8 @@ const MetricsDashboard: React.FC<{
     }
   };
 
-  const filteredMetrics = selectedCategory === 'all' 
-    ? metrics 
+  const filteredMetrics = selectedCategory === 'all'
+    ? metrics
     : metrics.filter(m => m.category === selectedCategory);
 
   return (
@@ -290,7 +290,7 @@ const MetricsDashboard: React.FC<{
               <Refresh />
             </IconButton>
           </MuiBox>
-          
+
           {/* Category filter */}
           <MuiBox display="flex" gap={1} mb={2} flexWrap="wrap">
             {['all', 'performance', 'security', 'quality', 'business'].map((category) => (
@@ -300,11 +300,11 @@ const MetricsDashboard: React.FC<{
                 size="small"
                 onClick={() => setSelectedCategory(category)}
                 sx={{
-                  backgroundColor: selectedCategory === category 
-                    ? `${nexusColors.quantum}30` 
+                  backgroundColor: selectedCategory === category
+                    ? `${nexusColors.quantum}30`
                     : 'transparent',
-                  color: selectedCategory === category 
-                    ? nexusColors.quantum 
+                  color: selectedCategory === category
+                    ? nexusColors.quantum
                     : nexusColors.text.secondary,
                   border: `1px solid ${nexusColors.quantum}40`,
                   '&:hover': {
@@ -314,11 +314,11 @@ const MetricsDashboard: React.FC<{
               />
             ))}
           </MuiBox>
-          
+
           {/* Metrics list */}
           {filteredMetrics.map((metric) => {
             const status = getMetricStatus(metric);
-            
+
             return (
               <motion.div
                 key={metric.id}
@@ -349,7 +349,7 @@ const MetricsDashboard: React.FC<{
                         {status === 'normal' && <CheckCircle sx={{ color: nexusColors.success }} />}
                       </MuiBox>
                     </MuiBox>
-                    
+
                     <LinearProgress
                       variant="determinate"
                       value={(metric.value / metric.threshold.max) * 100}
@@ -361,7 +361,7 @@ const MetricsDashboard: React.FC<{
                         }
                       }}
                     />
-                    
+
                     <MuiBox display="flex" justifyContent="space-between">
                       <Typography variant="caption" sx={{ color: nexusColors.text.secondary }}>
                         Min: {metric.threshold.min}
@@ -419,7 +419,7 @@ const StreamControlPanel: React.FC<{
               {isPlaying ? <Pause /> : <PlayArrow />}
             </IconButton>
           </MuiBox>
-          
+
           {streams.map((stream) => (
             <MuiBox key={stream.id} display="flex" alignItems="center" justifyContent="space-between" mb={1}>
               <MuiBox>
@@ -435,13 +435,13 @@ const StreamControlPanel: React.FC<{
                   label={stream.status}
                   size="small"
                   sx={{
-                    backgroundColor: stream.status === 'normal' 
-                      ? `${nexusColors.success}20` 
+                    backgroundColor: stream.status === 'normal'
+                      ? `${nexusColors.success}20`
                       : stream.status === 'warning'
                       ? `${nexusColors.warning}20`
                       : `${nexusColors.error}20`,
-                    color: stream.status === 'normal' 
-                      ? nexusColors.success 
+                    color: stream.status === 'normal'
+                      ? nexusColors.success
                       : stream.status === 'warning'
                       ? nexusColors.warning
                       : nexusColors.error,
@@ -486,7 +486,7 @@ const RealtimeAnalyticsEngine: React.FC<RealtimeAnalyticsEngineProps> = ({
     // Calculate system load based on stream activity
     const totalThroughput = dataStreams.reduce((sum, stream) => sum + stream.throughput, 0);
     setSystemLoad(Math.min(totalThroughput / 100, 100));
-    
+
     // Check for metric alerts
     metrics.forEach(metric => {
       const status = metric.value < metric.threshold.min || metric.value > metric.threshold.max;
@@ -523,12 +523,12 @@ const RealtimeAnalyticsEngine: React.FC<RealtimeAnalyticsEngineProps> = ({
         <ambientLight intensity={0.3} />
         <pointLight position={[10, 10, 10]} intensity={0.8} color="#00ffff" />
         <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ff00ff" />
-        
+
         <Environment preset="night" />
-        
+
         {/* Data Flow Visualization */}
         <DataFlowVisualization streams={dataStreams} />
-        
+
         {/* Post-processing effects */}
         <EffectComposer>
           <Bloom luminanceThreshold={0.3} luminanceSmoothing={0.9} height={300} />
@@ -539,13 +539,13 @@ const RealtimeAnalyticsEngine: React.FC<RealtimeAnalyticsEngineProps> = ({
           />
         </EffectComposer>
       </Canvas>
-      
+
       {/* Metrics Dashboard */}
       <MetricsDashboard metrics={metrics} onMetricAlert={onMetricAlert} />
-      
+
       {/* Stream Control Panel */}
       <StreamControlPanel streams={dataStreams} />
-      
+
       {/* System Status Indicator */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -569,9 +569,9 @@ const RealtimeAnalyticsEngine: React.FC<RealtimeAnalyticsEngineProps> = ({
             <Typography variant="h6" sx={{ color: nexusColors.quantum, mb: 1 }}>
               ⚡ System Load
             </Typography>
-            <Typography variant="h4" sx={{ 
-              color: systemLoad > 80 ? nexusColors.error : 
-                     systemLoad > 60 ? nexusColors.warning : 
+            <Typography variant="h4" sx={{
+              color: systemLoad > 80 ? nexusColors.error :
+                     systemLoad > 60 ? nexusColors.warning :
                      nexusColors.success,
               mb: 1
             }}>
@@ -583,8 +583,8 @@ const RealtimeAnalyticsEngine: React.FC<RealtimeAnalyticsEngineProps> = ({
               sx={{
                 backgroundColor: `${nexusColors.quantum}20`,
                 '& .MuiLinearProgress-bar': {
-                  backgroundColor: systemLoad > 80 ? nexusColors.error : 
-                                   systemLoad > 60 ? nexusColors.warning : 
+                  backgroundColor: systemLoad > 80 ? nexusColors.error :
+                                   systemLoad > 60 ? nexusColors.warning :
                                    nexusColors.success
                 }
               }}

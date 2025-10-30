@@ -33,5 +33,3 @@ const OpenSearchPanel: React.FC = () => {
 };
 
 export default OpenSearchPanel;
-
-

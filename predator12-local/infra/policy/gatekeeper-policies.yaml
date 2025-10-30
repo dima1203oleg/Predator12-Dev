@@ -19,12 +19,12 @@ spec:
                 type: string
             message:
               type: string
-  
+
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8srequiredlabels
-        
+
         violation[{"msg": msg, "details": {"missing_labels": missing}}] {
           provided := {label | input.review.object.metadata.labels[label]}
           required := {label | label := input.parameters.labels[_]}
@@ -72,30 +72,30 @@ spec:
               type: array
               items:
                 type: string
-  
+
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8scontainerresources
-        
+
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
           not container.resources.limits.cpu
           msg := sprintf("Container %v has no CPU limit", [container.name])
         }
-        
+
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
           not container.resources.limits.memory
           msg := sprintf("Container %v has no memory limit", [container.name])
         }
-        
+
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
           not container.resources.requests.cpu
           msg := sprintf("Container %v has no CPU request", [container.name])
         }
-        
+
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
           not container.resources.requests.memory
@@ -128,12 +128,12 @@ spec:
     spec:
       names:
         kind: K8sBlockDefault
-  
+
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8sblockdefault
-        
+
         violation[{"msg": msg}] {
           input.review.object.metadata.namespace == "default"
           msg := "Resources cannot be created in the default namespace"
@@ -168,19 +168,19 @@ spec:
               type: array
               items:
                 type: string
-  
+
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8simageregistry
-        
+
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
           image := container.image
           not any_allowed_registry(image)
           msg := sprintf("Image %v is not from an approved registry", [image])
         }
-        
+
         any_allowed_registry(image) {
           registry := input.parameters.registries[_]
           startswith(image, registry)
@@ -214,18 +214,18 @@ spec:
     spec:
       names:
         kind: K8sNoPriv
-  
+
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
         package k8snopriv
-        
+
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
           container.securityContext.privileged
           msg := sprintf("Privileged container %v is not allowed", [container.name])
         }
-        
+
         violation[{"msg": msg}] {
           container := input.review.object.spec.containers[_]
           container.securityContext.allowPrivilegeEscalation

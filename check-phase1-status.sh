@@ -81,11 +81,11 @@ echo ""
 if [ -f "predator12-local/frontend/src/components/ai/AIAgentsSection.tsx" ]; then
     agent_lines=$(wc -l < "predator12-local/frontend/src/components/ai/AIAgentsSection.tsx")
     echo -e "${BLUE}📝 AIAgentsSection.tsx: $agent_lines lines${NC}"
-    
+
     # Count components
     component_count=$(grep -c "^const.*=.*(" "predator12-local/frontend/src/components/ai/AIAgentsSection.tsx" || echo "0")
     echo -e "${BLUE}🔧 React Components: $component_count${NC}"
-    
+
     # Count useState
     state_count=$(grep -c "useState" "predator12-local/frontend/src/components/ai/AIAgentsSection.tsx" || echo "0")
     echo -e "${BLUE}📦 State Hooks: $state_count${NC}"
@@ -105,7 +105,7 @@ echo ""
 
 if [ -f "predator12-local/frontend/package.json" ]; then
     echo -e "${GREEN}✅ package.json found${NC}"
-    
+
     # Check if node_modules exists
     if [ -d "predator12-local/frontend/node_modules" ]; then
         echo -e "${GREEN}✅ node_modules installed${NC}"
@@ -126,7 +126,7 @@ if [ -f "predator12-local/frontend/src/components/ai/AIAgentsSection.tsx" ]; the
     if grep -q "export" "predator12-local/frontend/src/components/ai/AIAgentsSection.tsx"; then
         echo -e "${GREEN}✅ AIAgentsSection exports found${NC}"
     fi
-    
+
     if grep -q "interface" "predator12-local/frontend/src/data/AIAgentsModelsData.tsx" 2>/dev/null; then
         echo -e "${GREEN}✅ TypeScript interfaces defined${NC}"
     fi

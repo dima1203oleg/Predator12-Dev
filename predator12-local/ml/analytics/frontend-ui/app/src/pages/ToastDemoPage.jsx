@@ -14,20 +14,20 @@ const ToastDemoPage = () => {
         <Header />
         <main className="flex-1 p-6 mt-16 bg-gray-900 bg-opacity-80 rounded-tl-lg shadow-lg border-t border-l border-gray-700 overflow-auto">
           <h2 className="text-2xl font-bold text-blue-400 mb-6">Демонстрація системи сповіщень</h2>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Toast demo component */}
             <ToastDemo />
-            
+
             {/* Documentation section */}
             <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700">
               <h2 className="text-xl font-bold text-blue-400 mb-4">Документація</h2>
-              
+
               <div className="prose prose-invert prose-sm max-w-none">
                 <p>
                   Система сповіщень Predator Analytics підтримує два типи сповіщень:
                 </p>
-                
+
                 <ul>
                   <li>
                     <strong>Panel notifications</strong> - постійні сповіщення, які зберігаються в панелі сповіщень
@@ -36,10 +36,10 @@ const ToastDemoPage = () => {
                     <strong>Toast notifications</strong> - тимчасові спливаючі сповіщення, які автоматично зникають
                   </li>
                 </ul>
-                
+
                 <h3>Стилі анімації</h3>
                 <p>Система підтримує різні стилі анімації для сповіщень:</p>
-                
+
                 <table className="min-w-full divide-y divide-gray-700 mt-2 mb-4">
                   <thead>
                     <tr>
@@ -70,9 +70,9 @@ const ToastDemoPage = () => {
                     </tr>
                   </tbody>
                 </table>
-                
+
                 <h3>Як використовувати у компонентах:</h3>
-                
+
                 <pre className="bg-gray-900 p-3 rounded text-xs">
                   <code>{`
 // Імпортуйте хук useToast
@@ -81,7 +81,7 @@ import { useToast } from '../components/Notifications/ToastProvider';
 const YourComponent = () => {
   // Викличте хук у своєму компоненті
   const { addToast } = useToast();
-  
+
   // Функція для показу сповіщення
   const showNotification = () => {
     addToast({
@@ -95,7 +95,7 @@ const YourComponent = () => {
       }
     });
   };
-  
+
   return (
     <button onClick={showNotification}>
       Показати сповіщення
@@ -104,13 +104,13 @@ const YourComponent = () => {
 }`}
                   </code>
                 </pre>
-                
+
                 <h3>Глобальне налаштування:</h3>
                 <p>Для налаштування всіх сповіщень, модифікуйте провайдер:</p>
-                
+
                 <pre className="bg-gray-900 p-3 rounded text-xs">
                   <code>{`
-<ToastProvider 
+<ToastProvider
   position="top-right"
   autoCloseDelay={5000}
   animationStyle="bounce"
@@ -121,9 +121,9 @@ const YourComponent = () => {
 `}
                   </code>
                 </pre>
-                
+
                 <h3>Підтримувані властивості:</h3>
-                
+
                 <table className="min-w-full divide-y divide-gray-700 mt-2">
                   <thead>
                     <tr>
@@ -169,4 +169,4 @@ const YourComponent = () => {
   );
 };
 
-export default ToastDemoPage; 
+export default ToastDemoPage;

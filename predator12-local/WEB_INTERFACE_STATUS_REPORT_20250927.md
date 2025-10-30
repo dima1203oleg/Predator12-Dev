@@ -65,7 +65,7 @@
    ```bash
    # Через Docker Compose
    docker compose up -d backend
-   
+
    # АБО вручну
    cd backend && python app/main.py
    ```

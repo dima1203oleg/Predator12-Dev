@@ -15,7 +15,7 @@ const NotificationCenter = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showPreferences, setShowPreferences] = useState(false);
   const [preferences, setPreferences] = useState(DEFAULT_NOTIFICATION_PREFERENCES);
-  
+
   // Load user preferences on mount from API
   useEffect(() => {
     const loadPreferences = async () => {
@@ -25,7 +25,7 @@ const NotificationCenter = () => {
         setPreferences(apiPrefs);
       } catch (error) {
         console.error('Помилка завантаження з API:', error);
-        
+
         // Якщо API недоступний, використовуємо localStorage як запасний варіант
         const savedPreferences = localStorage.getItem('notificationPreferences');
         if (savedPreferences) {
@@ -37,10 +37,10 @@ const NotificationCenter = () => {
         }
       }
     };
-    
+
     loadPreferences();
   }, []);
-  
+
   // Auto-close notifications if enabled
   useEffect(() => {
     if (preferences.autoClose && notifications.length > 0) {
@@ -49,12 +49,12 @@ const NotificationCenter = () => {
           setIsOpen(false);
         }
       }, preferences.autoCloseDelay);
-      
+
       // Clear timeout when component unmounts or preferences change
       return () => clearTimeout(timer);
     }
   }, [notifications, preferences.autoClose, preferences.autoCloseDelay, isOpen]);
-  
+
   // Process incoming notifications from WebSocket
   const handleNotification = useCallback((data) => {
     if (data && data.type === 'notification') {
@@ -62,7 +62,7 @@ const NotificationCenter = () => {
       if (!preferences[data.severity || NOTIFICATION_SEVERITY.INFO]) {
         return; // Skip this notification based on user preferences
       }
-      
+
       const newNotification = {
         id: data.id || `notif-${Date.now()}`,
         title: data.title || 'System Notification',
@@ -72,10 +72,10 @@ const NotificationCenter = () => {
         read: false,
         action: data.action
       };
-      
+
       setNotifications(prev => [newNotification, ...prev].slice(0, 50)); // Limit to 50 notifications
       setUnreadCount(prev => prev + 1);
-      
+
       // Play sound based on severity and preference
       if (preferences.sound) {
         if (data.severity === NOTIFICATION_SEVERITY.CRITICAL || data.severity === NOTIFICATION_SEVERITY.ERROR) {
@@ -88,7 +88,7 @@ const NotificationCenter = () => {
       }
     }
   }, [preferences]);
-  
+
   // Connect to the notifications WebSocket endpoint
   const { connectionStatus } = useGlobalWebSocket(
     'notifications',
@@ -99,31 +99,31 @@ const NotificationCenter = () => {
       maxReconnectAttempts: 10
     }
   );
-  
+
   // Mark all notifications as read
   const markAllAsRead = () => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(notification => ({ ...notification, read: true }))
     );
     setUnreadCount(0);
   };
-  
+
   // Mark a single notification as read
   const markAsRead = (id) => {
-    setNotifications(prev => 
-      prev.map(notification => 
+    setNotifications(prev =>
+      prev.map(notification =>
         notification.id === id ? { ...notification, read: true } : notification
       )
     );
     setUnreadCount(prev => Math.max(0, prev - 1));
   };
-  
+
   // Clear all notifications
   const clearAll = () => {
     setNotifications([]);
     setUnreadCount(0);
   };
-  
+
   // Delete a single notification
   const deleteNotification = (id) => {
     const notification = notifications.find(n => n.id === id);
@@ -132,18 +132,18 @@ const NotificationCenter = () => {
       setUnreadCount(prev => Math.max(0, prev - 1));
     }
   };
-  
+
   // Handle notification click (for action URLs)
   const handleNotificationClick = (notification) => {
     if (!notification.read) {
       markAsRead(notification.id);
     }
-    
+
     if (notification.action && notification.action.url) {
       window.open(notification.action.url, notification.action.target || '_self');
     }
   };
-  
+
   // Toggle notification panel
   const togglePanel = () => {
     setIsOpen(!isOpen);
@@ -151,17 +151,17 @@ const NotificationCenter = () => {
       markAllAsRead();
     }
   };
-  
+
   // Open preferences modal
   const openPreferences = (e) => {
     e.stopPropagation();
     setShowPreferences(true);
   };
-  
+
   // Close preferences modal and reload preferences
   const closePreferences = () => {
     setShowPreferences(false);
-    
+
     // Reload preferences in case they were changed
     const loadPreferences = async () => {
       try {
@@ -170,7 +170,7 @@ const NotificationCenter = () => {
         setPreferences(apiPrefs);
       } catch (error) {
         console.error('Помилка завантаження з API:', error);
-        
+
         // Якщо API недоступний, використовуємо localStorage як запасний варіант
         const savedPreferences = localStorage.getItem('notificationPreferences');
         if (savedPreferences) {
@@ -182,10 +182,10 @@ const NotificationCenter = () => {
         }
       }
     };
-    
+
     loadPreferences();
   };
-  
+
   // Get severity icon based on notification type
   const getSeverityIcon = (severity) => {
     switch (severity) {
@@ -230,17 +230,17 @@ const NotificationCenter = () => {
         );
     }
   };
-  
+
   // Format timestamp to local time
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
-  
+
   return (
     <div className="notification-center">
       {/* Notification Bell Button */}
-      <button 
+      <button
         className={`notification-bell ${unreadCount > 0 ? 'has-notifications' : ''}`}
         onClick={togglePanel}
         title="Notifications"
@@ -253,15 +253,15 @@ const NotificationCenter = () => {
           <span className="notification-badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
         )}
       </button>
-      
+
       {/* Notification Panel */}
       {isOpen && (
         <div className="notification-panel">
           <div className="notification-header">
             <h3>Notifications</h3>
             <div className="notification-actions">
-              <button 
-                onClick={openPreferences} 
+              <button
+                onClick={openPreferences}
                 className="action-button"
                 title="Налаштування сповіщень"
               >
@@ -270,8 +270,8 @@ const NotificationCenter = () => {
                   <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                 </svg>
               </button>
-              <button 
-                onClick={markAllAsRead} 
+              <button
+                onClick={markAllAsRead}
                 className="action-button"
                 title="Mark all as read"
               >
@@ -280,8 +280,8 @@ const NotificationCenter = () => {
                   <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
               </button>
-              <button 
-                onClick={clearAll} 
+              <button
+                onClick={clearAll}
                 className="action-button"
                 title="Clear all"
               >
@@ -290,8 +290,8 @@ const NotificationCenter = () => {
                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                 </svg>
               </button>
-              <button 
-                onClick={togglePanel} 
+              <button
+                onClick={togglePanel}
                 className="action-button"
                 title="Close"
               >
@@ -313,8 +313,8 @@ const NotificationCenter = () => {
               </div>
             ) : (
               notifications.map(notification => (
-                <div 
-                  key={notification.id} 
+                <div
+                  key={notification.id}
                   className={`notification-item ${notification.severity} ${notification.read ? 'read' : 'unread'}`}
                   onClick={() => handleNotificationClick(notification)}
                 >
@@ -333,8 +333,8 @@ const NotificationCenter = () => {
                       </button>
                     )}
                   </div>
-                  <button 
-                    className="notification-delete" 
+                  <button
+                    className="notification-delete"
                     onClick={(e) => {
                       e.stopPropagation();
                       deleteNotification(notification.id);
@@ -365,14 +365,14 @@ const NotificationCenter = () => {
           </div>
         </div>
       )}
-      
+
       {/* Notification Preferences Modal */}
-      <NotificationPreferences 
-        isOpen={showPreferences} 
-        onClose={closePreferences} 
+      <NotificationPreferences
+        isOpen={showPreferences}
+        onClose={closePreferences}
       />
     </div>
   );
 };
 
-export default NotificationCenter; 
+export default NotificationCenter;

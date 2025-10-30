@@ -90,4 +90,4 @@ export const NOTIFICATION_MESSAGE_SCHEMA = {
     url: '/some-url',
     target: '_self'
   }
-}; 
+};

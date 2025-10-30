@@ -10,7 +10,7 @@ check_docker() {
         open -a Docker
         echo "⏳ Зачекайте 30 секунд для запуску Docker..."
         sleep 30
-        
+
         # Перевірка ще раз
         if ! docker info >/dev/null 2>&1; then
             echo "❌ Docker все ще недоступний. Запустіть Docker Desktop вручно."
@@ -23,13 +23,13 @@ check_docker() {
 # Функція для видалення застарілих версій
 fix_compose_versions() {
     echo "🔧 Виправлення docker-compose версій..."
-    
+
     # Видалення version: з основного файлу
     if grep -q "^version:" docker-compose.yml 2>/dev/null; then
         sed -i '' '/^version:/d' docker-compose.yml
         echo "   ✅ Видалено version з docker-compose.yml"
     fi
-    
+
     # Видалення version: з override файлу
     if grep -q "^version:" docker-compose.override.yml 2>/dev/null; then
         sed -i '' '/^version:/d' docker-compose.override.yml
@@ -51,39 +51,39 @@ check_env() {
 # Головна функція
 main() {
     echo "📍 Робоча папка: $(pwd)"
-    
+
     # Перевірки
     check_docker
-    fix_compose_versions  
+    fix_compose_versions
     check_env
-    
+
     echo ""
     echo "🚀 Запуск Predator11 stack..."
-    
+
     # Зупинка старих контейнерів (якщо є)
     echo "🛑 Зупинка старих контейнерів..."
     docker-compose down
-    
+
     # Запуск нових
     echo "▶️ Запуск сервісів..."
     docker-compose up -d
-    
+
     echo ""
     echo "⏳ Чекаємо запуску сервісів (60 секунд)..."
     sleep 60
-    
+
     # Перевірка статусу
     echo ""
     echo "📊 Статус сервісів:"
     docker-compose ps
-    
+
     echo ""
     echo "🌐 Перевірка доступності..."
-    
+
     # Основні сервіси
     services=(
         "3000:Frontend"
-        "8000:Backend" 
+        "8000:Backend"
         "5432:PostgreSQL"
         "6379:Redis"
         "9200:OpenSearch"
@@ -91,24 +91,24 @@ main() {
         "9090:Prometheus"
         "3001:Grafana"
     )
-    
+
     for service in "${services[@]}"; do
         port=$(echo $service | cut -d: -f1)
         name=$(echo $service | cut -d: -f2)
-        
+
         if nc -z localhost $port 2>/dev/null; then
             echo "   ✅ $name ($port) - Доступний"
         else
             echo "   ⚠️ $name ($port) - Недоступний (можливо, ще запускається)"
         fi
     done
-    
+
     echo ""
     echo "🎯 ВАЖЛИВО:"
     echo "   • Деякі сервіси можуть показувати 🟡 ORANGE статус перші 2-3 хвилини"
     echo "   • Це нормально - великі сервіси (OpenSearch, Keycloak) запускаються повільно"
     echo "   • Перевіряйте логи: docker-compose logs [service_name]"
-    
+
     echo ""
     echo "📱 Корисні посилання:"
     echo "   • Frontend: http://localhost:3000"
@@ -116,7 +116,7 @@ main() {
     echo "   • OpenSearch Dashboards: http://localhost:5601"
     echo "   • Grafana: http://localhost:3001"
     echo "   • Prometheus: http://localhost:9090"
-    
+
     echo ""
     echo "🔍 Для моніторингу статусу:"
     echo "   docker-compose ps"

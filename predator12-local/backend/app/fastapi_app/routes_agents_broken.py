@@ -100,7 +100,10 @@ async def execute_workflow(request: WorkflowRequest):
             results["data_quality"] = await _call_agent(
                 "data_quality",
                 "quality/validate",
-                {"dataset_id": request.dataset_id, **request.params.get("data_quality", {})},
+                {
+                    "dataset_id": request.dataset_id,
+                    **request.params.get("data_quality", {}),
+                },
             )
 
         # Step 3: Anomaly detection
@@ -116,7 +119,10 @@ async def execute_workflow(request: WorkflowRequest):
             results["synthetic"] = await _call_agent(
                 "synthetic",
                 "synthetic/generate",
-                {"dataset_id": request.dataset_id, **request.params.get("synthetic", {})},
+                {
+                    "dataset_id": request.dataset_id,
+                    **request.params.get("synthetic", {}),
+                },
             )
 
         # Step 5: Security and privacy validation

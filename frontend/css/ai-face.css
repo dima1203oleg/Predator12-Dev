@@ -1,0 +1,401 @@
+/**
+ * AI Face Component - Стилі для 3D обличчя та емоцій
+ */
+
+/* === КОНТЕЙНЕР AI ОБЛИЧЧЯ === */
+
+.ai-face-canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.ai-face-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.ai-face-container:hover .ai-face-overlay {
+    opacity: 1;
+}
+
+/* === ЕМОЦІЇ FALLBACK === */
+
+.ai-face-2d {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 122, 204, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-face-2d::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(0, 122, 204, 0.1),
+        transparent
+    );
+    animation: scan 3s linear infinite;
+    pointer-events: none;
+}
+
+.face-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007acc, #00d4ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 30px rgba(0, 122, 204, 0.3);
+    position: relative;
+    transition: all 0.5s ease;
+}
+
+.face-avatar::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #007acc, #00d4ff, #007acc);
+    z-index: -1;
+    animation: rotate 3s linear infinite;
+}
+
+/* === ЕМОЦІЇ === */
+
+.emotion-neutral .face-avatar {
+    background: linear-gradient(135deg, #007acc, #00d4ff);
+    transform: scale(1);
+}
+
+.emotion-happy .face-avatar {
+    background: linear-gradient(135deg, #00ff88, #00cc66);
+    transform: scale(1.1);
+    animation: happy-bounce 1s ease-in-out;
+}
+
+.emotion-thinking .face-avatar {
+    background: linear-gradient(135deg, #ffaa00, #ff8800);
+    transform: scale(0.95);
+    animation: thinking-pulse 2s ease-in-out infinite;
+}
+
+.emotion-speaking .face-avatar {
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    transform: scale(1.05);
+    animation: speaking-wave 0.5s ease-in-out infinite alternate;
+}
+
+.emotion-surprised .face-avatar {
+    background: linear-gradient(135deg, #9c27b0, #e91e63);
+    transform: scale(1.2);
+    animation: surprised-shake 0.5s ease-in-out;
+}
+
+.emotion-sad .face-avatar {
+    background: linear-gradient(135deg, #666, #444);
+    transform: scale(0.9);
+    animation: sad-droop 1s ease-in-out;
+}
+
+/* === СТАТУС ТЕКСТ === */
+
+.face-status-text {
+    color: #8bb8e8;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 0.5rem;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.ai-face-2d:hover .face-status-text {
+    opacity: 1;
+    color: #00d4ff;
+}
+
+/* === ЧАСТИНКИ ТА ЕФЕКТИ === */
+
+.face-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #007acc;
+    border-radius: 50%;
+    animation: float 4s ease-in-out infinite;
+    opacity: 0.6;
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+.particle:nth-child(2) { left: 20%; animation-delay: 0.5s; }
+.particle:nth-child(3) { left: 30%; animation-delay: 1s; }
+.particle:nth-child(4) { left: 40%; animation-delay: 1.5s; }
+.particle:nth-child(5) { left: 50%; animation-delay: 2s; }
+.particle:nth-child(6) { left: 60%; animation-delay: 2.5s; }
+.particle:nth-child(7) { left: 70%; animation-delay: 3s; }
+.particle:nth-child(8) { left: 80%; animation-delay: 3.5s; }
+
+/* === ГОЛОСОВІ ХВИЛІ === */
+
+.voice-waves {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 3px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.voice-waves.active {
+    opacity: 1;
+}
+
+.voice-wave {
+    width: 3px;
+    height: 20px;
+    background: linear-gradient(to top, #007acc, #00d4ff);
+    border-radius: 2px;
+    animation: voice-wave 1s ease-in-out infinite;
+}
+
+.voice-wave:nth-child(1) { animation-delay: 0s; }
+.voice-wave:nth-child(2) { animation-delay: 0.1s; }
+.voice-wave:nth-child(3) { animation-delay: 0.2s; }
+.voice-wave:nth-child(4) { animation-delay: 0.3s; }
+.voice-wave:nth-child(5) { animation-delay: 0.4s; }
+
+/* === КОНТРОЛИ НАЛАШТУВАНЬ === */
+
+.ai-face-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.ai-face-container:hover .ai-face-controls {
+    opacity: 1;
+}
+
+.face-control-btn {
+    width: 25px;
+    height: 25px;
+    border: none;
+    background: rgba(0, 122, 204, 0.7);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.face-control-btn:hover {
+    background: rgba(0, 122, 204, 1);
+    transform: scale(1.1);
+}
+
+/* === НАЛАШТУВАННЯ ЯКОСТІ === */
+
+.quality-low .ai-face-canvas {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.quality-medium .ai-face-canvas {
+    image-rendering: auto;
+}
+
+.quality-high .ai-face-canvas {
+    image-rendering: auto;
+    filter: contrast(1.1) saturate(1.1);
+}
+
+/* === АНІМАЦІЇ === */
+
+@keyframes scan {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes happy-bounce {
+    0%, 100% { transform: scale(1.1) translateY(0); }
+    50% { transform: scale(1.15) translateY(-5px); }
+}
+
+@keyframes thinking-pulse {
+    0%, 100% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes speaking-wave {
+    0% { transform: scale(1.05) rotate(-1deg); }
+    100% { transform: scale(1.08) rotate(1deg); }
+}
+
+@keyframes surprised-shake {
+    0%, 100% { transform: scale(1.2) translateX(0); }
+    25% { transform: scale(1.25) translateX(-2px); }
+    75% { transform: scale(1.25) translateX(2px); }
+}
+
+@keyframes sad-droop {
+    0% { transform: scale(0.9) translateY(0); }
+    100% { transform: scale(0.85) translateY(3px); }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+    10%, 90% {
+        opacity: 0.6;
+    }
+    50% {
+        transform: translateY(-20px);
+        opacity: 1;
+    }
+}
+
+@keyframes voice-wave {
+    0%, 100% {
+        height: 5px;
+        opacity: 0.3;
+    }
+    50% {
+        height: 25px;
+        opacity: 1;
+    }
+}
+
+/* === АДАПТИВНІСТЬ === */
+
+@media (max-width: 768px) {
+    .face-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 3rem;
+    }
+
+    .face-status-text {
+        font-size: 0.8rem;
+    }
+
+    .ai-face-controls {
+        top: 5px;
+        right: 5px;
+    }
+
+    .face-control-btn {
+        width: 20px;
+        height: 20px;
+        font-size: 0.6rem;
+    }
+
+    .voice-waves {
+        bottom: 10px;
+    }
+
+    .voice-wave {
+        width: 2px;
+        height: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .face-avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+
+    .particle {
+        width: 1px;
+        height: 1px;
+    }
+}
+
+/* === ДОСТУПНІСТЬ === */
+
+@media (prefers-reduced-motion: reduce) {
+    .face-avatar::after,
+    .particle,
+    .voice-wave {
+        animation: none;
+    }
+
+    .emotion-happy .face-avatar,
+    .emotion-thinking .face-avatar,
+    .emotion-speaking .face-avatar,
+    .emotion-surprised .face-avatar,
+    .emotion-sad .face-avatar {
+        animation: none;
+    }
+}
+
+.ai-face-container[aria-label] {
+    cursor: help;
+}
+
+.face-control-btn[aria-label]:focus {
+    outline: 2px solid #007acc;
+    outline-offset: 2px;
+}

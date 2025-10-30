@@ -22,14 +22,14 @@ const Header = () => {
         // Placeholder for settings logic
         alert('Opening settings...');
     };
-    
+
     const showDemoToast = (severity) => {
         const toastData = {
             title: `${severity.charAt(0).toUpperCase() + severity.slice(1)} сповіщення`,
             message: `Це демонстрація ${severity} сповіщення з автоматичним закриттям.`,
             severity: severity,
         };
-        
+
         // Add action for success toasts
         if (severity === 'success') {
             toastData.action = {
@@ -37,7 +37,7 @@ const Header = () => {
                 url: '/dashboard'
             };
         }
-        
+
         addToast(toastData);
     };
 
@@ -46,27 +46,27 @@ const Header = () => {
             <div className="flex justify-between items-center px-6 py-3">
                 <div className="flex items-center">
                     <h1 className="text-xl font-bold text-blue-400 font-orbitron">Predator Analytics</h1>
-                    
+
                     <div className="ml-6 flex space-x-2">
-                        <button 
+                        <button
                             onClick={() => showDemoToast('info')}
                             className="px-2 py-1 text-xs bg-blue-900 hover:bg-blue-800 text-white rounded"
                         >
                             Інфо
                         </button>
-                        <button 
+                        <button
                             onClick={() => showDemoToast('success')}
                             className="px-2 py-1 text-xs bg-green-900 hover:bg-green-800 text-white rounded"
                         >
                             Успіх
                         </button>
-                        <button 
+                        <button
                             onClick={() => showDemoToast('warning')}
                             className="px-2 py-1 text-xs bg-yellow-900 hover:bg-yellow-800 text-white rounded"
                         >
                             Увага
                         </button>
-                        <button 
+                        <button
                             onClick={() => showDemoToast('error')}
                             className="px-2 py-1 text-xs bg-red-900 hover:bg-red-800 text-white rounded"
                         >
@@ -74,10 +74,10 @@ const Header = () => {
                         </button>
                     </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-4">
                     <NotificationManager />
-                    
+
                     <div className="flex items-center text-gray-300 hover:text-blue-400 cursor-pointer">
                         <span className="mr-2 text-sm">Аналітик</span>
                         <div className="w-8 h-8 bg-blue-900 rounded-full flex items-center justify-center text-white">
@@ -90,4 +90,4 @@ const Header = () => {
     );
 };
 
-export default Header; 
+export default Header;

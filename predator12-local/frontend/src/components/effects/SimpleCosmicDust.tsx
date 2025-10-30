@@ -46,7 +46,7 @@ export const SimpleCosmicDust: React.FC<SimpleCosmicDustProps> = ({
         this.vx = (Math.random() - 0.5) * speed * 0.5;
         this.vy = (Math.random() - 0.5) * speed * 0.5;
         this.size = Math.random() * 2 + 1;
-        
+
         const colors = [nexusColors.emerald, nexusColors.sapphire, nexusColors.amethyst];
         this.color = colors[Math.floor(Math.random() * colors.length)];
         this.life = Math.random();

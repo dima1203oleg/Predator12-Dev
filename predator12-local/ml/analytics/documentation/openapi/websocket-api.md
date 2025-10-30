@@ -23,4 +23,4 @@ This document describes the WebSocket endpoints available in the Predator Analyt
   }
   ```
 - **Update Frequency**: Approximately every 5 seconds
-- **Usage**: Connect to this endpoint using a WebSocket client (e.g., in JavaScript, use `new WebSocket('ws://<api-host>/ws/sentiment-updates')`). Handle incoming messages to update UI components in real-time. 
+- **Usage**: Connect to this endpoint using a WebSocket client (e.g., in JavaScript, use `new WebSocket('ws://<api-host>/ws/sentiment-updates')`). Handle incoming messages to update UI components in real-time.

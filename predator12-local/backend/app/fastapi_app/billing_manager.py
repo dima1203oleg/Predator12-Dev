@@ -225,7 +225,8 @@ class BillingManager:
             # Query database
             async with self.db_session_factory() as session:
                 result = await session.execute(
-                    text("SELECT plan_tier FROM users WHERE id = :user_id"), {"user_id": user_id}
+                    text("SELECT plan_tier FROM users WHERE id = :user_id"),
+                    {"user_id": user_id},
                 )
                 row = result.fetchone()
 
@@ -338,10 +339,10 @@ class BillingManager:
                 await session.execute(
                     text(
                         """
-                        INSERT INTO usage_records 
-                        (user_id, organization_id, usage_type, quantity, unit, 
+                        INSERT INTO usage_records
+                        (user_id, organization_id, usage_type, quantity, unit,
                          timestamp, resource_id, metadata, cost_usd, trace_id)
-                        VALUES 
+                        VALUES
                         (:user_id, :organization_id, :usage_type, :quantity, :unit,
                          :timestamp, :resource_id, :metadata, :cost_usd, :trace_id)
                     """
@@ -354,7 +355,7 @@ class BillingManager:
                         "unit": record.unit,
                         "timestamp": record.timestamp,
                         "resource_id": record.resource_id,
-                        "metadata": json.dumps(record.metadata) if record.metadata else None,
+                        "metadata": (json.dumps(record.metadata) if record.metadata else None),
                         "cost_usd": float(record.cost_usd) if record.cost_usd else None,
                         "trace_id": record.trace_id,
                     },
@@ -441,14 +442,18 @@ class BillingManager:
                     text(
                         """
                         SELECT usage_type, SUM(quantity) as total_quantity, SUM(cost_usd) as total_cost
-                        FROM usage_records 
-                        WHERE user_id = :user_id 
-                        AND timestamp >= :start_time 
+                        FROM usage_records
+                        WHERE user_id = :user_id
+                        AND timestamp >= :start_time
                         AND timestamp <= :end_time
                         GROUP BY usage_type
                     """
                     ),
-                    {"user_id": user_id, "start_time": start_time, "end_time": end_time},
+                    {
+                        "user_id": user_id,
+                        "start_time": start_time,
+                        "end_time": end_time,
+                    },
                 )
 
                 usage_by_type = {}
@@ -599,14 +604,18 @@ class BillingManager:
                         text(
                             """
                             SELECT usage_type, SUM(quantity) as total_quantity, SUM(cost_usd) as total_cost
-                            FROM usage_records 
-                            WHERE user_id = :user_id 
-                            AND timestamp >= :start_time 
+                            FROM usage_records
+                            WHERE user_id = :user_id
+                            AND timestamp >= :start_time
                             AND timestamp <= :end_time
                             GROUP BY usage_type
                         """
                         ),
-                        {"user_id": user_id, "start_time": start_time, "end_time": end_time},
+                        {
+                            "user_id": user_id,
+                            "start_time": start_time,
+                            "end_time": end_time,
+                        },
                     )
 
                     day_usage = {"date": date.isoformat(), "usage": {}}

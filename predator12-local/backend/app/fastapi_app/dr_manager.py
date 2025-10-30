@@ -191,11 +191,18 @@ class DRManager:
             # Store job in Redis
             job_key = f"backup_job:{job_id}"
             await self.redis.setex(
-                job_key, 86400, json.dumps(asdict(backup_job), default=str)  # 24 hours TTL
+                job_key,
+                86400,
+                json.dumps(asdict(backup_job), default=str),  # 24 hours TTL
             )
 
             # Execute pgBackRest command
-            cmd = ["pgbackrest", "--stanza=main", f"--type={backup_type.value}", "backup"]
+            cmd = [
+                "pgbackrest",
+                "--stanza=main",
+                f"--type={backup_type.value}",
+                "backup",
+            ]
 
             logger.info(f"Starting PostgreSQL {backup_type.value} backup...")
             result = await asyncio.create_subprocess_exec(
@@ -208,7 +215,9 @@ class DRManager:
                 # Get backup info
                 info_cmd = ["pgbackrest", "--stanza=main", "info", "--output=json"]
                 info_result = await asyncio.create_subprocess_exec(
-                    *info_cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                    *info_cmd,
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
                 )
 
                 info_stdout, _ = await info_result.communicate()
@@ -291,7 +300,9 @@ class DRManager:
                         try:
                             # Download object
                             self.minio_client.fget_object(
-                                bucket, obj.object_name, str(bucket_backup_path / obj.object_name)
+                                bucket,
+                                obj.object_name,
+                                str(bucket_backup_path / obj.object_name),
                             )
                             total_size += obj.size
 
@@ -729,7 +740,10 @@ def get_dr_manager() -> Optional["DRManager"]:
 
 
 def initialize_dr_manager(
-    redis_client: aioredis.Redis, db_session_factory, minio_client=None, backup_storage=None
+    redis_client: aioredis.Redis,
+    db_session_factory,
+    minio_client=None,
+    backup_storage=None,
 ):
     """Initialize global DR manager."""
     global dr_manager

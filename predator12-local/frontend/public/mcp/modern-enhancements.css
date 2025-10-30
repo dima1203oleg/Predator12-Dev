@@ -89,38 +89,38 @@ html {
   .container {
     padding: 0 0.75rem;
   }
-  
+
   .header {
     padding: 0.75rem 0;
   }
-  
+
   .logo {
     font-size: 1.25rem;
   }
-  
+
   .stats {
     flex-direction: column;
     gap: 0.75rem;
     align-items: flex-start;
   }
-  
+
   .nav-tab {
     padding: 0.75rem 1rem;
     font-size: 0.8rem;
   }
-  
+
   .chat-container {
     height: 300px;
   }
-  
+
   .message-content {
     font-size: 0.875rem;
   }
-  
+
   .card {
     padding: 1rem;
   }
-  
+
   .btn {
     padding: 0.625rem 1rem;
     font-size: 0.8rem;

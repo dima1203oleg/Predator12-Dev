@@ -1,0 +1,648 @@
+/**
+ * Predator Analytics - Hero Page Styles
+ * Неонова тема з інтерактивним AI обличчям
+ */
+
+/* === ЗМІННІ === */
+:root {
+    --bg: #050511;
+    --bg-overlay: rgba(8, 8, 16, 0.85);
+    --neon1: #18FFFF;
+    --neon2: #FF00E6;
+    --neon3: #00FF88;
+    --text: #d9e8ff;
+    --text-dim: #8bb8e8;
+    --border: rgba(255, 255, 255, 0.08);
+    --panel-bg: rgba(8, 8, 16, 0.35);
+}
+
+/* === БАЗОВІ СТИЛІ === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* === HERO ROOT === */
+.hero-root {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* === ФОНОВИЙ ШАР === */
+.hero-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+        radial-gradient(1200px 800px at 60% 40%, rgba(24, 255, 255, 0.15), transparent 60%),
+        radial-gradient(800px 600px at 30% 70%, rgba(255, 0, 230, 0.12), transparent 55%),
+        radial-gradient(600px 600px at 80% 20%, rgba(0, 255, 136, 0.08), transparent 50%);
+    opacity: 0.28;
+    pointer-events: none;
+    animation: bgPulse 20s ease-in-out infinite;
+}
+
+@keyframes bgPulse {
+    0%, 100% { opacity: 0.28; }
+    50% { opacity: 0.35; }
+}
+
+/* === ГОЛОВНА СІТКА === */
+.hero-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    padding: 40px;
+    min-height: 100vh;
+}
+
+/* === HUD СЕКЦІЯ === */
+.hud {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hud-head {
+    position: relative;
+}
+
+/* === БРЕНДИНГ === */
+.brand {
+    font-weight: 800;
+    font-size: 2.5rem;
+    letter-spacing: 0.06em;
+    margin: 0 0 8px;
+    background: linear-gradient(90deg, var(--neon1), var(--neon2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: brandGlow 3s ease-in-out infinite;
+}
+
+.brand span {
+    color: var(--neon2);
+}
+
+@keyframes brandGlow {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
+}
+
+/* === AI ОБЛИЧЧЯ === */
+.ai-face {
+    position: relative;
+    border: 1px solid var(--border);
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.ai-face:hover {
+    border-color: rgba(24, 255, 255, 0.3);
+    box-shadow: 0 12px 48px rgba(24, 255, 255, 0.15);
+}
+
+.face-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Анімація очей */
+#left-eye, #right-eye {
+    animation: eyeBlink 3s ease-in-out infinite;
+}
+
+@keyframes eyeBlink {
+    0%, 96%, 100% { opacity: 1; }
+    98% { opacity: 0.3; }
+}
+
+/* Анімація рота при говорінні */
+.ai-face.speaking #mouth {
+    animation: mouthSpeak 0.3s ease-in-out infinite alternate;
+}
+
+@keyframes mouthSpeak {
+    0% { d: path('M250,470 C300,490 350,470 350,470'); }
+    100% { d: path('M250,465 C300,485 350,465 350,465'); }
+}
+
+/* Анімація сітки */
+#face-grid path {
+    animation: gridPulse 4s ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * 0.1s);
+}
+
+@keyframes gridPulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.45; }
+}
+
+/* === ПІДКАЗКА === */
+.ai-hint {
+    position: absolute;
+    bottom: 60px;
+    right: 16px;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    color: var(--text-dim);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 6px 12px;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: hintFloat 2s ease-in-out infinite;
+}
+
+@keyframes hintFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* === СТАТУС AI === */
+.ai-status {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--neon3);
+    box-shadow: 0 0 10px var(--neon3);
+    animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* === СТРІЧКА РИЗИКІВ === */
+.risk-ticker {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 10px;
+    background: linear-gradient(90deg, rgba(255, 68, 68, 0.06), rgba(255, 170, 0, 0.06));
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: tickerPulse 3s ease-in-out infinite;
+}
+
+@keyframes tickerPulse {
+    0%, 100% { border-color: rgba(255, 68, 68, 0.3); }
+    50% { border-color: rgba(255, 68, 68, 0.6); }
+}
+
+.risk-label {
+    color: #ff4444;
+}
+
+.risk-text {
+    color: var(--text);
+    opacity: 0.9;
+}
+
+/* === ПОДІЇ АГЕНТІВ === */
+.hud-events {
+    margin-top: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.hud-events h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--neon1);
+    margin-bottom: 8px;
+}
+
+.hud-events ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.hud-events li {
+    padding: 6px 0;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    animation: eventSlideIn 0.3s ease-out;
+}
+
+.hud-events li:last-child {
+    border-bottom: none;
+}
+
+@keyframes eventSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 0.8;
+        transform: translateX(0);
+    }
+}
+
+/* === ПАНЕЛІ === */
+.hero-panels {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.chat-dock,
+.network-mini {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    background: var(--panel-bg);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.chat-dock h3,
+.network-mini h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--neon1);
+    margin-bottom: 12px;
+}
+
+/* === ЧАТ === */
+.chat-feed {
+    height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    scroll-behavior: smooth;
+}
+
+.msg {
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 90%;
+    animation: msgSlideIn 0.3s ease-out;
+    word-wrap: break-word;
+}
+
+@keyframes msgSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.msg.user {
+    background: rgba(24, 255, 255, 0.12);
+    border: 1px solid rgba(24, 255, 255, 0.3);
+    align-self: flex-end;
+    color: #fff;
+}
+
+.msg.assistant {
+    background: rgba(255, 0, 230, 0.12);
+    border: 1px solid rgba(255, 0, 230, 0.3);
+    align-self: flex-start;
+    color: #fff;
+}
+
+.msg.system {
+    background: rgba(255, 170, 0, 0.12);
+    border: 1px solid rgba(255, 170, 0, 0.3);
+    align-self: center;
+    font-size: 0.85rem;
+    color: #ffcc66;
+}
+
+/* === КОНТРОЛИ ЧАТУ === */
+.chat-controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.chat-controls input {
+    flex: 1;
+    background: rgba(11, 11, 24, 0.8);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.chat-controls input:focus {
+    border-color: var(--neon1);
+    box-shadow: 0 0 0 3px rgba(24, 255, 255, 0.1);
+}
+
+.chat-controls button {
+    background: rgba(20, 20, 40, 0.9);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.chat-controls button:hover {
+    background: rgba(24, 255, 255, 0.2);
+    border-color: var(--neon1);
+    transform: translateY(-2px);
+}
+
+.chat-controls button:active {
+    transform: translateY(0);
+}
+
+/* === МЕРЕЖА === */
+.network-canvas {
+    height: 300px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.network-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-dim);
+    gap: 12px;
+}
+
+.placeholder-icon {
+    font-size: 3rem;
+    opacity: 0.5;
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+.placeholder-text {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    text-align: center;
+}
+
+/* === ТЕХНІЧНА НАВІГАЦІЯ === */
+.tech-nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    gap: 12px;
+    padding: 12px 20px;
+    background: rgba(8, 8, 16, 0.9);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: var(--text-dim);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background: rgba(24, 255, 255, 0.1);
+    color: var(--neon1);
+    transform: translateY(-3px);
+}
+
+.nav-icon {
+    font-size: 1.5rem;
+}
+
+.nav-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* === МОДАЛЬНЕ ВІКНО === */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.loading-content {
+    text-align: center;
+    padding: 40px;
+    background: rgba(26, 26, 46, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(24, 255, 255, 0.3);
+    border-top: 3px solid var(--neon1);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: var(--text);
+    font-size: 1rem;
+}
+
+/* === СКРОЛБАРИ === */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(24, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(24, 255, 255, 0.7);
+}
+
+/* === АДАПТИВНІСТЬ === */
+@media (max-width: 1200px) {
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .brand {
+        font-size: 2rem;
+    }
+
+    .tech-nav {
+        bottom: 10px;
+        padding: 8px 12px;
+    }
+
+    .nav-link {
+        padding: 6px 12px;
+    }
+
+    .nav-icon {
+        font-size: 1.2rem;
+    }
+
+    .nav-text {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-grid {
+        padding: 15px;
+    }
+
+    .brand {
+        font-size: 1.5rem;
+    }
+
+    .ai-face {
+        padding: 12px;
+    }
+
+    .chat-feed,
+    .network-canvas {
+        height: 250px;
+    }
+
+    .tech-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .ai-hint {
+        font-size: 0.75rem;
+        bottom: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-grid {
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .chat-controls {
+        flex-wrap: wrap;
+    }
+
+    .chat-controls input {
+        width: 100%;
+    }
+
+    .chat-controls button {
+        flex: 1;
+    }
+}
+
+/* === ДОСТУПНІСТЬ === */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

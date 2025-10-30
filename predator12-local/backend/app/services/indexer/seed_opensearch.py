@@ -83,9 +83,7 @@ def ensure_write_alias(alias: str, shards: int = 3, replicas: int = 1) -> None:
         "settings": {
             "number_of_shards": shards,
             "number_of_replicas": replicas,
-            "index": {
-                "routing": {"allocation.include._tier_preference": "data_hot"}
-            },
+            "index": {"routing": {"allocation.include._tier_preference": "data_hot"}},
         },
         "aliases": {alias: {"is_write_index": True}},
     }

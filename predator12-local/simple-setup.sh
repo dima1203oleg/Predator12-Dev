@@ -88,18 +88,18 @@ fi
 echo -e "\n${BLUE}5. Встановлення backend залежностей...${NC}"
 if [ -d "backend" ]; then
     cd backend
-    
+
     if [ ! -d "venv" ]; then
         echo -e "${YELLOW}Створюю Python virtual environment...${NC}"
         $PYTHON_CMD -m venv venv
     fi
-    
+
     echo -e "${YELLOW}Активую venv та встановлюю залежності...${NC}"
     source venv/bin/activate
     pip install --upgrade pip -q
     pip install -r requirements.txt -q
     deactivate
-    
+
     echo -e "${GREEN}✅ Backend залежності встановлено${NC}"
     cd ..
 else
@@ -110,14 +110,14 @@ fi
 echo -e "\n${BLUE}6. Встановлення frontend залежностей...${NC}"
 if [ -d "frontend" ]; then
     cd frontend
-    
+
     if [ ! -d "node_modules" ]; then
         echo -e "${YELLOW}Встановлюю npm залежності...${NC}"
         npm install -q
     else
         echo -e "${GREEN}✅ node_modules вже існує${NC}"
     fi
-    
+
     echo -e "${GREEN}✅ Frontend залежності встановлено${NC}"
     cd ..
 else

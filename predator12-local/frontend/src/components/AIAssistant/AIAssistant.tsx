@@ -153,32 +153,32 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
   const generateAIResponse = (userMessage: string): string => {
     const lowerMessage = userMessage.toLowerCase();
-    
+
     // Simple rule-based responses (in production, use actual AI API)
     if (lowerMessage.includes('навігація') || lowerMessage.includes('модуль')) {
       return 'Nexus Core має кілька модулів: Хроно-просторовий Аналіз для 4D візуалізації подій, AI Supervision для моніторингу агентів, DataOps для управління даними, Reality Simulator для моделювання сценаріїв, та OpenSearch Dashboard для аналітики. Який модуль вас цікавить?';
     }
-    
+
     if (lowerMessage.includes('дані') || lowerMessage.includes('аналіз')) {
       return 'Для роботи з даними рекомендую модуль DataOps - там ви можете завантажувати файли, налаштовувати ETL конвеєри та генерувати синтетичні дані. Також корисний модуль Хроно-просторового Аналізу для візуалізації геоданих у часі.';
     }
-    
+
     if (lowerMessage.includes('симуляція') || lowerMessage.includes('моделювання')) {
       return 'Reality Simulator дозволяє створювати what-if сценарії з різними типами моделей: Monte Carlo, Agent-based, System Dynamics та Discrete Event. Ви можете налаштувати параметри та запустити симуляцію для прогнозування результатів.';
     }
-    
+
     if (lowerMessage.includes('агенти') || lowerMessage.includes('ai')) {
       return 'AI Supervision модуль показує стан всіх агентів системи у 3D візуалізації. Ви можете моніторити продуктивність, перезапускати агентів та переглядати статистику роботи мульти-агентної системи.';
     }
-    
+
     if (lowerMessage.includes('пошук') || lowerMessage.includes('opensearch')) {
       return 'OpenSearch Dashboard інтегрований в Nexus Core з підтримкою SSO та кастомної теми. Ви можете створювати дашборди, виконувати пошукові запити та аналізувати логи в реальному часі.';
     }
-    
+
     if (lowerMessage.includes('допомога') || lowerMessage.includes('help')) {
       return 'Я можу допомогти з: навігацією по модулях Nexus Core, поясненням функцій системи, рекомендаціями по аналізу даних, налаштуванням симуляцій та загальними питаннями по роботі з платформою. Що саме вас цікавить?';
     }
-    
+
     // Default responses
     const defaultResponses = [
       'Цікаве питання! Дозвольте мені проаналізувати це в контексті Nexus Core системи.',
@@ -186,7 +186,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       'Це важливе питання для аналітичної платформи. Чи можете уточнити, який саме аспект вас цікавить?',
       'Nexus Core має потужні можливості для вирішення таких завдань. Давайте розглянемо варіанти.'
     ];
-    
+
     return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
   };
 
@@ -208,7 +208,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
     // Simulate AI thinking time
     setTimeout(() => {
       const aiResponse = generateAIResponse(userMessage.content);
-      
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
@@ -296,7 +296,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
               />
             )}
           </Box>
-          
+
           <Box sx={{ display: 'flex', gap: 0.5 }}>
             <Tooltip title="Settings">
               <IconButton size="small" sx={{ color: nexusColors.nebula }}>
@@ -523,7 +523,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
                   },
                 }}
               />
-              
+
               {voiceEnabled && (
                 <Tooltip title={isListening ? "Stop listening" : "Voice input"}>
                   <IconButton
@@ -540,7 +540,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
                   </IconButton>
                 </Tooltip>
               )}
-              
+
               {isSpeaking ? (
                 <Tooltip title="Stop speaking">
                   <IconButton

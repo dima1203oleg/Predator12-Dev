@@ -58,7 +58,7 @@ class AgentsAPI {
   // Збагачення агента складною логікою вибору моделей
   private enrichAgentWithModelLogic(agent: any): AgentConfig {
     const bestModels = this.selectOptimalModelsForAgent(agent.type);
-    
+
     return {
       ...agent,
       primaryModel: bestModels[0],
@@ -89,7 +89,7 @@ class AgentsAPI {
 
     const category = typeToCategory[agentType] || 'reasoning';
     const categoryModels = FREE_MODELS_CATALOG[category];
-    
+
     // Сортуємо за продуктивністю та повертаємо топ моделі
     return categoryModels
       .sort((a, b) => b.performance - a.performance)
@@ -98,23 +98,23 @@ class AgentsAPI {
 
   // Багаторівневий фідбек з адаптивною маршрутизацією
   async processWithMultiLevelFeedback(
-    agentId: string, 
-    task: any, 
+    agentId: string,
+    task: any,
     attempt: number = 1
   ): Promise<any> {
     const agent = await this.getAgent(agentId);
     const feedbackLevel = this.calculateFeedbackLevel(agent, attempt);
-    
+
     try {
       // Вибір моделі на основі рівня фідбеку
       const selectedModel = this.selectModelForLevel(agent, feedbackLevel);
-      
+
       // Виконання задачі з вибраною моделлю
       const result = await this.executeTask(selectedModel, task);
-      
+
       // Оцінка якості результату
       const qualityScore = await this.evaluateResult(result, task);
-      
+
       if (qualityScore >= agent.multiLevelFeedback.thresholds[feedbackLevel.level]) {
         // Успіх - зберігаємо метрики
         this.updateModelPerformance(selectedModel, true, qualityScore);
@@ -136,7 +136,7 @@ class AgentsAPI {
   private calculateFeedbackLevel(agent: AgentConfig, attempt: number): FeedbackLevel {
     const level = Math.min(attempt - 1, agent.multiLevelFeedback.levels - 1);
     const threshold = agent.multiLevelFeedback.thresholds[level];
-    
+
     return {
       level,
       threshold,
@@ -197,7 +197,7 @@ class AgentsAPI {
         task: originalTask,
         criteria: ['accuracy', 'completeness', 'relevance', 'clarity']
       });
-      
+
       return evaluation.score || 0.5;
     } catch (error) {
       // Fallback до простої евристичної оцінки
@@ -208,12 +208,12 @@ class AgentsAPI {
   // Проста оцінка якості
   private simpleEvaluation(result: any): number {
     if (!result || typeof result !== 'object') return 0.3;
-    
+
     let score = 0.5;
     if (result.content && result.content.length > 50) score += 0.2;
     if (result.confidence && result.confidence > 0.7) score += 0.2;
     if (result.sources && result.sources.length > 0) score += 0.1;
-    
+
     return Math.min(score, 1.0);
   }
 
@@ -305,7 +305,7 @@ class AgentsAPI {
       .sort((a, b) => b.qualityScore * b.successRate - a.qualityScore * a.successRate);
 
     // Логуємо найкращі моделі
-    console.log('🎯 Топ моделі за продуктивністю:', 
+    console.log('🎯 Топ моделі за продуктивністю:',
       sortedPerformance.slice(0, 5).map(p => `${p.modelId}: ${(p.qualityScore * 100).toFixed(1)}%`)
     );
   }

@@ -13,7 +13,7 @@ terraform {
       version = "~> 1.14.0"
     }
   }
-  
+
   backend "local" {
     path = "terraform.tfstate"
   }
@@ -184,7 +184,7 @@ resource "helm_release" "postgresql" {
   name       = "postgresql"
   chart      = "../helm/postgresql"
   namespace  = kubernetes_namespace.predator.metadata[0].name
-  
+
   set_sensitive {
     name  = "password"
     value = var.postgresql_password
@@ -206,7 +206,7 @@ resource "helm_release" "qdrant" {
   name       = "qdrant"
   chart      = "../helm/qdrant"
   namespace  = kubernetes_namespace.predator.metadata[0].name
-  
+
   set_sensitive {
     name  = "apiKey"
     value = var.qdrant_api_key
@@ -223,12 +223,12 @@ resource "helm_release" "minio" {
   name       = "minio"
   chart      = "../helm/minio"
   namespace  = kubernetes_namespace.predator.metadata[0].name
-  
+
   set_sensitive {
     name  = "rootUser"
     value = var.minio_root_user
   }
-  
+
   set_sensitive {
     name  = "rootPassword"
     value = var.minio_root_password

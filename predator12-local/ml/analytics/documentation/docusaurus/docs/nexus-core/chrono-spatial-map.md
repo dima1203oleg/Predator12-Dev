@@ -32,4 +32,4 @@
 ## Troubleshooting
 
 - **Disconnected Status**: If the map shows 'Disconnected', ensure your network connection is stable and the API server is reachable. Use the 'Reconnect' button to retry.
-- **No Data for Regions**: If regions do not update or show 'No sentiment data available' in the popup, the backend might not be sending data for those regions. This is expected if the mock data or real data does not cover all displayed regions. 
+- **No Data for Regions**: If regions do not update or show 'No sentiment data available' in the popup, the backend might not be sending data for those regions. This is expected if the mock data or real data does not cover all displayed regions.

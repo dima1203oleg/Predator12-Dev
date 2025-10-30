@@ -594,7 +594,7 @@
   <!-- Main Content -->
   <main class="main">
     <div class="container">
-      
+
       <!-- Chat Tab -->
       <div id="chat-tab" class="tab-content active">
         <div class="grid grid-2">
@@ -605,7 +605,7 @@
                 Smart Chat Interface
               </h2>
             </div>
-            
+
             <div class="form-group">
               <label class="form-label">Select AI Model</label>
               <div class="select-wrapper">
@@ -633,8 +633,8 @@
             </div>
 
             <div style="display: flex; gap: 0.75rem;">
-              <input type="text" id="chatInput" class="form-control" 
-                     placeholder="Введіть ваше повідомлення..." 
+              <input type="text" id="chatInput" class="form-control"
+                     placeholder="Введіть ваше повідомлення..."
                      style="flex: 1;">
               <button id="sendBtn" class="btn btn-primary">
                 <i class="fas fa-paper-plane"></i>
@@ -674,7 +674,7 @@
                 API Playground
               </h2>
             </div>
-            
+
             <div class="form-group">
               <label class="form-label">Model</label>
               <div class="select-wrapper">
@@ -738,7 +738,7 @@
                 Code Generator
               </h2>
             </div>
-            
+
             <div class="form-group">
               <label class="form-label">Programming Language</label>
               <div class="select-wrapper">
@@ -775,7 +775,7 @@
 
             <div class="form-group">
               <label class="form-label">Custom Prompt (Optional)</label>
-              <input type="text" id="codePrompt" class="form-control" 
+              <input type="text" id="codePrompt" class="form-control"
                      placeholder="e.g., Write a joke about programming">
             </div>
 
@@ -942,7 +942,7 @@ Click "Generate Code" to create a ready-to-use example...
       // Remove active class from all tabs and contents
       document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      
+
       // Add active class to clicked tab and corresponding content
       event.target.classList.add('active');
       document.getElementById(tabName + '-tab').classList.add('active');
@@ -969,9 +969,9 @@ Click "Generate Code" to create a ready-to-use example...
       const input = document.getElementById('chatInput');
       const model = document.getElementById('chatModel').value;
       const container = document.getElementById('chatContainer');
-      
+
       console.log('sendMessage called', { inputValue: input.value, model });
-      
+
       if (!input.value.trim()) {
         console.log('Empty input, returning');
         return;
@@ -984,14 +984,14 @@ Click "Generate Code" to create a ready-to-use example...
 
       // Add user message
       addMessage('user', userMessage);
-      
+
       // Add typing indicator
       const typingId = 'typing-' + Date.now();
       addTypingIndicator(typingId);
 
       try {
         console.log('Making fetch request to /v1/simple-chat');
-        
+
         const response = await fetch('/v1/simple-chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1002,13 +1002,13 @@ Click "Generate Code" to create a ready-to-use example...
         });
 
         console.log('Response received:', response.status, response.statusText);
-        
+
         const result = await response.json();
         console.log('Response JSON:', result);
-        
+
         // Remove typing indicator
         document.getElementById(typingId)?.remove();
-        
+
         if (result.message) {
           addMessage('assistant', result.message);
           showNotification('Response received!', 'success');
@@ -1058,7 +1058,7 @@ Click "Generate Code" to create a ready-to-use example...
       messageDiv.className = `message ${type}`;
       if (id) messageDiv.id = id;
 
-      const avatar = type === 'user' ? '👤' : 
+      const avatar = type === 'user' ? '👤' :
                    type === 'assistant' ? '🤖' : '❌';
 
       const time = new Date().toLocaleTimeString();
@@ -1085,12 +1085,12 @@ Click "Generate Code" to create a ready-to-use example...
           ${message}
         </div>
       `;
-      
+
       document.body.appendChild(notification);
-      
+
       // Show notification
       setTimeout(() => notification.classList.add('show'), 100);
-      
+
       // Hide after 3 seconds
       setTimeout(() => {
         notification.classList.remove('show');
@@ -1189,18 +1189,18 @@ Click "Generate Code" to create a ready-to-use example...
 
     // Event Listeners
     console.log('Setting up event listeners...');
-    
+
     const sendBtn = document.getElementById('sendBtn');
     const chatInput = document.getElementById('chatInput');
     const clearBtn = document.getElementById('clearBtn');
-    
+
     console.log('Elements found:', { sendBtn, chatInput, clearBtn });
-    
+
     if (sendBtn) {
       sendBtn.addEventListener('click', sendMessage);
       console.log('sendBtn listener added');
     }
-    
+
     if (chatInput) {
       chatInput.addEventListener('keypress', (e) => {
         console.log('Key pressed:', e.key);
@@ -1208,7 +1208,7 @@ Click "Generate Code" to create a ready-to-use example...
       });
       console.log('chatInput listener added');
     }
-    
+
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
         console.log('Clear button clicked');
@@ -1279,7 +1279,7 @@ Click "Generate Code" to create a ready-to-use example...
         showNotification('No history to export', 'warning');
         return;
       }
-      
+
       const data = {
         exported: new Date().toISOString(),
         history: chatHistory,
@@ -1288,7 +1288,7 @@ Click "Generate Code" to create a ready-to-use example...
           modelsUsed: [...new Set(chatHistory.map(h => h.model))]
         }
       };
-      
+
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1296,7 +1296,7 @@ Click "Generate Code" to create a ready-to-use example...
       a.download = `chat-history-${new Date().toISOString().split('T')[0]}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      
+
       showNotification('History exported!', 'success');
       showQuickActions();
     }
@@ -1322,14 +1322,14 @@ Click "Generate Code" to create a ready-to-use example...
       try {
         const response = await fetch('/v1/models');
         const data = await response.json();
-        
+
         if (data.data && data.data.length > 0) {
           updateModelsDisplay(data.data);
           updateModelSelectors(data.data);
-          
+
           // Update models count in header
           document.getElementById('models-count').textContent = data.data.length;
-          
+
           // Update providers count
           const providers = new Set(data.data.map(model => {
             if (model.id.includes('openai') || model.id.includes('gpt')) return 'OpenAI';
@@ -1359,7 +1359,7 @@ Click "Generate Code" to create a ready-to-use example...
 
       models.forEach(model => {
         const modelCard = createModelCard(model);
-        
+
         if (model.id.includes('openai') || model.id.includes('gpt')) {
           openaiSection.appendChild(modelCard);
         } else if (model.id.includes('microsoft') || model.id.includes('Phi')) {
@@ -1373,16 +1373,16 @@ Click "Generate Code" to create a ready-to-use example...
     function createModelCard(model) {
       const card = document.createElement('div');
       card.className = 'model-card';
-      
+
       const name = model.id.split('/').pop() || model.id;
       const description = getModelDescription(model.id);
-      
+
       card.innerHTML = `
         <div class="model-name">${name}</div>
         <div class="model-description">${description}</div>
         <div class="model-id" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">${model.id}</div>
       `;
-      
+
       return card;
     }
 
@@ -1407,29 +1407,29 @@ Click "Generate Code" to create a ready-to-use example...
         'Mistral-Nemo': 'European excellence',
         'Mistral-Large-2407': 'Mistral flagship'
       };
-      
+
       return descriptions[modelId] || 'Advanced language model';
     }
 
     function updateModelSelectors(models) {
       const selectors = ['chatModel', 'playgroundModel', 'codeModel'];
-      
+
       selectors.forEach(selectorId => {
         const select = document.getElementById(selectorId);
         if (select) {
           // Keep current selection
           const currentValue = select.value;
-          
+
           // Clear and rebuild options
           select.innerHTML = '';
-          
+
           models.forEach(model => {
             const option = document.createElement('option');
             option.value = model.id;
             option.textContent = getModelDisplayName(model.id);
             select.appendChild(option);
           });
-          
+
           // Restore selection if still available
           if (currentValue && [...select.options].some(opt => opt.value === currentValue)) {
             select.value = currentValue;
@@ -1455,7 +1455,7 @@ Click "Generate Code" to create a ready-to-use example...
         'Mistral-Nemo': '🌟 Mistral Nemo',
         'Mistral-Large-2407': '🌟 Mistral Large'
       };
-      
+
       return displayNames[modelId] || `📝 ${modelId}`;
     }
 
@@ -1466,7 +1466,7 @@ Click "Generate Code" to create a ready-to-use example...
       checkServerStatus();
       loadSettings();
     });
-    
+
     // Load models and start checking status immediately
     loadModels();
     checkServerStatus();

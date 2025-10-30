@@ -12,10 +12,10 @@ from .self_healing_agent import SelfHealingAgent
 
 __all__ = [
     "AnomalyDetectionAgent",
-    "AutoImproveAgent", 
+    "AutoImproveAgent",
     "DatasetAgent",
     "ForecastAgent",
     "GraphAnalyticsAgent",
     "SecurityAgent",
-    "SelfHealingAgent"
+    "SelfHealingAgent",
 ]

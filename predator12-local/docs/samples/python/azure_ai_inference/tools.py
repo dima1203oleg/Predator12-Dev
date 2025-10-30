@@ -2,8 +2,9 @@
 for running specific actions depending on the context of the conversation.
 This sample demonstrates how to define a function tool and how to act on a request from the model to invoke it."""
 
-import os
 import json
+import os
+
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import (
     AssistantMessage,
@@ -26,7 +27,7 @@ endpoint = "https://models.github.ai/inference"
 # by modifying the value of `modelName` in the code below. For this code sample
 # you need a model supporting tools. The following compatible models are
 # available in the GitHub Models service:
-# 
+#
 # Cohere: Cohere-command-r, Cohere-command-r-plus
 # Mistral AI: Mistral-large, Mistral-large-2407, Mistral-Nemo, Mistral-small
 # Azure OpenAI: gpt-4o-mini, gpt-4o
@@ -36,6 +37,7 @@ client = ChatCompletionsClient(
     endpoint=endpoint,
     credential=AzureKeyCredential(token),
 )
+
 
 def get_flight_info(origin_city: str, destination_city: str):
     if origin_city == "Seattle" and destination_city == "Miami":
@@ -48,6 +50,7 @@ def get_flight_info(origin_city: str, destination_city: str):
             }
         )
     return json.dump({"error": "No flights found between the cities"})
+
 
 flight_info = ChatCompletionsToolDefinition(
     function=FunctionDefinition(
@@ -90,26 +93,19 @@ if response.choices[0].finish_reason == CompletionsFinishReason.TOOL_CALLS:
 
     messages.append(AssistantMessage(tool_calls=response.choices[0].message.tool_calls))
 
-    if (
-        response.choices[0].message.tool_calls
-        and len(response.choices[0].message.tool_calls) == 1
-    ):
+    if response.choices[0].message.tool_calls and len(response.choices[0].message.tool_calls) == 1:
 
         tool_call = response.choices[0].message.tool_calls[0]
 
         if isinstance(tool_call, ChatCompletionsToolCall):
 
             function_args = json.loads(tool_call.function.arguments.replace("'", '"'))
-            print(
-                f"Calling function `{tool_call.function.name}` with arguments {function_args}"
-            )
+            print(f"Calling function `{tool_call.function.name}` with arguments {function_args}")
             callable_func = locals()[tool_call.function.name]
             function_return = callable_func(**function_args)
             print(f"Function returned = {function_return}")
 
-            messages.append(
-                ToolMessage(tool_call_id=tool_call.id, content=function_return)
-            )
+            messages.append(ToolMessage(tool_call_id=tool_call.id, content=function_return))
 
             response = client.complete(
                 messages=messages,

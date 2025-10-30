@@ -2,6 +2,7 @@
 so that the first token shows up early and you avoid waiting for long responses."""
 
 import os
+
 from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
 

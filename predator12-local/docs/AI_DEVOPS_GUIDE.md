@@ -59,7 +59,7 @@ class BaseAgent:
         self.status = "starting"
         self.metrics = {}
         self.last_seen = None
-    
+
     async def register(self):
         """Register with agent management system."""
         async with aiohttp.ClientSession() as session:
@@ -71,7 +71,7 @@ class BaseAgent:
                     "status": self.status
                 }
             )
-    
+
     async def heartbeat(self):
         """Send periodic heartbeat."""
         while True:
@@ -85,7 +85,7 @@ class BaseAgent:
                     }
                 )
             await asyncio.sleep(30)
-    
+
     async def run(self):
         """Override in subclass."""
         raise NotImplementedError
@@ -175,7 +175,7 @@ class HealthChecker:
                     return {"status": "unhealthy", "code": resp.status}
         except Exception as e:
             return {"status": "error", "error": str(e)}
-    
+
     async def check_database(self) -> Dict:
         """Check database connectivity."""
         import asyncpg
@@ -186,7 +186,7 @@ class HealthChecker:
             return {"status": "healthy", "response": result}
         except Exception as e:
             return {"status": "error", "error": str(e)}
-    
+
     async def check_all(self) -> Dict[str, Dict]:
         """Check all services."""
         results = await asyncio.gather(
@@ -196,7 +196,7 @@ class HealthChecker:
             self.check_qdrant(),
             return_exceptions=True
         )
-        
+
         return {
             "backend": results[0],
             "database": results[1],
@@ -233,7 +233,7 @@ class MLAutoscaler:
         self.model = LinearRegression()
         self.scaler = StandardScaler()
         self.history = []
-    
+
     def collect_features(self, timestamp: datetime) -> np.ndarray:
         """Extract time-based features."""
         return np.array([
@@ -243,36 +243,36 @@ class MLAutoscaler:
             int(timestamp.weekday() >= 5),     # Is weekend
             int(9 <= timestamp.hour <= 17),    # Business hours
         ])
-    
+
     def train(self, historical_data: List[Dict]):
         """Train prediction model."""
         X = []
         y = []
-        
+
         for point in historical_data:
             features = self.collect_features(point['timestamp'])
             X.append(features)
             y.append(point['load'])
-        
+
         X = np.array(X)
         y = np.array(y)
-        
+
         X_scaled = self.scaler.fit_transform(X)
         self.model.fit(X_scaled, y)
-        
+
         # Save model
         joblib.dump(self.model, 'models/autoscale_model.pkl')
         joblib.dump(self.scaler, 'models/autoscale_scaler.pkl')
-    
+
     def predict(self, timestamp: datetime) -> float:
         """Predict load for given timestamp."""
         features = self.collect_features(timestamp)
         features_scaled = self.scaler.transform([features])
         predicted_load = self.model.predict(features_scaled)[0]
-        
+
         # Add safety margin
         return predicted_load * 1.15
-    
+
     def get_recommended_replicas(
         self,
         current_load: float,
@@ -282,10 +282,10 @@ class MLAutoscaler:
         """Calculate recommended replica count."""
         # Target: 70% CPU utilization per replica
         target_utilization = 0.7
-        
+
         # Calculate required replicas
         required = predicted_load / (target_utilization * current_load / current_replicas)
-        
+
         # Round up and clamp to limits
         return max(1, min(10, int(np.ceil(required))))
 ```
@@ -307,12 +307,12 @@ class AICodeReviewer:
         """Analyze Python file for issues."""
         with open(filepath) as f:
             code = f.read()
-        
+
         issues = []
-        
+
         try:
             tree = ast.parse(code)
-            
+
             # Check for common issues
             for node in ast.walk(tree):
                 # Too many arguments
@@ -323,7 +323,7 @@ class AICodeReviewer:
                             'line': node.lineno,
                             'message': f'Function {node.name} has too many arguments ({len(node.args.args)})'
                         })
-                
+
                 # Nested loops (potential O(n²))
                 if isinstance(node, ast.For):
                     for child in ast.walk(node):
@@ -333,7 +333,7 @@ class AICodeReviewer:
                                 'line': node.lineno,
                                 'message': 'Nested loops detected - consider optimization'
                             })
-                
+
                 # Bare except
                 if isinstance(node, ast.ExceptHandler):
                     if node.type is None:
@@ -342,30 +342,30 @@ class AICodeReviewer:
                             'line': node.lineno,
                             'message': 'Bare except clause - specify exception types'
                         })
-        
+
         except SyntaxError as e:
             issues.append({
                 'type': 'syntax',
                 'line': e.lineno,
                 'message': f'Syntax error: {e.msg}'
             })
-        
+
         return issues
-    
+
     def create_pr_comment(self, issues: List[Dict]) -> str:
         """Create GitHub PR comment."""
         if not issues:
             return "✅ **AI Code Review**: No issues found!"
-        
+
         comment = ["## 🤖 AI Code Review\n"]
-        
+
         grouped = {}
         for issue in issues:
             itype = issue['type']
             if itype not in grouped:
                 grouped[itype] = []
             grouped[itype].append(issue)
-        
+
         for itype, items in grouped.items():
             icon = {
                 'complexity': '🔴',
@@ -373,11 +373,11 @@ class AICodeReviewer:
                 'antipattern': '🟠',
                 'syntax': '❌'
             }.get(itype, '•')
-            
+
             comment.append(f"\n### {icon} {itype.upper()} ({len(items)} found)\n")
             for item in items:
                 comment.append(f"- Line {item['line']}: {item['message']}\n")
-        
+
         return "".join(comment)
 ```
 
@@ -397,7 +397,7 @@ class AdvancedQueryOptimizer:
     async def analyze_execution_plan(self, query: str) -> Dict:
         """Deep analysis of execution plan."""
         conn = await asyncpg.connect("postgresql://...")
-        
+
         # Get execution plan with all details
         plan = await conn.fetch(f"""
             EXPLAIN (
@@ -408,25 +408,25 @@ class AdvancedQueryOptimizer:
                 FORMAT JSON
             ) {query}
         """)
-        
+
         plan_json = plan[0]['QUERY PLAN'][0]
-        
+
         await conn.close()
-        
+
         return {
             'execution_time': plan_json['Execution Time'],
             'planning_time': plan_json['Planning Time'],
             'total_cost': plan_json['Plan']['Total Cost'],
             'plan_details': self.extract_bottlenecks(plan_json)
         }
-    
+
     def extract_bottlenecks(self, plan: Dict) -> List[Dict]:
         """Extract performance bottlenecks."""
         bottlenecks = []
-        
+
         def traverse(node, depth=0):
             node_type = node.get('Node Type', '')
-            
+
             # Sequential scans on large tables
             if node_type == 'Seq Scan':
                 rows = node.get('Plan Rows', 0)
@@ -438,7 +438,7 @@ class AdvancedQueryOptimizer:
                         'rows': rows,
                         'suggestion': f"Consider adding index on {node.get('Filter', 'WHERE clause')}"
                     })
-            
+
             # Nested loops on large datasets
             if node_type == 'Nested Loop':
                 outer_rows = node.get('Plans', [{}])[0].get('Actual Rows', 0)
@@ -449,18 +449,18 @@ class AdvancedQueryOptimizer:
                         'rows': outer_rows,
                         'suggestion': 'Consider using hash join instead'
                     })
-            
+
             # Recursive traversal
             for child in node.get('Plans', []):
                 traverse(child, depth + 1)
-        
+
         traverse(plan['Plan'])
         return bottlenecks
-    
+
     def generate_index_suggestions(self, bottlenecks: List[Dict]) -> List[str]:
         """Generate specific index creation commands."""
         suggestions = []
-        
+
         for bottleneck in bottlenecks:
             if bottleneck['type'] == 'seq_scan':
                 table = bottleneck['table']
@@ -471,7 +471,7 @@ class AdvancedQueryOptimizer:
                     f"CREATE INDEX CONCURRENTLY idx_{table}_optimized "
                     f"ON {table} USING btree (/* columns from WHERE clause */);\n"
                 )
-        
+
         return suggestions
 ```
 
@@ -496,25 +496,25 @@ from opentelemetry.instrumentation.redis import RedisInstrumentor
 
 def setup_telemetry(app):
     """Setup OpenTelemetry for FastAPI app."""
-    
+
     # Tracing
     trace_provider = TracerProvider()
     trace_exporter = OTLPSpanExporter(endpoint="http://otel-collector:4317")
     trace_provider.add_span_processor(BatchSpanProcessor(trace_exporter))
     trace.set_tracer_provider(trace_provider)
-    
+
     # Metrics
     metric_reader = PeriodicExportingMetricReader(
         OTLPMetricExporter(endpoint="http://otel-collector:4317")
     )
     meter_provider = MeterProvider(metric_readers=[metric_reader])
     metrics.set_meter_provider(meter_provider)
-    
+
     # Auto-instrumentation
     FastAPIInstrumentor.instrument_app(app)
     SQLAlchemyInstrumentor().instrument()
     RedisInstrumentor().instrument()
-    
+
     return trace.get_tracer(__name__), metrics.get_meter(__name__)
 ```
 
@@ -532,9 +532,9 @@ from datetime import datetime
 
 async def simulate_failure():
     """Simulate backend failure to test self-healing."""
-    
+
     print("🧪 Starting E2E rollout failure test...")
-    
+
     # Step 1: Trigger deployment with intentional error
     print("1️⃣ Triggering deployment...")
     async with aiohttp.ClientSession() as session:
@@ -542,15 +542,15 @@ async def simulate_failure():
             "http://backend:8000/api/admin/trigger-errors",
             json={"error_rate": 0.10}  # 10% error rate
         )
-    
+
     # Step 2: Wait for Argo Rollouts to detect
     print("2️⃣ Waiting for Argo Rollouts detection...")
     await asyncio.sleep(120)  # 2 minutes
-    
+
     # Step 3: Verify rollback occurred
     print("3️⃣ Verifying automatic rollback...")
     rollout_status = await check_rollout_status()
-    
+
     if rollout_status["phase"] == "Degraded":
         print("✅ Test PASSED: Rollback detected!")
         return True
@@ -599,12 +599,12 @@ rules:
   - apiGroups: [""]
     resources: ["pods", "pods/log"]
     verbs: ["get", "list", "watch"]
-  
+
   # Read metrics
   - apiGroups: ["metrics.k8s.io"]
     resources: ["pods"]
     verbs: ["get", "list"]
-  
+
   # NO access to secrets
   - apiGroups: [""]
     resources: ["secrets"]

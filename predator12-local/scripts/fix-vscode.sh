@@ -263,7 +263,7 @@ if command -v python3 &> /dev/null; then
     else
         error "settings.json має помилки синтаксису!"
     fi
-    
+
     if python3 -m json.tool "$VSCODE_DIR/launch.json" > /dev/null 2>&1; then
         success "launch.json валідний"
     else

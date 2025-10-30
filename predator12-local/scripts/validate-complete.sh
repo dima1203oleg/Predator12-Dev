@@ -39,7 +39,7 @@ echo -e "${BLUE}📋 Configuration validation...${NC}"
 test -f docker-compose.yml
 check_result $? "docker-compose.yml exists and valid"
 
-test -f Makefile  
+test -f Makefile
 check_result $? "Makefile exists"
 
 test -f backend/requirements.txt
@@ -74,7 +74,7 @@ simulate_check "Keycloak identity management ready"
 
 echo -e "\n${BLUE}🤖 Agent system validation...${NC}"
 simulate_check "SupervisorAgent orchestration ready"
-simulate_check "DatasetAgent processing configured" 
+simulate_check "DatasetAgent processing configured"
 simulate_check "AnomalyAgent ML detection setup"
 simulate_check "ForecastAgent time series ready"
 simulate_check "GraphAgent network analysis configured"
@@ -100,7 +100,7 @@ simulate_check "Performance tracking ready"
 
 echo -e "\n${BLUE}🚀 Deployment readiness...${NC}"
 simulate_check "Development environment ready"
-simulate_check "Staging deployment configured"  
+simulate_check "Staging deployment configured"
 simulate_check "Production deployment validated"
 simulate_check "CI/CD pipeline operational"
 simulate_check "Auto-scaling configured"
@@ -139,7 +139,7 @@ if [ $success_count -eq $total_checks ]; then
     echo -e "${BLUE}🚀 Deployment commands ready:${NC}"
     echo "  📚 Validation:    make validate"
     echo "  🛠️  Development:   make dev-up"
-    echo "  🧪 Staging:       make staging-deploy" 
+    echo "  🧪 Staging:       make staging-deploy"
     echo "  🚀 Production:    make final-deploy"
     echo "  📊 Data Import:   make import-data"
     echo "  🔍 Health Check:  make status-full"

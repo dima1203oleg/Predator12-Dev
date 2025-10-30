@@ -1,0 +1,213 @@
+# Global configuration
+global:
+  domain: predator-analytics.local
+  environment: production
+
+  # Image registry
+  imageRegistry: docker.io
+  imagePullSecrets: []
+
+  # Storage class
+  storageClass: standard
+
+  # Security
+  enableRBAC: true
+  enablePSP: false
+
+  # Monitoring
+  monitoring:
+    enabled: true
+    prometheus:
+      enabled: true
+      serviceMonitor: true
+    grafana:
+      enabled: true
+
+# Backend service
+backend:
+  enabled: true
+  replicaCount: 3
+
+  image:
+    repository: predator-analytics/backend
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 8000
+
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - host: api.predator-analytics.local
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: api-tls
+        hosts:
+          - api.predator-analytics.local
+
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+
+  env:
+    - name: DEBUG
+      value: "false"
+    - name: DB_HOST
+      value: "{{ .Release.Name }}-postgresql"
+    - name: REDIS_HOST
+      value: "{{ .Release.Name }}-redis-master"
+
+# Frontend service
+frontend:
+  enabled: true
+  replicaCount: 2
+
+  image:
+    repository: predator-analytics/frontend
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 3000
+
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - host: predator-analytics.local
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: frontend-tls
+        hosts:
+          - predator-analytics.local
+
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+
+# Arbiter Agent
+arbiter-agent:
+  enabled: true
+  replicaCount: 2
+
+  image:
+    repository: predator-analytics/arbiter-agent
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+# Dataset Inspector Agent
+dataset-inspector-agent:
+  enabled: true
+  replicaCount: 2
+
+  image:
+    repository: predator-analytics/dataset-inspector-agent
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+# Redis configuration
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: true
+    existingSecret: redis-secret
+    existingSecretPasswordKey: password
+
+  master:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 512Mi
+
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: standard
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  auth:
+    username: predator
+    database: predator_analytics
+    existingSecret: postgresql-secret
+
+  primary:
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+
+    persistence:
+      enabled: true
+      size: 50Gi
+      storageClass: standard
+
+# Qdrant Vector DB
+qdrant:
+  enabled: true
+  replicaCount: 1
+
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+
+  persistence:
+    size: 100Gi
+    storageClass: standard

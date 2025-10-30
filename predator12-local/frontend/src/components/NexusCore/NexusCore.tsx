@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Box, AppBar, Toolbar, Typography, IconButton, Fab, Dialog, DialogContent } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   Dashboard as DashboardIcon,
   Psychology as AIIcon,
   Storage as DataIcon,
@@ -72,10 +72,10 @@ export const NexusCore: React.FC = () => {
   };
 
   return (
-    <Box sx={{ 
-      height: '100vh', 
-      display: 'flex', 
-      background: `linear-gradient(135deg, ${nexusColors.void} 0%, ${nexusColors.obsidian} 30%, #ff006650 60%, ${nexusColors.darkMatter} 100%)`, 
+    <Box sx={{
+      height: '100vh',
+      display: 'flex',
+      background: `linear-gradient(135deg, ${nexusColors.void} 0%, ${nexusColors.obsidian} 30%, #ff006650 60%, ${nexusColors.darkMatter} 100%)`,
       overflow: 'hidden',
       border: '5px solid #00ff00',
       boxShadow: 'inset 0 0 50px #ff00ff'
@@ -97,7 +97,7 @@ export const NexusCore: React.FC = () => {
       <NexusSidebar open={sidebarOpen} modules={nexusModules} activeModule={activeModule} onModuleSelect={setActiveModule} />
 
       <Box component="main" sx={{ flexGrow: 1, pt: 8, pl: sidebarOpen ? '280px' : '80px', transition: 'padding-left 0.3s ease', height: '100vh', overflow: 'hidden', position: 'relative' }}>
-        
+
         {/* ТЕСТ - ЦЕ ПОВИННО БУТИ ВИДНО! */}
         <Box sx={{
           position: 'absolute',
@@ -122,7 +122,7 @@ export const NexusCore: React.FC = () => {
 
         {/* Cosmic Dust Background - CSS Version */}
         <CSSCosmicDust particleCount={50} />
-        
+
         <AnimatePresence mode="wait">
           <motion.div key={activeModule} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} style={{ height: '100%' }}>
             {renderModule()}

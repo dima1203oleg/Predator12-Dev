@@ -77,7 +77,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
   onShowLogs
 }) => {
   const { t } = useI18n();
-  
+
   // State
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
@@ -86,20 +86,20 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
   const [sttEnabled, setSttEnabled] = useState(true); // Включено за замовчуванням
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  
+
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const speechSynthesis = useRef<SpeechSynthesis | null>(null);
   const speechRecognition = useRef<any>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  
+
   // Initialize speech services
   useEffect(() => {
     // TTS
     if ('speechSynthesis' in window) {
       speechSynthesis.current = window.speechSynthesis;
     }
-    
+
     // STT
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
@@ -107,7 +107,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
       speechRecognition.current.continuous = false;
       speechRecognition.current.interimResults = false;
       speechRecognition.current.lang = t('guide.speechLang', 'uk-UA');
-      
+
       speechRecognition.current.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
         setInputText(transcript);
@@ -115,58 +115,58 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
         // Auto-send voice input
         handleSendMessage(transcript);
       };
-      
+
       speechRecognition.current.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
       };
-      
+
       speechRecognition.current.onend = () => {
         setIsListening(false);
       };
     }
   }, [t]);
-  
+
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-  
+
   // Initialize welcome message
   useEffect(() => {
     if (open && messages.length === 0) {
       const welcomeMessage = generateWelcomeMessage();
       setMessages([welcomeMessage]);
-      
+
       if (ttsEnabled) {
         speak(welcomeMessage.text);
       }
     }
   }, [open, messages.length, currentModule, systemHealth, ttsEnabled]);
-  
+
   // TTS functionality
   const speak = useCallback((text: string) => {
     if (!ttsEnabled || !speechSynthesis.current) return;
-    
+
     speechSynthesis.current.cancel();
-    
+
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = t('guide.speechLang', 'uk-UA');
     utterance.rate = 0.9;
     utterance.pitch = 1.0;
     utterance.volume = 0.8;
-    
+
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
-    
+
     speechSynthesis.current.speak(utterance);
   }, [ttsEnabled, t]);
-  
+
   // STT functionality
   const startListening = useCallback(() => {
     if (!sttEnabled || !speechRecognition.current || isListening) return;
-    
+
     try {
       setIsListening(true);
       speechRecognition.current.start();
@@ -175,7 +175,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
       setIsListening(false);
     }
   }, [sttEnabled, isListening]);
-  
+
   // Stop listening
   const stopListening = useCallback(() => {
     if (speechRecognition.current && isListening) {
@@ -183,17 +183,17 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
       setIsListening(false);
     }
   }, [isListening]);
-  
+
   // Generate contextual responses using AI models
   const generateResponse = useCallback(async (userInput: string): Promise<ChatMessage> => {
     const lowerInput = userInput.toLowerCase();
     const messageId = Date.now().toString();
-    
+
     // Спроба використати AI модель для відповіді
     try {
       const agentsAPI = await import('../../services/agentsAPI');
       const response = await agentsAPI.default.processWithMultiLevelFeedback(
-        'quick-agent', 
+        'quick-agent',
         {
           type: 'chat_response',
           input: userInput,
@@ -204,7 +204,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
           }
         }
       );
-      
+
       if (response && response.content) {
         // Успішна відповідь від AI
         const aiMessage: ChatMessage = {
@@ -214,17 +214,17 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
           timestamp: new Date(),
           emotion: 'happy'
         };
-        
+
         if (ttsEnabled) {
           speak(response.content);
         }
-        
+
         return aiMessage;
       }
     } catch (error) {
       console.warn('AI response failed, using fallback:', error);
     }
-    
+
     // Fallback до статичних відповідей
     // Navigation requests
     if (lowerInput.includes('показати') && lowerInput.includes('модул')) {
@@ -241,17 +241,17 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
         ]
       };
     }
-    
+
     // System health requests
     if (lowerInput.includes('статус') || lowerInput.includes('стан') || lowerInput.includes('здоров\'я')) {
-      const healthMessage = systemHealth === 'optimal' 
+      const healthMessage = systemHealth === 'optimal'
         ? t('guide.responses.healthOptimal', 'Система працює нормально. Всі компоненти функціонують штатно.')
         : systemHealth === 'degraded'
         ? t('guide.responses.healthDegraded', 'Виявлено деградацію продуктивності. Рекомендую перевірити логи.')
         : systemHealth === 'critical'
         ? t('guide.responses.healthCritical', 'КРИТИЧНИЙ стан! Потрібне негайне втручання.')
         : t('guide.responses.healthUnknown', 'Статус системи невідомий. Перевіряю зв\'язок з моніторингом...');
-        
+
       return {
         id: messageId,
         text: healthMessage,
@@ -264,7 +264,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
         ] : []
       };
     }
-    
+
     // Help requests
     if (lowerInput.includes('допомога') || lowerInput.includes('help') || lowerInput.includes('як')) {
       return {
@@ -280,7 +280,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
         ]
       };
     }
-    
+
     // Agents requests
     if (lowerInput.includes('агент') || lowerInput.includes('мас') || lowerInput.includes('ai')) {
       return {
@@ -295,7 +295,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
         ]
       };
     }
-    
+
     // Default response
     return {
       id: messageId,
@@ -308,17 +308,17 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
       ]
     };
   }, [currentModule, systemHealth, onNavigate, onHealthCheck, onShowLogs, t]);
-  
+
   // Generate welcome message
   const generateWelcomeMessage = useCallback((): ChatMessage => {
-    const contextMessage = systemHealth === 'optimal' 
+    const contextMessage = systemHealth === 'optimal'
       ? t('guide.welcome.optimal', `Привіт! Я ваш AI-гід. Система працює нормально, модуль "${currentModule}" готовий до роботи.`)
       : systemHealth === 'critical'
       ? t('guide.welcome.critical', 'Привіт! Виявлено критичні проблеми в системі. Чим можу допомогти?')
       : systemHealth === 'degraded'
       ? t('guide.welcome.degraded', 'Привіт! Система працює з обмеженнями. Рекомендую перевірити стан компонентів.')
       : t('guide.welcome.unknown', 'Привіт! Статус системи невідомий. Перевіряю зв\'язок з компонентами...');
-      
+
     return {
       id: 'welcome',
       text: contextMessage,
@@ -332,12 +332,12 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
       ]
     };
   }, [currentModule, systemHealth, t]);
-  
+
   // Handle sending messages
   const handleSendMessage = useCallback((text?: string) => {
     const messageText = text || inputText.trim();
     if (!messageText) return;
-    
+
     // Add user message
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -345,26 +345,26 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
       type: 'user',
       timestamp: new Date()
     };
-    
+
     setMessages(prev => [...prev, userMessage]);
     setInputText('');
-    
+
     // Show typing indicator
     setIsTyping(true);
-    
+
     // Simulate processing delay
     setTimeout(() => {
       const response = generateResponse(messageText);
       setMessages(prev => [...prev, response]);
       setIsTyping(false);
-      
+
       // Auto-speak response
       if (ttsEnabled && response.type === 'guide') {
         speak(response.text);
       }
     }, 1000 + Math.random() * 1000); // 1-2 second delay
   }, [inputText, generateResponse, ttsEnabled, speak]);
-  
+
   // Handle key press
   const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -372,21 +372,21 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
       handleSendMessage();
     }
   }, [handleSendMessage]);
-  
+
   // Quick action buttons
   const quickActions = [
-    { 
-      label: t('guide.quick.modules', 'Модулі'), 
+    {
+      label: t('guide.quick.modules', 'Модулі'),
       action: () => handleSendMessage('показати модулі'),
       icon: <NavIcon fontSize="small" />
     },
-    { 
-      label: t('guide.quick.status', 'Статус'), 
+    {
+      label: t('guide.quick.status', 'Статус'),
       action: () => handleSendMessage('статус системи'),
       icon: <RefreshIcon fontSize="small" />
     },
-    { 
-      label: t('guide.quick.help', 'Допомога'), 
+    {
+      label: t('guide.quick.help', 'Допомога'),
       action: () => handleSendMessage('допомога'),
       icon: <HelpIcon fontSize="small" />
     }
@@ -409,16 +409,17 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
         }
       }}
     >
-      <DialogTitle sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
+      <DialogTitle sx={{
+        display: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
         background: `linear-gradient(90deg, ${nexusColors.quantum}20, transparent)`,
         borderBottom: `1px solid ${nexusColors.quantum}`
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Box sx={{ position: 'relative' }}>
-            <div/* HolographicAIFace
+            {/*
+            <HolographicAIFace
               isActive={true}
               isSpeaking={isSpeaking}
               emotion={systemHealth === 'optimal' ? 'success' : systemHealth === 'critical' ? 'error' : 'neutral'}
@@ -427,6 +428,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
               enableAura={false}
               enableDataStream={false}
             />
+            */}
           </Box>
           <Box>
             <Typography variant="h6" sx={{ color: nexusColors.frost, fontFamily: 'Orbitron' }}>
@@ -437,7 +439,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
             </Typography>
           </Box>
         </Box>
-        
+
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           {/* Voice controls */}
           <Tooltip title={ttsEnabled ? t('guide.tts.disable', 'Вимкнути озвучування') : t('guide.tts.enable', 'Увімкнути озвучування')}>
@@ -448,7 +450,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
               {ttsEnabled ? <VolumeIcon /> : <VolumeOffIcon />}
             </IconButton>
           </Tooltip>
-          
+
           <Tooltip title={sttEnabled ? t('guide.stt.disable', 'Вимкнути голосовий ввід') : t('guide.stt.enable', 'Увімкнути голосовий ввід')}>
             <IconButton
               onClick={() => setSttEnabled(!sttEnabled)}
@@ -457,18 +459,18 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
               {sttEnabled ? <MicIcon /> : <MicOffIcon />}
             </IconButton>
           </Tooltip>
-          
+
           <IconButton onClick={onClose} sx={{ color: nexusColors.shadow }}>
             <CloseIcon />
           </IconButton>
         </Box>
       </DialogTitle>
-      
+
       <DialogContent sx={{ p: 0, display: 'flex', flexDirection: 'column', height: 400 }}>
         {/* Messages area */}
-        <Box sx={{ 
-          flex: 1, 
-          overflow: 'auto', 
+        <Box sx={{
+          flex: 1,
+          overflow: 'auto',
           p: 2,
           display: 'flex',
           flexDirection: 'column',
@@ -486,7 +488,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
                 <Paper
                   sx={{
                     p: 2,
-                    background: message.type === 'user' 
+                    background: message.type === 'user'
                       ? `linear-gradient(135deg, ${nexusColors.sapphire}30, ${nexusColors.quantum}20)`
                       : `linear-gradient(135deg, ${nexusColors.quantum}20, ${nexusColors.obsidian}40)`,
                     border: `1px solid ${message.type === 'user' ? nexusColors.sapphire : nexusColors.quantum}`,
@@ -499,7 +501,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
                   <Typography variant="body2" sx={{ color: nexusColors.frost, mb: 1 }}>
                     {message.text}
                   </Typography>
-                  
+
                   {message.actions && message.actions.length > 0 && (
                     <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
                       {message.actions.map((action, actionIndex) => (
@@ -517,9 +519,9 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
                       ))}
                     </Stack>
                   )}
-                  
-                  <Typography variant="caption" sx={{ 
-                    color: nexusColors.shadow, 
+
+                  <Typography variant="caption" sx={{
+                    color: nexusColors.shadow,
                     display: 'block',
                     mt: 1,
                     textAlign: message.type === 'user' ? 'right' : 'left'
@@ -530,7 +532,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
               </motion.div>
             ))}
           </AnimatePresence>
-          
+
           {/* Typing indicator */}
           <AnimatePresence>
             {isTyping && (
@@ -539,9 +541,9 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
               >
-                <Paper sx={{ 
-                  p: 2, 
-                  alignSelf: 'flex-start', 
+                <Paper sx={{
+                  p: 2,
+                  alignSelf: 'flex-start',
                   background: `${nexusColors.quantum}20`,
                   border: `1px solid ${nexusColors.quantum}`,
                   borderRadius: 2,
@@ -557,10 +559,10 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
               </motion.div>
             )}
           </AnimatePresence>
-          
+
           <div ref={messagesEndRef} />
         </Box>
-        
+
         {/* Quick actions */}
         <Box sx={{ p: 2, borderTop: `1px solid ${nexusColors.quantum}30` }}>
           <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
@@ -584,9 +586,9 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
           </Stack>
         </Box>
       </DialogContent>
-      
-      <DialogActions sx={{ 
-        p: 2, 
+
+      <DialogActions sx={{
+        p: 2,
         background: `linear-gradient(90deg, transparent, ${nexusColors.quantum}10)`,
         borderTop: `1px solid ${nexusColors.quantum}`
       }}>
@@ -618,13 +620,13 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
               }
             }}
           />
-          
+
           {sttEnabled && (
             <Tooltip title={isListening ? t('guide.stt.stop', 'Зупинити прослуховування') : t('guide.stt.start', 'Почати прослуховування')}>
               <IconButton
                 onClick={isListening ? stopListening : startListening}
                 disabled={isTyping}
-                sx={{ 
+                sx={{
                   color: isListening ? nexusColors.crimson : nexusColors.sapphire,
                   backgroundColor: isListening ? `${nexusColors.crimson}20` : `${nexusColors.sapphire}20`
                 }}
@@ -633,7 +635,7 @@ const EnhancedContextualChat: React.FC<EnhancedContextualChatProps> = ({
               </IconButton>
             </Tooltip>
           )}
-          
+
           <Tooltip title={t('guide.send', 'Відправити повідомлення')}>
             <IconButton
               onClick={() => handleSendMessage()}

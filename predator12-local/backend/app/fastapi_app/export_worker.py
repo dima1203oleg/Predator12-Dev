@@ -191,7 +191,9 @@ class ExportWorkerManager:
             # Store request in Redis
             request_key = f"export_request:{request.request_id}"
             await self.redis.setex(
-                request_key, 86400, json.dumps(asdict(request), default=str)  # 24 hours TTL
+                request_key,
+                86400,
+                json.dumps(asdict(request), default=str),  # 24 hours TTL
             )
 
             # Submit Celery task
@@ -215,8 +217,8 @@ class ExportWorkerManager:
             result = await session.execute(
                 text(
                     """
-                    SELECT id, row_count, size_mb 
-                    FROM datasets 
+                    SELECT id, row_count, size_mb
+                    FROM datasets
                     WHERE id = :dataset_id AND user_id = :user_id
                 """
                 ),
@@ -294,7 +296,9 @@ class ExportWorkerManager:
 
             # Cache result for faster retrieval
             await self.redis.setex(
-                result_key, 3600, json.dumps(asdict(result), default=str)  # 1 hour cache
+                result_key,
+                3600,
+                json.dumps(asdict(result), default=str),  # 1 hour cache
             )
 
             return result
@@ -567,7 +571,11 @@ async def _generate_export_file(
 
         file_size = file_path.stat().st_size
 
-        return {"file_path": filename, "local_path": str(file_path), "file_size": file_size}
+        return {
+            "file_path": filename,
+            "local_path": str(file_path),
+            "file_size": file_size,
+        }
 
     except Exception as e:
         logger.error(f"Error generating export file: {e}")
@@ -579,7 +587,9 @@ async def _upload_to_storage(export_worker, file_info):
     try:
         if export_worker.minio_client:
             export_worker.minio_client.fput_object(
-                export_worker.export_bucket, file_info["file_path"], file_info["local_path"]
+                export_worker.export_bucket,
+                file_info["file_path"],
+                file_info["local_path"],
             )
 
             # Delete local file after upload
@@ -600,7 +610,10 @@ def get_export_worker() -> Optional[ExportWorkerManager]:
 
 
 def initialize_export_worker(
-    redis_client: aioredis.Redis, db_session_factory, minio_client=None, billing_manager=None
+    redis_client: aioredis.Redis,
+    db_session_factory,
+    minio_client=None,
+    billing_manager=None,
 ):
     """Initialize global export worker."""
     global export_worker

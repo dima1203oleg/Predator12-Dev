@@ -28,9 +28,9 @@ check_http_endpoint() {
     local url=$2
     local expected_status=${3:-200}
     local timeout=${4:-$TIMEOUT}
-    
+
     echo -n "[$name] "
-    
+
     if response=$(curl -s -w "%{http_code}" -m "$timeout" "$url" 2>/dev/null); then
         status_code="${response: -3}"
         if [ "$status_code" = "$expected_status" ]; then
@@ -52,9 +52,9 @@ check_tcp_port() {
     local host=$2
     local port=$3
     local timeout=${4:-$TIMEOUT}
-    
+
     echo -n "[$name] "
-    
+
     if timeout "$timeout" bash -c "</dev/tcp/$host/$port" 2>/dev/null; then
         echo -e "${GREEN}✅ Reachable${NC} ($host:$port)"
         return 0
@@ -67,7 +67,7 @@ check_tcp_port() {
 # Function to check container status
 check_container_status() {
     local service_name=$1
-    
+
     if docker-compose -f "$COMPOSE_FILE" ps "$service_name" | grep -q "Up"; then
         echo -e "[$service_name] ${GREEN}✅ Running${NC}"
         return 0
@@ -80,7 +80,7 @@ check_container_status() {
 # Function to get container resource usage
 get_container_resources() {
     local service_name=$1
-    
+
     if docker-compose -f "$COMPOSE_FILE" ps -q "$service_name" >/dev/null 2>&1; then
         container_id=$(docker-compose -f "$COMPOSE_FILE" ps -q "$service_name")
         if [ -n "$container_id" ]; then
@@ -279,7 +279,7 @@ if command -v uptime &> /dev/null; then
     load_avg=$(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}' | sed 's/,//')
     cpu_cores=$(nproc 2>/dev/null || echo "1")
     load_percentage=$(echo "$load_avg * 100 / $cpu_cores" | bc -l 2>/dev/null | cut -d. -f1)
-    
+
     if [ "$load_percentage" -lt 70 ]; then
         echo -e "${GREEN}✅ OK${NC} (${load_avg} avg, ${cpu_cores} cores)"
     elif [ "$load_percentage" -lt 90 ]; then

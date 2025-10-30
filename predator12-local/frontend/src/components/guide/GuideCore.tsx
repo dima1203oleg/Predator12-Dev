@@ -86,12 +86,12 @@ const GuideCore: React.FC<GuideCoreProps> = ({
   // Performance monitoring
   const monitorPerformance = useCallback(() => {
     const start = performance.now();
-    
+
     frameRef.current = requestAnimationFrame(() => {
       const end = performance.now();
       performanceRef.current.frameTime = end - start;
       performanceRef.current.fps = Math.round(1000 / (end - start));
-      
+
       // Auto-adjust performance mode
       if (performanceRef.current.fps < 30 && guideState.performanceMode !== 'low') {
         setGuideState(prev => ({ ...prev, performanceMode: 'low' }));
@@ -102,7 +102,7 @@ const GuideCore: React.FC<GuideCoreProps> = ({
           'warn'
         );
       }
-      
+
       monitorPerformance();
     });
   }, [guideState.performanceMode, addEvent, t]);
@@ -119,12 +119,12 @@ const GuideCore: React.FC<GuideCoreProps> = ({
   // Collision detection with UI elements
   const checkCollisions = useCallback(() => {
     if (!dragRef.current) return;
-    
+
     const guideRect = dragRef.current.getBoundingClientRect();
     const criticalElements = avoidanceSelectors
       .flatMap(selector => Array.from(document.querySelectorAll(selector)))
       .filter((element): element is Element => !!element && element !== dragRef.current);
-    
+
     criticalElements.forEach(element => {
       const rect = element.getBoundingClientRect();
       const isColliding = !(
@@ -133,7 +133,7 @@ const GuideCore: React.FC<GuideCoreProps> = ({
         guideRect.bottom < rect.top ||
         guideRect.top > rect.bottom
       );
-      
+
       if (isColliding) {
         // Auto-reposition to avoid collision
         const newX = rect.right + 10;
@@ -169,7 +169,7 @@ const GuideCore: React.FC<GuideCoreProps> = ({
         t('guide.hints.etl.logs')
       ]
     };
-    
+
     setGuideState(prev => ({
       ...prev,
       contextualHints: hints[context] || []
@@ -245,7 +245,7 @@ const GuideCore: React.FC<GuideCoreProps> = ({
       'minimize_guide': () => setGuideState(prev => ({ ...prev, isMinimized: true })),
       'show_help': () => setGuideState(prev => ({ ...prev, showChat: true }))
     };
-    
+
     const action = commands[command.toLowerCase().replace(/\s+/g, '_')];
     if (action) {
       action();
@@ -281,8 +281,8 @@ const GuideCore: React.FC<GuideCoreProps> = ({
       <motion.div
         className="guide-container bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl"
         initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ 
-          opacity: 1, 
+        animate={{
+          opacity: 1,
           scale: guideState.isMinimized ? 0.7 : 1,
           height: guideState.isMinimized ? 80 : 'auto'
         }}
@@ -300,7 +300,7 @@ const GuideCore: React.FC<GuideCoreProps> = ({
               {t('guide.title')}
             </span>
           </div>
-          
+
           <div className="flex items-center space-x-1">
             <button
               onClick={toggleChat}
@@ -309,7 +309,7 @@ const GuideCore: React.FC<GuideCoreProps> = ({
             >
               <MessageCircle size={16} />
             </button>
-            
+
             <button
               onClick={toggleSettings}
               className="p-1 text-slate-400 hover:text-slate-200 transition-colors"
@@ -317,7 +317,7 @@ const GuideCore: React.FC<GuideCoreProps> = ({
             >
               <Settings size={16} />
             </button>
-            
+
             <button
               onClick={toggleMinimize}
               className="p-1 text-slate-400 hover:text-slate-200 transition-colors"

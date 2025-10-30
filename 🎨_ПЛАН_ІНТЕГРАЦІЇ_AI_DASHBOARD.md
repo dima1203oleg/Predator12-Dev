@@ -446,9 +446,9 @@ export interface AIModel {
 2. ✅ Інтегрувати в main.tsx:
    ```tsx
    import { AIAgentsSection } from './components/ai/AIAgentsSection';
-   
+
    // В Dashboard компоненті
-   <AIAgentsSection 
+   <AIAgentsSection
      agents={aiAgents}
      models={aiModels}
    />
@@ -524,16 +524,16 @@ export interface AIModel {
 1. ✅ Connect to backend:
    ```typescript
    // /frontend/src/api/agentsApi.ts
-   
+
    export const agentsApi = {
      getAll: () => fetch('/api/agents'),
      getById: (id: string) => fetch(`/api/agents/${id}`),
-     execute: (id: string, task: any) => 
+     execute: (id: string, task: any) =>
        fetch(`/api/agents/${id}/execute`, {
          method: 'POST',
          body: JSON.stringify(task)
        }),
-     getMetrics: (id: string) => 
+     getMetrics: (id: string) =>
        fetch(`/api/agents/${id}/metrics`)
    };
    ```
@@ -541,9 +541,9 @@ export interface AIModel {
 2. ✅ WebSocket для real-time:
    ```typescript
    // /frontend/src/api/websocketClient.ts
-   
+
    const ws = new WebSocket('ws://localhost:8000/ws');
-   
+
    ws.onmessage = (event) => {
      const data = JSON.parse(event.data);
      if (data.type === 'agent_metrics') {

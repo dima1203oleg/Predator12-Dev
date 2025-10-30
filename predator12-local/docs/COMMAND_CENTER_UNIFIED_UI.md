@@ -82,7 +82,7 @@ import { useStore } from '@/store/dashboardStore';
 
 export function Dashboard() {
   const { mode, data, filters } = useStore();
-  
+
   return (
     <div className="dashboard-container">
       {/* Header with Controls */}
@@ -92,14 +92,14 @@ export function Dashboard() {
         <FilterPanel />
         <ExportButton />
       </DashboardHeader>
-      
+
       {/* Main Visualization */}
       {mode === '3d' ? (
         <Dashboard3D data={data} filters={filters} />
       ) : (
         <Dashboard2D data={data} filters={filters} />
       )}
-      
+
       {/* Legend */}
       <Legend items={[
         { color: 'red', label: 'High Risk' },
@@ -135,19 +135,19 @@ import { AnomalyCard } from './AnomalyCard';
 export function DataFeed() {
   const [anomalies, setAnomalies] = useState<Anomaly[]>([]);
   const socket = useWebSocket('/ws/feed');
-  
+
   useEffect(() => {
     socket.on('anomaly:new', (anomaly: Anomaly) => {
       setAnomalies(prev => [anomaly, ...prev].slice(0, 100));
     });
-    
+
     socket.on('anomaly:updated', (update) => {
-      setAnomalies(prev => 
+      setAnomalies(prev =>
         prev.map(a => a.id === update.id ? { ...a, ...update } : a)
       );
     });
   }, [socket]);
-  
+
   return (
     <div className="feed-container infinite-scroll">
       {anomalies.map(anomaly => (
@@ -175,25 +175,25 @@ function AnomalyCard({ anomaly, onDrillDown, onDismiss, onEscalate }) {
           {anomaly.riskLevel}
         </span>
       </div>
-      
+
       {/* Content */}
       <h3>{anomaly.title}</h3>
       <p>{anomaly.description}</p>
-      
+
       {/* Evidence Chips */}
       <div className="evidence-chips">
         {anomaly.evidence.map(e => (
           <Chip key={e.id} label={e.type} onClick={() => viewEvidence(e)} />
         ))}
       </div>
-      
+
       {/* Actions */}
       <div className="card-actions">
         <Button onClick={onDrillDown}>🔍 Drill Down</Button>
         <Button onClick={onDismiss}>✖️ Dismiss</Button>
         <Button onClick={onEscalate}>⚠️ Escalate</Button>
       </div>
-      
+
       {/* Stats */}
       <div className="stats">
         <span>Confidence: {anomaly.confidence}%</span>
@@ -232,15 +232,15 @@ export function AITerminal() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { sendMessage, uploadFile } = useChat();
-  
+
   const handleSubmit = async () => {
     if (!input.trim()) return;
-    
+
     const userMessage = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
-    
+
     try {
       const response = await sendMessage({
         query: input,
@@ -248,14 +248,14 @@ export function AITerminal() {
         rag_enabled: true,
         history: messages.slice(-5)
       });
-      
+
       const assistantMessage = {
         role: 'assistant',
         content: response.message,
         sources: response.sources,
         visualizations: response.visualizations
       };
-      
+
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Chat error:', error);
@@ -267,10 +267,10 @@ export function AITerminal() {
       setIsLoading(false);
     }
   };
-  
+
   const handleFileUpload = async (file: File) => {
     setIsLoading(true);
-    
+
     try {
       const result = await uploadFile(file);
       setMessages(prev => [...prev, {
@@ -286,11 +286,11 @@ export function AITerminal() {
       setIsLoading(false);
     }
   };
-  
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-  
+
   return (
     <div className="ai-terminal">
       {/* Message History */}
@@ -301,7 +301,7 @@ export function AITerminal() {
         {isLoading && <LoadingIndicator />}
         <div ref={messagesEndRef} />
       </div>
-      
+
       {/* Input Area */}
       <div className="input-area">
         <FileUpload onUpload={handleFileUpload} />
@@ -321,7 +321,7 @@ export function AITerminal() {
           {isLoading ? '⏳' : '📤'} Send
         </button>
       </div>
-      
+
       {/* Suggestions */}
       <div className="suggestions">
         <button onClick={() => setInput('Show top anomalies this week')}>
@@ -344,12 +344,12 @@ function MessageBubble({ message }) {
     <div className={`message ${message.role}`}>
       <div className="message-content">
         <ReactMarkdown>{message.content}</ReactMarkdown>
-        
+
         {/* Visualizations */}
         {message.visualizations?.map(viz => (
           <PlotlyChart key={viz.id} data={viz.data} layout={viz.layout} />
         ))}
-        
+
         {/* Sources */}
         {message.sources && (
           <div className="sources">
@@ -393,22 +393,22 @@ export function AnalyticsDeck() {
   const [dashboards, setDashboards] = useState([]);
   const [selectedDashboard, setSelectedDashboard] = useState(null);
   const [filters, setFilters] = useState({});
-  
+
   useEffect(() => {
     loadDashboards();
   }, []);
-  
+
   const loadDashboards = async () => {
     const response = await fetch('/api/v1/analytics/dashboards');
     const data = await response.json();
     setDashboards(data.dashboards);
     setSelectedDashboard(data.dashboards[0]);
   };
-  
-  const embedUrl = selectedDashboard 
+
+  const embedUrl = selectedDashboard
     ? `${process.env.OPENSEARCH_URL}/app/dashboards#/view/${selectedDashboard.id}?embed=true&_g=${encodeFilters(filters)}`
     : null;
-  
+
   return (
     <div className="analytics-deck">
       {/* Dashboard Selector */}
@@ -423,23 +423,23 @@ export function AnalyticsDeck() {
           </button>
         ))}
       </div>
-      
+
       {/* Filters */}
       <div className="filters-panel">
-        <DateRangePicker 
-          value={filters.timeRange} 
+        <DateRangePicker
+          value={filters.timeRange}
           onChange={range => setFilters({ ...filters, timeRange: range })}
         />
-        <AgentFilter 
+        <AgentFilter
           value={filters.agent}
           onChange={agent => setFilters({ ...filters, agent })}
         />
-        <RiskLevelFilter 
+        <RiskLevelFilter
           value={filters.riskLevel}
           onChange={level => setFilters({ ...filters, riskLevel: level })}
         />
       </div>
-      
+
       {/* Embedded Dashboard */}
       {embedUrl && (
         <iframe
@@ -449,7 +449,7 @@ export function AnalyticsDeck() {
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
         />
       )}
-      
+
       {/* Raw Mode (Pro Only) */}
       {hasRole('pro') && (
         <div className="raw-mode-toggle">
@@ -489,7 +489,7 @@ export function AgentMap() {
   const [edges, setEdges] = useState([]);
   const socket = useWebSocket('/ws/agents');
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     // Initialize network
     const network = new Network(
@@ -517,16 +517,16 @@ export function AgentMap() {
         }
       }
     );
-    
+
     // WebSocket updates
     socket.on('agent:status', (update) => {
-      setNodes(prev => prev.map(n => 
-        n.id === update.agent_id 
+      setNodes(prev => prev.map(n =>
+        n.id === update.agent_id
           ? { ...n, color: getStatusColor(update.status) }
           : n
       ));
     });
-    
+
     socket.on('agent:task', (task) => {
       // Add temporary edge for task flow
       setEdges(prev => [...prev, {
@@ -535,20 +535,20 @@ export function AgentMap() {
         label: task.type,
         color: { color: 'blue', opacity: 0.5 }
       }]);
-      
+
       // Remove after 2 seconds
       setTimeout(() => {
-        setEdges(prev => prev.filter(e => 
+        setEdges(prev => prev.filter(e =>
           e.from !== task.from_agent || e.to !== task.to_agent
         ));
       }, 2000);
     });
-    
+
     return () => {
       network.destroy();
     };
   }, [nodes, edges, socket]);
-  
+
   return (
     <div className="agent-map-container">
       {/* Legend */}
@@ -558,10 +558,10 @@ export function AgentMap() {
         <span><div className="dot red" /> Error</span>
         <span><div className="dot gray" /> Idle</span>
       </div>
-      
+
       {/* Network Visualization */}
       <div ref={containerRef} className="network" />
-      
+
       {/* Stats */}
       <div className="stats-panel">
         <div className="stat">
@@ -616,11 +616,11 @@ import { useWebSocket } from '@/hooks/useWebSocket';
 export function UploadManager() {
   const [uploads, setUploads] = useState<Upload[]>([]);
   const socket = useWebSocket('/ws/upload');
-  
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     for (const file of acceptedFiles) {
       const uploadId = crypto.randomUUID();
-      
+
       // Add to uploads list
       setUploads(prev => [...prev, {
         id: uploadId,
@@ -628,12 +628,12 @@ export function UploadManager() {
         progress: 0,
         status: 'uploading'
       }]);
-      
+
       // Start upload
       await uploadFile(file, uploadId);
     }
   }, []);
-  
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -644,7 +644,7 @@ export function UploadManager() {
     },
     maxSize: 700 * 1024 * 1024  // 700MB
   });
-  
+
   useEffect(() => {
     socket.on('upload:progress', (data) => {
       setUploads(prev => prev.map(u =>
@@ -653,7 +653,7 @@ export function UploadManager() {
           : u
       ));
     });
-    
+
     socket.on('upload:complete', (data) => {
       setUploads(prev => prev.map(u =>
         u.id === data.upload_id
@@ -661,7 +661,7 @@ export function UploadManager() {
           : u
       ));
     });
-    
+
     socket.on('upload:error', (data) => {
       setUploads(prev => prev.map(u =>
         u.id === data.upload_id
@@ -670,18 +670,18 @@ export function UploadManager() {
       ));
     });
   }, [socket]);
-  
+
   const uploadFile = async (file: File, uploadId: string) => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_id', uploadId);
-    
+
     try {
       const response = await fetch('/api/v1/upload', {
         method: 'POST',
         body: formData
       });
-      
+
       if (!response.ok) {
         throw new Error('Upload failed');
       }
@@ -689,7 +689,7 @@ export function UploadManager() {
       console.error('Upload error:', error);
     }
   };
-  
+
   return (
     <div className="upload-manager">
       {/* Dropzone */}
@@ -709,7 +709,7 @@ export function UploadManager() {
           </div>
         )}
       </div>
-      
+
       {/* Upload List */}
       <div className="uploads-list">
         {uploads.map(upload => (
@@ -727,17 +727,17 @@ function UploadCard({ upload }) {
         <span className="filename">{upload.file.name}</span>
         <span className="filesize">{formatSize(upload.file.size)}</span>
       </div>
-      
+
       {upload.status === 'uploading' && (
         <div className="progress-bar">
-          <div 
-            className="progress-fill" 
+          <div
+            className="progress-fill"
             style={{ width: `${upload.progress}%` }}
           />
           <span className="progress-text">{upload.progress}%</span>
         </div>
       )}
-      
+
       {upload.status === 'complete' && (
         <div className="result">
           ✅ {upload.result.rows_imported} rows imported
@@ -746,7 +746,7 @@ function UploadCard({ upload }) {
           </button>
         </div>
       )}
-      
+
       {upload.status === 'error' && (
         <div className="error">
           ❌ {upload.error}
@@ -779,13 +779,13 @@ export function PIIToggle() {
   const { user, hasRole } = useAuth();
   const [piiUnlocked, setPiiUnlocked] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  
+
   const handleToggle = async () => {
     if (!hasRole('view_pii')) {
       setShowUpgradeModal(true);
       return;
     }
-    
+
     if (piiUnlocked) {
       // Lock PII
       setPiiUnlocked(false);
@@ -800,12 +800,12 @@ export function PIIToggle() {
           reason: 'manual_unlock'
         })
       });
-      
+
       setPiiUnlocked(true);
       store.setState({ maskPII: false });
     }
   };
-  
+
   return (
     <div className="pii-toggle-container">
       <button
@@ -814,13 +814,13 @@ export function PIIToggle() {
       >
         {piiUnlocked ? '🔓 PII Unlocked' : '🔒 Unlock PII'}
       </button>
-      
+
       {piiUnlocked && (
         <div className="warning">
           ⚠️ PII is now visible. All actions are audited.
         </div>
       )}
-      
+
       {showUpgradeModal && (
         <UpgradeModal onClose={() => setShowUpgradeModal(false)} />
       )}
@@ -895,14 +895,14 @@ export function PIIToggle() {
   .main-content {
     grid-template-columns: 1fr;
   }
-  
+
   .sidebar {
     position: fixed;
     left: -250px;
     transition: left 0.3s;
     z-index: 100;
   }
-  
+
   .sidebar.open {
     left: 0;
   }
@@ -948,4 +948,3 @@ open http://localhost:3000
 **Document Version**: 11.0  
 **Last Updated**: 2025-01-06  
 **Status**: ✅ **READY FOR IMPLEMENTATION**
-

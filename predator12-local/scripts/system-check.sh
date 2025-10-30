@@ -44,7 +44,7 @@ echo ""
 # ==============================================================================
 # 1. Python 3.11
 # ==============================================================================
-info "=== 1. Python 3.11 ===" 
+info "=== 1. Python 3.11 ==="
 
 if command -v python3.11 &> /dev/null; then
     VERSION=$(python3.11 --version)
@@ -67,7 +67,7 @@ if command -v psql &> /dev/null; then
     PG_VERSION=$(psql --version | head -1)
     success "PostgreSQL встановлено: $PG_VERSION"
     ((PASSED++))
-    
+
     # Перевірка чи запущено
     if lsof -i :5432 &> /dev/null; then
         success "PostgreSQL запущено на порту 5432"
@@ -94,7 +94,7 @@ if command -v redis-cli &> /dev/null; then
     REDIS_VERSION=$(redis-cli --version)
     success "Redis встановлено: $REDIS_VERSION"
     ((PASSED++))
-    
+
     if lsof -i :6379 &> /dev/null; then
         success "Redis запущено на порту 6379"
         ((PASSED++))
@@ -163,7 +163,7 @@ VENV_PATH="$PROJECT_ROOT/backend/venv"
 if [ -d "$VENV_PATH" ]; then
     success "venv існує: $VENV_PATH"
     ((PASSED++))
-    
+
     if [ -f "$VENV_PATH/bin/python" ]; then
         VENV_PYTHON=$("$VENV_PATH/bin/python" --version 2>&1)
         if [[ "$VENV_PYTHON" == *"3.11"* ]]; then
@@ -201,7 +201,7 @@ PORTS=(
 for entry in "${PORTS[@]}"; do
     PORT="${entry%%:*}"
     NAME="${entry#*:}"
-    
+
     if lsof -i :"$PORT" &> /dev/null; then
         warning "Port $PORT ($NAME) зайнятий"
         ((WARNINGS++))
@@ -221,7 +221,7 @@ info "=== 8. .env Configuration ==="
 if [ -f "$PROJECT_ROOT/backend/.env" ]; then
     success ".env існує"
     ((PASSED++))
-    
+
     # Перевірка критичних параметрів
     if grep -q "DATABASE_URL" "$PROJECT_ROOT/backend/.env"; then
         success "DATABASE_URL налаштовано"
@@ -246,7 +246,7 @@ info "=== 9. OpenSearch (опціонально) ==="
 if command -v opensearch &> /dev/null || brew list opensearch &> /dev/null; then
     success "OpenSearch встановлено"
     ((PASSED++))
-    
+
     if lsof -i :9200 &> /dev/null; then
         success "OpenSearch запущено"
         ((PASSED++))
@@ -272,7 +272,7 @@ if command -v node &> /dev/null; then
     NODE_VERSION=$(node --version)
     success "Node.js: $NODE_VERSION"
     ((PASSED++))
-    
+
     if command -v npm &> /dev/null; then
         NPM_VERSION=$(npm --version)
         success "npm: $NPM_VERSION"

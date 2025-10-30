@@ -40,12 +40,12 @@ export const Enhanced26AgentsModule: React.FC = () => {
       <Canvas camera={{ position: [0, 0, 15], fov: 60 }}>
         <ambientLight intensity={0.3} />
         <pointLight position={[10, 10, 10]} intensity={0.8} color={nexusColors.emerald} />
-        
+
         {/* Central Hub */}
         <Sphere args={[1, 32, 32]} position={[0, 0, 0]}>
           <meshStandardMaterial color={nexusColors.emerald} wireframe transparent opacity={0.6} />
         </Sphere>
-        
+
         {/* Agents */}
         {agents.map((agent) => (
           <Agent3D key={agent.id} agent={agent} />
@@ -63,7 +63,7 @@ export const Enhanced26AgentsModule: React.FC = () => {
             <Typography variant="h6" sx={{ color: nexusColors.sapphire, mb: 2 }}>
               🤖 26 AI Agents Hub
             </Typography>
-            
+
             <Grid container spacing={1}>
               {agents.map((agent) => (
                 <Grid item xs={6} key={agent.id}>

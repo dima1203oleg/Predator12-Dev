@@ -214,7 +214,11 @@ class StandardDataDictionary:
         # Geographic fields
         "latitude": {"type": "float", "range": [-90, 90], "required": False},
         "longitude": {"type": "float", "range": [-180, 180], "required": False},
-        "location": {"type": "string", "pattern": "^[A-Za-z0-9\\s,.-]+$", "required": False},
+        "location": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9\\s,.-]+$",
+            "required": False,
+        },
         # Identification fields
         "id": {"type": "string", "pattern": "^[a-zA-Z0-9_-]+$", "required": True},
         "user_id": {"type": "string", "classification": "PII", "required": False},
@@ -256,7 +260,10 @@ class StandardDataDictionary:
                 if isinstance(value, str):
                     datetime.fromisoformat(value.replace("Z", "+00:00"))
                 elif not isinstance(value, datetime):
-                    return False, f"Field {field_name} must be datetime or ISO8601 string"
+                    return (
+                        False,
+                        f"Field {field_name} must be datetime or ISO8601 string",
+                    )
             except ValueError:
                 return False, f"Field {field_name} has invalid datetime format"
 
@@ -266,7 +273,10 @@ class StandardDataDictionary:
                 if "range" in field_spec:
                     min_val, max_val = field_spec["range"]
                     if not (min_val <= float_val <= max_val):
-                        return False, f"Field {field_name} out of range [{min_val}, {max_val}]"
+                        return (
+                            False,
+                            f"Field {field_name} out of range [{min_val}, {max_val}]",
+                        )
             except (ValueError, TypeError):
                 return False, f"Field {field_name} must be a number"
 
@@ -276,7 +286,10 @@ class StandardDataDictionary:
 
             if "enum" in field_spec:
                 if value not in field_spec["enum"]:
-                    return False, f"Field {field_name} must be one of {field_spec['enum']}"
+                    return (
+                        False,
+                        f"Field {field_name} must be one of {field_spec['enum']}",
+                    )
 
         return True, ""
 

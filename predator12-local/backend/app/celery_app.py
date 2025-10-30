@@ -1,5 +1,6 @@
-from celery import Celery
 import os
+
+from celery import Celery
 
 # Створення Celery додатку
 celery_app = Celery(
@@ -8,13 +9,13 @@ celery_app = Celery(
     backend=os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/0"),
     include=[
         "app.agents.tasks.dataset_tasks",
-        "app.agents.tasks.anomaly_tasks", 
+        "app.agents.tasks.anomaly_tasks",
         "app.agents.tasks.forecast_tasks",
         "app.agents.tasks.graph_tasks",
         "app.agents.tasks.security_tasks",
         "app.agents.tasks.self_healing_tasks",
-        "app.agents.tasks.auto_improve_tasks"
-    ]
+        "app.agents.tasks.auto_improve_tasks",
+    ],
 )
 
 # Конфігурація Celery

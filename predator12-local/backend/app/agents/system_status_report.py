@@ -4,9 +4,10 @@
 Звіт про поточний стан системи з усіма агентами та моделями
 """
 
+
 def system_status_report():
     """Генерує звіт про поточний стан системи"""
-    
+
     print("🤖 PREDATOR ANALYTICS NEXUS CORE - SYSTEM STATUS REPORT")
     print("=" * 80)
     print("📅 Date: September 26, 2025")
@@ -17,7 +18,7 @@ def system_status_report():
     print("🏗️ SYSTEM ARCHITECTURE:")
     print("-" * 50)
     print("✅ Multi-Agent System: ACTIVE")
-    print("✅ Model Router: OPERATIONAL") 
+    print("✅ Model Router: OPERATIONAL")
     print("✅ Specialized Registry: CONFIGURED")
     print("✅ Dynamic Load Balancing: ENABLED")
     print("✅ Fallback Strategies: IMPLEMENTED")
@@ -25,17 +26,52 @@ def system_status_report():
     # Agent Status
     print("\n🤖 AGENTS STATUS:")
     print("-" * 50)
-    
+
     agents_info = [
-        ("🔍 AnomalyDetectionAgent", "Anomaly Detection & Statistical Analysis", "5 capabilities", "ACTIVE"),
-        ("📈 ForecastAgent", "Forecasting & Trend Analysis", "6 capabilities", "ACTIVE"),
-        ("🕸️ GraphAnalyticsAgent", "Graph Analysis & Network Intelligence", "7 capabilities", "ACTIVE"),
-        ("📊 DatasetAgent", "Data Processing & ETL Operations", "6 capabilities", "ACTIVE"),
-        ("🛡️ SecurityAgent", "Security Analysis & Threat Detection", "6 capabilities", "ACTIVE"),
-        ("🔧 SelfHealingAgent", "System Diagnostics & Auto-Healing", "6 capabilities", "ACTIVE"),
-        ("📚 AutoImproveAgent", "System Optimization & Learning", "6 capabilities", "ACTIVE")
+        (
+            "🔍 AnomalyDetectionAgent",
+            "Anomaly Detection & Statistical Analysis",
+            "5 capabilities",
+            "ACTIVE",
+        ),
+        (
+            "📈 ForecastAgent",
+            "Forecasting & Trend Analysis",
+            "6 capabilities",
+            "ACTIVE",
+        ),
+        (
+            "🕸️ GraphAnalyticsAgent",
+            "Graph Analysis & Network Intelligence",
+            "7 capabilities",
+            "ACTIVE",
+        ),
+        (
+            "📊 DatasetAgent",
+            "Data Processing & ETL Operations",
+            "6 capabilities",
+            "ACTIVE",
+        ),
+        (
+            "🛡️ SecurityAgent",
+            "Security Analysis & Threat Detection",
+            "6 capabilities",
+            "ACTIVE",
+        ),
+        (
+            "🔧 SelfHealingAgent",
+            "System Diagnostics & Auto-Healing",
+            "6 capabilities",
+            "ACTIVE",
+        ),
+        (
+            "📚 AutoImproveAgent",
+            "System Optimization & Learning",
+            "6 capabilities",
+            "ACTIVE",
+        ),
     ]
-    
+
     for name, role, capabilities, status in agents_info:
         print(f"✅ {name}")
         print(f"   📋 Role: {role}")
@@ -59,9 +95,9 @@ def system_status_report():
         ("🔴 DeepSeek", "8 models (13.8%)", "R1, V3 reasoning models"),
         ("🟠 Cohere", "8 models (13.8%)", "Command, Embed models"),
         ("🟣 Meta", "7 models (12.1%)", "Llama-3/4 series"),
-        ("⚫ xAI", "3 models (5.2%)", "Grok-3 series")
+        ("⚫ xAI", "3 models (5.2%)", "Grok-3 series"),
     ]
-    
+
     print(f"\n🏢 PROVIDER DISTRIBUTION:")
     print("-" * 50)
     for provider, count, description in providers:
@@ -72,16 +108,20 @@ def system_status_report():
     print(f"\n🎯 SPECIALIZATION BREAKDOWN:")
     print("-" * 50)
     specializations = [
-        ("🧠 Reasoning Models", "15 models", "DeepSeek R1, OpenAI O-series, Phi-4 Reasoning"),
+        (
+            "🧠 Reasoning Models",
+            "15 models",
+            "DeepSeek R1, OpenAI O-series, Phi-4 Reasoning",
+        ),
         ("🖼️ Multimodal Models", "8 models", "GPT-4o, Phi-4 Multimodal, Vision models"),
         ("💬 Chat-Optimized", "12 models", "GPT-5 series, Command series"),
         ("📏 Large Context", "8 models", "Llama-405B, Large variants"),
         ("🏃 Fast Response", "4 models", "Mini variants for quick tasks"),
         ("🔧 Code-Specialized", "3 models", "Codestral for ETL/programming"),
         ("👁️ Vision Models", "4 models", "Visual data processing"),
-        ("🧮 Embedding Models", "4 models", "Cohere, OpenAI embeddings")
+        ("🧮 Embedding Models", "4 models", "Cohere, OpenAI embeddings"),
     ]
-    
+
     for spec_type, count, description in specializations:
         print(f"{spec_type}: {count}")
         print(f"   📝 {description}")
@@ -100,7 +140,7 @@ def system_status_report():
     print("-" * 50)
     capabilities = [
         "🔍 Anomaly Detection (Statistical & ML-based)",
-        "📈 Time Series Forecasting & Trend Analysis", 
+        "📈 Time Series Forecasting & Trend Analysis",
         "🕸️ Graph Analytics & Network Intelligence",
         "📊 ETL Data Processing & Transformation",
         "🛡️ Security Threat Analysis & Detection",
@@ -108,9 +148,9 @@ def system_status_report():
         "📚 Continuous Learning & Optimization",
         "🎯 Dynamic Model Selection & Routing",
         "⚖️ Load Balancing & Performance Monitoring",
-        "🔄 Real-time Adaptation & Fallback"
+        "🔄 Real-time Adaptation & Fallback",
     ]
-    
+
     for capability in capabilities:
         print(f"✅ {capability}")
 
@@ -156,7 +196,7 @@ def system_status_report():
     print(f"\n📋 SUMMARY:")
     print("-" * 50)
     print("• ✅ 7/7 Agents: OPERATIONAL")
-    print("• ✅ 58/58 Models: DISTRIBUTED") 
+    print("• ✅ 58/58 Models: DISTRIBUTED")
     print("• ✅ 100% Coverage: ACHIEVED")
     print("• ✅ Specialization: OPTIMIZED")
     print("• 🔄 Docker: NEEDS FIXING")

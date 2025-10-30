@@ -4,7 +4,7 @@ description: "Відновлення нездорового backend сервіс
 version: "1.0"
 triggers:
   - alert: "BackendDown"
-  - alert: "HighErrorRate" 
+  - alert: "HighErrorRate"
   - health_check_failed: "backend"
 
 steps:
@@ -24,14 +24,14 @@ steps:
       - reload_config: true
       - garbage_collect: true
     timeout: 60
-    
+
   - name: "Перевірка після м'якого відновлення"
     type: "health_check"
     actions:
       - curl: "http://localhost:5001/health"
       - check_response_time: 5000
     success_condition: "status_code == 200"
-    
+
   - name: "Рестарт контейнера"
     type: "hard_recovery"
     condition: "previous_step_failed"
@@ -39,7 +39,7 @@ steps:
       - docker_restart: "predator11-backend-1"
       - wait_for_health: 120
     timeout: 180
-    
+
   - name: "Відновлення з backup"
     type: "disaster_recovery"
     condition: "previous_step_failed"
@@ -54,7 +54,7 @@ notifications:
     - slack: "#alerts"
       message: "🚨 AutoHeal: Розпочато відновлення backend"
   on_success:
-    - slack: "#alerts" 
+    - slack: "#alerts"
       message: "✅ AutoHeal: Backend відновлено успішно"
   on_failure:
     - slack: "#critical"

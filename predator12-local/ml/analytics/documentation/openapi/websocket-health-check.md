@@ -48,4 +48,4 @@ This endpoint can also be used by external monitoring tools (e.g., Prometheus) t
 ## Future Enhancements
 
 - Add detailed metrics to the health check response, such as the number of active connections or average latency.
-- Implement authentication for the health check and metrics endpoints to restrict access to authorized users or systems. 
+- Implement authentication for the health check and metrics endpoints to restrict access to authorized users or systems.

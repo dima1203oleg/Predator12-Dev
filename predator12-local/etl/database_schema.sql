@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS dim_unit_measure (
 -- Fact table: Declaration Items (partitioned by date)
 CREATE TABLE IF NOT EXISTS fact_declaration_item (
     declaration_item_id BIGSERIAL,
-    
+
     -- Foreign keys to dimensions
     customs_office_id INTEGER REFERENCES dim_customs_office(customs_office_id),
     importer_id INTEGER REFERENCES dim_company(company_id),
@@ -81,19 +81,19 @@ CREATE TABLE IF NOT EXISTS fact_declaration_item (
     incoterms_id INTEGER REFERENCES dim_incoterms(incoterms_id),
     currency_id INTEGER REFERENCES dim_currency(currency_id),
     unit_id INTEGER REFERENCES dim_unit_measure(unit_id),
-    
+
     -- Declaration identifiers
     declaration_number VARCHAR(50) NOT NULL,
     declaration_type VARCHAR(20),
     line_number INTEGER NOT NULL,
     declaration_date DATE NOT NULL,
-    
+
     -- Quantities and weights
     quantity DECIMAL(18,6),
     gross_weight_kg DECIMAL(18,6),
     net_weight_kg DECIMAL(18,6),
     customs_weight DECIMAL(18,6),
-    
+
     -- Values (in original currency and USD)
     invoice_value_original DECIMAL(18,6),
     invoice_value_usd DECIMAL(18,6),
@@ -101,45 +101,45 @@ CREATE TABLE IF NOT EXISTS fact_declaration_item (
     customs_value_net_usd_kg DECIMAL(18,6),
     customs_value_gross_usd_kg DECIMAL(18,6),
     customs_value_usd_additional_unit DECIMAL(18,6),
-    
+
     -- Reference prices and differences
     min_base_usd_kg DECIMAL(18,6),
     min_base_diff DECIMAL(18,6),
     net_customs_value_usd_kg DECIMAL(18,6),
     customs_value_diff_usd_kg DECIMAL(18,6),
-    
+
     -- Rates and procedures
     preferential_rate DECIMAL(5,2),
     full_rate DECIMAL(5,2),
     special_procedure VARCHAR(10),
     contract_type VARCHAR(50),
-    
+
     -- Additional fields
     delivery_place TEXT,
     trademark VARCHAR(200),
     goods_description TEXT,
     goods_description_hash VARCHAR(64), -- for PII masking
-    
+
     -- Weight calculations
     weight_single DECIMAL(18,6),
     weight_diff DECIMAL(18,6),
-    
+
     -- Data quality flags
     is_anomaly BOOLEAN DEFAULT FALSE,
     anomaly_type VARCHAR(100),
     data_quality_score DECIMAL(3,2),
-    
+
     -- Audit fields
     source_file VARCHAR(255),
     processed_at TIMESTAMP DEFAULT NOW(),
     created_at TIMESTAMP DEFAULT NOW(),
-    
+
     -- Composite primary key
     PRIMARY KEY (declaration_date, declaration_item_id),
-    
+
     -- Unique constraint for business key
     UNIQUE (declaration_number, line_number, declaration_date)
-    
+
 ) PARTITION BY RANGE (declaration_date);
 
 -- Create partitions for fact table (by month)
@@ -155,22 +155,22 @@ CREATE TABLE IF NOT EXISTS fact_declaration_item_2024_03 PARTITION OF fact_decla
 -- Add more partitions as needed...
 
 -- Indexes for performance
-CREATE INDEX IF NOT EXISTS idx_fact_decl_item_decl_number 
+CREATE INDEX IF NOT EXISTS idx_fact_decl_item_decl_number
     ON fact_declaration_item (declaration_number);
 
-CREATE INDEX IF NOT EXISTS idx_fact_decl_item_hs_code 
+CREATE INDEX IF NOT EXISTS idx_fact_decl_item_hs_code
     ON fact_declaration_item (hs_code_id);
 
-CREATE INDEX IF NOT EXISTS idx_fact_decl_item_importer 
+CREATE INDEX IF NOT EXISTS idx_fact_decl_item_importer
     ON fact_declaration_item (importer_id);
 
-CREATE INDEX IF NOT EXISTS idx_fact_decl_item_country_origin 
+CREATE INDEX IF NOT EXISTS idx_fact_decl_item_country_origin
     ON fact_declaration_item (country_origin_id);
 
-CREATE INDEX IF NOT EXISTS idx_fact_decl_item_customs_office 
+CREATE INDEX IF NOT EXISTS idx_fact_decl_item_customs_office
     ON fact_declaration_item (customs_office_id);
 
-CREATE INDEX IF NOT EXISTS idx_fact_decl_item_anomaly 
+CREATE INDEX IF NOT EXISTS idx_fact_decl_item_anomaly
     ON fact_declaration_item (is_anomaly) WHERE is_anomaly = TRUE;
 
 -- Indexes on dimension tables
@@ -182,7 +182,7 @@ CREATE INDEX IF NOT EXISTS idx_hs_code_hierarchy ON dim_hs_code (hs_code_6, hs_c
 
 -- Masked view for free tier users
 CREATE OR REPLACE VIEW fact_declaration_item_masked AS
-SELECT 
+SELECT
     declaration_item_id,
     customs_office_id,
     MD5(importer_id::text) as importer_id_hash,
@@ -199,7 +199,7 @@ SELECT
     net_weight_kg,
     customs_weight,
     -- Mask sensitive financial data
-    CASE WHEN invoice_value_usd > 100000 THEN ROUND(invoice_value_usd, -3) 
+    CASE WHEN invoice_value_usd > 100000 THEN ROUND(invoice_value_usd, -3)
          ELSE invoice_value_usd END as invoice_value_usd_masked,
     calculated_invoice_value_usd_kg,
     customs_value_net_usd_kg,
@@ -220,7 +220,7 @@ SELECT * FROM fact_declaration_item;
 
 -- Monthly aggregations
 CREATE MATERIALIZED VIEW IF NOT EXISTS mv_monthly_trade_stats AS
-SELECT 
+SELECT
     DATE_TRUNC('month', declaration_date) as trade_month,
     hs.hs_code_6,
     hs.description_6,
@@ -259,9 +259,9 @@ BEGIN
     start_date := DATE_TRUNC('month', target_date);
     end_date := start_date + INTERVAL '1 month';
     table_name := 'fact_declaration_item_' || TO_CHAR(start_date, 'YYYY_MM');
-    
-    EXECUTE format('CREATE TABLE IF NOT EXISTS %I PARTITION OF fact_declaration_item 
-                    FOR VALUES FROM (%L) TO (%L)', 
+
+    EXECUTE format('CREATE TABLE IF NOT EXISTS %I PARTITION OF fact_declaration_item
+                    FOR VALUES FROM (%L) TO (%L)',
                    table_name, start_date, end_date);
 END;
 $$ LANGUAGE plpgsql;

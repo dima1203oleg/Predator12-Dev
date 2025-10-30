@@ -96,7 +96,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({
   // Зберігаємо мову при зміні
   useEffect(() => {
     localStorage.setItem('nexus_language', language);
-    
+
     // Можемо також оновити HTML lang атрибут
     document.documentElement.lang = language.toLowerCase();
   }, [language]);
@@ -125,12 +125,12 @@ export const useTranslation = () => {
 export const LanguageSwitcher: React.FC<{
   className?: string;
   variant?: 'button' | 'select' | 'toggle';
-}> = ({ 
-  className = '', 
-  variant = 'toggle' 
+}> = ({
+  className = '',
+  variant = 'toggle'
 }) => {
   const { language, setLanguage } = useI18n();
-  
+
   if (variant === 'toggle') {
     return (
       <button

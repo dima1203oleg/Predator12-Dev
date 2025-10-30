@@ -58,4 +58,4 @@ services:
       - ../../databases/minio/data:/data
     ports:
       - "9000:9000"
-    command: server /data 
+    command: server /data

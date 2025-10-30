@@ -86,7 +86,7 @@ export const COMPETITION_SCENARIOS: CompetitionScenario[] = [
     tasks: ['complex_analysis', 'multi_step_reasoning', 'logical_deduction']
   },
   {
-    name: 'coding_showdown', 
+    name: 'coding_showdown',
     title: '💻 Код-дуель',
     models: ['codestral-2501', 'deepseek/deepseek-coder-v2', 'phind/phind-codellama-34b-v2'],
     tasks: ['algorithm_design', 'code_optimization', 'bug_fixing']
@@ -99,7 +99,7 @@ export const COMPETITION_SCENARIOS: CompetitionScenario[] = [
   },
   {
     name: 'language_masters',
-    title: '🌍 Мовні майстри', 
+    title: '🌍 Мовні майстри',
     models: ['qwen/qwen2.5-14b-instruct', 'google/gemma-2-9b-it', 'meta/meta-llama-3.1-8b-instruct'],
     tasks: ['translation', 'multilingual_understanding', 'cultural_context']
   },
@@ -117,7 +117,7 @@ export const COMPETITION_SCENARIOS: CompetitionScenario[] = [
   }
 ];
 
-// Agent-to-Model assignments - ALL FREE models only 
+// Agent-to-Model assignments - ALL FREE models only
 export const AGENT_MODEL_ASSIGNMENTS: Record<string, string> = {
   ChiefOrchestrator: 'qwen/qwen2.5-72b-instruct',
   QueryPlanner: 'microsoft/phi-4-reasoning',
@@ -172,14 +172,14 @@ export const getTotalModelsCount = (): number => {
 // Simulate competition results with realistic variance
 export const simulateCompetitionResults = (scenario: CompetitionScenario): Record<string, number> => {
   const results: Record<string, number> = {};
-  
+
   scenario.models.forEach(modelId => {
     const basePerformance = getModelPerformance(modelId);
     const variance = (Math.random() - 0.5) * 20; // ±10 points variance
     const finalScore = Math.max(0, Math.min(100, basePerformance + variance));
     results[modelId] = Math.round(finalScore * 100) / 100; // Round to 2 decimal places
   });
-  
+
   return results;
 };
 

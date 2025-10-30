@@ -20,7 +20,7 @@ const ToastContainer = ({
   const [toasts, setToasts] = useState([]);
   const [exitingToasts, setExitingToasts] = useState([]);
   const timersRef = useRef({});
-  
+
   // Update toasts when notifications change
   useEffect(() => {
     if (notifications.length > 0) {
@@ -29,19 +29,19 @@ const ToastContainer = ({
       const newNotifications = notifications
         .filter(n => !existingIds.has(n.id))
         .slice(0, limit);
-      
+
       if (newNotifications.length > 0) {
         // Add animation style to each notification
         const styledNotifications = newNotifications.map(notification => ({
           ...notification,
           animationStyle: notification.animationStyle || animationStyle
         }));
-        
+
         setToasts(prev => [...styledNotifications, ...prev].slice(0, limit));
       }
     }
   }, [notifications, limit, toasts, exitingToasts, animationStyle]);
-  
+
   // Handle toast removal with exit animation
   const removeToast = useCallback((id) => {
     // Clear the timer for this toast
@@ -49,7 +49,7 @@ const ToastContainer = ({
       clearTimeout(timersRef.current[id]);
       delete timersRef.current[id];
     }
-    
+
     // Find the toast to exit
     const toastToExit = toasts.find(t => t.id === id);
     if (toastToExit) {
@@ -57,7 +57,7 @@ const ToastContainer = ({
       setExitingToasts(prev => [...prev, {...toastToExit, exiting: true}]);
       // Remove from active toasts
       setToasts(prev => prev.filter(toast => toast.id !== id));
-      
+
       // Remove the toast after animation completes
       setTimeout(() => {
         setExitingToasts(prev => prev.filter(toast => toast.id !== id));
@@ -65,7 +65,7 @@ const ToastContainer = ({
       }, 300); // Match animation duration
     }
   }, [onClose, toasts]);
-  
+
   // Auto-close toasts after delay
   useEffect(() => {
     if (autoClose && toasts.length > 0) {
@@ -76,19 +76,19 @@ const ToastContainer = ({
           }, autoCloseDelay);
         }
       });
-      
+
       return () => {
         // Clear all timers on unmount
         Object.values(timersRef.current).forEach(timer => clearTimeout(timer));
       };
     }
   }, [toasts, autoClose, autoCloseDelay, removeToast]);
-  
+
   // Handle mouse enter - pause auto-close timer
   const handleMouseEnter = useCallback((id) => {
     if (pauseOnHover && autoClose && timersRef.current[id]) {
       clearTimeout(timersRef.current[id]);
-      
+
       // Find the progress bar element and pause its animation
       const progressBar = document.getElementById(`progress-${id}`);
       if (progressBar) {
@@ -96,7 +96,7 @@ const ToastContainer = ({
       }
     }
   }, [pauseOnHover, autoClose]);
-  
+
   // Handle mouse leave - resume auto-close timer
   const handleMouseLeave = useCallback((id) => {
     if (pauseOnHover && autoClose) {
@@ -104,7 +104,7 @@ const ToastContainer = ({
       timersRef.current[id] = setTimeout(() => {
         removeToast(id);
       }, autoCloseDelay);
-      
+
       // Find the progress bar element and resume its animation
       const progressBar = document.getElementById(`progress-${id}`);
       if (progressBar) {
@@ -112,7 +112,7 @@ const ToastContainer = ({
       }
     }
   }, [pauseOnHover, autoClose, autoCloseDelay, removeToast]);
-  
+
   // Get the animation class based on the style
   const getAnimationClass = (style) => {
     switch (style) {
@@ -130,7 +130,7 @@ const ToastContainer = ({
         return 'anim-slide-right';
     }
   };
-  
+
   // Get severity icon
   const getSeverityIcon = (severity) => {
     switch (severity) {
@@ -175,14 +175,14 @@ const ToastContainer = ({
         );
     }
   };
-  
+
   // Render both active and exiting toasts
   const renderToast = (toast, isExiting = false) => {
     const animClass = getAnimationClass(toast.animationStyle);
-    
+
     return (
-      <div 
-        key={toast.id} 
+      <div
+        key={toast.id}
         className={`toast ${toast.severity} ${animClass} ${isExiting ? 'exiting' : ''}`}
         onClick={() => !isExiting && closeOnClick && removeToast(toast.id)}
         onMouseEnter={() => !isExiting && handleMouseEnter(toast.id)}
@@ -195,7 +195,7 @@ const ToastContainer = ({
           <h4>{toast.title}</h4>
           <p>{toast.message}</p>
           {toast.action && toast.action.label && !isExiting && (
-            <button 
+            <button
               className="toast-action-btn"
               onClick={(e) => {
                 e.stopPropagation();
@@ -209,7 +209,7 @@ const ToastContainer = ({
             </button>
           )}
         </div>
-        <button 
+        <button
           className="toast-close"
           onClick={(e) => {
             e.stopPropagation();
@@ -223,7 +223,7 @@ const ToastContainer = ({
         </button>
         {autoClose && !isExiting && (
           <div className="toast-progress-container">
-            <div 
+            <div
               id={`progress-${toast.id}`}
               className="toast-progress"
               style={{
@@ -235,7 +235,7 @@ const ToastContainer = ({
       </div>
     );
   };
-  
+
   return (
     <div className={`toast-container ${position}`}>
       {toasts.map(toast => renderToast(toast))}
@@ -244,4 +244,4 @@ const ToastContainer = ({
   );
 };
 
-export default ToastContainer; 
+export default ToastContainer;

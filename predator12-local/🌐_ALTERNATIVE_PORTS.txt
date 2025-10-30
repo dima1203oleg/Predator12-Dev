@@ -21,7 +21,7 @@
 
 📦 **Static Production Server**:
    ├── URL: http://localhost:8080
-   ├── Status: ✅ АКТИВНИЙ  
+   ├── Status: ✅ АКТИВНИЙ
    ├── Python HTTP Server
    ├── Production build
    └── Статичні файлі з /frontend/dist
@@ -77,7 +77,7 @@ http://localhost:8081
 🔍 **Діагностика**:
 ```bash
 lsof -i :3000          # Хто використовує порт 3000
-docker ps              # Активні контейнери  
+docker ps              # Активні контейнери
 docker logs <name>     # Логи контейнера
 netstat -an | grep 3000 # Перевірка порту
 ```

@@ -115,7 +115,7 @@ export const NexusVisualEffects: React.FC<NexusVisualEffectsProps> = ({
               filter: 'drop-shadow(0 0 10px #00FFC6)'
             }}
           />
-          
+
           {/* Top Right */}
           <Box
             sx={{
@@ -130,7 +130,7 @@ export const NexusVisualEffects: React.FC<NexusVisualEffectsProps> = ({
               filter: 'drop-shadow(0 0 10px #0A75FF)'
             }}
           />
-          
+
           {/* Bottom Left */}
           <Box
             sx={{
@@ -145,7 +145,7 @@ export const NexusVisualEffects: React.FC<NexusVisualEffectsProps> = ({
               filter: 'drop-shadow(0 0 10px #A020F0)'
             }}
           />
-          
+
           {/* Bottom Right */}
           <Box
             sx={{
@@ -178,7 +178,7 @@ export const NexusVisualEffects: React.FC<NexusVisualEffectsProps> = ({
               animation: `${scanH} 8s infinite linear`
             }}
           />
-          
+
           {/* Vertical Scan Line */}
           <Box
             sx={{

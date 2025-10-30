@@ -7,7 +7,7 @@ datasources:
     url: http://prometheus:9090
     isDefault: true
     editable: true
-    
+
   - name: PostgreSQL
     type: postgres
     access: proxy
@@ -19,7 +19,7 @@ datasources:
     jsonData:
       sslmode: disable
       postgresVersion: 1400
-      
+
   - name: OpenSearch
     type: elasticsearch
     access: proxy
@@ -29,7 +29,7 @@ datasources:
       esVersion: 7.10.0
       timeField: "@timestamp"
       interval: Daily
-      
+
   - name: MLflow
     type: grafana-mlflow-datasource
     access: proxy

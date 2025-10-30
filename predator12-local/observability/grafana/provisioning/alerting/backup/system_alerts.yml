@@ -50,7 +50,7 @@ groups:
                 type: "prometheus"
                 uid: "prometheus"
               expr: >
-                (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / 
+                (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) /
                 node_memory_MemTotal_bytes * 100 > 80
               refId: A
               editorMode: "code"
@@ -82,7 +82,7 @@ groups:
                 type: "prometheus"
                 uid: "prometheus"
               expr: >
-                (node_filesystem_avail_bytes{mountpoint="/", fstype!="tmpfs"} * 100) / 
+                (node_filesystem_avail_bytes{mountpoint="/", fstype!="tmpfs"} * 100) /
                 node_filesystem_size_bytes{mountpoint="/", fstype!="tmpfs"} < 20
               refId: A
               editorMode: "code"

@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: argocd-sync-wait
+spec:
+  steps:
+    - name: sync
+      image: bitnami/argocd:latest
+      script: |
+        #!/bin/sh
+        set -e
+        echo "Argocd sync placeholder; requires ARGOCD token in env"
+        # argocd login ${ARGO_SERVER} --auth-token ${ARGO_AUTH_TOKEN} --insecure
+        # argocd app sync predator
+        exit 0

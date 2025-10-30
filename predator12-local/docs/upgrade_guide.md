@@ -12,10 +12,10 @@
    # Stage 1: 25% traffic
    kubectl set image deployment/predator-orchestrator \
      orchestrator=predator/orchestrator:v2 --replicas=1
-   
+
    # Stage 2: 50% traffic
    kubectl scale deployment/predator-orchestrator --replicas=2
-   
+
    # Full rollout
    kubectl rollout restart deployment/predator-orchestrator
    ```

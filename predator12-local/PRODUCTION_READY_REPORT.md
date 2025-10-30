@@ -66,7 +66,7 @@ const updateMetrics = (modelId, success, quality) => {
 const generateResponse = async (userInput) => {
   try {
     const response = await agentsAPI.processWithMultiLevelFeedback(
-      'quick-agent', 
+      'quick-agent',
       { type: 'chat_response', input: userInput }
     );
     if (response?.content) {
@@ -157,7 +157,7 @@ crontab -l
 
 ## 🎉 СТАТУС: ГОТОВО ДО ПЕРЕХОДУ
 
-Система повністю готова до автоматичного переходу на Kubernetes з Helm Charts. 
+Система повністю готова до автоматичного переходу на Kubernetes з Helm Charts.
 Планувальник сам обере оптимальний момент та виконає міграцію без втручання користувача.
 
 **Веб-інтерфейс доступний на порту 5090 після міграції.**

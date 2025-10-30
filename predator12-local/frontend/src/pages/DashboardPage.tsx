@@ -12,17 +12,17 @@ const DashboardPage = () => {
       <div className="cyber-face-container">
         <HolographicGuide />
       </div>
-      
+
       <div className="flowmap-container">
         <DataFlowMap />
       </div>
-      
+
       <div className="mas-container">
         <MASSupervisor />
       </div>
-      
+
       <div className="voice-controls">
-        <button 
+        <button
           onClick={isListening ? stopListening : startListening}
           style={{ backgroundColor: isListening ? '#FF0000' : '#00FF66' }}
         >

@@ -1,0 +1,289 @@
+# Predator Analytics Configuration
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+# Application Images
+image:
+  registry: docker.io
+  repository: predator-analytics
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+
+# Frontend Configuration
+frontend:
+  enabled: true
+  replicaCount: 3
+  image:
+    repository: predator-analytics/frontend
+    tag: "1.0.0"
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3000
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+
+# Backend API Configuration
+backend:
+  enabled: true
+  replicaCount: 5
+  image:
+    repository: predator-analytics/backend
+    tag: "1.0.0"
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 75
+  env:
+    MODELS_ENABLED: "58_free_models"
+    AI_FEEDBACK_LEVELS: "4"
+    ADAPTIVE_ROUTING: "true"
+    COST_OPTIMIZATION: "true"
+
+# AI Agents Configuration
+agents:
+  enabled: true
+  supervisor:
+    replicaCount: 2
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+  workers:
+    reasoning:
+      replicaCount: 5
+      primaryModel: "meta/meta-llama-3.1-70b-instruct"
+      fallbackModels:
+        - "microsoft/phi-4-reasoning"
+        - "qwen/qwen2.5-72b-instruct"
+    code:
+      replicaCount: 3
+      primaryModel: "codestral-2501"
+      fallbackModels:
+        - "deepseek/deepseek-coder-v2"
+        - "qwen/qwen2.5-coder-7b-instruct"
+    quick:
+      replicaCount: 8
+      primaryModel: "microsoft/phi-3-mini-4k-instruct"
+      fallbackModels:
+        - "mistral/ministral-3b"
+        - "google/gemma-2-2b-it"
+  multiLevelFeedback:
+    enabled: true
+    levels: 4
+    thresholds: [0.9, 0.75, 0.6, 0.4]
+    adaptiveRouting: true
+    performanceTracking: true
+
+# Model Registry Configuration
+modelRegistry:
+  enabled: true
+  freeModels:
+    reasoning: 12
+    code: 10
+    quick: 8
+    embed: 8
+    vision: 6
+    gen: 4
+  competitionScenarios:
+    enabled: true
+    evaluationInterval: "5m"
+    models:
+      premium: ["gpt-5", "microsoft/phi-4-reasoning", "qwen/qwen2.5-72b-instruct"]
+      coding: ["codestral-2501", "deepseek/deepseek-coder-v2", "phind/phind-codellama-34b-v2"]
+      speed: ["microsoft/phi-3-mini-4k-instruct", "mistral/ministral-3b", "google/gemma-2-2b-it"]
+
+# Database Configuration
+postgresql:
+  enabled: true
+  auth:
+    database: predator_analytics
+    username: predator
+    password: ""
+    existingSecret: ""
+  primary:
+    persistence:
+      enabled: true
+      size: 100Gi
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+
+# Redis Configuration
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: ""
+    existingSecret: ""
+  master:
+    persistence:
+      enabled: true
+      size: 20Gi
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+
+# OpenSearch Configuration
+opensearch:
+  enabled: true
+  clusterName: predator-opensearch
+  nodeGroup: "master"
+  masterService: "predator-opensearch"
+  replicas: 3
+  minimumMasterNodes: 2
+  persistence:
+    enabled: true
+    size: 200Gi
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+
+# Monitoring Configuration
+monitoring:
+  enabled: true
+  prometheus:
+    enabled: true
+    persistence:
+      enabled: true
+      size: 50Gi
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+  grafana:
+    enabled: true
+    admin:
+      password: ""
+      existingSecret: ""
+    persistence:
+      enabled: true
+      size: 10Gi
+    dashboards:
+      enabled: true
+      configMapName: "predator-dashboards"
+  alertmanager:
+    enabled: true
+    config:
+      global:
+        slack_api_url: ""
+      receivers:
+        - name: 'slack-alerts'
+          slack_configs:
+            - channel: '#predator-alerts'
+              title: 'Predator Analytics Alert'
+
+# Security Configuration
+security:
+  enabled: true
+  networkPolicies:
+    enabled: true
+  podSecurityPolicy:
+    enabled: true
+  rbac:
+    enabled: true
+  serviceAccount:
+    create: true
+    name: "predator-analytics"
+    annotations: {}
+
+# Voice Assistant Configuration
+voiceAssistant:
+  enabled: true
+  speechRecognition:
+    enabled: true
+    language: "uk-UA"
+    fallbackLanguage: "en-US"
+  textToSpeech:
+    enabled: true
+    voice: "uk-UA-Standard-A"
+    speed: 0.9
+    pitch: 1.0
+  aiModels:
+    primary: "microsoft/phi-3-mini-4k-instruct"
+    fallback: "mistral/ministral-3b"
+
+# Ingress Configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  hosts:
+    - host: predator-analytics.local
+      paths:
+        - path: /
+          pathType: Prefix
+          service:
+            name: predator-frontend
+            port: 80
+        - path: /api
+          pathType: Prefix
+          service:
+            name: predator-backend
+            port: 8000
+  tls:
+    - secretName: predator-analytics-tls
+      hosts:
+        - predator-analytics.local
+
+# Storage Configuration
+persistence:
+  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 10Gi
+
+# Node Affinity and Tolerations
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Pod Disruption Budget
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1

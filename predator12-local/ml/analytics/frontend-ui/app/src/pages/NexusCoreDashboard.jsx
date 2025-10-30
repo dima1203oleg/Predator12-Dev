@@ -62,4 +62,4 @@ const NexusCoreDashboard = () => {
   );
 };
 
-export default NexusCoreDashboard; 
+export default NexusCoreDashboard;

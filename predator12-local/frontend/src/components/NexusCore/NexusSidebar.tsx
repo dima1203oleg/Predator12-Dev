@@ -57,9 +57,9 @@ export const NexusSidebar: React.FC<NexusSidebarProps> = ({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <Typography 
-              variant="h6" 
-              sx={{ 
+            <Typography
+              variant="h6"
+              sx={{
                 fontFamily: 'Orbitron',
                 color: nexusColors.emerald,
                 textShadow: `0 0 10px ${nexusColors.emerald}`,
@@ -68,9 +68,9 @@ export const NexusSidebar: React.FC<NexusSidebarProps> = ({
             >
               NEXUS MODULES
             </Typography>
-            <Typography 
-              variant="body2" 
-              sx={{ 
+            <Typography
+              variant="body2"
+              sx={{
                 color: nexusColors.nebula,
                 fontSize: '0.75rem'
               }}
@@ -91,7 +91,7 @@ export const NexusSidebar: React.FC<NexusSidebarProps> = ({
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Tooltip 
+            <Tooltip
               title={open ? '' : `${module.label} - ${module.description}`}
               placement="right"
               arrow
@@ -102,8 +102,8 @@ export const NexusSidebar: React.FC<NexusSidebarProps> = ({
                   onClick={() => onModuleSelect(module.id)}
                   sx={{
                     borderRadius: '12px',
-                    border: activeModule === module.id 
-                      ? `2px solid ${module.color}` 
+                    border: activeModule === module.id
+                      ? `2px solid ${module.color}`
                       : `1px solid ${nexusColors.quantum}40`,
                     background: activeModule === module.id
                       ? `linear-gradient(45deg, ${module.color}20, transparent)`
@@ -130,14 +130,14 @@ export const NexusSidebar: React.FC<NexusSidebarProps> = ({
                       minWidth: open ? 40 : 'auto',
                       justifyContent: 'center',
                       transition: 'color 0.3s ease',
-                      filter: activeModule === module.id 
-                        ? `drop-shadow(0 0 8px ${module.color})` 
+                      filter: activeModule === module.id
+                        ? `drop-shadow(0 0 8px ${module.color})`
                         : 'none'
                     }}
                   >
                     {module.icon}
                   </ListItemIcon>
-                  
+
                   {open && (
                     <ListItemText
                       primary={
@@ -148,8 +148,8 @@ export const NexusSidebar: React.FC<NexusSidebarProps> = ({
                             fontWeight: activeModule === module.id ? 600 : 400,
                             color: activeModule === module.id ? module.color : nexusColors.frost,
                             fontSize: '0.85rem',
-                            textShadow: activeModule === module.id 
-                              ? `0 0 6px ${module.color}80` 
+                            textShadow: activeModule === module.id
+                              ? `0 0 6px ${module.color}80`
                               : 'none'
                           }}
                         >
@@ -180,16 +180,16 @@ export const NexusSidebar: React.FC<NexusSidebarProps> = ({
       {/* Status Panel */}
       <Box sx={{ mt: 'auto', p: 2 }}>
         <Divider sx={{ borderColor: nexusColors.quantum, mb: 2 }} />
-        
+
         {open && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            <Typography 
-              variant="caption" 
-              sx={{ 
+            <Typography
+              variant="caption"
+              sx={{
                 color: nexusColors.shadow,
                 fontFamily: 'Fira Code',
                 display: 'block',
@@ -198,7 +198,7 @@ export const NexusSidebar: React.FC<NexusSidebarProps> = ({
             >
               SYSTEM STATUS
             </Typography>
-            
+
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
               <Box
                 sx={{
@@ -214,7 +214,7 @@ export const NexusSidebar: React.FC<NexusSidebarProps> = ({
                 All Systems Operational
               </Typography>
             </Box>
-            
+
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Box
                 sx={{

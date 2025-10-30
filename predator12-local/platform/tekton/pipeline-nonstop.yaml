@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: predator-nonstop
+spec:
+  tasks:
+    - name: build
+      taskRef: { name: kaniko-build }
+    - name: test
+      runAfter: [build]
+      taskRef: { name: pytest-run }
+    - name: scan
+      runAfter: [test]
+      taskRef: { name: trivy-scan }
+    - name: deploy-stage
+      runAfter: [scan]
+      taskRef: { name: argocd-sync }
+    - name: etl
+      runAfter: [deploy-stage]
+      taskRef: { name: etl-runner }

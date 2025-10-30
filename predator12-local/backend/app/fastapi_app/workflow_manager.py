@@ -133,7 +133,9 @@ class WorkflowManager:
         if self.redis_client:
             try:
                 await self.redis_client.setex(
-                    f"workflow:{task_id}", self.cache_ttl, json.dumps(asdict(workflow), default=str)
+                    f"workflow:{task_id}",
+                    self.cache_ttl,
+                    json.dumps(asdict(workflow), default=str),
                 )
             except Exception as e:
                 logger.warning("Failed to cache workflow in Redis", error=str(e))
@@ -160,7 +162,10 @@ class WorkflowManager:
                 workflow.steps_completed.append(current_step)
             await self._update_workflow(workflow)
             logger.info(
-                "Workflow progress updated", task_id=task_id, step=current_step, progress=progress
+                "Workflow progress updated",
+                task_id=task_id,
+                step=current_step,
+                progress=progress,
             )
 
     async def complete_workflow(self, task_id: str, results: dict[str, Any]):
@@ -240,7 +245,10 @@ class WorkflowManager:
         return None
 
     async def list_workflows(
-        self, limit: int = 10, offset: int = 0, status_filter: Optional[WorkflowStatus] = None
+        self,
+        limit: int = 10,
+        offset: int = 0,
+        status_filter: Optional[WorkflowStatus] = None,
     ) -> dict[str, Any]:
         """List workflows with pagination"""
         workflows = list(self.active_workflows.values())

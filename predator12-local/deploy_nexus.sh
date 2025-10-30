@@ -90,22 +90,22 @@ print_section "FRONTEND BUILD CHECK"
 if [ ! -d "frontend/dist" ]; then
     print_status "Збираю frontend..."
     cd frontend
-    
+
     if [ ! -d "node_modules" ]; then
         print_status "Встановлюю npm залежності..."
         npm install
     fi
-    
+
     print_status "Виконую production build..."
     npm run build
-    
+
     if [ $? -eq 0 ]; then
         print_success "Frontend зібрано успішно"
     else
         print_error "Помилка збірки frontend"
         exit 1
     fi
-    
+
     cd ..
 else
     print_success "Frontend вже зібрано"

@@ -155,4 +155,3 @@ Dashboard працює на http://localhost:3000
 Версія: Dashboard v2.0
 Статус: ✅ ГОТОВО (крім push)
 Commit: 0c5172c
-

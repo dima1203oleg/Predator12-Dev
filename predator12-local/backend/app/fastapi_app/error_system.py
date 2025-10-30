@@ -258,7 +258,10 @@ class ValidationError(PredatorException):
     """Input validation errors"""
 
     def __init__(
-        self, message: str = "Validation failed", field_errors: Dict[str, str] = None, **kwargs
+        self,
+        message: str = "Validation failed",
+        field_errors: Dict[str, str] = None,
+        **kwargs,
     ):
         super().__init__(
             code=ErrorCode.VALIDATION_ERROR,
@@ -275,7 +278,10 @@ class DataQualityError(PredatorException):
     """Data quality validation errors"""
 
     def __init__(
-        self, message: str = "Data quality check failed", quality_issues: List[str] = None, **kwargs
+        self,
+        message: str = "Data quality check failed",
+        quality_issues: List[str] = None,
+        **kwargs,
     ):
         super().__init__(
             code=ErrorCode.DATA_QUALITY_ERROR,
@@ -404,7 +410,10 @@ def handle_exceptions(component: str = "unknown"):
                     code = ErrorCode.SERVICE_UNAVAILABLE
 
                 predator_error = PredatorException(
-                    code=code, message=str(e.detail), component=component, status_code=e.status_code
+                    code=code,
+                    message=str(e.detail),
+                    component=component,
+                    status_code=e.status_code,
                 )
                 error_tracker.record_error(predator_error)
                 raise predator_error
@@ -506,7 +515,10 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException) 
     error_code = code_mapping.get(exc.status_code, ErrorCode.INTERNAL_ERROR)
 
     predator_error = PredatorException(
-        code=error_code, message=str(exc.detail), status_code=exc.status_code, component="http"
+        code=error_code,
+        message=str(exc.detail),
+        status_code=exc.status_code,
+        component="http",
     )
 
     return await predator_exception_handler(request, predator_error)

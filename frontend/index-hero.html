@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PREDATOR ANALYTICS - AI Interface</title>
+    <link rel="stylesheet" href="css/hero.css">
+</head>
+<body>
+    <main class="hero-root">
+        <!-- Фоновий шар з неоновими градієнтами -->
+        <div class="hero-bg"></div>
+
+        <!-- Головна сітка -->
+        <div class="hero-grid">
+
+            <!-- Ліва панель: HUD + AI Face -->
+            <section class="hud">
+                <!-- Заголовок бренду -->
+                <div class="hud-head">
+                    <h1 class="brand">PREDATOR <span>ANALYTICS</span></h1>
+
+                    <!-- AI Обличчя (центральний елемент) -->
+                    <div class="ai-face" id="ai-face">
+                        <svg viewBox="0 0 600 700" class="face-svg" id="face-svg">
+                            <!-- Градієнти для неонового ефекту -->
+                            <defs>
+                                <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#18FFFF"/>
+                                    <stop offset="100%" stop-color="#FF00E6"/>
+                                </linearGradient>
+                                <filter id="neon-glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+
+                            <!-- Контур голови -->
+                            <path id="head-outline"
+                                  d="M300,30 C430,60 520,200 520,340 C520,530 430,650 300,670 C170,650 80,530 80,340 C80,200 170,60 300,30 Z"
+                                  fill="none"
+                                  stroke="url(#glow)"
+                                  stroke-opacity="0.9"
+                                  stroke-width="2"
+                                  filter="url(#neon-glow)"/>
+
+                            <!-- Горизонтальні сітки обличчя -->
+                            <g id="face-grid" opacity="0.25">
+                                <path d="M120,120 C220,100 380,100 480,120" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,150 C220,125 380,125 480,150" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,180 C220,150 380,150 480,180" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,210 C220,175 380,175 480,210" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,240 C220,200 380,200 480,240" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,270 C220,225 380,225 480,270" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,300 C220,250 380,250 480,300" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,330 C220,275 380,275 480,330" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,360 C220,300 380,300 480,360" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,390 C220,325 380,325 480,390" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,420 C220,350 380,350 480,420" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,450 C220,375 380,375 480,450" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,480 C220,400 380,400 480,480" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                                <path d="M120,510 C220,425 380,425 480,510" stroke="url(#glow)" stroke-width="1" fill="none"/>
+                            </g>
+
+                            <!-- Очі (з анімацією) -->
+                            <circle id="left-eye" cx="230" cy="310" r="8" fill="#18FFFF" filter="url(#neon-glow)"/>
+                            <circle id="right-eye" cx="370" cy="310" r="8" fill="#18FFFF" filter="url(#neon-glow)"/>
+
+                            <!-- Ніс -->
+                            <path d="M300,350 C295,390 305,410 300,430"
+                                  stroke="#18FFFF"
+                                  stroke-width="2"
+                                  fill="none"
+                                  opacity="0.6"
+                                  filter="url(#neon-glow)"/>
+
+                            <!-- Рот (змінюється при говорінні) -->
+                            <path id="mouth"
+                                  d="M250,470 C300,490 350,470 350,470"
+                                  stroke="#FF00E6"
+                                  stroke-width="2"
+                                  fill="none"
+                                  opacity="0.6"
+                                  filter="url(#neon-glow)"/>
+                        </svg>
+
+                        <!-- Підказка для користувача -->
+                        <div class="ai-hint" id="ai-hint">Постав запит… я поговорю з системою 🚀</div>
+
+                        <!-- Індикатор стану -->
+                        <div class="ai-status" id="ai-status">
+                            <span class="status-dot"></span>
+                            <span class="status-text">Готовий до роботи</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Стрічка попереджень/ризиків -->
+                <div class="risk-ticker" id="risk-ticker">
+                    <span class="risk-label">⚠️ ВИЯВЛЕНО РИЗИК:</span>
+                    <span class="risk-text">контрагент X пов'язаний із санкційною фірмою</span>
+                </div>
+
+                <!-- Події агентів -->
+                <aside class="hud-events">
+                    <h3>🤖 AGENT EVENTS</h3>
+                    <ul id="agent-events">
+                        <li>Router Agent: Аналіз запиту користувача...</li>
+                        <li>Law Agent: Пошук в базі законодавства...</li>
+                        <li>Court Agent: Перевірка судових справ...</li>
+                    </ul>
+                </aside>
+            </section>
+
+            <!-- Права панель: Чат + Міні-граф -->
+            <section class="hero-panels">
+
+                <!-- Чат-док -->
+                <div class="chat-dock">
+                    <h3>💬 CHAT</h3>
+                    <div class="chat-feed" id="chat-feed">
+                        <div class="msg assistant">
+                            Вітаю! Я AI помічник Predator Analytics.
+                            Питай мене про контрагентів, судові справи, або будь-що інше.
+                            Я зв'яжусь з потрібними агентами! 🎯
+                        </div>
+                    </div>
+
+                    <!-- Контроли чату -->
+                    <div class="chat-controls">
+                        <input
+                            type="text"
+                            id="chat-input"
+                            placeholder="Введи запит…"
+                            autocomplete="off"/>
+                        <button id="chat-send" title="Відправити (Enter)">📤</button>
+                        <button id="chat-voice" title="Голосове введення">🎙️</button>
+                    </div>
+                </div>
+
+                <!-- Міні-граф зв'язків -->
+                <div class="network-mini">
+                    <h3>🕸️ NETWORK</h3>
+                    <div class="network-canvas" id="network-canvas">
+                        <!-- Canvas для Cytoscape або D3 -->
+                        <div class="network-placeholder">
+                            <div class="placeholder-icon">🔗</div>
+                            <div class="placeholder-text">Граф зв'язків з'явиться після запиту</div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+
+        <!-- Навігація до технічних сторінок -->
+        <nav class="tech-nav">
+            <a href="dashboard.html" class="nav-link">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="analytics.html" class="nav-link">
+                <span class="nav-icon">📈</span>
+                <span class="nav-text">Analytics</span>
+            </a>
+            <a href="network.html" class="nav-link">
+                <span class="nav-icon">🕸️</span>
+                <span class="nav-text">Network</span>
+            </a>
+            <a href="settings.html" class="nav-link">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">Settings</span>
+            </a>
+        </nav>
+
+    </main>
+
+    <!-- Модальне вікно завантаження -->
+    <div id="loading-modal" class="modal" style="display:none;">
+        <div class="modal-content loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Обробляю запит...</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/hero-main.js" type="module"></script>
+</body>
+</html>

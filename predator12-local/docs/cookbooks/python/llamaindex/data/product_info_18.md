@@ -5,7 +5,7 @@ TrekStar Hiking Sandals, price $70,
 TrekReady
 
 Main Category: FOOTWEAR
-Sub Category: MEN'S FOOTWEAR 
+Sub Category: MEN'S FOOTWEAR
 Product Type: SANDALS
 
 ## Features

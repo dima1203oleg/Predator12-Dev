@@ -57,7 +57,7 @@ export const AISupervisionModule: React.FC<AISupervisionModuleProps> = ({
   const sceneRef = useRef<THREE.Scene>();
   const rendererRef = useRef<THREE.WebGLRenderer>();
   const animationIdRef = useRef<number>();
-  
+
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [show3D, setShow3D] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
@@ -111,7 +111,7 @@ export const AISupervisionModule: React.FC<AISupervisionModuleProps> = ({
       // Agent node
       const nodeGeometry = new THREE.SphereGeometry(0.2, 16, 16);
       let nodeColor: string;
-      
+
       switch (agent.status) {
         case 'active':
           nodeColor = nexusColors.emerald;
@@ -187,32 +187,32 @@ export const AISupervisionModule: React.FC<AISupervisionModuleProps> = ({
     let time = 0;
     const animate = () => {
       time += 0.01;
-      
+
       // Rotate hub
       hub.rotation.x += 0.01;
       hub.rotation.y += 0.02;
-      
+
       // Pulse hub based on activity
       const scale = 1 + Math.sin(time * 2) * 0.1;
       hub.scale.setScalar(scale);
-      
+
       // Animate agent nodes
       Object.values(agentMeshes).forEach((mesh, index) => {
         mesh.rotation.x += 0.02;
         mesh.rotation.y += 0.01;
-        
+
         // Floating animation
         const offset = index * 0.5;
         mesh.position.y += Math.sin(time + offset) * 0.01;
       });
-      
+
       // Auto-rotate camera
       if (autoRotate) {
         camera.position.x = Math.cos(time * 0.2) * 12;
         camera.position.z = Math.sin(time * 0.2) * 12;
         camera.lookAt(0, 0, 0);
       }
-      
+
       renderer.render(scene, camera);
       animationIdRef.current = requestAnimationFrame(animate);
     };
@@ -257,10 +257,10 @@ export const AISupervisionModule: React.FC<AISupervisionModuleProps> = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            mb: 3, 
+        <Typography
+          variant="h4"
+          sx={{
+            mb: 3,
             color: nexusColors.sapphire,
             fontFamily: 'Orbitron',
             textShadow: `0 0 10px ${nexusColors.sapphire}`
@@ -312,7 +312,7 @@ export const AISupervisionModule: React.FC<AISupervisionModuleProps> = ({
                     />
                   </Box>
                 </Box>
-                
+
                 {show3D ? (
                   <Box
                     ref={mountRef}
@@ -353,7 +353,7 @@ export const AISupervisionModule: React.FC<AISupervisionModuleProps> = ({
                 <Typography variant="h6" sx={{ mb: 2, color: nexusColors.amethyst }}>
                   Статистика Системи
                 </Typography>
-                
+
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="body2" sx={{ color: nexusColors.nebula, mb: 1 }}>
                     Активні агенти: {allAgents.filter(a => a.status === 'active').length} / {allAgents.length}
@@ -414,7 +414,7 @@ export const AISupervisionModule: React.FC<AISupervisionModuleProps> = ({
                 <Typography variant="h6" sx={{ mb: 2, color: nexusColors.emerald }}>
                   Список Агентів
                 </Typography>
-                
+
                 <TableContainer component={Paper} sx={{ backgroundColor: 'transparent' }}>
                   <Table size="small">
                     <TableHead>

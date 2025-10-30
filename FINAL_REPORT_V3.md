@@ -25,16 +25,16 @@ Frontend:
   - React 18 (функціональні компоненти)
   - TypeScript (strict mode)
   - Vite 5.4.20 (build tool)
-  
+
 Styling:
   - CSS-in-JS (inline styles)
   - Glassmorphism effects
   - Custom animations
-  
+
 State Management:
   - React Hooks (useState, useEffect, useRef)
   - Props drilling (малий масштаб проекту)
-  
+
 Features:
   - Real-time search
   - Category filtering
@@ -67,9 +67,9 @@ interface SearchBarProps {
 
 **Використання**:
 ```tsx
-<SearchBar 
-  value={searchQuery} 
-  onChange={setSearchQuery} 
+<SearchBar
+  value={searchQuery}
+  onChange={setSearchQuery}
 />
 ```
 
@@ -111,9 +111,9 @@ transform: translateY(-2px)
 
 **Використання**:
 ```tsx
-<FilterChip 
-  label="Database" 
-  active={activeFilter === 'database'} 
+<FilterChip
+  label="Database"
+  active={activeFilter === 'database'}
   onClick={() => setActiveFilter('database')}
   count={categoryCounts.database}
 />
@@ -202,9 +202,9 @@ interface ServiceModalProps {
 
 **Використання**:
 ```tsx
-<ServiceModal 
-  service={selectedService} 
-  onClose={() => setSelectedService(null)} 
+<ServiceModal
+  service={selectedService}
+  onClose={() => setSelectedService(null)}
 />
 ```
 
@@ -345,7 +345,7 @@ security  → 1 сервіс  (Keycloak)
 const filteredServices = services.filter((service) => {
   const matchesSearch = service.name.toLowerCase()
     .includes(searchQuery.toLowerCase());
-  const matchesFilter = activeFilter === 'all' || 
+  const matchesFilter = activeFilter === 'all' ||
     service.category === activeFilter;
   return matchesSearch && matchesFilter;
 });
@@ -1066,7 +1066,7 @@ npm run lint
   20:30 - Документація створена
   21:00 - Demo script готовий
   21:30 - Фінальний звіт завершений
-  
+
 Загальний час: ~3.5 години
 ```
 
@@ -1105,4 +1105,3 @@ Quality score:      10/10
 # 🚀 PREDATOR12 DASHBOARD - ГОТОВИЙ ДО ВИКОРИСТАННЯ!
 
 **Насолоджуйтесь вдосконаленим інтерфейсом! ✨**
-

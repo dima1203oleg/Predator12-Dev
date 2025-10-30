@@ -233,7 +233,7 @@ celery-workers:
 ```yaml
 # Alert escalation:
 Level 1: Development team (5min)
-Level 2: Operations team (15min) 
+Level 2: Operations team (15min)
 Level 3: Management team (30min)
 ```
 

@@ -151,7 +151,7 @@ npm run preview
 
 ## 🎉 ФІНАЛЬНИЙ СТАТУС
 
-**PREDATOR12 AI Dashboard v2.0** 
+**PREDATOR12 AI Dashboard v2.0**
 🔥 **ПОВНІСТЮ ФУНКЦІОНАЛЬНИЙ!** 🔥
 
 ✅ **GitHub Deploy:** УСПІШНО  

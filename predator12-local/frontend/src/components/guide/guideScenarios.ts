@@ -58,7 +58,7 @@ export const guideScenarios: GuideScenario[] = [
     ttl: 30,
     repeatInterval: 120
   },
-  
+
   {
     id: 'dashboard-health-critical',
     module: 'dashboard',
@@ -467,14 +467,14 @@ export const interpolateMessage = (message: string, context: any): string => {
 
 // Фільтрація сценаріїв за модулем та пріоритетом
 export const getActiveScenarios = (
-  module: string, 
-  context: any, 
+  module: string,
+  context: any,
   minPriority: 'low' | 'medium' | 'high' | 'critical' = 'low'
 ): GuideScenario[] => {
   const priorityLevels = { low: 0, medium: 1, high: 2, critical: 3 };
-  
+
   return guideScenarios
-    .filter(scenario => 
+    .filter(scenario =>
       (scenario.module === module || scenario.module === '*') &&
       priorityLevels[scenario.trigger.priority] >= priorityLevels[minPriority] &&
       evaluateTrigger(scenario.trigger.condition, context)

@@ -23,10 +23,10 @@ run_test() {
     local test_name="$1"
     local test_command="$2"
     local expected_output="$3"
-    
+
     TESTS_TOTAL=$((TESTS_TOTAL + 1))
     echo -n "  🔍 $test_name... "
-    
+
     if eval "$test_command" > /dev/null 2>&1; then
         echo -e "${GREEN}✅ PASS${NC}"
         TESTS_PASSED=$((TESTS_PASSED + 1))
@@ -42,9 +42,9 @@ run_test() {
 check_http() {
     local url="$1"
     local expected_status="${2:-200}"
-    
+
     local status=$(curl -s -o /dev/null -w "%{http_code}" "$url" || echo "000")
-    
+
     if [ "$status" = "$expected_status" ]; then
         return 0
     else
@@ -147,7 +147,7 @@ echo -e "  ${RED}❌ Провалено: $TESTS_FAILED${NC}"
 if [ $TESTS_TOTAL -gt 0 ]; then
     SUCCESS_RATE=$((TESTS_PASSED * 100 / TESTS_TOTAL))
     echo "  📊 Успішність: $SUCCESS_RATE%"
-    
+
     if [ $SUCCESS_RATE -ge 90 ]; then
         echo -e "${GREEN}🎉 Система готова до роботи!${NC}"
         exit 0

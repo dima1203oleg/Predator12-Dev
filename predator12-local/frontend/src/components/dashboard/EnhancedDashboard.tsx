@@ -41,12 +41,12 @@ const EnhancedDashboard: React.FC = () => {
       setError(null);
 
       // TODO: Replace with real API calls when backend is ready
-      const healthData: any = { 
-        status: 'optimal', 
-        cpu: 45, 
-        memory: 62, 
+      const healthData: any = {
+        status: 'optimal',
+        cpu: 45,
+        memory: 62,
         activeAgents: 12,
-        reasons: [] 
+        reasons: []
       };
       const agentsData: any[] = [];
 
@@ -80,7 +80,7 @@ const EnhancedDashboard: React.FC = () => {
     } catch (err: any) {
       const errorMessage = err?.message || 'Failed to load dashboard data';
       setError(errorMessage);
-      
+
       addEvent(
         { type: 'NETWORK_OFFLINE' },
         'Помилка мережі',
@@ -102,7 +102,7 @@ const EnhancedDashboard: React.FC = () => {
     try {
       // TODO: Implement real restart when backend is ready
       console.log('Restarting agent:', agentId);
-      
+
       addEvent(
         { type: 'ACTION_REQUIRED', cta: { label: 'Перезапуск', run: () => {} } },
         'Перезапуск агента',
@@ -150,15 +150,15 @@ const EnhancedDashboard: React.FC = () => {
   // Початкове завантаження даних
   useEffect(() => {
     loadDashboardData();
-    
+
     // Автооновлення кожні 30 секунд
     const interval = setInterval(loadDashboardData, 30000);
-    
+
     // TODO: Реальний WebSocket для подій реального часу
     // const ws = nexusAPI.connectWebSocket((event: any) => {
     //   let message = '';
     //   let level: 'info' | 'success' | 'warn' | 'error' = 'info';
-    //   
+    //
     //   switch (event.type) {
     //     case 'HEALTH_UNKNOWN':
     //       message = `Компонент ${event.source} не відповідає`;
@@ -177,7 +177,7 @@ const EnhancedDashboard: React.FC = () => {
     //       level = 'warn';
     //       break;
     //   }
-    //   
+    //
     //   if (message) {
     //     addEvent(event, 'Системна подія', message, level);
     //   }
@@ -234,10 +234,10 @@ const EnhancedDashboard: React.FC = () => {
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
             <Box>
-              <Typography 
-                variant="h3" 
-                sx={{ 
-                  color: nexusColors.frost, 
+              <Typography
+                variant="h3"
+                sx={{
+                  color: nexusColors.frost,
                   fontFamily: 'Orbitron, monospace',
                   fontWeight: 700,
                   textShadow: `0 0 20px ${nexusColors.quantum}50`,
@@ -249,10 +249,10 @@ const EnhancedDashboard: React.FC = () => {
               >
                 Міст Управління
               </Typography>
-              <Typography 
-                variant="subtitle1" 
-                sx={{ 
-                  color: nexusColors.nebula, 
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  color: nexusColors.nebula,
                   mt: 1,
                   opacity: 0.8
                 }}
@@ -263,11 +263,11 @@ const EnhancedDashboard: React.FC = () => {
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               {/* Last updated indicator */}
-              <Typography 
-                variant="caption" 
-                sx={{ 
-                  color: nexusColors.nebula, 
-                  opacity: 0.7 
+              <Typography
+                variant="caption"
+                sx={{
+                  color: nexusColors.nebula,
+                  opacity: 0.7
                 }}
               >
                 Оновлено: {lastUpdated.toLocaleTimeString('uk-UA')}
@@ -286,7 +286,7 @@ const EnhancedDashboard: React.FC = () => {
                     }
                   }}
                 >
-                  <RefreshIcon sx={{ 
+                  <RefreshIcon sx={{
                     animation: loading ? 'spin 1s linear infinite' : 'none',
                     '@keyframes spin': {
                       from: { transform: 'rotate(0deg)' },
@@ -334,9 +334,9 @@ const EnhancedDashboard: React.FC = () => {
         {/* Error Alert */}
         {error && (
           <Fade in={true}>
-            <Alert 
-              severity="error" 
-              sx={{ 
+            <Alert
+              severity="error"
+              sx={{
                 mb: 3,
                 backgroundColor: `${nexusColors.error}15`,
                 border: `1px solid ${nexusColors.error}40`,
@@ -434,7 +434,7 @@ const EnhancedDashboard: React.FC = () => {
 
       {/* Fixed UI elements */}
       <NotificationHub />
-      <GuideDock 
+      <GuideDock
         currentModule="dashboard"
         systemHealth={systemHealth?.status}
       />

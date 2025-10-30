@@ -37,9 +37,9 @@ check_service() {
     local service_name=$1
     local url=$2
     local expected_status=${3:-200}
-    
+
     echo -n "Checking $service_name... "
-    
+
     if curl -s -o /dev/null -w "%{http_code}" "$url" | grep -q "$expected_status"; then
         echo -e "${GREEN}✓ Healthy${NC}"
         return 0
@@ -55,15 +55,15 @@ test_api_endpoint() {
     local url=$2
     local method=${3:-GET}
     local data=$4
-    
+
     echo -n "Testing $name... "
-    
+
     if [[ "$method" == "POST" ]]; then
         response=$(curl -s -X POST -H "Content-Type: application/json" -d "$data" "$url")
     else
         response=$(curl -s "$url")
     fi
-    
+
     if [[ $? -eq 0 ]]; then
         echo -e "${GREEN}✓ Success${NC}"
         return 0
@@ -103,16 +103,16 @@ echo -e "\n${BLUE}=== Phase 3: MCP Server Tests ===${NC}"
 if [[ -d "./codespaces-models" ]]; then
     echo "Testing MCP Server..."
     cd codespaces-models
-    
+
     # Start MCP server in background
     node server.js &
     MCP_PID=$!
     sleep 5
-    
+
     # Test MCP endpoint
     test_api_endpoint "MCP Server" "http://localhost:3010/v1/simple-chat" "POST" \
         '{"message": "Hello from test", "history": []}'
-    
+
     # Stop MCP server
     kill $MCP_PID 2>/dev/null || true
     cd ..
@@ -155,7 +155,7 @@ if [[ -f "./scripts/indexing/discover_pg_schema.py" ]]; then
     fi
 fi
 
-# Test indexing script  
+# Test indexing script
 if [[ -f "./scripts/indexing/index_pg_to_opensearch.py" ]]; then
     echo -n "Testing indexing script... "
     if python3 ./scripts/indexing/index_pg_to_opensearch.py --dry-run &>/dev/null; then
@@ -241,7 +241,7 @@ cat << EOF
 
 ⚙️ Components Status:
    - Backend API: Ready
-   - Frontend: Ready  
+   - Frontend: Ready
    - OpenSearch: Ready
    - Monitoring: Ready
 

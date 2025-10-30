@@ -154,13 +154,13 @@ export const DataOpsModule: React.FC = () => {
         lastModified: new Date(),
         source: 'upload'
       };
-      
+
       setDatasets(prev => [...prev, newDataset]);
-      
+
       // Simulate upload process
       setTimeout(() => {
-        setDatasets(prev => prev.map(ds => 
-          ds.id === newDataset.id 
+        setDatasets(prev => prev.map(ds =>
+          ds.id === newDataset.id
             ? { ...ds, status: 'ready', rows: Math.floor(Math.random() * 10000) + 1000, columns: Math.floor(Math.random() * 20) + 5 }
             : ds
         ));
@@ -216,10 +216,10 @@ export const DataOpsModule: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Typography 
-          variant="h4" 
-          sx={{ 
-            mb: 3, 
+        <Typography
+          variant="h4"
+          sx={{
+            mb: 3,
             color: nexusColors.amethyst,
             fontFamily: 'Orbitron',
             textShadow: `0 0 10px ${nexusColors.amethyst}`
@@ -238,7 +238,7 @@ export const DataOpsModule: React.FC = () => {
                   <UploadIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
                   Телепортація Даних
                 </Typography>
-                
+
                 <Box
                   {...getRootProps()}
                   sx={{
@@ -248,7 +248,7 @@ export const DataOpsModule: React.FC = () => {
                     textAlign: 'center',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
-                    background: isDragActive 
+                    background: isDragActive
                       ? `linear-gradient(45deg, ${nexusColors.emerald}20, transparent)`
                       : 'transparent',
                     '&:hover': {
@@ -297,7 +297,7 @@ export const DataOpsModule: React.FC = () => {
                   <TransformIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
                   ETL Конвеєри
                 </Typography>
-                
+
                 {pipelines.map((pipeline) => (
                   <Box key={pipeline.id} sx={{ mb: 2, p: 2, border: `1px solid ${nexusColors.quantum}`, borderRadius: 1 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
@@ -313,11 +313,11 @@ export const DataOpsModule: React.FC = () => {
                         }}
                       />
                     </Box>
-                    
+
                     <Typography variant="body2" sx={{ color: nexusColors.nebula, mb: 1 }}>
                       {pipeline.source} → {pipeline.destination}
                     </Typography>
-                    
+
                     {pipeline.status === 'running' && (
                       <LinearProgress
                         variant="determinate"
@@ -331,7 +331,7 @@ export const DataOpsModule: React.FC = () => {
                         }}
                       />
                     )}
-                    
+
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Typography variant="caption" sx={{ color: nexusColors.shadow }}>
                         Останній запуск: {pipeline.lastRun.toLocaleString()}
@@ -361,7 +361,7 @@ export const DataOpsModule: React.FC = () => {
                 <Typography variant="h6" sx={{ mb: 2, color: nexusColors.warning }}>
                   Каталог Датасетів
                 </Typography>
-                
+
                 <TableContainer component={Paper} sx={{ backgroundColor: 'transparent' }}>
                   <Table>
                     <TableHead>
@@ -443,8 +443,8 @@ export const DataOpsModule: React.FC = () => {
                           <TableCell sx={{ borderColor: nexusColors.quantum }}>
                             <Box sx={{ display: 'flex', gap: 0.5 }}>
                               <Tooltip title="Переглянути">
-                                <IconButton 
-                                  size="small" 
+                                <IconButton
+                                  size="small"
                                   sx={{ color: nexusColors.sapphire }}
                                   onClick={() => setSelectedDataset(dataset)}
                                 >
@@ -550,8 +550,8 @@ export const DataOpsModule: React.FC = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setSyntheticDialogOpen(false)}>Скасувати</Button>
-            <Button 
-              variant="contained" 
+            <Button
+              variant="contained"
               onClick={() => setSyntheticDialogOpen(false)}
               sx={{ backgroundColor: nexusColors.emerald }}
             >

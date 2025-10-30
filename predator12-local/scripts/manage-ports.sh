@@ -43,7 +43,7 @@ PORTS=(
 check_port() {
     local port=$1
     local name=$2
-    
+
     if sudo lsof -i :$port -sTCP:LISTEN &>/dev/null; then
         local pid=$(sudo lsof -ti :$port -sTCP:LISTEN)
         local process=$(ps -p $pid -o comm= 2>/dev/null || echo "unknown")
@@ -61,9 +61,9 @@ check_port() {
 free_port() {
     local port=$1
     local name=$2
-    
+
     info "Звільняю порт $port ($name)..."
-    
+
     if sudo lsof -ti :$port -sTCP:LISTEN &>/dev/null; then
         local pids=$(sudo lsof -ti :$port -sTCP:LISTEN)
         for pid in $pids; do
@@ -72,7 +72,7 @@ free_port() {
             sudo kill -9 $pid 2>/dev/null || true
         done
         sleep 1
-        
+
         if sudo lsof -ti :$port -sTCP:LISTEN &>/dev/null; then
             error "Не вдалося звільнити порт $port"
             return 1
@@ -92,10 +92,10 @@ free_port() {
 cmd_check() {
     info "=== Перевірка всіх портів Predator12 ==="
     echo ""
-    
+
     local occupied=0
     local free_count=0
-    
+
     for entry in "${PORTS[@]}"; do
         local port="${entry%%:*}"
         local name="${entry#*:}"
@@ -105,7 +105,7 @@ cmd_check() {
             occupied=$((occupied + 1))
         fi
     done
-    
+
     echo ""
     info "Підсумок: $free_count вільних, $occupied зайнятих"
 }
@@ -116,25 +116,25 @@ cmd_check() {
 cmd_free() {
     warning "=== УВАГА: Звільнення всіх портів Predator12 ==="
     echo ""
-    
+
     read -p "Ви впевнені? Це вб'є всі процеси на цих портах! (y/N): " -n 1 -r REPLY
     echo ""
-    
+
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         info "Скасовано користувачем"
         exit 0
     fi
-    
+
     echo ""
     info "Звільняю порти..."
     echo ""
-    
+
     for entry in "${PORTS[@]}"; do
         local port="${entry%%:*}"
         local name="${entry#*:}"
         free_port "$port" "$name"
     done
-    
+
     echo ""
     success "Всі порти звільнено!"
 }
@@ -144,12 +144,12 @@ cmd_free() {
 # ==============================================================================
 cmd_free_single() {
     local port=$1
-    
+
     if [ -z "$port" ]; then
         error "Вкажіть номер порту: $0 free-single <PORT>"
         exit 1
     fi
-    
+
     local name="Unknown service"
     for entry in "${PORTS[@]}"; do
         if [ "${entry%%:*}" = "$port" ]; then
@@ -157,7 +157,7 @@ cmd_free_single() {
             break
         fi
     done
-    
+
     free_port "$port" "$name"
 }
 
@@ -167,11 +167,11 @@ cmd_free_single() {
 cmd_free_dev() {
     info "=== Звільняю dev-порти (8000, 3000, 5555) ==="
     echo ""
-    
+
     free_port 8000 "Backend FastAPI"
     free_port 3000 "Frontend"
     free_port 5555 "Celery Flower"
-    
+
     echo ""
     success "Dev-порти звільнено!"
 }
@@ -182,15 +182,15 @@ cmd_free_dev() {
 cmd_kill_postgres() {
     warning "=== УВАГА: Зупинка PostgreSQL ==="
     echo ""
-    
+
     read -p "Це зупинить всю базу даних! Впевнені? (y/N): " -n 1 -r REPLY
     echo ""
-    
+
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         info "Скасовано"
         exit 0
     fi
-    
+
     # Спроба через brew
     if brew services list 2>/dev/null | grep -q "postgresql.*started"; then
         info "Зупиняю PostgreSQL через Homebrew..."

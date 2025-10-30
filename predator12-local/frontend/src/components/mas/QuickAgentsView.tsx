@@ -28,7 +28,7 @@ const QuickAgentsView: React.FC<QuickAgentsViewProps> = ({ onAgentClick }) => {
     { id: 'Anomaly', category: 'core', status: 'active', health: 90 },
     { id: 'Forecast', category: 'core', status: 'active', health: 88 },
     { id: 'Simulator', category: 'core', status: 'active', health: 84 },
-    
+
     // Specialized Agents (10)
     { id: 'SyntheticData', category: 'specialized', status: 'paused', health: 0 },
     { id: 'ReportExport', category: 'specialized', status: 'active', health: 95 },
@@ -68,10 +68,10 @@ const QuickAgentsView: React.FC<QuickAgentsViewProps> = ({ onAgentClick }) => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography 
-        variant="h5" 
-        sx={{ 
-          mb: 3, 
+      <Typography
+        variant="h5"
+        sx={{
+          mb: 3,
           color: nexusColors.frost,
           textAlign: 'center',
           background: `linear-gradient(45deg, ${nexusColors.quantum}, ${nexusColors.sapphire})`,
@@ -81,7 +81,7 @@ const QuickAgentsView: React.FC<QuickAgentsViewProps> = ({ onAgentClick }) => {
       >
         🤖 Всі {allAgents.length} агентів системи
       </Typography>
-      
+
       <Grid container spacing={2}>
         {allAgents.map((agent) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={agent.id}>
@@ -104,10 +104,10 @@ const QuickAgentsView: React.FC<QuickAgentsViewProps> = ({ onAgentClick }) => {
                   <Typography sx={{ fontSize: '0.9rem' }}>
                     {getCategoryEmoji(agent.category)} {getStatusEmoji(agent.status)}
                   </Typography>
-                  <Typography 
-                    variant="body2" 
-                    sx={{ 
-                      ml: 1, 
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      ml: 1,
                       fontWeight: 600,
                       color: nexusColors.frost,
                       fontSize: '0.8rem'
@@ -116,7 +116,7 @@ const QuickAgentsView: React.FC<QuickAgentsViewProps> = ({ onAgentClick }) => {
                     {agent.id}
                   </Typography>
                 </Box>
-                
+
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Chip
                     size="small"
@@ -128,10 +128,10 @@ const QuickAgentsView: React.FC<QuickAgentsViewProps> = ({ onAgentClick }) => {
                       height: 20
                     }}
                   />
-                  <Typography 
-                    variant="caption" 
-                    sx={{ 
-                      color: agent.health > 80 ? nexusColors.emerald : 
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: agent.health > 80 ? nexusColors.emerald :
                              agent.health > 50 ? nexusColors.warning : nexusColors.crimson,
                       fontWeight: 600
                     }}
@@ -139,10 +139,10 @@ const QuickAgentsView: React.FC<QuickAgentsViewProps> = ({ onAgentClick }) => {
                     {agent.health}%
                   </Typography>
                 </Box>
-                
-                <Typography 
-                  variant="caption" 
-                  sx={{ 
+
+                <Typography
+                  variant="caption"
+                  sx={{
                     color: nexusColors.shadow,
                     display: 'block',
                     mt: 1,
@@ -156,11 +156,11 @@ const QuickAgentsView: React.FC<QuickAgentsViewProps> = ({ onAgentClick }) => {
           </Grid>
         ))}
       </Grid>
-      
+
       <Box sx={{ mt: 3, textAlign: 'center' }}>
         <Typography variant="body2" sx={{ color: nexusColors.shadow }}>
-          Core: {allAgents.filter(a => a.category === 'core').length} | 
-          Specialized: {allAgents.filter(a => a.category === 'specialized').length} | 
+          Core: {allAgents.filter(a => a.category === 'core').length} |
+          Specialized: {allAgents.filter(a => a.category === 'specialized').length} |
           Active: {allAgents.filter(a => a.status === 'active').length}
         </Typography>
       </Box>

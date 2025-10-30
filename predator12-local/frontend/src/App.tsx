@@ -70,6 +70,10 @@ import AIVoiceInterface from './components/voice/AIVoiceInterface';
 import VoiceControlIntegration from './components/VoiceControlIntegration';
 import Immersive3DVisualizer from './components/visualization/Immersive3DVisualizer';
 import RealTimeCollaborationHub from './components/collaboration/RealTimeCollaborationHub';
+// CYBER-ACE модуль
+import CyberAcePage from './modules/cyber-ace/CyberAcePage';
+import CyberAceTestPage from './modules/cyber-ace/CyberAceTestPage';
+import './modules/cyber-ace/styles/cyber-ace.css';
 // Нові ігрові компоненти
 import AchievementSystem from './components/game/AchievementSystem';
 import NeuralNetworkGame from './components/game/NeuralNetworkGame';
@@ -269,6 +273,13 @@ function App() {
       icon: GroupsIcon,
       color: nexusColors.success.light,
       xp: 320
+    },
+    {
+      id: 'cyber-ace',
+      label: 'CYBER-ACE Assistant',
+      icon: RocketIcon,
+      color: '#00ffff',
+      xp: 500
     }
   ];
 
@@ -887,6 +898,29 @@ function App() {
                     onVideoCallStart={() => console.log('Video call started')}
                     onScreenShareStart={() => console.log('Screen share started')}
                   />
+                </motion.div>
+              ) : currentView === 'cyber-ace' ? (
+                <motion.div
+                  key="cyber-ace"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.6, ease: 'easeOut' }}
+                >
+                  <React.Suspense fallback={
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minHeight: '80vh',
+                      color: '#00ffff',
+                      fontSize: '1.5rem'
+                    }}>
+                      🤖 Loading CYBER-ACE...
+                    </div>
+                  }>
+                    <CyberAcePage />
+                  </React.Suspense>
                 </motion.div>
               ) : (
                 <motion.div

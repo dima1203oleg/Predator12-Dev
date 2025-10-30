@@ -63,7 +63,7 @@ const AdminDashboard = () => {
                 <Header />
                 <main className="flex-1 p-6 mt-16 bg-gray-900 bg-opacity-80 rounded-tl-lg shadow-lg border-t border-l border-gray-700 overflow-auto">
                     <h2 className="text-2xl font-bold text-blue-400 mb-6">Панель адміністратора</h2>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {/* System Status Card */}
                         <div className="bg-gray-800 rounded-lg shadow-lg border border-gray-700 p-5">
@@ -87,13 +87,13 @@ const AdminDashboard = () => {
                                 </div>
                             </div>
                         </div>
-                        
+
                         {/* Admin Tools Card */}
                         <div className="bg-gray-800 rounded-lg shadow-lg border border-gray-700 p-5">
                             <h3 className="text-lg font-semibold text-blue-300 mb-4">Інструменти моніторингу</h3>
                             <div className="space-y-3">
-                                <Link 
-                                    to="/admin/websocket-monitor" 
+                                <Link
+                                    to="/admin/websocket-monitor"
                                     className="block w-full bg-blue-900 hover:bg-blue-800 text-white py-2 px-4 rounded text-center transition duration-300"
                                 >
                                     <span className="flex items-center justify-center">
@@ -121,7 +121,7 @@ const AdminDashboard = () => {
                                 </button>
                             </div>
                         </div>
-                        
+
                         {/* ... existing cards ... */}
                     </div>
                 </main>
@@ -130,4 +130,4 @@ const AdminDashboard = () => {
     );
 };
 
-export default AdminDashboard; 
+export default AdminDashboard;

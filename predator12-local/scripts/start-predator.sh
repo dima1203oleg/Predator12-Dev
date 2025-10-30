@@ -39,9 +39,9 @@ check_service_health() {
     local service_name=$1
     local url=$2
     local expected_status=${3:-200}
-    
+
     echo -n "Checking $service_name health... "
-    
+
     for i in $(seq 1 30); do
         if curl -s -o /dev/null -w "%{http_code}" "$url" | grep -q "$expected_status"; then
             echo -e "${GREEN}✅ Healthy${NC}"
@@ -49,7 +49,7 @@ check_service_health() {
         fi
         sleep 2
     done
-    
+
     echo -e "${RED}❌ Unhealthy${NC}"
     return 1
 }
@@ -59,9 +59,9 @@ wait_for_service() {
     local service_name=$1
     local port=$2
     local host=${3:-localhost}
-    
+
     echo -n "Waiting for $service_name to be ready... "
-    
+
     for i in $(seq 1 60); do
         if nc -z "$host" "$port" 2>/dev/null; then
             echo -e "${GREEN}✅ Ready${NC}"
@@ -69,7 +69,7 @@ wait_for_service() {
         fi
         sleep 2
     done
-    
+
     echo -e "${RED}❌ Timeout${NC}"
     return 1
 }
@@ -224,13 +224,13 @@ echo ""
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}🎉 Predator11 started successfully!${NC}"
     echo -e "${GREEN}✅ All services are healthy and ready to use${NC}"
-    
+
     # Show resource usage
     echo ""
     echo -e "${BLUE}💻 Resource Usage:${NC}"
     echo "================================"
     docker stats --no-stream --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}" | head -10
-    
+
 else
     echo -e "${RED}❌ Some services failed to start properly${NC}"
     echo -e "${YELLOW}💡 Check the logs above and run health checks manually${NC}"

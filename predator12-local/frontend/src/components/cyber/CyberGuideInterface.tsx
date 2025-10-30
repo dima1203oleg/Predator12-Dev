@@ -68,13 +68,13 @@ interface GestureCommand {
 // Компонент голографічного ефекту
 const HolographicOverlay: React.FC<{ effect: HologramEffect; isActive: boolean }> = ({ effect, isActive }) => {
   const overlayRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     if (!overlayRef.current || !effect.enabled || !isActive) return;
-    
+
     const overlay = overlayRef.current;
     let animationId: number;
-    
+
     const animate = () => {
       if (effect.glitch) {
         const glitchValue = Math.sin(Date.now() * 0.01) * 0.5;
@@ -82,13 +82,13 @@ const HolographicOverlay: React.FC<{ effect: HologramEffect; isActive: boolean }
       }
       animationId = requestAnimationFrame(animate);
     };
-    
+
     animate();
     return () => cancelAnimationFrame(animationId);
   }, [effect, isActive]);
-  
+
   if (!effect.enabled || !isActive) return null;
-  
+
   return (
     <Box
       ref={overlayRef}
@@ -131,45 +131,45 @@ const HolographicOverlay: React.FC<{ effect: HologramEffect; isActive: boolean }
 };
 
 // Компонент кібер-обличчя
-const CyberFace: React.FC<{ 
-  emotion: CyberGuideState['currentEmotion']; 
+const CyberFace: React.FC<{
+  emotion: CyberGuideState['currentEmotion'];
   isSpeaking: boolean;
   transparency: number;
 }> = ({ emotion, isSpeaking, transparency }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
+
     canvas.width = 200;
     canvas.height = 200;
-    
+
     let animationId: number;
-    
+
     const drawFace = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
       const time = Date.now() * 0.003;
-      
+
       // Основне кібер-обличчя
       ctx.strokeStyle = `rgba(0, 255, 255, ${transparency})`;
       ctx.lineWidth = 2;
-      
+
       // Зовнішній контур
       ctx.beginPath();
       ctx.arc(centerX, centerY, 80, 0, Math.PI * 2);
       ctx.stroke();
-      
+
       // Очі залежно від емоції
       const eyeGlow = isSpeaking ? Math.sin(time * 5) * 0.3 + 0.7 : 0.5;
       ctx.fillStyle = `rgba(0, 255, 255, ${eyeGlow * transparency})`;
-      
+
       if (emotion === 'happy') {
         // Веселі очі
         ctx.beginPath();
@@ -191,7 +191,7 @@ const CyberFace: React.FC<{
         ctx.arc(centerX + 25, centerY - 15, 5, 0, Math.PI * 2);
         ctx.fill();
       }
-      
+
       // Рот залежно від мовлення
       if (isSpeaking) {
         const mouthAnimation = Math.sin(time * 8) * 10;
@@ -203,11 +203,11 @@ const CyberFace: React.FC<{
         ctx.arc(centerX, centerY + 20, 5, 0, Math.PI);
         ctx.stroke();
       }
-      
+
       // Додаткові кібер-елементи
       ctx.strokeStyle = `rgba(255, 0, 100, ${transparency * 0.6})`;
       ctx.lineWidth = 1;
-      
+
       // Кібер-сітка
       for (let i = 0; i < 6; i++) {
         const angle = (i / 6) * Math.PI * 2 + time;
@@ -215,20 +215,20 @@ const CyberFace: React.FC<{
         const y1 = centerY + Math.sin(angle) * 60;
         const x2 = centerX + Math.cos(angle) * 90;
         const y2 = centerY + Math.sin(angle) * 90;
-        
+
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
       }
-      
+
       animationId = requestAnimationFrame(drawFace);
     };
-    
+
     drawFace();
     return () => cancelAnimationFrame(animationId);
   }, [emotion, isSpeaking, transparency]);
-  
+
   return (
     <canvas
       ref={canvasRef}
@@ -255,7 +255,7 @@ const CyberGuideInterface: React.FC = () => {
     adaptiveMode: true,
     transparency: 0.8
   });
-  
+
   const [hologramEffect, setHologramEffect] = useState<HologramEffect>({
     enabled: true,
     intensity: 60,
@@ -263,10 +263,10 @@ const CyberGuideInterface: React.FC = () => {
     glitch: true,
     scanlines: true
   });
-  
+
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [currentMessage, setCurrentMessage] = useState('Вітаю! Я ваш кібер-гід по системі Predator Analytics.');
-  
+
   // Жести
   const gestureCommands: GestureCommand[] = [
     {
@@ -288,7 +288,7 @@ const CyberGuideInterface: React.FC = () => {
       description: 'Відкрити налаштування'
     }
   ];
-  
+
   // Голосові команди
   const voiceCommands = [
     { command: 'привіт', action: () => setCurrentMessage('Привіт! Чим можу допомогти?') },
@@ -296,7 +296,7 @@ const CyberGuideInterface: React.FC = () => {
     { command: 'статус', action: () => setCurrentMessage('Система працює в оптимальному режимі') },
     { command: 'налаштування', action: () => setSettingsOpen(true) }
   ];
-  
+
   // Адаптивні підказки
   const adaptiveHints = [
     'Спробуйте подвійний клік для активації гіда',
@@ -304,9 +304,9 @@ const CyberGuideInterface: React.FC = () => {
     'Налаштуйте прозорість для комфортного використання',
     'Увімкніть жести для інтуїтивного управління'
   ];
-  
+
   const [currentHint, setCurrentHint] = useState(0);
-  
+
   useEffect(() => {
     if (guideState.adaptiveMode) {
       const interval = setInterval(() => {
@@ -315,13 +315,13 @@ const CyberGuideInterface: React.FC = () => {
       return () => clearInterval(interval);
     }
   }, [guideState.adaptiveMode]);
-  
+
   // Симуляція голосового синтезу
   const speak = (text: string) => {
     if (!guideState.voiceEnabled) return;
-    
+
     setGuideState(prev => ({ ...prev, isSpeaking: true }));
-    
+
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = guideState.language === 'uk' ? 'uk-UA' : 'en-US';
@@ -331,13 +331,13 @@ const CyberGuideInterface: React.FC = () => {
       setTimeout(() => setGuideState(prev => ({ ...prev, isSpeaking: false })), 2000);
     }
   };
-  
+
   // Симуляція розпізнавання голосу
   const startListening = () => {
     if (!guideState.voiceEnabled) return;
-    
+
     setGuideState(prev => ({ ...prev, isListening: true }));
-    
+
     // Симуляція
     setTimeout(() => {
       setGuideState(prev => ({ ...prev, isListening: false }));
@@ -345,7 +345,7 @@ const CyberGuideInterface: React.FC = () => {
       speak('Команду розпізнано успішно!');
     }, 3000);
   };
-  
+
   if (!guideState.isActive) {
     return (
       <Fab
@@ -368,11 +368,11 @@ const CyberGuideInterface: React.FC = () => {
       </Fab>
     );
   }
-  
+
   return (
     <>
       <HolographicOverlay effect={hologramEffect} isActive={guideState.isActive} />
-      
+
       <AnimatePresence>
         {guideState.isActive && (
           <motion.div
@@ -391,8 +391,8 @@ const CyberGuideInterface: React.FC = () => {
               elevation={24}
               sx={{
                 p: 3,
-                background: `linear-gradient(135deg, 
-                  rgba(0, 20, 40, ${guideState.transparency}) 0%, 
+                background: `linear-gradient(135deg,
+                  rgba(0, 20, 40, ${guideState.transparency}) 0%,
                   rgba(0, 10, 30, ${guideState.transparency}) 100%)`,
                 backdropFilter: 'blur(10px)',
                 border: `1px solid rgba(0, 255, 255, 0.3)`,
@@ -421,7 +421,7 @@ const CyberGuideInterface: React.FC = () => {
                     transparency={guideState.transparency}
                   />
                 </Avatar>
-                
+
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="h6" sx={{ color: nexusColors.emerald }}>
                     Кібер-Гід NEXUS
@@ -436,7 +436,7 @@ const CyberGuideInterface: React.FC = () => {
                     }}
                   />
                 </Box>
-                
+
                 <Box>
                   <Tooltip title="Налаштування">
                     <IconButton
@@ -447,7 +447,7 @@ const CyberGuideInterface: React.FC = () => {
                       <SettingsIcon />
                     </IconButton>
                   </Tooltip>
-                  
+
                   <Tooltip title="Закрити">
                     <IconButton
                       size="small"
@@ -459,7 +459,7 @@ const CyberGuideInterface: React.FC = () => {
                   </Tooltip>
                 </Box>
               </Box>
-              
+
               {/* Повідомлення */}
               <Paper
                 sx={{
@@ -481,7 +481,7 @@ const CyberGuideInterface: React.FC = () => {
                   {currentMessage}
                 </Typography>
               </Paper>
-              
+
               {/* Адаптивні підказки */}
               {guideState.adaptiveMode && (
                 <Box sx={{ mb: 2 }}>
@@ -493,7 +493,7 @@ const CyberGuideInterface: React.FC = () => {
                   </Typography>
                 </Box>
               )}
-              
+
               {/* Контроли */}
               <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
                 <Tooltip title={guideState.voiceEnabled ? "Вимкнути голос" : "Увімкнути голос"}>
@@ -507,7 +507,7 @@ const CyberGuideInterface: React.FC = () => {
                     {guideState.voiceEnabled ? <VolumeUp /> : <VolumeOff />}
                   </IconButton>
                 </Tooltip>
-                
+
                 <Tooltip title={guideState.isListening ? "Зупинити прослуховування" : "Почати прослуховування"}>
                   <IconButton
                     color={guideState.isListening ? "secondary" : "default"}
@@ -520,7 +520,7 @@ const CyberGuideInterface: React.FC = () => {
                     {guideState.isListening ? <MicOff /> : <Mic />}
                   </IconButton>
                 </Tooltip>
-                
+
                 <Tooltip title={guideState.gestureEnabled ? "Вимкнути жести" : "Увімкнути жести"}>
                   <IconButton
                     color={guideState.gestureEnabled ? "primary" : "default"}
@@ -532,7 +532,7 @@ const CyberGuideInterface: React.FC = () => {
                     <Gesture />
                   </IconButton>
                 </Tooltip>
-                
+
                 <Tooltip title="Говорити повідомлення">
                   <IconButton
                     onClick={() => speak(currentMessage)}
@@ -547,7 +547,7 @@ const CyberGuideInterface: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      
+
       {/* Панель налаштувань */}
       <Dialog
         open={settingsOpen}
@@ -556,8 +556,8 @@ const CyberGuideInterface: React.FC = () => {
         fullWidth
         PaperProps={{
           sx: {
-            background: `linear-gradient(135deg, 
-              rgba(0, 20, 40, 0.95) 0%, 
+            background: `linear-gradient(135deg,
+              rgba(0, 20, 40, 0.95) 0%,
               rgba(0, 10, 30, 0.95) 100%)`,
             backdropFilter: 'blur(10px)',
             border: `1px solid rgba(0, 255, 255, 0.3)`,
@@ -568,7 +568,7 @@ const CyberGuideInterface: React.FC = () => {
           <Typography variant="h6" sx={{ color: nexusColors.emerald, mb: 3 }}>
             Налаштування Кібер-Гіда
           </Typography>
-          
+
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle2" sx={{ color: nexusColors.frost, mb: 2 }}>
               Прозорість: {Math.round(guideState.transparency * 100)}%
@@ -587,7 +587,7 @@ const CyberGuideInterface: React.FC = () => {
               }}
             />
           </Box>
-          
+
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle2" sx={{ color: nexusColors.frost, mb: 2 }}>
               Інтенсивність голограми: {hologramEffect.intensity}%
@@ -606,7 +606,7 @@ const CyberGuideInterface: React.FC = () => {
               }}
             />
           </Box>
-          
+
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <FormControlLabel
               control={
@@ -619,7 +619,7 @@ const CyberGuideInterface: React.FC = () => {
               label="Адаптивний режим"
               sx={{ color: nexusColors.frost }}
             />
-            
+
             <FormControlLabel
               control={
                 <Switch
@@ -631,7 +631,7 @@ const CyberGuideInterface: React.FC = () => {
               label="Частинки голограми"
               sx={{ color: nexusColors.frost }}
             />
-            
+
             <FormControlLabel
               control={
                 <Switch
@@ -643,7 +643,7 @@ const CyberGuideInterface: React.FC = () => {
               label="Глітч ефекти"
               sx={{ color: nexusColors.frost }}
             />
-            
+
             <FormControlLabel
               control={
                 <Switch
@@ -658,13 +658,13 @@ const CyberGuideInterface: React.FC = () => {
           </Box>
         </DialogContent>
       </Dialog>
-      
+
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.7; }
         }
-        
+
         @keyframes particleFlow {
           0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
           33% { transform: translateX(30px) translateY(-20px) rotate(120deg); }

@@ -214,7 +214,7 @@ import { OrbitControls, Text3D } from '@react-three/drei';
 
 export function Dashboard3D({ data, fallback2D = false }) {
   const [is3DSupported, setIs3DSupported] = useState(true);
-  
+
   useEffect(() => {
     // Detect WebGL support
     const gl = document.createElement('canvas').getContext('webgl');
@@ -259,7 +259,7 @@ export function DataFeed() {
   return (
     <div className="feed-container">
       {anomalies.map(anomaly => (
-        <AnomalyCard 
+        <AnomalyCard
           key={anomaly.id}
           title={anomaly.title}
           description={anomaly.description}
@@ -289,9 +289,9 @@ export function AITerminal() {
         rag_enabled: true
       })
     });
-    
+
     const result = await response.json();
-    setMessages(prev => [...prev, 
+    setMessages(prev => [...prev,
       { role: 'user', content: query },
       { role: 'assistant', content: result.response }
     ]);
@@ -300,8 +300,8 @@ export function AITerminal() {
   return (
     <div className="terminal">
       <MessageList messages={messages} />
-      <input 
-        value={query} 
+      <input
+        value={query}
         onChange={e => setQuery(e.target.value)}
         onKeyPress={e => e.key === 'Enter' && handleSubmit()}
         placeholder="Ask me anything... (e.g., Show import schemes from Poland 2023)"
@@ -339,7 +339,7 @@ export function PIIToggle() {
   };
 
   return (
-    <button 
+    <button
       onClick={handleUnlock}
       className={hasPIIAccess ? 'unlock-btn' : 'upgrade-btn'}
     >
@@ -428,27 +428,27 @@ from langgraph.graph import StateGraph
 
 class NexusSupervisor:
     """Central orchestrator for all 30 agents."""
-    
+
     def __init__(self):
         self.agents = {}
         self.registry = self.load_registry()
         self.policies = self.load_policies()
         self.graph = self.build_graph()
-        
+
     def load_registry(self):
         """Load agent → model mappings from registry.yaml."""
         with open('backend/agents/registry.yaml') as f:
             return yaml.safe_load(f)
-    
+
     def load_policies(self):
         """Load execution policies from policies.yaml."""
         with open('backend/agents/policies.yaml') as f:
             return yaml.safe_load(f)
-    
+
     def build_graph(self):
         """Build LangGraph for task routing."""
         graph = StateGraph()
-        
+
         # Add nodes for each agent category
         graph.add_node("data_agents", self.route_data_agents)
         graph.add_node("query_agents", self.route_query_agents)
@@ -456,47 +456,47 @@ class NexusSupervisor:
         graph.add_node("self_heal", self.route_self_heal)
         graph.add_node("self_optimize", self.route_self_optimize)
         graph.add_node("self_modernize", self.route_self_modernize)
-        
+
         # Add edges for task flow
         graph.add_edge("START", "data_agents")
         graph.add_edge("data_agents", "query_agents")
         graph.add_edge("query_agents", "analysis_agents")
-        
+
         return graph.compile()
-    
+
     async def execute_task(self, task: dict):
         """Execute a task through the agent graph."""
         # Check policies and quotas
         if not self.check_policies(task):
             raise PolicyViolationError("Task violates policies")
-        
+
         # Route to appropriate agent category
         result = await self.graph.ainvoke({
             "task": task,
             "context": self.get_context(task)
         })
-        
+
         # Audit and log
         await self.audit_log(task, result)
-        
+
         return result
-    
+
     def check_policies(self, task: dict) -> bool:
         """Enforce PII gates, billing limits, resource quotas."""
         user = task.get('user')
-        
+
         # PII gate
         if task.get('requires_pii') and not user.has_role('view_pii'):
             return False
-        
+
         # Billing gate
         if task.get('cost') > user.quota_remaining:
             return False
-        
+
         # Resource limits
         if self.get_resource_usage() > self.policies['max_resources']:
             return False
-        
+
         return True
 ```
 
@@ -514,21 +514,21 @@ from sklearn.ensemble import RandomForestRegressor
 
 class ModelRouter:
     """Intelligent LLM routing with MoMA-style selection."""
-    
+
     def __init__(self):
         self.registry = self.load_model_registry()
         self.profiler = ModelProfiler()
         self.scorer = ScoringEngine()
         self.fallback_chains = self.build_fallback_chains()
-        
+
     async def select_model(self, task: dict) -> str:
         """Select optimal model for task."""
         # Step 1: Intent classification
         intent = await self.classify_intent(task)
-        
+
         # Step 2: Get candidate models
         candidates = self.get_candidates(intent, top_k=3)
-        
+
         # Step 3: Score candidates
         scores = await self.scorer.score_models(
             candidates=candidates,
@@ -539,19 +539,19 @@ class ModelRouter:
                 'cost_limit': task.get('max_cost', 0.01)
             }
         )
-        
+
         # Step 4: Select best (threshold > 0.7)
         best = max(scores, key=lambda x: x['score'])
         if best['score'] < 0.7:
             return self.fallback_chains[intent][0]
-        
+
         return best['model']
-    
+
     async def classify_intent(self, task: dict) -> str:
         """Classify task intent using lightweight LLM."""
         prompt = f"""Classify the following task intent:
         Task: {task['description']}
-        
+
         Categories:
         - reasoning: Complex multi-step logic
         - coding: Code generation/analysis
@@ -559,18 +559,18 @@ class ModelRouter:
         - vision: Image analysis
         - embedding: Text vectorization
         - fast_ui: Real-time UI response
-        
+
         Return only the category name.
         """
-        
+
         response = await self.call_classifier(prompt)
         return response.strip().lower()
-    
+
     def get_candidates(self, intent: str, top_k: int = 3) -> List[str]:
         """Get top-k models for intent from registry."""
         models = self.registry.get(intent, [])
         return models[:top_k]
-    
+
     def build_fallback_chains(self) -> Dict[str, List[str]]:
         """Define fallback chains per intent."""
         return {
@@ -602,7 +602,7 @@ class ModelRouter:
 
 class ScoringEngine:
     """Score models based on weighted criteria."""
-    
+
     def __init__(self):
         self.weights = {
             'context_match': 0.4,
@@ -611,19 +611,19 @@ class ScoringEngine:
             'dependency_score': 0.15
         }
         self.ml_regressor = self.load_regressor()
-    
+
     async def score_models(
-        self, 
-        candidates: List[str], 
-        task: dict, 
+        self,
+        candidates: List[str],
+        task: dict,
         context: dict
     ) -> List[Dict]:
         """Score each candidate model."""
         scores = []
-        
+
         for model in candidates:
             profile = await self.profiler.get_profile(model)
-            
+
             # Calculate sub-scores
             context_match = self.calculate_context_match(
                 task, model, profile
@@ -635,7 +635,7 @@ class ScoringEngine:
                 model, task['type']
             )
             dependency_score = self.check_dependencies(model)
-            
+
             # Weighted score
             total_score = (
                 self.weights['context_match'] * context_match +
@@ -643,21 +643,21 @@ class ScoringEngine:
                 self.weights['historical_perf'] * historical_perf +
                 self.weights['dependency_score'] * dependency_score
             )
-            
+
             # ML regressor refinement
             features = np.array([[
-                context_match, 
-                resource_fit, 
-                historical_perf, 
+                context_match,
+                resource_fit,
+                historical_perf,
                 dependency_score,
                 profile['avg_latency'],
                 profile['avg_cost']
             ]])
             ml_score = self.ml_regressor.predict(features)[0]
-            
+
             # Combined score
             final_score = 0.7 * total_score + 0.3 * ml_score
-            
+
             scores.append({
                 'model': model,
                 'score': final_score,
@@ -669,7 +669,7 @@ class ScoringEngine:
                     'ml_prediction': ml_score
                 }
             })
-        
+
         return sorted(scores, key=lambda x: x['score'], reverse=True)
 ```
 
@@ -687,7 +687,7 @@ model_registry:
       avg_latency_ms: 1200
       accuracy_score: 0.95
       fallback: anthropic/claude-3.5-sonnet
-      
+
     - model: anthropic/claude-3.5-sonnet
       provider: anthropic
       context_window: 200000
@@ -695,7 +695,7 @@ model_registry:
       avg_latency_ms: 1500
       accuracy_score: 0.94
       fallback: meta-llama/llama-3.3-70b-instruct
-      
+
     - model: meta-llama/llama-3.3-70b-instruct
       provider: fireworks
       context_window: 128000
@@ -713,7 +713,7 @@ model_registry:
       avg_latency_ms: 600
       accuracy_score: 0.91
       fallback: deepseek/deepseek-coder-v2-lite
-      
+
     - model: deepseek/deepseek-coder-v2-lite
       provider: deepseek
       context_window: 163840
@@ -731,7 +731,7 @@ model_registry:
       avg_latency_ms: 150
       accuracy_score: 0.75
       fallback: microsoft/phi-3-mini-4k
-      
+
     - model: microsoft/phi-3-mini-4k
       provider: fireworks
       context_window: 4096
@@ -749,7 +749,7 @@ model_registry:
       avg_latency_ms: 1800
       accuracy_score: 0.88
       fallback: microsoft/phi-3.5-vision-instruct
-      
+
     - model: microsoft/phi-3.5-vision-instruct
       provider: fireworks
       context_window: 128000
@@ -765,7 +765,7 @@ model_registry:
       dimensions: 1024
       avg_latency_ms: 50
       fallback: sentence-transformers/all-MiniLM-L6-v2
-      
+
     - model: sentence-transformers/all-MiniLM-L6-v2
       provider: local
       dimensions: 384
@@ -780,20 +780,20 @@ agent_models:
       - anthropic/claude-3.5-sonnet
       - meta-llama/llama-3.3-70b-instruct
     embed: BAAI/bge-m3
-    
+
   SearchPlannerAgent:
     primary: openai/gpt-4o
     fallbacks:
       - google/gemini-2.0-flash-exp
       - meta-llama/llama-3.3-70b-instruct
     embed: BAAI/bge-m3
-    
+
   ModelRouterAgent:
     primary: openai/gpt-4o-mini
     fallbacks:
       - mistralai/ministral-3b
     embed: null
-    
+
   ArbiterAgent:
     models:
       - openai/gpt-4o
@@ -802,20 +802,20 @@ agent_models:
       - meta-llama/llama-3.3-70b-instruct
       - deepseek/deepseek-chat
     selection_strategy: parallel_consensus
-    
+
   AutoHealAgent:
     primary: meta-llama/llama-3.3-70b-instruct
     fallbacks:
       - qwen/qwen-2.5-72b-instruct
     embed: null
-    
+
   TestGeneratorAgent:
     primary: qwen/qwq-32b-preview
     fallbacks:
       - deepseek/deepseek-coder-v2-lite
       - mistralai/codestral-latest
     embed: null
-    
+
   DependencyUpdaterAgent:
     primary: qwen/qwen-2.5-coder-32b-instruct
     fallbacks:
@@ -834,84 +834,84 @@ policies:
     memory_per_agent: "1Gi"
     max_concurrent_agents: 10
     timeout_seconds: 300
-    
+
   # Rate Limits
   rate_limits:
     requests_per_minute: 60
     tokens_per_hour: 1000000
     cost_per_day: 100.0
-    
+
   # Priority Levels
   priorities:
     critical: 1  # Self-heal, security
     high: 2      # User queries, analysis
     normal: 3    # Optimization, reports
     low: 4       # Modernization, background tasks
-    
+
   # Degradation Strategy
   degradation:
     on_high_load:
       - disable_low_priority_agents
       - use_faster_models
       - increase_cache_ttl
-      
+
     on_model_failure:
       - use_fallback_chain
       - retry_with_backoff: [1s, 5s, 15s]
       - escalate_to_human: 3_failures
-      
+
     on_cost_limit:
       - switch_to_local_models
       - enable_aggressive_caching
       - queue_non_critical_tasks
-      
+
   # PII Protection
   pii_masks:
     default_mask: true
     hash_algorithm: sha256
     pepper_env_var: PII_PEPPER
-    
+
   pii_roles:
     - view_pii
     - export_pii
     - admin
-    
+
   pii_audit:
     log_all_disclosures: true
     retention_days: 730  # 2 years
-    
+
   # Billing Gates
   billing_tiers:
     free:
       queries_per_day: 100
       pii_access: false
       export_formats: [csv]
-      
+
     pro:
       queries_per_day: 10000
       pii_access: true
       export_formats: [csv, pdf, pptx]
-      
+
     enterprise:
       queries_per_day: unlimited
       pii_access: true
       export_formats: [csv, pdf, pptx, api]
       custom_models: true
-      
+
   # Human-in-the-Loop
   human_review_required:
     - migration_generation
     - dependency_updates
     - schema_changes
     - security_policy_changes
-    
+
   # Sandbox Constraints
   sandbox:
     docker_enabled: true
     network_isolation: true
     no_git_write: true
     no_system_calls: true
-    
+
   # Telemetry
   telemetry:
     otel_enabled: true
@@ -1232,4 +1232,3 @@ Current Status: Phase 1 Complete, Phase 2-8 In Progress
 **Document Version**: 11.0  
 **Last Updated**: 2025-01-06  
 **Status**: ✅ **READY FOR IMPLEMENTATION**
-

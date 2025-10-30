@@ -6,7 +6,7 @@
 **Docker daemon не запущений** - це корінь всіх проблем.
 
 ```
-Cannot connect to the Docker daemon at unix:///Users/dima/.docker/run/docker.sock. 
+Cannot connect to the Docker daemon at unix:///Users/dima/.docker/run/docker.sock.
 Is the docker daemon running?
 ```
 

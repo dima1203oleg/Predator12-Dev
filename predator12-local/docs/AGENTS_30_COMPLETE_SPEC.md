@@ -48,20 +48,20 @@ agent:
   name: PortCollisionHealer
   category: self_heal
   priority: critical
-  
+
 dependencies:
   scripts:
     - scripts/manage-ports.sh
   apis:
     - Docker API
     - Kubernetes API (future)
-    
+
 triggers:
   - type: prometheus_alert
     condition: port_in_use{port=~"8000|3000|5432"} == 1
   - type: pre_launch_check
     condition: port_scan_failed
-    
+
 execution:
   steps:
     - name: detect_process
@@ -74,11 +74,11 @@ execution:
       condition: process_still_alive
     - name: restart_service
       command: systemctl restart ${service}
-      
+
 metrics:
   success_rate: 95%
   resolution_time: <10s
-  
+
 llm_config:
   primary: openai/gpt-4o-mini
   fallbacks:
@@ -86,7 +86,7 @@ llm_config:
     - local/tinyllama-1.1b
   context_window: 8192
   temperature: 0.1
-  
+
 logging:
   path: logs/agents/self_heal/port_collision.log
   level: INFO
@@ -103,20 +103,20 @@ agent:
   name: VenvRestorer
   category: self_heal
   priority: high
-  
+
 dependencies:
   scripts:
     - scripts/setup-venv.sh
   files:
     - backend/requirements-311-modern.txt
     - frontend/package.json
-    
+
 triggers:
   - type: import_error
     condition: ModuleNotFoundError
   - type: health_check
     condition: venv_check_failed
-    
+
 execution:
   steps:
     - name: backup_old_venv
@@ -127,11 +127,11 @@ execution:
       command: .venv/bin/pip install -r requirements-311-modern.txt
     - name: verify_imports
       command: .venv/bin/python -c "import fastapi, celery, sqlalchemy"
-      
+
 metrics:
   success_rate: 100%
   restoration_time: <3min
-  
+
 llm_config:
   primary: openai/gpt-4o-mini
   fallbacks:
@@ -150,7 +150,7 @@ agent:
   name: ServiceRestarter
   category: self_heal
   priority: critical
-  
+
 dependencies:
   commands:
     - brew services (macOS)
@@ -160,12 +160,12 @@ dependencies:
     - redis-cli ping
     - curl http://localhost:6333/health
     - curl http://localhost:9200/_cluster/health
-    
+
 triggers:
   - type: health_probe_failure
     services: [postgresql, redis, qdrant, opensearch]
     threshold: 3_consecutive_failures
-    
+
 execution:
   steps:
     - name: diagnose
@@ -180,11 +180,11 @@ execution:
     - name: escalate
       condition: restart_failed
       action: human_intervention
-      
+
 metrics:
   uptime: >99.9%
   recovery_time: <30s
-  
+
 llm_config:
   primary: anthropic/claude-3.5-sonnet
   fallbacks:
@@ -203,7 +203,7 @@ agent:
   name: DependencyBreakerFixer
   category: self_heal
   priority: high
-  
+
 dependencies:
   tools:
     - pip-audit
@@ -211,13 +211,13 @@ dependencies:
   files:
     - requirements-311-modern.txt
     - pyproject.toml
-    
+
 triggers:
   - type: pre_commit_failure
     hook: pip-audit
   - type: cron
     schedule: "0 2 * * *"  # Daily 2am
-    
+
 execution:
   steps:
     - name: scan_vulnerabilities
@@ -234,11 +234,11 @@ execution:
       condition: tests_pass
       action: git_pr
       labels: [auto-deps, security]
-      
+
 metrics:
   dependencies_clean: <5min
   pr_merge_rate: >80%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -257,25 +257,25 @@ agent:
   name: LogAnomalyHealer
   category: self_heal
   priority: high
-  
+
 dependencies:
   services:
     - Loki (log aggregation)
     - Tempo (tracing)
   agents:
     - SelfDiagnosisAgent
-    
+
 triggers:
   - type: log_error_spike
     condition: error_rate > 5x_baseline
     window: 5min
-    
+
 execution:
   steps:
     - name: aggregate_errors
       query: |
-        {app="predator12"} |= "ERROR" 
-        | json 
+        {app="predator12"} |= "ERROR"
+        | json
         | count by error_type
     - name: classify_error
       llm_prompt: |
@@ -288,11 +288,11 @@ execution:
         - rollback_deployment
     - name: verify_resolution
       condition: error_rate < baseline
-      
+
 metrics:
   error_rate_drop: 50%
   resolution_time: <10min
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -311,7 +311,7 @@ agent:
   name: CacheEvictor
   category: self_heal
   priority: medium
-  
+
 dependencies:
   services:
     - Redis
@@ -319,14 +319,14 @@ dependencies:
   commands:
     - redis-cli
     - mc (MinIO client)
-    
+
 triggers:
   - type: cache_hit_rate_low
     condition: hit_rate < 80%
     window: 15min
   - type: cache_corruption_detected
     condition: value_validation_failed
-    
+
 execution:
   steps:
     - name: identify_corrupted_keys
@@ -336,11 +336,11 @@ execution:
     - name: verify_restoration
       command: redis-cli INFO stats
       check: hit_rate > 95%
-      
+
 metrics:
   hit_rate_restore: >95%
   eviction_time: <2min
-  
+
 llm_config:
   primary: openai/gpt-4o-mini
   fallbacks:
@@ -359,20 +359,20 @@ agent:
   name: IndexRebuilder
   category: self_heal
   priority: high
-  
+
 dependencies:
   services:
     - Qdrant
     - OpenSearch
   agents:
     - IndexerAgent
-    
+
 triggers:
   - type: index_health_alert
     condition: status != "green"
   - type: query_latency_high
     condition: p95_latency > 5s
-    
+
 execution:
   steps:
     - name: backup_index
@@ -388,11 +388,11 @@ execution:
         mode: full_reindex
     - name: verify_health
       command: curl "localhost:9200/_cluster/health?wait_for_status=green"
-      
+
 metrics:
   query_latency: <2s
   reindex_time: <15min
-  
+
 llm_config:
   primary: anthropic/claude-3.5-sonnet
   fallbacks:
@@ -411,20 +411,20 @@ agent:
   name: BackupValidator
   category: self_heal
   priority: critical
-  
+
 dependencies:
   tools:
     - pgBackRest
     - Velero (future K8s)
   storage:
     - MinIO (backup repository)
-    
+
 triggers:
   - type: scheduled
     cron: "0 3 * * *"  # Daily 3am
   - type: backup_failure_alert
     source: prometheus
-    
+
 execution:
   steps:
     - name: list_backups
@@ -439,11 +439,11 @@ execution:
     - name: validate_data
       query: SELECT count(*) FROM critical_tables
       check: count > 0
-      
+
 metrics:
   restore_success: 100%
   validation_time: <30min
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -462,19 +462,19 @@ agent:
   name: NetworkResolver
   category: self_heal
   priority: high
-  
+
 dependencies:
   tools:
     - kubectl (future)
     - NetworkPolicies
     - Istio/Linkerd (future)
-    
+
 triggers:
   - type: connectivity_alert
     services: [kafka, postgresql, redis]
   - type: timeout_spike
     threshold: >10x_baseline
-    
+
 execution:
   steps:
     - name: diagnose_connectivity
@@ -488,11 +488,11 @@ execution:
       command: systemctl restart networking
     - name: verify_connectivity
       command: curl ${health_endpoint}
-      
+
 metrics:
   ping_success: 100%
   resolution_time: <5min
-  
+
 llm_config:
   primary: openai/gpt-4o-mini
   fallbacks:
@@ -511,18 +511,18 @@ agent:
   name: FailsafeSwitcher
   category: self_heal
   priority: critical
-  
+
 dependencies:
   supervisor: NEXUS_SUPERVISOR
   notification: PagerDuty/Slack
-  
+
 triggers:
   - type: agent_error_threshold
     condition: error_rate > 20%
     window: 10min
   - type: cascade_failure
     condition: >3_agents_failing
-    
+
 execution:
   steps:
     - name: disable_all_agents
@@ -542,11 +542,11 @@ execution:
         ${agent_logs}
         ${error_patterns}
         Suggest recovery steps.
-        
+
 metrics:
   manual_fallback_time: <30s
   notification_delivery: 100%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -577,19 +577,19 @@ agent:
   name: LintOptimizer
   category: optimize
   priority: high
-  
+
 dependencies:
   tools:
     - ruff
     - black
     - pre-commit
-    
+
 triggers:
   - type: pre_commit_failure
     hook: ruff-check
   - type: code_push
     branch: main
-    
+
 execution:
   steps:
     - name: run_lint_check
@@ -609,11 +609,11 @@ execution:
     - name: commit_fixes
       condition: tests_pass
       message: "chore: auto-lint fixes [skip ci]"
-      
+
 metrics:
   lint_score: 100%
   fix_time: <2min
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -632,7 +632,7 @@ agent:
   name: TestGenerator
   category: optimize
   priority: high
-  
+
 dependencies:
   tools:
     - pytest
@@ -640,20 +640,20 @@ dependencies:
     - Testcontainers
   frameworks:
     - hypothesis (property-based testing)
-    
+
 triggers:
   - type: code_change
     files: ["*.py", "!tests/*"]
   - type: coverage_drop
     threshold: <80%
-    
+
 execution:
   steps:
     - name: analyze_code
       llm_prompt: |
         Code to test:
         ${code_content}
-        
+
         Generate pytest tests covering:
         - Happy path
         - Edge cases
@@ -668,11 +668,11 @@ execution:
     - name: create_pr
       condition: coverage_increase > 20%
       labels: [auto-generated, tests]
-      
+
 metrics:
   coverage_increase: +20%
   test_generation_time: <5min
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -691,20 +691,20 @@ agent:
   name: MigrationBuilder
   category: optimize
   priority: critical
-  
+
 dependencies:
   tools:
     - alembic
     - sqlalchemy
   database:
     - PostgreSQL (schema introspection)
-    
+
 triggers:
   - type: schema_change_detected
     source: SQLAlchemy models
   - type: manual_request
     command: make migration message="Add user preferences"
-    
+
 execution:
   steps:
     - name: detect_model_changes
@@ -713,7 +713,7 @@ execution:
       llm_prompt: |
         Migration SQL:
         ${migration_sql}
-        
+
         Review for:
         - Data loss risks (DROP TABLE/COLUMN)
         - Index performance impact
@@ -734,11 +734,11 @@ execution:
       condition: all_checks_pass
       labels: [migration, review-required]
       reviewers: [database-team]
-      
+
 metrics:
   migration_success: 95%
   review_time: <15min
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -757,19 +757,19 @@ agent:
   name: DataNormalizer
   category: optimize
   priority: high
-  
+
 dependencies:
   tools:
     - Great Expectations
     - pandas
     - pyarrow (Parquet)
-    
+
 triggers:
   - type: data_ingest
     source: DatasetIngestAgent
   - type: validation_failure
     threshold: >5%_rows_invalid
-    
+
 execution:
   steps:
     - name: profile_dataset
@@ -799,11 +799,11 @@ execution:
         - completeness
         - uniqueness
         - validity
-        
+
 metrics:
   data_quality: >95%
   normalization_time: <10min
-  
+
 llm_config:
   primary: openai/gpt-4o-mini
   fallbacks:
@@ -822,20 +822,20 @@ agent:
   name: QueryOptimizer
   category: optimize
   priority: high
-  
+
 dependencies:
   databases:
     - PostgreSQL (EXPLAIN ANALYZE)
     - OpenSearch (profiling API)
   services:
     - Qdrant (query metrics)
-    
+
 triggers:
   - type: slow_query_detected
     condition: latency > 2s
   - type: scheduled_optimization
     cron: "0 4 * * 0"  # Weekly Sunday 4am
-    
+
 execution:
   steps:
     - name: identify_slow_queries
@@ -851,7 +851,7 @@ execution:
       llm_prompt: |
         Query: ${query}
         Execution plan: ${explain_output}
-        
+
         Suggest optimizations:
         - Missing indexes
         - Query rewrite
@@ -864,11 +864,11 @@ execution:
       check: avg_time < 500ms
     - name: document_changes
       output: docs/query_optimizations.md
-      
+
 metrics:
   latency_drop: 30%
   throughput_increase: 20%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -887,26 +887,26 @@ agent:
   name: CacheTuner
   category: optimize
   priority: medium
-  
+
 dependencies:
   services:
     - Redis (INFO stats)
     - MinIO (lifecycle policies)
   monitoring:
     - Prometheus (cache metrics)
-    
+
 triggers:
   - type: cache_miss_high
     condition: miss_rate > 20%
     window: 1hour
   - type: memory_pressure
     condition: redis_memory_used > 80%
-    
+
 execution:
   steps:
     - name: analyze_access_patterns
       query: |
-        redis-cli --scan --pattern "*" | 
+        redis-cli --scan --pattern "*" |
         xargs -I {} redis-cli OBJECT IDLETIME {}
     - name: segment_keys
       categories:
@@ -917,7 +917,7 @@ execution:
       llm_prompt: |
         Access patterns: ${patterns}
         Current TTLs: ${current_ttls}
-        
+
         Suggest optimal TTL per category.
     - name: apply_ttl_changes
       commands:
@@ -937,11 +937,11 @@ execution:
         - hit_rate
         - eviction_rate
         - memory_usage
-        
+
 metrics:
   hit_rate: >95%
   memory_savings: 20%
-  
+
 llm_config:
   primary: openai/gpt-4o-mini
   fallbacks:
@@ -960,21 +960,21 @@ agent:
   name: ResourceBalancer
   category: optimize
   priority: medium
-  
+
 dependencies:
   kubernetes:
     - HPA API (future)
     - VPA API (future)
   monitoring:
     - Prometheus (resource metrics)
-    
+
 triggers:
   - type: cpu_high
     condition: cpu_usage > 70%
     window: 10min
   - type: memory_pressure
     condition: memory_usage > 80%
-    
+
 execution:
   steps:
     - name: analyze_resource_trends
@@ -985,7 +985,7 @@ execution:
       llm_prompt: |
         Resource trends: ${trends}
         Current limits: ${current_limits}
-        
+
         Predict optimal HPA/VPA configuration.
     - name: generate_hpa_manifest
       template: |
@@ -1008,11 +1008,11 @@ execution:
     - name: create_pr
       condition: simulation_success
       labels: [optimization, autoscaling]
-      
+
 metrics:
   utilization_balanced: 60-80%
   cost_savings: 15%
-  
+
 llm_config:
   primary: anthropic/claude-3.5-sonnet
   fallbacks:
@@ -1031,18 +1031,18 @@ agent:
   name: ConfigDrifter
   category: optimize
   priority: high
-  
+
 dependencies:
   tools:
     - git
     - kubectl (future)
     - ArgoCD CLI (future)
-  
+
 triggers:
   - type: scheduled
     cron: "*/15 * * * *"  # Every 15min
   - type: argocd_sync_failure
-    
+
 execution:
   steps:
     - name: fetch_live_config
@@ -1055,7 +1055,7 @@ execution:
       llm_prompt: |
         Drift detected:
         ${diff_output}
-        
+
         Classify:
         - Expected (e.g., auto-generated labels)
         - Unexpected (manual changes)
@@ -1067,11 +1067,11 @@ execution:
     - name: auto_remediate
       condition: expected_drift && auto_fix_enabled
       command: kubectl apply -f infra/
-      
+
 metrics:
   drift_detection_time: <5min
   remediation_success: 90%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -1090,7 +1090,7 @@ agent:
   name: PerfProfiler
   category: optimize
   priority: medium
-  
+
 dependencies:
   tools:
     - cProfile
@@ -1098,13 +1098,13 @@ dependencies:
     - OpenTelemetry (tracing)
   services:
     - Jaeger (trace visualization)
-    
+
 triggers:
   - type: latency_spike
     condition: p95_latency > 3s
   - type: manual_profiling
     command: make profile
-    
+
 execution:
   steps:
     - name: start_profiling
@@ -1114,7 +1114,7 @@ execution:
       llm_prompt: |
         Profiling data: ${profile_svg}
         Top 10 hotspots: ${hotspots}
-        
+
         Suggest optimizations:
         - Algorithm improvements
         - Caching opportunities
@@ -1130,11 +1130,11 @@ execution:
       url: http://localhost:16686
     - name: document_findings
       output: docs/performance_analysis.md
-      
+
 metrics:
   bottleneck_identified: 80%
   optimization_applied: 50%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -1153,20 +1153,20 @@ agent:
   name: DocUpdater
   category: optimize
   priority: medium
-  
+
 dependencies:
   tools:
     - Sphinx
     - mkdocs
   templates:
     - ADR (Architecture Decision Records)
-    
+
 triggers:
   - type: code_pr_merged
     files: ["*.py", "*.ts"]
   - type: manual_request
     command: make docs
-    
+
 execution:
   steps:
     - name: extract_docstrings
@@ -1175,7 +1175,7 @@ execution:
       llm_prompt: |
         Code diff: ${git_diff}
         Existing docs: ${current_docs}
-        
+
         Generate/update:
         - API documentation
         - Changelog entry
@@ -1186,25 +1186,25 @@ execution:
       condition: architectural_change
       template: |
         # ADR-${number}: ${title}
-        
+
         ## Status
         Accepted
-        
+
         ## Context
         ${context}
-        
+
         ## Decision
         ${decision}
-        
+
         ## Consequences
         ${consequences}
     - name: commit_docs
       message: "docs: update API docs and ADR [skip ci]"
-      
+
 metrics:
   doc_coverage: +10%
   freshness: <24hours
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -1235,19 +1235,19 @@ agent:
   name: DepUpdater
   category: modernize
   priority: high
-  
+
 dependencies:
   tools:
     - pip-audit
     - safety
     - dependabot (optional)
-    
+
 triggers:
   - type: scheduled
     cron: "0 2 * * 1"  # Weekly Monday 2am
   - type: vulnerability_alert
     source: GitHub Security Advisories
-    
+
 execution:
   steps:
     - name: scan_vulnerabilities
@@ -1259,7 +1259,7 @@ execution:
         Vulnerabilities: ${vulnerabilities}
         Current versions: ${current_versions}
         Available updates: ${available_updates}
-        
+
         Prioritize updates by:
         - Severity (critical > high > medium)
         - Breaking changes risk
@@ -1274,24 +1274,24 @@ execution:
       labels: [dependencies, security, auto-deps]
       body: |
         ## 🔐 Security Update
-        
+
         **Package**: ${package}
         **Current**: ${current_version}
         **New**: ${new_version}
-        
+
         **Vulnerabilities Fixed**:
         ${vulnerabilities_fixed}
-        
+
         **Breaking Changes**: ${breaking_changes}
-        
+
         **Test Results**: ✅ All tests passing
-        
+
         /cc @security-team
-        
+
 metrics:
   vulnerabilities_fixed: 100%
   pr_merge_time: <48hours
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -1310,26 +1310,26 @@ agent:
   name: CodeRefactorer
   category: modernize
   priority: medium
-  
+
 dependencies:
   tools:
     - ruff (refactoring rules)
     - black
     - pyupgrade
-    
+
 triggers:
   - type: code_smell_detected
     tool: SonarQube/CodeClimate
   - type: manual_request
     command: make refactor target=pydantic_v2
-    
+
 execution:
   steps:
     - name: analyze_refactoring_scope
       llm_prompt: |
         Code to refactor: ${code_files}
         Target: ${refactoring_target}
-        
+
         Plan refactoring:
         - Files to change
         - Breaking changes
@@ -1350,11 +1350,11 @@ execution:
     - name: create_pr
       condition: all_checks_pass
       labels: [refactoring, review-required]
-      
+
 metrics:
   complexity_drop: 20%
   test_coverage_maintained: 100%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -1373,19 +1373,19 @@ agent:
   name: FeatureSuggester
   category: modernize
   priority: low
-  
+
 dependencies:
   agents:
     - QueryPatternLearner
   tools:
     - GitHub Issues API
-    
+
 triggers:
   - type: user_feedback
     source: feedback_form
   - type: query_pattern_analysis
     frequency: weekly
-    
+
 execution:
   steps:
     - name: aggregate_user_queries
@@ -1400,7 +1400,7 @@ execution:
       llm_prompt: |
         Top user queries: ${top_queries}
         Current features: ${current_features}
-        
+
         Suggest new features to address unmet needs.
     - name: estimate_effort
       criteria:
@@ -1412,19 +1412,19 @@ execution:
       labels: [enhancement, user-requested]
       template: |
         ## 💡 Feature Proposal
-        
+
         **User Need**: ${user_need}
         **Suggested Solution**: ${solution}
         **Estimated Effort**: ${effort}
         **Priority**: ${priority}
-        
+
         **Example Queries**:
         ${example_queries}
-        
+
 metrics:
   feature_prs: 5/week
   acceptance_rate: >60%
-  
+
 llm_config:
   primary: anthropic/claude-3.5-sonnet
   fallbacks:
@@ -1443,19 +1443,19 @@ agent:
   name: ArchEvolver
   category: modernize
   priority: high
-  
+
 dependencies:
   kubernetes:
     - HPA/VPA APIs (future)
   tools:
     - ArgoCD (future)
-    
+
 triggers:
   - type: scale_alert
     condition: manual_scaling_frequency > 5/week
   - type: architecture_review
     schedule: quarterly
-    
+
 execution:
   steps:
     - name: analyze_scaling_patterns
@@ -1466,7 +1466,7 @@ execution:
       llm_prompt: |
         Current architecture: ${current_arch}
         Scaling patterns: ${patterns}
-        
+
         Propose:
         - HPA configuration
         - Service mesh adoption
@@ -1483,11 +1483,11 @@ execution:
         - resource_utilization
         - cost_savings
         - latency_improvement
-        
+
 metrics:
   efficiency_gain: +15%
   cost_reduction: 10%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -1506,18 +1506,18 @@ agent:
   name: ModelUpgrader
   category: modernize
   priority: medium
-  
+
 dependencies:
   services:
     - ModelRouter
     - MLflow (model registry)
-    
+
 triggers:
   - type: model_drift_detected
     condition: accuracy_drop > 5%
   - type: new_model_release
     source: OpenAI/Anthropic announcements
-    
+
 execution:
   steps:
     - name: evaluate_new_model
@@ -1545,11 +1545,11 @@ execution:
       command: |
         mlflow models create ${model_name}
         mlflow models update-version ${model_name} ${version}
-        
+
 metrics:
   accuracy_gain: +10%
   cost_reduction: 5%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -1568,19 +1568,19 @@ agent:
   name: SecurityHardener
   category: modernize
   priority: critical
-  
+
 dependencies:
   tools:
     - Trivy (container scanning)
     - Bandit (Python SAST)
     - OPA/Kyverno (policies)
-    
+
 triggers:
   - type: vulnerability_scan
     schedule: daily
   - type: compliance_audit
     schedule: quarterly
-    
+
 execution:
   steps:
     - name: scan_vulnerabilities
@@ -1591,7 +1591,7 @@ execution:
       llm_prompt: |
         Vulnerabilities: ${vulnerabilities}
         Current policies: ${current_policies}
-        
+
         Recommend security hardening:
         - OPA policies to add
         - RBAC refinements
@@ -1599,7 +1599,7 @@ execution:
     - name: generate_opa_policies
       template: |
         package kubernetes.admission
-        
+
         deny[msg] {
           input.request.kind.kind == "Pod"
           not input.request.object.spec.securityContext.runAsNonRoot
@@ -1610,11 +1610,11 @@ execution:
     - name: create_pr
       labels: [security, compliance]
       reviewers: [security-team]
-      
+
 metrics:
   security_score: +25%
   vulnerabilities_fixed: 100%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -1633,19 +1633,19 @@ agent:
   name: UIEnhancer
   category: modernize
   priority: medium
-  
+
 dependencies:
   tools:
     - Lighthouse
     - axe-core (accessibility)
     - Prettier
-    
+
 triggers:
   - type: lighthouse_score_low
     condition: accessibility < 90
   - type: user_feedback
     category: ui_ux
-    
+
 execution:
   steps:
     - name: run_accessibility_audit
@@ -1656,7 +1656,7 @@ execution:
       llm_prompt: |
         Accessibility issues: ${issues}
         Current UI: ${ui_components}
-        
+
         Suggest fixes:
         - ARIA labels
         - Color contrast
@@ -1674,11 +1674,11 @@ execution:
         - Manual screen reader test
     - name: create_pr
       labels: [ui, accessibility]
-      
+
 metrics:
   lighthouse_score: ≥90
   wcag_compliance: 2.1 AA
-  
+
 llm_config:
   primary: openai/gpt-4o-mini
   fallbacks:
@@ -1697,18 +1697,18 @@ agent:
   name: PerfModernizer
   category: modernize
   priority: high
-  
+
 dependencies:
   tools:
     - cProfile
     - OpenTelemetry
-    
+
 triggers:
   - type: latency_high
     condition: p95_latency > 2s
   - type: throughput_low
     condition: rps < 100
-    
+
 execution:
   steps:
     - name: profile_bottlenecks
@@ -1716,7 +1716,7 @@ execution:
     - name: identify_optimization_opportunities
       llm_prompt: |
         Profiling data: ${profile_data}
-        
+
         Suggest modernizations:
         - Convert sync to async
         - Add connection pooling
@@ -1728,7 +1728,7 @@ execution:
         def fetch_data():
             result = requests.get(url)
             return result.json()
-        
+
         # After
         async def fetch_data():
             async with aiohttp.ClientSession() as session:
@@ -1740,11 +1740,11 @@ execution:
     - name: create_pr
       condition: throughput_increase > 30%
       labels: [performance, modernization]
-      
+
 metrics:
   throughput_gain: +30%
   latency_reduction: 40%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -1763,18 +1763,18 @@ agent:
   name: DocModernizer
   category: modernize
   priority: low
-  
+
 dependencies:
   tools:
     - Sphinx
     - mkdocs
-    
+
 triggers:
   - type: feature_merged
     branch: main
   - type: doc_staleness_alert
     condition: last_update > 30days
-    
+
 execution:
   steps:
     - name: analyze_code_changes
@@ -1783,7 +1783,7 @@ execution:
       llm_prompt: |
         Code changes: ${changes}
         Existing docs: ${current_docs}
-        
+
         Generate doc updates for:
         - New features
         - API changes
@@ -1799,11 +1799,11 @@ execution:
       command: mkdocs build
     - name: commit_updates
       message: "docs: update documentation for ${feature} [skip ci]"
-      
+
 metrics:
   doc_freshness: 95%
   coverage: +10%
-  
+
 llm_config:
   primary: openai/gpt-4o
   fallbacks:
@@ -1822,18 +1822,18 @@ agent:
   name: EcoOptimizer
   category: modernize
   priority: low
-  
+
 dependencies:
   tools:
     - codecarbon (carbon tracking)
     - ModelRouter
-    
+
 triggers:
   - type: cost_alert
     condition: cloud_cost_increase > 20%
   - type: sustainability_review
     schedule: quarterly
-    
+
 execution:
   steps:
     - name: measure_carbon_footprint
@@ -1842,7 +1842,7 @@ execution:
       llm_prompt: |
         Carbon emissions: ${emissions}
         Model usage: ${model_usage}
-        
+
         Suggest green alternatives:
         - Smaller models for simple tasks
         - On-premise vs cloud tradeoff
@@ -1862,11 +1862,11 @@ execution:
         - carbon_reduction
         - cost_savings
         - performance_impact
-        
+
 metrics:
   co2_footprint: -20%
   cost_savings: 15%
-  
+
 llm_config:
   primary: openai/gpt-4o-mini
   fallbacks:
@@ -1892,18 +1892,18 @@ class NexusSupervisor:
     Central orchestrator for all 30 agents.
     Implements Plan-then-Execute, Human-in-Loop, and Intelligent Routing.
     """
-    
+
     def __init__(self):
         self.agents = self._load_agents()
         self.registry = self._load_registry()
         self.policies = self._load_policies()
         self.model_router = ModelRouter(self.registry)
         self.graph = self._build_execution_graph()
-        
+
     def _load_agents(self) -> Dict[str, Agent]:
         """Load all 30 agents from configuration."""
         agents = {}
-        
+
         # Self-Heal Agents
         agents['port_collision_healer'] = PortCollisionHealer()
         agents['venv_restorer'] = VenvRestorer()
@@ -1915,7 +1915,7 @@ class NexusSupervisor:
         agents['backup_validator'] = BackupValidator()
         agents['network_resolver'] = NetworkResolver()
         agents['failsafe_switcher'] = FailsafeSwitcher()
-        
+
         # Optimize Agents
         agents['lint_optimizer'] = LintOptimizer()
         agents['test_generator'] = TestGenerator()
@@ -1927,7 +1927,7 @@ class NexusSupervisor:
         agents['config_drifter'] = ConfigDrifter()
         agents['perf_profiler'] = PerfProfiler()
         agents['doc_updater'] = DocUpdater()
-        
+
         # Modernize Agents
         agents['dep_updater'] = DepUpdater()
         agents['code_refactorer'] = CodeRefactorer()
@@ -1939,23 +1939,23 @@ class NexusSupervisor:
         agents['perf_modernizer'] = PerfModernizer()
         agents['doc_modernizer'] = DocModernizer()
         agents['eco_optimizer'] = EcoOptimizer()
-        
+
         return agents
-    
+
     def _load_registry(self) -> Dict:
         """Load agent-to-model registry."""
         with open('backend/agents/registry.yaml') as f:
             return yaml.safe_load(f)
-    
+
     def _load_policies(self) -> Dict:
         """Load execution policies."""
         with open('backend/agents/policies.yaml') as f:
             return yaml.safe_load(f)
-    
+
     def _build_execution_graph(self) -> StateGraph:
         """Build LangGraph for agent orchestration."""
         graph = StateGraph()
-        
+
         # Add nodes for each category
         graph.add_node("plan", self.plan_execution)
         graph.add_node("self_heal", self.route_self_heal)
@@ -1963,7 +1963,7 @@ class NexusSupervisor:
         graph.add_node("modernize", self.route_modernize)
         graph.add_node("verify", self.verify_execution)
         graph.add_node("escalate", self.escalate_to_human)
-        
+
         # Add edges
         graph.add_edge("START", "plan")
         graph.add_conditional_edges(
@@ -1988,16 +1988,16 @@ class NexusSupervisor:
             }
         )
         graph.add_edge("escalate", END)
-        
+
         return graph.compile()
-    
+
     async def execute_task(self, task: Dict[str, Any]) -> Dict:
         """
         Execute a task through the agent graph.
-        
+
         Args:
             task: Task specification with type, context, priority
-            
+
         Returns:
             Execution result with status, output, metrics
         """
@@ -2005,88 +2005,88 @@ class NexusSupervisor:
             # Check policies
             if not self._check_policies(task):
                 raise PolicyViolationError(f"Task violates policies: {task}")
-            
+
             # Plan execution
             execution_plan = await self._plan_execution(task)
-            
+
             # Execute through graph
             result = await self.graph.ainvoke({
                 "task": task,
                 "plan": execution_plan,
                 "context": self._get_context(task)
             })
-            
+
             # Audit log
             await self._audit_log(task, result)
-            
+
             # Update metrics
             await self._update_metrics(task, result)
-            
+
             return result
-            
+
         except Exception as e:
             logger.error(f"Task execution failed: {e}", exc_info=True)
             await self._handle_failure(task, e)
             raise
-    
+
     def _check_policies(self, task: Dict) -> bool:
         """Enforce policies (PII, billing, resources)."""
         user = task.get('user')
-        
+
         # Resource limits
         if self._get_resource_usage() > self.policies['resource_limits']['max_concurrent_agents']:
             logger.warning("Max concurrent agents reached")
             return False
-        
+
         # PII gate
         if task.get('requires_pii') and not user.has_role('view_pii'):
             logger.warning(f"User {user.id} lacks PII access")
             return False
-        
+
         # Cost limits
         estimated_cost = self._estimate_cost(task)
         if estimated_cost > user.quota_remaining:
             logger.warning(f"User {user.id} quota exceeded")
             return False
-        
+
         return True
-    
+
     async def _plan_execution(self, task: Dict) -> Dict:
         """Plan-then-Execute: LLM creates execution plan."""
         prompt = f"""
         Task: {task['description']}
         Category: {task['category']}
         Priority: {task['priority']}
-        
+
         Create a detailed execution plan:
         1. Steps required
         2. Agents to invoke
         3. Dependencies
         4. Rollback strategy
         5. Success criteria
-        
+
         Consider risks and propose safeguards.
         """
-        
+
         model = await self.model_router.select_model({
             'task_type': 'planning',
             'complexity': 'high'
         })
-        
+
         response = await model.ainvoke(prompt)
         plan = self._parse_plan(response)
-        
+
         # Human-in-loop for risky tasks
         if plan['risk_level'] == 'high':
             plan['requires_approval'] = True
             logger.info(f"Plan requires human approval: {plan}")
-        
+
         return plan
-    
+
     def determine_category(self, state: Dict) -> str:
         """Determine which category graph to route to."""
         task_type = state['task']['type']
-        
+
         if task_type in ['alert', 'failure', 'health_check']:
             return 'self_heal'
         elif task_type in ['optimization', 'test_generation', 'profiling']:
@@ -2108,4 +2108,3 @@ class NexusSupervisor:
 **Document Version**: 12.0  
 **Last Updated**: 2025-01-06  
 **Status**: ✅ **COMPLETE AGENT SPECIFICATION**
-

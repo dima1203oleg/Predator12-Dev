@@ -1,21 +1,50 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { createContext, useContext, useState, useEffect } from 'react';
-import uaTranslations from './ua.json';
-import enTranslations from './en.json';
-const I18nContext = createContext(null);
-export const useI18n = () => {
-    const context = useContext(I18nContext);
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LanguageSwitcher = exports.useTranslation = exports.I18nProvider = exports.useI18n = void 0;
+const react_1 = __importStar(require("react"));
+const ua_json_1 = __importDefault(require("./ua.json"));
+const en_json_1 = __importDefault(require("./en.json"));
+const I18nContext = (0, react_1.createContext)(null);
+const useI18n = () => {
+    const context = (0, react_1.useContext)(I18nContext);
     if (!context) {
         throw new Error('useI18n must be used within I18nProvider');
     }
     return context;
 };
+exports.useI18n = useI18n;
 const translations = {
-    UA: uaTranslations,
-    EN: enTranslations
+    UA: ua_json_1.default,
+    EN: en_json_1.default
 };
-export const I18nProvider = ({ children, defaultLanguage = 'UA' }) => {
-    const [language, setLanguage] = useState(() => {
+const I18nProvider = ({ children, defaultLanguage = 'UA' }) => {
+    const [language, setLanguage] = (0, react_1.useState)(() => {
         // Зберігаємо вибір мови в localStorage
         const saved = localStorage.getItem('nexus_language');
         return saved || defaultLanguage;
@@ -67,7 +96,7 @@ export const I18nProvider = ({ children, defaultLanguage = 'UA' }) => {
         return value;
     };
     // Зберігаємо мову при зміні
-    useEffect(() => {
+    (0, react_1.useEffect)(() => {
         localStorage.setItem('nexus_language', language);
         // Можемо також оновити HTML lang атрибут
         document.documentElement.lang = language.toLowerCase();
@@ -78,18 +107,22 @@ export const I18nProvider = ({ children, defaultLanguage = 'UA' }) => {
         t,
         translations: translations[language]
     };
-    return (_jsx(I18nContext.Provider, { value: value, children: children }));
+    return (<I18nContext.Provider value={value}>
+      {children}
+    </I18nContext.Provider>);
 };
+exports.I18nProvider = I18nProvider;
 // Хук для легкого використання перекладів
-export const useTranslation = () => {
-    const { t, language, setLanguage } = useI18n();
+const useTranslation = () => {
+    const { t, language, setLanguage } = (0, exports.useI18n)();
     return { t, language, setLanguage };
 };
+exports.useTranslation = useTranslation;
 // Компонент для перемикача мови
-export const LanguageSwitcher = ({ className = '', variant = 'toggle' }) => {
-    const { language, setLanguage } = useI18n();
+const LanguageSwitcher = ({ className = '', variant = 'toggle' }) => {
+    const { language, setLanguage } = (0, exports.useI18n)();
     if (variant === 'toggle') {
-        return (_jsx("button", { className: `language-switcher ${className}`, onClick: () => setLanguage(language === 'UA' ? 'EN' : 'UA'), style: {
+        return (<button className={`language-switcher ${className}`} onClick={() => setLanguage(language === 'UA' ? 'EN' : 'UA')} style={{
                 background: 'transparent',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 borderRadius: '8px',
@@ -98,15 +131,21 @@ export const LanguageSwitcher = ({ className = '', variant = 'toggle' }) => {
                 fontSize: '0.8rem',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease'
-            }, children: language }));
+            }}>
+        {language}
+      </button>);
     }
-    return (_jsxs("select", { className: className, value: language, onChange: (e) => setLanguage(e.target.value), style: {
+    return (<select className={className} value={language} onChange={(e) => setLanguage(e.target.value)} style={{
             background: 'transparent',
             border: '1px solid rgba(255, 255, 255, 0.2)',
             borderRadius: '8px',
             color: '#fff',
             padding: '4px 8px',
             fontSize: '0.8rem'
-        }, children: [_jsx("option", { value: "UA", children: "\uD83C\uDDFA\uD83C\uDDE6 UA" }), _jsx("option", { value: "EN", children: "\uD83C\uDDEC\uD83C\uDDE7 EN" })] }));
+        }}>
+      <option value="UA">🇺🇦 UA</option>
+      <option value="EN">🇬🇧 EN</option>
+    </select>);
 };
-export default I18nProvider;
+exports.LanguageSwitcher = LanguageSwitcher;
+exports.default = exports.I18nProvider;

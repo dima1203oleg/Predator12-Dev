@@ -37,5 +37,3 @@ export const CORE_AGENTS: NexusAgent[] = [
   { name: 'ExplainabilityAgent', status: 'active', health: 'excellent', cpu: '8%', memory: '28%' },
   { name: 'KPIDashboardAgent', status: 'active', health: 'good', cpu: '9%', memory: '26%' }
 ];
-
-

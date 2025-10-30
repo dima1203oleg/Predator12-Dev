@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException
 from typing import Any, Dict
+
+from fastapi import APIRouter, HTTPException
 
 from .supervisor import get_supervisor
 

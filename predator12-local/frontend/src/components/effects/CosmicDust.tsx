@@ -65,7 +65,7 @@ const DustParticles: React.FC<{
     particles.current.forEach((particle, i) => {
       // Update position
       particle.position.add(particle.velocity);
-      
+
       // Update life
       particle.life += delta * 0.2;
       if (particle.life >= particle.maxLife) {
@@ -174,10 +174,10 @@ const DustParticles: React.FC<{
           void main() {
             float dist = length(gl_PointCoord - vec2(0.5));
             if (dist > 0.5) discard;
-            
+
             float alpha = 1.0 - (dist * 2.0);
             alpha = pow(alpha, 3.0);
-            
+
             gl_FragColor = vec4(vColor, alpha * opacity);
           }
         `}

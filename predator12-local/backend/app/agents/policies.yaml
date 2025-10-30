@@ -13,7 +13,7 @@ pii_policies:
   masking_enabled: true
   masking_patterns:
     edrpou: "[COMPANY_ID_MASKED]"
-    company_name: "[COMPANY_MASKED]" 
+    company_name: "[COMPANY_MASKED]"
     phone: "[PHONE_MASKED]"
     email: "[EMAIL_MASKED]"
   access_roles:

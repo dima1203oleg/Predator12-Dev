@@ -26,4 +26,3 @@ const AdminModule: React.FC = () => {
 };
 
 export default AdminModule;
-

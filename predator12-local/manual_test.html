@@ -11,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #000000 0%, #0F121A 50%, #1A1D2E 100%);
@@ -19,18 +19,18 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        
+
         .container {
             padding: 2rem;
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .header {
             text-align: center;
             margin-bottom: 3rem;
         }
-        
+
         .logo {
             font-size: 3rem;
             margin-bottom: 1rem;
@@ -41,7 +41,7 @@
             text-shadow: 0 0 30px rgba(0, 255, 198, 0.5);
             animation: pulse 2s infinite;
         }
-        
+
         .status-panel {
             background: rgba(0, 255, 198, 0.1);
             border: 1px solid rgba(0, 255, 198, 0.3);
@@ -49,7 +49,7 @@
             padding: 2rem;
             margin-bottom: 2rem;
         }
-        
+
         .test-section {
             background: rgba(10, 117, 255, 0.1);
             border: 1px solid rgba(10, 117, 255, 0.3);
@@ -57,34 +57,34 @@
             padding: 1.5rem;
             margin-bottom: 1.5rem;
         }
-        
+
         .test-section h3 {
             color: #00FFC6;
             margin-bottom: 1rem;
         }
-        
+
         .test-result {
             padding: 0.5rem;
             margin: 0.5rem 0;
             border-radius: 5px;
             font-weight: bold;
         }
-        
+
         .test-pass {
             background: rgba(0, 255, 136, 0.2);
             border-left: 4px solid #00FF88;
         }
-        
+
         .test-fail {
             background: rgba(255, 0, 51, 0.2);
             border-left: 4px solid #FF0033;
         }
-        
+
         .test-pending {
             background: rgba(255, 184, 0, 0.2);
             border-left: 4px solid #FFB800;
         }
-        
+
         .canvas-container {
             width: 100%;
             height: 300px;
@@ -94,18 +94,18 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         canvas {
             display: block;
             width: 100%;
             height: 100%;
         }
-        
+
         .voice-test {
             text-align: center;
             padding: 1rem;
         }
-        
+
         .voice-btn {
             background: linear-gradient(45deg, #00FFC6, #0A75FF);
             border: none;
@@ -117,22 +117,22 @@
             margin: 0.5rem;
             transition: transform 0.3s;
         }
-        
+
         .voice-btn:hover {
             transform: scale(1.05);
         }
-        
+
         .voice-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        
+
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.7; }
             100% { opacity: 1; }
         }
-        
+
         .loading {
             animation: pulse 1.5s infinite;
         }
@@ -145,18 +145,18 @@
             <h1>Ручне тестування компонентів</h1>
             <p>Перевірка функціональності без React</p>
         </div>
-        
+
         <div class="status-panel">
             <h2>📊 Статус системи</h2>
             <div id="systemStatus" class="loading">Ініціалізація...</div>
         </div>
-        
+
         <div class="test-section">
             <h3>🌐 Браузер та WebGL</h3>
             <div id="webglTest" class="test-result test-pending">Перевіряємо WebGL підтримку...</div>
             <div id="canvasTest" class="test-result test-pending">Тестуємо Canvas...</div>
         </div>
-        
+
         <div class="test-section">
             <h3>🎨 3D Рендеринг (Three.js)</h3>
             <div id="threeTest" class="test-result test-pending">Завантажуємо Three.js...</div>
@@ -164,7 +164,7 @@
                 <canvas id="testCanvas"></canvas>
             </div>
         </div>
-        
+
         <div class="test-section">
             <h3>🎤 Голосове управління</h3>
             <div id="voiceTest" class="test-result test-pending">Перевіряємо Speech API...</div>
@@ -174,7 +174,7 @@
             </div>
             <div id="voiceResult"></div>
         </div>
-        
+
         <div class="test-section">
             <h3>📱 Responsive дизайн</h3>
             <div id="responsiveTest" class="test-result test-pending">Перевіряємо екран...</div>
@@ -195,14 +195,14 @@
         function testWebGL() {
             const canvas = document.createElement('canvas');
             const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            
+
             if (gl) {
                 const info = {
                     vendor: gl.getParameter(gl.VENDOR),
                     renderer: gl.getParameter(gl.RENDERER),
                     version: gl.getParameter(gl.VERSION)
                 };
-                
+
                 document.getElementById('webglTest').innerHTML = `✅ WebGL ПІДТРИМУЄТЬСЯ<br><small>${info.renderer}</small>`;
                 document.getElementById('webglTest').className = 'test-result test-pass';
                 return true;
@@ -217,24 +217,24 @@
         function testCanvas() {
             const canvas = document.getElementById('testCanvas');
             const ctx = canvas.getContext('2d');
-            
+
             if (ctx) {
                 // Простий тест малювання
                 canvas.width = canvas.offsetWidth;
                 canvas.height = canvas.offsetHeight;
-                
+
                 const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
                 gradient.addColorStop(0, '#00FFC6');
                 gradient.addColorStop(1, '#0A75FF');
-                
+
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
+
                 ctx.fillStyle = '#F0F8FF';
                 ctx.font = 'bold 24px Arial';
                 ctx.textAlign = 'center';
                 ctx.fillText('Canvas працює!', canvas.width/2, canvas.height/2);
-                
+
                 document.getElementById('canvasTest').innerHTML = `✅ Canvas ПРАЦЮЄ`;
                 document.getElementById('canvasTest').className = 'test-result test-pass';
                 return true;
@@ -252,21 +252,21 @@
                     const scene = new THREE.Scene();
                     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
                     const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('testCanvas') });
-                    
+
                     renderer.setSize(800, 300);
                     renderer.setClearColor(0x000000);
-                    
+
                     // Створюємо куб
                     const geometry = new THREE.BoxGeometry();
-                    const material = new THREE.MeshBasicMaterial({ 
+                    const material = new THREE.MeshBasicMaterial({
                         color: 0x00FFC6,
-                        wireframe: true 
+                        wireframe: true
                     });
                     const cube = new THREE.Mesh(geometry, material);
                     scene.add(cube);
-                    
+
                     camera.position.z = 5;
-                    
+
                     // Анімація
                     function animate() {
                         requestAnimationFrame(animate);
@@ -275,7 +275,7 @@
                         renderer.render(scene, camera);
                     }
                     animate();
-                    
+
                     document.getElementById('threeTest').innerHTML = `✅ Three.js ПРАЦЮЄ<br><small>Версія: ${THREE.REVISION}</small>`;
                     document.getElementById('threeTest').className = 'test-result test-pass';
                     return true;
@@ -295,10 +295,10 @@
         function testVoice() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const speechSynthesis = window.speechSynthesis;
-            
+
             let voiceSupport = false;
             let ttsSupport = false;
-            
+
             if (SpeechRecognition) {
                 voiceSupport = true;
                 document.getElementById('voiceBtn').disabled = false;
@@ -312,7 +312,7 @@
                     recognition.start();
                 };
             }
-            
+
             if (speechSynthesis) {
                 ttsSupport = true;
                 document.getElementById('ttsBtn').disabled = false;
@@ -323,7 +323,7 @@
                     document.getElementById('voiceResult').innerHTML = `🔊 Синтез голосу активний`;
                 };
             }
-            
+
             const status = `${voiceSupport ? '✅' : '❌'} Speech Recognition | ${ttsSupport ? '✅' : '❌'} Speech Synthesis`;
             document.getElementById('voiceTest').innerHTML = status;
             document.getElementById('voiceTest').className = `test-result ${voiceSupport && ttsSupport ? 'test-pass' : 'test-fail'}`;
@@ -334,13 +334,13 @@
             const width = window.innerWidth;
             const height = window.innerHeight;
             const ratio = window.devicePixelRatio || 1;
-            
+
             let category = '';
             if (width >= 1200) category = 'Desktop Large';
             else if (width >= 992) category = 'Desktop';
             else if (width >= 768) category = 'Tablet';
             else category = 'Mobile';
-            
+
             document.getElementById('responsiveTest').innerHTML = `
                 ✅ ${category}: ${width}x${height}<br>
                 <small>DPR: ${ratio}, Touch: ${navigator.maxTouchPoints > 0 ? 'Yes' : 'No'}</small>

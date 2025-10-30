@@ -103,12 +103,12 @@ if [[ "$response" =~ ^[Yy]$ ]]; then
     if command -v pg_dump &> /dev/null; then
         DB_NAME="predator11"
         DB_USER="predator"
-        
+
         print_warning "Створення backup БД $DB_NAME..."
         pg_dump -U $DB_USER -d $DB_NAME > "$BACKUP_DIR/db-backup.sql" 2>/dev/null || {
             print_warning "Не вдалося створити backup БД (можливо, немає доступу)"
         }
-        
+
         if [ -f "$BACKUP_DIR/db-backup.sql" ]; then
             print_success "БД backup створено: $BACKUP_DIR/db-backup.sql"
         fi

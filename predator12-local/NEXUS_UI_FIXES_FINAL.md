@@ -10,7 +10,7 @@
 
 ### 🤖 Enhanced3DGuide компонент
 - **Проблема**: Неправильні типи emotion та systemHealth
-- **Рішення**: 
+- **Рішення**:
   - `'concerned'` → `'processing'`
   - Додано перетворення `'degraded'` → `'warning'`
 

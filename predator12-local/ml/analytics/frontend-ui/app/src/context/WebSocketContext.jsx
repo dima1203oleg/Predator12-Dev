@@ -25,19 +25,19 @@ export const useWebSocketContext = () => {
 export const WebSocketProvider = ({ children }) => {
   // Track all active WebSocket connections
   const [connections, setConnections] = useState({});
-  
+
   // Store connection statuses
   const [connectionStatuses, setConnectionStatuses] = useState({});
-  
+
   // WebSocket references
   const wsRefs = useRef({});
-  
+
   // Track reconnection attempts
   const reconnectAttempts = useRef({});
-  
+
   // Track reconnection timeouts
   const reconnectTimeouts = useRef({});
-  
+
   // Track message handlers
   const messageHandlers = useRef({});
 
@@ -48,12 +48,12 @@ export const WebSocketProvider = ({ children }) => {
     if (!messageHandlers.current[endpoint]) {
       messageHandlers.current[endpoint] = [];
     }
-    
+
     // Add handler if it doesn't already exist
     if (!messageHandlers.current[endpoint].includes(handler)) {
       messageHandlers.current[endpoint].push(handler);
     }
-    
+
     // Return function to unregister
     return () => {
       if (messageHandlers.current[endpoint]) {
@@ -94,38 +94,38 @@ export const WebSocketProvider = ({ children }) => {
    * Connect to a WebSocket endpoint
    */
   const connect = useCallback((endpoint, config = {}) => {
-    const fullUrl = endpoint.startsWith('ws://') || endpoint.startsWith('wss://') 
-      ? endpoint 
+    const fullUrl = endpoint.startsWith('ws://') || endpoint.startsWith('wss://')
+      ? endpoint
       : `${API_WS_URL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
-      
+
     const {
       autoReconnect = true,
       reconnectInterval = 5000,
       maxReconnectAttempts = 5
     } = config;
-    
+
     // Don't reconnect if already connecting or connected
-    if (connectionStatuses[endpoint] === 'connecting' || 
+    if (connectionStatuses[endpoint] === 'connecting' ||
        (wsRefs.current[endpoint] && wsRefs.current[endpoint].readyState === WebSocket.OPEN)) {
       return;
     }
-    
+
     // Update connection status
     setConnectionStatuses(prev => ({
       ...prev,
       [endpoint]: 'connecting'
     }));
-    
+
     // Close existing connection if any
     if (wsRefs.current[endpoint]) {
       wsRefs.current[endpoint].close();
     }
-    
+
     try {
       // Create new WebSocket connection
       const ws = new WebSocket(fullUrl);
       wsRefs.current[endpoint] = ws;
-      
+
       // Set up event handlers
       ws.onopen = () => {
         console.log(`WebSocket connected to ${fullUrl}`);
@@ -134,7 +134,7 @@ export const WebSocketProvider = ({ children }) => {
           [endpoint]: 'connected'
         }));
         reconnectAttempts.current[endpoint] = 0;
-        
+
         // Update connections mapping
         setConnections(prev => ({
           ...prev,
@@ -145,30 +145,30 @@ export const WebSocketProvider = ({ children }) => {
           }
         }));
       };
-      
+
       ws.onmessage = (event) => {
         parseMessage(endpoint, event);
       };
-      
+
       ws.onclose = (event) => {
         console.log(`WebSocket disconnected from ${fullUrl}:`, event.code, event.reason);
         setConnectionStatuses(prev => ({
           ...prev,
           [endpoint]: 'disconnected'
         }));
-        
+
         // Clean up reconnect timeout if exists
         if (reconnectTimeouts.current[endpoint]) {
           clearTimeout(reconnectTimeouts.current[endpoint]);
         }
-        
+
         // Handle reconnection if enabled
         if (autoReconnect) {
           const attempts = reconnectAttempts.current[endpoint] || 0;
-          
+
           if (attempts < maxReconnectAttempts) {
             console.log(`Attempting to reconnect to ${endpoint} (${attempts + 1}/${maxReconnectAttempts})...`);
-            
+
             reconnectTimeouts.current[endpoint] = setTimeout(() => {
               reconnectAttempts.current[endpoint] = attempts + 1;
               connect(endpoint, config);
@@ -178,7 +178,7 @@ export const WebSocketProvider = ({ children }) => {
           }
         }
       };
-      
+
       ws.onerror = (error) => {
         console.error(`WebSocket error on ${fullUrl}:`, error);
         setConnectionStatuses(prev => ({
@@ -186,7 +186,7 @@ export const WebSocketProvider = ({ children }) => {
           [endpoint]: 'disconnected'
         }));
       };
-      
+
       return true;
     } catch (error) {
       console.error(`Failed to create WebSocket connection to ${fullUrl}:`, error);
@@ -207,19 +207,19 @@ export const WebSocketProvider = ({ children }) => {
       clearTimeout(reconnectTimeouts.current[endpoint]);
       delete reconnectTimeouts.current[endpoint];
     }
-    
+
     // Close WebSocket connection if exists
     if (wsRefs.current[endpoint]) {
       wsRefs.current[endpoint].close();
       delete wsRefs.current[endpoint];
     }
-    
+
     // Update connection status
     setConnectionStatuses(prev => ({
       ...prev,
       [endpoint]: 'disconnected'
     }));
-    
+
     // Remove from connections mapping
     setConnections(prev => {
       const newConnections = { ...prev };
@@ -233,12 +233,12 @@ export const WebSocketProvider = ({ children }) => {
    */
   const sendMessage = useCallback((endpoint, data) => {
     const ws = wsRefs.current[endpoint];
-    
+
     if (!ws || ws.readyState !== WebSocket.OPEN) {
       console.error(`Cannot send message to ${endpoint}: WebSocket is not connected`);
       return false;
     }
-    
+
     try {
       const message = typeof data === 'string' ? data : JSON.stringify(data);
       ws.send(message);
@@ -265,7 +265,7 @@ export const WebSocketProvider = ({ children }) => {
       Object.keys(reconnectTimeouts.current).forEach(endpoint => {
         clearTimeout(reconnectTimeouts.current[endpoint]);
       });
-      
+
       // Close all connections
       Object.keys(wsRefs.current).forEach(endpoint => {
         if (wsRefs.current[endpoint]) {
@@ -296,4 +296,4 @@ WebSocketProvider.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-export default WebSocketContext; 
+export default WebSocketContext;

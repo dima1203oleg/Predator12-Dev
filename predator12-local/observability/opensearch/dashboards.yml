@@ -6,7 +6,7 @@ opensearch.hosts: ["http://opensearch:9200"]
 # Development convenience; in production configure TLS and proper certs
 opensearch.ssl.verificationMode: none
 
-# Security disabled for development  
+# Security disabled for development
 opensearch.requestHeadersAllowlist: ["securitytenant","Authorization"]
 
 # Default route (replaces deprecated defaultAppId)

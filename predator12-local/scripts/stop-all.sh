@@ -93,11 +93,11 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     if command -v brew >/dev/null 2>&1; then
         info "Зупиняю Redis..."
         brew services stop redis 2>/dev/null || true
-        
+
         info "Зупиняю OpenSearch..."
         brew services stop opensearch 2>/dev/null || true
         brew services stop opensearch-dashboards 2>/dev/null || true
-        
+
         warning "PostgreSQL залишається запущеним (містить дані)"
         read "REPLY?Зупинити PostgreSQL? (y/N): "
         if [[ $REPLY =~ ^[Yy]$ ]]; then

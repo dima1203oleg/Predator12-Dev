@@ -1,13 +1,13 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, IconButton, Tooltip, Paper, Chip } from '@mui/material';
-import { 
-  VolumeUp, 
-  Settings, 
-  Help, 
+import {
+  VolumeUp,
+  Settings,
+  Help,
   Psychology,
   Visibility,
-  VisibilityOff 
+  VisibilityOff
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { nexusColors } from '../../theme/nexusTheme';
@@ -32,7 +32,7 @@ const Enhanced3DGuide: React.FC<Enhanced3DGuideProps> = ({
   const [showChat, setShowChat] = useState(false);
   const [currentMessage, setCurrentMessage] = useState('🚀 Система Predator готова до роботи');
   const [isSpeaking, setIsSpeaking] = useState(false);
-  
+
   // Автоматичні повідомлення на основі стану системи
   useEffect(() => {
     const messages = {
@@ -56,15 +56,15 @@ const Enhanced3DGuide: React.FC<Enhanced3DGuideProps> = ({
         '🔧 Запускаю процедури відновлення'
       ]
     };
-    
+
     const systemMessages = messages[systemHealth];
     let currentIndex = 0;
-    
+
     const interval = setInterval(() => {
       setCurrentMessage(systemMessages[currentIndex]);
       currentIndex = (currentIndex + 1) % systemMessages.length;
     }, 8000);
-    
+
     return () => clearInterval(interval);
   }, [systemHealth, agentsCount, activeAgentsCount]);
 
@@ -162,9 +162,9 @@ const Enhanced3DGuide: React.FC<Enhanced3DGuideProps> = ({
               <Typography sx={{ fontSize: '1.2rem' }}>
                 {getHealthEmoji()}
               </Typography>
-              <Typography 
-                variant="h6" 
-                sx={{ 
+              <Typography
+                variant="h6"
+                sx={{
                   color: nexusColors.frost,
                   fontWeight: 600,
                   fontSize: '1rem'
@@ -173,26 +173,26 @@ const Enhanced3DGuide: React.FC<Enhanced3DGuideProps> = ({
                 Nexus Guide AI
               </Typography>
             </Box>
-            
+
             <Box sx={{ display: 'flex', gap: 0.5 }}>
               <Tooltip title="Озвучити">
                 <IconButton size="small" onClick={handleSpeak}>
                   <VolumeUp sx={{ color: nexusColors.frost, fontSize: '1.1rem' }} />
                 </IconButton>
               </Tooltip>
-              
+
               <Tooltip title="Чат">
                 <IconButton size="small" onClick={() => setShowChat(!showChat)}>
                   <Help sx={{ color: nexusColors.frost, fontSize: '1.1rem' }} />
                 </IconButton>
               </Tooltip>
-              
+
               <Tooltip title="Налаштування">
                 <IconButton size="small">
                   <Settings sx={{ color: nexusColors.frost, fontSize: '1.1rem' }} />
                 </IconButton>
               </Tooltip>
-              
+
               <Tooltip title="Приховати гіда">
                 <IconButton size="small" onClick={onToggleVisibility}>
                   <VisibilityOff sx={{ color: nexusColors.frost, fontSize: '1.1rem' }} />
@@ -200,13 +200,14 @@ const Enhanced3DGuide: React.FC<Enhanced3DGuideProps> = ({
               </Tooltip>
             </Box>
           </Box>
-          
+
           {/* 3D Face */}
           <Box sx={{ height: 180, position: 'relative', overflow: 'hidden' }}>
-            <div/* HolographicAIFace
+            {/*
+            <HolographicAIFace
               isActive={true}
               isSpeaking={isSpeaking}
-              emotion={systemHealth === 'optimal' ? 'neutral' : 
+              emotion={systemHealth === 'optimal' ? 'neutral' :
                       systemHealth === 'degraded' ? 'processing' : 'alert'}
               message={currentMessage}
               size="medium"
@@ -217,13 +218,14 @@ const Enhanced3DGuide: React.FC<Enhanced3DGuideProps> = ({
               cpuLoad={0.35}
               memoryUsage={0.28}
             />
+            */}
           </Box>
-          
+
           {/* Status Info */}
           <Box sx={{ p: 2 }}>
-            <Typography 
-              variant="body2" 
-              sx={{ 
+            <Typography
+              variant="body2"
+              sx={{
                 color: nexusColors.frost,
                 mb: 1.5,
                 textAlign: 'center',
@@ -233,7 +235,7 @@ const Enhanced3DGuide: React.FC<Enhanced3DGuideProps> = ({
             >
               {currentMessage}
             </Typography>
-            
+
             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
               <Chip
                 size="small"

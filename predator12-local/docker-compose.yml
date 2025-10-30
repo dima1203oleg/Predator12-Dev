@@ -17,7 +17,6 @@ services:
       - redis
       - opensearch
       - minio
-      - modelsdk
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - REDIS_URL=${REDIS_URL}
@@ -133,6 +132,15 @@ services:
       - ./backend:/app
       - ./agents:/app/agents
       - ./logs:/app/logs
+    restart: unless-stopped
+
+  # ===== AI MODELS =====
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
     restart: unless-stopped
 
   # Брокер подій Redpanda (Kafka-сумісний)
@@ -554,6 +562,8 @@ volumes:
   loki_data:
     driver: local
   tempo_data:
+    driver: local
+  ollama_data:
     driver: local
 
 # ===== NETWORKS =====

@@ -7,4 +7,4 @@ export const useStore = create((set) => ({
     setLoading: (status) => set({ isLoading: status }),
     error: null,
     setError: (error) => set({ error }),
-})); 
+}));

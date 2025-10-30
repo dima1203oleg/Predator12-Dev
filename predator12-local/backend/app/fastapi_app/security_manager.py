@@ -106,7 +106,10 @@ class SecurityManager:
         self.docker_client = docker.from_env()
 
         # Security configuration
-        self.sbom_tools = {"syft": "/usr/local/bin/syft", "cyclonedx": "/usr/local/bin/cyclonedx"}
+        self.sbom_tools = {
+            "syft": "/usr/local/bin/syft",
+            "cyclonedx": "/usr/local/bin/cyclonedx",
+        }
 
         self.signing_config = {
             "cosign_binary": "/usr/local/bin/cosign",
@@ -126,7 +129,11 @@ class SecurityManager:
                 "required": True,
             },
             "ISO27001": {
-                "controls": ["risk_management", "incident_response", "asset_management"],
+                "controls": [
+                    "risk_management",
+                    "incident_response",
+                    "asset_management",
+                ],
                 "required": False,
             },
             "NIST": {
@@ -314,7 +321,9 @@ class SecurityManager:
             # Store scan result
             scan_key = f"vuln_scan:{scan_id}"
             await self.redis.setex(
-                scan_key, 86400, json.dumps(asdict(scan_result), default=str)  # 24 hours TTL
+                scan_key,
+                86400,
+                json.dumps(asdict(scan_result), default=str),  # 24 hours TTL
             )
 
             logger.info(f"Vulnerability scan completed: {len(findings)} vulnerabilities found")
@@ -391,7 +400,9 @@ class SecurityManager:
             # Store signature info
             sig_key = f"image_signature:{hashlib.sha256(image_name.encode()).hexdigest()[:16]}"
             await self.redis.setex(
-                sig_key, 2592000, json.dumps(asdict(signature), default=str)  # 30 days TTL
+                sig_key,
+                2592000,
+                json.dumps(asdict(signature), default=str),  # 30 days TTL
             )
 
             logger.info(f"Image signed successfully: {image_name}")
@@ -467,7 +478,10 @@ class SecurityManager:
                     logger.info(f"Secret rotated: {secret_name}")
 
                 except Exception as e:
-                    rotation_results[secret_name] = {"status": "failed", "error": str(e)}
+                    rotation_results[secret_name] = {
+                        "status": "failed",
+                        "error": str(e),
+                    }
                     logger.error(f"Failed to rotate secret {secret_name}: {e}")
 
             return {
@@ -537,7 +551,10 @@ class SecurityManager:
                 elif control == "backup":
                     compliance_results[control] = await self._check_backup()
                 else:
-                    compliance_results[control] = {"status": "not_implemented", "score": 0}
+                    compliance_results[control] = {
+                        "status": "not_implemented",
+                        "score": 0,
+                    }
 
             # Calculate overall compliance score
             total_score = sum(result.get("score", 0) for result in compliance_results.values())
@@ -548,7 +565,7 @@ class SecurityManager:
                 "framework": framework,
                 "compliance_percentage": round(compliance_percentage, 2),
                 "controls": compliance_results,
-                "overall_status": "compliant" if compliance_percentage >= 80 else "non_compliant",
+                "overall_status": ("compliant" if compliance_percentage >= 80 else "non_compliant"),
                 "checked_at": datetime.now(timezone.utc).isoformat(),
             }
 

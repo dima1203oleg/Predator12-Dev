@@ -83,10 +83,10 @@ features:
 class BaseAgent:
     async def register(self):
         # Register with agent-ui
-    
+
     async def heartbeat(self):
         # Periodic status updates
-    
+
     async def run(self):
         # Main agent logic
 ```
@@ -285,11 +285,11 @@ from agents.base_agent import BaseAgent
 class MyAgent(BaseAgent):
     def __init__(self):
         super().__init__("my_agent", "custom")
-    
+
     async def run(self):
         await self.register()
         asyncio.create_task(self.heartbeat())
-        
+
         while True:
             # Your logic here
             self.metrics = {"tasks": 123}

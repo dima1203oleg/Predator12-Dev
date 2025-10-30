@@ -21,5 +21,3 @@ test.describe('DEV parity visual tests', () => {
     });
   }
 });
-
-

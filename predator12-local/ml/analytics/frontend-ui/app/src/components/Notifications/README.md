@@ -72,7 +72,7 @@ const App = () => {
 // Use in components
 const YourComponent = () => {
   const { addToast } = useToast();
-  
+
   const showSuccessToast = () => {
     addToast({
       title: "Успіх",
@@ -80,7 +80,7 @@ const YourComponent = () => {
       severity: "success"
     });
   };
-  
+
   return (
     <button onClick={showSuccessToast}>
       Показати сповіщення
@@ -346,4 +346,4 @@ The notification system is optimized for performance:
 - Toast components use requestAnimationFrame for smoother animations
 - DOM updates are minimized by only updating when notifications change
 - CSS animations are hardware-accelerated through transform properties
-- Event handler optimizations with useCallback 
+- Event handler optimizations with useCallback

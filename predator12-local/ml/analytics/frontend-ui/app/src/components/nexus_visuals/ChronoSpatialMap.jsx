@@ -28,7 +28,7 @@ const ChronoSpatialMap = () => {
     const [lastUpdate, setLastUpdate] = useState(null);
     const [selectedRegionLocal, setSelectedRegionLocal] = useState(null);
     const { selectedRegion, setSelectedRegion } = useSimulationStore();
-    
+
     // Process incoming WebSocket messages
     const handleSentimentUpdate = useCallback((data) => {
         if (data.timestamp && data.region_sentiments) {
@@ -44,7 +44,7 @@ const ChronoSpatialMap = () => {
             setLastUpdate(new Date(data.timestamp).toLocaleTimeString());
         }
     }, []);
-    
+
     // Use the global WebSocket hook
     const { connectionStatus, connect } = useGlobalWebSocket(
         'sentiment-updates',
@@ -92,7 +92,7 @@ const ChronoSpatialMap = () => {
         transition: 'background-color 0.5s ease',
         cursor: 'pointer',
     };
-    
+
     const statusHeaderStyle = {
         color: connectionStatus === 'connected' ? '#00FFC6' : '#FF4C4C',
         padding: '10px',
@@ -130,7 +130,7 @@ const ChronoSpatialMap = () => {
             <h3 style={{ color: '#00FFC6', borderBottom: '1px solid #00FFC6', paddingBottom: '10px' }}>
                 Real-Time Regional Sentiment Map
             </h3>
-            <WebSocketStatus 
+            <WebSocketStatus
                 wsEndpoint="/ws/sentiment-updates"
                 connectionStatus={connectionStatus}
                 onReconnect={connect}
@@ -141,8 +141,8 @@ const ChronoSpatialMap = () => {
                     const bgColor = sentiment ? getSentimentColor(sentiment.score) : 'rgba(50, 70, 100, 0.4)';
                     const isSelected = regionId === selectedRegion;
                     return (
-                        <div 
-                            key={regionId} 
+                        <div
+                            key={regionId}
                             style={{
                                 ...regionBaseStyle,
                                 ...regionData.style,
@@ -175,16 +175,16 @@ const ChronoSpatialMap = () => {
                             ) : (
                                 <p>No sentiment data available.</p>
                             )}
-                            <button 
-                                onClick={handleClosePopup} 
-                                style={{ 
-                                    backgroundColor: '#00FFC6', 
-                                    color: '#0A192F', 
-                                    border: 'none', 
-                                    padding: '5px 10px', 
-                                    borderRadius: '4px', 
-                                    cursor: 'pointer', 
-                                    marginTop: '10px' 
+                            <button
+                                onClick={handleClosePopup}
+                                style={{
+                                    backgroundColor: '#00FFC6',
+                                    color: '#0A192F',
+                                    border: 'none',
+                                    padding: '5px 10px',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    marginTop: '10px'
                                 }}
                             >
                                 Close
@@ -197,4 +197,4 @@ const ChronoSpatialMap = () => {
     );
 };
 
-export default ChronoSpatialMap; 
+export default ChronoSpatialMap;

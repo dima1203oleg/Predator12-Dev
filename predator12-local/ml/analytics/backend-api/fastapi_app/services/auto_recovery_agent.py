@@ -33,9 +33,7 @@ structlog.configure(
     wrapper_class=structlog.stdlib.BoundLogger,
     cache_logger_on_first_use=True,
 )
-logger: structlog.stdlib.BoundLogger = structlog.get_logger(
-    "PredatorAutoRecoveryAgent"
-)
+logger: structlog.stdlib.BoundLogger = structlog.get_logger("PredatorAutoRecoveryAgent")
 AGENT_VERSION = "2.1.0"
 
 
@@ -97,9 +95,7 @@ class PredatorAutoRecoveryAgent:
             self.config = AppConfig()
 
             # Initialize thread pool
-            self.thread_pool = ThreadPoolExecutor(
-                max_workers=(os.cpu_count() or 1) + 4
-            )
+            self.thread_pool = ThreadPoolExecutor(max_workers=(os.cpu_count() or 1) + 4)
 
             # Initialize HTTP client
             self.http_session = ClientSession(
@@ -107,9 +103,7 @@ class PredatorAutoRecoveryAgent:
                     ssl=self.config.ssl_verify,
                     limit_per_host=self.config.http_max_connections_per_host,
                 ),
-                timeout=ClientTimeout(
-                    total=self.config.http_client_timeout_seconds
-                ),
+                timeout=ClientTimeout(total=self.config.http_client_timeout_seconds),
             )
 
             logger.info("Agent initialized successfully")
@@ -154,4 +148,4 @@ async def main():
 
 if __name__ == "__main__":
     uvloop.install()
-    asyncio.run(main()) 
+    asyncio.run(main())

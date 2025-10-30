@@ -89,7 +89,7 @@ PUT _plugins/_ism/policies/events_lifecycle
   }
 }
 
-# Metrics ILM Policy  
+# Metrics ILM Policy
 PUT _plugins/_ism/policies/metrics_lifecycle
 {
   "policy": {

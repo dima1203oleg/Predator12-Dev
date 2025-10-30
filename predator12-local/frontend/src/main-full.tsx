@@ -11,11 +11,11 @@ import RealTimeMonitor from './components/RealTimeMonitor';
 import Neural3DVisualization from './components/Neural3DVisualization';
 import AgentControlCenter from './components/AgentControlCenter';
 import VoiceControlInterface from './components/VoiceControlInterface';
-import AgentProgressTracker from './components/AgentProgressTracker';
 import type { AIAgent, AIModel } from './components/AIComponents';
 import './styles/dashboard-refined.css';
-import './styles/cosmic-enhancements.css';
+import './styles/global.css';
 import MetricBlock from './components/MetricBlock';
+import { ServiceCard as ServiceCardNew, ServiceCategorySection as ServiceCategorySectionNew, ServiceStatus as ServiceStatusType } from './components/ServiceComponents';
 
 // ============= TYPES =============
 interface SystemMetrics {
@@ -132,7 +132,7 @@ const AnimatedBackground: React.FC = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="animated-canvas"
+      className="animated-bg-canvas"
     />
   );
 };
@@ -141,72 +141,9 @@ const AnimatedBackground: React.FC = () => {
 // (Заміна на MetricBlock - старий inline варіант видалено)
 
 // ============= SERVICE CARD =============
-const ServiceCard: React.FC<{
-  service: ServiceStatus;
-  onClick?: () => void;
-}> = ({ service, onClick }) => {
-  return (
-    <div
-      className="service-card"
-      data-status={service.status}
-      onClick={onClick}
-    >
-      <div className="service-card-inner">
-        <div
-          className="service-card-status-dot"
-          data-animated={service.status === 'online' ? 'true' : 'false'}
-        />
-        <div className="service-card-content">
-          <div className="service-card-name">{service.name}</div>
-          <div className="service-card-meta">
-            {service.requests.toLocaleString()}/min · {service.uptime}
-          </div>
-        </div>
-        <div className="service-card-badge" data-status={service.status}>
-          {service.status}
-        </div>
-      </div>
-    </div>
-  );
-};
-
+// (Legacy inline implementation removed - now using class-based components in ServiceComponents.tsx)
 // ============= SERVICE CATEGORY SECTION =============
-const ServiceCategorySection: React.FC<{
-  title: string;
-  icon: string;
-  services: ServiceStatus[];
-  onServiceClick: (service: ServiceStatus) => void;
-}> = ({ title, icon, services, onServiceClick }) => {
-  if (services.length === 0) return null;
-
-  return (
-    <div className="service-category-section">
-      <div className="service-category-header">
-        <span className="category-icon">{icon}</span>
-        <h3>{title}</h3>
-        <span className="service-category-count">
-          {services.length} {services.length === 1 ? 'service' : 'services'}
-        </span>
-        <div className="category-spacer" />
-        <div className="service-category-stats">
-          <span className="stat-online">
-            ● {services.filter(s => s.status === 'online').length} online
-          </span>
-          {services.filter(s => s.status === 'warning').length > 0 && (
-            <span className="stat-warning">
-              ● {services.filter(s => s.status === 'warning').length} warning
-            </span>
-          )}
-        </div>
-      </div>
-      <div className="grid-services">
-        {services.map((service, i) => (
-          <ServiceCard key={i} service={service} onClick={() => onServiceClick(service)} />
-        ))}
-      </div>
-    </div>
-  );
-};
+// (Legacy inline implementation removed)
 
 // ============= MAIN APP =============
 const App: React.FC = () => {
@@ -217,7 +154,7 @@ const App: React.FC = () => {
     network: 34,
   });
 
-  const [services] = useState<ServiceStatus[]>([
+  const [services] = useState<ServiceStatusType[]>([
     // 🚀 Core Application Services (5)
     { name: 'Backend API', status: 'online', uptime: '99.9%', requests: 1247, responseTime: 45, lastCheck: '2s ago', category: 'core' },
     { name: 'Frontend React', status: 'online', uptime: '100%', requests: 2156, responseTime: 12, lastCheck: '1s ago', category: 'core' },
@@ -1324,7 +1261,7 @@ const App: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('all');
-  const [selectedService, setSelectedService] = useState<ServiceStatus | null>(null);
+  const [selectedService, setSelectedService] = useState<ServiceStatusType | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([
     {
       id: '1',
@@ -1380,6 +1317,37 @@ const App: React.FC = () => {
     security: services.filter((s) => s.category === 'security').length,
   };
 
+  const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>({});
+  const toggleCategory = (cat:string)=> setCollapsedCategories(c=>({...c,[cat]:!c[cat]}));
+
+  const categoryOrder: Array<{ key:string; title:string; icon:string; label:string }> = [
+    { key:'core', title:'Core Application Services', icon:'🚀', label:'Core'},
+    { key:'database', title:'Database & Storage', icon:'💾', label:'DB'},
+    { key:'search', title:'Search & Indexing', icon:'🔍', label:'Search'},
+    { key:'messaging', title:'Message Queue & Streaming', icon:'📨', label:'MQ'},
+    { key:'ai', title:'AI / ML Services', icon:'🤖', label:'AI'},
+    { key:'monitoring', title:'Monitoring Stack', icon:'📊', label:'Mon'},
+    { key:'metrics', title:'System Metrics', icon:'📈', label:'Metrics'},
+    { key:'security', title:'Security & Edge', icon:'🔐', label:'Sec'},
+  ];
+
+  const stickyNavRef = useRef<HTMLDivElement|null>(null);
+  const [activeCategoryAnchor,setActiveCategoryAnchor] = useState<string>('');
+  useEffect(()=>{
+    const handler = () => {
+      const scrollPos = window.scrollY + 140; // offset for header
+      let current = '';
+      for (const c of categoryOrder) {
+        const el = document.getElementById('cat-'+c.key);
+        if (el && el.offsetTop <= scrollPos) current = c.key;
+      }
+      setActiveCategoryAnchor(current);
+    };
+    window.addEventListener('scroll', handler,{ passive:true });
+    handler();
+    return ()=> window.removeEventListener('scroll', handler);
+  },[]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setMetrics({
@@ -1398,6 +1366,7 @@ const App: React.FC = () => {
       <a href="#main" className="skip-link">Skip to main content</a>
       <AnimatedBackground />
       <div id="main" className="app-shell enhanced-visible">
+        {/* Header */}
         <div className="app-header-bar">
           <div>
             <h1 className="app-header-title">Predator Nexus Visibility Hub</h1>
@@ -1405,126 +1374,83 @@ const App: React.FC = () => {
             <div className="system-status-pill"><span className="system-status-dot"/>System Online · {services.length} Services · {services.filter(s=>s.status==='online').length} OK · {services.filter(s=>s.status==='warning').length} Warn</div>
           </div>
         </div>
-        {/* Replacing original metric cards with new markup wrapper classes can be iterative; keep legacy below for now */}
-        {/* ...existing code... */}
+
+        {/* Sticky Category Jump Nav */}
+        <div className="sticky-category-nav" ref={stickyNavRef} role="tablist" aria-label="Service categories navigation">
+          <button className="category-jump" data-active={activeFilter==='all' && !activeCategoryAnchor ? 'true':undefined} onClick={()=>{ setActiveFilter('all'); window.scrollTo({top:0,behavior:'smooth'}); }}>All ({services.length})</button>
+          {categoryOrder.map(cat => (
+            <a key={cat.key} href={'#cat-'+cat.key} className="category-jump" data-active={activeCategoryAnchor===cat.key? 'true': undefined} onClick={()=> setActiveFilter('all')} aria-label={`Jump to ${cat.title}`}>{cat.icon} {cat.label}</a>
+          ))}
+        </div>
+
         {/* Metrics Grid */}
-        <div className="metrics-grid">
+        <div className="metrics-grid" aria-label="System metrics overview">
           <MetricBlock title="CPU Usage" value={metrics.cpu} unit="%" icon="⚡" color="#8B5CF6" trend={-2.3} />
           <MetricBlock title="Memory" value={metrics.memory} unit="%" icon="💾" color="#EC4899" trend={1.5} />
           <MetricBlock title="Disk" value={metrics.disk} unit="%" icon="💿" color="#3B82F6" trend={0.8} />
           <MetricBlock title="Network" value={metrics.network} unit="MB/s" icon="🌐" color="#10B981" trend={5.2} />
         </div>
 
-        {/* ========== SERVICE FILTERS & SEARCH ========== */}
-        <div className="filter-strip">
+        {/* Filters (retain existing chips) */}
+        <div className="filter-strip mb-24">
+          {/* Search now via existing input markup */}
           <div className="search-bar">
             <span className="search-bar-icon">🔍</span>
-            <input
-              value={searchQuery}
-              onChange={(e)=>setSearchQuery(e.target.value)}
-              placeholder="Search services..."
-              aria-label="Search services"
-            />
+            <input value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} placeholder="Search services..." aria-label="Search services" />
           </div>
           <button className="filter-chip" data-active={activeFilter==='all'} onClick={()=>setActiveFilter('all')}>🌟 All<span className="filter-chip-badge">{categoryCounts.all}</span></button>
-          <button className="filter-chip" data-active={activeFilter==='core'} onClick={()=>setActiveFilter('core')}>🚀 Core<span className="filter-chip-badge">{categoryCounts.core}</span></button>
-          <button className="filter-chip" data-active={activeFilter==='database'} onClick={()=>setActiveFilter('database')}>💾 DB<span className="filter-chip-badge">{categoryCounts.database}</span></button>
-          <button className="filter-chip" data-active={activeFilter==='search'} onClick={()=>setActiveFilter('search')}>🔍 Search<span className="filter-chip-badge">{categoryCounts.search}</span></button>
-            <button className="filter-chip" data-active={activeFilter==='messaging'} onClick={()=>setActiveFilter('messaging')}>📨 MQ<span className="filter-chip-badge">{categoryCounts.messaging}</span></button>
-          <button className="filter-chip" data-active={activeFilter==='ai'} onClick={()=>setActiveFilter('ai')}>🤖 AI<span className="filter-chip-badge">{categoryCounts.ai}</span></button>
-          <button className="filter-chip" data-active={activeFilter==='monitoring'} onClick={()=>setActiveFilter('monitoring')}>📊 Mon<span className="filter-chip-badge">{categoryCounts.monitoring}</span></button>
-          <button className="filter-chip" data-active={activeFilter==='metrics'} onClick={()=>setActiveFilter('metrics')}>📈 Metrics<span className="filter-chip-badge">{categoryCounts.metrics}</span></button>
-          <button className="filter-chip" data-active={activeFilter==='security'} onClick={()=>setActiveFilter('security')}>🔐 Sec<span className="filter-chip-badge">{categoryCounts.security}</span></button>
+          {categoryOrder.map(cat => (
+            <button key={cat.key} className="filter-chip" data-active={activeFilter===cat.key} onClick={()=>setActiveFilter(cat.key)}>{cat.icon} {cat.label}<span className="filter-chip-badge">{(categoryCounts as any)[cat.key]}</span></button>
+          ))}
         </div>
 
-        {/* ========== SERVICES SECTION ========== */}
+        {/* Services */}
         {activeFilter === 'all' ? (
           <div>
-            {/* Core */}
-            <ServiceCategorySection
-              title="Core Application Services"
-              icon="🚀"
-              services={filteredServices.filter(s=>s.category==='core')}
-              onServiceClick={setSelectedService}
-            />
-            <ServiceCategorySection
-              title="Database & Storage"
-              icon="💾"
-              services={filteredServices.filter(s=>s.category==='database')}
-              onServiceClick={setSelectedService}
-            />
-            <ServiceCategorySection
-              title="Search & Indexing"
-              icon="🔍"
-              services={filteredServices.filter(s=>s.category==='search')}
-              onServiceClick={setSelectedService}
-            />
-            <ServiceCategorySection
-              title="Message Queue & Streaming"
-              icon="📨"
-              services={filteredServices.filter(s=>s.category==='messaging')}
-              onServiceClick={setSelectedService}
-            />
-            <ServiceCategorySection
-              title="AI / ML Services"
-              icon="🤖"
-              services={filteredServices.filter(s=>s.category==='ai')}
-              onServiceClick={setSelectedService}
-            />
-            <ServiceCategorySection
-              title="Monitoring Stack"
-              icon="📊"
-              services={filteredServices.filter(s=>s.category==='monitoring')}
-              onServiceClick={setSelectedService}
-            />
-            <ServiceCategorySection
-              title="System Metrics"
-              icon="📈"
-              services={filteredServices.filter(s=>s.category==='metrics')}
-              onServiceClick={setSelectedService}
-            />
-            <ServiceCategorySection
-              title="Security & Edge"
-              icon="🔐"
-              services={filteredServices.filter(s=>s.category==='security')}
-              onServiceClick={setSelectedService}
-            />
+            {categoryOrder.map(cat => (
+              <ServiceCategorySectionNew
+                key={cat.key}
+                id={'cat-'+cat.key}
+                title={cat.title}
+                icon={cat.icon}
+                services={filteredServices.filter(s=>s.category===cat.key)}
+                onServiceClick={setSelectedService}
+                collapsed={!!collapsedCategories[cat.key]}
+                onToggle={()=>toggleCategory(cat.key)}
+                active={activeCategoryAnchor===cat.key}
+              />
+            ))}
           </div>
         ) : (
           <div className="category-section">
             <div className="category-header"><h3>{activeFilter.toUpperCase()} Services</h3></div>
-            <div className="grid-services">
-              {filteredServices.map((s,i)=>(<ServiceCard key={i} service={s} onClick={()=>setSelectedService(s)} />))}
+            <div className="service-grid">
+              {filteredServices.map((s,i)=>(<ServiceCardNew key={i} service={s} onClick={()=>setSelectedService(s)} />))}
             </div>
-            {filteredServices.length===0 && <div className="no-results">No services match filter</div>}
+            {filteredServices.length===0 && <div className="no-services-message">No services match filter</div>}
           </div>
         )}
 
-        {/* ========== AI AGENTS & MODELS ========== */}
-        <div className="section-ai-ecosystem">
-          <h2 className="app-header-title section-title-lg">AI Ecosystem</h2>
-          <div className="subtitle-dim section-subtitle">Agents · Models · Operational Intelligence</div>
+        {/* Agents & Models */}
+        <div className="mt-50 ai-ecosystem-section">
+          <h2 className="app-header-title text-32">AI Ecosystem</h2>
+          <div className="subtitle-dim mb-24">Agents · Models · Operational Intelligence</div>
           <div className="grid-agents">
-            {agentsToShow.map(a => (
-              <AgentCard key={a.id} agent={a} />
-            ))}
+            {agentsToShow.map(a => (<AgentCard key={a.id} agent={a} />))}
           </div>
           {totalAgentPages>1 && (
-            <div className="pagination">
+            <div className="pagination mt-20">
               {Array.from({ length: totalAgentPages }).map((_,i)=>(
                 <button key={i} className={i===agentsPage? 'active':''} onClick={()=>setAgentsPage(i)}>{i+1}</button>
               ))}
             </div>
           )}
-
-          <h3 className="models-title">Models Registry</h3>
-          <div className="grid-models">
-            {modelsToShow.map(m => (
-              <ModelCard key={m.id} model={m} />
-            ))}
+          <h3 className="text-26 mt-56 fw-700">Models Registry</h3>
+          <div className="grid-models mt-16">
+            {modelsToShow.map(m => (<ModelCard key={m.id} model={m} />))}
           </div>
           {totalModelPages>1 && (
-            <div className="pagination">
+            <div className="pagination mt-20">
               {Array.from({ length: totalModelPages }).map((_,i)=>(
                 <button key={i} className={i===modelsPage? 'active':''} onClick={()=>setModelsPage(i)}>{i+1}</button>
               ))}
@@ -1532,41 +1458,36 @@ const App: React.FC = () => {
           )}
         </div>
 
-        {/* ========== AGENT PROGRESS TRACKER ========== */}
-        <AgentProgressTracker />
-
-        {/* ========== ADVANCED INTERACTIVE PANELS ========== */}
-        <div className="section-advanced">
-          <h2 className="app-header-title section-title-md">Operational Control Center</h2>
-          <div className="subtitle-dim section-subtitle">Real-Time Monitoring · 3D Neural Map · Voice & Terminal Interfaces</div>
+        {/* Advanced Panels */}
+        <div className="mt-70 operational-center-section">
+          <h2 className="app-header-title text-30">Operational Control Center</h2>
+            <div className="subtitle-dim mb-32">Real-Time Monitoring · 3D Neural Map · Voice & Terminal Interfaces</div>
           <div className="grid-advanced">
-            <div className="enhanced-card">
-              <h4>Real-Time Monitor</h4>
+            <div className="enhanced-card p-20">
+              <h4 className="card-title">Real-Time Monitor</h4>
               <RealTimeMonitor />
             </div>
-            <div className="enhanced-card">
-              <h4>3D Neural Visualization</h4>
+            <div className="enhanced-card p-20">
+              <h4 className="card-title">3D Neural Visualization</h4>
               <Neural3DVisualization />
             </div>
-            <div className="enhanced-card">
-              <h4>Agent Control Center</h4>
+            <div className="enhanced-card p-20">
+              <h4 className="card-title">Agent Control Center</h4>
               <AgentControlCenter agents={agents} />
             </div>
-            <div className="enhanced-card">
-              <h4>Voice Control Interface</h4>
+            <div className="enhanced-card p-20">
+              <h4 className="card-title">Voice Control Interface</h4>
               <VoiceControlInterface />
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="app-footer">© 2025 PREDATOR12 · All Systems Operational</div>
-
-      </div>{/* /app-shell */}
-      {/* Alerts & Modal restored */}
-      {alerts.map(alert => (
-        <AlertNotification key={alert.id} alert={alert} onClose={()=>setAlerts(alerts.filter(a=>a.id!==alert.id))} />
-      ))}
+        <div className="footer-note">© 2025 PREDATOR12 · All Systems Operational</div>
+      </div>
+      {/* Alerts container */}
+      <div className="alert-layer" role="region" aria-label="System alerts">
+        {alerts.map(alert => (<AlertNotification key={alert.id} alert={alert} onClose={()=>setAlerts(alerts.filter(a=>a.id!==alert.id))} />))}
+      </div>
       <ServiceModal service={selectedService} onClose={()=>setSelectedService(null)} />
     </>
   );

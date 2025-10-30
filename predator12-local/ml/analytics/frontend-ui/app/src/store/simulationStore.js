@@ -5,4 +5,4 @@ const useSimulationStore = create((set) => ({
   setSelectedRegion: (regionId) => set({ selectedRegion: regionId }),
 }));
 
-export default useSimulationStore; 
+export default useSimulationStore;

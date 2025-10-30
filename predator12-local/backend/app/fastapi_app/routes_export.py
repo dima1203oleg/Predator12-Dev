@@ -138,7 +138,7 @@ async def get_export_status(
             "request_id": result.request_id,
             "status": result.status.value,
             "created_at": result.created_at.isoformat() if result.created_at else None,
-            "completed_at": result.completed_at.isoformat() if result.completed_at else None,
+            "completed_at": (result.completed_at.isoformat() if result.completed_at else None),
             "expires_at": result.expires_at.isoformat() if result.expires_at else None,
         }
 
@@ -185,9 +185,9 @@ async def list_user_exports(
             export_info = {
                 "request_id": export.request_id,
                 "status": export.status.value,
-                "created_at": export.created_at.isoformat() if export.created_at else None,
-                "completed_at": export.completed_at.isoformat() if export.completed_at else None,
-                "expires_at": export.expires_at.isoformat() if export.expires_at else None,
+                "created_at": (export.created_at.isoformat() if export.created_at else None),
+                "completed_at": (export.completed_at.isoformat() if export.completed_at else None),
+                "expires_at": (export.expires_at.isoformat() if export.expires_at else None),
                 "file_size_bytes": export.file_size_bytes,
                 "row_count": export.row_count,
             }
@@ -199,7 +199,11 @@ async def list_user_exports(
 
             export_list.append(export_info)
 
-        return {"user_id": user_id, "exports": export_list, "total_count": len(export_list)}
+        return {
+            "user_id": user_id,
+            "exports": export_list,
+            "total_count": len(export_list),
+        }
 
     except Exception as e:
         logger.error(f"Error listing user exports: {e}")
@@ -251,7 +255,9 @@ async def download_export_file(
                 raise HTTPException(status_code=404, detail="Export file not found")
 
             return FileResponse(
-                path=str(local_file_path), filename=file_path, media_type="application/octet-stream"
+                path=str(local_file_path),
+                filename=file_path,
+                media_type="application/octet-stream",
             )
 
     except HTTPException:
@@ -281,7 +287,8 @@ async def cancel_export_request(
 
         if result.status not in [ExportStatus.PENDING, ExportStatus.PROCESSING]:
             raise HTTPException(
-                status_code=400, detail=f"Cannot cancel export with status: {result.status.value}"
+                status_code=400,
+                detail=f"Cannot cancel export with status: {result.status.value}",
             )
 
         # Get task ID and revoke it
@@ -304,7 +311,11 @@ async def cancel_export_request(
 
         await export_worker.redis.setex(result_key, 3600, json.dumps(failed_result))
 
-        return {"success": True, "message": "Export request cancelled", "request_id": request_id}
+        return {
+            "success": True,
+            "message": "Export request cancelled",
+            "request_id": request_id,
+        }
 
     except HTTPException:
         raise
@@ -358,7 +369,11 @@ async def get_export_formats():
                 "best_for": ["system integration", "structured data exchange"],
             },
         },
-        "limits": {"max_file_size_mb": 100, "max_rows": 1000000, "default_expiry_hours": 24},
+        "limits": {
+            "max_file_size_mb": 100,
+            "max_rows": 1000000,
+            "default_expiry_hours": 24,
+        },
     }
 
 
@@ -392,7 +407,9 @@ async def admin_cleanup_exports(
 
 
 @router.get("/health")
-async def export_health_check(export_worker: ExportWorkerManager = Depends(get_export_worker)):
+async def export_health_check(
+    export_worker: ExportWorkerManager = Depends(get_export_worker),
+):
     """
     Health check for export service.
     """
@@ -434,4 +451,8 @@ async def export_health_check(export_worker: ExportWorkerManager = Depends(get_e
 
     except Exception as e:
         logger.error(f"Export health check failed: {e}")
-        return {"status": "unhealthy", "error": str(e), "timestamp": datetime.now().isoformat()}
+        return {
+            "status": "unhealthy",
+            "error": str(e),
+            "timestamp": datetime.now().isoformat(),
+        }

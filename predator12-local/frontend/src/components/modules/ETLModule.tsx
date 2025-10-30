@@ -77,10 +77,10 @@ const ETLModule: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography 
-        variant="h4" 
-        sx={{ 
-          mb: 3, 
+      <Typography
+        variant="h4"
+        sx={{
+          mb: 3,
           color: nexusColors.frost,
           textAlign: 'center',
           background: `linear-gradient(45deg, ${nexusColors.emerald}, ${nexusColors.sapphire})`,
@@ -147,7 +147,7 @@ const ETLModule: React.FC = () => {
           />
         </Box>
       )}
-      
+
       <Grid container spacing={3}>
         {pipelines.map((pipeline) => (
           <Grid item xs={12} md={6} lg={4} key={pipeline.id}>
@@ -173,7 +173,7 @@ const ETLModule: React.FC = () => {
                     {getStatusEmoji(pipeline.status)}
                   </Typography>
                 </Box>
-                
+
                 <Chip
                   size="small"
                   label={pipeline.status}
@@ -183,7 +183,7 @@ const ETLModule: React.FC = () => {
                     mb: 2
                   }}
                 />
-                
+
                 {pipeline.status === 'running' && (
                   <Box sx={{ mb: 2 }}>
                     <Typography variant="caption" sx={{ color: nexusColors.nebula }}>
@@ -201,15 +201,15 @@ const ETLModule: React.FC = () => {
                     />
                   </Box>
                 )}
-                
+
                 <Typography variant="body2" sx={{ color: nexusColors.nebula, mb: 1 }}>
                   📊 Записів оброблено: {pipeline.recordsProcessed.toLocaleString()}
                 </Typography>
-                
+
                 <Typography variant="caption" sx={{ color: nexusColors.shadow, display: 'block', mb: 2 }}>
                   🕐 Останній запуск: {pipeline.lastRun}
                 </Typography>
-                
+
                 <Stack direction="row" spacing={1}>
                   <Button
                     size="small"
@@ -224,7 +224,7 @@ const ETLModule: React.FC = () => {
                   >
                     {pipeline.status === 'running' ? 'Пауза' : 'Запуск'}
                   </Button>
-                  
+
                   <Button
                     size="small"
                     variant="outlined"
@@ -240,7 +240,7 @@ const ETLModule: React.FC = () => {
                   >
                     Перезапуск
                   </Button>
-                  
+
                   <Button
                     size="small"
                     variant="outlined"
@@ -262,11 +262,11 @@ const ETLModule: React.FC = () => {
           </Grid>
         ))}
       </Grid>
-      
+
       <Box sx={{ mt: 4, textAlign: 'center' }}>
         <Typography variant="body2" sx={{ color: nexusColors.nebula }}>
-          Активні: {pipelines.filter(p => p.status === 'running').length} | 
-          Зупинені: {pipelines.filter(p => p.status === 'stopped').length} | 
+          Активні: {pipelines.filter(p => p.status === 'running').length} |
+          Зупинені: {pipelines.filter(p => p.status === 'stopped').length} |
           Помилки: {pipelines.filter(p => p.status === 'error').length}
         </Typography>
       </Box>

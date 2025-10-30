@@ -60,11 +60,11 @@ const MyComponent = () => {
   return (
     <div>
       {/* Use the WebSocketStatus component with the hook */}
-      <WebSocketStatus 
+      <WebSocketStatus
         wsEndpoint="/my-endpoint"
         connectionStatus={connectionStatus}
       />
-      
+
       <button onClick={sendSomeData}>
         Request Data
       </button>
@@ -110,12 +110,12 @@ The hook returns an object with the following properties:
 For components that need to maintain multiple WebSocket connections, simply use the hook multiple times with different endpoints:
 
 ```jsx
-const { 
+const {
   connectionStatus: dataStatus,
   sendMessage: sendDataRequest
 } = useWebSocket(`${API_WS_URL}/data-stream`);
 
-const { 
+const {
   connectionStatus: controlStatus,
   sendMessage: sendControlCommand
 } = useWebSocket(`${API_WS_URL}/control`);
@@ -126,7 +126,7 @@ const {
 If you need custom reconnection behavior, you can disable the automatic reconnection and implement your own logic:
 
 ```jsx
-const { 
+const {
   connectionStatus,
   connect,
   disconnect
@@ -138,7 +138,7 @@ useEffect(() => {
     const timer = setTimeout(() => {
       connect();
     }, customInterval);
-    
+
     return () => clearTimeout(timer);
   }
 }, [connectionStatus, shouldReconnect, connect]);
@@ -152,7 +152,7 @@ The `useWebSocket` hook is designed to work seamlessly with the `WebSocketStatus
 const { connectionStatus, connect } = useWebSocket(wsUrl);
 
 return (
-  <WebSocketStatus 
+  <WebSocketStatus
     wsEndpoint={wsUrl}
     connectionStatus={connectionStatus}
     onReconnect={connect}
@@ -166,4 +166,4 @@ return (
 2. **Connection Status**: Use the connection status to provide visual feedback to users.
 3. **Message Handling**: Keep message handling logic separate from connection management.
 4. **Cleanup**: The hook automatically cleans up connections when components unmount, but be mindful of reconnection attempts that might be in progress.
-5. **Testing**: Mock WebSocket connections in tests to ensure components behave correctly in all connection states. 
+5. **Testing**: Mock WebSocket connections in tests to ensure components behave correctly in all connection states.

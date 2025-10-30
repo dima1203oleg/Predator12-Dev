@@ -1,17 +1,18 @@
+import os
+from datetime import datetime, timedelta
+from typing import Any, Dict, Optional
+
+import redis.asyncio as redis
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
 from jose import JWTError, jwt
-from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
-import os
-import redis.asyncio as redis
-from pydantic import BaseModel
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import sessionmaker
 
 # Import local modules
 from models.database import SessionLocal, User
+from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session, sessionmaker
+
 from .services.auth_service import AuthService
 
 # Constants
@@ -22,10 +23,12 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 # OAuth2 scheme
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 # Token data model
 class TokenData(BaseModel):
     username: Optional[str] = None
     permissions: list[str] = []
+
 
 # Database dependency
 def get_db():
@@ -35,6 +38,7 @@ def get_db():
     finally:
         db.close()
 
+
 # Redis dependency
 async def get_redis_client():
     """
@@ -43,6 +47,7 @@ async def get_redis_client():
     redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
     return redis.from_url(redis_url, encoding="utf-8", decode_responses=True)
 
+
 # PostgreSQL dependency
 async def get_db_session():
     """
@@ -50,6 +55,7 @@ async def get_db_session():
     This is a placeholder; in a real app, it would be configured
     with the actual database connection.
     """
+
     # Placeholder for session creation (to be implemented with actual DB config)
     async def mock_session():
         class MockSession:
@@ -66,6 +72,7 @@ async def get_db_session():
 
     return await mock_session()
 
+
 # Create access token
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
@@ -77,8 +84,11 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+
 # Get current user
-async def get_current_user(token: str = Depends(oauth2_scheme), auth_service: AuthService = Depends(get_auth_service)):
+async def get_current_user(
+    token: str = Depends(oauth2_scheme), auth_service: AuthService = Depends(get_auth_service)
+):
     user = await auth_service.get_current_user(token)
     if not user:
         raise HTTPException(
@@ -88,11 +98,13 @@ async def get_current_user(token: str = Depends(oauth2_scheme), auth_service: Au
         )
     return user
 
+
 # Get current active user
 async def get_current_active_user(current_user: User = Depends(get_current_user)):
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
 
 # Check if user has required permissions
 def has_permission(required_permissions: list[str]):
@@ -104,41 +116,43 @@ def has_permission(required_permissions: list[str]):
                 detail="Not enough permissions",
             )
         return current_user
+
     return check_permission
+
 
 # Get Kafka producer
 def get_kafka_producer():
-    from kafka import KafkaProducer
     import json
-    
+
+    from kafka import KafkaProducer
+
     bootstrap_servers = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9092")
     producer = KafkaProducer(
         bootstrap_servers=bootstrap_servers,
-        value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-        key_serializer=lambda v: v.encode('utf-8') if v else None,
+        value_serializer=lambda v: json.dumps(v).encode("utf-8"),
+        key_serializer=lambda v: v.encode("utf-8") if v else None,
     )
     try:
         yield producer
     finally:
         producer.close()
 
+
 # Get Qdrant client
 def get_qdrant_client():
     from qdrant_client import QdrantClient
-    
+
     qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
     client = QdrantClient(url=qdrant_url)
     return client
 
+
 # Get OpenSearch client
 def get_opensearch_client():
     from opensearchpy import OpenSearch
-    
+
     opensearch_url = os.getenv("OPENSEARCH_URL", "http://localhost:9200")
-    auth = (
-        os.getenv("OPENSEARCH_USER", "admin"),
-        os.getenv("OPENSEARCH_PASSWORD", "admin")
-    )
+    auth = (os.getenv("OPENSEARCH_USER", "admin"), os.getenv("OPENSEARCH_PASSWORD", "admin"))
     client = OpenSearch(
         hosts=[opensearch_url],
         http_auth=auth,
@@ -148,6 +162,7 @@ def get_opensearch_client():
     )
     return client
 
+
 # Mock function for demonstration
 async def mock_external_api_call():
     """
@@ -156,6 +171,7 @@ async def mock_external_api_call():
     Returns a dictionary with a mock user ID.
     """
     return {"id": "mock_user_id"}
+
 
 # Dependency for auth service
 async def get_auth_service() -> AuthService:

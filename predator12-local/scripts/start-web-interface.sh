@@ -18,7 +18,7 @@ if lsof -Pi :5090 -sTCP:LISTEN -t >/dev/null ; then
     echo -e "${YELLOW}⚠️  Port 5090 is already in use${NC}"
     echo -e "${BLUE}🔍 Checking existing process...${NC}"
     lsof -i :5090
-    
+
     read -p "Kill existing process and restart? (y/n) " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then

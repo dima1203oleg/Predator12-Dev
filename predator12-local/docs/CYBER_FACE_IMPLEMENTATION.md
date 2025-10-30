@@ -121,11 +121,11 @@ interface CyberFaceMode {
 ```python
 class EmotionDetector:
     emotions = [
-        'neutral', 'happy', 'sad', 'angry', 
+        'neutral', 'happy', 'sad', 'angry',
         'surprised', 'fearful', 'disgusted',
         'focused', 'confused', 'stressed'
     ]
-    
+
     confidence_threshold = 0.75
     update_frequency = 30  # FPS
     smoothing_window = 5   # frames
@@ -137,7 +137,7 @@ class VoiceInterface:
     languages = ['en-US', 'uk-UA', 'ru-RU']
     wake_words = ['hey cyber', 'predator', 'assistant']
     voice_models = ['azure-neural', 'elevenlabs', 'local-tts']
-    
+
     speech_recognition_confidence = 0.8
     response_timeout = 3.0  # seconds
 ```
@@ -151,7 +151,7 @@ class CyberFaceWebSocket:
         'ai_responses': 'generated responses',
         'system_status': 'agent and system updates'
     }
-    
+
     max_connections = 100
     heartbeat_interval = 30  # seconds
 ```
@@ -192,7 +192,7 @@ cyber_face_performance:
   avatar_render_fps: 30fps
   memory_usage: <2GB
   cpu_usage: <25%
-  
+
 command_center_performance:
   dashboard_load_time: <3s
   real_time_updates: <500ms

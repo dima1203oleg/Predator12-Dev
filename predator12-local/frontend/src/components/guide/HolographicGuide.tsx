@@ -14,10 +14,30 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useGesture } from '@use-gesture/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import * as THREE from 'three';
-import { Box, Typography, IconButton, Card, CardContent } from '@mui/material';
-import MicIcon from '@mui/icons-material/Mic';
-import MicOffIcon from '@mui/icons-material/MicOff';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import {
+  Box,
+  Typography,
+  IconButton,
+  Card,
+  CardContent,
+  Paper,
+  Chip,
+  Avatar,
+  ButtonGroup,
+  Button,
+  Tooltip
+} from '@mui/material';
+import {
+  Mic as MicIcon,
+  MicOff as MicOffIcon,
+  VolumeUp as VolumeUpIcon,
+  Psychology as PsychologyIcon,
+  AutoAwesome as AutoAwesomeIcon,
+  Speed as SpeedIcon,
+  Lightbulb as LightbulbIcon,
+  Settings as SettingsIcon
+} from '@mui/icons-material';
+import { nexusColors } from '../../theme/nexusTheme';
 
 // Web Speech API interface розширення
 declare global {

@@ -58,7 +58,7 @@
 
     <script>
         function updateStatus(message, isError = false) {
-            document.getElementById('status').innerHTML += 
+            document.getElementById('status').innerHTML +=
                 `<div class="status ${isError ? 'error' : 'success'}">${message}</div>`;
         }
 
@@ -83,7 +83,7 @@
             // Test 3: Fetch API
             if ('fetch' in window) {
                 updateStatus('✅ Fetch API: доступний');
-                
+
                 // Test server connection
                 fetch('/health')
                     .then(response => {

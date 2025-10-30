@@ -1,5 +1,6 @@
-import os
 import logging
+import os
+
 from celery import Celery
 from dotenv import load_dotenv
 
@@ -10,7 +11,7 @@ load_dotenv()
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.StreamHandler()]
+    handlers=[logging.StreamHandler()],
 )
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ app = Celery(
     "predator_worker",
     broker=redis_url,
     backend=redis_url,
-    include=["tasks.analytics", "tasks.etl", "tasks.notifications", "tasks.autoheal"]
+    include=["tasks.analytics", "tasks.etl", "tasks.notifications", "tasks.autoheal"],
 )
 
 # Configure Celery settings
@@ -66,17 +67,19 @@ app.conf.beat_schedule = {
 # Add OpenTelemetry instrumentation if enabled
 if os.getenv("ENABLE_TELEMETRY", "false").lower() == "true":
     from opentelemetry import trace
-    from opentelemetry.sdk.trace import TracerProvider
-    from opentelemetry.sdk.trace.export import BatchSpanProcessor
     from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
     from opentelemetry.instrumentation.celery import CeleryInstrumentor
-    
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+
     # Setup OpenTelemetry
     tracer_provider = TracerProvider()
-    processor = BatchSpanProcessor(OTLPSpanExporter(endpoint=os.getenv("OTLP_ENDPOINT", "tempo:4317")))
+    processor = BatchSpanProcessor(
+        OTLPSpanExporter(endpoint=os.getenv("OTLP_ENDPOINT", "tempo:4317"))
+    )
     tracer_provider.add_span_processor(processor)
     trace.set_tracer_provider(tracer_provider)
-    
+
     # Instrument Celery
     CeleryInstrumentor().instrument()
     logger.info("OpenTelemetry instrumentation enabled for Celery")

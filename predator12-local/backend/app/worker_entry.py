@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import os
-from rq import Worker, Queue, Connection
+
 import redis
+from rq import Connection, Queue, Worker
 
 
 def main() -> None:
