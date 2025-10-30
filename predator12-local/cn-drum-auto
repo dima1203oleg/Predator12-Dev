@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Та ж логіка, але всі підтвердження натискаємо автоматично через `yes`
+
+ORDER=("groq" "mistral" "gemini" "hf" "fireworks")
+declare -A CFG=(
+  ["groq"]="$HOME/.continue/config-groq.yaml"
+  ["mistral"]="$HOME/.continue/config-mistral.yaml"
+  ["gemini"]="$HOME/.continue/config-gemini.yaml"
+  ["hf"]="$HOME/.continue/config-hf.yaml"
+  ["fireworks"]="$HOME/.continue/config-fireworks.yaml"
+)
+
+if [[ -n "$CN_DRUM_ONLY" ]]; then
+  ORDER=("$CN_DRUM_ONLY")
+fi
+
+ARGS=( "$@" )
+
+for prov in "${ORDER[@]}"; do
+  cfg="${CFG[$prov]}"
+  if [[ ! -f "$cfg" ]]; then
+    echo "[cn-drum-auto] Пропускаю '$prov': немає конфига $cfg" >&2
+    continue
+  fi
+
+  echo "[cn-drum-auto] Спроба провайдера: $prov ($cfg)" >&2
+  yes | cn --config "$cfg" "${ARGS[@]}"
+  code=$?
+
+  if [[ $code -eq 0 ]]; then
+    exit 0
+  else
+    echo "[cn-drum-auto] Провайдер '$prov' відхилився (код $code). Переходимо далі..." >&2
+  fi
+done
+
+echo "[cn-drum-auto] Усі провайдери недоступні або повернули помилку." >&2
+exit 1
