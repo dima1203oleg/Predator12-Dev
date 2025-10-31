@@ -34,10 +34,10 @@ jobs:
 
       - name: Trivy filesystem scan (optional)
         if: ${{ env.SKIP_SUPPLYCHAIN != 'true' && env.SKIP_SUPPLYCHAIN != '1' }}
-        uses: aquasecurity/trivy-action@v0.20.0
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           scan-type: fs
-          format: 'table'
+          format: "table"
           severity: CRITICAL,HIGH
           exit-code: 1
 
