@@ -26,6 +26,19 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      - name: Ensure full checkout and submodules
+        run: |
+          # ensure we have full history so git can access .gitmodules and submodules
+          git fetch --no-tags --prune --unshallow || true
+          git submodule sync --recursive || true
+          git submodule update --init --recursive || true
+          # ensure shim path exists (create tests dir and symlink to root shim if missing)
+          mkdir -p ./scripts/tests || true
+          if [ ! -f ./scripts/tests/gitops_sync_dry_tests.sh ]; then
+            ln -sf ../gitops_sync_dry_tests.sh ./scripts/tests/gitops_sync_dry_tests.sh || true
+          fi
+          chmod +x ./scripts/gitops_sync_dry_tests.sh ./scripts/tests/gitops_sync_dry_tests.sh || true
+
       - name: Install deps
         run: |
           sudo apt-get update
