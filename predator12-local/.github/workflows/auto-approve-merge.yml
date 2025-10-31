@@ -23,6 +23,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          persist-credentials: true
 
       - name: Wait for required checks to pass
         uses: lewagon/wait-on-check-action@v1.3.4
