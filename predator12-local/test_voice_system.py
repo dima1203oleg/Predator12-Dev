@@ -9,9 +9,9 @@ import sys
 import time
 from pathlib import Path
 
-print("🧪 " + "="*50)
+print("🧪 " + "=" * 50)
 print("   PREDATOR12 Voice System Test")
-print("="*50 + "\n")
+print("=" * 50 + "\n")
 
 # ============================================
 # Перевірка імпортів
@@ -24,45 +24,50 @@ modules_status = {}
 # TTS
 try:
     from TTS.api import TTS
-    modules_status['TTS'] = "✅ OK"
+
+    modules_status["TTS"] = "✅ OK"
     print("✅ Coqui TTS встановлено")
 except ImportError as e:
-    modules_status['TTS'] = f"❌ НЕ ВСТАНОВЛЕНО"
+    modules_status["TTS"] = f"❌ НЕ ВСТАНОВЛЕНО"
     print(f"❌ Coqui TTS: {e}")
 
 # Whisper
 try:
     import whisper
-    modules_status['Whisper'] = "✅ OK"
+
+    modules_status["Whisper"] = "✅ OK"
     print("✅ Whisper встановлено")
 except ImportError as e:
-    modules_status['Whisper'] = f"❌ НЕ ВСТАНОВЛЕНО"
+    modules_status["Whisper"] = f"❌ НЕ ВСТАНОВЛЕНО"
     print(f"❌ Whisper: {e}")
 
 # faster-whisper
 try:
     from faster_whisper import WhisperModel
-    modules_status['faster-whisper'] = "✅ OK"
+
+    modules_status["faster-whisper"] = "✅ OK"
     print("✅ faster-whisper встановлено")
 except ImportError as e:
-    modules_status['faster-whisper'] = f"❌ НЕ ВСТАНОВЛЕНО"
+    modules_status["faster-whisper"] = f"❌ НЕ ВСТАНОВЛЕНО"
     print(f"❌ faster-whisper: {e}")
 
 # Audio
 try:
     import soundfile as sf
-    modules_status['soundfile'] = "✅ OK"
+
+    modules_status["soundfile"] = "✅ OK"
     print("✅ soundfile встановлено")
 except ImportError as e:
-    modules_status['soundfile'] = f"❌ НЕ ВСТАНОВЛЕНО"
+    modules_status["soundfile"] = f"❌ НЕ ВСТАНОВЛЕНО"
     print(f"❌ soundfile: {e}")
 
 try:
     import numpy as np
-    modules_status['numpy'] = "✅ OK"
+
+    modules_status["numpy"] = "✅ OK"
     print("✅ numpy встановлено")
 except ImportError as e:
-    modules_status['numpy'] = f"❌ НЕ ВСТАНОВЛЕНО"
+    modules_status["numpy"] = f"❌ НЕ ВСТАНОВЛЕНО"
     print(f"❌ numpy: {e}")
 
 print()
@@ -71,7 +76,7 @@ print()
 # Тест TTS
 # ============================================
 
-if '✅' in modules_status.get('TTS', ''):
+if "✅" in modules_status.get("TTS", ""):
     print("🔊 Тестування TTS (Text-to-Speech)...")
     print("-" * 50)
 
@@ -92,11 +97,7 @@ if '✅' in modules_status.get('TTS', ''):
         print(f"   Генерація аудіо...")
         start_time = time.time()
 
-        tts.tts_to_file(
-            text=test_text_uk,
-            file_path=output_file_uk,
-            language="uk"
-        )
+        tts.tts_to_file(text=test_text_uk, file_path=output_file_uk, language="uk")
 
         elapsed = time.time() - start_time
         print(f"✅ Згенеровано за {elapsed:.2f}s")
@@ -111,11 +112,7 @@ if '✅' in modules_status.get('TTS', ''):
         print(f"   Generating audio...")
         start_time = time.time()
 
-        tts.tts_to_file(
-            text=test_text_en,
-            file_path=output_file_en,
-            language="en"
-        )
+        tts.tts_to_file(text=test_text_en, file_path=output_file_en, language="en")
 
         elapsed = time.time() - start_time
         print(f"✅ Generated in {elapsed:.2f}s")
@@ -134,7 +131,7 @@ print()
 # Тест STT (якщо є тестові файли)
 # ============================================
 
-if '✅' in modules_status.get('faster-whisper', '') or '✅' in modules_status.get('Whisper', ''):
+if "✅" in modules_status.get("faster-whisper", "") or "✅" in modules_status.get("Whisper", ""):
     print("🎤 Тестування STT (Speech-to-Text)...")
     print("-" * 50)
 
@@ -148,9 +145,10 @@ if '✅' in modules_status.get('faster-whisper', '') or '✅' in modules_status.
     if test_files:
         try:
             # Використовуємо faster-whisper якщо доступно
-            if '✅' in modules_status.get('faster-whisper', ''):
+            if "✅" in modules_status.get("faster-whisper", ""):
                 print("📥 Завантаження faster-whisper моделі...")
                 from faster_whisper import WhisperModel
+
                 model = WhisperModel("base", device="cpu", compute_type="int8")
                 print("✅ Модель завантажена")
 
@@ -163,12 +161,15 @@ if '✅' in modules_status.get('faster-whisper', '') or '✅' in modules_status.
 
                     elapsed = time.time() - start_time
                     print(f"✅ Розпізнано за {elapsed:.2f}s")
-                    print(f"   Мова: {info.language} (вірогідність: {info.language_probability:.2%})")
+                    print(
+                        f"   Мова: {info.language} (вірогідність: {info.language_probability:.2%})"
+                    )
                     print(f"   Текст: {text}")
 
-            elif '✅' in modules_status.get('Whisper', ''):
+            elif "✅" in modules_status.get("Whisper", ""):
                 print("📥 Завантаження Whisper моделі...")
                 import whisper
+
                 model = whisper.load_model("base")
                 print("✅ Модель завантажена")
 
@@ -199,9 +200,9 @@ print()
 # Підсумок
 # ============================================
 
-print("="*50)
+print("=" * 50)
 print("📊 Підсумок тестування")
-print("="*50)
+print("=" * 50)
 
 for module, status in modules_status.items():
     print(f"{status:20} {module}")
@@ -209,7 +210,7 @@ for module, status in modules_status.items():
 print()
 
 # Рекомендації
-if any('❌' in status for status in modules_status.values()):
+if any("❌" in status for status in modules_status.values()):
     print("⚠️  Деякі модулі не встановлені!")
     print("\n💡 Для встановлення виконайте:")
     print("   ./install-voice-tech.sh")
@@ -224,6 +225,6 @@ else:
     print("      http://localhost:8000/docs")
     print("   3. Інтегруйте з фронтендом")
 
-print("\n" + "="*50)
+print("\n" + "=" * 50)
 print("✨ Тестування завершено!")
-print("="*50)
+print("=" * 50)

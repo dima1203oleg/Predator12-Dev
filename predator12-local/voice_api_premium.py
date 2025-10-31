@@ -7,30 +7,33 @@
 Пріоритет: Українська та Англійська мови
 """
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, Query
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse, JSONResponse
-from pydantic import BaseModel
-import uvicorn
-import os
-import io
-import tempfile
-import base64
-from datetime import datetime
-from typing import Optional, List, Dict, Any
 import asyncio
+import base64
+import io
+import os
+import tempfile
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
 import aiohttp
+import uvicorn
+from fastapi import FastAPI, File, HTTPException, Query, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, StreamingResponse
+from pydantic import BaseModel
 
 # Локальні імпорти (опціонально)
 try:
-    import soundfile as sf
     import numpy as np
+    import soundfile as sf
+
     AUDIO_PROCESSING = True
 except ImportError:
     AUDIO_PROCESSING = False
 
 try:
     import pyttsx3
+
     PYTTSX3_AVAILABLE = True
 except ImportError:
     PYTTSX3_AVAILABLE = False
@@ -51,57 +54,57 @@ ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
 # ПРІОРИТЕТ TTS (від найкращих)
 TTS_PROVIDERS = {
     "uk": [
-        "google_neural2_uk",      # Google Cloud Neural2 (найкращий)
-        "aws_polly_neural_uk",    # AWS Polly Neural
-        "azure_neural_uk",        # Azure Neural
-        "coqui_xtts_uk",         # Локальна Coqui (багатомовна)
-        "pyttsx3_uk",            # Системний fallback
-        "browser"                # Браузерний fallback
+        "google_neural2_uk",  # Google Cloud Neural2 (найкращий)
+        "aws_polly_neural_uk",  # AWS Polly Neural
+        "azure_neural_uk",  # Azure Neural
+        "coqui_xtts_uk",  # Локальна Coqui (багатомовна)
+        "pyttsx3_uk",  # Системний fallback
+        "browser",  # Браузерний fallback
     ],
     "en": [
-        "google_neural2_en",      # Google Cloud Neural2
-        "aws_polly_neural_en",    # AWS Polly Neural
-        "azure_neural_en",        # Azure Neural
-        "elevenlabs_en",          # ElevenLabs (якщо є ключ)
-        "coqui_xtts_en",         # Локальна Coqui
-        "pyttsx3_en",            # Системний fallback
-        "browser"                # Браузерний fallback
-    ]
+        "google_neural2_en",  # Google Cloud Neural2
+        "aws_polly_neural_en",  # AWS Polly Neural
+        "azure_neural_en",  # Azure Neural
+        "elevenlabs_en",  # ElevenLabs (якщо є ключ)
+        "coqui_xtts_en",  # Локальна Coqui
+        "pyttsx3_en",  # Системний fallback
+        "browser",  # Браузерний fallback
+    ],
 }
 
 # ПРІОРИТЕТ STT
 STT_PROVIDERS = {
     "uk": [
-        "google_chirp_uk",        # Google Cloud Chirp (найновіша)
-        "azure_neural_uk",        # Azure Neural STT
-        "whisper_large_v3",       # Whisper Large v3 (локально)
-        "google_standard_uk",     # Google Standard
-        "browser"                # Браузерний fallback
+        "google_chirp_uk",  # Google Cloud Chirp (найновіша)
+        "azure_neural_uk",  # Azure Neural STT
+        "whisper_large_v3",  # Whisper Large v3 (локально)
+        "google_standard_uk",  # Google Standard
+        "browser",  # Браузерний fallback
     ],
     "en": [
-        "google_chirp_en",        # Google Cloud Chirp
-        "azure_neural_en",        # Azure Neural STT
-        "aws_transcribe",         # AWS Transcribe
-        "whisper_large_v3",       # Whisper Large v3
-        "browser"                # Браузерний fallback
-    ]
+        "google_chirp_en",  # Google Cloud Chirp
+        "azure_neural_en",  # Azure Neural STT
+        "aws_transcribe",  # AWS Transcribe
+        "whisper_large_v3",  # Whisper Large v3
+        "browser",  # Браузерний fallback
+    ],
 }
 
 # НАЙКРАЩІ ГОЛОСИ
 PREMIUM_VOICES = {
     "uk": {
         "google": "uk-UA-Standard-A",  # Або uk-UA-Wavenet-A якщо доступно
-        "aws": "Polina",                # AWS Ukrainian Neural
+        "aws": "Polina",  # AWS Ukrainian Neural
         "azure": "uk-UA-PolinaNeural",  # Azure Neural
-        "pyttsx3": "ukrainian"
+        "pyttsx3": "ukrainian",
     },
     "en": {
-        "google": "en-US-Neural2-J",    # Найновіший Neural2
-        "aws": "Joanna",                # AWS Neural
-        "azure": "en-US-JennyNeural",   # Azure Neural
-        "elevenlabs": "Rachel",         # ElevenLabs
-        "pyttsx3": "english"
-    }
+        "google": "en-US-Neural2-J",  # Найновіший Neural2
+        "aws": "Joanna",  # AWS Neural
+        "azure": "en-US-JennyNeural",  # Azure Neural
+        "elevenlabs": "Rachel",  # ElevenLabs
+        "pyttsx3": "english",
+    },
 }
 
 # ============================================
@@ -111,7 +114,7 @@ PREMIUM_VOICES = {
 app = FastAPI(
     title="🎤 PREDATOR12 Ultimate Voice API V5.4 PREMIUM",
     description="Найкращі API та локальні моделі для TTS/STT",
-    version="5.4.0"
+    version="5.4.0",
 )
 
 app.add_middleware(
@@ -126,6 +129,7 @@ app.add_middleware(
 # Pydantic Models
 # ============================================
 
+
 class TTSRequest(BaseModel):
     text: str
     language: str = "uk"
@@ -134,9 +138,11 @@ class TTSRequest(BaseModel):
     provider: str = "auto"
     quality: str = "high"
 
+
 class STTRequest(BaseModel):
     language: str = "uk"
     provider: str = "auto"
+
 
 class TTSResponse(BaseModel):
     audio_url: Optional[str] = None
@@ -148,6 +154,7 @@ class TTSResponse(BaseModel):
     cached: bool = False
     timestamp: str
 
+
 class STTResponse(BaseModel):
     text: str
     language: str
@@ -155,6 +162,7 @@ class STTResponse(BaseModel):
     duration: float
     provider: str
     timestamp: str
+
 
 class VoiceCapabilities(BaseModel):
     tts_providers: Dict[str, List[str]]
@@ -165,9 +173,11 @@ class VoiceCapabilities(BaseModel):
     recommended_stt: Dict[str, str]
     supported_languages: List[str]
 
+
 # ============================================
 # Startup
 # ============================================
+
 
 @app.on_event("startup")
 async def startup_event():
@@ -176,7 +186,9 @@ async def startup_event():
     print("=" * 80)
 
     print("\n📋 Конфігурація:")
-    print(f"   🌐 Google Cloud API: {'✅ Налаштовано' if GOOGLE_CLOUD_API_KEY else '❌ Не налаштовано'}")
+    print(
+        f"   🌐 Google Cloud API: {'✅ Налаштовано' if GOOGLE_CLOUD_API_KEY else '❌ Не налаштовано'}"
+    )
     print(f"   🌐 AWS API: {'✅ Налаштовано' if AWS_ACCESS_KEY_ID else '❌ Не налаштовано'}")
     print(f"   🌐 Azure Speech: {'✅ Налаштовано' if AZURE_SPEECH_KEY else '❌ Не налаштовано'}")
     print(f"   🌐 ElevenLabs: {'✅ Налаштовано' if ELEVENLABS_API_KEY else '❌ Не налаштовано'}")
@@ -196,9 +208,11 @@ async def startup_event():
     print("📊 Capabilities: GET /api/v1/capabilities")
     print("=" * 80 + "\n")
 
+
 # ============================================
 # TTS Providers Implementation
 # ============================================
+
 
 async def tts_google_cloud(text: str, language: str, speed: float = 1.0) -> Optional[bytes]:
     """Google Cloud TTS - Найкраща якість"""
@@ -218,16 +232,13 @@ async def tts_google_cloud(text: str, language: str, speed: float = 1.0) -> Opti
 
         data = {
             "input": {"text": text},
-            "voice": {
-                "languageCode": language_code,
-                "name": voice_name
-            },
+            "voice": {"languageCode": language_code, "name": voice_name},
             "audioConfig": {
                 "audioEncoding": "MP3",
                 "speakingRate": speed,
                 "pitch": 0.0,
-                "volumeGainDb": 0.0
-            }
+                "volumeGainDb": 0.0,
+            },
         }
 
         async with aiohttp.ClientSession() as session:
@@ -244,6 +255,7 @@ async def tts_google_cloud(text: str, language: str, speed: float = 1.0) -> Opti
 
     return None
 
+
 async def tts_aws_polly(text: str, language: str, speed: float = 1.0) -> Optional[bytes]:
     """AWS Polly Neural TTS"""
     if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY:
@@ -258,23 +270,23 @@ async def tts_aws_polly(text: str, language: str, speed: float = 1.0) -> Optiona
             return None
 
         polly = boto3.client(
-            'polly',
+            "polly",
             aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-            region_name=AWS_REGION
+            region_name=AWS_REGION,
         )
 
         voice_id = PREMIUM_VOICES[language]["aws"]
 
         response = polly.synthesize_speech(
             Text=text,
-            OutputFormat='mp3',
+            OutputFormat="mp3",
             VoiceId=voice_id,
-            Engine='neural',  # Neural engine для вищої якості
-            LanguageCode='uk-UA' if language == 'uk' else 'en-US'
+            Engine="neural",  # Neural engine для вищої якості
+            LanguageCode="uk-UA" if language == "uk" else "en-US",
         )
 
-        audio_content = response['AudioStream'].read()
+        audio_content = response["AudioStream"].read()
         print(f"   ✅ AWS Polly Neural: {len(audio_content)} bytes")
         return audio_content
 
@@ -282,6 +294,7 @@ async def tts_aws_polly(text: str, language: str, speed: float = 1.0) -> Optiona
         print(f"   ❌ AWS Polly exception: {e}")
 
     return None
+
 
 async def tts_azure_neural(text: str, language: str, speed: float = 1.0) -> Optional[bytes]:
     """Azure Neural TTS"""
@@ -305,11 +318,13 @@ async def tts_azure_neural(text: str, language: str, speed: float = 1.0) -> Opti
         headers = {
             "Ocp-Apim-Subscription-Key": AZURE_SPEECH_KEY,
             "Content-Type": "application/ssml+xml",
-            "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3"
+            "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3",
         }
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(url, headers=headers, data=ssml.encode('utf-8'), timeout=30) as resp:
+            async with session.post(
+                url, headers=headers, data=ssml.encode("utf-8"), timeout=30
+            ) as resp:
                 if resp.status == 200:
                     audio_content = await resp.read()
                     print(f"   ✅ Azure Neural TTS: {len(audio_content)} bytes")
@@ -321,6 +336,7 @@ async def tts_azure_neural(text: str, language: str, speed: float = 1.0) -> Opti
 
     return None
 
+
 async def tts_elevenlabs(text: str, language: str) -> Optional[bytes]:
     """ElevenLabs TTS (тільки для англійської)"""
     if not ELEVENLABS_API_KEY or language != "en":
@@ -330,18 +346,12 @@ async def tts_elevenlabs(text: str, language: str) -> Optional[bytes]:
         voice_id = "21m00Tcm4TlvDq8ikWAM"  # Rachel
         url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
 
-        headers = {
-            "xi-api-key": ELEVENLABS_API_KEY,
-            "Content-Type": "application/json"
-        }
+        headers = {"xi-api-key": ELEVENLABS_API_KEY, "Content-Type": "application/json"}
 
         data = {
             "text": text,
             "model_id": "eleven_multilingual_v2",
-            "voice_settings": {
-                "stability": 0.5,
-                "similarity_boost": 0.75
-            }
+            "voice_settings": {"stability": 0.5, "similarity_boost": 0.75},
         }
 
         async with aiohttp.ClientSession() as session:
@@ -355,6 +365,7 @@ async def tts_elevenlabs(text: str, language: str) -> Optional[bytes]:
 
     return None
 
+
 def tts_pyttsx3_fallback(text: str, language: str) -> Optional[bytes]:
     """pyttsx3 локальний fallback"""
     if not PYTTSX3_AVAILABLE:
@@ -364,23 +375,23 @@ def tts_pyttsx3_fallback(text: str, language: str) -> Optional[bytes]:
         engine = pyttsx3.init()
 
         # Налаштування голосу
-        voices = engine.getProperty('voices')
+        voices = engine.getProperty("voices")
 
         # Пошук українського/англійського голосу
         for voice in voices:
             if language == "uk" and ("ukrainian" in voice.name.lower() or "uk" in voice.id.lower()):
-                engine.setProperty('voice', voice.id)
+                engine.setProperty("voice", voice.id)
                 break
             elif language == "en" and ("english" in voice.name.lower() or "en" in voice.id.lower()):
-                engine.setProperty('voice', voice.id)
+                engine.setProperty("voice", voice.id)
                 break
 
         # Збереження у файл
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as tmp:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
             engine.save_to_file(text, tmp.name)
             engine.runAndWait()
 
-            with open(tmp.name, 'rb') as f:
+            with open(tmp.name, "rb") as f:
                 audio_content = f.read()
 
             os.unlink(tmp.name)
@@ -392,9 +403,11 @@ def tts_pyttsx3_fallback(text: str, language: str) -> Optional[bytes]:
 
     return None
 
+
 # ============================================
 # TTS Endpoint - З FALLBACK ЛОГІКОЮ
 # ============================================
+
 
 @app.post("/api/v1/tts", response_model=TTSResponse)
 async def text_to_speech(request: TTSRequest):
@@ -454,11 +467,11 @@ async def text_to_speech(request: TTSRequest):
             provider="Browser Web Speech API (Fallback)",
             quality="browser",
             cached=False,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
 
     # Конвертуємо в base64 для відправки
-    audio_base64 = base64.b64encode(audio_content).decode('utf-8')
+    audio_base64 = base64.b64encode(audio_content).decode("utf-8")
 
     print(f"   ✅ Успіх! Використано: {provider_used}")
 
@@ -470,18 +483,18 @@ async def text_to_speech(request: TTSRequest):
         provider=provider_used,
         quality=request.quality,
         cached=False,
-        timestamp=datetime.now().isoformat()
+        timestamp=datetime.now().isoformat(),
     )
+
 
 # ============================================
 # STT Endpoint
 # ============================================
 
+
 @app.post("/api/v1/stt", response_model=STTResponse)
 async def speech_to_text(
-    audio: UploadFile = File(...),
-    language: str = Query("uk"),
-    provider: str = Query("auto")
+    audio: UploadFile = File(...), language: str = Query("uk"), provider: str = Query("auto")
 ):
     """
     🎧 Speech-to-Text з автоматичним fallback
@@ -499,12 +512,14 @@ async def speech_to_text(
         confidence=0.0,
         duration=0.0,
         provider="Browser Web Speech API (Recommended)",
-        timestamp=datetime.now().isoformat()
+        timestamp=datetime.now().isoformat(),
     )
+
 
 # ============================================
 # Capabilities Endpoint
 # ============================================
+
 
 @app.get("/api/v1/capabilities", response_model=VoiceCapabilities)
 async def get_capabilities():
@@ -514,7 +529,7 @@ async def get_capabilities():
         "Google Cloud": bool(GOOGLE_CLOUD_API_KEY),
         "AWS Polly": bool(AWS_ACCESS_KEY_ID),
         "Azure Speech": bool(AZURE_SPEECH_KEY),
-        "ElevenLabs": bool(ELEVENLABS_API_KEY)
+        "ElevenLabs": bool(ELEVENLABS_API_KEY),
     }
 
     recommended_tts = {}
@@ -550,12 +565,14 @@ async def get_capabilities():
         local_available=PYTTSX3_AVAILABLE,
         recommended_tts=recommended_tts,
         recommended_stt=recommended_stt,
-        supported_languages=["uk", "en"]
+        supported_languages=["uk", "en"],
     )
+
 
 # ============================================
 # Health Check
 # ============================================
+
 
 @app.get("/health")
 async def health_check():
@@ -564,17 +581,13 @@ async def health_check():
         "version": "5.4.0",
         "api_configured": bool(GOOGLE_CLOUD_API_KEY or AWS_ACCESS_KEY_ID or AZURE_SPEECH_KEY),
         "local_available": PYTTSX3_AVAILABLE,
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
     }
+
 
 # ============================================
 # Main
 # ============================================
 
 if __name__ == "__main__":
-    uvicorn.run(
-        app,
-        host="0.0.0.0",
-        port=8765,
-        log_level="info"
-    )
+    uvicorn.run(app, host="0.0.0.0", port=8765, log_level="info")

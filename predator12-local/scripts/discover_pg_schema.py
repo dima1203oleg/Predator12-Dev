@@ -14,6 +14,7 @@ Example:
   python3 scripts/discover_pg_schema.py --pg postgresql://user:pass@localhost:5432/keycloak
 """
 
+
 def require(module: str) -> Optional[object]:
     try:
         return __import__(module)
@@ -21,17 +22,22 @@ def require(module: str) -> Optional[object]:
         print(f"[WARN] Missing dependency: {module}.\n{HELP_NOTE}")
         return None
 
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--pg', default=os.environ.get('PG_URI', ''), help='Postgres URI, e.g. postgresql://user:pass@host:5432/db')
+    parser.add_argument(
+        "--pg",
+        default=os.environ.get("PG_URI", ""),
+        help="Postgres URI, e.g. postgresql://user:pass@host:5432/db",
+    )
     args = parser.parse_args()
 
     if not args.pg:
-        print('[ERROR] Provide --pg or set PG_URI env var')
+        print("[ERROR] Provide --pg or set PG_URI env var")
         sys.exit(1)
 
-    psycopg2 = require('psycopg2')
-    tabulate = require('tabulate')
+    psycopg2 = require("psycopg2")
+    tabulate = require("tabulate")
     if not psycopg2:
         sys.exit(1)
 
@@ -43,31 +49,38 @@ def main():
 
     try:
         cur = conn.cursor()
-        cur.execute("""
+        cur.execute(
+            """
             SELECT table_schema, table_name
             FROM information_schema.tables
             WHERE table_type='BASE TABLE' AND table_schema NOT IN ('pg_catalog','information_schema')
             ORDER BY table_schema, table_name;
-        """)
+        """
+        )
         tables = cur.fetchall()
         print(f"[INFO] Found {len(tables)} tables")
         for schema, table in tables:
-            cur.execute("""
+            cur.execute(
+                """
                 SELECT column_name, data_type
                 FROM information_schema.columns
                 WHERE table_schema=%s AND table_name=%s
                 ORDER BY ordinal_position
-            """, (schema, table))
+            """,
+                (schema, table),
+            )
             cols = cur.fetchall()
             print(f"\n{schema}.{table}")
             if tabulate:
                 from tabulate import tabulate as _tab
-                print(_tab(cols, headers=['column','type']))
+
+                print(_tab(cols, headers=["column", "type"]))
             else:
                 for c in cols:
                     print(f"  - {c[0]}: {c[1]}")
     finally:
         conn.close()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

@@ -4,16 +4,17 @@
 Найкращі БЕЗКОШТОВНІ моделі для TTS/STT з українською та англійською мовами
 """
 
-from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse, JSONResponse
-from pydantic import BaseModel
-import uvicorn
-import os
 import io
+import os
 import tempfile
-from typing import Optional, List, Dict
 from datetime import datetime
+from typing import Dict, List, Optional
+
+import uvicorn
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse, StreamingResponse
+from pydantic import BaseModel
 
 # ============================================
 # БЕЗКОШТОВНІ TTS моделі
@@ -22,6 +23,7 @@ from datetime import datetime
 # 1. Coqui TTS - найкращий безкоштовний TTS
 try:
     from TTS.api import TTS
+
     COQUI_AVAILABLE = True
 except ImportError:
     COQUI_AVAILABLE = False
@@ -30,6 +32,7 @@ except ImportError:
 # 2. pyttsx3 - офлайн TTS (системні голоси)
 try:
     import pyttsx3
+
     PYTTSX3_AVAILABLE = True
 except ImportError:
     PYTTSX3_AVAILABLE = False
@@ -38,6 +41,7 @@ except ImportError:
 # 3. gTTS - Google TTS (безкоштовний, без API key)
 try:
     from gtts import gTTS
+
     GTTS_AVAILABLE = True
 except ImportError:
     GTTS_AVAILABLE = False
@@ -50,6 +54,7 @@ except ImportError:
 # 1. Whisper - найкращий безкоштовний STT від OpenAI
 try:
     import whisper
+
     WHISPER_AVAILABLE = True
 except ImportError:
     WHISPER_AVAILABLE = False
@@ -58,6 +63,7 @@ except ImportError:
 # 2. faster-whisper - швидша версія Whisper
 try:
     from faster_whisper import WhisperModel
+
     FASTER_WHISPER_AVAILABLE = True
 except ImportError:
     FASTER_WHISPER_AVAILABLE = False
@@ -65,15 +71,17 @@ except ImportError:
 
 # 3. Vosk - швидкий офлайн STT
 try:
-    from vosk import Model, KaldiRecognizer
     import json as json_lib
+
+    from vosk import KaldiRecognizer, Model
+
     VOSK_AVAILABLE = True
 except ImportError:
     VOSK_AVAILABLE = False
     print("⚠️  Vosk не встановлено: pip install vosk")
 
-import soundfile as sf
 import numpy as np
+import soundfile as sf
 
 # ============================================
 # FastAPI Application
@@ -82,7 +90,7 @@ import numpy as np
 app = FastAPI(
     title="🎤 PREDATOR12 Premium FREE Voice API",
     description="Найкращі безкоштовні TTS/STT моделі",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 app.add_middleware(
@@ -107,15 +115,18 @@ pyttsx3_engine = None
 # Pydantic Models
 # ============================================
 
+
 class TTSRequest(BaseModel):
     text: str
     language: str = "uk"  # uk, en
     speed: float = 1.0
     provider: str = "auto"  # auto, coqui, gtts, pyttsx3
 
+
 class STTRequest(BaseModel):
     language: str = "uk"
     provider: str = "auto"  # auto, whisper, faster-whisper, vosk
+
 
 class VoiceCapabilities(BaseModel):
     tts_providers: Dict[str, bool]
@@ -124,9 +135,11 @@ class VoiceCapabilities(BaseModel):
     recommended_tts: str
     recommended_stt: str
 
+
 # ============================================
 # Startup - Завантаження моделей
 # ============================================
+
 
 @app.on_event("startup")
 async def startup_event():
@@ -160,7 +173,7 @@ async def startup_event():
     if PYTTSX3_AVAILABLE:
         try:
             pyttsx3_engine = pyttsx3.init()
-            voices = pyttsx3_engine.getProperty('voices')
+            voices = pyttsx3_engine.getProperty("voices")
             print(f"   ✅ pyttsx3: {len(voices)} системних голосів")
         except Exception as e:
             print(f"   ⚠️  pyttsx3: {e}")
@@ -200,9 +213,11 @@ async def startup_event():
     print(f"🎧 STT: http://localhost:5094/api/stt")
     print("=" * 80 + "\n")
 
+
 # ============================================
 # Endpoints
 # ============================================
+
 
 @app.get("/")
 async def root():
@@ -210,12 +225,9 @@ async def root():
         "service": "PREDATOR12 Premium FREE Voice API",
         "version": "1.0.0",
         "status": "online",
-        "endpoints": {
-            "capabilities": "/api/capabilities",
-            "tts": "/api/tts",
-            "stt": "/api/stt"
-        }
+        "endpoints": {"capabilities": "/api/capabilities", "tts": "/api/tts", "stt": "/api/stt"},
     }
+
 
 @app.get("/api/capabilities")
 async def get_capabilities():
@@ -225,19 +237,20 @@ async def get_capabilities():
         tts_providers={
             "coqui": COQUI_AVAILABLE and (coqui_tts_uk is not None),
             "gtts": GTTS_AVAILABLE,
-            "pyttsx3": PYTTSX3_AVAILABLE
+            "pyttsx3": PYTTSX3_AVAILABLE,
         },
         stt_providers={
             "faster-whisper": FASTER_WHISPER_AVAILABLE and (faster_whisper_model is not None),
             "whisper": WHISPER_AVAILABLE and (whisper_model is not None),
-            "vosk": VOSK_AVAILABLE
+            "vosk": VOSK_AVAILABLE,
         },
         supported_languages=["uk", "en"],
         recommended_tts="coqui" if COQUI_AVAILABLE else "gtts",
-        recommended_stt="faster-whisper" if FASTER_WHISPER_AVAILABLE else "whisper"
+        recommended_stt="faster-whisper" if FASTER_WHISPER_AVAILABLE else "whisper",
     )
 
     return capabilities
+
 
 @app.post("/api/tts")
 async def text_to_speech(request: TTSRequest):
@@ -341,7 +354,7 @@ async def text_to_speech(request: TTSRequest):
             print(f"   💻 Використовується: pyttsx3 (системні голоси)")
 
             engine = pyttsx3.init()
-            engine.setProperty('rate', int(150 * speed))
+            engine.setProperty("rate", int(150 * speed))
 
             with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
                 engine.save_to_file(text, temp_file.name)
@@ -361,17 +374,13 @@ async def text_to_speech(request: TTSRequest):
     return StreamingResponse(
         io.BytesIO(audio_bytes),
         media_type="audio/wav",
-        headers={
-            "X-Provider": used_provider,
-            "X-Language": language
-        }
+        headers={"X-Provider": used_provider, "X-Language": language},
     )
+
 
 @app.post("/api/stt")
 async def speech_to_text(
-    audio: UploadFile = File(...),
-    language: str = "uk",
-    provider: str = "auto"
+    audio: UploadFile = File(...), language: str = "uk", provider: str = "auto"
 ):
     """
     Speech-to-Text з автоматичним вибором найкращого провайдера
@@ -411,9 +420,7 @@ async def speech_to_text(
             print(f"   ⚡ Використовується: faster-whisper")
 
             segments, info = faster_whisper_model.transcribe(
-                temp_path,
-                language=language,
-                beam_size=5
+                temp_path, language=language, beam_size=5
             )
 
             text = " ".join([segment.text for segment in segments])
@@ -434,11 +441,7 @@ async def speech_to_text(
         try:
             print(f"   🎤 Використовується: Whisper")
 
-            result = whisper_model.transcribe(
-                temp_path,
-                language=language,
-                task="transcribe"
-            )
+            result = whisper_model.transcribe(temp_path, language=language, task="transcribe")
 
             text = result["text"]
             confidence = 0.90
@@ -460,17 +463,13 @@ async def speech_to_text(
         "language": language,
         "confidence": confidence,
         "provider": used_provider,
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
     }
+
 
 # ============================================
 # Run Server
 # ============================================
 
 if __name__ == "__main__":
-    uvicorn.run(
-        app,
-        host="0.0.0.0",
-        port=5094,
-        log_level="info"
-    )
+    uvicorn.run(app, host="0.0.0.0", port=5094, log_level="info")

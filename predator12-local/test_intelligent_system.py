@@ -2,9 +2,11 @@
 """
 Тестовий скрипт для демонстрації роботи інтелектуального супервізора
 """
-import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), 'agents'))
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "agents"))
+
 
 def test_intelligent_supervisor():
     print("🚀 PREDATOR11 INTELLIGENT SUPERVISOR v3.0 TEST")
@@ -14,7 +16,7 @@ def test_intelligent_supervisor():
         from supervisor import Supervisor, TaskType
 
         print("✅ Loading advanced agent ecosystem...")
-        sup = Supervisor('agents/agents.yaml', dry_run=True)
+        sup = Supervisor("agents/agents.yaml", dry_run=True)
         sup.load_config()
 
         print(f"✅ Loaded {len(sup.agents)} agents with intelligent routing")
@@ -24,7 +26,7 @@ def test_intelligent_supervisor():
         print("-" * 40)
 
         # Show key agents
-        key_agents = ['ChiefOrchestratorAgent', 'ModelRouterAgent', 'AnomalyAgent', 'ForecastAgent']
+        key_agents = ["ChiefOrchestratorAgent", "ModelRouterAgent", "AnomalyAgent", "ForecastAgent"]
         for agent_name in key_agents:
             if agent_name in sup.agents:
                 cfg = sup.agents[agent_name]
@@ -45,10 +47,26 @@ def test_intelligent_supervisor():
         if sup.model_router:
             # Test different routing scenarios
             test_cases = [
-                ("Python Code Generation", TaskType.CODE, {"specialization": "python", "complexity_score": 0.8}),
-                ("Complex Reasoning", TaskType.REASONING, {"context_length": 35000, "complexity_score": 0.9}),
-                ("Multilingual Embeddings", TaskType.EMBED, {"specialization": "multilingual", "language": "ukrainian"}),
-                ("Document Analysis", TaskType.VISION, {"specialization": "document_analysis", "image_type": "document"})
+                (
+                    "Python Code Generation",
+                    TaskType.CODE,
+                    {"specialization": "python", "complexity_score": 0.8},
+                ),
+                (
+                    "Complex Reasoning",
+                    TaskType.REASONING,
+                    {"context_length": 35000, "complexity_score": 0.9},
+                ),
+                (
+                    "Multilingual Embeddings",
+                    TaskType.EMBED,
+                    {"specialization": "multilingual", "language": "ukrainian"},
+                ),
+                (
+                    "Document Analysis",
+                    TaskType.VISION,
+                    {"specialization": "document_analysis", "image_type": "document"},
+                ),
             ]
 
             for description, task_type, context in test_cases:
@@ -64,15 +82,17 @@ def test_intelligent_supervisor():
         print("🧠 TESTING CONTEXT-ADAPTIVE SELECTION:")
         print("-" * 40)
 
-        if 'ChiefOrchestratorAgent' in sup.agents:
+        if "ChiefOrchestratorAgent" in sup.agents:
             test_contexts = [
                 ("High Complexity Task", {"task_complexity": 0.9, "reasoning_required": True}),
                 ("Fast Response Required", {"task_complexity": 0.2, "response_time_required": 2}),
-                ("Balanced Task", {"task_complexity": 0.6, "reasoning_required": False})
+                ("Balanced Task", {"task_complexity": 0.6, "reasoning_required": False}),
             ]
 
             for description, context in test_contexts:
-                selected_model = sup.select_model_for_context_adaptive_task('ChiefOrchestratorAgent', context)
+                selected_model = sup.select_model_for_context_adaptive_task(
+                    "ChiefOrchestratorAgent", context
+                )
                 print(f"  🎯 {description}")
                 print(f"     Context: {context}")
                 print(f"     Selected Model: {selected_model or 'None'}")
@@ -88,8 +108,10 @@ def test_intelligent_supervisor():
     except Exception as e:
         print(f"❌ ERROR: {str(e)}")
         import traceback
+
         traceback.print_exc()
         return False
+
 
 if __name__ == "__main__":
     success = test_intelligent_supervisor()

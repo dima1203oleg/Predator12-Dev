@@ -2,13 +2,15 @@
 
 # 0. Self-healing imports (pandera, great_expectations, deepchecks, logging, retry, chaos-monkey)
 import logging
-import pandera as pa
-from pandera import Column, DataFrameSchema
-import great_expectations as ge
-from deepchecks.tabular import Dataset, Suite
-from tenacity import retry, stop_after_attempt, wait_fixed
 import random
+
+import great_expectations as ge
 import pandas as pd
+import pandera as pa
+from deepchecks.tabular import Dataset, Suite
+from pandera import Column, DataFrameSchema
+from tenacity import retry, stop_after_attempt, wait_fixed
+
 
 # 1. Extract (з retry та fallback)
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(5))
@@ -84,6 +86,7 @@ if random.random() < 0.05:
 - Використовуйте pandas для завантаження великих CSV/XLS:
 ```python
 import pandas as pd
+
 df = pd.read_csv('customs_registry.csv', dtype=str)
 ```
 - Для PDF — pdfplumber, для веб — Scrapy/Playwright.
@@ -98,11 +101,13 @@ df['edrpou'] = df['edrpou'].str.zfill(8)
 - Перевірка якості даних:
 ```python
 from agents.dataset_inspector import inspect_dataset
+
 inspect_dataset(df)
 ```
 - Автоматичне виправлення схеми:
 ```python
 from agents.auto_heal import auto_heal_schema
+
 df = auto_heal_schema(df)
 ```
 
@@ -110,12 +115,14 @@ df = auto_heal_schema(df)
 - Завантаження у PostgreSQL:
 ```python
 from sqlalchemy import create_engine
+
 engine = create_engine('postgresql://user:pass@host:5432/db')
 df.to_sql('customs_registry', engine, if_exists='replace', index=False)
 ```
 - Збереження оригіналів у MinIO:
 ```python
 import boto3
+
 s3 = boto3.client('s3', endpoint_url='http://minio:9000', aws_access_key_id='minio', aws_secret_access_key='minio123')
 s3.upload_file('customs_registry.csv', 'originals', 'customs_registry.csv')
 ```

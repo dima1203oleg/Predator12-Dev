@@ -89,6 +89,10 @@ if [ -f "charts/predator/values.yaml" ]; then
     # shellcheck disable=SC2016
     yq eval -i '.image.tag = env(IMAGE_TAG)' charts/predator/values.yaml || true
   else
+    # create structured backup path instead of in-place .bak files
+    BACKUP_DIR=".gitops_backups/$(date +%s)"
+    mkdir -p "$BACKUP_DIR/$(dirname charts/predator/values.yaml)" || true
+    cp -v charts/predator/values.yaml "$BACKUP_DIR/charts/predator/values.yaml.bak.$(date +%s)" || true
     sed -E -i.bak "s/^(\s*tag:\s*).*/\1${IMAGE_TAG}/" charts/predator/values.yaml || true
   fi
 else
@@ -103,8 +107,11 @@ else
 
   for f in $RENDERED_FILES; do
     [ -f "$f" ] || continue
-    echo "[gitops_sync] -> processing $f"
-    cp -v "$f" "$f.bak.$(date +%s)" || true
+  echo "[gitops_sync] -> processing $f"
+  # place backups under a timestamped .gitops_backups directory to avoid littering the manifests tree
+  BACKUP_DIR=".gitops_backups/$(date +%s)"
+  mkdir -p "$(dirname "$BACKUP_DIR/$f")" || true
+  cp -v "$f" "$BACKUP_DIR/$f.bak.$(date +%s)" || true
     if [ "$YQ_PRESENT" -eq 1 ]; then
       echo "[gitops_sync] attempting structured yq update on $f"
       # shellcheck disable=SC2016

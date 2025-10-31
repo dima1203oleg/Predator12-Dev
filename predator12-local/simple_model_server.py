@@ -3,16 +3,19 @@
 🚀 ПРОСТИЙ ПРАЦЮЮЧИЙ MODEL SDK
 Без помилок, з реальними AI відповідями
 """
+from typing import Any, Dict, List
+
+import uvicorn
 from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import List, Dict, Any
-import uvicorn
 
 app = FastAPI(title="Working Model SDK", version="1.0.0")
+
 
 class Message(BaseModel):
     role: str
     content: str
+
 
 class ChatRequest(BaseModel):
     model: str
@@ -20,10 +23,12 @@ class ChatRequest(BaseModel):
     max_tokens: int = 1000
     temperature: float = 0.7
 
+
 class ChatResponse(BaseModel):
     choices: List[Dict[str, Any]]
     model: str
     usage: Dict[str, int]
+
 
 # Реєстр моделей
 MODELS = {
@@ -32,8 +37,9 @@ MODELS = {
     "meta/meta-llama-3.1-405b-instruct": "Llama 3.1 405B - для складних завдань",
     "microsoft/phi-4-reasoning": "Phi-4 - для логічного аналізу",
     "gpt-4": "GPT-4 (алиас для gpt-4o)",
-    "claude-3": "Claude-3 - для аналітики"
+    "claude-3": "Claude-3 - для аналітики",
 }
+
 
 @app.post("/v1/chat/completions")
 async def chat(request: ChatRequest):
@@ -58,20 +64,15 @@ async def chat(request: ChatRequest):
         response = generate_general_response(user_msg, request.model)
 
     return ChatResponse(
-        choices=[{
-            "message": {
-                "role": "assistant",
-                "content": response
-            },
-            "finish_reason": "stop"
-        }],
+        choices=[{"message": {"role": "assistant", "content": response}, "finish_reason": "stop"}],
         model=request.model,
         usage={
             "prompt_tokens": len(user_msg.split()),
             "completion_tokens": len(response.split()),
-            "total_tokens": len(user_msg.split()) + len(response.split())
-        }
+            "total_tokens": len(user_msg.split()) + len(response.split()),
+        },
     )
+
 
 def generate_anomaly_analysis(message: str, model: str) -> str:
     return f"""🔍 **АНАЛІЗ АНОМАЛІЙ** ({model})
@@ -94,6 +95,7 @@ def generate_anomaly_analysis(message: str, model: str) -> str:
 
 *Аналіз виконано {model}*"""
 
+
 def generate_forecast(message: str, model: str) -> str:
     return f"""📈 **ПРОГНОЗУВАННЯ** ({model})
 
@@ -109,6 +111,7 @@ def generate_forecast(message: str, model: str) -> str:
 **Ризики:** Можлива зміна через зовнішні фактори
 
 *Прогноз від {model}*"""
+
 
 def generate_security_analysis(message: str, model: str) -> str:
     return f"""🛡️ **АНАЛІЗ БЕЗПЕКИ** ({model})
@@ -130,6 +133,7 @@ def generate_security_analysis(message: str, model: str) -> str:
 
 *Аналіз безпеки від {model}*"""
 
+
 def generate_data_analysis(message: str, model: str) -> str:
     return f"""📊 **АНАЛІЗ ДАНИХ** ({model})
 
@@ -150,6 +154,7 @@ def generate_data_analysis(message: str, model: str) -> str:
 
 *Аналіз даних від {model}*"""
 
+
 def generate_general_response(message: str, model: str) -> str:
     return f"""🤖 **AI ВІДПОВІДЬ** ({model})
 
@@ -168,6 +173,7 @@ def generate_general_response(message: str, model: str) -> str:
 
 *Відповідь згенерована {model}*"""
 
+
 @app.get("/v1/models")
 async def models():
     return {
@@ -175,17 +181,14 @@ async def models():
             {"id": model_id, "owned_by": "predator11", "available": True}
             for model_id in MODELS.keys()
         ],
-        "total": len(MODELS)
+        "total": len(MODELS),
     }
+
 
 @app.get("/health")
 async def health():
-    return {
-        "status": "healthy",
-        "models_total": len(MODELS),
-        "version": "1.0.0",
-        "working": True
-    }
+    return {"status": "healthy", "models_total": len(MODELS), "version": "1.0.0", "working": True}
+
 
 if __name__ == "__main__":
     uvicorn.run("simple_model_server:app", host="0.0.0.0", port=3010, log_level="info")

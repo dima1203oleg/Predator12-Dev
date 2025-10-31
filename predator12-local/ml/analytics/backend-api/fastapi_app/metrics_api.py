@@ -1,12 +1,14 @@
-from fastapi import APIRouter, Query
 from datetime import datetime, timedelta
-from typing import List, Dict, Any
-from fastapi.responses import JSONResponse
+from typing import Any, Dict, List
+
 import numpy as np
+from fastapi import APIRouter, Query
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
 # --- MOCKED DATA: Replace with real data fetching/logic as needed ---
+
 
 def generate_time_series(start: str, end: str, series: List[str]):
     # Generate mock time series data for demo
@@ -22,17 +24,19 @@ def generate_time_series(start: str, end: str, series: List[str]):
         values.append(row)
     return values
 
+
 @router.get("/metrics/agent-trends")
 def agent_trends(start: str = Query(...), end: str = Query(...)):
     # Example: one series (total activity)
     data = {
         "labels": ["timestamp"],
-        "datasets": [
-            {"label": "Agent Activity", "data": np.random.randint(50, 200, 7).tolist()}
+        "datasets": [{"label": "Agent Activity", "data": np.random.randint(50, 200, 7).tolist()}],
+        "timestamps": [(datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)][
+            ::-1
         ],
-        "timestamps": [(datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d") for i in range(7)][::-1]
     }
     return JSONResponse(content=data)
+
 
 @router.get("/metrics/agent-trends-multiline")
 def agent_trends_multiline(start: str = Query(...), end: str = Query(...)):
@@ -40,6 +44,7 @@ def agent_trends_multiline(start: str = Query(...), end: str = Query(...)):
     series = ["Agent A", "Agent B", "Agent C", "Agent D"]
     values = generate_time_series(start, end, series)
     return {"values": values, "series": series}
+
 
 @router.get("/metrics/agent-role-distribution")
 def agent_role_distribution():
@@ -52,6 +57,7 @@ def agent_role_distribution():
     ]
     return data
 
+
 @router.get("/metrics/agent-activity-heatmap")
 def agent_activity_heatmap():
     # Example: heatmap data
@@ -60,12 +66,11 @@ def agent_activity_heatmap():
     values = np.random.randint(0, 10, (len(yLabels), len(xLabels))).tolist()
     return {"xLabels": xLabels, "yLabels": yLabels, "values": values}
 
+
 @router.get("/metrics/agent-network")
 def agent_network():
     # Example: network graph data
-    nodes = [
-        {"id": f"A{i}", "name": f"Agent {i+1}"} for i in range(6)
-    ]
+    nodes = [{"id": f"A{i}", "name": f"Agent {i+1}"} for i in range(6)]
     links = [
         {"source": "A0", "target": "A1"},
         {"source": "A1", "target": "A2"},

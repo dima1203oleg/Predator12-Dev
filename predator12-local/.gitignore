@@ -115,6 +115,7 @@ backups/
 backup-*/
 *.backup/
 *.bak/
+.gitops_backups/
 
 # ============
 # Storage

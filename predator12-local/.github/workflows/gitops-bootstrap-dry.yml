@@ -1,0 +1,62 @@
+name: GitOps bootstrap — DRY_RUN smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-run-dry:
+    name: Build bootstrap image and run DRY_RUN
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build bootstrap image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile.bootstrap
+          push: false
+          tags: predator-bootstrap:ci
+
+      - name: Run bootstrap in DRY_RUN and capture logs
+        env:
+          DRY_RUN: '1'
+          IMAGE_TAG: ci-test-$(date +%s)
+          MANIFESTS_REPO: ./predator-manifests
+        run: |
+          mkdir -p .gha-output
+          set -o pipefail
+          docker run --rm \
+            -e DRY_RUN=${DRY_RUN} \
+            -e IMAGE_TAG=${IMAGE_TAG} \
+            -e MANIFESTS_REPO=${MANIFESTS_REPO} \
+            -v $GITHUB_WORKSPACE:/work -w /work predator-bootstrap:ci \
+            2>&1 | tee .gha-output/gitops_sync.log || true
+          # capture any git diff in predator-manifests (if present)
+          if [ -d predator-manifests ]; then
+            git -C predator-manifests --no-pager diff > .gha-output/manifests.diff || true
+            git -C predator-manifests --no-pager status --porcelain > .gha-output/manifests.status || true
+            git -C predator-manifests log -n 3 --pretty=oneline > .gha-output/manifests.log || true
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitops-bootstrap-dry-output
+          path: .gha-output
+
+      - name: Fail if DRY_RUN did not complete successfully
+        if: failure()
+        run: |
+          echo "Bootstrap DRY_RUN step failed — check artifacts for details" && exit 1

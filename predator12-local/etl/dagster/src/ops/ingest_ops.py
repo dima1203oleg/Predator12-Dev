@@ -1,8 +1,10 @@
-from dagster import op, Out, In, Nothing
+import os
+
 import duckdb as ddb
 import pandas as pd
-import os
+from dagster import In, Nothing, Out, op
 from elasticsearch import Elasticsearch, helpers
+
 
 @op(out={"parquet_path": Out(str)})
 def read_chunk_and_write_parquet(context):
@@ -19,6 +21,7 @@ def read_chunk_and_write_parquet(context):
     df.to_parquet(parquet_path, index=False)
     return parquet_path
 
+
 @op(ins={"parquet_path": In(str)}, out={"rowcount": Out(int)})
 def validate_and_normalize(context, parquet_path: str):
     df = pd.read_parquet(parquet_path)
@@ -29,6 +32,7 @@ def validate_and_normalize(context, parquet_path: str):
         df["description"] = df["description"].fillna("").str.strip().str[:2048]
     df.to_parquet(parquet_path, index=False)
     return len(df)
+
 
 @op(ins={"parquet_path": In(str)}, out={"loaded": Out(int)})
 def load_to_postgres(context, parquet_path: str):
@@ -46,16 +50,20 @@ def load_to_postgres(context, parquet_path: str):
                 df = batch.to_pandas()
                 # Simplified COPY via execute_values
                 from psycopg2.extras import execute_values
+
                 cols = list(df.columns)
                 values = [tuple(x) for x in df.to_numpy()]
-                execute_values(cur,
-                               f"INSERT INTO {table} ({','.join(cols)}) VALUES %s ON CONFLICT DO NOTHING",
-                               values,
-                               page_size=10000)
+                execute_values(
+                    cur,
+                    f"INSERT INTO {table} ({','.join(cols)}) VALUES %s ON CONFLICT DO NOTHING",
+                    values,
+                    page_size=10000,
+                )
                 total += len(df)
         conn.commit()
     context.log.info(f"Loaded {total} rows into {table}")
     return total
+
 
 @op(ins={"parquet_path": In(str)}, out={"indexed": Out(int)})
 def index_to_opensearch(context, parquet_path: str):

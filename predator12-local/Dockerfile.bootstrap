@@ -1,0 +1,35 @@
+FROM ubuntu:22.04
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl wget gnupg lsb-release build-essential python3 python3-pip \
+    git unzip perl gettext procps sudo ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Helm
+RUN curl -fsSL https://get.helm.sh/helm-v3.12.0-linux-amd64.tar.gz | tar xz && \
+    mv linux-amd64/helm /usr/local/bin/helm && rm -rf linux-amd64
+
+# yq (v4)
+RUN wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.45.1/yq_linux_amd64 && \
+    chmod +x /usr/local/bin/yq
+
+# argocd CLI
+RUN curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 && \
+    chmod +x /usr/local/bin/argocd || true
+
+# gh CLI
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg || true && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+      > /etc/apt/sources.list.d/github-cli.list && apt-get update && apt-get install -y gh || true
+
+# trivy & cosign (best-effort)
+RUN curl -sSL "https://github.com/aquasecurity/trivy/releases/latest/download/trivy_$(uname -s)_$(uname -m).tar.gz" | tar xz --wildcards --strip-components=1 -C /usr/local/bin '*/trivy' || true
+RUN curl -sSL https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64 -o /usr/local/bin/cosign || true && chmod +x /usr/local/bin/cosign || true
+
+WORKDIR /work
+COPY scripts/gitops_sync.sh /work/scripts/gitops_sync.sh
+COPY predator-base-manifests /work/predator-base-manifests
+RUN chmod +x /work/scripts/gitops_sync.sh || true
+
+ENTRYPOINT ["/work/scripts/gitops_sync.sh"]
