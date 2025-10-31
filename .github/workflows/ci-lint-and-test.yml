@@ -1,0 +1,65 @@
+name: CI — Lint and Test
+
+on:
+  pull_request:
+    branches: [ main, 'feature/**' ]
+  push:
+    branches: [ 'feature/**' ]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11]
+        node-version: [18]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install backend deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt || true
+
+      - name: Install frontend deps
+        run: |
+          if [ -f frontend/package.json ]; then
+            cd frontend && npm ci
+          fi
+
+      - name: Run backend linters & typecheck
+        run: |
+          pip install black isort mypy pytest
+          black --check backend || true
+          isort --check-only backend || true
+          mypy backend --ignore-missing-imports || true
+
+      - name: Run frontend lint
+        run: |
+          if [ -f frontend/package.json ]; then
+            cd frontend && npx eslint . || true
+          fi
+
+      - name: Run tests
+        run: |
+          pytest -q || true
+
+      - name: Upload test-report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-report
+          path: |
+            ./

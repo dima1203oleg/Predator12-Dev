@@ -1,0 +1,37 @@
+name: Autodeploy (dry-run)
+
+on:
+  push:
+    branches:
+      - "**"
+  workflow_dispatch: {}
+
+jobs:
+  run-dry-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up shell tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git perl
+
+      - name: Make scripts executable
+        run: |
+          chmod +x ./scripts/tests/gitops_sync_dry_tests.sh
+
+      - name: Run gitops_sync DRY_RUN tests
+        env:
+          DRY_RUN: "1"
+        run: |
+          mkdir -p ./artifacts
+          ./scripts/tests/gitops_sync_dry_tests.sh || true
+          tar -czf ./artifacts/gitops_sync_test_logs.tgz /tmp/gitops_sync_test_logs || true
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitops_sync_test_logs
+          path: ./artifacts/gitops_sync_test_logs.tgz

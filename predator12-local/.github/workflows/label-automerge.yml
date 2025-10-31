@@ -2,33 +2,16 @@ name: Label PR for automerge
 on:
   pull_request_target:
     types: [opened]
+
 jobs:
   label:
     runs-on: ubuntu-latest
     steps:
-      - name: Add labels if safe size
+      - name: Add automerge labels when PR is small
         uses: actions-ecosystem/action-add-labels@v1
         if: ${{ github.event.pull_request.additions < 1200 && github.event.pull_request.changed_files < 60 }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Add both the simple 'automerge' label for visibility
-          # and the namespaced label expected by the safe auto-merge
-          # workflow (auto-merge-safe.yml).
-          labels: automerge,autonomous/allow-auto-merge
-name: Label PR for automerge
-on:
-  pull_request_target:
-    types: [opened]
-jobs:
-  label:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Add label if safe size
-        uses: actions-ecosystem/action-add-labels@v1
-          if: ${{ github.event.pull_request.additions < 1200 && github.event.pull_request.changed_files < 60 }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: automerge
-            # Add both the simple 'automerge' label for visibility
-            # and the namespaced label expected by the safe auto-merge
-            # workflow (auto-merge-safe.yml).
-            labels: automerge,autonomous/allow-auto-merge
+          labels: |
+            automerge
+            autonomous/allow-auto-merge

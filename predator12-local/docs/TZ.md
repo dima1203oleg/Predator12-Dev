@@ -14,22 +14,22 @@
 
 Ролі (коротко):
 
-| Роль | Фокус |
-|---|---|
-| Engineering Lead | Архітектура, roadmap |
-| DevOps / SRE | K8s/Argo/Prometheus, rollback |
-| Backend / Frontend devs | Агенти, extension, scripts |
-| QA | E2E / chaos tests |
-| Security | Trivy/Cosign, RBAC, secrets |
+| Роль                    | Фокус                         |
+| ----------------------- | ----------------------------- |
+| Engineering Lead        | Архітектура, roadmap          |
+| DevOps / SRE            | K8s/Argo/Prometheus, rollback |
+| Backend / Frontend devs | Агенти, extension, scripts    |
+| QA                      | E2E / chaos tests             |
+| Security                | Trivy/Cosign, RBAC, secrets   |
 
 KPI (витяг):
 
-| Метрика | Ціль | Вимір |
-|---|---:|---|
-| Low-risk цикли | ≥95% success | <10 хв |
-| Self-heal | ≥85% | симуляція pod crash/latency |
-| CI/CD | 100% green DRY_RUN | логи артефактів |
-| Безпека | 0 критичних | Trivy/scan pass |
+| Метрика        |               Ціль | Вимір                       |
+| -------------- | -----------------: | --------------------------- |
+| Low-risk цикли |       ≥95% success | <10 хв                      |
+| Self-heal      |               ≥85% | симуляція pod crash/latency |
+| CI/CD          | 100% green DRY_RUN | логи артефактів             |
+| Безпека        |        0 критичних | Trivy/scan pass             |
 
 ---
 
@@ -82,6 +82,7 @@ CI (Actions dry/e2e kind; PR artifacts; squash merge)
   - Outputs: verifyPass boolean, metrics snapshot
 
 Edge cases:
+
 - Empty diff (no-op)
 - Network failure during push/pr
 - Flaky Prometheus metrics (retries/backoff)
@@ -109,9 +110,9 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'helm/**'
-      - 'scripts/**'
-      - '.vscode/**'
+      - "helm/**"
+      - "scripts/**"
+      - ".vscode/**"
 jobs:
   dryrun:
     runs-on: ubuntu-latest
@@ -171,7 +172,7 @@ Secrets: `GH_TOKEN`, `ARGO_AUTH_TOKEN`, `MCP_TOKEN` (зберігати в GitHu
 
 ### 4.3 Скрипти (приклади для включення)
 
-1) `scripts/gitops_sync.sh` — скорочений шаблон (помістіть повний скрипт у репо):
+1. `scripts/gitops_sync.sh` — скорочений шаблон (помістіть повний скрипт у репо):
 
 ```bash
 #!/usr/bin/env bash
@@ -217,7 +218,7 @@ fi
 echo "[gitops_sync] cycle completed"
 ```
 
-2) `scripts/render_and_sync.sh` — helm render example:
+2. `scripts/render_and_sync.sh` — helm render example:
 
 ```bash
 #!/usr/bin/env bash
@@ -233,7 +234,7 @@ find ./rendered -name '*.yaml' -exec cat {} \; > "${OUTPUT}"
 echo "[render_and_sync] rendered -> ${OUTPUT}"
 ```
 
-3) `scripts/gitops_sync_dry_tests.sh` — minimal checks (Bash):
+3. `scripts/gitops_sync_dry_tests.sh` — minimal checks (Bash):
 
 ```bash
 #!/usr/bin/env bash
@@ -259,15 +260,15 @@ metadata:
   name: predator-canary-analysis
 spec:
   metrics:
-  - name: error-rate
-    interval: 30s
-    count: 5
-    successCondition: result < 0.005
-    failureCondition: result >= 0.01
-    provider:
-      prometheus:
-        address: http://prometheus-operated.monitoring.svc.cluster.local
-        query: sum(rate(http_requests_total{job="predator",status=~"5.."}[2m])) / sum(rate(http_requests_total{job="predator"}[2m]))
+    - name: error-rate
+      interval: 30s
+      count: 5
+      successCondition: result < 0.005
+      failureCondition: result >= 0.01
+      provider:
+        prometheus:
+          address: http://prometheus-operated.monitoring.svc.cluster.local
+          query: sum(rate(http_requests_total{job="predator",status=~"5.."}[2m])) / sum(rate(http_requests_total{job="predator"}[2m]))
 ```
 
 ### 4.5 PR workflow
@@ -299,37 +300,44 @@ spec:
 ## 6. План реалізації (21 днів) — чеклісти
 
 ### Фаза 0: Підготовка (Дні 1-2)
+
 - [ ] Створити локальний `kind` кластер (2 nodes).
 - [ ] Встановити ArgoCD + Prometheus через Helm (prometheus-community).
 - [ ] Клон manifests repo → commit bootstrap.
 
 ### Фаза 1: GitOps (Дні 3-5)
+
 - [ ] Додавання / патчі `scripts/render_and_sync.sh`, `scripts/gitops_sync.sh`.
 - [ ] Прогнати local DRY_RUN ×10.
 - [ ] Виправлення shellcheck/helm lint.
 
 ### Фаза 2: VS Code Extension (Дні 6-10)
+
 - [ ] `argocdAutoDeployer.ts` — preflight → MCP → execute → poll.
 - [ ] `verify.ts` — prometheus queries + smoke.
 - [ ] `stateManager.ts` — JSON audit, redact secrets.
 - [ ] Manual trigger тести F5 ×10.
 
 ### Фаза 3: MCP & Security (Дні 11-15)
+
 - [ ] `MCPOrchestrator.ts` — parallel analyze + consensus.
 - [ ] `SupplyChainValidator.ts` — Trivy + Cosign + SBOM checks.
 - [ ] Integrate MCP job into CI.
 
 ### Фаза 4: Rollouts & Self-Heal (Дні 16-19)
+
 - [ ] Argo Rollouts canary + AnalysisTemplate.
 - [ ] Hook verify.ts into analysis phases.
 - [ ] Supervisor/health_monitor self-heal end-to-end tests (pod kill).
 
 ### Фаза 5: Audit & Ops (Дні 20-22)
+
 - [ ] Retention policy 90d; redact secrets.
 - [ ] RBAC: `argo/rbac/autonomous-agent-role.yaml`.
 - [ ] Runbook for rollback & Slack alerts.
 
 ### Фаза 6: CI/Release (Дні 23-28)
+
 - [ ] CI e2e kind runs stable.
 - [ ] Create VSIX / extension packaging (optional).
 - [ ] Final run: simulate PR → merge → tag → Argo sync.
@@ -338,13 +346,13 @@ spec:
 
 ## 7. Ризики та пом'якшення
 
-| Ризик | Ймовірність | Пом'якшення |
-|---|---:|---|
-| Вразливості в ланцюгу (vulns) | High | Block on CRITICAL/HIGH; scheduled scans |
-| Argo fail / sync issues | Medium | Poll 300s; автоматичний rollback, Slack alert |
-| Секрети потрапляють у логи | High | redact regex, git-secrets pre-commit |
-| Flaky metrics | Low | retries 3x; mockable thresholds |
-| MCP false positive | Medium | Weighted consensus, manual override PR |
+| Ризик                         | Ймовірність | Пом'якшення                                   |
+| ----------------------------- | ----------: | --------------------------------------------- |
+| Вразливості в ланцюгу (vulns) |        High | Block on CRITICAL/HIGH; scheduled scans       |
+| Argo fail / sync issues       |      Medium | Poll 300s; автоматичний rollback, Slack alert |
+| Секрети потрапляють у логи    |        High | redact regex, git-secrets pre-commit          |
+| Flaky metrics                 |         Low | retries 3x; mockable thresholds               |
+| MCP false positive            |      Medium | Weighted consensus, manual override PR        |
 
 ---
 
@@ -387,7 +395,11 @@ spec:
 ```ts
 // Inputs: repoPath, imageTag, dryRun
 // Outputs: runId, phases[]
-export async function runAutoDeploy(opts: {repoPath:string, imageTag:string, dryRun:boolean}) {
+export async function runAutoDeploy(opts: {
+  repoPath: string;
+  imageTag: string;
+  dryRun: boolean;
+}) {
   const runId = genRunId();
   await preflightChecks(opts.repoPath, opts.imageTag);
   const mcp = await MCPOrchestrator.analyze(opts.repoPath);

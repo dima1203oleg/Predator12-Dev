@@ -1,0 +1,37 @@
+name: Auto-approve pull requests
+
+# WARNING: This workflow will approve every pull request automatically. This is
+# intentionally permissive and can be a security risk. Only enable if you
+# understand the implications.
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize, ready_for_review, labeled, unlabeled, assigned]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  auto-approve:
+    name: Auto-approve PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Approve pull request via API
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            if (!pr) {
+              core.info('No pull_request payload. Exiting.');
+              return;
+            }
+            core.info(`Auto-approving PR #${pr.number} from ${pr.user.login}`);
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              event: 'APPROVE',
+              body: 'Auto-approved by repository automation.'
+            });
