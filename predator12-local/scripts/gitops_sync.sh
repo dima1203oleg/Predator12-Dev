@@ -65,6 +65,11 @@ fi
 
 pushd "$MANIFESTS_REPO" >/dev/null
 
+# Defensive: ensure we have full history and submodules in manifests repo (idempotent)
+git fetch --no-tags --prune --unshallow 2>/dev/null || true
+git submodule sync --recursive 2>/dev/null || true
+git submodule update --init --recursive 2>/dev/null || true
+
 # -------- MCP analyze (predictive decision) --------
 log_phase "mcp" "calling MCP analyzer"
 MCP_CONTEXT="{\"changes\":[\"imageTag:$IMAGE_TAG\"],\"runId\":\"$RUN_ID\"}"
@@ -155,9 +160,23 @@ if [ "$AUTO_PUSH" -eq 1 ] && [ "$COMMITTED" -eq 1 ]; then
 
   log_phase "push" "low-risk detected — pushing to ${TARGET_BRANCH}"
   # Push current HEAD to the target branch on origin
-  git push origin HEAD:"${TARGET_BRANCH}"
-  git tag -a "deploy-$RUN_ID" -m "deploy $RUN_ID" || git tag -f "deploy-$RUN_ID"
-  git push origin "deploy-$RUN_ID" --force
+  if git push origin HEAD:"${TARGET_BRANCH}"; then
+    log_phase "push" "pushed ${TARGET_BRANCH}"
+  else
+    log_phase "push" "first push failed; attempting force-with-lease"
+    if git push --force-with-lease origin HEAD:"${TARGET_BRANCH}"; then
+      log_phase "push" "pushed ${TARGET_BRANCH} (force-with-lease)"
+    else
+      log_phase "push.failed" "unable to push to ${TARGET_BRANCH}"
+    fi
+  fi
+  # Create or update a tag pointing at this run
+  if git tag -a "deploy-$RUN_ID" -m "deploy $RUN_ID" 2>/dev/null; then
+    git push origin "deploy-$RUN_ID" --force || true
+  else
+    git tag -f "deploy-$RUN_ID" || true
+    git push origin "deploy-$RUN_ID" --force || true
+  fi
   log_phase "push" "pushed ${TARGET_BRANCH} and tag deploy-$RUN_ID"
   echo "Low-risk auto-push OK"
 else
