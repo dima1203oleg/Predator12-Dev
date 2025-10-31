@@ -1,6 +1,3 @@
 [submodule "predator-manifests"]
-    path = predator-manifests
-    url = https://github.com/dima1203oleg/predator-manifests.git
-[submodule "predator-manifests"]
 	path = predator-manifests
 	url = https://github.com/dima1203oleg/predator-manifests.git
