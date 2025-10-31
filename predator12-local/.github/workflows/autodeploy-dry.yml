@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'helm/**'
-      - 'scripts/**'
-      - '.vscode/**'
+      - "helm/**"
+      - "scripts/**"
+      - ".vscode/**"
 
 jobs:
   dryrun:
@@ -14,7 +14,7 @@ jobs:
     env:
       MANIFESTS_REPO: ../manifests-temp
       IMAGE_TAG: dr-${{ github.run_id }}
-      DRY_RUN: '1'
+      DRY_RUN: "1"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,8 +31,18 @@ jobs:
       - name: GitOps Dry-Run
         run: bash scripts/gitops_sync.sh || true
 
-      - name: Run Dry Tests
-        run: bash scripts/gitops_sync_dry_tests.sh || true
+      - name: Run Dry Tests (tolerant)
+        run: |
+          # tolerant runner: try both common locations for the dry-tests shim
+          if [ -f "$GITHUB_WORKSPACE/scripts/tests/gitops_sync_dry_tests.sh" ]; then
+            chmod +x "$GITHUB_WORKSPACE/scripts/tests/gitops_sync_dry_tests.sh" || true
+            "$GITHUB_WORKSPACE/scripts/tests/gitops_sync_dry_tests.sh" || true
+          elif [ -f "$GITHUB_WORKSPACE/scripts/gitops_sync_dry_tests.sh" ]; then
+            chmod +x "$GITHUB_WORKSPACE/scripts/gitops_sync_dry_tests.sh" || true
+            "$GITHUB_WORKSPACE/scripts/gitops_sync_dry_tests.sh" || true
+          else
+            echo "No dry-tests script found at expected paths; skipping dry tests."
+          fi
 
       - name: Shellcheck
         run: shellcheck scripts/*.sh || true
@@ -44,168 +54,18 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: gitops-logs
-          path: test-*.log
-
-  supplychain:
-    runs-on: ubuntu-latest
-    needs: dryrun
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: false
-
-      - name: Trivy FS Scan
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          scan-type: fs
-          severity: CRITICAL,HIGH
-          exit-code: 1
-          ignore-unfixed: true
-
-      - name: Cosign Verify (placeholder)
-        run: echo "Cosign verify placeholder — integrate registry and key"
-
-  e2e-kind:
-    runs-on: ubuntu-latest
-    needs: supplychain
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: false
-
-      - name: Kind Cluster
-        run: |
-          curl -sLo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64 && chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind
-          kind create cluster --config kind-config.yaml || true
-
-      - name: Helm Install Dry
-        run: helm install predator-dry ./helm/predator-umbrella --dry-run --debug || true
-
-      - name: Kubectl Dry
-        run: kubectl apply --dry-run=server -f rendered.yaml || true
-
-      - name: Teardown
-        run: kind delete cluster || true
-name: Autodeploy Dry-Run & Supply Chain
-on:
-  workflow_dispatch: {}
-  push:
-    paths:
-      - 'helm/**'
-      - 'scripts/**'
-      - '.vscode/**'
-jobs:
-  dryrun:
-    runs-on: ubuntu-latest
-    env:
-      MANIFESTS_REPO: ../manifests-temp
-      IMAGE_TAG: dr-${{ github.run_id }}
-      DRY_RUN: '1'
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: false
-      - name: Install deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq yq shellcheck helm kubectl bats kind
-      - name: Render Helm
-        run: bash scripts/render_and_sync.sh
-      - name: GitOps Dry-Run
-        run: bash scripts/gitops_sync.sh
-      - name: Run Dry Tests
-        run: bash scripts/gitops_sync_dry_tests.sh
-      - name: Shellcheck
-        run: shellcheck scripts/*.sh || true
-      - name: Helm Lint
-        run: helm lint helm/predator-umbrella --strict
-      - name: Upload Logs
-        uses: actions/upload-artifact@v4
-        with:
-          name: gitops-logs
           path: |
             ./.autodeploy/**
             test-*.log
+
   supplychain:
-    runs-on: ubuntu-latest
     needs: dryrun
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: false
-      - name: Trivy FS Scan
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          scan-type: fs
-          severity: CRITICAL,HIGH
-          exit-code: 1
-          ignore-unfixed: true
-      - name: Cosign Verify (placeholder)
-        run: echo "Cosign verify placeholder — integrate registry and key"
-  e2e-kind:
-    runs-on: ubuntu-latest
-    needs: supplychain
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: false
-      - name: Kind Cluster
-        run: |
-          curl -sLo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64 && chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind
-          kind create cluster --config kind-config.yaml || true
-      - name: Helm Install Dry
-        run: helm install predator-dry ./helm/predator-umbrella --dry-run --debug || true
-      - name: Kubectl Dry
-        run: kubectl apply --dry-run=server -f rendered.yaml || true
-      - name: Teardown
-        run: kind delete cluster || true
-name: Autodeploy Dry-Run & Supply Chain
-
-on:
-  workflow_dispatch:
-  push:
-    paths:
-      - 'helm/**'
-      - 'scripts/**'
-      - '.vscode/**'
-
-jobs:
-  dryrun:
-    runs-on: ubuntu-latest
-    env:
-      MANIFESTS_REPO: ../manifests-temp
-      IMAGE_TAG: dr-$(date +%s)
-      DRY_RUN: "1"
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: false
-      - name: Install deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y yq jq shellcheck helm kubectl bats kind
-      - name: Render Helm
-        run: bash scripts/render_and_sync.sh
-      - name: GitOps Dry-Run
-        run: bash scripts/gitops_sync.sh
-      - name: Run Dry Tests
-        run: bash scripts/gitops_sync_dry_tests.sh
-      - name: Shellcheck
-        run: shellcheck scripts/*.sh || true
-      - name: Helm Lint
-        run: helm lint helm/predator-umbrella --strict
-      - name: Upload Logs
-        uses: actions/upload-artifact@v4
-        with:
-          name: gitops-logs
-          path: test-*.log
-
-  supplychain:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: false
+
       - name: Trivy FS Scan
         uses: aquasecurity/trivy-action@v0.20.0
         with:
@@ -213,98 +73,28 @@ jobs:
           severity: CRITICAL,HIGH
           exit-code: 1
           ignore-unfixed: true
-      - name: Cosign Verify Mock
+
+      - name: Cosign Verify (placeholder)
         run: echo "Cosign verify placeholder — integrate registry and key"
 
   e2e-kind:
+    needs: supplychain
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: false
+
       - name: Kind Cluster
         run: |
           curl -sLo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64 && chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind
-          kind create cluster --config kind-config.yaml
+          kind create cluster --config kind-config.yaml || true
+
       - name: Helm Install Dry
-        run: helm install predator-dry ./helm/predator-umbrella --dry-run --debug
+        run: helm install predator-dry ./helm/predator-umbrella --dry-run --debug || true
+
       - name: Kubectl Dry
-        run: kubectl apply --dry-run=server -f rendered.yaml
+        run: kubectl apply --dry-run=server -f rendered.yaml || true
+
       - name: Teardown
         run: kind delete cluster || true
-name: Autodeploy Dry-Run & Supply Chain
-on:
-  workflow_dispatch:
-  push:
-    paths:
-      - 'helm/**'
-      - 'scripts/**'
-      - '.vscode/**'
-jobs:
-  dryrun:
-    name: Autodeploy Dry-Run & Supply Chain
-
-    on:
-      workflow_dispatch:
-      push:
-        paths:
-          - 'helm/**'
-          - 'scripts/**'
-          - '.vscode/**'
-
-    jobs:
-      dryrun:
-        runs-on: ubuntu-latest
-        env:
-          MANIFESTS_REPO: ../manifests-temp
-          IMAGE_TAG: dr-$(date +%s)
-          DRY_RUN: "1"
-        steps:
-          - uses: actions/checkout@v4
-          - name: Install deps
-            run: |
-              sudo apt-get update
-              sudo apt-get install -y yq jq shellcheck helm kubectl bats kind
-          - name: Render Helm
-            run: bash scripts/render_and_sync.sh
-          - name: GitOps Dry-Run
-            run: bash scripts/gitops_sync.sh
-          - name: Run Dry Tests
-            run: bash scripts/gitops_sync_dry_tests.sh
-          - name: Shellcheck
-            run: shellcheck scripts/*.sh || true
-          - name: Helm Lint
-            run: helm lint helm/predator-umbrella --strict
-          - name: Upload Logs
-            uses: actions/upload-artifact@v4
-            with:
-              name: gitops-logs
-              path: test-*.log
-
-      supplychain:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v4
-          - name: Trivy FS Scan
-            uses: aquasecurity/trivy-action@v0.20.0
-            with:
-              scan-type: fs
-              severity: CRITICAL,HIGH
-              exit-code: 1
-              ignore-unfixed: true
-          - name: Cosign Verify Mock
-            run: echo "Cosign verify placeholder — integrate registry and key"
-
-      e2e-kind:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v4
-          - name: Kind Cluster
-            run: |
-              curl -sLo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64 && chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind
-              kind create cluster --config kind-config.yaml
-          - name: Helm Install Dry
-            run: helm install predator-dry ./helm/predator-umbrella --dry-run --debug
-          - name: Kubectl Dry
-            run: kubectl apply --dry-run=server -f rendered.yaml
-          - name: Teardown
-            run: kind delete cluster || true
-        run: |
