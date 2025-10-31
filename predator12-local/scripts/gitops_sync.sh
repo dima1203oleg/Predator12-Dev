@@ -97,6 +97,25 @@ else
   log_phase "git" "no changes to commit"
 fi
 
+# If running in GitHub Actions, configure git for pushing using the provided token
+if [ -n "${GITHUB_ACTIONS:-}" ]; then
+  # set safe git user
+  git config user.name "${GITHUB_ACTOR:-github-actions[bot]}"
+  git config user.email "${GITHUB_ACTOR:-github-actions[bot]}@users.noreply.github.com"
+
+  # If a token is available, rewrite origin to use it for non-interactive push
+  if [ -n "${GITHUB_TOKEN:-}" ]; then
+    # Try to infer repository if not provided
+    if [ -z "${GITHUB_REPOSITORY:-}" ]; then
+      GITHUB_REPOSITORY=$(git config --get remote.origin.url | sed -E 's#git@github.com:##;s#https://github.com/##;s#\.git$##') || true
+    fi
+    if [ -n "${GITHUB_REPOSITORY:-}" ]; then
+      git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" || true
+      log_phase "git" "rewrote origin to use GITHUB_TOKEN for pushes"
+    fi
+  fi
+fi
+
 # DRY_RUN behaviour: show diff and exit without pushing
 if [ "$DRY_RUN" != "0" ]; then
   log_phase "dry-run" "showing diff (no push)"
@@ -125,11 +144,21 @@ else
 fi
 
 if [ "$AUTO_PUSH" -eq 1 ] && [ "$COMMITTED" -eq 1 ]; then
-  log_phase "push" "low-risk detected — pushing to main"
-  git push origin main
+  # Decide target branch for CI vs local runs. In CI prefer pushing back to the
+  # checked-out branch (so we don't unexpectedly push to main). Locally default
+  # to main for convenience unless AUTOSAVE_BRANCH is set.
+  if [ -n "${GITHUB_ACTIONS:-}" ]; then
+    TARGET_BRANCH="${AUTOSAVE_BRANCH:-$(git rev-parse --abbrev-ref HEAD)}"
+  else
+    TARGET_BRANCH="${AUTOSAVE_BRANCH:-main}"
+  fi
+
+  log_phase "push" "low-risk detected — pushing to ${TARGET_BRANCH}"
+  # Push current HEAD to the target branch on origin
+  git push origin HEAD:"${TARGET_BRANCH}"
   git tag -a "deploy-$RUN_ID" -m "deploy $RUN_ID" || git tag -f "deploy-$RUN_ID"
   git push origin "deploy-$RUN_ID" --force
-  log_phase "push" "pushed main and tag deploy-$RUN_ID"
+  log_phase "push" "pushed ${TARGET_BRANCH} and tag deploy-$RUN_ID"
   echo "Low-risk auto-push OK"
 else
   BRANCH="auto-update-$RUN_ID"
