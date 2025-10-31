@@ -39,6 +39,10 @@ jobs:
         run: |
           # ensure we have full history so git can access .gitmodules and submodules
           git fetch --no-tags --prune --unshallow || true
+          # Ensure .gitmodules contains expected URL for predator-manifests (idempotent)
+          if [ -f .gitmodules ]; then
+            git config -f .gitmodules submodule.predator-manifests.url "https://github.com/dima1203oleg/predator-manifests.git" || true
+          fi
           git submodule sync --recursive || true
           git submodule update --init --recursive || true
           # ensure shim path exists (create tests dir and symlink to root shim if missing)
