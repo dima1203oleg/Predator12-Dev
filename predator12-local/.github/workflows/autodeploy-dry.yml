@@ -11,10 +11,14 @@ on:
 jobs:
   dryrun:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       MANIFESTS_REPO: ../manifests-temp
       IMAGE_TAG: dr-${{ github.run_id }}
       DRY_RUN: "1"
+      AUTOSAVE_BRANCH: auto/autodeploy-tz
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
