@@ -1,5 +1,59 @@
 #!/usr/bin/env bash
 set -euo pipefail
+MANIFESTS_REPO="${MANIFESTS_REPO:-../predator-manifests}"
+IMAGE_TAG="${IMAGE_TAG:-auto-$(date +%s)}"
+DRY_RUN="${DRY_RUN:-0}"
+
+echo "[gitops_sync] start: MANIFESTS_REPO=${MANIFESTS_REPO} IMAGE_TAG=${IMAGE_TAG} DRY_RUN=${DRY_RUN}"
+
+# 1) Init repo (idempotent)
+if [ ! -d "${MANIFESTS_REPO}" ]; then
+  git clone git@github.com:dima1203oleg/predator-manifests.git "${MANIFESTS_REPO}"
+fi
+
+# 2) Run MCP analyzer (node/mcpOrchestrator.js expected to return exit code 2 for high-risk)
+if command -v node >/dev/null 2>&1 && [ -f ./mcp/mcpOrchestrator.js ]; then
+  node ./mcp/mcpOrchestrator.js --repo "${PWD}" --image-tag "${IMAGE_TAG}" || true
+fi
+
+# 3) Bump image tag in values.yaml (idempotent via yq)
+if [ -f "${MANIFESTS_REPO}/helm/predator-umbrella/values.yaml" ]; then
+  if command -v yq >/dev/null 2>&1; then
+    yq eval -i ".global.image.tag = \"${IMAGE_TAG}\"" "${MANIFESTS_REPO}/helm/predator-umbrella/values.yaml"
+  else
+    echo "yq not found — skipping values.yaml bump"
+  fi
+else
+  echo "Values file not found in manifests repo — skipping bump"
+fi
+
+# 4) Commit changes
+if [ -d "${MANIFESTS_REPO}/.git" ]; then
+  cd "${MANIFESTS_REPO}"
+  git add -A || true
+  if git diff --cached --quiet; then
+    echo "[gitops_sync] no changes to commit"
+  else
+    git commit -m "chore: update image tag ${IMAGE_TAG} [auto]" || true
+    if [ "${DRY_RUN}" != "1" ]; then
+      git push origin main || true
+    else
+      git --no-pager show --name-only --pretty="" HEAD > ../test-rendered-change.log || true
+    fi
+  fi
+  cd - >/dev/null || true
+else
+  echo "Manifests repo not initialized — skipping commit/push"
+fi
+
+# 5) Optionally trigger ArgoCD sync via its API (requires ARGO_AUTH_TOKEN)
+if [ "${DRY_RUN}" != "1" ] && [ -n "${ARGO_SERVER:-}" ] && [ -n "${ARGO_AUTH_TOKEN:-}" ]; then
+  curl -sS -X POST "${ARGO_SERVER}/api/v1/applications/predator/sync" -H "Authorization: Bearer ${ARGO_AUTH_TOKEN}" || true
+fi
+
+echo "[gitops_sync] cycle completed"
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Helm-first GitOps sync script — robust bootstrap, MCP decision, DRY_RUN, HTTPS fallback, PR flow, ArgoCD sync
 MANIF_REPO="${MANIF_REPO:-${MANIFESTS_REPO:-../predator-manifests}}"
