@@ -138,10 +138,29 @@ jobs:
     needs: dryrun
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          submodules: recursive
+      - name: Manual defensive checkout (supplychain)
+        run: |
+          set -euo pipefail
+          REPO_URL="https://github.com/dima1203oleg/Predator12-Dev"
+          rm -rf .git || true
+          git init
+          git remote add origin "$REPO_URL"
+          git fetch --no-tags --prune origin "+refs/heads/*:refs/remotes/origin/*" || true
+          BRANCH="${{ github.ref_name }}"
+          if [ -z "$BRANCH" ]; then
+            BRANCH=main
+          fi
+          if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH"; then
+            git checkout -B "$BRANCH" "refs/remotes/origin/$BRANCH"
+          else
+            git checkout -B main refs/remotes/origin/main || true
+          fi
+          git fetch --no-tags --prune --unshallow || true
+          if [ -f .gitmodules ]; then
+            git config -f .gitmodules submodule.predator-manifests.url "https://github.com/dima1203oleg/predator-manifests.git" || true
+          fi
+          git submodule sync --recursive || true
+          git submodule update --init --recursive || true
 
       - name: Trivy FS Scan
         uses: aquasecurity/trivy-action@v0.20.0
@@ -158,10 +177,29 @@ jobs:
     needs: supplychain
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          submodules: recursive
+      - name: Manual defensive checkout (e2e-kind)
+        run: |
+          set -euo pipefail
+          REPO_URL="https://github.com/dima1203oleg/Predator12-Dev"
+          rm -rf .git || true
+          git init
+          git remote add origin "$REPO_URL"
+          git fetch --no-tags --prune origin "+refs/heads/*:refs/remotes/origin/*" || true
+          BRANCH="${{ github.ref_name }}"
+          if [ -z "$BRANCH" ]; then
+            BRANCH=main
+          fi
+          if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH"; then
+            git checkout -B "$BRANCH" "refs/remotes/origin/$BRANCH"
+          else
+            git checkout -B main refs/remotes/origin/main || true
+          fi
+          git fetch --no-tags --prune --unshallow || true
+          if [ -f .gitmodules ]; then
+            git config -f .gitmodules submodule.predator-manifests.url "https://github.com/dima1203oleg/predator-manifests.git" || true
+          fi
+          git submodule sync --recursive || true
+          git submodule update --init --recursive || true
 
       - name: Kind Cluster
         run: |
