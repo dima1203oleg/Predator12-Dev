@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'PR number (optional for manual dispatch)'
+        description: "PR number (optional for manual dispatch)"
         required: false
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
   evaluate-and-merge:
     runs-on: ubuntu-latest
     if: |
-      github.event_name == 'workflow_dispatch' || (github.event.label && github.event.label.name == 'autonomous/allow-auto-merge')
+      github.event_name == 'workflow_dispatch' || contains(github.event.pull_request.labels.*.name, 'autonomous/allow-auto-merge')
     env:
       MCP_THRESHOLD: 0.9
     steps:
@@ -37,7 +37,7 @@ jobs:
         uses: aquasecurity/trivy-action@v0.20.0
         with:
           scan-type: fs
-          format: 'table'
+          format: "table"
           severity: CRITICAL,HIGH
           exit-code: 1
 
