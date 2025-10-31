@@ -18,7 +18,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: false
+          fetch-depth: 0
+          submodules: recursive
 
       - name: Install deps
         run: |
@@ -79,7 +80,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: false
+          fetch-depth: 0
+          submodules: recursive
 
       - name: Trivy FS Scan
         uses: aquasecurity/trivy-action@v0.20.0
@@ -98,7 +100,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: false
+          fetch-depth: 0
+          submodules: recursive
 
       - name: Kind Cluster
         run: |
