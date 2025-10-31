@@ -24,9 +24,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 100
           submodules: true
-          persist-credentials: true
 
       - name: Manual defensive checkout
         run: |
