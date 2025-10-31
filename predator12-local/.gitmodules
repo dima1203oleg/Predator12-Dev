@@ -1,3 +1,5 @@
 [submodule "predator-manifests"]
 	path = predator-manifests
 	url = https://github.com/dima1203oleg/predator-manifests.git
+
+# marker: ensure .gitmodules present in latest commit for CI shallow-checkout
