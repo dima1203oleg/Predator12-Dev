@@ -1,0 +1,26 @@
+name: Autodeploy Auto (scheduled / main push)
+on:
+  schedule:
+    - cron: "0 2 * * *" # daily at 02:00 UTC
+  push:
+    branches:
+      - main
+jobs:
+  run-and-trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run dry-run
+        run: |
+          bash scripts/render_and_sync.sh || true
+          RUN_ID=ci-${{ github.run_id }} DRY_RUN=1 bash scripts/gitops_sync.sh || true
+      - name: Call Autodeploy Controller
+        env:
+          AUTODEPLOY_ENDPOINT: ${{ secrets.AUTODEPLOY_ENDPOINT }}
+          AUTODEPLOY_TOKEN: ${{ secrets.AUTODEPLOY_TOKEN }}
+        run: |
+          if [ -n "$AUTODEPLOY_ENDPOINT" ] && [ -n "$AUTODEPLOY_TOKEN" ]; then
+            curl -fsS -X POST "$AUTODEPLOY_ENDPOINT/trigger" -H "Authorization: Bearer $AUTODEPLOY_TOKEN" -d '{"source":"github-scheduled"}' || true
+          else
+            echo "Autodeploy endpoint not configured"
+          fi

@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  build-test-lint:
+    runs-on: ubuntu-latest
+    env:
+      # Use a dedicated test database URL for CI
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/testdb
+      # Add any other necessary environment variables for tests
+      # For example, if your tests require specific API keys or configurations,
+      # you might set them here or use GitHub Secrets.
+
+    services:
+      # Start a PostgreSQL service for backend tests
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip" # Cache pip dependencies
+
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # If using Poetry, uncomment and adapt:
+          # pip install poetry
+          # poetry install
+
+      - name: Run backend tests
+        run: pytest -q --maxfail=1
+
+      # Optional: Add linting and static analysis for backend
+      # - name: Run backend linting (flake8)
+      #   run: flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      # - name: Run backend type checking (mypy)
+      #   run: mypy --ignore-missing-imports --install-types --non-interactive backend/
+
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm" # Cache npm dependencies
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+          cd ..
+
+      - name: Lint frontend
+        run: cd frontend && npm run lint --if-present
+
+      - name: Run frontend tests
+        run: cd frontend && npm run test --if-present
+
+      - name: Build frontend
+        run: cd frontend && npm run build --if-present
+
+      # Optional: Check Dockerfile validity
+      # - name: Check Dockerfile
+      #   run: docker run --rm hadolint/hadolint < .devcontainer/Dockerfile

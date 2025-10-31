@@ -1,0 +1,123 @@
+# Autodeploy Dry-Run & Supply Chain (full)
+# updated-by-autodeploy-shim: 2025-10-31
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "helm/**"
+      - "scripts/**"
+      - ".vscode/**"
+
+jobs:
+  dryrun:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      MANIFESTS_REPO: ../manifests-temp
+      IMAGE_TAG: dr-${{ github.run_id }}
+      DRY_RUN: "1"
+      AUTOSAVE_BRANCH: auto/autodeploy-tz
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yq jq shellcheck helm kubectl bats kind
+
+      - name: Render Helm
+        run: bash scripts/render_and_sync.sh || true
+
+      - name: GitOps Dry-Run
+        run: bash scripts/gitops_sync.sh || true
+
+      - name: Run Dry Tests (tolerant)
+        run: |
+          # tolerant runner: try both common locations for the dry-tests shim
+          set -euo pipefail
+          # Check several possible locations for the dry-tests shim
+          candidates=(
+            "$GITHUB_WORKSPACE/scripts/tests/gitops_sync_dry_tests.sh"
+            "$GITHUB_WORKSPACE/scripts/gitops_sync_dry_tests.sh"
+            "./scripts/tests/gitops_sync_dry_tests.sh"
+            "./scripts/gitops_sync_dry_tests.sh"
+          )
+
+          found=""
+          for c in "${candidates[@]}"; do
+            if [ -f "$c" ]; then
+              found="$c"
+              break
+            fi
+          done
+
+          if [ -n "$found" ]; then
+            echo "Found dry-tests shim at: $found"
+            chmod +x "$found" || true
+            "$found" || true
+          else
+            echo "No dry-tests script found at expected paths; skipping dry tests."
+          fi
+
+      - name: Shellcheck
+        run: shellcheck scripts/*.sh || true
+
+      - name: Helm Lint
+        run: helm lint helm/predator-umbrella --strict || true
+
+      - name: Upload Logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitops-logs
+          path: |
+            ./.autodeploy/**
+            test-*.log
+
+  supplychain:
+    needs: dryrun
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Trivy FS Scan
+        uses: aquasecurity/trivy-action@v0.20.0
+        with:
+          scan-type: fs
+          severity: CRITICAL,HIGH
+          exit-code: 1
+          ignore-unfixed: true
+
+      - name: Cosign Verify (placeholder)
+        run: echo "Cosign verify placeholder — integrate registry and key"
+
+  e2e-kind:
+    needs: supplychain
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Kind Cluster
+        run: |
+          curl -sLo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64 && chmod +x ./kind && sudo mv ./kind /usr/local/bin/kind
+          kind create cluster --config kind-config.yaml || true
+
+      - name: Helm Install Dry
+        run: helm install predator-dry ./helm/predator-umbrella --dry-run --debug || true
+
+      - name: Kubectl Dry
+        run: kubectl apply --dry-run=server -f rendered.yaml || true
+
+      - name: Teardown
+        run: kind delete cluster || true

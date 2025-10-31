@@ -1,0 +1,67 @@
+name: Non-Stop Predator
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "*/30 * * * *"
+permissions:
+  contents: write
+  id-token: write
+  actions: read
+jobs:
+  guardrails:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Non-Stop config
+        run: python3 scripts/validate_nonstop.py
+  ci:
+    needs: guardrails
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build/Test/Scan
+        run: ./scripts/opsctl build-test-scan
+  cd:
+    if: ${{ success() }}
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login Vault (OIDC)
+        uses: hashicorp/vault-action@v3
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          method: jwt
+          role: ops-bot
+      - name: Kubeconfig
+        run: vault kv get -field=kubeconfig kv/kube/ctx-stage > kubeconfig
+      - name: Deploy via ArgoCD (stage)
+        env:
+          ARGO_AUTH_TOKEN: ${{ secrets.ARGO_AUTH_TOKEN }}
+        run: ./scripts/opsctl deploy stage --kubeconfig kubeconfig --nonstop
+  etl:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run ETL changed jobs
+        run: ./scripts/opsctl etl-run --jobs changed --nonstop
+  gate_prod:
+    if: ${{ success() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check release gate
+        run: ./scripts/opsctl check-gate --env prod
+      - name: Maybe release (auto-merge)
+        env:
+          AUTO_MERGE: "1"
+          MANIFESTS_REPO: ${{ secrets.MANIFESTS_REPO }}
+          OPS_IMAGE: "${{ secrets.REGISTRY_HOST }}/$GITHUB_REPOSITORY:${{ github.sha }}"
+          ARGO_AUTH_TOKEN: ${{ secrets.ARGO_AUTH_TOKEN }}
+          BRANCH: main
+        run: |
+          echo "AUTO_MERGE=$AUTO_MERGE MANIFESTS_REPO=$MANIFESTS_REPO OPS_IMAGE=$OPS_IMAGE"
+          ./scripts/opsctl maybe-release --env prod --timebox 12h
