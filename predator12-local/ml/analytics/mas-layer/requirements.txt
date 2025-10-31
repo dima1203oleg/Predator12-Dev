@@ -1,11 +1,11 @@
 
 crewai==0.28.0
-langchain==0.0.285
+langchain>=0.0.312
 langgraph==0.0.20
 sqlalchemy==2.0.27
 psycopg2-binary==2.9.7
 redis==4.6.0
-kafka-python==2.0.2
+kafka-python>=2.0.3
 httpx==0.25.0
 python-dotenv==1.0.0
 opentelemetry-api==1.22.0
@@ -18,7 +18,7 @@ numpy==1.25.2
 pandas==2.1.0
 matplotlib==3.8.0
 tenacity==8.2.3
-qdrant-client==1.5.4
+qdrant-client>=1.9.0
 opensearch-py==2.3.1
-minio==7.1.17
+minio>=7.2.11
 prometheus-client==0.17.1

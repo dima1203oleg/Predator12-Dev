@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: predator-canary-analysis
+spec:
+  args:
+    - name: service-name
+  metrics:
+    - name: error-rate
+      interval: 60s
+      count: 3
+      failureLimit: 1
+      successCondition: result < 0.005
+      provider:
+        prometheus:
+          address: http://prometheus-server.monitoring.svc.cluster.local
+          query: |
+            sum(rate(http_requests_total{service="{{args.service-name}}",status=~"5.."}[2m])) / sum(rate(http_requests_total{service="{{args.service-name}}"}[2m]))
+    - name: p95-latency
+      interval: 60s
+      count: 3
+      failureLimit: 1
+      successCondition: result < 0.300
+      provider:
+        prometheus:
+          query: |
+            histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service="{{args.service-name}}"}[2m])) by (le))
+    - name: uptime
+      interval: 60s
+      count: 3
+      failureLimit: 1
+      successCondition: result > 0.995
+      provider:
+        prometheus:
+          query: |
+            avg_over_time(up{job="{{args.service-name}}"}[2m])
