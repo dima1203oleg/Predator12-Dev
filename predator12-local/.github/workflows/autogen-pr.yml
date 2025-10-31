@@ -3,7 +3,7 @@ name: Autogen — create PR from suggestions (template)
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: '0 3 * * *'
+    - cron: "0 3 * * *"
 
 jobs:
   create-pr:
@@ -11,11 +11,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          persist-credentials: true
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Run auto_propose generator
         run: |
