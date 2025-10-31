@@ -34,15 +34,30 @@ jobs:
       - name: Run Dry Tests (tolerant)
         run: |
           # tolerant runner: try both common locations for the dry-tests shim
-          if [ -f "$GITHUB_WORKSPACE/scripts/tests/gitops_sync_dry_tests.sh" ]; then
-            chmod +x "$GITHUB_WORKSPACE/scripts/tests/gitops_sync_dry_tests.sh" || true
-            "$GITHUB_WORKSPACE/scripts/tests/gitops_sync_dry_tests.sh" || true
-          elif [ -f "$GITHUB_WORKSPACE/scripts/gitops_sync_dry_tests.sh" ]; then
-            chmod +x "$GITHUB_WORKSPACE/scripts/gitops_sync_dry_tests.sh" || true
-            "$GITHUB_WORKSPACE/scripts/gitops_sync_dry_tests.sh" || true
-          else
-            echo "No dry-tests script found at expected paths; skipping dry tests."
-          fi
+            set -euo pipefail
+            # Check several possible locations for the dry-tests shim
+            candidates=(
+              "$GITHUB_WORKSPACE/scripts/tests/gitops_sync_dry_tests.sh"
+              "$GITHUB_WORKSPACE/scripts/gitops_sync_dry_tests.sh"
+              "./scripts/tests/gitops_sync_dry_tests.sh"
+              "./scripts/gitops_sync_dry_tests.sh"
+            )
+
+            found=""
+            for c in "${candidates[@]}"; do
+              if [ -f "$c" ]; then
+                found="$c"
+                break
+              fi
+            done
+
+            if [ -n "$found" ]; then
+              echo "Found dry-tests shim at: $found"
+              chmod +x "$found" || true
+              "$found" || true
+            else
+              echo "No dry-tests script found at expected paths; skipping dry tests."
+            fi
 
       - name: Shellcheck
         run: shellcheck scripts/*.sh || true
