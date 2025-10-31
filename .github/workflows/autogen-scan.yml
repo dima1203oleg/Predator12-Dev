@@ -2,7 +2,7 @@ name: Autogen Scan (scheduled)
 
 on:
   schedule:
-    - cron: '0 2 * * *' # daily at 02:00 UTC
+    - cron: "0 2 * * *" # daily at 02:00 UTC
   workflow_dispatch: {}
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Run auto_propose dry-run
         run: |

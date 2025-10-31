@@ -3,7 +3,7 @@ name: GitOps bootstrap — DRY_RUN smoke
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-run-dry:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository (with submodules)
         uses: actions/checkout@v4
         with:
-          submodules: 'recursive'
+          submodules: "recursive"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -31,7 +31,7 @@ jobs:
 
       - name: Run bootstrap in DRY_RUN and capture logs
         env:
-          DRY_RUN: '1'
+          DRY_RUN: "1"
           IMAGE_TAG: ci-test-$(date +%s)
           MANIFESTS_REPO: ./predator-manifests
         run: |

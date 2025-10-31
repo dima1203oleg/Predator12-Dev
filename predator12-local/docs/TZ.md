@@ -1,3 +1,173 @@
+---
+title: ТЗ — Автономний GitOps-конвеєр для Predator Analytics
+author: Generated
+date: 2025-10-31T00:00:00.000Z
+---
+# Технічне завдання (ТЗ): Автономний GitOps-конвеєр Predator Analytics
+
+Коротко: повністю автоматизований, безпечний і відтворюваний GitOps-конвеєр для Predator Analytics — preflight (MCP) → Helm render → gitops sync → ArgoCD + Rollouts → verify (Prometheus + smoke) → finalize/tag або rollback/self-heal.
+
+## Зміст
+
+- 1. Мета проєкту
+- 2. Основні цілі
+- 3. Архітектура конвеєра
+- 4. Логіка виконання конвеєра
+  - 4.1 Dry-Run CI
+  - 4.2 Етап автозлиття
+- 5. Вимоги до скриптів
+- 6. Argo Rollouts
+- 7. Безпека та відповідність
+- 8. Очікуваний результат
+- 9. Додаткові рекомендації
+
+---
+
+## 1. Мета проєкту
+
+Реалізувати повністю автоматизований GitOps-конвеєр, який забезпечує автономне розгортання Predator Analytics з інтеграцією Helm, ArgoCD, GitHub Actions і supply-chain перевірками (Trivy, Cosign). Конвеєр має підтримувати progressive rollout (canary / blue-green), вимагати dry-run перевірку і гарантувати, що в реліз потрапляють тільки перевірені артефакти.
+
+## 2. Основні цілі
+
+1. Автоматизація деплою — мінімум ручних кроків (тригери — Git/VS Code extension).
+2. Dry-Run перед продом — обов'язковий рендер та валідація маніфестів.
+3. Supply-chain перевірки: Trivy FS scan, Cosign verify (за потреби), SBOM.
+4. Не маскувати помилки в критичних секціях (без `|| true`).
+5. Argo Rollouts з AnalysisTemplate (Prometheus metrics) для безпечних canary-перехідних фаз.
+6. Автооновлення тегів образів та автоматичне злиття PR при дотриманні політик і проходженні перевірок.
+
+## 3. Архітектура конвеєра
+
+Компоненти:
+
+- `.github/workflows/autodeploy-dry.yml` — dry-run workflow (helm render, gitops_sync, tests, Trivy, kind e2e)
+- `scripts/render_and_sync.sh` — рендер Helm-чартів у `./rendered/` і злиття у `rendered.yaml`
+- `scripts/gitops_sync.sh` — idempotent sync → bump тегів → commit/PR or push
+- `scripts/gitops_sync_dry_tests.sh` — базові sanity checks (contains Deployment, helm lint)
+- `rollouts/analysis-template.yaml` — Argo Rollouts AnalysisTemplate (Prometheus queries)
+- `.github/workflows/label-automerge.yml` + `auto-merge-safe.yml` — label → evaluate → merge
+- `extension/argocdAutoDeployer.ts` (extension) — preflight + trigger cycle
+- `core/mcpOrchestrator.js` / `MCPOrchestrator.ts` — оцінка ризиків (MCP)
+
+Діаграма потоку (для копіювання у diagram tool):
+
+```
+VS Code (Ctrl+Alt+D) → preflight (git diff + MCP + lint/scan)
+↓
+GitOps (render_and_sync.sh → gitops_sync.sh: init/MCP/yq/DRY_RUN/push|PR)
+↓ (low: push+tag / high: PR gh label)
+Argo CD (sync --prune; Rollouts canary 5/25/50/100% + AnalysisTemplate Prometheus)
+↓
+Agents (supervisor.py status; health_monitor.py /self-heal on degraded)
+↓
+Verify (Prometheus + smoke tests)
+```
+
+## 4. Логіка виконання конвеєра
+
+### 4.1 Dry-Run CI
+
+Етапи:
+
+1. Checkout коду
+2. Install dependencies: `helm`, `kubectl`, `yq`, `jq`, `bats`, `kind`, `shellcheck`
+3. Helm render: `bash scripts/render_and_sync.sh`
+4. GitOps dry sync: `DRY_RUN=1 bash scripts/gitops_sync.sh`
+5. Static checks: `shellcheck` (critical failures — блокують)
+6. `helm lint --strict` на chart
+7. `trivy` FS scan (відмовитися при CRITICAL/HIGH залежностях)
+8. e2e: `kind` cluster, dry-apply `rendered.yaml`, smoke curl `/health`, teardown
+
+### 4.2 Етап автозлиття
+
+- `label-automerge.yml` автоматично додає мітки, коли PR відповідає розміру (наприклад additions < 1200, changed_files < 60). Ми додаємо:
+  - `automerge` — видима мітка
+  - `autonomous/allow-auto-merge` — namespaced мітка, якої очікує `auto-merge-safe.yml`
+- `auto-merge-safe.yml` виконує перевірки: Trivy, Cosign (за заданою змінною), MCP; якщо всі проходять → merge (squash)
+
+## 5. Вимоги до скриптів
+
+Загальні правила:
+
+- У всіх скриптах: `set -euo pipefail`
+- Не маскувати помилки у критичних секціях (усунути `|| true` у критичних місцях)
+- Логувати (logs/autodeploy.log) й робити аудит runId + phases
+
+### 5.1 `render_and_sync.sh`
+
+- `helm dependency update`
+- `helm template` → зберегти у `./rendered/<chart>/` і змерджити у `rendered.yaml`
+- Якщо helm або chart відсутні — exit 1
+
+### 5.2 `gitops_sync.sh`
+
+- Idempotent init/push/PR flow:
+  - Клон manifests repo якщо не існує
+  - `yq` або `sed` щоб підняти `image.tag`
+  - `git add -A && git commit -m "chore: update image tag ${IMAGE_TAG}"` — лише якщо є зміни
+  - Якщо `DRY_RUN=1` — не пушити в remote, лише вивести diff / rendered log
+  - Якщо low-risk → push to main (або branch+automerge), якщо high-risk → create PR (gh)
+
+### 5.3 `gitops_sync_dry_tests.sh`
+
+- Перевірки: `rendered.yaml` існує, містить `kind: Deployment` і `helm lint` проходить
+- Exit code != 0 при помилках
+
+## 6. Argo Rollouts
+
+- `rollouts/analysis-template.yaml` повинен містити Prometheus-метрики:
+  - `error_rate` (successCondition: < 0.005, failureCondition: >= 0.01)
+  - `p95 latency` (successCondition: < 0.3s)
+  - `up` (successCondition: > 0.995)
+
+Щоб інтегрувати: додати AnalysisTemplate у маніфести і посилатися на нього у `Rollout` ресурсі.
+
+## 7. Безпека та відповідність
+
+1. CI блокує при знайдених CRITICAL/HIGH вразливостях у Trivy.
+2. Cosign verify для production images — перевіряти підпис при RELEASE.
+3. RBAC: `argo/rbac/autonomous-agent-role.yaml` — роль для ботів, обмежити scope.
+4. Redaction: при логуванні видаляти секрети (regex-based) перед збереженням audit JSON.
+
+## 8. Очікуваний результат
+
+- Автономний GitOps-конвеєр, що:
+  - генерує і перевіряє манифести перед пушем;
+  - блокує мерджі при supply-chain/CI проблемах;
+  - інтегрується з Argo Rollouts для прогресивних релізів;
+  - зберігає audit logs (runId, phases) із ретеншеном 90 днів.
+
+## 9. Додаткові рекомендації
+
+- Додати Dependabot або Renovate для регулярних оновлень залежностей.
+- Центральний лог `logs/autodeploy.log` та `./.auto_merge_audit/` для runId JSON.
+- Документувати Runbook: як відкотитись вручну, як відключити auto-merge у надзвичайній ситуації.
+
+---
+
+### Try it — швидка перевірка локально (zsh)
+
+```bash
+# Render
+./scripts/render_and_sync.sh ./helm/predator-umbrella/prod.yaml
+
+# Dry-run install (kind/local)
+helm install predator-dry ./helm/predator-umbrella --dry-run --debug
+
+# Dry tests
+bash scripts/gitops_sync_dry_tests.sh
+```
+
+---
+
+Файл згенеровано з узагальнених вимог і логів CI. Якщо хочете — я також:
+
+- додам `.github/dependabot.yml` і відкрию PR для автоматичних оновлень;
+- згеную докладніші PRs з bump-версіями для критичних пакетів в `requirements.txt` (draft);
+- або підготу юзкейси для `argocdAutoDeployer.ts` / `MCPOrchestrator.ts`.
+
+Вкажіть, що робити далі.
+
 # Predator Analytics — Автономний GitOps-конвеєр (Розширене ТЗ)
 
 Коротко: один тригер у VS Code (`autodeploy.toProd` via Ctrl+Alt+D) запускає ідемпотентний цикл: preflight (MCP-ризики) → Helm render → sync → Argo CD (rollouts) → verify (Prometheus + smoke) → finalize/tag або rollback/self-heal. Всі приклади налаштовані під `ghcr.io/dima1203oleg/predator-analytics`.

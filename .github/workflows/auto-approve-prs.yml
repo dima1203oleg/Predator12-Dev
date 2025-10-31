@@ -6,7 +6,17 @@ name: Auto-approve pull requests
 
 on:
   pull_request_target:
-    types: [opened, edited, reopened, synchronize, ready_for_review, labeled, unlabeled, assigned]
+    types:
+      [
+        opened,
+        edited,
+        reopened,
+        synchronize,
+        ready_for_review,
+        labeled,
+        unlabeled,
+        assigned,
+      ]
 
 permissions:
   pull-requests: write
