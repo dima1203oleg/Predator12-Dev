@@ -21,6 +21,13 @@ jobs:
       AUTOSAVE_BRANCH: auto/autodeploy-tz
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          persist-credentials: true
+
       - name: Manual defensive checkout
         run: |
           set -euo pipefail
@@ -152,6 +159,13 @@ jobs:
     needs: dryrun
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          persist-credentials: true
+
       - name: Manual defensive checkout (supplychain)
         run: |
           set -euo pipefail
@@ -191,6 +205,13 @@ jobs:
     needs: supplychain
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          persist-credentials: true
+
       - name: Manual defensive checkout (e2e-kind)
         run: |
           set -euo pipefail
