@@ -26,15 +26,6 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
-      - name: Make scripts executable (tolerant)
-        run: |
-          # Don't fail if the tests shim is not present yet (some runners fetch shallow)
-          if [ -f ./scripts/tests/gitops_sync_dry_tests.sh ]; then
-            chmod +x ./scripts/tests/gitops_sync_dry_tests.sh || true
-          else
-            echo "scripts/tests/gitops_sync_dry_tests.sh not present yet; continuing"
-          fi
-
       - name: Ensure full checkout and submodules
         run: |
           # ensure we have full history so git can access .gitmodules and submodules
@@ -51,6 +42,15 @@ jobs:
             ln -sf ../gitops_sync_dry_tests.sh ./scripts/tests/gitops_sync_dry_tests.sh || true
           fi
           chmod +x ./scripts/gitops_sync_dry_tests.sh ./scripts/tests/gitops_sync_dry_tests.sh || true
+
+      - name: Make scripts executable (tolerant)
+        run: |
+          # Don't fail if the tests shim is not present yet (some runners fetch shallow)
+          if [ -f ./scripts/tests/gitops_sync_dry_tests.sh ]; then
+            chmod +x ./scripts/tests/gitops_sync_dry_tests.sh || true
+          else
+            echo "scripts/tests/gitops_sync_dry_tests.sh not present yet; continuing"
+          fi
 
       - name: Install deps
         run: |
