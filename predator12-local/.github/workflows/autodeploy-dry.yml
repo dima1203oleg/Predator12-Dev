@@ -88,9 +88,9 @@ jobs:
             else
               # No remote shim available (or download failed) — create a minimal non-blocking shim
               cat > "$SHIM_PATH" <<'EOF' || true
-              #!/usr/bin/env bash
-              echo "[autodeploy shim] placeholder"; exit 0
-              EOF
+#!/usr/bin/env bash
+echo "[autodeploy shim] placeholder"; exit 0
+EOF
             fi
           fi
           chmod +x "$SHIM_PATH" || true
@@ -109,30 +109,30 @@ jobs:
       - name: Run Dry Tests (tolerant)
         run: |
           # tolerant runner: try both common locations for the dry-tests shim
-            set -euo pipefail
-            # Check several possible locations for the dry-tests shim
-            candidates=(
-              "$GITHUB_WORKSPACE/scripts/tests/gitops_sync_dry_tests.sh"
-              "$GITHUB_WORKSPACE/scripts/gitops_sync_dry_tests.sh"
-              "./scripts/tests/gitops_sync_dry_tests.sh"
-              "./scripts/gitops_sync_dry_tests.sh"
-            )
+          set -euo pipefail
+          # Check several possible locations for the dry-tests shim
+          candidates=(
+            "$GITHUB_WORKSPACE/scripts/tests/gitops_sync_dry_tests.sh"
+            "$GITHUB_WORKSPACE/scripts/gitops_sync_dry_tests.sh"
+            "./scripts/tests/gitops_sync_dry_tests.sh"
+            "./scripts/gitops_sync_dry_tests.sh"
+          )
 
-            found=""
-            for c in "${candidates[@]}"; do
-              if [ -f "$c" ]; then
-                found="$c"
-                break
-              fi
-            done
-
-            if [ -n "$found" ]; then
-              echo "Found dry-tests shim at: $found"
-              chmod +x "$found" || true
-              "$found" || true
-            else
-              echo "No dry-tests script found at expected paths; skipping dry tests."
+          found=""
+          for c in "${candidates[@]}"; do
+            if [ -f "$c" ]; then
+              found="$c"
+              break
             fi
+          done
+
+          if [ -n "$found" ]; then
+            echo "Found dry-tests shim at: $found"
+            chmod +x "$found" || true
+            "$found" || true
+          else
+            echo "No dry-tests script found at expected paths; skipping dry tests."
+          fi
 
       - name: Shellcheck
         run: shellcheck scripts/*.sh || true
