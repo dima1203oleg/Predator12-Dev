@@ -1,4 +1,5 @@
-name: Autodeploy Dry-Run & Supply Chain
+# Autodeploy Dry-Run & Supply Chain
+# updated-by-autodeploy-shim: 2025-10-31
 
 on:
   workflow_dispatch:
