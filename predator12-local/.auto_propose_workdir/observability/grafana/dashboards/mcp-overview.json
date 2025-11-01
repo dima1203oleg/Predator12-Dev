@@ -1,0 +1,52 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "type": "graph",
+      "title": "HTTP Requests by Status",
+      "targets": [
+        {"expr": "sum by(status) (http_requests_total)", "legendFormat": "status {{status}}"}
+      ],
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0}
+    },
+    {
+      "type": "stat",
+      "title": "Upstream Active",
+      "targets": [
+        {"expr": "upstream_active_current"}
+      ],
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 8}
+    },
+    {
+      "type": "stat",
+      "title": "Upstream Queue",
+      "targets": [
+        {"expr": "upstream_queue_length"}
+      ],
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 8}
+    },
+    {
+      "type": "graph",
+      "title": "Request Duration (approx)",
+      "targets": [
+        {"expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))", "legendFormat": "p95"},
+        {"expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))", "legendFormat": "p99"}
+      ],
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 12}
+    }
+  ],
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": ["predator", "mcp"],
+  "templating": {"list": []},
+  "time": {"from": "now-6h", "to": "now"},
+  "timezone": "",
+  "title": "MCP Overview",
+  "uid": "mcp-overview",
+  "version": 1
+}

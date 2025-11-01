@@ -1,0 +1,148 @@
+# ============================================================================
+# PREDATOR12 Modern Python 3.11 Requirements
+# ============================================================================
+# Optimized for Python 3.11+ with latest stable versions (Oct 2025)
+# Focus: Performance, async/await, modern patterns
+# ============================================================================
+
+# ====================
+# Web Framework / ASGI
+# ====================
+fastapi==0.118.0           # Modern async web framework with Pydantic v2
+uvicorn[standard]==0.37.0  # ASGI server with uvloop for performance
+starlette==0.48.0          # Locked for compatibility
+
+# ====================
+# Data Validation
+# ====================
+pydantic==2.11.10          # v2 for fast validation, model_validate(), computed fields
+pydantic-settings==2.7.0   # Environment variables management
+
+# ====================
+# Database
+# ====================
+SQLAlchemy==2.0.43         # Modern async ORM with new syntax
+alembic==1.16.5            # Database migrations compatible with SQLAlchemy 2.0
+psycopg[binary,pool]==3.2.10  # Async PostgreSQL driver with connection pooling
+
+# ====================
+# Caching / Task Queue
+# ====================
+redis==6.4.0               # Redis client (redis-py, not the Redis server itself)
+celery==5.5.3              # Distributed task queue
+
+# ====================
+# HTTP Clients
+# ====================
+httpx==0.28.1              # Modern async HTTP client
+qdrant-client==1.15.1      # Vector database client
+opensearch-py>=2.4.1,<3.0  # For OpenSearch 2.x clusters (most stable)
+# opensearch-py==3.0.0     # Use this for OpenSearch 3.x (breaking changes, check migration guide)
+minio==7.2.12              # S3-compatible storage client
+
+# ====================
+# Data Processing / ETL
+# ====================
+numpy==2.3.3               # Numerical computing (with Python 3.11 wheels)
+pandas==2.3.3              # Data analysis and manipulation
+openpyxl==3.1.5            # Excel file handling
+pdfplumber==0.11.7         # PDF text extraction
+playwright==1.55.0         # Browser automation for dynamic scraping
+scrapy==2.13.3             # Web scraping framework
+telethon==1.41.2           # Telegram client (stable, tested with Python 3.11)
+confluent-kafka==2.11.1    # Kafka client
+
+# ====================
+# AI / ML
+# ====================
+openai==1.58.1             # OpenAI API client
+anthropic==0.42.0          # Anthropic Claude API
+langchain==0.3.14          # LLM orchestration framework
+langchain-community==0.3.14  # Community integrations
+faiss-cpu>=1.10,<1.13      # Vector similarity search (1.10+ for ARM support, <1.13 for stability)
+
+# ====================
+# Observability / Monitoring
+# ====================
+opentelemetry-sdk==1.37.0  # OpenTelemetry base SDK
+opentelemetry-instrumentation-fastapi==0.58b0  # FastAPI auto-instrumentation
+opentelemetry-exporter-otlp==1.37.0  # OTLP exporter for traces/metrics
+prometheus-client==0.21.1  # Prometheus metrics
+sentry-sdk[fastapi]==2.22.0  # Error tracking
+
+# ====================
+# Security / Auth
+# ====================
+PyJWT==2.10.1              # JWT tokens (Keycloak integration)
+passlib[bcrypt]==1.7.4     # Password hashing
+python-jose[cryptography]==3.3.0  # JWT/JWE/JWS implementation
+cryptography==44.0.0       # Cryptographic recipes
+
+# ====================
+# Performance / Async
+# ====================
+uvloop==0.21.0             # Fast event loop (Linux/macOS)
+orjson==3.10.14            # Fast JSON serialization
+aiocache==0.12.3           # Async caching
+aiofiles==24.1.0           # Async file operations
+aiohttp==3.12.1            # Async HTTP client/server
+
+# ====================
+# Logging / Structured Logs
+# ====================
+structlog==25.4.0          # Structured logging
+loguru==0.7.3              # Modern logging with colors and rotation
+python-json-logger==3.2.1  # JSON log formatter
+
+# ====================
+# Reliability / Retries
+# ====================
+tenacity==9.1.2            # Retry logic with exponential backoff
+backoff==2.2.1             # Decorator-based retry
+
+# ====================
+# Configuration / Environment
+# ====================
+python-dotenv==1.0.1       # .env file support
+pyyaml==6.0.2              # YAML configuration
+
+# ====================
+# Testing
+# ====================
+pytest==8.3.4              # Testing framework
+pytest-asyncio==0.24.0     # Async test support
+pytest-cov==6.0.0          # Coverage reporting
+httpx==0.28.1              # Already included above, needed for TestClient
+faker==34.0.0              # Test data generation
+
+# ====================
+# Code Quality
+# ====================
+black==25.1.0              # Code formatter
+ruff==0.9.3                # Fast linter (replaces flake8, isort, etc)
+mypy==1.14.1               # Static type checking
+
+# ====================
+# Development Tools
+# ====================
+ipython==8.31.0            # Enhanced Python shell
+rich==14.0.0               # Rich terminal output
+typer==0.15.1              # CLI framework
+python-multipart==0.0.20   # Form data parsing for FastAPI
+
+# ====================
+# Date/Time
+# ====================
+python-dateutil==2.9.0     # Date/time utilities
+pytz==2025.2               # Timezone support
+
+# ====================
+# Validation / Parsing
+# ====================
+email-validator==2.2.0     # Email validation for Pydantic
+phonenumbers==8.13.52      # Phone number parsing/validation
+
+# ====================
+# Background Tasks
+# ====================
+apscheduler==3.11.0        # Advanced Python scheduler

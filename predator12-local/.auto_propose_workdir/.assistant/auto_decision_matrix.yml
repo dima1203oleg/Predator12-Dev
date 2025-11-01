@@ -1,0 +1,23 @@
+version: 1
+rules:
+  - when: "pr.opened OR push.to_main"
+    do: ["build", "test", "lint", "sbom", "scan"]
+    on_fail: "create_issue:auto-fix && try_fix:2 && if_fail:halt_and_escalate"
+  - when: "pipeline.pass AND env in [dev,stage]"
+    do: ["push-image", "argocd-sync", "run:db-migrations", "seed:demo-data?"]
+  - when: "rollout.degradation > 5% for 10m"
+    do: ["enable:autoheal", "restart:canary", "rollback:prev"]
+  - when: "etl.schedule OR dataset.changed"
+    do: ["etl-run", "vectorize", "opensearch-refresh", "quality-check"]
+  - when: "ui.i18n.missing > 0"
+    do: ["generate:uk-UA.po", "open_pr:i18n-fix", "auto-commit:translations"]
+  - when: "docs.missing OR api.changed"
+    do: ["generate:openapi", "docusaurus:build", "publish:docs-preview"]
+defaults:
+  retries: 2
+  notify_channel: "ops-telegram:webhook"
+  timeouts:
+    build: 15m
+    test: 15m
+    deploy: 10m
+    etl: 60m

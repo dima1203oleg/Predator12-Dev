@@ -10,7 +10,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+  "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -30,6 +30,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "src/**/*.tsx", "src/**/*.ts"],
+  "include": ["src/**/*", "src/**/*.tsx", "src/**/*.ts", "src/main-full.tsx"],
   "exclude": ["node_modules", "dist", "build"]
 }

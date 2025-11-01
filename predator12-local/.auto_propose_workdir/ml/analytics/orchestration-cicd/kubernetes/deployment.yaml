@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: predator-api
+  labels:
+    app: predator-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: predator-api
+  template:
+    metadata:
+      labels:
+        app: predator-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8000"
+    spec:
+      containers:
+      - name: api
+        image: ${REGISTRY}/predator-api:${TAG}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: predator-secrets
+              key: database-url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: predator-secrets
+              key: redis-url
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          valueFrom:
+            configMapKeyRef:
+              name: predator-config
+              key: kafka-bootstrap-servers
+        - name: QDRANT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: predator-config
+              key: qdrant-url
+        - name: OPENSEARCH_URL
+          valueFrom:
+            configMapKeyRef:
+              name: predator-config
+              key: opensearch-url
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      serviceAccountName: predator-api-sa

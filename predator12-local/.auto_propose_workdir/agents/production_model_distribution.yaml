@@ -1,0 +1,820 @@
+agents:
+  Anomaly:
+    category: real_time_detection
+    model_strategy:
+      arbiter_model: cohere/command-r-08-2024
+      competition_models:
+      - microsoft/phi-3-small-8k-instruct
+      - qwen/qwen2.5-7b-instruct
+      - meta-llama/llama-3.2-3b-instruct
+      emergency_pool:
+      - qwen/qwen2.5-1.5b-instruct
+      - qwen/qwen2.5-0.5b-instruct
+      fallback_chain:
+      - microsoft/phi-3-mini-4k-instruct
+      - qwen/qwen2.5-3b-instruct
+      - meta-llama/llama-3.2-1b-instruct
+    performance_settings:
+      load_balancing: ultra_fast
+      max_concurrent: 10
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Виявлення аномалій в реальному часі
+    thermal_protection:
+      cooldown: 15
+      enabled: true
+      threshold: 0.65
+  Arbiter:
+    category: decision_arbitration
+    model_strategy:
+      arbiter_model: mistralai/mixtral-8x7b-instruct-v0.1
+      competition_models:
+      - ai21-labs/ai21-jamba-1.5-large
+      - meta-llama/meta-llama-3-70b-instruct
+      - cohere/command-r-plus-08-2024
+      emergency_pool:
+      - mistralai/mistral-7b-instruct-v0.3
+      - meta-llama/meta-llama-3-8b-instruct
+      fallback_chain:
+      - qwen/qwen2.5-32b-instruct
+      - microsoft/phi-3-small-128k-instruct
+      - google/gemma-2-27b-it
+    performance_settings:
+      load_balancing: decision_quality
+      max_concurrent: 3
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Арбітраж рішень між агентами
+    thermal_protection:
+      cooldown: 50
+      enabled: true
+      threshold: 0.85
+  AutoHeal:
+    category: code_generation_healing
+    model_strategy:
+      arbiter_model: cohere/command-r-plus-08-2024
+      competition_models:
+      - mistralai/codestral-latest
+      - ai21-labs/ai21-jamba-1.5-large
+      - microsoft/phi-3-small-128k-instruct
+      emergency_pool:
+      - microsoft/phi-3-mini-128k-instruct
+      - google/gemma-2-27b-it
+      fallback_chain:
+      - meta-llama/meta-llama-3-8b-instruct
+      - qwen/qwen2.5-7b-instruct
+      - mistralai/mistral-7b-instruct-v0.3
+    performance_settings:
+      load_balancing: code_quality_score
+      max_concurrent: 3
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Автовиправлення коду та системи
+    thermal_protection:
+      cooldown: 30
+      enabled: true
+      threshold: 0.75
+  BillingGate:
+    category: financial_analysis
+    model_strategy:
+      arbiter_model: ai21-labs/ai21-jamba-1.5-large
+      competition_models:
+      - qwen/qwen2.5-32b-instruct
+      - microsoft/phi-3-small-8k-instruct
+      - cohere/command-r-08-2024
+      emergency_pool:
+      - qwen/qwen2.5-7b-instruct
+      - microsoft/phi-3-mini-128k-instruct
+      fallback_chain:
+      - meta-llama/meta-llama-3-8b-instruct
+      - google/gemma-2-27b-it
+      - mistralai/mistral-7b-instruct-v0.3
+    performance_settings:
+      load_balancing: financial_accuracy
+      max_concurrent: 3
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Аналіз фінансів та біллінгу
+    thermal_protection:
+      cooldown: 40
+      enabled: true
+      threshold: 0.8
+  ChiefOrchestrator:
+    category: critical_orchestration
+    model_strategy:
+      arbiter_model: cohere/command-r-plus-08-2024
+      competition_models:
+      - ai21-labs/ai21-jamba-1.5-large
+      - mistralai/mixtral-8x7b-instruct-v0.1
+      - meta-llama/meta-llama-3-70b-instruct
+      emergency_pool:
+      - microsoft/phi-3-mini-128k-instruct
+      - qwen/qwen2.5-7b-instruct
+      fallback_chain:
+      - mistralai/mistral-7b-instruct-v0.3
+      - microsoft/phi-3-mini-4k-instruct
+      - meta-llama/meta-llama-3-8b-instruct
+    performance_settings:
+      load_balancing: competition_winner
+      max_concurrent: 5
+      priority_level: critical
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Керування всіма агентами та розподіл завдань
+    thermal_protection:
+      cooldown: 45
+      enabled: true
+      threshold: 0.85
+  ComplianceMonitor:
+    category: compliance_monitoring
+    model_strategy:
+      arbiter_model: ai21-labs/ai21-jamba-1.5-large
+      competition_models:
+      - cohere/command-r-plus-08-2024
+      - microsoft/phi-3-small-128k-instruct
+      - qwen/qwen2.5-32b-instruct
+      emergency_pool:
+      - mistralai/mistral-7b-instruct-v0.3
+      - qwen/qwen2.5-7b-instruct
+      fallback_chain:
+      - meta-llama/meta-llama-3-70b-instruct
+      - google/gemma-2-27b-it
+      - cohere/command-r-08-2024
+    performance_settings:
+      load_balancing: compliance_accuracy
+      max_concurrent: 4
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Моніторинг відповідності та регуляторні вимоги
+    thermal_protection:
+      cooldown: 35
+      enabled: true
+      threshold: 0.75
+  DataQuality:
+    category: high_load_analysis
+    model_strategy:
+      arbiter_model: cohere/command-r-08-2024
+      competition_models:
+      - meta-llama/meta-llama-3-8b-instruct
+      - microsoft/phi-3-mini-128k-instruct
+      - qwen/qwen2.5-7b-instruct
+      emergency_pool:
+      - microsoft/phi-3-mini-4k-instruct
+      - qwen/qwen2.5-1.5b-instruct
+      fallback_chain:
+      - microsoft/phi-3-small-8k-instruct
+      - qwen/qwen2.5-3b-instruct
+      - meta-llama/llama-3.2-3b-instruct
+    performance_settings:
+      load_balancing: round_robin_fast
+      max_concurrent: 8
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Аналіз якості даних та виявлення аномалій
+    thermal_protection:
+      cooldown: 20
+      enabled: true
+      threshold: 0.7
+  DatasetIngest:
+    category: fast_processing
+    model_strategy:
+      arbiter_model: microsoft/phi-3-small-8k-instruct
+      competition_models:
+      - meta-llama/llama-3.2-1b-instruct
+      - qwen/qwen2.5-3b-instruct
+      - microsoft/phi-3-mini-4k-instruct
+      emergency_pool:
+      - meta-llama/llama-3.2-3b-instruct
+      - cohere/command-r-08-2024
+      fallback_chain:
+      - qwen/qwen2.5-1.5b-instruct
+      - qwen/qwen2.5-0.5b-instruct
+      - microsoft/phi-3-medium-4k-instruct
+    performance_settings:
+      load_balancing: maximum_throughput
+      max_concurrent: 15
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Швидке поглинання та обробка великих даних
+    thermal_protection:
+      cooldown: 10
+      enabled: true
+      threshold: 0.6
+  ETLOrchestrator:
+    category: data_transformation
+    model_strategy:
+      arbiter_model: cohere/command-r-plus-08-2024
+      competition_models:
+      - microsoft/phi-3-small-128k-instruct
+      - qwen/qwen2.5-7b-instruct
+      - meta-llama/meta-llama-3-8b-instruct
+      emergency_pool:
+      - qwen/qwen2.5-32b-instruct
+      - meta-llama/llama-3.2-3b-instruct
+      fallback_chain:
+      - google/gemma-2-27b-it
+      - mistralai/mistral-7b-instruct-v0.3
+      - microsoft/phi-3-mini-128k-instruct
+    performance_settings:
+      load_balancing: pipeline_efficiency
+      max_concurrent: 8
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Оркестрація ETL процесів
+    thermal_protection:
+      cooldown: 25
+      enabled: true
+      threshold: 0.75
+  Embedding:
+    category: embeddings_vectors
+    model_strategy:
+      arbiter_model: ai21-labs/ai21-jamba-1.5-large
+      competition_models:
+      - cohere/command-r-plus-08-2024
+      - qwen/qwen2.5-32b-instruct
+      - microsoft/phi-3-small-128k-instruct
+      emergency_pool:
+      - qwen/qwen2.5-7b-instruct
+      - mistralai/mistral-7b-instruct-v0.3
+      fallback_chain:
+      - meta-llama/meta-llama-3-8b-instruct
+      - google/gemma-2-27b-it
+      - cohere/command-r-08-2024
+    performance_settings:
+      load_balancing: vector_quality
+      max_concurrent: 12
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Створення векторних представлень
+    thermal_protection:
+      cooldown: 15
+      enabled: true
+      threshold: 0.65
+  Forecast:
+    category: predictive_analytics
+    model_strategy:
+      arbiter_model: meta-llama/meta-llama-3-70b-instruct
+      competition_models:
+      - mistralai/mixtral-8x7b-instruct-v0.1
+      - ai21-labs/ai21-jamba-1.5-large
+      - qwen/qwen2.5-32b-instruct
+      emergency_pool:
+      - mistralai/mistral-7b-instruct-v0.3
+      - meta-llama/meta-llama-3-8b-instruct
+      fallback_chain:
+      - cohere/command-r-plus-08-2024
+      - microsoft/phi-3-small-128k-instruct
+      - qwen/qwen2.5-7b-instruct
+    performance_settings:
+      load_balancing: accuracy_weighted
+      max_concurrent: 5
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Прогнозування та передбачення трендів
+    thermal_protection:
+      cooldown: 40
+      enabled: true
+      threshold: 0.8
+  GraphBuilder:
+    category: graph_analysis
+    model_strategy:
+      arbiter_model: meta-llama/meta-llama-3-70b-instruct
+      competition_models:
+      - ai21-labs/ai21-jamba-1.5-large
+      - microsoft/phi-3-small-128k-instruct
+      - qwen/qwen2.5-32b-instruct
+      emergency_pool:
+      - meta-llama/meta-llama-3-8b-instruct
+      - qwen/qwen2.5-7b-instruct
+      fallback_chain:
+      - cohere/command-r-plus-08-2024
+      - google/gemma-2-27b-it
+      - mistralai/mistral-7b-instruct-v0.3
+    performance_settings:
+      load_balancing: graph_complexity
+      max_concurrent: 4
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Побудова та аналіз графів зв'язків
+    thermal_protection:
+      cooldown: 35
+      enabled: true
+      threshold: 0.8
+  Indexer:
+    category: indexing_search
+    model_strategy:
+      arbiter_model: meta-llama/meta-llama-3-8b-instruct
+      competition_models:
+      - cohere/command-r-08-2024
+      - qwen/qwen2.5-7b-instruct
+      - microsoft/phi-3-mini-128k-instruct
+      emergency_pool:
+      - meta-llama/llama-3.2-3b-instruct
+      - qwen/qwen2.5-1.5b-instruct
+      fallback_chain:
+      - google/gemma-2-27b-it
+      - qwen/qwen2.5-3b-instruct
+      - microsoft/phi-3-small-8k-instruct
+    performance_settings:
+      load_balancing: search_relevance
+      max_concurrent: 6
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Індексація даних та семантичний пошук
+    thermal_protection:
+      cooldown: 20
+      enabled: true
+      threshold: 0.7
+  ModelRouter:
+    category: critical_routing
+    model_strategy:
+      arbiter_model: mistralai/mistral-7b-instruct-v0.3
+      competition_models:
+      - meta-llama/meta-llama-3-70b-instruct
+      - microsoft/phi-3-small-128k-instruct
+      - cohere/command-r-plus-08-2024
+      emergency_pool:
+      - qwen/qwen2.5-32b-instruct
+      - google/gemma-2-27b-it
+      fallback_chain:
+      - microsoft/phi-3-mini-4k-instruct
+      - qwen/qwen2.5-7b-instruct
+      - meta-llama/meta-llama-3-8b-instruct
+    performance_settings:
+      load_balancing: fastest_accurate
+      max_concurrent: 4
+      priority_level: critical
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Маршрутизація запитів між моделями та агентами
+    thermal_protection:
+      cooldown: 30
+      enabled: true
+      threshold: 0.8
+  NexusGuide:
+    category: user_assistance
+    model_strategy:
+      arbiter_model: qwen/qwen2.5-32b-instruct
+      competition_models:
+      - cohere/command-r-plus-08-2024
+      - microsoft/phi-3-small-128k-instruct
+      - meta-llama/meta-llama-3-8b-instruct
+      emergency_pool:
+      - microsoft/phi-3-mini-128k-instruct
+      - qwen/qwen2.5-7b-instruct
+      fallback_chain:
+      - google/gemma-2-27b-it
+      - cohere/command-r-08-2024
+      - mistralai/mistral-7b-instruct-v0.3
+    performance_settings:
+      load_balancing: user_satisfaction
+      max_concurrent: 5
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Допомога користувачам та навігація
+    thermal_protection:
+      cooldown: 20
+      enabled: true
+      threshold: 0.7
+  OSINTCrawler:
+    category: web_intelligence
+    model_strategy:
+      arbiter_model: cohere/command-r-08-2024
+      competition_models:
+      - meta-llama/llama-3.2-3b-instruct
+      - qwen/qwen2.5-3b-instruct
+      - microsoft/phi-3-mini-4k-instruct
+      emergency_pool:
+      - qwen/qwen2.5-0.5b-instruct
+      - google/gemma-2-27b-it
+      fallback_chain:
+      - qwen/qwen2.5-1.5b-instruct
+      - meta-llama/llama-3.2-1b-instruct
+      - microsoft/phi-3-medium-4k-instruct
+    performance_settings:
+      load_balancing: crawl_speed
+      max_concurrent: 10
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Збір розвідувальної інформації з відкритих джерел
+    thermal_protection:
+      cooldown: 12
+      enabled: true
+      threshold: 0.6
+  PIIGuardian:
+    category: privacy_protection
+    model_strategy:
+      arbiter_model: meta-llama/meta-llama-3-70b-instruct
+      competition_models:
+      - microsoft/phi-3-small-128k-instruct
+      - cohere/command-r-plus-08-2024
+      - qwen/qwen2.5-7b-instruct
+      emergency_pool:
+      - meta-llama/meta-llama-3-8b-instruct
+      - cohere/command-r-08-2024
+      fallback_chain:
+      - ai21-labs/ai21-jamba-1.5-large
+      - google/gemma-2-27b-it
+      - mistralai/mistral-7b-instruct-v0.3
+    performance_settings:
+      load_balancing: privacy_score
+      max_concurrent: 6
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Захист персональних даних та приватності
+    thermal_protection:
+      cooldown: 30
+      enabled: true
+      threshold: 0.75
+  PerformanceOptimizer:
+    category: performance_optimization
+    model_strategy:
+      arbiter_model: ai21-labs/ai21-jamba-1.5-large
+      competition_models:
+      - mistralai/codestral-latest
+      - microsoft/phi-3-small-128k-instruct
+      - qwen/qwen2.5-32b-instruct
+      emergency_pool:
+      - mistralai/mistral-7b-instruct-v0.3
+      - qwen/qwen2.5-7b-instruct
+      fallback_chain:
+      - meta-llama/meta-llama-3-8b-instruct
+      - cohere/command-r-plus-08-2024
+      - google/gemma-2-27b-it
+    performance_settings:
+      load_balancing: optimization_impact
+      max_concurrent: 3
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Оптимізація продуктивності системи
+    thermal_protection:
+      cooldown: 45
+      enabled: true
+      threshold: 0.8
+  QueryPlanner:
+    category: critical_planning
+    model_strategy:
+      arbiter_model: meta-llama/meta-llama-3-70b-instruct
+      competition_models:
+      - ai21-labs/ai21-jamba-1.5-large
+      - cohere/command-r-plus-08-2024
+      - mistralai/mixtral-8x7b-instruct-v0.1
+      emergency_pool:
+      - mistralai/mistral-7b-instruct-v0.3
+      - microsoft/phi-3-mini-128k-instruct
+      fallback_chain:
+      - microsoft/phi-3-small-8k-instruct
+      - qwen/qwen2.5-32b-instruct
+      - cohere/command-r-08-2024
+    performance_settings:
+      load_balancing: consensus_vote
+      max_concurrent: 3
+      priority_level: critical
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Планування та оптимізація складних запитів
+    thermal_protection:
+      cooldown: 60
+      enabled: true
+      threshold: 0.75
+  RedTeam:
+    category: security_testing
+    model_strategy:
+      arbiter_model: cohere/command-r-plus-08-2024
+      competition_models:
+      - mistralai/codestral-latest
+      - ai21-labs/ai21-jamba-1.5-large
+      - meta-llama/meta-llama-3-70b-instruct
+      emergency_pool:
+      - mistralai/mistral-7b-instruct-v0.3
+      - meta-llama/meta-llama-3-8b-instruct
+      fallback_chain:
+      - microsoft/phi-3-small-128k-instruct
+      - qwen/qwen2.5-32b-instruct
+      - google/gemma-2-27b-it
+    performance_settings:
+      load_balancing: security_depth
+      max_concurrent: 2
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Тестування безпеки та пошук уразливостей
+    thermal_protection:
+      cooldown: 60
+      enabled: true
+      threshold: 0.9
+  ReportExport:
+    category: document_generation
+    model_strategy:
+      arbiter_model: ai21-labs/ai21-jamba-1.5-large
+      competition_models:
+      - cohere/command-r-plus-08-2024
+      - microsoft/phi-3-small-128k-instruct
+      - meta-llama/meta-llama-3-8b-instruct
+      emergency_pool:
+      - mistralai/mistral-7b-instruct-v0.3
+      - qwen/qwen2.5-7b-instruct
+      fallback_chain:
+      - qwen/qwen2.5-32b-instruct
+      - google/gemma-2-27b-it
+      - cohere/command-r-08-2024
+    performance_settings:
+      load_balancing: document_quality
+      max_concurrent: 4
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Створення звітів та документації
+    thermal_protection:
+      cooldown: 25
+      enabled: true
+      threshold: 0.7
+  SchemaMapper:
+    category: schema_analysis
+    model_strategy:
+      arbiter_model: ai21-labs/ai21-jamba-1.5-large
+      competition_models:
+      - microsoft/phi-3-small-128k-instruct
+      - qwen/qwen2.5-32b-instruct
+      - cohere/command-r-08-2024
+      emergency_pool:
+      - qwen/qwen2.5-7b-instruct
+      - microsoft/phi-3-mini-128k-instruct
+      fallback_chain:
+      - meta-llama/meta-llama-3-8b-instruct
+      - google/gemma-2-27b-it
+      - mistralai/mistral-7b-instruct-v0.3
+    performance_settings:
+      load_balancing: schema_complexity
+      max_concurrent: 3
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Аналіз та маппінг схем даних
+    thermal_protection:
+      cooldown: 30
+      enabled: true
+      threshold: 0.75
+  SelfDiagnosis:
+    category: system_diagnostics
+    model_strategy:
+      arbiter_model: ai21-labs/ai21-jamba-1.5-large
+      competition_models:
+      - meta-llama/meta-llama-3-70b-instruct
+      - microsoft/phi-3-small-128k-instruct
+      - cohere/command-r-08-2024
+      emergency_pool:
+      - microsoft/phi-3-mini-4k-instruct
+      - meta-llama/meta-llama-3-8b-instruct
+      fallback_chain:
+      - qwen/qwen2.5-32b-instruct
+      - google/gemma-2-27b-it
+      - mistralai/mistral-7b-instruct-v0.3
+    performance_settings:
+      load_balancing: diagnostic_depth
+      max_concurrent: 4
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Самодіагностика системи та виявлення проблем
+    thermal_protection:
+      cooldown: 35
+      enabled: true
+      threshold: 0.7
+  SelfImprovement:
+    category: self_optimization
+    model_strategy:
+      arbiter_model: cohere/command-r-plus-08-2024
+      competition_models:
+      - ai21-labs/ai21-jamba-1.5-large
+      - mistralai/mixtral-8x7b-instruct-v0.1
+      - meta-llama/meta-llama-3-70b-instruct
+      emergency_pool:
+      - mistralai/mistral-7b-instruct-v0.3
+      - meta-llama/meta-llama-3-8b-instruct
+      fallback_chain:
+      - qwen/qwen2.5-32b-instruct
+      - microsoft/phi-3-small-128k-instruct
+      - google/gemma-2-27b-it
+    performance_settings:
+      load_balancing: learning_efficiency
+      max_concurrent: 2
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Самовдосконалення та навчання системи
+    thermal_protection:
+      cooldown: 120
+      enabled: true
+      threshold: 0.95
+  Simulator:
+    category: simulation_modeling
+    model_strategy:
+      arbiter_model: ai21-labs/ai21-jamba-1.5-large
+      competition_models:
+      - mistralai/mixtral-8x7b-instruct-v0.1
+      - qwen/qwen2.5-32b-instruct
+      - microsoft/phi-3-small-128k-instruct
+      emergency_pool:
+      - qwen/qwen2.5-7b-instruct
+      - mistralai/mistral-7b-instruct-v0.3
+      fallback_chain:
+      - cohere/command-r-plus-08-2024
+      - meta-llama/meta-llama-3-8b-instruct
+      - google/gemma-2-27b-it
+    performance_settings:
+      load_balancing: simulation_accuracy
+      max_concurrent: 3
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Моделювання та симуляція сценаріїв
+    thermal_protection:
+      cooldown: 50
+      enabled: true
+      threshold: 0.85
+  SyntheticData:
+    category: data_generation
+    model_strategy:
+      arbiter_model: meta-llama/meta-llama-3-70b-instruct
+      competition_models:
+      - cohere/command-r-plus-08-2024
+      - microsoft/phi-3-small-128k-instruct
+      - qwen/qwen2.5-7b-instruct
+      emergency_pool:
+      - mistralai/mistral-7b-instruct-v0.3
+      - qwen/qwen2.5-32b-instruct
+      fallback_chain:
+      - ai21-labs/ai21-jamba-1.5-large
+      - google/gemma-2-27b-it
+      - meta-llama/meta-llama-3-8b-instruct
+    performance_settings:
+      load_balancing: data_diversity
+      max_concurrent: 5
+      priority_level: normal
+    reliability:
+      backoff_strategy: exponential
+      circuit_breaker: true
+      health_checks: true
+      retry_attempts: 3
+    specialization: Генерація синтетичних даних
+    thermal_protection:
+      cooldown: 30
+      enabled: true
+      threshold: 0.75
+arbitration_system:
+  arbiter_timeout: 15
+  conflict_resolution: weighted_vote
+  enabled: true
+  escalation_levels: 3
+competition_system:
+  consensus_threshold: 0.7
+  enabled: true
+  strategy: parallel_evaluation
+  timeout_seconds: 30
+  winner_selection: best_score_fastest
+failover_system:
+  cascade_prevention: true
+  detection_time: 3
+  enabled: true
+  recovery_attempts: 5
+metadata:
+  created_at: '2025-09-28'
+  description: Продакшн розподіл 21 працюючої безкоштовної моделі
+  strategy: competition_arbitration_fallback_thermal
+  total_agents: 26
+  total_models: 21
+  version: '2.0'
+model_tiers:
+  tier_1_premium:
+  - ai21-labs/ai21-jamba-1.5-large
+  - mistralai/mixtral-8x7b-instruct-v0.1
+  - meta-llama/meta-llama-3-70b-instruct
+  - mistralai/mistral-7b-instruct-v0.3
+  - microsoft/phi-3-mini-4k-instruct
+  tier_2_balanced:
+  - meta-llama/meta-llama-3-8b-instruct
+  - microsoft/phi-3-mini-128k-instruct
+  - microsoft/phi-3-small-8k-instruct
+  - microsoft/phi-3-small-128k-instruct
+  - qwen/qwen2.5-7b-instruct
+  - qwen/qwen2.5-32b-instruct
+  tier_3_specialized:
+  - cohere/command-r-plus-08-2024
+  - cohere/command-r-08-2024
+  - mistralai/codestral-latest
+  - google/gemma-2-27b-it
+  - meta-llama/llama-3.2-3b-instruct
+  tier_4_fast:
+  - meta-llama/llama-3.2-1b-instruct
+  - qwen/qwen2.5-3b-instruct
+  - qwen/qwen2.5-1.5b-instruct
+  - qwen/qwen2.5-0.5b-instruct
+  - microsoft/phi-3-medium-4k-instruct
+system_architecture:
+  arbitration_enabled: true
+  auto_failover: true
+  competition_enabled: true
+  cost_optimization: true
+  load_balancing: true
+  reliability_first: true
+  thermal_protection: true
+thermal_protection:
+  cooldown_strategies:
+  - reduce_concurrency
+  - switch_to_fallback
+  - activate_emergency_pool
+  - temporary_shutdown
+  global_enabled: true
+  monitoring_interval: 5

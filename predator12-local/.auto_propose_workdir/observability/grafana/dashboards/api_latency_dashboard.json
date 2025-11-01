@@ -1,0 +1,63 @@
+{
+  "annotations": {"list": [{"builtIn": 1, "datasource": "-- Grafana --", "enable": true, "hide": true, "iconColor": "rgba(0, 211, 255, 1)", "name": "Annotations & Alerts", "type": "dashboard"}]},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {"type": "row", "title": "API Overview", "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0}},
+    {
+      "type": "timeseries",
+      "title": "HTTP Requests /s",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "sum(rate(http_requests_total[1m]))", "legendFormat": "rps"}],
+      "gridPos": {"h": 6, "w": 8, "x": 0, "y": 1}
+    },
+    {
+      "type": "timeseries",
+      "title": "HTTP 5xx Rate (%)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "100 * (sum(rate(http_requests_total{code=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m])))", "legendFormat": "5xx%"}],
+      "gridPos": {"h": 6, "w": 8, "x": 8, "y": 1}
+    },
+    {
+      "type": "timeseries",
+      "title": "Latency p95/p99 (ms)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) * 1000", "legendFormat": "p95"},
+        {"expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) * 1000", "legendFormat": "p99"}
+      ],
+      "gridPos": {"h": 6, "w": 8, "x": 16, "y": 1}
+    },
+    {"type": "row", "title": "Breakdown", "gridPos": {"h": 1, "w": 24, "x": 0, "y": 7}},
+    {
+      "type": "table",
+      "title": "Top paths by 5xx",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "topk(10, sum by (path)(rate(http_requests_total{code=~\"5..\"}[5m])))", "legendFormat": "{{path}}"}],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "transformations": [{"id": "labelsToFields"}]
+    },
+    {
+      "type": "table",
+      "title": "Top slow paths (p95 ms)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "topk(10, histogram_quantile(0.95, sum by (le, path)(rate(http_request_duration_seconds_bucket[5m])))*1000)", "legendFormat": "{{path}}"}],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "transformations": [{"id": "labelsToFields"}]
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["predator11", "api", "observability"],
+  "templating": {"list": [{"name": "DS_PROMETHEUS", "type": "datasource", "query": "prometheus", "current": {"selected": true}, "label": "Prometheus"}]},
+  "time": {"from": "now-6h", "to": "now"},
+  "timepicker": {"refresh_intervals": ["5s","10s","30s","1m","5m"]},
+  "timezone": "browser",
+  "title": "Predator11 • API Latency & Errors",
+  "uid": "predator11-api-latency",
+  "version": 1
+}

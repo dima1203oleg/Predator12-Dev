@@ -1,0 +1,68 @@
+{
+  "title": "Model Ensemble & Arbiter",
+  "uid": "model-ensemble-arbiter",
+  "schemaVersion": 38,
+  "version": 1,
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Ensemble Runs (rate)",
+      "targets": [
+        {
+          "expr": "sum by (task) (rate(model_router_ensemble_runs_total[5m]))",
+          "legendFormat": "{{task}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8}
+    },
+    {
+      "type": "timeseries",
+      "title": "Ensemble Timeouts (rate)",
+      "targets": [
+        {
+          "expr": "sum by (task) (rate(model_router_ensemble_timeouts_total[5m]))",
+          "legendFormat": "timeout:{{task}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8}
+    },
+    {
+      "type": "table",
+      "title": "Winners by Model (last 1h)",
+      "targets": [
+        {
+          "expr": "sum by (task,model) (increase(model_router_ensemble_winner_total[1h]))",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8}
+    },
+    {
+      "type": "timeseries",
+      "title": "API p95 latency (s)",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8}
+    },
+    {
+      "type": "timeseries",
+      "title": "Router Requests (success/failure)",
+      "targets": [
+        {
+          "expr": "sum by (task,status) (rate(model_router_requests_total[5m]))",
+          "legendFormat": "{{task}} {{status}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": {"x": 0, "y": 16, "w": 24, "h": 9}
+    }
+  ],
+  "tags": ["predator11","ensemble","arbiter"],
+  "time": {"from": "now-6h", "to": "now"}
+}

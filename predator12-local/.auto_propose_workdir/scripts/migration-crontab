@@ -1,0 +1,11 @@
+# Predator Analytics - Intelligent Migration Scheduler
+# Автоматичний запуск в оптимальний момент
+
+# Запуск планувальника щодня о 01:00 (якщо ще не запущений)
+0 1 * * * /bin/bash -c 'if ! pgrep -f "intelligent-migration-scheduler" > /dev/null; then /Users/dima/Documents/Predator11/scripts/intelligent-migration-scheduler.sh --daemon; fi'
+
+# Перевірка стану кожні 4 години
+0 */4 * * * /Users/dima/Documents/Predator11/scripts/intelligent-migration-scheduler.sh --check-only >> /tmp/predator-migration-checks.log
+
+# Очищення старих логів щотижня
+0 0 * * 0 find /tmp -name "predator-migration*.log" -mtime +7 -delete

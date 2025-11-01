@@ -1,0 +1,116 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Predator Analytics - Agent Performance",
+    "tags": ["predator", "agents", "performance"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Agent Task Throughput",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(celery_task_completed_total[5m])",
+            "legendFormat": "{{agent}} - Completed/sec"
+          },
+          {
+            "expr": "rate(celery_task_failed_total[5m])",
+            "legendFormat": "{{agent}} - Failed/sec"
+          }
+        ],
+        "gridPos": {"h": 9, "w": 12, "x": 0, "y": 0},
+        "yAxes": [
+          {"label": "Tasks per second", "min": 0},
+          {"show": false}
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Agent Queue Lengths",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "celery_queue_length",
+            "legendFormat": "{{queue}} Queue Length"
+          }
+        ],
+        "gridPos": {"h": 9, "w": 12, "x": 12, "y": 0},
+        "yAxes": [
+          {"label": "Queue Length", "min": 0},
+          {"show": false}
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Task Execution Time",
+        "type": "heatmap",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.50, rate(celery_task_duration_seconds_bucket[5m]))",
+            "legendFormat": "50th percentile"
+          },
+          {
+            "expr": "histogram_quantile(0.95, rate(celery_task_duration_seconds_bucket[5m]))",
+            "legendFormat": "95th percentile"
+          },
+          {
+            "expr": "histogram_quantile(0.99, rate(celery_task_duration_seconds_bucket[5m]))",
+            "legendFormat": "99th percentile"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 9}
+      },
+      {
+        "id": 4,
+        "title": "ML Model Performance",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "mlflow_model_accuracy",
+            "legendFormat": "{{model_name}} Accuracy"
+          },
+          {
+            "expr": "mlflow_model_prediction_time",
+            "legendFormat": "{{model_name}} Prediction Time (ms)"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 17}
+      },
+      {
+        "id": 5,
+        "title": "Data Processing Volume",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(dataset_records_processed_total[5m])",
+            "legendFormat": "Records/sec"
+          },
+          {
+            "expr": "rate(dataset_bytes_processed_total[5m])",
+            "legendFormat": "Bytes/sec"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 17}
+      },
+      {
+        "id": 6,
+        "title": "Agent Resource Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "process_resident_memory_bytes{job='celery-worker'}",
+            "legendFormat": "{{instance}} Memory"
+          },
+          {
+            "expr": "rate(process_cpu_seconds_total{job='celery-worker'}[5m]) * 100",
+            "legendFormat": "{{instance}} CPU %"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 25}
+      }
+    ],
+    "time": {"from": "now-1h", "to": "now"},
+    "refresh": "10s"
+  }
+}

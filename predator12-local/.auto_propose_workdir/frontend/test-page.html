@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🚀 TEST PAGE - Predator Analytics</title>
+    <style>
+      body {
+        background-color: white;
+        color: black;
+        font-family: Arial, sans-serif;
+        padding: 50px;
+        margin: 0;
+      }
+      h1 {
+        color: #0066cc;
+        font-size: 2em;
+      }
+      .status {
+        background: #e8f5e8;
+        border: 1px solid #4caf50;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🚀 Predator Frontend Test Page</h1>
+    <div class="status">
+      <p><strong>✅ Статус:</strong> Тестова сторінка завантажена успішно!</p>
+      <p><strong>🕐 Час:</strong> <span id="time"></span></p>
+      <p><strong>🔍 Діагностика:</strong> Якщо ви бачите цю сторінку, nginx працює правильно.</p>
+    </div>
+    <div id="root">
+      <p>🔄 React додаток буде завантажений тут...</p>
+    </div>
+
+    <script>
+      // Показуємо поточний час
+      document.getElementById('time').textContent = new Date().toLocaleString();
+
+      // Простий тест JavaScript
+      console.log('✅ JavaScript працює!');
+
+      // Імітація простого React додатку
+      setTimeout(() => {
+        const root = document.getElementById('root');
+        root.innerHTML = `
+          <div style="background: #f0f8ff; padding: 20px; border-radius: 5px; margin-top: 20px;">
+            <h2>🎉 Простий React тест</h2>
+            <p>Якщо ви бачите це повідомлення, значить:</p>
+            <ul>
+              <li>✅ HTML завантажується</li>
+              <li>✅ CSS працює</li>
+              <li>✅ JavaScript виконується</li>
+              <li>✅ DOM маніпуляції працюють</li>
+            </ul>
+            <p><strong>Висновок:</strong> Проблема може бути в React/TypeScript коді, а не в базовій інфраструктурі.</p>
+          </div>
+        `;
+      }, 1000);
+    </script>
+  </body>
+</html>

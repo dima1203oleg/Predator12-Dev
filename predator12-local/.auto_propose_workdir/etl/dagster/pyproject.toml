@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "predator-dagster"
+version = "0.1.0"
+description = "Dagster pipelines for Predator Analytics"
+authors = ["Predator Team"]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+dagster = "^1.7.13"
+dagster-webserver = "^1.7.13"
+pyarrow = "^17.0.0"
+duckdb = "^1.1.0"
+pandas = "^2.2.2"
+parquet = "*"
+psycopg2-binary = "^2.9.9"
+elastic-transport = "^8.13.0"
+elasticsearch = "^8.13.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

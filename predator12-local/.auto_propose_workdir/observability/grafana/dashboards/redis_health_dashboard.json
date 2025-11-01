@@ -1,0 +1,87 @@
+{
+  "annotations": {"list": [{"builtIn": 1, "datasource": "-- Grafana --", "enable": true, "hide": true, "iconColor": "rgba(0, 211, 255, 1)", "name": "Annotations & Alerts", "type": "dashboard"}]},
+  "editable": true,
+  "graphTooltip": 1,
+  "liveNow": true,
+  "panels": [
+    {"type": "row", "title": "Redis Overview", "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0}},
+    {
+      "type": "stat",
+      "title": "Uptime (days)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "redis_uptime_in_seconds / 86400"}],
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 1}
+    },
+    {
+      "type": "stat",
+      "title": "Connected Clients",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "redis_connected_clients"}],
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 1}
+    },
+    {
+      "type": "stat",
+      "title": "Used Memory (MB)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "redis_memory_used_bytes / 1024 / 1024"}],
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 1}
+    },
+    {
+      "type": "stat",
+      "title": "Keyspace Hits Ratio (%)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "100 * (redis_keyspace_hits_total / (redis_keyspace_hits_total + redis_keyspace_misses_total))"}],
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 1}
+    },
+    {"type": "row", "title": "Throughput", "gridPos": {"h": 1, "w": 24, "x": 0, "y": 5}},
+    {
+      "type": "timeseries",
+      "title": "Ops/sec",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "rate(redis_commands_total[1m])", "legendFormat": "ops"}],
+      "gridPos": {"h": 6, "w": 8, "x": 0, "y": 6}
+    },
+    {
+      "type": "timeseries",
+      "title": "Network I/O (KB/s)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "rate(redis_net_input_bytes_total[1m]) / 1024", "legendFormat": "in"},
+        {"expr": "rate(redis_net_output_bytes_total[1m]) / 1024", "legendFormat": "out"}
+      ],
+      "gridPos": {"h": 6, "w": 8, "x": 8, "y": 6}
+    },
+    {
+      "type": "timeseries",
+      "title": "Evicted Keys /s",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "rate(redis_evicted_keys_total[5m])", "legendFormat": "evictions"}],
+      "gridPos": {"h": 6, "w": 8, "x": 16, "y": 6}
+    },
+    {"type": "row", "title": "Keyspace", "gridPos": {"h": 1, "w": 24, "x": 0, "y": 12}},
+    {
+      "type": "timeseries",
+      "title": "Keys per DB",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "sum by (db) (redis_db_keys{db!="db0"})", "legendFormat": "{{db}}"}],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 13}
+    },
+    {
+      "type": "timeseries",
+      "title": "Expires per DB",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [{"expr": "sum by (db) (redis_db_keys_expiring{db!="db0"})", "legendFormat": "{{db}}"}],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 13}
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["predator11", "redis", "observability"],
+  "templating": {"list": [{"name": "DS_PROMETHEUS", "type": "datasource", "query": "prometheus", "current": {"selected": true}, "label": "Prometheus"}]},
+  "time": {"from": "now-6h", "to": "now"},
+  "timezone": "browser",
+  "title": "Predator11 • Redis Health",
+  "uid": "predator11-redis-health",
+  "version": 1
+}

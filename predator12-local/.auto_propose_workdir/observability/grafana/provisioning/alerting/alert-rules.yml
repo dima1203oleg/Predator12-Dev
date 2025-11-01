@@ -1,0 +1,87 @@
+apiVersion: 1
+
+# Folder to store the alerts in
+folders:
+  - name: Predator Alerts
+    title: Predator Alerts
+    description: Alerts for Predator Platform
+
+# Global alert configuration
+route:
+  group_by: ['alertname', 'severity']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'email-default'
+
+# Alert rule groups
+groups:
+  - name: system-alerts
+    folder: Predator Alerts
+    interval: 1m
+    rules:
+      - alert: HighCPUUsage
+        uid: high-cpu-usage-alert
+        title: High CPU Usage Alert
+        expr: 100 * (1 - avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m]))) > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is {{ $value }}% on {{ $labels.instance }} for more than 5 minutes"
+
+      - alert: CriticalCPUUsage
+        uid: critical-cpu-usage-alert
+        title: Critical CPU Usage Alert
+        expr: 100 * (1 - avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m]))) > 95
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is {{ $value }}% on {{ $labels.instance }} for more than 5 minutes"
+
+      - alert: HighMemoryUsage
+        uid: high-memory-usage-alert
+        title: High Memory Usage Alert
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}"
+
+      - alert: CriticalMemoryUsage
+        uid: critical-memory-usage-alert
+        title: Critical Memory Usage Alert
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 90
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical memory usage on {{ $labels.instance }}"
+          description: "Memory usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}"
+
+      - alert: HighDiskUsage
+        uid: high-disk-usage-alert
+        title: High Disk Usage Alert
+        expr: 100 - (node_filesystem_avail_bytes{mountpoint="/",fstype!="tmpfs"} * 100) / node_filesystem_size_bytes{mountpoint="/",fstype!="tmpfs"} > 80
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High disk usage on {{ $labels.instance }} ({{ $labels.mountpoint }})"
+          description: "Disk usage is {{ $value | humanizePercentage }} on {{ $labels.mountpoint }} ({{ $labels.instance }})"
+
+      - alert: CriticalDiskUsage
+        uid: critical-disk-usage-alert
+        title: Critical Disk Usage Alert
+        expr: 100 - (node_filesystem_avail_bytes{mountpoint="/",fstype!="tmpfs"} * 100) / node_filesystem_size_bytes{mountpoint="/",fstype!="tmpfs"} > 90
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Critical disk usage on {{ $labels.instance }} ({{ $labels.mountpoint }})"
+          description: "Disk usage is {{ $value | humanizePercentage }} on {{ $labels.mountpoint }} ({{ $labels.instance }})"

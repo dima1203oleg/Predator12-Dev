@@ -1,0 +1,117 @@
+groups:
+  - name: predator11.critical
+    rules:
+      # Критичні алерти системи
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.instance }} is down"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute."
+
+      - alert: HighMemoryUsage
+        expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.9
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage is above 90% for more than 5 minutes on {{ $labels.instance }}"
+
+      - alert: HighDiskUsage
+        expr: (node_filesystem_size_bytes{fstype!="tmpfs"} - node_filesystem_free_bytes{fstype!="tmpfs"}) / node_filesystem_size_bytes{fstype!="tmpfs"} > 0.9
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High disk usage on {{ $labels.instance }}"
+          description: "Disk usage is above 90% for {{ $labels.mountpoint }} on {{ $labels.instance }}"
+
+  - name: predator11.application
+    rules:
+      # Алерти специфічні для Predator11
+      - alert: BackendHighErrorRate
+        expr: rate(http_requests_total{job="predator-backend",code=~"5.."}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate in Predator11 backend"
+          description: "Backend error rate is {{ $value }} errors per second"
+
+      - alert: DatabaseConnectionFailure
+        expr: up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database connection failure"
+          description: "PostgreSQL database is unreachable"
+
+      - alert: RedisConnectionFailure
+        expr: up{job="redis"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis connection failure"
+          description: "Redis cache is unreachable"
+
+      - alert: OpensearchClusterRed
+        expr: elasticsearch_cluster_health_status{color="red"} == 1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "OpenSearch cluster is in red state"
+          description: "OpenSearch cluster health is red - data loss may occur"
+
+      - alert: CeleryWorkerDown
+        expr: up{job="celery-worker"} == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Celery worker is down"
+          description: "Background task processing is unavailable"
+
+      - alert: QdrantConnectionFailure
+        expr: up{job="qdrant"} == 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Qdrant vector database is down"
+          description: "Vector search functionality is unavailable"
+
+  - name: predator11.performance
+    rules:
+      # Алерти продуктивності
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="predator-backend"}[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High response time in backend"
+          description: "95th percentile response time is {{ $value }}s"
+
+      - alert: HighContainerMemoryUsage
+        expr: container_memory_usage_bytes{name!=""} / container_spec_memory_limit_bytes > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage in container {{ $labels.name }}"
+          description: "Container memory usage is above 80%"
+
+      - alert: HighContainerCPUUsage
+        expr: rate(container_cpu_usage_seconds_total{name!=""}[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage in container {{ $labels.name }}"
+          description: "Container CPU usage is above 80%"

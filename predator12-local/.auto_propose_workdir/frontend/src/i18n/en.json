@@ -1,0 +1,8 @@
+{
+  "performance": {
+    "title": "Performance",
+    "mode": "Mode",
+    "autoAdjusted": "Quality automatically reduced for stable operation",
+    "fallbackMode": "Guide running in compatibility mode for better performance"
+  }
+}

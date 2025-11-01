@@ -1,0 +1,92 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "type": "row",
+      "title": "Tiered Cache Overview",
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0}
+    },
+    {
+      "type": "timeseries",
+      "title": "Memory vs Redis Hits (rate)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "sum(rate(tiered_cache_hit_memory[5m]))", "legendFormat": "memory"},
+        {"expr": "sum(rate(tiered_cache_hit_redis[5m]))", "legendFormat": "redis"}
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 1}
+    },
+    {
+      "type": "timeseries",
+      "title": "Misses & Evictions (rate)",
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "sum(rate(tiered_cache_miss[5m]))", "legendFormat": "miss"},
+        {"expr": "sum(rate(tiered_cache_evictions[5m]))", "legendFormat": "evict"}
+      ],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 1}
+    },
+    {
+      "type": "bargauge",
+      "title": "Hit Ratio (last 5m)",
+      "gridPos": {"h": 6, "w": 12, "x": 0, "y": 9},
+      "options": {"displayMode": "gradient"},
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "sum(rate(tiered_cache_hit_memory[5m]) + rate(tiered_cache_hit_redis[5m])) / sum(rate(tiered_cache_hit_memory[5m]) + rate(tiered_cache_hit_redis[5m]) + rate(tiered_cache_miss[5m]))", "legendFormat": "hit_ratio"}
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Top Functions by Cache Activity",
+      "gridPos": {"h": 10, "w": 24, "x": 0, "y": 15},
+      "transformations": [
+        {"id": "labelsToFields"}
+      ],
+      "datasource": {"type": "prometheus", "uid": "${DS_PROMETHEUS}"},
+      "targets": [
+        {"expr": "topk(10, rate(tiered_cache_hit_memory[5m]) + rate(tiered_cache_hit_redis[5m]) + rate(tiered_cache_miss[5m]))", "legendFormat": "{{func}}"}
+      ],
+      "fieldConfig": {"defaults": {"custom": {"align": "center"}}}
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["predator11", "cache", "observability"],
+  "templating": {
+    "list": [
+      {
+        "name": "DS_PROMETHEUS",
+        "type": "datasource",
+        "query": "prometheus",
+        "current": {"selected": true},
+        "label": "Prometheus"
+      }
+    ]
+  },
+  "time": {"from": "now-6h", "to": "now"},
+  "timepicker": {"refresh_intervals": ["5s","10s","30s","1m","5m"]},
+  "timezone": "browser",
+  "title": "Predator11 • Tiered Cache",
+  "uid": "predator11-tiered-cache",
+  "version": 1
+}

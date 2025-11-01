@@ -1,0 +1,583 @@
+agents:
+  Anomaly:
+    fallback: real_time_detection_backup
+    llm: real_time_detection_primary
+    load_balancing: fastest_response
+    max_concurrent: 6
+  Arbiter:
+    fallback: decision_making_backup
+    llm: decision_making_primary
+    load_balancing: round_robin
+    max_concurrent: 2
+  AutoHeal:
+    fallback: code_generation_backup
+    llm: code_generation_primary
+    load_balancing: code_quality
+    max_concurrent: 2
+  BillingGate:
+    fallback: financial_analysis_backup
+    llm: financial_analysis_primary
+    load_balancing: round_robin
+    max_concurrent: 2
+  ChiefOrchestrator:
+    fallback: critical_reasoning_backup
+    llm: critical_reasoning_primary
+    load_balancing: round_robin
+    max_concurrent: 4
+  ComplianceMonitor:
+    fallback: compliance_check_backup
+    llm: compliance_check_primary
+    load_balancing: round_robin
+    max_concurrent: 3
+  DataQuality:
+    fallback: high_load_analysis_backup
+    llm: high_load_analysis_primary
+    load_balancing: round_robin
+    max_concurrent: 5
+  DatasetIngest:
+    fallback: fast_processing_backup
+    llm: fast_processing_primary
+    load_balancing: throughput
+    max_concurrent: 8
+  ETLOrchestrator:
+    fallback: data_transformation_backup
+    llm: data_transformation_primary
+    load_balancing: data_size_based
+    max_concurrent: 6
+  Embedding:
+    fallback: embeddings_backup
+    llm: embeddings_primary
+    load_balancing: embedding_dimension
+    max_concurrent: 10
+  Forecast:
+    fallback: predictive_analytics_backup
+    llm: predictive_analytics_primary
+    load_balancing: accuracy_based
+    max_concurrent: 4
+  GraphBuilder:
+    fallback: graph_analysis_backup
+    llm: graph_analysis_primary
+    load_balancing: round_robin
+    max_concurrent: 3
+  Indexer:
+    fallback: indexing_backup
+    llm: indexing_primary
+    load_balancing: index_size
+    max_concurrent: 4
+  ModelRouter:
+    fallback: critical_routing_backup
+    llm: critical_routing_primary
+    load_balancing: least_loaded
+    max_concurrent: 3
+  NexusGuide:
+    fallback: user_assistance_backup
+    llm: user_assistance_primary
+    load_balancing: round_robin
+    max_concurrent: 3
+  OSINTCrawler:
+    fallback: web_analysis_backup
+    llm: web_analysis_primary
+    load_balancing: round_robin
+    max_concurrent: 5
+  PIIGuardian:
+    fallback: privacy_protection_backup
+    llm: privacy_protection_primary
+    load_balancing: round_robin
+    max_concurrent: 4
+  PerformanceOptimizer:
+    fallback: performance_backup
+    llm: performance_primary
+    load_balancing: round_robin
+    max_concurrent: 2
+  QueryPlanner:
+    fallback: critical_planning_backup
+    llm: critical_planning_primary
+    load_balancing: performance_based
+    max_concurrent: 3
+  RedTeam:
+    fallback: security_testing_backup
+    llm: security_testing_primary
+    load_balancing: round_robin
+    max_concurrent: 2
+  ReportExport:
+    fallback: document_generation_backup
+    llm: document_generation_primary
+    load_balancing: round_robin
+    max_concurrent: 2
+  SchemaMapper:
+    fallback: schema_analysis_backup
+    llm: schema_analysis_primary
+    load_balancing: round_robin
+    max_concurrent: 2
+  SelfDiagnosis:
+    fallback: system_analysis_backup
+    llm: system_analysis_primary
+    load_balancing: diagnostic_accuracy
+    max_concurrent: 3
+  SelfImprovement:
+    fallback: optimization_backup
+    llm: optimization_primary
+    load_balancing: round_robin
+    max_concurrent: 1
+  Simulator:
+    fallback: simulation_backup
+    llm: simulation_primary
+    load_balancing: round_robin
+    max_concurrent: 2
+  SyntheticData:
+    fallback: data_generation_backup
+    llm: data_generation_primary
+    load_balancing: round_robin
+    max_concurrent: 3
+kafka_topics:
+  agents_communication:
+  - agents.requests
+  - agents.responses
+  - agents.status
+  - agents.tuning
+  data_flow:
+  - data.ingest
+  - data.quality
+  - data.processed
+  - etl.status
+  models:
+  - models.requests
+  - models.responses
+  - models.health
+  - models.failover
+  orchestrator:
+  - orchestrator.tasks
+  - orchestrator.results
+  - orchestrator.scaling
+  system_events:
+  - system.incidents
+  - system.notifications
+  - system.health
+  - system.alerts
+llm_profiles:
+  code_generation_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - qwen/qwen2.5-3b-instruct
+    max_tokens: 4096
+    model_id: core42/jais-30b-chat
+    provider: sdk
+    temperature: 0.1
+  code_generation_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - ai21/ai21-jamba-1-5-mini
+    - core42/jais-30b-chat
+    - microsoft/phi-3-small-8k-instruct
+    max_tokens: 4096
+    model_id: deepseek/deepseek-coder-v2
+    provider: sdk
+    temperature: 0.2
+  compliance_check_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: deepseek/deepseek-v3
+    provider: sdk
+    temperature: 0.1
+  compliance_check_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - deepseek/deepseek-v3
+    max_tokens: 4096
+    model_id: microsoft/phi-3-vision-128k-instruct
+    provider: sdk
+    temperature: 0.2
+  critical_planning_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - cohere/command-r-plus-08-2024
+    max_tokens: 4096
+    model_id: qwen/qwen2.5-32b-instruct
+    provider: sdk
+    temperature: 0.1
+  critical_planning_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - microsoft/phi-3-medium-128k-instruct
+    - qwen/qwen2.5-32b-instruct
+    - mistral/mistral-large-2411
+    max_tokens: 4096
+    model_id: openai/gpt-4o-mini-2024-07-18
+    provider: sdk
+    temperature: 0.2
+  critical_reasoning_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - openai/gpt-4o-2024-11-20
+    max_tokens: 4096
+    model_id: qwen/qwen2.5-72b-instruct
+    provider: sdk
+    temperature: 0.1
+  critical_reasoning_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - meta/meta-llama-3.3-70b-instruct
+    - qwen/qwen2.5-72b-instruct
+    - mistral/mixtral-8x22b-instruct
+    max_tokens: 4096
+    model_id: deepseek/deepseek-r1
+    provider: sdk
+    temperature: 0.1
+  critical_routing_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - meta/meta-llama-3.2-90b-vision-instruct
+    max_tokens: 4096
+    model_id: openai/o1-preview-2024-09-12
+    provider: sdk
+    temperature: 0.1
+  critical_routing_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - deepseek/deepseek-v3
+    - openai/o1-preview-2024-09-12
+    - xai/grok-2-1212
+    max_tokens: 4096
+    model_id: microsoft/phi-4
+    provider: sdk
+    temperature: 0.2
+  data_generation_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: deepseek/deepseek-coder-v2
+    provider: sdk
+    temperature: 0.1
+  data_generation_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - deepseek/deepseek-coder-v2
+    max_tokens: 4096
+    model_id: core42/jais-30b-chat
+    provider: sdk
+    temperature: 0.2
+  data_transformation_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - mistral/mistral-nemo-2407
+    max_tokens: 4096
+    model_id: openai/gpt-4o-2024-08-06
+    provider: sdk
+    temperature: 0.1
+  data_transformation_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - openai/chatgpt-4o-latest
+    - openai/gpt-4o-2024-08-06
+    - openai/gpt-4o-2024-05-13
+    max_tokens: 4096
+    model_id: openai/gpt-3.5-turbo-1106
+    provider: sdk
+    temperature: 0.2
+  decision_making_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: mistral/mistral-large-2411
+    provider: sdk
+    temperature: 0.1
+  decision_making_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - mistral/mistral-large-2411
+    max_tokens: 4096
+    model_id: qwen/qwen2.5-32b-instruct
+    provider: sdk
+    temperature: 0.2
+  document_generation_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: meta/meta-llama-3.1-8b-instruct
+    provider: sdk
+    temperature: 0.1
+  document_generation_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - meta/meta-llama-3.1-8b-instruct
+    max_tokens: 4096
+    model_id: xai/grok-2-vision-1212
+    provider: sdk
+    temperature: 0.2
+  embeddings_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - microsoft/phi-3-mini-4k-instruct
+    max_tokens: 4096
+    model_id: meta/meta-llama-3.2-3b-instruct
+    provider: sdk
+    temperature: 0.1
+  embeddings_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - cohere/embed-multilingual-v3.0
+    - meta/meta-llama-3.2-3b-instruct
+    - qwen/qwen2.5-1.5b-instruct
+    max_tokens: 4096
+    model_id: cohere/embed-english-v3.0
+    provider: sdk
+    temperature: 0.2
+  fast_processing_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - openai/gpt-3.5-turbo-0125
+    max_tokens: 4096
+    model_id: openai/gpt-4-0613
+    provider: sdk
+    temperature: 0.1
+  fast_processing_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - openai/gpt-4-turbo-2024-04-09
+    - openai/gpt-4-0613
+    - openai/gpt-4-0125-preview
+    max_tokens: 4096
+    model_id: meta/meta-llama-3.1-405b-instruct
+    provider: sdk
+    temperature: 0.2
+  financial_analysis_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: microsoft/phi-3-mini-128k-instruct
+    provider: sdk
+    temperature: 0.1
+  financial_analysis_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - microsoft/phi-3-mini-128k-instruct
+    max_tokens: 4096
+    model_id: qwen/qwen2.5-3b-instruct
+    provider: sdk
+    temperature: 0.2
+  graph_analysis_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: mistral/ministral-3b-2410
+    provider: sdk
+    temperature: 0.1
+  graph_analysis_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - mistral/ministral-3b-2410
+    max_tokens: 4096
+    model_id: microsoft/phi-3-small-8k-instruct
+    provider: sdk
+    temperature: 0.2
+  high_load_analysis_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - ai21/ai21-jamba-1-5-large
+    max_tokens: 4096
+    model_id: microsoft/phi-3-vision-128k-instruct
+    provider: sdk
+    temperature: 0.1
+  high_load_analysis_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - openai/o1-mini-2024-09-12
+    - microsoft/phi-3-vision-128k-instruct
+    - deepseek/deepseek-coder-v2-lite
+    max_tokens: 4096
+    model_id: meta/meta-llama-3.2-11b-vision-instruct
+    provider: sdk
+    temperature: 0.2
+  indexing_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - cohere/command-light
+    max_tokens: 4096
+    model_id: openai/o4-2024-12-17
+    provider: sdk
+    temperature: 0.1
+  indexing_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - openai/o3-mini-2024-12-17
+    - openai/o4-2024-12-17
+    - mistral/codestral-2405
+    max_tokens: 4096
+    model_id: openai/o2-2024-12-17
+    provider: sdk
+    temperature: 0.2
+  optimization_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: ai21/ai21-jamba-1-5-large
+    provider: sdk
+    temperature: 0.1
+  optimization_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - ai21/ai21-jamba-1-5-large
+    max_tokens: 4096
+    model_id: deepseek/deepseek-coder-v2-lite
+    provider: sdk
+    temperature: 0.2
+  performance_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: meta/meta-llama-3.2-11b-vision-instruct
+    provider: sdk
+    temperature: 0.1
+  performance_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - meta/meta-llama-3.2-11b-vision-instruct
+    max_tokens: 4096
+    model_id: openai/o1-mini-2024-09-12
+    provider: sdk
+    temperature: 0.2
+  predictive_analytics_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - meta/meta-llama-3.2-1b-instruct
+    max_tokens: 4096
+    model_id: mistral/ministral-3b-2410
+    provider: sdk
+    temperature: 0.1
+  predictive_analytics_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - microsoft/phi-3-mini-128k-instruct
+    - mistral/ministral-3b-2410
+    - cohere/command-r7b-12-2024
+    max_tokens: 4096
+    model_id: qwen/qwen2.5-7b-instruct
+    provider: sdk
+    temperature: 0.2
+  privacy_protection_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: cohere/command-r-08-2024
+    provider: sdk
+    temperature: 0.1
+  privacy_protection_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - cohere/command-r-08-2024
+    max_tokens: 4096
+    model_id: mistral/ministral-8b-2410
+    provider: sdk
+    temperature: 0.2
+  real_time_detection_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - cohere/command-r-08-2024
+    max_tokens: 4096
+    model_id: qwen/qwen2.5-14b-instruct
+    provider: sdk
+    temperature: 0.1
+  real_time_detection_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - microsoft/phi-3-small-128k-instruct
+    - qwen/qwen2.5-14b-instruct
+    - mistral/ministral-8b-2410
+    max_tokens: 4096
+    model_id: meta/meta-llama-3.2-3b-instruct
+    provider: sdk
+    temperature: 0.2
+  schema_analysis_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: mistral/ministral-8b-2410
+    provider: sdk
+    temperature: 0.1
+  schema_analysis_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - mistral/ministral-8b-2410
+    max_tokens: 4096
+    model_id: qwen/qwen2.5-14b-instruct
+    provider: sdk
+    temperature: 0.2
+  security_testing_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: openai/o1-preview-2024-09-12
+    provider: sdk
+    temperature: 0.1
+  security_testing_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - openai/o1-preview-2024-09-12
+    max_tokens: 4096
+    model_id: meta/meta-llama-3.2-90b-vision-instruct
+    provider: sdk
+    temperature: 0.2
+  simulation_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: ai21/ai21-jamba-1-5-mini
+    provider: sdk
+    temperature: 0.1
+  simulation_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - ai21/ai21-jamba-1-5-mini
+    max_tokens: 4096
+    model_id: cohere/command-r7b-12-2024
+    provider: sdk
+    temperature: 0.2
+  system_analysis_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models:
+    - meta/meta-llama-3.1-70b-instruct
+    max_tokens: 4096
+    model_id: qwen/qwen2.5-1.5b-instruct
+    provider: sdk
+    temperature: 0.1
+  system_analysis_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - meta/meta-llama-3.1-8b-instruct
+    - qwen/qwen2.5-1.5b-instruct
+    - qwen/qwen2.5-0.5b-instruct
+    max_tokens: 4096
+    model_id: xai/grok-2-vision-1212
+    provider: sdk
+    temperature: 0.2
+  user_assistance_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: microsoft/phi-3-medium-128k-instruct
+    provider: sdk
+    temperature: 0.1
+  user_assistance_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - microsoft/phi-3-medium-128k-instruct
+    max_tokens: 4096
+    model_id: cohere/command-r-plus-08-2024
+    provider: sdk
+    temperature: 0.2
+  web_analysis_backup:
+    cost_per_1k_tokens: 0.0
+    emergency_models: []
+    max_tokens: 4096
+    model_id: qwen/qwen2.5-0.5b-instruct
+    provider: sdk
+    temperature: 0.1
+  web_analysis_primary:
+    cost_per_1k_tokens: 0.0
+    fallback_models:
+    - qwen/qwen2.5-0.5b-instruct
+    max_tokens: 4096
+    model_id: meta/meta-llama-3.2-1b-instruct
+    provider: sdk
+    temperature: 0.2

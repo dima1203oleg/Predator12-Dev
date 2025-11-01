@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "noEmit": false,
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/components/nexus_visuals/HolographicAIFace.tsx",
+    "src/components/nexus_visuals/SimpleCyberFace.tsx",
+    "src/components/metrics/AdvancedMetricsPanel.tsx",
+    "src/components/monitoring/RealtimeSystemMonitor.tsx",
+    "src/components/visualization/AI3DVisualization.tsx",
+    "src/components/testing/SystemFunctionalityTester.tsx",
+    "src/services/agentsAPI.ts",
+    "src/i18n/I18nProvider.tsx"
+  ]
+}

@@ -1,0 +1,134 @@
+llm_profiles:
+  reasoning_primary:
+    provider: sdk
+    model_id: meta/meta-llama-3.1-70b-instruct
+    max_tokens: 4096
+    temperature: 0.1
+    cost_per_1k_tokens: 0.0  # FREE MODEL
+  reasoning_backup:
+    provider: sdk
+    model_id: qwen/qwen2.5-72b-instruct
+    max_tokens: 4096
+    temperature: 0.1
+    cost_per_1k_tokens: 0.0  # FREE MODEL
+  codegen_primary:
+    provider: sdk
+    model_id: deepseek/deepseek-coder-v2
+    max_tokens: 8192
+    temperature: 0.0
+    cost_per_1k_tokens: 0.0  # FREE MODEL
+  codegen_backup:
+    provider: sdk
+    model_id: codestral-2501
+    max_tokens: 4096
+    temperature: 0.0
+    cost_per_1k_tokens: 0.0  # FREE MODEL
+  fast_small:
+    provider: sdk
+    model_id: microsoft/phi-3-mini-4k-instruct
+    max_tokens: 2048
+    temperature: 0.2
+    cost_per_1k_tokens: 0.0  # FREE MODEL
+  embed_multi:
+    provider: sdk
+    model_id: BAAI/bge-m3
+    dimensions: 1024
+    cost_per_1k_tokens: 0.0  # FREE MODEL
+  embed_fast:
+    provider: sdk
+    model_id: sentence-transformers/all-MiniLM-L6-v2
+    dimensions: 384
+    cost_per_1k_tokens: 0.0  # FREE MODEL
+
+agents:
+  # Core Agents (16)
+  ChiefOrchestrator:    { llm: reasoning_primary, fallback: reasoning_backup }
+  QueryPlanner:         { llm: reasoning_primary, fallback: reasoning_backup }
+  ModelRouter:          { llm: reasoning_primary }
+  Arbiter:              { llm: reasoning_backup }
+  NexusGuide:           { llm: reasoning_primary }
+  DatasetIngest:        { llm: fast_small }
+  DataQuality:          { llm: fast_small }
+  SchemaMapper:         { llm: reasoning_backup }
+  ETLOrchestrator:      { llm: fast_small }
+  Indexer:              { llm: fast_small }
+  Embedding:            { embed: embed_multi, fallback_embed: embed_fast }
+  OSINTCrawler:         { llm: fast_small }
+  GraphBuilder:         { llm: reasoning_primary, embed: embed_multi }
+  Anomaly:              { llm: fast_small }
+  Forecast:             { llm: fast_small }
+  Simulator:            { llm: reasoning_primary }
+
+  # Надсервісні Agents (10)
+  SyntheticData:        { llm: reasoning_primary }
+  ReportExport:         { llm: fast_small }
+  BillingGate:          { llm: fast_small }
+  PIIGuardian:          { llm: fast_small }
+  AutoHeal:             { llm: codegen_primary, fallback: codegen_backup }
+  SelfDiagnosis:        { llm: fast_small }
+  SelfImprovement:      { llm: reasoning_backup }
+  RedTeam:              { llm: reasoning_backup }
+  ComplianceMonitor:    { llm: fast_small }
+  PerformanceOptimizer: { llm: reasoning_primary }
+
+# Kafka Topics для міжагентної взаємодії
+kafka_topics:
+  orchestrator:
+    - "orchestrator.tasks"
+    - "orchestrator.results"
+    - "orchestrator.scaling"
+
+  data_flow:
+    - "data.ingest"
+    - "data.quality"
+    - "data.processed"
+    - "etl.status"
+
+  agents_communication:
+    - "agents.requests"
+    - "agents.responses"
+    - "agents.status"
+    - "agents.tuning"
+
+  system_events:
+    - "system.incidents"
+    - "system.notifications"
+    - "system.health"
+    - "system.alerts"
+
+  models:
+    - "models.requests"
+    - "models.responses"
+    - "models.optimization"
+
+  diagnostics:
+    - "diagnostics.incidents"
+    - "diagnostics.results"
+
+  security:
+    - "security.events"
+    - "security.alerts"
+    - "pii.requests"
+    - "pii.masked"
+
+# Qdrant Collections
+qdrant_collections:
+  osint_text_embeddings:
+    vector_size: 3072
+    distance: "Cosine"
+    index_type: "HNSW"
+
+  company_profiles:
+    vector_size: 1536
+    distance: "Cosine"
+    index_type: "HNSW"
+
+  improvement_vectors:
+    vector_size: 768
+    distance: "Cosine"
+    index_type: "HNSW"
+
+  incident_patterns:
+    vector_size: 768
+    distance: "Cosine"
+    index_type: "HNSW"

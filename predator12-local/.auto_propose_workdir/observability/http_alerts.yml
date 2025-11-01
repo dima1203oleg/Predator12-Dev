@@ -1,0 +1,32 @@
+groups:
+- name: http-api-alerts
+  rules:
+  - alert: Api5xxRateHigh
+    expr: 100 * (sum(rate(http_requests_total{code=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))) > 1
+    for: 10m
+    labels:
+      severity: warning
+      team: platform
+    annotations:
+      summary: "High 5xx rate (>1% over 10m)"
+      description: "Investigate backend errors, recent releases, upstream dependencies."
+
+  - alert: ApiLatencyP95High
+    expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) * 1000 > 250
+    for: 10m
+    labels:
+      severity: warning
+      team: platform
+    annotations:
+      summary: "API p95 latency high (>250ms for 10m)"
+      description: "Check DB/OS/Redis latency and saturation, recent traffic spikes."
+
+  - alert: ApiLatencyP99High
+    expr: histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) * 1000 > 500
+    for: 10m
+    labels:
+      severity: critical
+      team: platform
+    annotations:
+      summary: "API p99 latency high (>500ms for 10m)"
+      description: "Severe tail latency: check timeouts, contention, GC, slow endpoints."

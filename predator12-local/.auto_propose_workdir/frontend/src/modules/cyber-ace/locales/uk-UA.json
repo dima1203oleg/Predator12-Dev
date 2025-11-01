@@ -1,0 +1,109 @@
+{
+  "greeting": {
+    "default": "Вітаю! Я CYBER-ACE, ваш особистий кібер-асистент.",
+    "morning": "Доброго ранку! Я CYBER-ACE, готовий допомогти вам сьогодні.",
+    "afternoon": "Доброго дня! Я CYBER-ACE, ваш кібернетичний помічник.",
+    "evening": "Добрий вечір! Я CYBER-ACE, тут, щоб допомогти вам.",
+    "night": "Доброї ночі! Я CYBER-ACE, працюю цілодобово для вас.",
+    "subtitle": "Ваш розумний помічник для аналізу даних, виявлення ризиків та управління системами"
+  },
+  "voice": {
+    "placeholder": "Запитайте мене щось або натисніть мікрофон...",
+    "send": "Надіслати",
+    "listening": "Слухаю...",
+    "hint1": "🎤 Натисніть мікрофон для голосової команди",
+    "hint2": "💬 Або напишіть текстом",
+    "hint3": "🚀 Спробуйте: 'Проаналізуй ризики'",
+    "error": {
+      "notSupported": "Ваш браузер не підтримує голосове введення",
+      "failed": "Не вдалося запустити розпізнавання мови",
+      "no-speech": "Не вдалося розпізнати мову",
+      "audio-capture": "Немає доступу до мікрофона",
+      "network": "Помилка мережі",
+      "not-allowed": "Доступ до мікрофона заборонено",
+      "service-not-allowed": "Сервіс розпізнавання мови недоступний"
+    }
+  },
+  "actions": {
+    "title": "Швидкі дії",
+    "analyzeData": "Проаналізувати дані",
+    "detectRisks": "Виявити ризики",
+    "exploreNetwork": "Дослідити мережу",
+    "checkCompliance": "Перевірити відповідність",
+    "huntThreats": "Знайти загрози",
+    "findPatterns": "Знайти паттерни"
+  },
+  "agents": {
+    "title": "Мої агенти",
+    "subtitle": "Команда спеціалізованих AI-агентів для вирішення ваших завдань",
+    "show": "Показати агентів",
+    "hide": "Сховати агентів",
+    "activate": "Активувати",
+    "tasks": "Завдань",
+    "capabilities": "Можливості",
+    "lastActive": "Остання активність",
+    "status": {
+      "idle": "Очікує",
+      "active": "Активний",
+      "busy": "Зайнятий",
+      "error": "Помилка"
+    },
+    "stats": {
+      "total": "Всього",
+      "active": "Активних",
+      "busy": "Зайнятих"
+    },
+    "data-analyst": {
+      "name": "Data Analyst",
+      "description": "Аналізує великі обсяги даних, створює звіти та візуалізації"
+    },
+    "risk-detective": {
+      "name": "Risk Detective",
+      "description": "Виявляє ризики, аномалії та підозрілі патерни в даних"
+    },
+    "network-scout": {
+      "name": "Network Scout",
+      "description": "Досліджує мережу зв'язків, знаходить приховані залежності"
+    },
+    "compliance-guardian": {
+      "name": "Compliance Guardian",
+      "description": "Перевіряє відповідність регуляціям та стандартам"
+    },
+    "threat-hunter": {
+      "name": "Threat Hunter",
+      "description": "Активно полює на загрози безпеці системи"
+    },
+    "pattern-finder": {
+      "name": "Pattern Finder",
+      "description": "Знаходить приховані паттерни та тренди в даних"
+    }
+  },
+  "capabilities": {
+    "data-analysis": "Аналіз даних",
+    "reporting": "Звітність",
+    "visualization": "Візуалізація",
+    "risk-detection": "Виявлення ризиків",
+    "anomaly-detection": "Виявлення аномалій",
+    "alert-management": "Управління сповіщеннями",
+    "network-analysis": "Аналіз мережі",
+    "relationship-mapping": "Картування зв'язків",
+    "graph-visualization": "Візуалізація графів",
+    "compliance-check": "Перевірка відповідності",
+    "regulation-monitoring": "Моніторинг регуляцій",
+    "audit": "Аудит",
+    "threat-detection": "Виявлення загроз",
+    "security-analysis": "Аналіз безпеки",
+    "incident-response": "Реагування на інциденти",
+    "pattern-recognition": "Розпізнавання патернів",
+    "trend-analysis": "Аналіз трендів",
+    "prediction": "Прогнозування"
+  },
+  "system": {
+    "status": {
+      "online": "Онлайн",
+      "offline": "Офлайн",
+      "degraded": "Обмежена робота",
+      "maintenance": "Обслуговування"
+    }
+  }
+}

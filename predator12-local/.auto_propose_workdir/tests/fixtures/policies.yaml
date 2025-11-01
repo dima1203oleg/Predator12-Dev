@@ -1,0 +1,5 @@
+competition_system:
+  timeout_seconds: 30
+  quality_threshold: 0.7
+  latency_weight: 0.2
+  quality_weight: 0.8

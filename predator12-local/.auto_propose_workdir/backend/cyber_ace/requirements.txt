@@ -1,0 +1,22 @@
+# CYBER-ACE Backend Requirements
+# Python 3.11+
+
+# FastAPI
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+
+# OpenAI
+openai==1.10.0
+
+# Azure Speech
+azure-cognitiveservices-speech==1.35.0
+
+# Database
+redis==5.0.1
+qdrant-client==1.7.0
+
+# Utils
+python-dotenv==1.0.0
+python-multipart==0.0.6
+aiofiles==23.2.1

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { SearchBar, FilterChip, AlertNotification, ServiceModal } from './components/EnhancedComponents';
@@ -1363,7 +1364,15 @@ const App: React.FC = () => {
 
   return (
     <>
-      <a href="#main" className="skip-link">Skip to main content</a>
+      <button
+        className="skip-link"
+        onClick={() => {
+          const el = document.getElementById('main');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
+      >
+        Skip to main content
+      </button>
       <AnimatedBackground />
       <div id="main" className="app-shell enhanced-visible">
         {/* Header */}
@@ -1377,9 +1386,31 @@ const App: React.FC = () => {
 
         {/* Sticky Category Jump Nav */}
         <div className="sticky-category-nav" ref={stickyNavRef} role="tablist" aria-label="Service categories navigation">
-          <button className="category-jump" data-active={activeFilter==='all' && !activeCategoryAnchor ? 'true':undefined} onClick={()=>{ setActiveFilter('all'); window.scrollTo({top:0,behavior:'smooth'}); }}>All ({services.length})</button>
+          <button
+            className="category-jump"
+            role="tab"
+            aria-selected={activeFilter==='all' && !activeCategoryAnchor ? 'true' : 'false'}
+            tabIndex={0}
+            onClick={()=>{ setActiveFilter('all'); window.scrollTo({top:0,behavior:'smooth'}); }}
+          >
+            All ({services.length})
+          </button>
           {categoryOrder.map(cat => (
-            <a key={cat.key} href={'#cat-'+cat.key} className="category-jump" data-active={activeCategoryAnchor===cat.key? 'true': undefined} onClick={()=> setActiveFilter('all')} aria-label={`Jump to ${cat.title}`}>{cat.icon} {cat.label}</a>
+            <button
+              key={cat.key}
+              className="category-jump"
+              role="tab"
+              aria-selected={activeCategoryAnchor===cat.key ? 'true' : 'false'}
+              tabIndex={0}
+              onClick={()=> {
+                setActiveFilter('all');
+                const el = document.getElementById('cat-'+cat.key);
+                if (el) el.scrollIntoView({behavior:'smooth'});
+              }}
+              aria-label={`Jump to ${cat.title}`}
+            >
+              {cat.icon} {cat.label}
+            </button>
           ))}
         </div>
 

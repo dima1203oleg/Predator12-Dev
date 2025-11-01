@@ -1,0 +1,80 @@
+name: Publish Manifests to Manifests Repo
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish-manifests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Determine image tag
+        id: meta
+        run: |
+          echo "IMAGE_TAG=${GITHUB_SHA::8}" >> $GITHUB_OUTPUT
+
+      - name: Build and push image (if registry secrets present)
+        if: ${{ secrets.REGISTRY_USERNAME != '' && secrets.REGISTRY_PASSWORD != '' }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ secrets.REGISTRY_USERNAME }}/predator12:${{ steps.meta.outputs.IMAGE_TAG }}
+
+      - name: Prepare manifests (local)
+        env:
+          IMAGE: ${{ secrets.REGISTRY_USERNAME != '' && secrets.REGISTRY_PASSWORD != '' && format('{0}/predator12:{1}', secrets.REGISTRY_USERNAME, steps.meta.outputs.IMAGE_TAG) || format('local/predator12:dryrun-{0}', steps.meta.outputs.IMAGE_TAG) }}
+        run: |
+          chmod +x ./scripts/deploy/prepare_manifests.sh || true
+          ./scripts/deploy/prepare_manifests.sh "$IMAGE"
+
+      - name: Clone manifests repo and create PR (if credentials present)
+        if: ${{ secrets.MANIFESTS_REPO != '' && secrets.GH_TOKEN != '' }}
+        env:
+          MANIFESTS_REPO: ${{ secrets.MANIFESTS_REPO }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          IMAGE_TAG: ${{ steps.meta.outputs.IMAGE_TAG }}
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          tmpdir=$(mktemp -d)
+          git clone "$MANIFESTS_REPO" "$tmpdir"
+          cd "$tmpdir"
+          branch="auto/bump-manifests-${IMAGE_TAG}"
+          git checkout -b "$branch" || git checkout "$branch" || true
+          mkdir -p manifests || true
+          cp -r $GITHUB_WORKSPACE/manifests-ready/prod/* manifests/ || true
+          git add manifests || true
+          git commit -m "chore: bump manifests -> ${IMAGE_TAG}" || true
+          git push origin "$branch"
+          # create PR using GH CLI
+          echo "$GH_TOKEN" | gh auth login --with-token
+          gh pr create --title "chore: bump manifests ${IMAGE_TAG}" --body "Automated bump from CI" --base main --head "$branch" || true
+
+      - name: Trigger ArgoCD sync (optional)
+        if: ${{ secrets.ARGOCD_SERVER != '' && secrets.ARGOCD_TOKEN != '' }}
+        env:
+          ARGOCD_SERVER: ${{ secrets.ARGOCD_SERVER }}
+          ARGOCD_TOKEN: ${{ secrets.ARGOCD_TOKEN }}
+        run: |
+          # Trigger a manual sync of the application named in platform/argocd/app-predator12.yaml
+          APP_NAME=predator12-backend
+          curl -s -k -X POST "$ARGOCD_SERVER/api/v1/applications/$APP_NAME/sync" -H "Authorization: Bearer $ARGOCD_TOKEN" -H "Content-Type: application/json" -d '{}' || true

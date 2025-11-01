@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: predator-backend-rollout
+  labels:
+    app: predator-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: predator-backend
+  template:
+    metadata:
+      labels:
+        app: predator-backend
+    spec:
+      containers:
+        - name: backend
+          image: local/predator12:dryrun-1761657572
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause:
+            duration: 60
+        - setWeight: 50
+        - pause:
+            duration: 120
+      trafficRouting:
+        type: Service
+      analysis:
+        templates:
+          - name: prom-http-200-check
+        args:
+          - name: service
+            value: predator-backend
+        interval: 30s
+        maxWarningSeconds: 300
+        maxFailureSeconds: 600
+
+  progressDeadlineSeconds: 600

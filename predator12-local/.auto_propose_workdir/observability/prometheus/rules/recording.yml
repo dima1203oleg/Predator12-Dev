@@ -1,0 +1,50 @@
+groups:
+- name: node_recording
+  interval: 1m
+  rules:
+  - record: instance:node_cpu_utilisation:rate5m
+    expr: 1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) by (instance)
+  - record: instance:node_memory_utilisation:ratio
+    expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes
+  - record: instance:node_filesystem_usage:ratio
+    expr: (node_filesystem_size_bytes{mountpoint="/"} - node_filesystem_avail_bytes{mountpoint="/"}) / node_filesystem_size_bytes{mountpoint="/"}
+  - record: instance:node_network_receive_bytes:rate5m
+    expr: rate(node_network_receive_bytes_total[5m])
+  - record: instance:node_network_transmit_bytes:rate5m
+    expr: rate(node_network_transmit_bytes_total[5m])
+  - record: node:cpu_usage_pct:avg5m
+    expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m]))) * 100
+  - record: node:mem_free_pct
+    expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
+  - record: node:disk_usage_pct
+    expr: (node_filesystem_avail_bytes{fstype!~"tmpfs|fuse.lxcfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|fuse.lxcfs|overlay"}) * 100
+  - record: container:restarts:rate5m
+    expr: sum by (container_label_io_kubernetes_pod_name) (changes(kube_pod_container_status_restarts_total[5m]))
+
+- name: opensearch_recording
+  interval: 1m
+  rules:
+  - record: opensearch:indices_query_latency:rate5m
+    expr: rate(opensearch_indices_query_time_seconds_sum[5m]) / rate(opensearch_indices_query_time_seconds_count[5m])
+  - record: opensearch:indices_indexing_latency:rate5m
+    expr: rate(opensearch_indices_indexing_time_seconds_sum[5m]) / rate(opensearch_indices_indexing_time_seconds_count[5m])
+  - record: opensearch:jvm_memory_usage:ratio
+    expr: (jvm_memory_bytes_used{area="heap"} / jvm_memory_bytes_max{area="heap"})
+  - record: opensearch:thread_pool_rejected:rate5m
+    expr: rate(opensearch_thread_pool_rejected_count[5m])
+  - record: opensearch:indexing_rate:rate5m
+    expr: rate(opensearch_indices_indexing_index_total[5m])
+  - record: opensearch:search_rate:rate5m
+    expr: rate(opensearch_indices_search_query_total[5m])
+
+- name: application_recording
+  interval: 1m
+  rules:
+  - record: http_request_duration_seconds:rate5m
+    expr: rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])
+  - record: http_requests_total:rate5m
+    expr: rate(http_requests_total[5m])
+  - record: http_5xx_errors:rate5m
+    expr: rate(http_requests_total{status=~"5.."}[5m])
+  - record: http_error_rate:ratio
+    expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m])

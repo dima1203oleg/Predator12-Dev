@@ -1,0 +1,206 @@
+# ============================================================================
+# Predator12 Local Development .gitignore
+# ============================================================================
+
+# ============
+# Python
+# ============
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+venv/
+.venv/
+venv-*/
+ENV/
+env/
+.env
+.env.local
+.env.*.local
+*.pyc
+*.pyo
+*.pyd
+
+# ============
+# Node.js
+# ============
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+yarn.lock
+.npm
+.yarn-integrity
+.cache
+dist/
+.next/
+out/
+
+# ============
+# IDE / Editors
+# ============
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ============
+# Logs / Temp
+# ============
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+logs/*
+!logs/.gitkeep
+*.pid
+celerybeat-schedule
+celerybeat.pid
+
+# ============
+# Database
+# ============
+*.db
+*.sqlite
+*.sqlite3
+*.sql.backup
+
+# ============
+# Reports / Status Files
+# ============
+*REPORT*.txt
+*STATUS*.txt
+*FINAL*.txt
+*COMPLETE*.txt
+*SUCCESS*.txt
+*ANALYSIS*.json
+*TEST*.json
+*RESULTS*.json
+DIAGNOSIS_RESULTS.json
+*_TIMESTAMP*
+.absolute-finale-timestamp
+
+# ============
+# Backups
+# ============
+backups/
+.backups/
+backup-*/
+*.backup/
+*.bak/
+
+# ============
+# Storage
+# ============
+local_storage/
+uploads/
+downloads/
+data/local/
+
+# ============
+# Docker / Containers (we're local now!)
+# ============
+docker-compose.override.yml
+docker-compose.*.yml
+!docker-compose.yml
+!docker-compose.prod.yml
+.docker/
+volumes/
+
+# ============
+# Kubernetes / Helm (parked)
+# ============
+helm/
+k8s/
+argocd/
+infra/containers/
+
+# ============
+# AI / ML Models
+# ============
+*.h5
+*.pkl
+*.pt
+*.pth
+*.onnx
+*.pb
+models/local/
+checkpoints/
+
+# ============
+# Emoji Files (auto-generated reports)
+# ============
+🎉*
+🎊*
+🎯*
+🏆*
+🐳*
+📋*
+🔄*
+🔍*
+🚀*
+🧪*
+*_ABSOLUTE_*
+*_ULTIMATE_*
+*_REVOLUTIONARY_*
+
+# ============
+# Testing
+# ============
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+pytest.ini
+
+# ============
+# OS Specific
+# ============
+.DS_Store
+Thumbs.db
+Desktop.ini
+.Spotlight-V100
+.Trashes
+
+# ============
+# Misc
+# ============
+*.pyc
+*.class
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.dll
+*.out
+.vagrant/
+.sass-cache/

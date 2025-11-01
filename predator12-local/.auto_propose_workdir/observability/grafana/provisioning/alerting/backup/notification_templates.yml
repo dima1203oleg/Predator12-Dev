@@ -1,0 +1,91 @@
+templates:
+  - name: default_template
+    template: |
+      {{ define "alert_severity_prefix" }}
+      {{- if eq .Status "firing" -}}
+      {{- if eq .CommonLabels.severity "critical" -}}
+      🔴 [CRITICAL]
+      {{- else if eq .CommonLabels.severity "warning" -}}
+      🟡 [WARNING]
+      {{- else -}}
+      ℹ️ [INFO]
+      {{- end }}
+      {{- else -}}
+      ✅ [RESOLVED]
+      {{- end }}
+      {{- end }}
+
+      {{ define "slack.title" }}
+      {{ template "alert_severity_prefix" . }} {{ .CommonAnnotations.summary | title }}
+      {{ end }}
+
+      {{ define "slack.text" }}
+      {{ if gt (len .Alerts.Firing) 0 -}}
+      *Alerts Firing*: {{ .Alerts.Firing | len }}
+      {{ range .Alerts.Firing -}}
+      • *Alert:* {{ .Labels.alertname }}
+        *Severity:* {{ .Labels.severity | title }}
+        *Summary:* {{ .Annotations.summary }}
+        *Description:* {{ .Annotations.description }}
+        *Details:* {{ .GeneratorURL }}
+      {{ end }}
+      {{ end }}
+
+      {{ if gt (len .Alerts.Resolved) 0 -}}
+      *Alerts Resolved*: {{ .Alerts.Resolved | len }}
+      {{ range .Alerts.Resolved -}}
+      • *Alert:* {{ .Labels.alertname }}
+        *Resolved at:* {{ .StartsAt | time.Format "2006-01-02 15:04:05 UTC" }}
+      {{ end }}
+      {{ end }}
+      {{ end }}
+
+      {{ define "email.html" }}
+      <!DOCTYPE html>
+      <html>
+      <head>
+          <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; }
+              .header { background-color: #f8f9fa; padding: 10px; margin-bottom: 20px; }
+              .alert { border-left: 4px solid #f1c40f; padding: 10px; margin: 10px 0; }
+              .alert.critical { border-left-color: #e74c3c; }
+              .alert.warning { border-left-color: #f39c12; }
+              .alert.resolved { border-left-color: #2ecc71; }
+              .label { font-weight: bold; }
+              .value { color: #7f8c8d; }
+              a { color: #3498db; text-decoration: none; }
+          </style>
+      </head>
+      <body>
+          <div class="header">
+              <h2>{{ template "alert_severity_prefix" . }} {{ .CommonAnnotations.summary | title }}</h2>
+          </div>
+
+          {{ if gt (len .Alerts.Firing) 0 }}
+          <h3>Firing Alerts ({{ .Alerts.Firing | len }})</h3>
+          {{ range .Alerts.Firing }}
+          <div class="alert {{ .Labels.severity }}">
+              <h4>{{ .Labels.alertname }}</h4>
+              <p><span class="label">Status:</span> <span class="value">{{ .Status | toUpper }}</span></p>
+              <p><span class="label">Severity:</span> <span class="value">{{ .Labels.severity | title }}</span></p>
+              <p><span class="label">Summary:</span> {{ .Annotations.summary }}</p>
+              <p><span class="label">Description:</span> {{ .Annotations.description }}</p>
+              <p><a href="{{ .GeneratorURL }}">View in Grafana</a></p>
+          </div>
+          {{ end }}
+          {{ end }}
+
+          {{ if gt (len .Alerts.Resolved) 0 }}
+          <h3>Resolved Alerts ({{ .Alerts.Resolved | len }})</h3>
+          {{ range .Alerts.Resolved }}
+          <div class="alert resolved">
+              <h4>{{ .Labels.alertname }}</h4>
+              <p><span class="label">Status:</span> <span class="value">{{ .Status | toUpper }}</span></p>
+              <p><span class="label">Resolved at:</span> <span class="value">{{ .EndsAt | time.Format "2006-01-02 15:04:05 UTC" }}</span></p>
+              <p><a href="{{ .GeneratorURL }}">View in Grafana</a></p>
+          </div>
+          {{ end }}
+          {{ end }}
+      </body>
+      </html>
+      {{ end }}

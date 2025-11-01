@@ -1,0 +1,13 @@
+{
+  "mappings": {
+    "properties": {
+      "Номер митної декларації": {"type": "keyword"},
+      "ЄДРПОУ одержувача": {"type": "keyword"},
+      "Код товару": {"type": "keyword"},
+      "Опис товару": {"type": "text", "fields": {"keyword": {"type": "keyword"}}},
+      "Торгуюча країна": {"type": "keyword"},
+      "Країна походження": {"type": "keyword"},
+      "Дата оформлення": {"type": "date", "format": "dd.MM.yy||yyyy-MM-dd"}
+    }
+  }
+}

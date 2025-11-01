@@ -1,0 +1,99 @@
+# Auto-generation dataset templates
+# Each entry defines how to materialize a dataset end-to-end
+
+datasets:
+  - id: customs_daily
+    source: s3://minio/customs/raw/
+    schedule: "0 2 * * *"
+    expectations: basic_suite
+    output:
+      opensearch_index_prefix: customs_safe
+      opensearch_alias: customs_safe_current
+      qdrant_collection: customs_vectors
+      partition_by: ["ts::day"]
+    pii_policy: safe
+
+  - id: customs_restricted
+    source: s3://minio/customs/restricted/
+    schedule: "0 */6 * * *"
+    expectations: basic_suite
+    output:
+      opensearch_index_prefix: customs_restricted
+      opensearch_alias: customs_restricted_current
+      qdrant_collection: customs_restricted_vectors
+    pii_policy: restricted
+
+  - id: osint_telegram_daily
+    source: tg://channels/list.yaml
+    schedule: "*/30 * * * *"
+    expectations: osint_suite
+    output:
+      opensearch_index_prefix: osint_messages
+      opensearch_alias: osint_messages_current
+      qdrant_collection: osint_text_embeddings
+      partition_by: ["ts::day"]
+    pii_policy: safe
+
+  - id: anomalies_trade_routes
+    source: pg://stg_trade_routes
+    schedule: "0 */6 * * *"
+    expectations: anomaly_inputs
+    output:
+      opensearch_index_prefix: anomalies_routes
+      opensearch_alias: anomalies_routes_current
+    pii_policy: safe
+
+  - id: forecast_hs_country_monthly
+    source: pg://gold_fact_imports
+    schedule: "0 1 * * *"
+    expectations: forecast_inputs
+    output:
+      opensearch_index_prefix: forecast_imports
+      opensearch_alias: forecast_imports_current
+    pii_policy: safe
+
+  - id: graph_company_person_event
+    source: mixed://osint+customs
+    schedule: "0 */12 * * *"
+    expectations: graph_inputs
+    output:
+      opensearch_index_prefix: graph_entities
+      opensearch_alias: graph_entities_current
+      qdrant_collection: graph_embeddings
+    pii_policy: safe
+
+  - id: new_co_spike_imports
+    source: pg://gold_fact_imports
+    schedule: "0 3 * * *"
+    expectations: quality_suite
+    output:
+      opensearch_index_prefix: customs_safe_newco_spike
+      opensearch_alias: customs_safe_newco_spike_current
+    pii_policy: safe
+
+  - id: restricted_exports_audit
+    source: s3://minio/exports/restricted/
+    schedule: "0 4 * * *"
+    expectations: restricted_suite
+    output:
+      opensearch_index_prefix: exports_restricted
+      opensearch_alias: exports_restricted_current
+    pii_policy: restricted
+
+  - id: osint_web_rss
+    source: rss://feeds.yaml
+    schedule: "*/15 * * * *"
+    expectations: osint_suite
+    output:
+      opensearch_index_prefix: osint_rss
+      opensearch_alias: osint_rss_current
+    pii_policy: safe
+
+  - id: compliance_pii_audit
+    source: pg://audit_pii_access
+    schedule: "*/10 * * * *"
+    expectations: audit_suite
+    output:
+      opensearch_index_prefix: audit_pii_access
+      opensearch_alias: audit_pii_access_current
+    pii_policy: restricted

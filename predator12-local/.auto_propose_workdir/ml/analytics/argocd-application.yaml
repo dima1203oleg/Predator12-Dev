@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mas-backend
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/your-org/PredatorAnalytics.git'
+    targetRevision: HEAD
+    path: helm/mas-backend
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: mas
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+  info:
+    - name: 'Maintainer'
+      value: 'DevOps Team'
+    - name: 'GitOps'
+      value: 'ArgoCD'

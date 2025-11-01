@@ -1,0 +1,67 @@
+name: Predator Ops
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        required: true
+        type: choice
+        options: [helm-deploy, enable-autoheal, run-local-daemon]
+      env:
+        required: true
+        type: choice
+        options: [dev, stage]
+permissions:
+  contents: write
+  id-token: write
+  actions: read
+jobs:
+  guardrails:
+    runs-on: ubuntu-latest
+    outputs:
+      ok: ${{ steps.check.outputs.ok }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install deps for validator
+        run: python -m pip install pyyaml
+      - name: Validate permissions
+        id: check
+        run: |
+          python3 scripts/validate_permissions.py "${{ github.event.inputs.action }}" "${{ github.event.inputs.env }}"
+  helm_deploy:
+    if: ${{ github.event.inputs.action == 'helm-deploy' }}
+    runs-on: ubuntu-latest
+    needs: guardrails
+    steps:
+      - uses: actions/checkout@v4
+      - name: Auth to Vault (OIDC)
+        uses: hashicorp/vault-action@v3
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          method: jwt
+          role: ops-bot
+      - name: Pull kubeconfig from Vault
+        run: |
+          vault kv get -field=kubeconfig kv/kube/ctx-${{ github.event.inputs.env }} > kubeconfig
+      - name: Helm deploy via ArgoCD CLI
+        run: |
+          ./scripts/opsctl helm-deploy --env ${{ github.event.inputs.env }} --kube kubeconfig
+  autoheal:
+    if: ${{ github.event.inputs.action == 'enable-autoheal' }}
+    runs-on: ubuntu-latest
+    needs: guardrails
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply autoheal rollout/hpa
+        run: ./scripts/opsctl enable-autoheal --env ${{ github.event.inputs.env }}
+  run_local:
+    if: ${{ github.event.inputs.action == 'run-local-daemon' }}
+    runs-on: ubuntu-latest
+    needs: guardrails
+    steps:
+      - uses: actions/checkout@v4
+      - name: Emit instructions for local runner
+        run: ./scripts/opsctl run-local-daemon --env ${{ github.event.inputs.env }}

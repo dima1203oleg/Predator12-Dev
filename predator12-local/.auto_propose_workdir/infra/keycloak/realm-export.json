@@ -1,0 +1,77 @@
+{
+  "realm": "predator-analytics",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "frontend",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "redirectUris": ["http://localhost:3000/*", "https://predator.example.com/*"],
+      "webOrigins": ["*"]
+    },
+    {
+      "clientId": "api-gateway",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "clientAuthenticatorType": "client-secret",
+      "secret": "api-gateway-secret",
+      "serviceAccountsEnabled": true
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "admin",
+        "description": "Full access to all resources"
+      },
+      {
+        "name": "operator",
+        "description": "Manage infrastructure and deployments"
+      },
+      {
+        "name": "analyst",
+        "description": "Access to analytics and reports"
+      },
+      {
+        "name": "client_paid",
+        "description": "Paid client with access to unmasked data"
+      },
+      {
+        "name": "client_gov",
+        "description": "Government client with full access"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123"
+        }
+      ],
+      "realmRoles": ["admin"]
+    }
+  ],
+  "groups": [
+    {
+      "name": "admins",
+      "realmRoles": ["admin"]
+    },
+    {
+      "name": "operators",
+      "realmRoles": ["operator"]
+    },
+    {
+      "name": "analysts",
+      "realmRoles": ["analyst"]
+    },
+    {
+      "name": "clients",
+      "realmRoles": ["client_paid", "client_gov"]
+    }
+  ]
+}

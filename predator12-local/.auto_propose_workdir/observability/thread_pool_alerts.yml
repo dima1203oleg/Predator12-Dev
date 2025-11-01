@@ -1,0 +1,29 @@
+groups:
+- name: thread-pool-alerts
+  rules:
+  - alert: ThreadPoolOverloaded
+    expr: thread_pool_current_load > 0.9
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Пул потоків перевантажено"
+      description: "Навантаження {{ $value }} > 90% протягом 5 хв"
+
+  - alert: ThreadPoolUnderutilized
+    expr: thread_pool_current_load < 0.2
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Пул потоків недостатньо використовується"
+      description: "Навантаження {{ $value }} < 20% протягом 15 хв"
+
+  - alert: ThreadPoolSaturated
+    expr: thread_pool_queued > 20
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Черга пулу переповнена"
+      description: "{{ $value }} запитів в черзі"

@@ -1,0 +1,35 @@
+apiVersion: 1
+
+# Alertmanager configuration for Grafana
+# This file is used to configure the Alertmanager integration in Grafana
+
+alertmanagers:
+  - name: alertmanager
+    # URL of the Alertmanager instance
+    url: http://alertmanager:9093
+    # Path to the Alertmanager API
+    path_prefix: /
+    # Scheme to use when making requests to the Alertmanager instance
+    scheme: http
+    # Timeout for requests to the Alertmanager instance
+    timeout: 10s
+    # Additional HTTP headers to include in requests to the Alertmanager instance
+    http_header: {}
+    # Whether to use the Alertmanager API v2
+    api_version: v2
+
+# List of Alertmanager configurations to import
+alertmanager_configs:
+  - name: alertmanager
+    # URL of the Alertmanager instance
+    url: http://alertmanager:9093
+    # Path to the Alertmanager API
+    path_prefix: /
+    # Scheme to use when making requests to the Alertmanager instance
+    scheme: http
+    # Timeout for requests to the Alertmanager instance
+    timeout: 10s
+    # Additional HTTP headers to include in requests to the Alertmanager instance
+    http_header: {}
+    # Whether to use the Alertmanager API v2
+    api_version: v2

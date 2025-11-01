@@ -1,0 +1,32 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: git-push-template
+spec:
+  params:
+    - name: git-url
+    - name: revision
+    - name: git-repo-fullname
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: build-and-scan-run-
+      spec:
+        pipelineRef:
+          name: build-and-scan
+        params:
+          - name: git-url
+            value: "$(tt.params.git-url)"
+          - name: revision
+            value: "$(tt.params.revision)"
+          - name: image
+            value: "registry.example.com/$(tt.params.git-repo-fullname):$(tt.params.revision)"
+          - name: manifests-repo
+            value: "git@github.com:org/manifests-repo.git"
+          - name: manifests-branch
+            value: "main"
+        workspaces:
+          - name: shared-workspace
+            persistentVolumeClaim:
+              claimName: tekton-workspace-pvc

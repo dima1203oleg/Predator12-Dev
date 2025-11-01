@@ -1,0 +1,308 @@
+# ═══════════════════════════════════════════════════════════════════════════════════
+#                    🤖 OPTIMIZED AGENT MODELS REGISTRY 🤖
+#                      58 Free Models Specialized Distribution
+#                         Predator Analytics Nexus Core
+# ═══════════════════════════════════════════════════════════════════════════════════
+
+agents:
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #                           🔍 DATA & ANALYTICS AGENTS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  AnomalyAgent:
+    # Спеціалізація: Виявлення аномалій, статистичний аналіз, ML детекція
+    primary_model: deepseek/deepseek-r1  # Найкращий для аналітичних задач
+    fallback_models:
+      - deepseek/deepseek-v3-0324      # Backup DeepSeek
+      - microsoft/phi-4-reasoning       # Логічні міркування
+      - mistral-ai/mistral-large-2411   # Потужна модель
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - deepseek/deepseek-r1-0528      # Експериментальна версія
+      - openai/o1                      # Reasoning для складних аномалій
+      - openai/o1-mini                 # Швидка детекція
+
+  ForecastAgent:
+    # Спеціалізація: Прогнозування, часові ряди, тренд аналіз
+    primary_model: mistral-ai/mistral-large-2411  # Потужна для прогнозів
+    fallback_models:
+      - meta/meta-llama-3.1-405b-instruct  # Найбільша модель для складних прогнозів
+      - openai/gpt-5                       # Найновіша OpenAI
+      - microsoft/phi-4                    # Нова Phi-4
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - mistral-ai/mistral-medium-2505     # Середня потужність
+      - openai/o3                          # Найновіша reasoning
+      - xai/grok-3                         # Альтернативна потужна модель
+
+  GraphIntelligenceAgent:
+    # Спеціалізація: Граф аналіз, мережевий аналіз, топологія
+    primary_model: microsoft/phi-4-reasoning  # Ідеальна для графів
+    fallback_models:
+      - meta/llama-3.3-70b-instruct       # Потужна Llama
+      - mistral-ai/mistral-large-2411     # Backup
+      - deepseek/deepseek-r1              # Аналітична
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - microsoft/phi-4-multimodal-instruct # Мультимодальний аналіз
+      - meta/llama-4-maverick-17b-128e-instruct-fp8 # Спеціалізована Llama-4
+      - openai/gpt-4.1                    # Покращена GPT-4
+
+  DatasetAgent:
+    # Спеціалізація: Обробка даних, ETL, структурування
+    primary_model: microsoft/phi-4-reasoning
+    fallback_models:
+      - openai/gpt-4o                     # Multimodal для різних форматів
+      - cohere/cohere-command-r-plus-08-2024  # Потужна Cohere
+      - meta/meta-llama-3.1-8b-instruct  # Ефективна
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - microsoft/phi-3.5-vision-instruct # Для візуальних даних
+      - openai/gpt-4.1-mini              # Швидка обробка
+      - mistral-ai/codestral-2501         # Для структурованих даних
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #                           🛡️ SECURITY & OPERATIONS AGENTS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  SecurityAgent:
+    # Спеціалізація: Безпека, загрози, вразливості
+    primary_model: microsoft/phi-4-reasoning  # Логічний аналіз загроз
+    fallback_models:
+      - deepseek/deepseek-r1              # Глибокий аналіз
+      - openai/o1-preview                 # Reasoning для безпеки
+      - xai/grok-3                        # Альтернативна думка
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - microsoft/mai-ds-r1               # Microsoft AI для безпеки
+      - openai/o3-mini                    # Швидкий аналіз загроз
+      - mistral-ai/mistral-nemo           # Компактна але потужна
+
+  SelfHealingAgent:
+    # Спеціалізація: Самовідновлення, діагностика, автоматичне лікування
+    primary_model: openai/gpt-4o-mini     # Швидке реагування
+    fallback_models:
+      - mistral-ai/codestral-2501         # Код-орієнтована
+      - microsoft/phi-4-mini-reasoning    # Швидке міркування
+      - deepseek/deepseek-v3-0324         # Backup
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - microsoft/phi-3.5-moe-instruct    # Mixture of Experts
+      - openai/gpt-4.1-nano              # Мікро-модель для швидких дій
+      - mistral-ai/ministral-3b           # Легка модель
+
+  AutoImproveAgent:
+    # Спеціалізація: Самовдосконалення, оптимізація, навчання
+    primary_model: meta/meta-llama-3.1-405b-instruct  # Найпотужніша для навчання
+    fallback_models:
+      - openai/gpt-5                      # Найновіша GPT
+      - mistral-ai/mistral-large-2411     # Потужна альтернатива
+      - deepseek/deepseek-r1              # Reasoning для покращень
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - openai/o3                         # Найновіша reasoning
+      - microsoft/phi-4                   # Нова потужна модель
+      - xai/grok-3-mini                   # Компактна Grok
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #                           🎯 COORDINATION & MANAGEMENT AGENTS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  CoreOrchestrator:
+    # Спеціалізація: Координація, управління, оркестрація
+    primary_model: meta/meta-llama-3.1-405b-instruct  # Найпотужніша для координації
+    fallback_models:
+      - openai/gpt-5-chat                 # Чат-оптимізована GPT-5
+      - microsoft/phi-4-reasoning         # Логічна координація
+      - mistral-ai/mistral-large-2411     # Потужна альтернатива
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - openai/o1                         # Reasoning для рішень
+      - xai/grok-3                        # Альтернативний підхід
+      - deepseek/deepseek-r1              # Глибокий аналіз
+
+  NEXUS_SUPERVISOR:
+    # Спеціалізація: Верхньорівневий нагляд, стратегічні рішення
+    primary_model: meta/meta-llama-3.1-405b-instruct  # Найпотужніша
+    fallback_models:
+      - openai/gpt-5                      # Стратегічне планування
+      - openai/o3                         # Найновіша reasoning
+      - mistral-ai/mistral-large-2411     # Backup
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - openai/o1-preview                 # Прев'ю функції
+      - microsoft/phi-4                   # Нова потужна
+      - deepseek/deepseek-r1-0528         # Експериментальна
+
+  ArbiterAgent:
+    # Спеціалізація: Арбітраж, конфлікт-резолюція, рішення
+    primary_model: openai/o1               # Найкраща для reasoning
+    fallback_models:
+      - microsoft/phi-4-reasoning         # Логічні міркування
+      - deepseek/deepseek-r1              # Глибокий аналіз
+      - meta/llama-3.3-70b-instruct      # Збалансована
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - openai/o1-mini                    # Швидкі рішення
+      - openai/o4-mini                    # Найновіша міні
+      - xai/grok-3-mini                   # Альтернативна думка
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #                           🔍 SEARCH & ANALYSIS AGENTS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  OSINTAgent:
+    # Спеціалізація: Open Source Intelligence, пошук, збір інформації
+    primary_model: meta/meta-llama-3.1-8b-instruct  # Ефективна для пошуку
+    fallback_models:
+      - cohere/cohere-command-r-08-2024   # Command для пошуку
+      - microsoft/phi-3-medium-128k-instruct # Великий контекст
+      - openai/gpt-4o                     # Multimodal OSINT
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - meta/llama-3.2-90b-vision-instruct # Візуальний OSINT
+      - microsoft/phi-3.5-vision-instruct # Аналіз зображень
+      - meta/llama-4-scout-17b-16e-instruct # Розвідувальна
+
+  SearchPlannerAgent:
+    # Спеціалізація: Планування пошуку, стратегія пошуку
+    primary_model: microsoft/phi-4-reasoning
+    fallback_models:
+      - cohere/cohere-command-a           # Command для планування
+      - mistral-ai/mistral-medium-2505    # Планувальні здібності
+      - openai/gpt-4.1                   # Покращене планування
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - microsoft/phi-3-small-128k-instruct # Великий контекст
+      - openai/gpt-5-mini                 # Швидке планування
+      - meta/llama-3.2-11b-vision-instruct # Візуальне планування
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #                           🚀 SPECIALIZED UTILITY AGENTS
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  RedTeamAgent:
+    # Спеціалізація: Ethical hacking, тестування на проникнення
+    primary_model: microsoft/phi-4-reasoning  # Логічний підхід до тестування
+    fallback_models:
+      - deepseek/deepseek-v3-0324         # Глибокий аналіз вразливостей
+      - openai/o1-mini                    # Швидкий аналіз загроз
+      - xai/grok-3-mini                   # Альтернативний погляд
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - microsoft/mai-ds-r1               # Microsoft спеціалізована
+      - deepseek/deepseek-r1              # Дослідницька модель
+      - core42/jais-30b-chat             # Арабська модель для різноманітності
+
+  ModelRouterAgent:
+    # Спеціалізація: Маршрутизація моделей, оптимізація вибору
+    primary_model: microsoft/phi-4-reasoning
+    fallback_models:
+      - openai/gpt-4o-mini               # Швидкий роутинг
+      - mistral-ai/ministral-3b          # Легка для роутингу
+      - meta/meta-llama-3.1-8b-instruct # Ефективна
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - microsoft/phi-3.5-mini-instruct  # Компактна
+      - openai/gpt-4.1-nano             # Нано для швидкості
+      - openai/gpt-5-nano               # Найновіша нано
+
+  ReportExportAgent:
+    # Спеціалізація: Генерація звітів, експорт, форматування
+    primary_model: openai/gpt-4o-mini     # Ефективна для тексту
+    fallback_models:
+      - microsoft/phi-4-mini-instruct    # Компактна для звітів
+      - mistral-ai/mistral-small-2503    # Мала але якісна
+      - cohere/cohere-command-r-08-2024  # Command для документів
+    embedding_model: cohere/cohere-embed-v3-multilingual
+    specialized_models:
+      - microsoft/phi-3-medium-4k-instruct # Середня з контекстом
+      - openai/text-embedding-3-large    # Для семантичного пошуку
+      - openai/text-embedding-3-small    # Компактні embedding'и
+
+# ═══════════════════════════════════════════════════════════════════════════════════
+#                              🎯 MODEL OPTIMIZATION CONFIG
+# ═══════════════════════════════════════════════════════════════════════════════════
+
+model_optimization:
+  # Розподіл навантаження за потужністю
+  high_performance:
+    - meta/meta-llama-3.1-405b-instruct  # Найпотужніша
+    - openai/gpt-5                       # Найновіша GPT
+    - mistral-ai/mistral-large-2411      # Потужна Mistral
+    - deepseek/deepseek-r1               # Reasoning
+    - openai/o3                          # Найновіша O-серія
+
+  medium_performance:
+    - microsoft/phi-4                    # Нова Phi-4
+    - meta/llama-3.3-70b-instruct       # Середня Llama
+    - openai/gpt-4.1                    # Покращена GPT-4
+    - xai/grok-3                        # Потужна Grok
+    - mistral-ai/mistral-medium-2505     # Середня Mistral
+
+  fast_response:
+    - openai/gpt-4o-mini               # Швидка GPT
+    - microsoft/phi-4-mini-instruct    # Компактна Phi
+    - mistral-ai/ministral-3b          # Легка Mistral
+    - openai/o1-mini                   # Швидка O-серія
+    - microsoft/phi-3.5-mini-instruct  # Міні Phi
+
+  specialized_tasks:
+    vision:
+      - meta/llama-3.2-90b-vision-instruct
+      - microsoft/phi-3.5-vision-instruct
+      - meta/llama-3.2-11b-vision-instruct
+      - microsoft/phi-4-multimodal-instruct
+
+    code:
+      - mistral-ai/codestral-2501
+      - microsoft/mai-ds-r1
+      - deepseek/deepseek-v3-0324
+
+    embedding:
+      - cohere/cohere-embed-v3-multilingual
+      - cohere/cohere-embed-v3-english
+      - openai/text-embedding-3-large
+      - openai/text-embedding-3-small
+
+# ═══════════════════════════════════════════════════════════════════════════════════
+#                                🔄 FALLBACK STRATEGY
+# ═══════════════════════════════════════════════════════════════════════════════════
+
+fallback_strategy:
+  # Стратегія перемикання при недоступності моделі
+  primary_failure: fallback_models
+  fallback_failure: specialized_models
+  all_failure: basic_models
+
+  basic_models:
+    - openai/gpt-4o-mini              # Надійна базова
+    - microsoft/phi-3-mini-128k-instruct # Стабільна
+    - meta/meta-llama-3.1-8b-instruct # Ефективна
+    - mistral-ai/ministral-3b         # Легка
+
+# ═══════════════════════════════════════════════════════════════════════════════════
+#                               📊 USAGE STATISTICS
+# ═══════════════════════════════════════════════════════════════════════════════════
+
+usage_tracking:
+  total_models: 58
+  models_per_agent:
+    primary: 1
+    fallback: 3-4
+    specialized: 3-6
+
+  distribution_by_provider:
+    openai: 14        # 24.1%
+    microsoft: 13     # 22.4%
+    meta: 8           # 13.8%
+    mistral: 6        # 10.3%
+    deepseek: 4       # 6.9%
+    cohere: 5         # 8.6%
+    xai: 2            # 3.4%
+    ai21: 2           # 3.4%
+    core42: 1         # 1.7%
+
+  coverage: 100%     # Всі 58 моделей використовуються
+  redundancy: high   # Множинні fallback опції
+  specialization: optimized  # Моделі підібрані за спеціалізацією

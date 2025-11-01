@@ -1,0 +1,39 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: kaniko-build
+spec:
+  params:
+    - name: image
+  steps:
+    - name: build
+      image: gcr.io/kaniko-project/executor:latest
+      script: |
+        #!/busybox/sh
+        set -e
+        echo "Kaniko build for image: $(params.image)"
+        /kaniko/executor --context . --destination $(params.image) --insecure || exit 1
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: kaniko-build
+spec:
+  params:
+    - name: IMAGE
+      type: string
+    - name: CONTEXT
+      type: string
+      default: "."
+    - name: DOCKERFILE
+      type: string
+      default: "Dockerfile"
+  workspaces:
+    - name: source
+  steps:
+    - name: kaniko
+      image: gcr.io/kaniko-project/executor:latest
+      env:
+        - name: DOCKER_CONFIG
+          value: /kaniko/.docker
+      script: |
+        /kaniko/executor --context $(workspaces.source.path)/$(params.CONTEXT) --dockerfile $(workspaces.source.path)/$(params.DOCKERFILE) --destination=$(params.IMAGE) --verbosity=info

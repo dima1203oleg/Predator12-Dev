@@ -1,0 +1,13 @@
+{
+  "argoServer": "https://argocd.example.com",
+  "appName": "predator",
+  "workflowPath": ".github/workflows/prod.yml",
+  "checkCriteria": {
+    "minUptimePct": 99,
+    "maxLatencyMs": 500,
+    "maxCpuPct": 70
+  },
+  "secrets": {
+    "argocdTokenKey": "ARGO_AUTH_TOKEN"
+  }
+}

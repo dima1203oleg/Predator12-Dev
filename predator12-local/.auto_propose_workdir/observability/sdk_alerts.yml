@@ -1,0 +1,32 @@
+groups:
+- name: sdk-router-alerts
+  rules:
+  - alert: ModelRouterFailuresHigh
+    expr: 100 * (sum(rate(model_router_requests_total{status="failure"}[5m])) / sum(rate(model_router_requests_total[5m]))) > 5
+    for: 10m
+    labels:
+      severity: warning
+      team: platform
+    annotations:
+      summary: "Model Router failures >5% over 10m"
+      description: "Investigate SDK errors, provider limits, network timeouts."
+
+  - alert: ModelRouterRetriesSurge
+    expr: sum(rate(model_router_retries_total[5m])) > 5
+    for: 10m
+    labels:
+      severity: warning
+      team: platform
+    annotations:
+      summary: "Model Router retry surge (>5/min)"
+      description: "Increased retries indicate upstream instability or rate limits."
+
+  - alert: ModelRouterFallbacksSpike
+    expr: sum(rate(model_router_fallbacks_total[5m])) > 3
+    for: 10m
+    labels:
+      severity: info
+      team: platform
+    annotations:
+      summary: "Model Router fallbacks spike (>3/min)"
+      description: "Frequent fallbacks; monitor provider health and quotas."

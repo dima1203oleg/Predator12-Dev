@@ -1,0 +1,141 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: predator-analytics-ci
+spec:
+  workspaces:
+    - name: shared-workspace
+    - name: dockerconfig
+  params:
+    - name: git-url
+      type: string
+      description: Git repository URL
+    - name: git-revision
+      type: string
+      description: Git revision to build
+      default: main
+    - name: image-registry
+      type: string
+      description: Registry where image should be pushed
+    - name: image-tag
+      type: string
+      description: Tag to apply to the built image
+      default: latest
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+        - name: depth
+          value: "1"
+        - name: subdirectory
+          value: ""
+
+    - name: run-tests
+      taskRef:
+        name: pytest
+      runAfter:
+        - fetch-repository
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: PYTHON
+          value: "python3"
+        - name: ARGS
+          value:
+            - "-xvs"
+            - "backend-api/tests/"
+
+    - name: run-security-scan
+      taskRef:
+        name: trivy-scanner
+      runAfter:
+        - fetch-repository
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: ARGS
+          value:
+            - "fs"
+            - "--security-checks"
+            - "vuln,config,secret"
+            - "--severity"
+            - "HIGH,CRITICAL"
+            - "."
+
+    - name: build-api-image
+      taskRef:
+        name: kaniko
+      runAfter:
+        - run-tests
+        - run-security-scan
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: dockerconfig
+          workspace: dockerconfig
+      params:
+        - name: IMAGE
+          value: $(params.image-registry)/predator-api:$(params.image-tag)
+        - name: CONTEXT
+          value: backend-api/fastapi_app
+        - name: DOCKERFILE
+          value: Dockerfile
+
+    - name: build-frontend-image
+      taskRef:
+        name: kaniko
+      runAfter:
+        - run-tests
+        - run-security-scan
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+        - name: dockerconfig
+          workspace: dockerconfig
+      params:
+        - name: IMAGE
+          value: $(params.image-registry)/predator-frontend:$(params.image-tag)
+        - name: CONTEXT
+          value: frontend-ui/app
+        - name: DOCKERFILE
+          value: Dockerfile
+
+    - name: update-helm-values
+      taskRef:
+        name: helm-updater
+      runAfter:
+        - build-api-image
+        - build-frontend-image
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: CHART_PATH
+          value: orchestration-cicd/helm
+        - name: VALUES_FILE
+          value: values-prod.yaml
+        - name: IMAGE_TAG
+          value: $(params.image-tag)
+
+    - name: trigger-argocd-sync
+      taskRef:
+        name: argocd-task-sync-and-wait
+      runAfter:
+        - update-helm-values
+      params:
+        - name: application-name
+          value: predator-analytics
+        - name: flags
+          value: --insecure
+        - name: argocd-version
+          value: v2.5.0

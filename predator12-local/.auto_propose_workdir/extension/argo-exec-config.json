@@ -1,0 +1,7 @@
+{
+  "argoServer": "https://argocd.example.com",
+  "argoAppName": "predator",
+  "githubWorkflowPath": ".github/workflows/prod.yml",
+  "manifestsRepo": "../predator-manifests",
+  "prodTag": "prod-stable"
+}

@@ -1,0 +1,67 @@
+[tool.poetry]
+name = "predator-backend"
+version = "0.1.0"
+description = "Backend API for Predator Analytics with AI/ML capabilities"
+authors = ["Predator Team <team@predator.com>"]
+packages = [{include = "fastapi_app"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.104.1"
+uvicorn = "^0.24.0"
+pydantic = "^2.5.0"
+sqlalchemy = "^2.0.23"
+psycopg2-binary = "^2.9.9"
+redis = "^5.0.1"
+celery = "^5.3.4"
+langchain = "^0.1.0"
+langchain-community = "^0.0.10"
+qdrant-client = "^1.6.9"
+mlflow = "^2.9.2"
+openai = "^1.3.7"
+pandas = "^2.1.4"
+numpy = "^1.24.0"
+polars = "^0.20.0"
+pyarrow = "^17.0.0"
+great-expectations = "^0.18.0"
+pydantic-settings = "^2.1.0"
+sentence-transformers = "^2.2.2"
+scikit-learn = "^1.3.2"
+transformers = "^4.35.2"
+torch = "^2.1.1"
+faiss-cpu = "^1.7.4"
+pymongo = "^4.6.1"
+elasticsearch = "^8.11.0"
+opensearch-py = "^2.4.2"
+minio = "^7.2.0"
+kafka-python = "^2.0.2"
+pika = "^1.3.2"
+python-keycloak = "^3.0.0"
+hvac = "^2.1.0"
+prometheus-client = "^0.19.0"
+jaeger-client = "^4.8.0"
+opentelemetry-distro = "^0.43b0"
+opentelemetry-instrumentation-fastapi = "^0.43b0"
+openpyxl = "^3.1.5"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+black = "^23.11.0"
+isort = "^5.12.0"
+ruff = "^0.6.2"
+mypy = "^1.10.0"
+pytest-asyncio = "^0.23.8"
+pytest-cov = "^5.0.0"
+types-requests = "^2.32.0.20240906"
+
+[tool.ruff]
+select = ["E", "F", "I", "B", "UP", "FA", "PIE"]
+line-length = 100
+src = ["fastapi_app"]
+
+[tool.black]
+line-length = 100
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

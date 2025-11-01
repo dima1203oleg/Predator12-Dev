@@ -1,0 +1,38 @@
+{
+  "policy": {
+    "description": "ISM for analytics indices (forecast, graph) with hot->warm->cold",
+    "default_state": "hot",
+    "states": [
+      {
+        "name": "hot",
+        "actions": [
+          { "rollover": { "min_size": "15gb", "min_index_age": "7d" } }
+        ],
+        "transitions": [
+          { "state_name": "warm", "conditions": { "min_index_age": "21d" } }
+        ]
+      },
+      {
+        "name": "warm",
+        "actions": [
+          { "replica_count": { "number_of_replicas": 1 } },
+          { "index_priority": { "priority": 30 } }
+        ],
+        "transitions": [
+          { "state_name": "cold", "conditions": { "min_index_age": "60d" } }
+        ]
+      },
+      {
+        "name": "cold",
+        "actions": [
+          { "read_only": {} },
+          { "index_priority": { "priority": 0 } }
+        ],
+        "transitions": []
+      }
+    ],
+    "ism_template": [
+      { "index_patterns": ["forecast_*", "graph_*"], "priority": 80 }
+    ]
+  }
+}

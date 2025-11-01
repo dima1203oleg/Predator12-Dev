@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: manifest-update
+spec:
+  params:
+    - name: manifests-repo
+      type: string
+    - name: image
+      type: string
+    - name: revision
+      type: string
+      default: "main"
+  steps:
+    - name: clone-manifests
+      image: alpine/git
+      script: |
+        git clone --single-branch --branch $(params.revision) $(params.manifests-repo) /workspace/manifests
+        cd /workspace/manifests
+        git config user.email "ci-bot@example.com"
+        git config user.name "ci-bot"
+    - name: update-values
+      image: alpine
+      script: |
+        set -e
+        # naive replacement: update image tag in values.yaml files
+        find /workspace/manifests -type f -name "values*.yaml" -print0 | xargs -0 -n1 sed -i "s|image: .*|image: '$(params.image)'|g" || true
+        cd /workspace/manifests
+        git add .
+        git commit -m "chore: update images to $(params.image)" || echo "nothing to commit"
+        git push origin $(params.revision) || echo "push failed"

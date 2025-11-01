@@ -1,0 +1,24 @@
+{
+  "index_template": {
+    "name": "forecast_template",
+    "index_patterns": [
+      "forecast_*"
+    ],
+    "template": {
+      "settings": {
+        "number_of_shards": 2,
+        "number_of_replicas": 1,
+        "index": {
+          "routing": {
+            "allocation.include._tier_preference": "data_hot"
+          }
+        }
+      },
+      "mappings": {
+        "dynamic": true
+      },
+      "aliases": {}
+    },
+    "priority": 90
+  }
+}

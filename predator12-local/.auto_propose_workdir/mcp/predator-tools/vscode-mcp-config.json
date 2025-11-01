@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "predator-tools": {
+      "command": "npx",
+      "args": [
+        "ts-node",
+        "src/index.ts"
+      ],
+      "transport": "stdio",
+      "env": {
+        "PREDATOR_HOME": "/Users/dima/Projects/PredatorAnalytics",
+        "OPENAI_API_KEY": "${env:OPENAI_API_KEY}",
+        "OPENSEARCH_API_KEY": "${env:OPENSEARCH_API_KEY}"
+      },
+      "timeoutMs": 120000
+    }
+  }
+}

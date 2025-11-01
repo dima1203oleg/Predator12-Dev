@@ -1,0 +1,85 @@
+---
+name: "OpenSearch Red Status Recovery"
+description: "Відновлення OpenSearch при red cluster status"
+version: "1.0"
+triggers:
+  - alert: "OpenSearchClusterRed"
+  - cluster_health: "red"
+  - shard_allocation_failed: true
+
+steps:
+  - name: "Діагностика cluster стану"
+    type: "analysis"
+    actions:
+      - get_cluster_health: "/_cluster/health"
+      - get_allocation_explain: "/_cluster/allocation/explain"
+      - check_disk_space: "/usr/share/opensearch/data"
+      - get_indices_status: "/_cat/indices?v"
+    timeout: 60
+
+  - name: "Очищення неприсвоєних shards"
+    type: "shard_recovery"
+    condition: "unassigned_shards > 0"
+    actions:
+      - retry_allocation: "/_cluster/reroute?retry_failed=true"
+      - force_allocation: "unassigned_primary_shards"
+    timeout: 300
+
+  - name: "Звільнення дискового простору"
+    type: "cleanup"
+    condition: "disk_usage > 85%"
+    actions:
+      - delete_old_indices: "older_than_7_days"
+      - force_merge: "indices_with_many_segments"
+      - clear_cache: "/_cache/clear"
+    timeout: 600
+
+  - name: "Зменшення JVM heap"
+    type: "memory_optimization"
+    condition: "memory_usage > 90%"
+    actions:
+      - reduce_jvm_heap: "256m"
+      - restart_opensearch: true
+      - wait_for_green: 180
+    timeout: 300
+
+  - name: "Відключення реплік"
+    type: "replica_management"
+    condition: "insufficient_nodes"
+    actions:
+      - set_replicas: 0
+      - wait_for_yellow: 120
+    timeout: 180
+
+  - name: "Повний рестарт кластера"
+    type: "cluster_restart"
+    condition: "previous_steps_failed"
+    actions:
+      - stop_opensearch: true
+      - clear_cluster_state: "/usr/share/opensearch/data/nodes"
+      - start_opensearch: true
+      - wait_for_cluster: 300
+    timeout: 600
+
+recovery_policies:
+  data_loss_acceptable: false
+  max_downtime_minutes: 10
+  prioritize_availability: true
+
+monitoring:
+  post_recovery:
+    - cluster_health_check: "every_30_seconds_for_5_minutes"
+    - performance_baseline: "compare_with_pre_incident"
+    - alert_if_degraded: true
+
+notifications:
+  on_start:
+    - slack: "#ops"
+      message: "🔍 AutoHeal: Діагностика OpenSearch red status"
+  on_recovery:
+    - slack: "#ops"
+      message: "🟢 AutoHeal: OpenSearch повернуто до green status"
+  on_failure:
+    - slack: "#critical"
+      message: "🔴 AutoHeal: OpenSearch залишається в red status. Потрібна експертна допомога."
+    - page_oncall: true
