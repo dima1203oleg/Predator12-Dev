@@ -42,7 +42,12 @@ jobs:
           if [ ! -f ./scripts/tests/gitops_sync_dry_tests.sh ]; then
             ln -sf ../gitops_sync_dry_tests.sh ./scripts/tests/gitops_sync_dry_tests.sh || true
           fi
-          chmod +x ./scripts/gitops_sync_dry_tests.sh ./scripts/tests/gitops_sync_dry_tests.sh || true
+          if [ -f ./scripts/gitops_sync_dry_tests.sh ]; then
+            chmod +x ./scripts/gitops_sync_dry_tests.sh || true
+          fi
+          if [ -f ./scripts/tests/gitops_sync_dry_tests.sh ]; then
+            chmod +x ./scripts/tests/gitops_sync_dry_tests.sh || true
+          fi
 
       - name: "Defensive: ensure full checkout, submodules and shims"
         run: |
@@ -59,12 +64,17 @@ jobs:
               ln -sf ./gitops_sync_dry_tests.sh ./scripts/tests/gitops_sync_dry_tests.sh || true
             else
               cat > ./scripts/tests/gitops_sync_dry_tests.sh <<'EOF' || true
-              #!/usr/bin/env bash
-              echo "[autodeploy shim] placeholder"; exit 0
-              EOF
+#!/usr/bin/env bash
+echo "[autodeploy shim] placeholder"; exit 0
+EOF
             fi
           fi
-          chmod +x ./scripts/gitops_sync_dry_tests.sh ./scripts/tests/gitops_sync_dry_tests.sh || true
+          if [ -f ./scripts/gitops_sync_dry_tests.sh ]; then
+            chmod +x ./scripts/gitops_sync_dry_tests.sh || true
+          fi
+          if [ -f ./scripts/tests/gitops_sync_dry_tests.sh ]; then
+            chmod +x ./scripts/tests/gitops_sync_dry_tests.sh || true
+          fi
 
       - name: Install deps
         run: |
