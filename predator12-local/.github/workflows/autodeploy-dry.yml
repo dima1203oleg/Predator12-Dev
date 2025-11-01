@@ -81,18 +81,20 @@ jobs:
           mkdir -p ./scripts/tests || true
           SHIM_PATH=./scripts/tests/gitops_sync_dry_tests.sh
           RAW_URL="https://raw.githubusercontent.com/dima1203oleg/Predator12-Dev/fix/manual-checkout/scripts/tests/gitops_sync_dry_tests.sh"
+          # Ensure a shim file exists before attempting chmod (defensive: create if missing)
           if [ ! -f "$SHIM_PATH" ]; then
-            # Try to download canonical shim from the test branch (fast path)
+            # Prefer downloading canonical shim; if unavailable, create a minimal non-blocking shim
             if curl -fsS -o "$SHIM_PATH" "$RAW_URL"; then
               echo "Downloaded shim from $RAW_URL"
             else
-              # No remote shim available (or download failed) — create a minimal non-blocking shim
               cat > "$SHIM_PATH" <<'EOF' || true
-#!/usr/bin/env bash
-echo "[autodeploy shim] placeholder"; exit 0
-EOF
+              #!/usr/bin/env bash
+              echo "[autodeploy shim] placeholder"; exit 0
+              EOF
+              chmod +x "$SHIM_PATH" || true
             fi
           fi
+          # Final ensure: chmod but tolerate errors
           chmod +x "$SHIM_PATH" || true
 
       - name: Install deps
