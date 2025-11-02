@@ -22,7 +22,7 @@ def run_command(cmd: List[str], cwd: Optional[Path] = None) -> tuple[int, str, s
         cwd=cwd,
         capture_output=True,
         text=True,
-        env={**os.environ, "PYTHONPATH": str(Path(__file__).parent.parent)}
+        env={**os.environ, "PYTHONPATH": str(Path(__file__).parent.parent)},
     )
     return result.returncode, result.stdout, result.stderr
 
@@ -32,16 +32,16 @@ def find_target_files(repo_root: Path, max_files: int = 5) -> List[Path]:
     # Priority files that are likely to need improvements
     priority_patterns = [
         "backend/app/agents/**/*.py",  # Agent implementations
-        "backend/app/**/*.py",         # Backend code
-        "frontend/src/**/*.ts",        # Frontend code
-        "scripts/**/*.py",             # Scripts
-        "agents/**/*.py",              # Agent code
+        "backend/app/**/*.py",  # Backend code
+        "frontend/src/**/*.ts",  # Frontend code
+        "scripts/**/*.py",  # Scripts
+        "agents/**/*.py",  # Agent code
     ]
 
     candidates = []
     for pattern in priority_patterns:
         for path in repo_root.glob(pattern):
-            if path.is_file() and not path.name.startswith('__'):
+            if path.is_file() and not path.name.startswith("__"):
                 candidates.append(path)
 
     # Sort by modification time (recently modified files first)
@@ -82,8 +82,11 @@ Files to analyze:
     try:
         # Run Aider with the prompt
         cmd = [
-            sys.executable, "-m", "aider",
-            "--message-file", str(prompt_file),
+            sys.executable,
+            "-m",
+            "aider",
+            "--message-file",
+            str(prompt_file),
             "--yes",  # Auto-approve changes
             "--no-git",  # Don't use git integration
             "--dark-mode",  # Better for automation
@@ -131,6 +134,7 @@ def generate_basic_patch(repo_root: Path) -> bool:
 
     # Add a timestamped note
     import datetime
+
     timestamp = datetime.datetime.utcnow().isoformat() + "Z"
     note = f"<!-- auto-suggestion: {timestamp} -->\n"
     new_content = note + content
@@ -146,8 +150,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="AI-powered patch generator")
     parser.add_argument("--target", help="Specific target file or directory")
     parser.add_argument("--max-files", type=int, default=3, help="Maximum files to analyze")
-    parser.add_argument("--method", choices=["aider", "continue", "basic"], default="aider",
-                       help="Generation method to use")
+    parser.add_argument(
+        "--method",
+        choices=["aider", "continue", "basic"],
+        default="aider",
+        help="Generation method to use",
+    )
     args = parser.parse_args()
 
     script_dir = Path(__file__).resolve().parent
@@ -162,7 +170,7 @@ def main() -> int:
         if target_path.is_file():
             target_files = [target_path]
         elif target_path.is_dir():
-            target_files = list(target_path.glob("**/*.py"))[:args.max_files]
+            target_files = list(target_path.glob("**/*.py"))[: args.max_files]
         else:
             print(f"Target {args.target} not found")
             return 1
@@ -194,21 +202,26 @@ def main() -> int:
         # Create unified diff - check if file exists in git
         try:
             returncode, stdout, stderr = run_command(
-                ["git", "ls-files", "--error-unmatch", "docs/auto-improvement-plan.md"],
-                repo_root
+                ["git", "ls-files", "--error-unmatch", "docs/auto-improvement-plan.md"], repo_root
             )
 
             if returncode == 0:
                 # File exists in git, use normal diff
                 returncode, stdout, stderr = run_command(
-                    ["git", "diff", "docs/auto-improvement-plan.md"],
-                    repo_root
+                    ["git", "diff", "docs/auto-improvement-plan.md"], repo_root
                 )
             else:
                 # File doesn't exist in git, create new file diff
                 returncode, stdout, stderr = run_command(
-                    ["git", "diff", "--no-index", "--", "/dev/null", "docs/auto-improvement-plan.md"],
-                    repo_root
+                    [
+                        "git",
+                        "diff",
+                        "--no-index",
+                        "--",
+                        "/dev/null",
+                        "docs/auto-improvement-plan.md",
+                    ],
+                    repo_root,
                 )
 
             if returncode in (0, 1):  # 0 = no diff, 1 = diff exists

@@ -12,8 +12,9 @@ from typing import Any, Optional
 import structlog
 from pydantic import BaseModel
 
-from .base_agent import BaseAgent, TaskPriority
 from agents.supervisor import TaskType
+
+from .base_agent import BaseAgent, TaskPriority
 
 logger = structlog.get_logger()
 
@@ -46,12 +47,11 @@ class NaturalLanguageController(BaseAgent):
                     r"перевірити?\s+стан",
                     r"system\s+status",
                     r"how\s+is\s+the\s+system",
-                    r"check\s+status"
+                    r"check\s+status",
                 ],
                 "action": "status",
-                "target": "system"
+                "target": "system",
             },
-
             # Запуск агента
             "start_agent": {
                 "patterns": [
@@ -59,12 +59,11 @@ class NaturalLanguageController(BaseAgent):
                     r"старт\s+агент\s+(\w+)",
                     r"включити\s+агент\s+(\w+)",
                     r"start\s+agent\s+(\w+)",
-                    r"run\s+agent\s+(\w+)"
+                    r"run\s+agent\s+(\w+)",
                 ],
                 "action": "start_agent",
-                "target_group": 1
+                "target_group": 1,
             },
-
             # Зупинка агента
             "stop_agent": {
                 "patterns": [
@@ -72,24 +71,22 @@ class NaturalLanguageController(BaseAgent):
                     r"стоп\s+агент\s+(\w+)",
                     r"виключити\s+агент\s+(\w+)",
                     r"stop\s+agent\s+(\w+)",
-                    r"halt\s+agent\s+(\w+)"
+                    r"halt\s+agent\s+(\w+)",
                 ],
                 "action": "stop_agent",
-                "target_group": 1
+                "target_group": 1,
             },
-
             # Аналіз даних
             "analyze": {
                 "patterns": [
                     r"проаналізувати\s+(.+)",
                     r"аналіз\s+(.+)",
                     r"analyze\s+(.+)",
-                    r"process\s+(.+)"
+                    r"process\s+(.+)",
                 ],
                 "action": "analyze",
-                "target_group": 1
+                "target_group": 1,
             },
-
             # Генерація звіту
             "generate_report": {
                 "patterns": [
@@ -97,35 +94,33 @@ class NaturalLanguageController(BaseAgent):
                     r"генерувати\s+звіт\s+(.+)",
                     r"створити\s+звіт\s+(.+)",
                     r"report\s+(.+)",
-                    r"generate\s+report\s+(.+)"
+                    r"generate\s+report\s+(.+)",
                 ],
                 "action": "generate_report",
-                "target_group": 1
+                "target_group": 1,
             },
-
             # Діагностика
             "diagnose": {
                 "patterns": [
                     r"діагностика\s+(.+)",
                     r"перевірити\s+(.+)",
                     r"diagnose\s+(.+)",
-                    r"check\s+(.+)"
+                    r"check\s+(.+)",
                 ],
                 "action": "diagnose",
-                "target_group": 1
+                "target_group": 1,
             },
-
             # Оптимізація
             "optimize": {
                 "patterns": [
                     r"оптимізувати\s+(.+)",
                     r"покращити\s+(.+)",
                     r"optimize\s+(.+)",
-                    r"improve\s+(.+)"
+                    r"improve\s+(.+)",
                 ],
                 "action": "optimize",
-                "target_group": 1
-            }
+                "target_group": 1,
+            },
         }
 
     def set_supervisor(self, supervisor):
@@ -138,7 +133,9 @@ class NaturalLanguageController(BaseAgent):
 
         # Перевіряємо на екстрені ситуації
         urgency = "normal"
-        if any(word in text for word in ["терміново", "критично", "emergency", "urgent", "critical"]):
+        if any(
+            word in text for word in ["терміново", "критично", "emergency", "urgent", "critical"]
+        ):
             urgency = "critical"
         elif any(word in text for word in ["швидко", "fast", "quick"]):
             urgency = "high"
@@ -158,22 +155,19 @@ class NaturalLanguageController(BaseAgent):
                             target = match.group(group_idx).strip()
 
                     # Якщо target не знайдено в групі, спробуємо витягти з тексту
-                    if not target and action in ["analyze", "generate_report", "diagnose", "optimize"]:
+                    if not target and action in [
+                        "analyze",
+                        "generate_report",
+                        "diagnose",
+                        "optimize",
+                    ]:
                         # Витягуємо все після ключового слова
                         target = match.group(1).strip() if match.groups() else "system"
 
-                    return NaturalLanguageCommand(
-                        action=action,
-                        target=target,
-                        urgency=urgency
-                    )
+                    return NaturalLanguageCommand(action=action, target=target, urgency=urgency)
 
         # Якщо не знайшли відповідність, повертаємо загальну команду
-        return NaturalLanguageCommand(
-            action="interpret",
-            target=text,
-            urgency=urgency
-        )
+        return NaturalLanguageCommand(action="interpret", target=text, urgency=urgency)
 
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
         """Виконує завдання через природну мову"""
@@ -192,7 +186,7 @@ class NaturalLanguageController(BaseAgent):
             original=command_text,
             action=parsed_command.action,
             target=parsed_command.target,
-            urgency=parsed_command.urgency
+            urgency=parsed_command.urgency,
         )
 
         # Виконуємо відповідну дію
@@ -226,7 +220,7 @@ class NaturalLanguageController(BaseAgent):
             return {
                 "success": False,
                 "error": f"Не вдалося виконати команду: {str(e)}",
-                "original_command": command_text
+                "original_command": command_text,
             }
 
     async def _execute_status_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
@@ -244,9 +238,9 @@ class NaturalLanguageController(BaseAgent):
                 "available_models": status.get("available_models", 0),
                 "system_health": status.get("system_health", "unknown"),
                 "thermal_status": status.get("thermal_status", {}),
-                "recent_competitions": status.get("recent_competitions", 0)
+                "recent_competitions": status.get("recent_competitions", 0),
             },
-            "message": f"Система працює. Агентів: {status.get('agents_count', 0)}, моделей: {status.get('available_models', 0)}"
+            "message": f"Система працює. Агентів: {status.get('agents_count', 0)}, моделей: {status.get('available_models', 0)}",
         }
 
     async def _execute_start_agent_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
@@ -263,7 +257,7 @@ class NaturalLanguageController(BaseAgent):
             "success": True,
             "action": "start_agent",
             "agent": agent_name,
-            "message": f"Агент {agent_name} запущено"
+            "message": f"Агент {agent_name} запущено",
         }
 
     async def _execute_stop_agent_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
@@ -277,7 +271,7 @@ class NaturalLanguageController(BaseAgent):
             "success": True,
             "action": "stop_agent",
             "agent": agent_name,
-            "message": f"Агент {agent_name} зупинено"
+            "message": f"Агент {agent_name} зупинено",
         }
 
     async def _execute_analyze_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
@@ -288,16 +282,14 @@ class NaturalLanguageController(BaseAgent):
         if self.supervisor:
             try:
                 result = await self.supervisor.handle_agent_request(
-                    "AnalyticsAgent",
-                    f"Проаналізувати: {target}",
-                    TaskType.PREDICTIVE_ANALYTICS
+                    "AnalyticsAgent", f"Проаналізувати: {target}", TaskType.PREDICTIVE_ANALYTICS
                 )
                 return {
                     "success": True,
                     "action": "analyze",
                     "target": target,
                     "result": result.get("response", "Аналіз виконано"),
-                    "model_used": result.get("winner_model", "unknown")
+                    "model_used": result.get("winner_model", "unknown"),
                 }
             except Exception as e:
                 self.logger.error("Analysis failed", error=str(e))
@@ -306,7 +298,7 @@ class NaturalLanguageController(BaseAgent):
             "success": True,
             "action": "analyze",
             "target": target,
-            "message": f"Аналіз {target} розпочато"
+            "message": f"Аналіз {target} розпочато",
         }
 
     async def _execute_report_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
@@ -318,14 +310,14 @@ class NaturalLanguageController(BaseAgent):
                 result = await self.supervisor.handle_agent_request(
                     "ReportExportAgent",
                     f"Згенерувати звіт про: {target}",
-                    TaskType.DOCUMENT_GENERATION
+                    TaskType.DOCUMENT_GENERATION,
                 )
                 return {
                     "success": True,
                     "action": "generate_report",
                     "target": target,
                     "result": result.get("response", "Звіт згенеровано"),
-                    "model_used": result.get("winner_model", "unknown")
+                    "model_used": result.get("winner_model", "unknown"),
                 }
             except Exception as e:
                 self.logger.error("Report generation failed", error=str(e))
@@ -334,7 +326,7 @@ class NaturalLanguageController(BaseAgent):
             "success": True,
             "action": "generate_report",
             "target": target,
-            "message": f"Звіт про {target} генерується"
+            "message": f"Звіт про {target} генерується",
         }
 
     async def _execute_diagnose_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
@@ -344,16 +336,14 @@ class NaturalLanguageController(BaseAgent):
         if self.supervisor:
             try:
                 result = await self.supervisor.handle_agent_request(
-                    "SelfHealingAgent",
-                    f"Діагностика: {target}",
-                    TaskType.SYSTEM_DIAGNOSTICS
+                    "SelfHealingAgent", f"Діагностика: {target}", TaskType.SYSTEM_DIAGNOSTICS
                 )
                 return {
                     "success": True,
                     "action": "diagnose",
                     "target": target,
                     "result": result.get("response", "Діагностика завершена"),
-                    "model_used": result.get("winner_model", "unknown")
+                    "model_used": result.get("winner_model", "unknown"),
                 }
             except Exception as e:
                 self.logger.error("Diagnosis failed", error=str(e))
@@ -362,7 +352,7 @@ class NaturalLanguageController(BaseAgent):
             "success": True,
             "action": "diagnose",
             "target": target,
-            "message": f"Діагностика {target} виконана"
+            "message": f"Діагностика {target} виконана",
         }
 
     async def _execute_optimize_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
@@ -374,14 +364,14 @@ class NaturalLanguageController(BaseAgent):
                 result = await self.supervisor.handle_agent_request(
                     "OptimizationAgent",
                     f"Оптимізувати: {target}",
-                    TaskType.PERFORMANCE_OPTIMIZATION
+                    TaskType.PERFORMANCE_OPTIMIZATION,
                 )
                 return {
                     "success": True,
                     "action": "optimize",
                     "target": target,
                     "result": result.get("response", "Оптимізація завершена"),
-                    "model_used": result.get("winner_model", "unknown")
+                    "model_used": result.get("winner_model", "unknown"),
                 }
             except Exception as e:
                 self.logger.error("Optimization failed", error=str(e))
@@ -390,7 +380,7 @@ class NaturalLanguageController(BaseAgent):
             "success": True,
             "action": "optimize",
             "target": target,
-            "message": f"Оптимізація {target} розпочата"
+            "message": f"Оптимізація {target} розпочата",
         }
 
     async def _execute_interpret_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
@@ -401,14 +391,14 @@ class NaturalLanguageController(BaseAgent):
                 result = await self.supervisor.handle_agent_request(
                     "NaturalLanguageController",
                     f"Інтерпретувати команду: {command.target}",
-                    TaskType.CRITICAL_ORCHESTRATION
+                    TaskType.CRITICAL_ORCHESTRATION,
                 )
                 return {
                     "success": True,
                     "action": "interpret",
                     "command": command.target,
                     "interpretation": result.get("response", "Команда інтерпретовано"),
-                    "model_used": result.get("winner_model", "unknown")
+                    "model_used": result.get("winner_model", "unknown"),
                 }
             except Exception as e:
                 self.logger.error("Command interpretation failed", error=str(e))
@@ -417,17 +407,17 @@ class NaturalLanguageController(BaseAgent):
             "success": True,
             "action": "interpret",
             "command": command.target,
-            "message": f"Команда '{command.target}' прийнята до обробки"
+            "message": f"Команда '{command.target}' прийнята до обробки",
         }
 
     def capabilities(self) -> list[str]:
         """Повертає список можливостей агента"""
         return [
             "natural_command",  # обробка команд природною мовою
-            "system_status",    # перевірка статусу системи
-            "agent_control",    # керування агентами
-            "data_analysis",    # аналіз даних
-            "report_generation", # генерація звітів
+            "system_status",  # перевірка статусу системи
+            "agent_control",  # керування агентами
+            "data_analysis",  # аналіз даних
+            "report_generation",  # генерація звітів
             "system_diagnosis",  # діагностика системи
-            "performance_optimization"  # оптимізація продуктивності
+            "performance_optimization",  # оптимізація продуктивності
         ]

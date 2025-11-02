@@ -24,8 +24,9 @@ from fastapi import FastAPI, HTTPException, Request
 
 # Імпорт агента для керування природною мовою
 try:
-    from backend.app.agents.handlers import NaturalLanguageController
     from agents.supervisor import ProductionSupervisor
+    from backend.app.agents.handlers import NaturalLanguageController
+
     AGENT_AVAILABLE = True
 except ImportError:
     AGENT_AVAILABLE = False
@@ -105,11 +106,14 @@ async def handle_status(message: types.Message) -> None:
     if nl_controller and supervisor:
         try:
             # Використовуємо агента для перевірки статусу
-            task_id = await nl_controller.submit_task("natural_command", {"command": "статус системи"})
+            task_id = await nl_controller.submit_task(
+                "natural_command", {"command": "статус системи"}
+            )
             await message.answer("🔄 Перевіряю статус системи...")
 
             # Чекаємо результат (в реальному коді краще використовувати webhook або polling)
             import asyncio
+
             await asyncio.sleep(2)  # Імітація очікування
 
             status_info = nl_controller.get_task_status(task_id)
@@ -148,7 +152,7 @@ async def handle_natural_language(message: types.Message) -> None:
         return
 
     user_text = message.text.strip()
-    if not user_text or user_text.startswith('/'):
+    if not user_text or user_text.startswith("/"):
         return  # Пропускаємо команди
 
     try:
@@ -160,6 +164,7 @@ async def handle_natural_language(message: types.Message) -> None:
 
         # Чекаємо результат (в продакшені краще використовувати callback або webhook)
         import asyncio
+
         await asyncio.sleep(3)  # Імітація обробки
 
         status_info = nl_controller.get_task_status(task_id)
@@ -207,10 +212,7 @@ async def tg_webhook(request: Request) -> dict[str, Any]:
 @app.get("/healthz")
 async def healthz() -> dict[str, str]:
     agent_status = "available" if nl_controller else "unavailable"
-    return {
-        "status": "ok",
-        "agent_system": agent_status
-    }
+    return {"status": "ok", "agent_system": agent_status}
 
 
 if __name__ == "__main__":
@@ -218,16 +220,10 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Predator Telegram Bot")
     parser.add_argument(
-        "--mode",
-        choices=["polling", "webhook"],
-        default="polling",
-        help="Режим роботи бота"
+        "--mode", choices=["polling", "webhook"], default="polling", help="Режим роботи бота"
     )
     parser.add_argument(
-        "--timeout",
-        type=int,
-        default=None,
-        help="Таймаут для тестування (секунди)"
+        "--timeout", type=int, default=None, help="Таймаут для тестування (секунди)"
     )
 
     args = parser.parse_args()
@@ -263,4 +259,5 @@ if __name__ == "__main__":
     elif args.mode == "webhook":
         print("🌐 Запуск веб-сервісу для webhook...")
         import uvicorn
+
         uvicorn.run(app, host="0.0.0.0", port=8000)
