@@ -29,6 +29,13 @@ echo "generator: $GENERATOR_CMD" >> "$REPORT"
 # Копіюємо весь репозиторій у sandbox (крім node_modules, .venv, .git, .auto_propose_workdir)
 rsync -a --exclude 'node_modules' --exclude '.venv' --exclude '.git' --exclude '.auto_propose_workdir' "$ROOT_DIR/" "$WORKDIR/"
 
+# Ініціалізуємо git репозиторій у sandbox
+(cd "$WORKDIR" && git init && git add . && git commit -m "Initial sandbox commit" --allow-empty) >> "$REPORT" 2>&1 || {
+  echo "Failed to initialize git repo in sandbox" >> "$REPORT"
+  cat "$REPORT"
+  exit 1
+}
+
 # Переконуємось, що dist скопійовано (на випадок, якщо rsync не скопіював через .gitignore)
 if [ -d "$ROOT_DIR/frontend/dist" ]; then
   mkdir -p "$WORKDIR/frontend"

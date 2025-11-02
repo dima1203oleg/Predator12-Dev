@@ -228,5 +228,16 @@ jobs:
       - name: Kubectl Dry
         run: kubectl apply --dry-run=server -f rendered.yaml || true
 
+      - name: Validate AgentDefinition/AgentPolicy CRDs
+        run: |
+          # Валідація CRD агентів/політик (dry-run)
+          if ls ./k8s/agents/*.yaml 1> /dev/null 2>&1; then
+            for f in ./k8s/agents/*.yaml; do
+              kubectl apply --dry-run=client -f "$f"
+            done
+          else
+            echo "No agent CRDs found for validation."
+          fi
+
       - name: Teardown
         run: kind delete cluster || true

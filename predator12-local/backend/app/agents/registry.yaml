@@ -4,6 +4,224 @@
 #                       Based on Agent Specializations
 # ═══════════════════════════════════════════════════════════════════════════════════
 
+llm_profiles:
+  # DeepSeek models
+  deepseek/deepseek-r1:
+    thermal_status: normal
+    cooldown_until: null
+  deepseek/deepseek-r1-0528:
+    thermal_status: normal
+    cooldown_until: null
+  deepseek/deepseek-v3-0324:
+    thermal_status: normal
+    cooldown_until: null
+
+  # OpenAI models
+  openai/o1:
+    thermal_status: normal
+    cooldown_until: null
+  openai/o1-mini:
+    thermal_status: normal
+    cooldown_until: null
+  openai/o1-preview:
+    thermal_status: normal
+    cooldown_until: null
+  openai/o3:
+    thermal_status: normal
+    cooldown_until: null
+  openai/o3-mini:
+    thermal_status: normal
+    cooldown_until: null
+  openai/o4-mini:
+    thermal_status: normal
+    cooldown_until: null
+  openai/gpt-5:
+    thermal_status: normal
+    cooldown_until: null
+  openai/gpt-5-chat:
+    thermal_status: normal
+    cooldown_until: null
+  openai/gpt-5-mini:
+    thermal_status: normal
+    cooldown_until: null
+  openai/gpt-5-nano:
+    thermal_status: normal
+    cooldown_until: null
+  openai/gpt-4o:
+    thermal_status: normal
+    cooldown_until: null
+  openai/gpt-4o-mini:
+    thermal_status: normal
+    cooldown_until: null
+  openai/gpt-4.1:
+    thermal_status: normal
+    cooldown_until: null
+  openai/gpt-4.1-mini:
+    thermal_status: normal
+    cooldown_until: null
+  openai/gpt-4.1-nano:
+    thermal_status: normal
+    cooldown_until: null
+  openai/text-embedding-3-large:
+    thermal_status: normal
+    cooldown_until: null
+  openai/text-embedding-3-small:
+    thermal_status: normal
+    cooldown_until: null
+
+  # Microsoft models
+  microsoft/phi-4-reasoning:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/phi-4:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/phi-4-mini-reasoning:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/phi-4-mini-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/phi-4-multimodal-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/phi-3.5-vision-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/phi-3.5-moe-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/phi-3.5-mini-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/phi-3-medium-128k-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/phi-3-medium-4k-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/phi-3-small-128k-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  microsoft/mai-ds-r1:
+    thermal_status: normal
+    cooldown_until: null
+
+  # Meta models
+  meta/meta-llama-3.1-405b-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  meta/meta-llama-3.1-8b-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  meta/llama-3.3-70b-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  meta/llama-3.2-90b-vision-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  meta/llama-3.2-11b-vision-instruct:
+    thermal_status: normal
+    cooldown_until: null
+  meta/llama-4-maverick-17b-128e-instruct-fp8:
+    thermal_status: normal
+    cooldown_until: null
+  meta/llama-4-scout-17b-16e-instruct:
+    thermal_status: normal
+    cooldown_until: null
+
+  # Mistral models
+  mistral-ai/mistral-large-2411:
+    thermal_status: normal
+    cooldown_until: null
+  mistral-ai/mistral-medium-2505:
+    thermal_status: normal
+    cooldown_until: null
+  mistral-ai/codestral-2501:
+    thermal_status: normal
+    cooldown_until: null
+  mistral-ai/mistral-small-2503:
+    thermal_status: normal
+    cooldown_until: null
+  mistral-ai/ministral-3b:
+    thermal_status: normal
+    cooldown_until: null
+  mistral-ai/mistral-nemo:
+    thermal_status: normal
+    cooldown_until: null
+
+  # Cohere models
+  cohere/cohere-embed-v3-multilingual:
+    thermal_status: normal
+    cooldown_until: null
+  cohere/cohere-command-r-plus-08-2024:
+    thermal_status: normal
+    cooldown_until: null
+  cohere/cohere-command-r-08-2024:
+    thermal_status: normal
+    cooldown_until: null
+  cohere/cohere-command-a:
+    thermal_status: normal
+    cooldown_until: null
+
+  # Google Gemini models
+  google/gemini-1.5-flash:
+    thermal_status: normal
+    cooldown_until: null
+  google/gemini-1.5-pro:
+    thermal_status: normal
+    cooldown_until: null
+
+  # Groq models
+  groq/llama-3.1-70b-versatile:
+    thermal_status: normal
+    cooldown_until: null
+  groq/llama-3.1-8b-instant:
+    thermal_status: normal
+    cooldown_until: null
+  groq/mixtral-8x7b-instruct:
+    thermal_status: normal
+    cooldown_until: null
+
+  # OpenRouter models (high limits, free tier)
+  openrouter/auto:
+    thermal_status: normal
+    cooldown_until: null
+  openrouter/gpt-4o-mini:
+    thermal_status: normal
+    cooldown_until: null
+  openrouter/llama-3.1-70b-instruct:
+    thermal_status: normal
+    cooldown_until: null
+
+  # Perplexity models (high limits, free tier)
+  perplexity/sonar-pro:
+    thermal_status: normal
+    cooldown_until: null
+  perplexity/sonar-reasoning-pro:
+    thermal_status: normal
+    cooldown_until: null
+
+  # Additional models to reach 58
+  azure/gpt-4-turbo:
+    thermal_status: normal
+    cooldown_until: null
+  azure/gpt-4-vision:
+    thermal_status: normal
+    cooldown_until: null
+  azure/gpt-3.5-turbo:
+    thermal_status: normal
+    cooldown_until: null
+  azure/text-embedding-ada-002:
+    thermal_status: normal
+    cooldown_until: null
+  azure/whisper-1:
+    thermal_status: normal
+    cooldown_until: null
+  azure/dall-e-3:
+    thermal_status: normal
+    cooldown_until: null
+
 agents:
   # ═══════════════════════════════════════════════════════════════════════════════
   #                        🔍 ANOMALY DETECTION AGENT
@@ -12,62 +230,79 @@ agents:
   AnomalyAgent:
     # 🎯 Specialization: Anomaly detection, statistical analysis, ML detection
     description: "Detects anomalies in data, performs statistical analysis of deviations"
-    primary_model: deepseek/deepseek-r1          # Best reasoning for anomalies
-    primary_models:
-      flagship: deepseek/deepseek-r1              # Best reasoning for anomalies
-      premium: openai/o1                          # OpenAI reasoning
-      standard: microsoft/phi-4-reasoning         # Microsoft reasoning
-    fallback_models:
-      - deepseek/deepseek-r1-0528                 # Experimental DeepSeek
-      - openai/o1-mini                           # Fast detection
-      - microsoft/mai-ds-r1                      # Microsoft AI for data science
-      - mistral-ai/mistral-large-2411            # Powerful Mistral
+    competition_models:
+      - deepseek/deepseek-r1
+      - openai/o1
+      - microsoft/phi-4-reasoning
+      - google/gemini-1.5-pro
+    fallback_chain:
+      - deepseek/deepseek-r1-0528
+      - openai/o1-mini
+      - mistral-ai/mistral-large-2411
+      - groq/llama-3.1-70b-versatile
+    emergency_pool:
+      - microsoft/mai-ds-r1
+      - xai/grok-3
+      - openrouter/auto
+    arbiter_model: deepseek/deepseek-r1
     embedding_model: cohere/cohere-embed-v3-multilingual
-    embedding_models:
-      - cohere/cohere-embed-v3-multilingual      # Multilingual embeddings
-      - openai/text-embedding-3-large            # Large embeddings
-    specialized_models:
-      statistical: deepseek/deepseek-v3-0324     # Statistical computations
-      ml_detection: openai/o1-preview            # ML detection
 
   ForecastAgent:
     # 📈 Специализация: Прогнозирование, временные ряды, тренд-анализ
-    primary_model: mistral-ai/mistral-large-2411
-    fallback_models:
+    description: "Forecasts trends, analyzes time series data"
+    competition_models:
+      - mistral-ai/mistral-large-2411
       - meta/meta-llama-3.1-405b-instruct
       - openai/gpt-5
+      - groq/llama-3.1-70b-versatile
+    fallback_chain:
       - microsoft/phi-4
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
+      - xai/grok-3
+      - deepseek/deepseek-r1
+      - google/gemini-1.5-flash
+    emergency_pool:
       - mistral-ai/mistral-medium-2505
       - openai/o3
-      - xai/grok-3
+      - openrouter/gpt-4o-mini
+    arbiter_model: mistral-ai/mistral-large-2411
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   GraphIntelligenceAgent:
     # 🕸️ Специализация: Граф-анализ, сетевой анализ, топология
-    primary_model: microsoft/phi-4-reasoning
-    fallback_models:
+    description: "Analyzes graphs, networks, and topologies"
+    competition_models:
+      - microsoft/phi-4-reasoning
       - meta/llama-3.3-70b-instruct
       - mistral-ai/mistral-large-2411
+      - perplexity/sonar-reasoning-pro
+    fallback_chain:
       - deepseek/deepseek-r1
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
-      - microsoft/phi-4-multimodal-instruct
-      - meta/llama-4-maverick-17b-128e-instruct-fp8
       - openai/gpt-4.1
+      - microsoft/phi-4-multimodal-instruct
+      - openrouter/llama-3.1-70b-instruct
+    emergency_pool:
+      - meta/llama-4-maverick-17b-128e-instruct-fp8
+      - xai/grok-3
+      - groq/mixtral-8x7b-instruct
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   DatasetAgent:
     # 📊 Специализация: Обработка данных, ETL, структурирование
-    primary_model: microsoft/phi-4-reasoning
-    fallback_models:
+    description: "Processes data, ETL operations, structuring"
+    competition_models:
+      - microsoft/phi-4-reasoning
       - openai/gpt-4o
       - cohere/cohere-command-r-plus-08-2024
+    fallback_chain:
       - meta/meta-llama-3.1-8b-instruct
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - microsoft/phi-3.5-vision-instruct
       - openai/gpt-4.1-mini
+    emergency_pool:
       - mistral-ai/codestral-2501
+      - deepseek/deepseek-v3-0324
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                           🛡️ SECURITY & OPERATIONS
@@ -75,42 +310,54 @@ agents:
 
   SecurityAgent:
     # 🛡️ Специализация: Безопасность, угрозы, уязвимости
-    primary_model: microsoft/phi-4-reasoning
-    fallback_models:
+    description: "Handles security, threats, vulnerabilities"
+    competition_models:
+      - microsoft/phi-4-reasoning
       - deepseek/deepseek-r1
       - openai/o1-preview
+    fallback_chain:
       - xai/grok-3
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - microsoft/mai-ds-r1
       - openai/o3-mini
+    emergency_pool:
       - mistral-ai/mistral-nemo
+      - core42/jais-30b-chat
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   SelfHealingAgent:
     # 🔧 Специализация: Само-восстановление, диагностика, автолечение
-    primary_model: openai/gpt-4o-mini
-    fallback_models:
+    description: "Self-healing, diagnostics, auto-recovery"
+    competition_models:
+      - openai/gpt-4o-mini
       - mistral-ai/codestral-2501
       - microsoft/phi-4-mini-reasoning
+    fallback_chain:
       - deepseek/deepseek-v3-0324
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - microsoft/phi-3.5-moe-instruct
       - openai/gpt-4.1-nano
+    emergency_pool:
       - mistral-ai/ministral-3b
+      - xai/grok-3-mini
+    arbiter_model: openai/gpt-4o-mini
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   AutoImproveAgent:
     # 📚 Специализация: Само-совершенствование, оптимизация, обучение
-    primary_model: meta/meta-llama-3.1-405b-instruct
-    fallback_models:
+    description: "Self-improvement, optimization, learning"
+    competition_models:
+      - meta/meta-llama-3.1-405b-instruct
       - openai/gpt-5
       - mistral-ai/mistral-large-2411
+    fallback_chain:
       - deepseek/deepseek-r1
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - openai/o3
       - microsoft/phi-4
+    emergency_pool:
       - xai/grok-3-mini
+      - core42/jais-30b-chat
+    arbiter_model: meta/meta-llama-3.1-405b-instruct
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                           🎯 COORDINATION & MANAGEMENT
@@ -118,42 +365,54 @@ agents:
 
   CoreOrchestrator:
     # 🎼 Специализация: Координация, управление, оркестрация
-    primary_model: meta/meta-llama-3.1-405b-instruct
-    fallback_models:
+    description: "Coordinates, manages, orchestrates"
+    competition_models:
+      - meta/meta-llama-3.1-405b-instruct
       - openai/gpt-5-chat
       - microsoft/phi-4-reasoning
+    fallback_chain:
       - mistral-ai/mistral-large-2411
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - openai/o1
-      - xai/grok-3
       - deepseek/deepseek-r1
+    emergency_pool:
+      - xai/grok-3
+      - core42/jais-30b-chat
+    arbiter_model: meta/meta-llama-3.1-405b-instruct
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   NEXUS_SUPERVISOR:
     # 👁️ Специализация: Верхнеуровневый надзор, стратегические решения
-    primary_model: meta/meta-llama-3.1-405b-instruct
-    fallback_models:
+    description: "High-level supervision, strategic decisions"
+    competition_models:
+      - meta/meta-llama-3.1-405b-instruct
       - openai/gpt-5
       - openai/o3
+    fallback_chain:
       - mistral-ai/mistral-large-2411
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - openai/o1-preview
       - microsoft/phi-4
+    emergency_pool:
       - deepseek/deepseek-r1-0528
+      - xai/grok-3
+    arbiter_model: meta/meta-llama-3.1-405b-instruct
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   ArbiterAgent:
     # ⚖️ Специализация: Арбитраж, разрешение конфликтов, принятие решений
-    primary_model: openai/o1
-    fallback_models:
+    description: "Arbitration, conflict resolution, decision making"
+    competition_models:
+      - openai/o1
       - microsoft/phi-4-reasoning
       - deepseek/deepseek-r1
+    fallback_chain:
       - meta/llama-3.3-70b-instruct
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - openai/o1-mini
       - openai/o4-mini
+    emergency_pool:
       - xai/grok-3-mini
+      - mistral-ai/mistral-large-2411
+    arbiter_model: openai/o1
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                           🔍 SEARCH & INTELLIGENCE
@@ -161,29 +420,37 @@ agents:
 
   OSINTAgent:
     # 🕵️ Специализация: OSINT, поиск, сбор информации
-    primary_model: meta/meta-llama-3.1-8b-instruct
-    fallback_models:
+    description: "OSINT, search, information gathering"
+    competition_models:
+      - meta/meta-llama-3.1-8b-instruct
       - cohere/cohere-command-r-08-2024
       - microsoft/phi-3-medium-128k-instruct
+    fallback_chain:
       - openai/gpt-4o
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - meta/llama-3.2-90b-vision-instruct
       - microsoft/phi-3.5-vision-instruct
+    emergency_pool:
       - meta/llama-4-scout-17b-16e-instruct
+      - xai/grok-3
+    arbiter_model: meta/meta-llama-3.1-8b-instruct
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   SearchPlannerAgent:
     # 🗺️ Специализация: Планирование поиска, стратегия поиска
-    primary_model: microsoft/phi-4-reasoning
-    fallback_models:
+    description: "Search planning, search strategy"
+    competition_models:
+      - microsoft/phi-4-reasoning
       - cohere/cohere-command-a
       - mistral-ai/mistral-medium-2505
+    fallback_chain:
       - openai/gpt-4.1
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - microsoft/phi-3-small-128k-instruct
       - openai/gpt-5-mini
+    emergency_pool:
       - meta/llama-3.2-11b-vision-instruct
+      - deepseek/deepseek-r1
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                           🚀 SPECIALIZED UTILITY AGENTS
@@ -191,39 +458,348 @@ agents:
 
   RedTeamAgent:
     # 🔴 Специализация: Ethical hacking, тестирование на проникновение
-    primary_model: microsoft/phi-4-reasoning
-    fallback_models:
+    description: "Ethical hacking, penetration testing"
+    competition_models:
+      - microsoft/phi-4-reasoning
       - deepseek/deepseek-v3-0324
       - openai/o1-mini
+    fallback_chain:
       - xai/grok-3-mini
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - microsoft/mai-ds-r1
       - deepseek/deepseek-r1
+    emergency_pool:
       - core42/jais-30b-chat
+      - mistral-ai/mistral-nemo
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   ModelRouterAgent:
     # 🛤️ Специализация: Маршрутизация моделей, оптимизация выбора
-    primary_model: microsoft/phi-4-reasoning
-    fallback_models:
+    description: "Model routing, selection optimization"
+    competition_models:
+      - microsoft/phi-4-reasoning
       - openai/gpt-4o-mini
       - mistral-ai/ministral-3b
+    fallback_chain:
       - meta/meta-llama-3.1-8b-instruct
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - microsoft/phi-3.5-mini-instruct
       - openai/gpt-4.1-nano
+    emergency_pool:
       - openai/gpt-5-nano
+      - xai/grok-3-mini
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
 
   ReportExportAgent:
     # 📋 Специализация: Генерация отчетов, экспорт, форматирование
-    primary_model: openai/gpt-4o-mini
-    fallback_models:
+    description: "Report generation, export, formatting"
+    competition_models:
+      - openai/gpt-4o-mini
       - microsoft/phi-4-mini-instruct
       - mistral-ai/mistral-small-2503
+    fallback_chain:
       - cohere/cohere-command-r-08-2024
-    embedding_model: cohere/cohere-embed-v3-multilingual
-    specialized_models:
       - microsoft/phi-3-medium-4k-instruct
       - openai/text-embedding-3-large
+    emergency_pool:
       - openai/text-embedding-3-small
+      - deepseek/deepseek-v3-0324
+    arbiter_model: openai/gpt-4o-mini
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  ChiefOrchestrator:
+    # 🎯 Специализация: Главный оркестратор, координация всех агентов
+    description: "Chief orchestrator, coordinates all agents"
+    competition_models:
+      - meta/meta-llama-3.1-405b-instruct
+      - openai/gpt-5
+      - microsoft/phi-4-reasoning
+      - google/gemini-1.5-pro
+      - groq/llama-3.1-70b-versatile
+    fallback_chain:
+      - mistral-ai/mistral-large-2411
+      - openai/o1
+      - deepseek/deepseek-r1
+      - perplexity/sonar-pro
+    emergency_pool:
+      - xai/grok-3
+      - core42/jais-30b-chat
+      - openrouter/auto
+    arbiter_model: meta/meta-llama-3.1-405b-instruct
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  DatasetIngest:
+    # 📥 Специализация: Ингест данных, загрузка, предварительная обработка
+    description: "Data ingestion, loading, preprocessing"
+    competition_models:
+      - microsoft/phi-4-reasoning
+      - openai/gpt-4o
+      - cohere/cohere-command-r-plus-08-2024
+    fallback_chain:
+      - meta/meta-llama-3.1-8b-instruct
+      - microsoft/phi-3.5-vision-instruct
+      - openai/gpt-4.1-mini
+    emergency_pool:
+      - mistral-ai/codestral-2501
+      - deepseek/deepseek-v3-0324
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  CodeReviewAgent:
+    # 🔍 Специализация: Ревью кода, анализ качества, предложения улучшений
+    description: "Code review, quality analysis, improvement suggestions"
+    competition_models:
+      - mistral-ai/codestral-2501
+      - openai/gpt-4o-mini
+      - microsoft/phi-4-mini-reasoning
+    fallback_chain:
+      - deepseek/deepseek-v3-0324
+      - microsoft/phi-3.5-moe-instruct
+      - openai/gpt-4.1-nano
+    emergency_pool:
+      - mistral-ai/ministral-3b
+      - xai/grok-3-mini
+    arbiter_model: mistral-ai/codestral-2501
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  PerformanceMonitorAgent:
+    # 📊 Специализация: Мониторинг производительности, метрики, оптимизация
+    description: "Performance monitoring, metrics, optimization"
+    competition_models:
+      - openai/gpt-4o-mini
+      - microsoft/phi-4-mini-instruct
+      - mistral-ai/mistral-small-2503
+    fallback_chain:
+      - cohere/cohere-command-r-08-2024
+      - microsoft/phi-3-medium-4k-instruct
+      - openai/text-embedding-3-large
+    emergency_pool:
+      - openai/text-embedding-3-small
+      - deepseek/deepseek-v3-0324
+    arbiter_model: openai/gpt-4o-mini
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  BackupRecoveryAgent:
+    # 💾 Специализация: Резервное копирование, восстановление, disaster recovery
+    description: "Backup, recovery, disaster recovery"
+    competition_models:
+      - microsoft/phi-4-reasoning
+      - deepseek/deepseek-r1
+      - openai/o1-preview
+    fallback_chain:
+      - xai/grok-3
+      - microsoft/mai-ds-r1
+      - openai/o3-mini
+    emergency_pool:
+      - mistral-ai/mistral-nemo
+      - core42/jais-30b-chat
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  ComplianceAgent:
+    # ⚖️ Специализация: Соответствие нормам, аудит, регуляторные требования
+    description: "Compliance, audit, regulatory requirements"
+    competition_models:
+      - openai/o1
+      - microsoft/phi-4-reasoning
+      - deepseek/deepseek-r1
+    fallback_chain:
+      - meta/llama-3.3-70b-instruct
+      - openai/o1-mini
+      - openai/o4-mini
+    emergency_pool:
+      - xai/grok-3-mini
+      - mistral-ai/mistral-large-2411
+    arbiter_model: openai/o1
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  IntegrationAgent:
+    # 🔗 Специализация: Интеграция систем, API, middleware
+    description: "System integration, APIs, middleware"
+    competition_models:
+      - microsoft/phi-4-reasoning
+      - openai/gpt-4o-mini
+      - mistral-ai/ministral-3b
+    fallback_chain:
+      - meta/meta-llama-3.1-8b-instruct
+      - microsoft/phi-3.5-mini-instruct
+      - openai/gpt-4.1-nano
+    emergency_pool:
+      - openai/gpt-5-nano
+      - xai/grok-3-mini
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  DocumentationAgent:
+    # 📚 Специализация: Генерация документации, wiki, knowledge base
+    description: "Documentation generation, wiki, knowledge base"
+    competition_models:
+      - openai/gpt-4o-mini
+      - microsoft/phi-4-mini-instruct
+      - mistral-ai/mistral-small-2503
+    fallback_chain:
+      - cohere/cohere-command-r-08-2024
+      - microsoft/phi-3-medium-4k-instruct
+      - openai/text-embedding-3-large
+    emergency_pool:
+      - openai/text-embedding-3-small
+      - deepseek/deepseek-v3-0324
+    arbiter_model: openai/gpt-4o-mini
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  TestingAgent:
+    # 🧪 Специализация: Автоматизированное тестирование, QA, validation
+    description: "Automated testing, QA, validation"
+    competition_models:
+      - mistral-ai/codestral-2501
+      - openai/gpt-4o-mini
+      - microsoft/phi-4-mini-reasoning
+    fallback_chain:
+      - deepseek/deepseek-v3-0324
+      - microsoft/phi-3.5-moe-instruct
+      - openai/gpt-4.1-nano
+    emergency_pool:
+      - mistral-ai/ministral-3b
+      - xai/grok-3-mini
+    arbiter_model: mistral-ai/codestral-2501
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  DeploymentAgent:
+    # 🚀 Специализация: Деплоймент, CI/CD, release management
+    description: "Deployment, CI/CD, release management"
+    competition_models:
+      - microsoft/phi-4-reasoning
+      - openai/gpt-4o-mini
+      - mistral-ai/ministral-3b
+    fallback_chain:
+      - meta/meta-llama-3.1-8b-instruct
+      - microsoft/phi-3.5-mini-instruct
+      - openai/gpt-4.1-nano
+    emergency_pool:
+      - openai/gpt-5-nano
+      - xai/grok-3-mini
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  AnalyticsAgent:
+    # 📈 Специализация: Аналитика данных, BI, reporting
+    description: "Data analytics, BI, reporting"
+    competition_models:
+      - meta/meta-llama-3.1-405b-instruct
+      - openai/gpt-5
+      - mistral-ai/mistral-large-2411
+    fallback_chain:
+      - microsoft/phi-4
+      - xai/grok-3
+      - deepseek/deepseek-r1
+    emergency_pool:
+      - mistral-ai/mistral-medium-2505
+      - openai/o3
+    arbiter_model: meta/meta-llama-3.1-405b-instruct
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  NotificationAgent:
+    # 📢 Специализация: Уведомления, alerts, messaging
+    description: "Notifications, alerts, messaging"
+    competition_models:
+      - openai/gpt-4o-mini
+      - microsoft/phi-4-mini-instruct
+      - mistral-ai/mistral-small-2503
+    fallback_chain:
+      - cohere/cohere-command-r-08-2024
+      - microsoft/phi-3-medium-4k-instruct
+      - openai/text-embedding-3-large
+    emergency_pool:
+      - openai/text-embedding-3-small
+      - deepseek/deepseek-v3-0324
+    arbiter_model: openai/gpt-4o-mini
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  SchedulingAgent:
+    # 📅 Специализация: Планирование задач, cron, workflow orchestration
+    description: "Task scheduling, cron, workflow orchestration"
+    competition_models:
+      - microsoft/phi-4-reasoning
+      - openai/gpt-4o-mini
+      - mistral-ai/ministral-3b
+    fallback_chain:
+      - meta/meta-llama-3.1-8b-instruct
+      - microsoft/phi-3.5-mini-instruct
+      - openai/gpt-4.1-nano
+    emergency_pool:
+      - openai/gpt-5-nano
+      - xai/grok-3-mini
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  ValidationAgent:
+    # ✅ Специализация: Валидация данных, проверка качества, verification
+    description: "Data validation, quality checks, verification"
+    competition_models:
+      - microsoft/phi-4-reasoning
+      - openai/gpt-4o
+      - cohere/cohere-command-r-plus-08-2024
+    fallback_chain:
+      - meta/meta-llama-3.1-8b-instruct
+      - microsoft/phi-3.5-vision-instruct
+      - openai/gpt-4.1-mini
+    emergency_pool:
+      - mistral-ai/codestral-2501
+      - deepseek/deepseek-v3-0324
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  OptimizationAgent:
+    # ⚡ Специализация: Оптимизация производительности, tuning, efficiency
+    description: "Performance optimization, tuning, efficiency"
+    competition_models:
+      - openai/gpt-4o-mini
+      - microsoft/phi-4-mini-instruct
+      - mistral-ai/mistral-small-2503
+    fallback_chain:
+      - cohere/cohere-command-r-08-2024
+      - microsoft/phi-3-medium-4k-instruct
+      - openai/text-embedding-3-large
+    emergency_pool:
+      - openai/text-embedding-3-small
+      - deepseek/deepseek-v3-0324
+    arbiter_model: openai/gpt-4o-mini
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  MaintenanceAgent:
+    # 🔧 Специализация: Техническое обслуживание, updates, patches
+    description: "Maintenance, updates, patches"
+    competition_models:
+      - microsoft/phi-4-reasoning
+      - deepseek/deepseek-v3-0324
+      - openai/o1-mini
+    fallback_chain:
+      - xai/grok-3-mini
+      - microsoft/mai-ds-r1
+      - deepseek/deepseek-r1
+    emergency_pool:
+      - core42/jais-30b-chat
+      - mistral-ai/mistral-nemo
+    arbiter_model: microsoft/phi-4-reasoning
+    embedding_model: cohere/cohere-embed-v3-multilingual
+
+  # ═══════════════════════════════════════════════════════════════════════════════
+  #                           🗣️ NATURAL LANGUAGE CONTROL AGENT
+  # ═══════════════════════════════════════════════════════════════════════════════
+
+  NaturalLanguageController:
+    # 🗣️ Специализация: Управление системою природною мовою, інтерпретація команд
+    description: "Controls system via natural language commands, interprets human instructions"
+    competition_models:
+      - mistral-ai/mistral-large-2411
+      - mistral-ai/mistral-medium-2505
+      - mistral-ai/mistral-nemo
+    fallback_chain:
+      - google/gemini-1.5-pro
+      - google/gemini-1.5-flash
+      - openrouter/auto
+    emergency_pool:
+      - perplexity/sonar-reasoning-pro
+      - groq/llama-3.1-70b-versatile
+    arbiter_model: mistral-ai/mistral-large-2411
+    embedding_model: cohere/cohere-embed-v3-multilingual

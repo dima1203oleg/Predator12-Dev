@@ -1,0 +1,40 @@
+{
+  "name": "predator-auto-approve",
+  "displayName": "Predator Auto Approve",
+  "description": "Extension for auto-approving changes in Predator12 project",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:predator.autoApprove"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "predator.autoApprove",
+        "title": "🤖 Auto Approve Changes"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "predator.autoApprove",
+          "when": "workspaceFolderCount == 1 && workspace.name == 'predator12-local'"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "node ./node_modules/vscode/bin/compile"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x"
+  }
+}

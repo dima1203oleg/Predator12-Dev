@@ -358,6 +358,17 @@ class ProductionSupervisor:
             "qwen/qwen2.5-32b-instruct": 0.82,
             "mistralai/codestral-latest": 0.85,
             "google/gemma-2-27b-it": 0.75,
+            # New providers
+            "google/gemini-1.5-flash": 0.85,
+            "google/gemini-1.5-pro": 0.95,
+            "groq/llama-3.1-70b-versatile": 0.90,
+            "groq/llama-3.1-8b-instant": 0.75,
+            "groq/mixtral-8x7b-instruct": 0.88,
+            "openrouter/auto": 0.80,
+            "openrouter/gpt-4o-mini": 0.82,
+            "openrouter/llama-3.1-70b-instruct": 0.90,
+            "perplexity/sonar-pro": 0.88,
+            "perplexity/sonar-reasoning-pro": 0.92,
         }
 
         base_score = base_scores.get(model_id, 0.70)
@@ -367,14 +378,30 @@ class ProductionSupervisor:
             TaskType.CODE_GENERATION: {
                 "mistralai/codestral-latest": 0.15,
                 "ai21-labs/ai21-jamba-1.5-large": 0.10,
+                "groq/llama-3.1-8b-instant": 0.08,
             },
             TaskType.FAST_PROCESSING: {
                 "meta-llama/llama-3.2-1b-instruct": 0.20,
                 "qwen/qwen2.5-3b-instruct": 0.15,
+                "google/gemini-1.5-flash": 0.18,
+                "groq/llama-3.1-8b-instant": 0.20,
+                "openrouter/gpt-4o-mini": 0.12,
             },
             TaskType.CRITICAL_ORCHESTRATION: {
                 "ai21-labs/ai21-jamba-1.5-large": 0.12,
                 "mistralai/mixtral-8x7b-instruct-v0.1": 0.10,
+                "google/gemini-1.5-pro": 0.15,
+                "perplexity/sonar-reasoning-pro": 0.18,
+            },
+            TaskType.PREDICTIVE_ANALYTICS: {
+                "perplexity/sonar-pro": 0.15,
+                "openrouter/llama-3.1-70b-instruct": 0.12,
+                "groq/llama-3.1-70b-versatile": 0.10,
+            },
+            TaskType.SECURITY_TESTING: {
+                "perplexity/sonar-reasoning-pro": 0.20,
+                "google/gemini-1.5-pro": 0.15,
+                "openrouter/auto": 0.10,
             },
         }
 

@@ -194,5 +194,13 @@ else
   fi
 fi
 
+# --- Argo Workflow trigger (v3.0 K8s orchestration) ---
+if command -v curl >/dev/null 2>&1 && [ -n "${ARGO_WORKFLOW_API:-}" ]; then
+  log_phase "argo" "triggering Argo Workflow via API"
+  curl -X POST "$ARGO_WORKFLOW_API" \
+    -H "Content-Type: application/json" \
+    -d '{"runId":"'$RUN_ID'","imageTag":"'$IMAGE_TAG'","branch":"'${TARGET_BRANCH:-main}'"}' || log_phase "argo" "Argo trigger failed"
+fi
+
 popd >/dev/null
 log_phase "end" "gitops_sync: done"

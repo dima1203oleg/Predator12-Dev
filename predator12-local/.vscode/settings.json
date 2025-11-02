@@ -13,9 +13,7 @@
   "terminal.integrated.fontSize": 14,
   "workbench.colorTheme": "Default Dark Modern",
   "workbench.iconTheme": "material-icon-theme",
-  "# note": "Не зберігайте реальні API-ключі у репозиторії. Використовуйте секрети або environment variables."
-}
-{
+  "# note": "Не зберігайте реальні API-ключі у репозиторії. Використовуйте секрети або environment variables.",
   "files.autoSave": "onFocusChange",
   "files.autoSaveDelay": 500,
   "git.enableSmartCommit": true,
@@ -161,5 +159,12 @@
       },
       "timeoutMs": 120000
     }
-  }
+  },
+  "extensions.autoInstall": [
+    "predator-auto-approve"
+  ]
+},
+  "extensions.autoInstall": [
+    "predator-auto-approve"
+  ]
 }

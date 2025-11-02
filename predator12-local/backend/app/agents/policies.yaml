@@ -88,6 +88,47 @@ models:
     latency: 0.9
     quality: 0.8
     type: embedding
+  # New providers with high limits/free tier
+  google/gemini-1.5-flash:
+    cost: 0.0 # Free tier with high limits
+    latency: 0.95
+    quality: 0.85
+  google/gemini-1.5-pro:
+    cost: 0.0 # Free tier with high limits
+    latency: 0.8
+    quality: 0.95
+  groq/llama-3.1-70b-versatile:
+    cost: 0.0 # Free tier with high limits
+    latency: 0.9
+    quality: 0.9
+  groq/llama-3.1-8b-instant:
+    cost: 0.0 # Free tier with high limits
+    latency: 0.98
+    quality: 0.75
+  groq/mixtral-8x7b-instruct:
+    cost: 0.0 # Free tier with high limits
+    latency: 0.85
+    quality: 0.88
+  openrouter/auto:
+    cost: 0.0 # Free tier with high limits
+    latency: 0.7
+    quality: 0.8
+  openrouter/gpt-4o-mini:
+    cost: 0.0 # Free tier with high limits
+    latency: 0.85
+    quality: 0.82
+  openrouter/llama-3.1-70b-instruct:
+    cost: 0.0 # Free tier with high limits
+    latency: 0.75
+    quality: 0.9
+  perplexity/sonar-pro:
+    cost: 0.0 # Free tier with high limits
+    latency: 0.8
+    quality: 0.88
+  perplexity/sonar-reasoning-pro:
+    cost: 0.0 # Free tier with high limits
+    latency: 0.7
+    quality: 0.92
 
 # Автоматичне самовідновлення
 autoheal:
