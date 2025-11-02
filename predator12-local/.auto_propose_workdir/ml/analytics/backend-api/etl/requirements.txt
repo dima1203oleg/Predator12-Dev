@@ -1,6 +1,0 @@
-watchdog
-sqlalchemy
-psycopg2-binary
-qdrant-client
-openai
-pandas

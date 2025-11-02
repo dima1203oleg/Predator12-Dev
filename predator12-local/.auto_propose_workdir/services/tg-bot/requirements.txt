@@ -1,5 +1,0 @@
-aiogram>=3.0.0,<4
-uvicorn[standard]
-uvloop
-prometheus-client
-httpx

@@ -1,4 +1,0 @@
-source: "src/**/{*.tsx,*.ts}"
-target_locale: "uk-UA"
-strategy: "missing_only"
-post_action: "open_pr"

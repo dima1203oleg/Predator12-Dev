@@ -95,7 +95,7 @@ const AIVoiceInterface: React.FC = () => {
   const synthRef = useRef<any>(null);
 
   const [settings, setSettings] = useState<VoiceSettings>({
-    language: 'uk-UA', // Українська за замовчуванням
+    language: 'uk-UA', // Ukrainian by default
     voice: 'uk-UA', // Український голос
     speed: 1,
     pitch: 1,
@@ -225,7 +225,9 @@ const AIVoiceInterface: React.FC = () => {
         console.log('Current state:', { isListening, isConnected });
         setIsListening(false);
         // НЕ перезапускаємо автоматично - користувач має контроль
-      };    console.log('✅ Web Speech API налаштовано успішно!');
+      };
+
+      console.log('✅ Web Speech API налаштовано успішно!');
 
     // Опціональний автотест TTS (розкоментуйте для тестування)
     // setTimeout(() => {
@@ -1266,7 +1268,7 @@ const AIVoiceInterface: React.FC = () => {
               }
               label={
                 <Typography sx={{ color: nexusColors.text.primary }}>
-                  Автоматично озвучувати відповіді
+                  Auto speak responses
                 </Typography>
               }
             />
@@ -1288,7 +1290,7 @@ const AIVoiceInterface: React.FC = () => {
               }
               label={
                 <Typography sx={{ color: nexusColors.text.primary }}>
-                  Безперервне прослуховування
+                  Continuous listening
                 </Typography>
               }
             />
@@ -1299,7 +1301,7 @@ const AIVoiceInterface: React.FC = () => {
             onClick={() => setSettingsOpen(false)}
             sx={{ color: nexusColors.text.secondary }}
           >
-            Закрити
+            Close
           </Button>
           <Button
             variant="contained"
@@ -1308,7 +1310,7 @@ const AIVoiceInterface: React.FC = () => {
               color: 'white'
             }}
           >
-            Зберегти
+            Save
           </Button>
         </DialogActions>
       </Dialog>
