@@ -23,8 +23,10 @@ from app.middleware.rate_limiter import (
 try:
     from observability.telemetry import setup_telemetry
 except ImportError:
+
     def setup_telemetry(app):
         return {}
+
 
 # Імпорт Voice Providers API
 # from api.voice_providers import router as voice_providers_router

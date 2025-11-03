@@ -3,9 +3,10 @@ Load Testing Сценарії для Predator12
 Використовує k6 або Locust для тестування з високим навантаженням
 """
 
-import time
 import random
-from locust import HttpUser, between, task, TaskSet, events
+import time
+
+from locust import HttpUser, TaskSet, between, events, task
 from locust.contrib.fasthttp import FastHttpUser
 
 
@@ -77,19 +78,21 @@ class PredatorUser(FastHttpUser):
 # Обробник подій для логування
 @events.test_start.add_listener
 def on_test_start(environment, **kwargs):
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🚀 LOAD TEST STARTED")
-    print("="*60)
+    print("=" * 60)
     print(f"Target: {environment.host}")
-    print(f"Users: {environment.runner.target_clients if hasattr(environment.runner, 'target_clients') else 'N/A'}")
-    print("="*60 + "\n")
+    print(
+        f"Users: {environment.runner.target_clients if hasattr(environment.runner, 'target_clients') else 'N/A'}"
+    )
+    print("=" * 60 + "\n")
 
 
 @events.test_stop.add_listener
 def on_test_stop(environment, **kwargs):
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🏁 LOAD TEST COMPLETED")
-    print("="*60)
+    print("=" * 60)
 
     # Вивести статистику
     for name, stats in environment.stats.entries.items():
@@ -104,13 +107,13 @@ def on_test_stop(environment, **kwargs):
             failure_rate = (stats.num_failures / stats.num_requests) * 100
             print(f"  Failure Rate: {failure_rate:.2f}%")
 
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
 
 
 # K6 Test Script (JavaScript)
 # Це можна запустити з k6 run load_test.js
 
-K6_TEST_SCRIPT = '''
+K6_TEST_SCRIPT = """
 import http from 'k6/http';
 import { check, sleep, group } from 'k6';
 import { Rate, Trend, Counter, Gauge } from 'k6/metrics';
@@ -171,11 +174,12 @@ export default function() {
 
   sleep(1);
 }
-'''
+"""
 
 
 if __name__ == "__main__":
-    print("""
+    print(
+        """
     🚀 LOAD TESTING GUIDE
 
     Option 1: Locust (Python-based)
@@ -202,4 +206,5 @@ if __name__ == "__main__":
     • Response time: < 500ms (95th percentile)
     • Error rate: < 1%
     • Throughput: > 100 req/sec
-    """)
+    """
+    )

@@ -3,11 +3,11 @@ E2E тестування для Predator12 з використанням pytest
 Smoke тесты для основних user flows
 """
 
-import pytest
-import httpx
 import json
-from typing import Dict, Any
+from typing import Any, Dict
 
+import httpx
+import pytest
 
 BASE_URL = "http://localhost:8000"
 
@@ -189,9 +189,7 @@ async def test_deployment_readiness(client, deployment_ready_checklist):
 
     # 1. Health endpoints
     health_response = await client.get("/health")
-    deployment_ready_checklist["health_endpoints_ok"] = (
-        health_response.status_code == 200
-    )
+    deployment_ready_checklist["health_endpoints_ok"] = health_response.status_code == 200
 
     # 2. Rate limiting
     rate_limit_headers = all(

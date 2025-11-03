@@ -57,42 +57,52 @@ curl http://localhost:9090/api/v1/query?query=up
 ### Morning Checklist (Before Shift)
 
 1. **System Health**
+
    ```bash
    curl -s http://localhost:8000/health | jq .components
    ```
+
    ✅ All components should be "healthy"
 
 2. **Database Health**
+
    ```bash
    docker-compose exec db psql -U postgres -d predator -c "SELECT version();"
    ```
+
    ✅ Should show PostgreSQL version
 
 3. **Redis Connection**
+
    ```bash
    redis-cli -h localhost ping
    ```
+
    ✅ Should return PONG
 
 4. **Celery Workers**
+
    ```bash
    celery -A app.workers inspect active
    ```
+
    ✅ Should show active workers
 
 5. **Monitoring Dashboards**
    - Prometheus: http://localhost:9090
    - Grafana: http://localhost:3000
-   ✅ Check CPU, memory, request rates
+     ✅ Check CPU, memory, request rates
 
 ### End-of-Day Checklist
 
 1. Review error logs:
+
    ```bash
    docker-compose logs api | grep -i error
    ```
 
 2. Check failed tasks:
+
    ```bash
    celery -A app.workers inspect failed
    ```
@@ -111,6 +121,7 @@ curl http://localhost:9090/api/v1/query?query=up
 **Symptoms:** CPU > 80% for 5+ minutes
 
 **Diagnosis:**
+
 ```bash
 # Find problematic process
 docker top predator12-api
@@ -121,6 +132,7 @@ docker-compose exec db psql -U postgres -d predator \
 ```
 
 **Resolution:**
+
 1. Identify the problematic query
 2. Kill the query if necessary:
    ```bash
@@ -135,11 +147,13 @@ docker-compose exec db psql -U postgres -d predator \
 **Symptoms:** Memory > 85% available
 
 **Diagnosis:**
+
 ```bash
 docker stats predator12-api --no-stream
 ```
 
 **Resolution:**
+
 1. Identify memory leaks:
    ```bash
    python -m memory_profiler backend/app/main.py
@@ -155,11 +169,13 @@ docker stats predator12-api --no-stream
 **Symptoms:** "Connection refused" in logs
 
 **Diagnosis:**
+
 ```bash
 docker-compose exec db psql -U postgres -d predator -c "SELECT 1;"
 ```
 
 **Resolution:**
+
 1. Check database container status:
    ```bash
    docker-compose logs db | tail -20
@@ -175,6 +191,7 @@ docker-compose exec db psql -U postgres -d predator -c "SELECT 1;"
 **Symptoms:** Average response time > 500ms
 
 **Diagnosis:**
+
 ```bash
 # Check slow queries
 curl 'http://localhost:9090/api/v1/query?query=http_request_duration_seconds_bucket'
@@ -184,6 +201,7 @@ celery -A app.workers inspect reserved
 ```
 
 **Resolution:**
+
 1. Scale Celery workers:
    ```bash
    docker-compose up -d --scale celery=3
@@ -202,6 +220,7 @@ celery -A app.workers inspect reserved
    - Alerts sent to on-call
 
 2. **Mitigation Phase**
+
    ```bash
    # Stop writes
    docker-compose pause api
@@ -220,6 +239,7 @@ celery -A app.workers inspect reserved
 ### Partial Data Loss
 
 1. Enable point-in-time recovery:
+
    ```bash
    # Check WAL archive
    ls -lh /var/lib/postgresql/data/pg_wal/
@@ -234,6 +254,7 @@ celery -A app.workers inspect reserved
 ### Complete Failure
 
 1. **Full Recovery Procedure**
+
    ```bash
    # 1. Stop all services
    docker-compose down
@@ -326,11 +347,13 @@ services:
 ### Regular Security Checks
 
 1. **Daily**: Review failed login attempts
+
    ```bash
    docker-compose logs keycloak | grep "Invalid credentials"
    ```
 
 2. **Weekly**: Rotate secrets
+
    ```bash
    bash scripts/rotate-secrets.sh
    ```
@@ -360,13 +383,13 @@ bash scripts/key-rotation.sh
 
 ### Common Issues
 
-| Problem | Symptoms | Solution |
-|---------|----------|----------|
-| API not responding | 502 Bad Gateway | Check API logs, restart container |
-| High latency | Response time > 1s | Scale horizontally, optimize queries |
-| Memory leak | Increasing memory usage | Restart worker, code review |
-| Database locked | "database is locked" | Kill blocking queries, analyze |
-| Redis unavailable | "Connection refused" | Check Redis container, restart |
+| Problem            | Symptoms                | Solution                             |
+| ------------------ | ----------------------- | ------------------------------------ |
+| API not responding | 502 Bad Gateway         | Check API logs, restart container    |
+| High latency       | Response time > 1s      | Scale horizontally, optimize queries |
+| Memory leak        | Increasing memory usage | Restart worker, code review          |
+| Database locked    | "database is locked"    | Kill blocking queries, analyze       |
+| Redis unavailable  | "Connection refused"    | Check Redis container, restart       |
 
 ### Debugging Tools
 
@@ -389,12 +412,12 @@ SELECT * FROM pg_stat_statements ORDER BY total_time DESC LIMIT 10;
 
 ## Escalation
 
-| Severity | Response Time | Escalation |
-|----------|--------------|------------|
-| 🟢 Low | 1 hour | Document in log |
-| 🟡 Medium | 15 mins | Notify on-call |
-| 🔴 High | 5 mins | Page on-call + team lead |
-| 🔴 Critical | Immediate | Page team, wake-up if needed |
+| Severity    | Response Time | Escalation                   |
+| ----------- | ------------- | ---------------------------- |
+| 🟢 Low      | 1 hour        | Document in log              |
+| 🟡 Medium   | 15 mins       | Notify on-call               |
+| 🔴 High     | 5 mins        | Page on-call + team lead     |
+| 🔴 Critical | Immediate     | Page team, wake-up if needed |
 
 ---
 
@@ -406,6 +429,7 @@ Template for after-incident reviews:
 # Incident Report - [Date] [Title]
 
 ## Timeline
+
 - **14:32** - Alert triggered
 - **14:35** - On-call responded
 - **14:42** - Issue identified
@@ -413,20 +437,25 @@ Template for after-incident reviews:
 - **15:00** - Service recovered
 
 ## Root Cause
+
 [Describe what caused the issue]
 
 ## Impact
+
 - Duration: 28 minutes
 - Affected users: X
 - SLA impact: X%
 
 ## Resolution
+
 [Describe what was done]
 
 ## Prevention
+
 [What will we do to prevent this]
 
 ## Action Items
+
 - [ ] Item 1 (Owner: X, Due: Date)
 - [ ] Item 2 (Owner: Y, Due: Date)
 ```

@@ -85,7 +85,6 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         "/api/v1/ingest/upload": (20, 3600),  # 20 на годину
         "/api/v1/search": (100, 60),  # 100 на хвилину
         "/api/v1/agents": (200, 60),  # 200 на хвилину для список агентів
-
         # Default для інших ендпоінтів
         "*": (1000, 60),  # 1000 на хвилину
     }
@@ -215,12 +214,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
             "connect-src 'self' ws: wss:"
         ),
         "Referrer-Policy": "strict-origin-when-cross-origin",
-        "Permissions-Policy": (
-            "geolocation=(), "
-            "microphone=(), "
-            "camera=(), "
-            "payment=()"
-        ),
+        "Permissions-Policy": ("geolocation=(), " "microphone=(), " "camera=(), " "payment=()"),
     }
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:

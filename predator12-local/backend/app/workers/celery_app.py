@@ -31,12 +31,10 @@ celery_app.conf.update(
     # Часові зони
     timezone="UTC",
     enable_utc=True,
-
     # Серіалізація (оптимізована з использованием msgpack для더 швидко)
     task_serializer="json",
     accept_content=["json", "msgpack"],
     result_serializer="json",
-
     # Результати та кеш
     result_expires=3600,
     result_cache_max=50000,  # Збільшено для більших обсягів
@@ -47,13 +45,11 @@ celery_app.conf.update(
         "retry_on_timeout": True,
         "db": 2,
     },
-
     # Батчинг для масових операцій
     task_max_retries=3,
     task_default_retry_delay=60,
     task_soft_time_limit=300,  # 5 хвилин
     task_time_limit=600,  # 10 хвилин (hard limit)
-
     # Черги для різних типів задач (пріоритизовані)
     task_routes={
         "app.workers.tasks.osint_analysis_task": {
@@ -81,7 +77,6 @@ celery_app.conf.update(
             "priority": 2,
         },
     },
-
     # Налаштування воркерів (оптимізовані)
     worker_prefetch_multiplier=4,  # Дозволити воркеру брати більше задач одночасно
     task_acks_late=True,  # Підтвердження після виконання
@@ -89,20 +84,17 @@ celery_app.conf.update(
     worker_disable_rate_limits=False,
     worker_request_timeout=300,
     worker_pool="solo",  # Для локальної розробки можна змінити на "prefork" для production
-
     # Моніторинг (вкл. метрики)
     worker_send_task_events=True,
     task_send_sent_event=True,
     worker_log_format="[%(levelname)s/%(processName)s] %(message)s",
     worker_task_log_format="[%(levelname)s/%(processName)s][%(task_name)s(%(task_id)s)] %(message)s",
-
     # Комунікація
     broker_connection_retry_on_startup=True,
     broker_connection_retry=True,
     broker_connection_max_retries=10,
     broker_heartbeat=30,
     broker_pool_limit=10,
-
     # Безпека
     worker_hijack_root_logger=False,
     worker_log_color=False,

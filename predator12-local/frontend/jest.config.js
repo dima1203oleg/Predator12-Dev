@@ -7,17 +7,17 @@ module.exports = {
     roots: ["<rootDir>/src"],
     testMatch: ["**/__tests__/**/*.ts?(x)", "**/?(*.)+(spec|test).ts?(x)"],
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
-    
+
     // Module resolution
     moduleNameMapper: {
         "^@/(.*)$": "<rootDir>/src/$1",
         "\\.(css|less|scss|sass)$": "identity-obj-proxy",
         "\\.(gif|ttf|eot|svg|png|jpg|jpeg)$": "<rootDir>/src/__mocks__/fileMock.js",
     },
-    
+
     // Setup files
     setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
-    
+
     // Transform files
     transform: {
         "^.+\\.tsx?$": ["ts-jest", {
@@ -28,7 +28,7 @@ module.exports = {
             },
         }],
     },
-    
+
     // Coverage
     collectCoverageFrom: [
         "src/**/*.{ts,tsx}",
@@ -36,7 +36,7 @@ module.exports = {
         "!src/index.tsx",
         "!src/reportWebVitals.ts",
     ],
-    
+
     coverageThresholds: {
         global: {
             branches: 70,
@@ -45,7 +45,7 @@ module.exports = {
             statements: 70,
         },
     },
-    
+
     // Globals
     globals: {
         "ts-jest": {
@@ -53,4 +53,3 @@ module.exports = {
         },
     },
 }
-
