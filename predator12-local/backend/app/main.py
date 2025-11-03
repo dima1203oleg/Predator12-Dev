@@ -12,6 +12,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel
 
+# Імпорт middleware для security та rate limiting
+from app.middleware.rate_limiter import (
+    CORSPolicyMiddleware,
+    RateLimitMiddleware,
+    SecurityHeadersMiddleware,
+)
+
+# Імпорт Telemetry (OpenTelemetry)
+try:
+    from observability.telemetry import setup_telemetry
+except ImportError:
+    def setup_telemetry(app):
+        return {}
+
 # Імпорт Voice Providers API
 # from api.voice_providers import router as voice_providers_router
 
@@ -28,13 +42,21 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Налаштувати Telemetry (OpenTelemetry)
+telemetry_info = setup_telemetry(app)
+
+# Додати security middleware (важливо: порядок має значення)
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(RateLimitMiddleware)
+app.add_middleware(CORSPolicyMiddleware)
+
 # Підключення Voice Providers API
 # app.include_router(voice_providers_router)
 
 # Підключення CYBER-ACE API
 # app.include_router(cyber_ace_router)
 
-# CORS middleware for frontend communication
+# CORS middleware for frontend communication (legacy, буде замінено на CORSPolicyMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[

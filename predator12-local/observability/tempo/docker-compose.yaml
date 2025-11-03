@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  tempo:
+    image: grafana/tempo:latest
+    command:
+      - "-config.file=/etc/tempo.yaml"
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml
+      - tempo-data:/var/tempo
+    ports:
+      - "3200:3200" # Tempo API
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+    environment:
+      - LOG_LEVEL=info
+    networks:
+      - predator
+
+  jaeger-ui:
+    image: grafana/jaeger-ui:latest
+    ports:
+      - "16686:16686"
+    environment:
+      - QUERY_BASE_PATH=/jaeger
+      - API_TRACE_QUERY_LOOKUP_URL=http://tempo:3200
+    depends_on:
+      - tempo
+    networks:
+      - predator
+
+networks:
+  predator:
+    external: true
+
+volumes:
+  tempo-data:
+    driver: local
