@@ -1,0 +1,134 @@
+# Prometheus alert rules for Predator 12 production
+
+groups:
+  - name: predator12-alerts
+    interval: 15s
+    rules:
+      # API availability
+      - alert: APIHighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          component: api
+        annotations:
+          summary: "API error rate is high ({{ $value | humanizePercentage }})"
+          description: "Backend API error rate has exceeded 5% threshold"
+
+      # System health
+      - alert: HighMemoryUsage
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "Memory usage is high ({{ $value | humanizePercentage }})"
+          description: "Available memory is below 10% threshold"
+
+      - alert: HighCPUUsage
+        expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 10m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "CPU usage is high ({{ $value | humanize }}%)"
+          description: "CPU usage has exceeded 80% for more than 10 minutes"
+
+      # Thermal management alerts
+      - alert: ThermalStatusCritical
+        expr: predator_thermal_status > 0.9
+        for: 2m
+        labels:
+          severity: critical
+          component: thermal
+        annotations:
+          summary: "System thermal status is critical ({{ $value | humanize }})"
+          description: "Thermal status has exceeded 0.9 threshold - emergency cooling needed"
+
+      - alert: ThermalStatusWarning
+        expr: predator_thermal_status > 0.75
+        for: 5m
+        labels:
+          severity: warning
+          component: thermal
+        annotations:
+          summary: "System thermal status is high ({{ $value | humanize }})"
+          description: "Thermal status has exceeded 0.75 threshold"
+
+      # Model competition latency
+      - alert: ModelCompetitionLatencyHigh
+        expr: histogram_quantile(0.95, model_competition_latency_ms) > 5000
+        for: 5m
+        labels:
+          severity: warning
+          component: models
+        annotations:
+          summary: "Model competition latency is high ({{ $value | humanize }}ms)"
+          description: "95th percentile latency has exceeded 5 seconds"
+
+      # Patch generation issues
+      - alert: PatchGenerationFailures
+        expr: rate(patch_generation_failures_total[5m]) > 0
+        for: 10m
+        labels:
+          severity: warning
+          component: patches
+        annotations:
+          summary: "Patch generation failures detected"
+          description: "Patch generation failures have been detected"
+
+      # Database connectivity
+      - alert: PostgreSQLDown
+        expr: up{job="postgres"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "PostgreSQL is unavailable"
+          description: "PostgreSQL exporter is unable to connect"
+
+      - alert: RedisDown
+        expr: up{job="redis"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: cache
+        annotations:
+          summary: "Redis is unavailable"
+          description: "Redis exporter is unable to connect"
+
+      # Queue monitoring
+      - alert: CeleryQueueBacklog
+        expr: celery_tasks_pending > 100
+        for: 10m
+        labels:
+          severity: warning
+          component: queue
+        annotations:
+          summary: "Large Celery task backlog ({{ $value }} tasks pending)"
+          description: "Celery queue has more than 100 pending tasks"
+
+      # Telegram bot monitoring
+      - alert: TelegramBotErrors
+        expr: rate(tg_bot_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+          component: telegram
+        annotations:
+          summary: "Telegram bot error rate is high"
+          description: "Telegram bot error rate has exceeded 1%"
+
+      # API response time
+      - alert: APIResponseTimeSlow
+        expr: histogram_quantile(0.95, http_request_duration_seconds) > 5
+        for: 5m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "API response time is slow ({{ $value | humanize }}s)"
+          description: "95th percentile API response time has exceeded 5 seconds"

@@ -1,0 +1,104 @@
+# Grafana provisioning configuration for Predator 12 dashboards
+
+apiVersion: 1
+
+providers:
+  - name: "Predator 12 Dashboards"
+    orgId: 1
+    folder: "Predator 12"
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 60
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: "Predator 12"
+        orgId: 1
+        folder: "Predator 12"
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /etc/grafana/provisioning/dashboards
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus:9090
+        isDefault: true
+        editable: true
+
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki:3100
+        isDefault: false
+        editable: true
+
+      - name: Tempo
+        type: tempo
+        access: proxy
+        url: http://tempo:3200
+        isDefault: false
+        editable: true
+
+dashboards:
+  - name: "Predator 12 - Overview"
+    orgId: 1
+    interval: 30s
+    panels:
+      - title: "System Health Status"
+        targets:
+          - expr: 'up{job="prometheus"}'
+      - title: "API Request Rate"
+        targets:
+          - expr: "rate(http_requests_total[5m])"
+      - title: "Error Rate"
+        targets:
+          - expr: 'rate(http_requests_total{status=~"5.."}[5m])'
+      - title: "Thermal Status"
+        targets:
+          - expr: "predator_thermal_status"
+
+  - name: "Predator 12 - Agents"
+    orgId: 1
+    interval: 30s
+    panels:
+      - title: "Active Agents"
+        targets:
+          - expr: "predator_agents_active"
+      - title: "Agent Health"
+        targets:
+          - expr: "predator_agent_health_status"
+      - title: "Model Competition Latency"
+        targets:
+          - expr: "model_competition_latency_ms"
+      - title: "Patch Generation Time"
+        targets:
+          - expr: "patch_generation_time_ms"
+
+  - name: "Predator 12 - Infrastructure"
+    orgId: 1
+    interval: 30s
+    panels:
+      - title: "CPU Usage"
+        targets:
+          - expr: 'rate(node_cpu_seconds_total{mode="user"}[5m]) * 100'
+      - title: "Memory Usage"
+        targets:
+          - expr: "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100"
+      - title: "Disk I/O"
+        targets:
+          - expr: "rate(node_disk_io_time_seconds_total[5m])"
+      - title: "Network Traffic"
+        targets:
+          - expr: "rate(node_network_transmit_bytes_total[5m])"
