@@ -22,6 +22,14 @@ from aiogram.filters import Command, CommandStart
 from aiogram.types import Update
 from fastapi import FastAPI, HTTPException, Request
 
+# Завантаження змінних середовища з .env файлу
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv не встановлено, продовжуємо без нього
+
 # Імпорт агента для керування природною мовою
 try:
     from agents.supervisor import ProductionSupervisor

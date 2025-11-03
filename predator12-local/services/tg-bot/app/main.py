@@ -3,6 +3,7 @@ import os
 
 import httpx
 from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Update
@@ -20,7 +21,7 @@ BACKEND_HEALTH_URL = os.getenv("BACKEND_HEALTH_URL", "http://backend:8000/health
 if not BOT_TOKEN:
     raise SystemExit("TELEGRAM_BOT_TOKEN is not set in env")
 
-bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
+bot = Bot(BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 dp = Dispatcher()
 app = FastAPI(title="Predator Telegram Webhook")
 
@@ -30,19 +31,22 @@ ERROR_COUNTER = Counter("tg_bot_errors_total", "Total Telegram handler errors")
 
 
 @dp.message(CommandStart())
-async def start(m: "aiogram.types.Message"):
+async def start(m: "aiogram.types.Message") -> None:
+    """Handle /start command."""
     UPDATES_COUNTER.inc()
     await m.answer("👋 Predator 12 тут. /help")
 
 
 @dp.message(Command("help"))
-async def help_(m: "aiogram.types.Message"):
+async def help_(m: "aiogram.types.Message") -> None:
+    """Handle /help command."""
     UPDATES_COUNTER.inc()
     await m.answer("Команди: /status, /upload, /id")
 
 
 @dp.message(Command("status"))
-async def status(m: "aiogram.types.Message"):
+async def status(m: "aiogram.types.Message") -> None:
+    """Handle /status command."""
     UPDATES_COUNTER.inc()
     # simple backend ping
     try:
@@ -57,19 +61,22 @@ async def status(m: "aiogram.types.Message"):
 
 
 @dp.message(Command("upload"))
-async def upload(m: "aiogram.types.Message"):
+async def upload(m: "aiogram.types.Message") -> None:
+    """Handle /upload command."""
     UPDATES_COUNTER.inc()
     await m.answer("🔼 Відкрийте модуль «Заливка даних» у Predator.")
 
 
 @dp.message(Command("id"))
-async def cid(m: "aiogram.types.Message"):
+async def cid(m: "aiogram.types.Message") -> None:
+    """Handle /id command."""
     UPDATES_COUNTER.inc()
     await m.answer(f"🆔 <code>{m.chat.id}</code>")
 
 
 @app.post("/tg/webhook")
-async def tg_webhook(request: Request):
+async def tg_webhook(request: Request) -> dict[str, object]:
+    """Handle Telegram webhook."""
     if request.query_params.get("token") != WEBHOOK_SECRET:
         raise HTTPException(status_code=401, detail="bad token")
     data = await request.json()
@@ -80,16 +87,18 @@ async def tg_webhook(request: Request):
     except Exception as e:
         ERROR_COUNTER.inc()
         logger.exception("Failed to feed update: %s", e)
-        raise HTTPException(status_code=500, detail="handler error")
+        raise HTTPException(status_code=500, detail="handler error") from e
 
 
 @app.get("/healthz")
-def healthz():
+def healthz() -> dict[str, str]:
+    """Health check endpoint."""
     return {"status": "ok"}
 
 
 @app.get("/metrics")
-def metrics():
+def metrics() -> Response:
+    """Prometheus metrics endpoint."""
     data = generate_latest()
     return Response(content=data, media_type=CONTENT_TYPE_LATEST)
 

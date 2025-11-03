@@ -60,7 +60,7 @@ ROOT_REPO="$ROOT_DIR" bash -lc "$GENERATOR_CMD" >> "$REPORT" 2>&1 || {
 if [ -f "$PATCH_DEST" ]; then
   cp "$PATCH_DEST" "$WORKDIR/suggested.patch"
   echo "Applying suggested.patch" >> "$REPORT"
-  (cd "$WORKDIR" && git apply suggested.patch) >> "$REPORT" 2>&1 || {
+  (cd "$WORKDIR" && patch -p1 < suggested.patch) >> "$REPORT" 2>&1 || {
     echo "Patch application failed" >> "$REPORT"
     exit 1
   }
