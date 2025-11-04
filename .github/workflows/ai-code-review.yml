@@ -27,7 +27,6 @@ jobs:
           pip install httpx pyyaml
       
       - name: DeepSeek Code Review
-        if: ${{ secrets.DEEPSEEK_API_KEY != '' }}
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
@@ -35,7 +34,6 @@ jobs:
           python agents/deepseek_agent.py || echo "DeepSeek review skipped (API key not configured)"
       
       - name: Gemini Security Scan
-        if: ${{ secrets.GEMINI_API_KEY != '' }}
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |

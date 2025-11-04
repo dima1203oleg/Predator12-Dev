@@ -124,10 +124,20 @@ Configure in `.continue/config.json`:
       "apiBase": "https://api.deepseek.com/v1",
       "apiKey": "${DEEPSEEK_API_KEY}",
       "contextLength": 65536
+    },
+    {
+      "title": "GPT-4o (GitHub Models)",
+      "provider": "openai",
+      "model": "gpt-4o",
+      "apiBase": "https://models.github.ai/inference",
+      "apiKey": "${GITHUB_TOKEN}",
+      "note": "Uses GitHub Models API, not direct OpenAI"
     }
   ]
 }
 ```
+
+**Note**: `GITHUB_TOKEN` is used for GitHub Models API (models.github.ai), which provides access to GPT-4o and other models through GitHub. This is different from the direct OpenAI API.
 
 Use with slash commands:
 - `/deepseek` - Use DeepSeek R1 for reasoning

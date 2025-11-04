@@ -18,8 +18,10 @@ cp .env.example .env
 Required keys:
 - `DEEPSEEK_API_KEY` - Get from [platform.deepseek.com](https://platform.deepseek.com)
 - `GEMINI_API_KEY` - Get from [Google AI Studio](https://makersuite.google.com)
-- `GITHUB_TOKEN` - Your GitHub personal access token
+- `GITHUB_TOKEN` - Your GitHub personal access token (for GitHub Models API)
 - `ANTHROPIC_API_KEY` - Get from [Anthropic](https://console.anthropic.com)
+
+**Note**: `GITHUB_TOKEN` provides access to GitHub Models API (models.github.ai) which includes GPT-4o, GPT-4o-mini, and other models. This is separate from direct OpenAI API access.
 
 ### Reload VS Code
 Press `Cmd/Ctrl + Shift + P` → "Reload Window"

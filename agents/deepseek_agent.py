@@ -16,8 +16,10 @@ from enum import Enum
 
 try:
     import httpx
-except ImportError:
-    httpx = None
+except ImportError as e:
+    raise ImportError(
+        "httpx is required for DeepSeek agent. Install it with: pip install httpx"
+    ) from e
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -83,7 +85,7 @@ class DeepSeekAgent:
             )
         }
         
-        self.timeout = httpx.Timeout(60.0, read=120.0) if httpx else None
+        self.timeout = httpx.Timeout(60.0, read=120.0)
     
     async def chat(
         self,
@@ -108,10 +110,6 @@ class DeepSeekAgent:
         Returns:
             API response dict
         """
-        if not httpx:
-            logger.error("❌ httpx not installed. Run: pip install httpx")
-            return {"error": "httpx not installed"}
-        
         if not self.api_key:
             logger.error("❌ DEEPSEEK_API_KEY not set")
             return {"error": "API key not configured"}
