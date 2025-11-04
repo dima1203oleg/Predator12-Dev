@@ -13,7 +13,7 @@ export interface CompetitionScenario {
   tasks: string[];
 }
 
-// 48 Free Models - matches backend model_registry.yaml
+// 52 Free Models - matches backend model_registry.yaml
 export const FREE_MODELS_CATALOG: Record<string, ModelInfo[]> = {
   reasoning: [
     { id: 'google/gemini-1.5-pro', free: true, performance: 96, category: 'reasoning' },
@@ -67,7 +67,6 @@ export const FREE_MODELS_CATALOG: Record<string, ModelInfo[]> = {
   ],
   vision: [
     { id: 'google/gemini-pro-vision', free: true, performance: 93, category: 'vision' },
-    { id: 'google/gemini-1.5-pro', free: true, performance: 94, category: 'vision' },
     { id: 'meta/llama-3.2-11b-vision-instruct', free: true, performance: 90, category: 'vision' },
     { id: 'Qwen/Qwen2-VL-7B-Instruct', free: true, performance: 88, category: 'vision' },
     { id: 'llava-hf/llava-1.6-mistral-7b', free: true, performance: 85, category: 'vision' },
