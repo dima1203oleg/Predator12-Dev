@@ -1,6 +1,6 @@
 # Predator12 - AI Dashboard Project
 
-Production-ready AI Dashboard with 30+ agents and 58+ free models integration.
+Production-ready AI Dashboard with 30+ agents and 61+ free models integration, including Google Gemini support.
 
 ## 🎉 Project Status
 
@@ -12,7 +12,8 @@ Production-ready AI Dashboard with 30+ agents and 58+ free models integration.
 This project contains the MEGA Dashboard for managing AI agents, models, and services:
 
 - **30+ AI Agents** across 5 categories
-- **58+ Free Models** from 10+ providers
+- **61+ Free Models** from 10+ providers (including Google Gemini)
+- **Google Gemini Models**: Gemini-1.5-Pro, Gemini-2.0-Flash, Gemini-Pro-Vision, and more
 - **Beautiful UI** with glassmorphism design
 - **Real-time Metrics** visualization
 - **Comprehensive Documentation** (8 docs)
