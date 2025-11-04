@@ -1,0 +1,27 @@
+{
+  "recommendations": [
+    "github.copilot",
+    "github.copilot-chat",
+    "wassimdev.wassimdev-vscode-deepseek",
+    "continue.continue",
+    "saoudrizwan.claude-dev",
+    "rooveterinaryinc.roo-coder",
+    "googlecloudtools.cloudcode",
+    "bito.bito",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.black-formatter",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-azuretools.vscode-docker",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "redhat.vscode-yaml",
+    "eamodio.gitlens",
+    "github.vscode-pull-request-github",
+    "donjayamanne.githistory",
+    "gruntfuggly.todo-tree",
+    "wayou.vscode-todo-highlight",
+    "pkief.material-icon-theme",
+    "zhuangtongfa.material-theme"
+  ]
+}

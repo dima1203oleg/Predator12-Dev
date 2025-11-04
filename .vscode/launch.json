@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "🤖 DeepSeek Agent",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/agents/deepseek_agent.py",
+      "console": "integratedTerminal",
+      "env": {
+        "DEEPSEEK_API_KEY": "${env:DEEPSEEK_API_KEY}",
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "🌟 Gemini Orchestrator",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/agents/gemini_orchestrator_agent.py",
+      "console": "integratedTerminal",
+      "env": {
+        "GEMINI_API_KEY": "${env:GEMINI_API_KEY}",
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "🚀 Full AI Stack",
+      "type": "compound",
+      "configurations": ["🤖 DeepSeek Agent", "🌟 Gemini Orchestrator"],
+      "stopAll": true
+    }
+  ]
+}
