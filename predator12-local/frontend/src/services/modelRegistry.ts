@@ -16,6 +16,8 @@ export interface CompetitionScenario {
 // 48 Free Models - matches backend model_registry.yaml
 export const FREE_MODELS_CATALOG: Record<string, ModelInfo[]> = {
   reasoning: [
+    { id: 'google/gemini-1.5-pro', free: true, performance: 96, category: 'reasoning' },
+    { id: 'google/gemini-pro', free: true, performance: 90, category: 'reasoning' },
     { id: 'meta/meta-llama-3.1-70b-instruct', free: true, performance: 95, category: 'reasoning' },
     { id: 'meta/meta-llama-3.1-8b-instruct', free: true, performance: 82, category: 'reasoning' },
     { id: 'mistral/mixtral-8x7b-instruct', free: true, performance: 89, category: 'reasoning' },
@@ -42,6 +44,8 @@ export const FREE_MODELS_CATALOG: Record<string, ModelInfo[]> = {
     { id: 'wizardcoder/wizardcoder-15b', free: true, performance: 83, category: 'code' }
   ],
   quick: [
+    { id: 'google/gemini-1.5-flash', free: true, performance: 88, category: 'quick' },
+    { id: 'google/gemini-2.0-flash', free: true, performance: 91, category: 'quick' },
     { id: 'microsoft/phi-3-mini-4k-instruct', free: true, performance: 79, category: 'quick' },
     { id: 'mistral/mistral-7b-instruct-v0.3', free: true, performance: 78, category: 'quick' },
     { id: 'qwen/qwen2.5-3b-instruct', free: true, performance: 76, category: 'quick' },
@@ -62,9 +66,11 @@ export const FREE_MODELS_CATALOG: Record<string, ModelInfo[]> = {
     { id: 'sentence-transformers/all-MiniLM-L6-v2', free: true, performance: 77, category: 'embed' }
   ],
   vision: [
-    { id: 'llava-hf/llava-1.6-mistral-7b', free: true, performance: 85, category: 'vision' },
-    { id: 'Qwen/Qwen2-VL-7B-Instruct', free: true, performance: 88, category: 'vision' },
+    { id: 'google/gemini-pro-vision', free: true, performance: 93, category: 'vision' },
+    { id: 'google/gemini-1.5-pro', free: true, performance: 94, category: 'vision' },
     { id: 'meta/llama-3.2-11b-vision-instruct', free: true, performance: 90, category: 'vision' },
+    { id: 'Qwen/Qwen2-VL-7B-Instruct', free: true, performance: 88, category: 'vision' },
+    { id: 'llava-hf/llava-1.6-mistral-7b', free: true, performance: 85, category: 'vision' },
     { id: 'llava-hf/llava-1.5-7b', free: true, performance: 82, category: 'vision' },
     { id: 'Qwen/Qwen2-VL-2B-Instruct', free: true, performance: 79, category: 'vision' },
     { id: 'moondream/moondream2', free: true, performance: 76, category: 'vision' }
