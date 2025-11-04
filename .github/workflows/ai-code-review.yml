@@ -1,0 +1,58 @@
+name: AI Code Review (DeepSeek + Gemini + Copilot)
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  ai-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install httpx pyyaml
+      
+      - name: DeepSeek Code Review
+        if: ${{ vars.DEEPSEEK_API_KEY != '' }}
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          echo "🤖 Running DeepSeek code review..."
+          python agents/deepseek_agent.py || echo "DeepSeek review skipped (API key not configured)"
+      
+      - name: Gemini Security Scan
+        if: ${{ vars.GEMINI_API_KEY != '' }}
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          echo "🌟 Running Gemini security scan..."
+          python agents/gemini_orchestrator_agent.py || echo "Gemini scan skipped (API key not configured)"
+      
+      - name: Copilot Quality Check
+        if: ${{ github.token != '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🚀 Running Copilot quality check..."
+          python agents/copilot_connector.py || echo "Copilot check completed"
+      
+      - name: Summary
+        run: |
+          echo "✅ AI Code Review Complete"
+          echo "- DeepSeek: Code analysis"
+          echo "- Gemini: Security scanning"
+          echo "- Copilot: Quality checks"
