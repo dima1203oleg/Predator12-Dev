@@ -13,8 +13,13 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-# Імпортуємо Gemini Agent
-from gemini_agent import GeminiAgent
+# Імпортуємо Gemini Agent з обробкою помилок
+try:
+    from gemini_agent import GeminiAgent
+    GEMINI_AGENT_AVAILABLE = True
+except ImportError:
+    GEMINI_AGENT_AVAILABLE = False
+    logging.warning("gemini_agent не знайдено. Gemini функціональність буде відключена.")
 
 logger = logging.getLogger(__name__)
 
@@ -128,9 +133,13 @@ class CloudModelSDK:
         self.model_routing = self._build_model_routing()
         self.clients = self._init_clients()
         
-        # Ініціалізуємо Gemini Agent
-        self.gemini_agent = GeminiAgent()
-        logger.info(f"🤖 Gemini Agent Status: {self.gemini_agent.get_status()}")
+        # Ініціалізуємо Gemini Agent якщо доступний
+        if GEMINI_AGENT_AVAILABLE:
+            self.gemini_agent = GeminiAgent()
+            logger.info(f"🤖 Gemini Agent Status: {self.gemini_agent.get_status()}")
+        else:
+            self.gemini_agent = None
+            logger.warning("⚠️ Gemini Agent недоступний")
 
     def _build_model_routing(self) -> Dict[str, Dict]:
         """Будує маршрутизацію хмарних моделей"""
@@ -183,7 +192,11 @@ class CloudModelSDK:
         """Маршрутизує запит до хмарного провайдера"""
         # Перевіряємо, чи це запит до Gemini
         if "gemini" in request.model.lower():
-            return await self._call_gemini(request)
+            if self.gemini_agent:
+                return await self._call_gemini(request)
+            else:
+                logger.warning("Запит до Gemini, але агент недоступний")
+                return await self._smart_demo_response(request)
         
         model_info = self.model_routing.get(request.model)
 
@@ -576,7 +589,7 @@ async def health_check():
     ]
     
     # Додаємо статус Gemini
-    gemini_available = cloud_model_sdk.gemini_agent.is_available()
+    gemini_available = cloud_model_sdk.gemini_agent.is_available() if cloud_model_sdk.gemini_agent else False
 
     return {
         "status": "healthy",
@@ -595,17 +608,35 @@ async def health_check():
 @app.get("/gemini/status")
 async def gemini_status():
     """Статус Gemini Agent"""
-    return cloud_model_sdk.gemini_agent.get_status()
+    if cloud_model_sdk.gemini_agent:
+        return cloud_model_sdk.gemini_agent.get_status()
+    else:
+        return {
+            "agent": "Gemini Agent",
+            "available": False,
+            "sdk_installed": False,
+            "api_key_configured": False,
+            "models_count": 0,
+            "models": [],
+            "error": "Gemini Agent module not available"
+        }
 
 
 @app.get("/")
 async def root():
     """Головна сторінка"""
-    gemini_status = "✅ Active" if cloud_model_sdk.gemini_agent.is_available() else "⚠️ Demo Mode"
+    if cloud_model_sdk.gemini_agent:
+        gemini_status = "✅ Active" if cloud_model_sdk.gemini_agent.is_available() else "⚠️ Demo Mode"
+    else:
+        gemini_status = "❌ Not Available"
+    
+    # Динамічний підрахунок кількості моделей
+    models_count = len(cloud_model_sdk.get_available_models())
+    
     return {
         "service": "Predator Cloud Model SDK",
         "version": "3.1.0",
-        "description": "40+ безкоштовних хмарних AI моделей + Google Gemini",
+        "description": f"{models_count}+ безкоштовних хмарних AI моделей + Google Gemini",
         "type": "CLOUD ONLY - NO LOCAL DEPENDENCIES",
         "providers": ["HuggingFace", "Together", "Replicate", "Groq", "OpenRouter", "Gemini", "Demo"],
         "gemini_agent": gemini_status,

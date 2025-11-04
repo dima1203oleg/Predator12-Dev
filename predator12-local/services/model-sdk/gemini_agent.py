@@ -58,6 +58,7 @@ class GeminiAgent:
                 "gemini-pro": genai.GenerativeModel("gemini-pro"),
                 "gemini-1.5-pro": genai.GenerativeModel("gemini-1.5-pro"),
                 "gemini-1.5-flash": genai.GenerativeModel("gemini-1.5-flash"),
+                # Примітка: gemini-2.0-flash - експериментальна модель, може мати обмеження
                 "gemini-2.0-flash": genai.GenerativeModel("gemini-2.0-flash-exp"),
             }
             logger.info(f"✅ Завантажено {len(self.models)} моделей Gemini")
@@ -116,7 +117,11 @@ class GeminiAgent:
             )
             
             # Повертаємо результат
-            content = response.text if hasattr(response, 'text') else str(response)
+            if hasattr(response, 'text'):
+                content = response.text
+            else:
+                logger.warning(f"Неочікуваний формат відповіді від Gemini API: {type(response)}")
+                content = str(response)
             
             return {
                 "role": "assistant",
@@ -165,9 +170,15 @@ class GeminiAgent:
         return "\n\n".join(context_parts)
 
     def _estimate_tokens(self, text: str) -> int:
-        """Оцінює кількість токенів у тексті"""
-        # Приблизна оцінка: 1 токен ≈ 4 символи
-        return len(text) // 4
+        """
+        Оцінює кількість токенів у тексті
+        
+        Примітка: Це приблизна оцінка. Для точного підрахунку токенів
+        використовуйте офіційний API Google для підрахунку токенів.
+        """
+        # Приблизна оцінка: 1 токен ≈ 4 символи (може варіюватися для різних мов)
+        # Для української мови це може бути менш точним
+        return max(1, len(text) // 4)
 
     def _demo_response(self, messages: List[Dict[str, str]]) -> Dict:
         """Генерує демо відповідь, якщо API недоступний"""
