@@ -967,9 +967,99 @@ export const aiModels: AIModel[] = [
       availability: '99.7%'
     }
   },
-  // Google Models (3 models)
+  // Google Models (6 models)
   {
     id: 'model-24',
+    name: 'Gemini-1.5-Pro',
+    provider: 'Google',
+    category: 'large-language',
+    status: 'online',
+    capabilities: ['chat', 'reasoning', 'large-context', 'multimodal'],
+    contextWindow: 2000000,
+    cost: 0,
+    speed: 'medium',
+    quality: 'high',
+    metrics: {
+      requestsPerMin: 1234,
+      avgLatency: 567,
+      errorRate: 0.01,
+      availability: '99.9%'
+    }
+  },
+  {
+    id: 'model-24a',
+    name: 'Gemini-1.5-Flash',
+    provider: 'Google',
+    category: 'efficient',
+    status: 'online',
+    capabilities: ['chat', 'reasoning', 'fast-response', 'multimodal'],
+    contextWindow: 1000000,
+    cost: 0,
+    speed: 'fast',
+    quality: 'high',
+    metrics: {
+      requestsPerMin: 3456,
+      avgLatency: 234,
+      errorRate: 0.01,
+      availability: '99.9%'
+    }
+  },
+  {
+    id: 'model-24b',
+    name: 'Gemini-2.0-Flash',
+    provider: 'Google',
+    category: 'efficient',
+    status: 'online',
+    capabilities: ['chat', 'reasoning', 'fast-response', 'multimodal', 'native-tool-use'],
+    contextWindow: 1000000,
+    cost: 0,
+    speed: 'fast',
+    quality: 'high',
+    metrics: {
+      requestsPerMin: 3890,
+      avgLatency: 198,
+      errorRate: 0.01,
+      availability: '99.9%'
+    }
+  },
+  {
+    id: 'model-24c',
+    name: 'Gemini-Pro',
+    provider: 'Google',
+    category: 'general',
+    status: 'online',
+    capabilities: ['chat', 'reasoning', 'code-generation'],
+    contextWindow: 32768,
+    cost: 0,
+    speed: 'fast',
+    quality: 'high',
+    metrics: {
+      requestsPerMin: 2567,
+      avgLatency: 312,
+      errorRate: 0.01,
+      availability: '99.8%'
+    }
+  },
+  {
+    id: 'model-24d',
+    name: 'Gemini-Pro-Vision',
+    provider: 'Google',
+    category: 'vision',
+    status: 'online',
+    capabilities: ['vision', 'image-analysis', 'multimodal', 'chat'],
+    contextWindow: 32768,
+    cost: 0,
+    speed: 'medium',
+    quality: 'high',
+    metrics: {
+      requestsPerMin: 1890,
+      avgLatency: 445,
+      errorRate: 0.02,
+      availability: '99.7%'
+    }
+  },
+  {
+    id: 'model-24e',
     name: 'Gemma-2-27B',
     provider: 'Google',
     category: 'general',
@@ -1028,7 +1118,7 @@ export const modelProviders = [
   { name: 'Cohere', count: 5, color: '#EC4899' },
   { name: 'Alibaba', count: 7, color: '#6366F1' },
   { name: 'AI21 Labs', count: 2, color: '#14B8A6' },
-  { name: 'Google', count: 3, color: '#F59E0B' },
+  { name: 'Google', count: 6, color: '#F59E0B' },
   { name: 'xAI', count: 2, color: '#8B5CF6' }
 ];
 
@@ -1037,8 +1127,8 @@ export const systemMetrics = {
   activeAgents: 28,
   trainingAgents: 1,
   idleAgents: 1,
-  totalModels: 58,
-  onlineModels: 56,
+  totalModels: 61,
+  onlineModels: 59,
   loadingModels: 2,
   avgResponseTime: 456,
   totalRequests: 1234567,
