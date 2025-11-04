@@ -7,8 +7,13 @@ THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="${THIS_DIR}"
 
 TARGET="${ROOT_DIR}/scripts/gitops_sync_dry_tests.sh"
-if [ -x "${TARGET}" ]; then
-  exec "${TARGET}" "$@"
+
+# Prevent infinite recursion by checking an environment variable
+if [ -z "${GITOPS_DRY_TESTS_SHIMMED:-}" ]; then
+  export GITOPS_DRY_TESTS_SHIMMED=1
+  if [ -x "${TARGET}" ]; then
+    exec "${TARGET}" "$@"
+  fi
 fi
 
 echo "[root-level dry-tests shim] canonical target not present or not executable: ${TARGET}"
