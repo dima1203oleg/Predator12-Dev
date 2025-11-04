@@ -13,6 +13,9 @@ import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
+# Імпортуємо Gemini Agent
+from gemini_agent import GeminiAgent
+
 logger = logging.getLogger(__name__)
 
 app = FastAPI(
@@ -124,6 +127,10 @@ class CloudModelSDK:
 
         self.model_routing = self._build_model_routing()
         self.clients = self._init_clients()
+        
+        # Ініціалізуємо Gemini Agent
+        self.gemini_agent = GeminiAgent()
+        logger.info(f"🤖 Gemini Agent Status: {self.gemini_agent.get_status()}")
 
     def _build_model_routing(self) -> Dict[str, Dict]:
         """Будує маршрутизацію хмарних моделей"""
@@ -174,6 +181,10 @@ class CloudModelSDK:
 
     async def route_request(self, request: ChatRequest) -> ChatResponse:
         """Маршрутизує запит до хмарного провайдера"""
+        # Перевіряємо, чи це запит до Gemini
+        if "gemini" in request.model.lower():
+            return await self._call_gemini(request)
+        
         model_info = self.model_routing.get(request.model)
 
         if not model_info:
@@ -291,6 +302,39 @@ class CloudModelSDK:
             # OpenRouter потребує API ключ, fallback до demo
             return await self._smart_demo_response(request)
         except:
+            return await self._smart_demo_response(request)
+
+    async def _call_gemini(self, request: ChatRequest) -> ChatResponse:
+        """Виклик Google Gemini API через GeminiAgent"""
+        try:
+            # Викликаємо Gemini Agent
+            result = await self.gemini_agent.chat(
+                model_name=request.model,
+                messages=request.messages,
+                max_tokens=request.max_tokens,
+                temperature=request.temperature
+            )
+            
+            # Конвертуємо у формат ChatResponse
+            return ChatResponse(
+                choices=[
+                    {
+                        "message": {
+                            "role": result["role"],
+                            "content": result["content"]
+                        },
+                        "finish_reason": result.get("finish_reason", "stop")
+                    }
+                ],
+                model=result.get("model", request.model),
+                usage=result.get("usage", {
+                    "prompt_tokens": 0,
+                    "completion_tokens": 0,
+                    "total_tokens": 0
+                })
+            )
+        except Exception as e:
+            logger.error(f"Помилка виклику Gemini Agent: {e}")
             return await self._smart_demo_response(request)
 
     async def _smart_demo_response(self, request: ChatRequest) -> ChatResponse:
@@ -530,26 +574,41 @@ async def health_check():
         for p, config in cloud_model_sdk.cloud_providers.items()
         if config["base_url"] != "internal"
     ]
+    
+    # Додаємо статус Gemini
+    gemini_available = cloud_model_sdk.gemini_agent.is_available()
 
     return {
         "status": "healthy",
         "models_total": len(models),
         "cloud_providers": cloud_providers,
+        "gemini_agent": {
+            "available": gemini_available,
+            "status": "active" if gemini_available else "demo_mode",
+        },
         "local_models": 0,
         "type": "cloud_only",
         "cost": "100% FREE",
     }
 
 
+@app.get("/gemini/status")
+async def gemini_status():
+    """Статус Gemini Agent"""
+    return cloud_model_sdk.gemini_agent.get_status()
+
+
 @app.get("/")
 async def root():
     """Головна сторінка"""
+    gemini_status = "✅ Active" if cloud_model_sdk.gemini_agent.is_available() else "⚠️ Demo Mode"
     return {
         "service": "Predator Cloud Model SDK",
         "version": "3.1.0",
-        "description": "40+ безкоштовних хмарних AI моделей",
+        "description": "40+ безкоштовних хмарних AI моделей + Google Gemini",
         "type": "CLOUD ONLY - NO LOCAL DEPENDENCIES",
-        "providers": ["HuggingFace", "Together", "Replicate", "Groq", "OpenRouter", "Demo"],
+        "providers": ["HuggingFace", "Together", "Replicate", "Groq", "OpenRouter", "Gemini", "Demo"],
+        "gemini_agent": gemini_status,
     }
 
 
