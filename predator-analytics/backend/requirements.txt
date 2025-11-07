@@ -35,6 +35,8 @@ opentelemetry-instrumentation-fastapi==0.42b0
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.6
+python-keycloak==3.9.0
+jwcrypto==1.5.0
 
 # Utilities
 httpx==0.25.2

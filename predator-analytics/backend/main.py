@@ -6,10 +6,11 @@ import logging
 from contextlib import asynccontextmanager
 
 from api.routes import agents, analytics, tasks, voice
+from auth.keycloak import keycloak_health_check, get_current_user, KeycloakUser
 from core.config import settings
 from core.database import Base, engine
 from core.monitoring import setup_monitoring
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from prometheus_client import make_asgi_app
@@ -80,14 +81,45 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.get("/health", tags=["Health"])
 async def health_check():
     """Health check endpoint"""
-    return {"status": "healthy", "service": "predator-analytics", "version": "1.0.0"}
+    keycloak_status = "healthy" if await keycloak_health_check() else "unhealthy"
+    return {
+        "status": "healthy",
+        "service": "predator-analytics",
+        "version": "1.0.0",
+        "keycloak": keycloak_status
+    }
 
 
 @app.get("/ready", tags=["Health"])
 async def readiness_check():
     """Readiness check endpoint"""
+    keycloak_ready = await keycloak_health_check()
     # TODO: Add database and Redis connectivity checks
-    return {"status": "ready", "checks": {"database": "ok", "redis": "ok", "agents": "ok"}}
+    return {
+        "status": "ready" if keycloak_ready else "not ready",
+        "checks": {
+            "database": "ok",
+            "redis": "ok",
+            "agents": "ok",
+            "keycloak": "ok" if keycloak_ready else "unavailable"
+        }
+    }
+
+
+# Auth endpoints
+@app.get("/api/v1/auth/me", tags=["Auth"])
+async def get_current_user_info(user: KeycloakUser = Depends(get_current_user)):
+    """Get current authenticated user information"""
+    return {
+        "sub": user.sub,
+        "username": user.username,
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "roles": user.roles,
+        "groups": user.groups,
+        "email_verified": user.email_verified,
+    }
 
 
 # API Routes
