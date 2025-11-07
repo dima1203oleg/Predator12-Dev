@@ -36,13 +36,13 @@ source:
   commit: fe977e538dc24bb2da937c6c9e48febb54083226
 run:
   volumes:
-    - '{{arxiv-mcp-server.storage_path}}:/app/papers'
+    - "{{arxiv-mcp-server.storage_path}}:/app/papers"
 config:
   description: Configure local storage path for downloaded papers
   env:
     - name: ARXIV_STORAGE_PATH
       example: /Users/local-test/papers
-      value: '/app/papers'
+      value: "/app/papers"
   parameters:
     type: object
     properties:

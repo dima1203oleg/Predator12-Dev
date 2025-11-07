@@ -38,6 +38,7 @@
 ### 4. 🛠️ Залежності
 
 #### Python Backend
+
 - [ ] Python 3.10+ встановлений
 - [ ] Віртуальне середовище `.venv` створене
 - [ ] Залежності з `requirements.txt` встановлені
@@ -46,6 +47,7 @@
 - [ ] `pytest` доступний (для тестів)
 
 #### Node.js Frontend
+
 - [ ] Node.js 18+ встановлений
 - [ ] `npm` або `yarn` доступний
 - [ ] Залежності з `package.json` встановлені
@@ -64,6 +66,7 @@
 - [ ] Таблиці створені
 
 #### Тест підключення:
+
 ```bash
 psql -h 127.0.0.1 -U predator_user -d predator -c "SELECT 1;"
 ```
@@ -77,6 +80,7 @@ psql -h 127.0.0.1 -U predator_user -d predator -c "SELECT 1;"
 ### 7. 📦 Скрипти
 
 Всі скрипти виконувані (`chmod +x`):
+
 - [ ] `scripts/init_local_db.sh`
 - [ ] `scripts/migrate_db.sh`
 - [ ] `scripts/pg_dump_from_container.sh`
@@ -101,6 +105,7 @@ psql -h 127.0.0.1 -U predator_user -d predator -c "SELECT 1;"
 - [ ] Немає критичних помилок в логах
 
 #### Тест:
+
 ```bash
 curl http://localhost:8000/health
 # Очікується: {"status": "ok"} або подібне
@@ -115,6 +120,7 @@ curl http://localhost:8000/health
 - [ ] Assets завантажуються
 
 #### Тест:
+
 ```bash
 curl http://localhost:3000
 # Очікується: HTML код сторінки
@@ -131,6 +137,7 @@ curl http://localhost:3000
   - [ ] Файлове сховище
 
 #### Запуск:
+
 ```bash
 make smoke
 # Або
@@ -146,6 +153,7 @@ make smoke
 - [ ] Таблиці містять дані
 
 #### Перевірка:
+
 ```bash
 PGPASSWORD=changeme psql -h 127.0.0.1 -U predator_user -d predator -c "\dt"
 ```
@@ -175,6 +183,7 @@ PGPASSWORD=changeme psql -h 127.0.0.1 -U predator_user -d predator -c "\dt"
 ## 🎯 Фінальна перевірка
 
 ### Швидкий тест (5 хв)
+
 ```bash
 # 1. Статус сервісів
 make status
@@ -193,6 +202,7 @@ curl -X POST http://localhost:8000/api/test \
 ```
 
 ### Результати мають бути:
+
 - ✅ Backend відповідає на всі запити
 - ✅ Frontend завантажується і працює
 - ✅ Smoke тести >= 90% успішності
@@ -200,17 +210,18 @@ curl -X POST http://localhost:8000/api/test \
 
 ## 📊 Критерії готовності
 
-| Критерій | Мінімум | Рекомендовано |
-|----------|---------|---------------|
-| Smoke тести успішність | 70% | 90%+ |
-| Backend response time | < 1s | < 300ms |
-| Frontend load time | < 5s | < 2s |
-| БД таблиць | > 0 | > 5 |
-| API endpoints | > 0 | > 10 |
+| Критерій               | Мінімум | Рекомендовано |
+| ---------------------- | ------- | ------------- |
+| Smoke тести успішність | 70%     | 90%+          |
+| Backend response time  | < 1s    | < 300ms       |
+| Frontend load time     | < 5s    | < 2s          |
+| БД таблиць             | > 0     | > 5           |
+| API endpoints          | > 0     | > 10          |
 
 ## 🚨 Якщо щось не працює
 
 ### Backend не запускається
+
 ```bash
 # Перевірка
 source .venv/bin/activate
@@ -222,6 +233,7 @@ make install
 ```
 
 ### Frontend не запускається
+
 ```bash
 cd frontend
 rm -rf node_modules
@@ -230,6 +242,7 @@ npm run dev
 ```
 
 ### БД не підключається
+
 ```bash
 # Перевірка PostgreSQL
 brew services list | grep postgresql
@@ -240,6 +253,7 @@ make initdb
 ```
 
 ### Smoke тести провалюються
+
 ```bash
 # Перевірка що все запущено
 ps aux | grep uvicorn
@@ -282,6 +296,7 @@ make dev
    - Додати свої агенти
 
 3. **Створити резервні копії**
+
    ```bash
    make backup
    ```
@@ -296,6 +311,6 @@ make dev
 
 **🏆 Вітаємо! Predator12 готовий до розробки!**
 
-Дата виконання чек-ліста: _______________
+Дата виконання чек-ліста: **\*\***\_\_\_**\*\***
 
-Підпис: _______________
+Підпис: **\*\***\_\_\_**\*\***

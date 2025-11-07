@@ -7,6 +7,7 @@
 ## 📋 Передумови
 
 ### Стек
+
 - **Backend:** Python 3.11 (Pydantic v2, SQLAlchemy 2.0, psycopg3), FastAPI, Celery
 - **Storage:** Redis, PostgreSQL 14+ (Timescale опціонально), Qdrant, OpenSearch 2.x
 - **Orchestration:** Kubernetes (K3s для dev/edge, RKE2/k8s для prod), GitOps з Argo CD + Helm
@@ -19,15 +20,15 @@
 
 ## 🧩 Архітектурні Модулі (з фіче-тоглами)
 
-| Модуль | Опис | Тогл | MVP індикатор успіху |
-|--------|------|------|---------------------|
-| **Self-Healing** | Автовідкат/рестарт при деградації метрик | `features.selfHealing.enabled` | 100% автоматичний rollback у canary протягом ≤2 хв |
-| **AI-Autoscaling** | Прогноз навантаження + HPA за custom метриками | `features.autoscale.enabled` | P95 latency стабільний ±10% під піками |
-| **AI-CI/CD Guard** | ML-валідація конфігів/логів у пайплайні | `features.aicicd.enabled` | ≤5% зниження failure-деплоїв |
-| **Code & Query Optimizer** | Агенти пропонують PR/індекси | `features.optimizers.enabled` | 1 авто-PR/тиждень із прийнятими змінами |
-| **Edge Offload** | Частина ETL/векторного пошуку на edge | `features.edge.enabled` | −25–40% latency для edge-трафіку |
-| **Federated Learning** | Обмін оновленнями моделей між кластерами | `features.federation.enabled` | Успішна глобальна агрегація моделі 1×/день |
-| **Agent Web UI** | Веб-інтерфейс для моніторингу всіх 26+ агентів | `features.agentUI.enabled` | Real-time статус всіх агентів + логи |
+| Модуль                     | Опис                                           | Тогл                           | MVP індикатор успіху                               |
+| -------------------------- | ---------------------------------------------- | ------------------------------ | -------------------------------------------------- |
+| **Self-Healing**           | Автовідкат/рестарт при деградації метрик       | `features.selfHealing.enabled` | 100% автоматичний rollback у canary протягом ≤2 хв |
+| **AI-Autoscaling**         | Прогноз навантаження + HPA за custom метриками | `features.autoscale.enabled`   | P95 latency стабільний ±10% під піками             |
+| **AI-CI/CD Guard**         | ML-валідація конфігів/логів у пайплайні        | `features.aicicd.enabled`      | ≤5% зниження failure-деплоїв                       |
+| **Code & Query Optimizer** | Агенти пропонують PR/індекси                   | `features.optimizers.enabled`  | 1 авто-PR/тиждень із прийнятими змінами            |
+| **Edge Offload**           | Частина ETL/векторного пошуку на edge          | `features.edge.enabled`        | −25–40% latency для edge-трафіку                   |
+| **Federated Learning**     | Обмін оновленнями моделей між кластерами       | `features.federation.enabled`  | Успішна глобальна агрегація моделі 1×/день         |
+| **Agent Web UI**           | Веб-інтерфейс для моніторингу всіх 26+ агентів | `features.agentUI.enabled`     | Real-time статус всіх агентів + логи               |
 
 **Всі модулі:** off-by-default у prod. Включення через Helm values.
 
@@ -36,6 +37,7 @@
 ## 📅 План Впровадження (14 днів, PoC → Guard-Rails)
 
 ### Тиждень 1
+
 1. **Self-Healing** (Argo Rollouts + Prometheus)
    - Налаштування Rollouts з canary
    - AnalysisTemplates для метрик
@@ -52,6 +54,7 @@
    - Grafana dashboards
 
 ### Тиждень 2
+
 4. **AI-CI/CD Guard** (GitHub Actions)
    - Легкі евристики + опційний ML
    - Валідація Helm values
@@ -156,30 +159,30 @@ spec:
         app: predator-backend
     spec:
       containers:
-      - name: backend
-        image: predator-backend:latest
-        ports:
-        - containerPort: 8000
-        env:
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
-          value: "http://otel-collector:4317"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 5
+        - name: backend
+          image: predator-backend:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://otel-collector:4317"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
   strategy:
     canary:
       steps:
         - setWeight: 20
-        - pause: {duration: 60}
+        - pause: { duration: 60 }
         - analysis:
             templates:
               - templateName: latency-check
@@ -187,7 +190,7 @@ spec:
               - name: svc
                 value: "predator-backend"
         - setWeight: 50
-        - pause: {duration: 60}
+        - pause: { duration: 60 }
         - analysis:
             templates:
               - templateName: error-rate-check
@@ -203,19 +206,19 @@ metadata:
   namespace: default
 spec:
   metrics:
-  - name: p95-latency
-    interval: 30s
-    successCondition: result[0] < 0.250  # <250ms
-    failureLimit: 1
-    provider:
-      prometheus:
-        address: http://prometheus-server.prometheus:80
-        query: |
-          histogram_quantile(0.95,
-            sum(rate(http_server_requests_seconds_bucket{
-              service="{{args.svc}}"
-            }[1m])) by (le)
-          )
+    - name: p95-latency
+      interval: 30s
+      successCondition: result[0] < 0.250 # <250ms
+      failureLimit: 1
+      provider:
+        prometheus:
+          address: http://prometheus-server.prometheus:80
+          query: |
+            histogram_quantile(0.95,
+              sum(rate(http_server_requests_seconds_bucket{
+                service="{{args.svc}}"
+              }[1m])) by (le)
+            )
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
@@ -224,21 +227,21 @@ metadata:
   namespace: default
 spec:
   metrics:
-  - name: error-rate
-    interval: 30s
-    successCondition: result[0] < 0.05  # <5%
-    failureLimit: 0
-    provider:
-      prometheus:
-        address: http://prometheus-server.prometheus:80
-        query: |
-          sum(rate(http_requests_total{
-            service="{{args.svc}}",
-            status=~"5.."
-          }[1m])) /
-          sum(rate(http_requests_total{
-            service="{{args.svc}}"
-          }[1m]))
+    - name: error-rate
+      interval: 30s
+      successCondition: result[0] < 0.05 # <5%
+      failureLimit: 0
+      provider:
+        prometheus:
+          address: http://prometheus-server.prometheus:80
+          query: |
+            sum(rate(http_requests_total{
+              service="{{args.svc}}",
+              status=~"5.."
+            }[1m])) /
+            sum(rate(http_requests_total{
+              service="{{args.svc}}"
+            }[1m]))
 ```
 
 ### PrometheusRule (алерти)
@@ -251,53 +254,53 @@ metadata:
   namespace: prometheus
 spec:
   groups:
-  - name: selfhealing
-    interval: 30s
-    rules:
-    - alert: PredatorHighErrorRate
-      expr: |
-        sum(rate(http_requests_total{
-          service="predator-backend",
-          status=~"5.."
-        }[5m])) /
-        sum(rate(http_requests_total{
-          service="predator-backend"
-        }[5m])) > 0.05
-      for: 2m
-      labels:
-        severity: critical
-        component: backend
-      annotations:
-        summary: "High 5xx error rate (>5%)"
-        description: "Backend error rate is {{ $value | humanizePercentage }}"
-        runbook_url: "https://docs.predator12.io/runbooks/self-healing"
+    - name: selfhealing
+      interval: 30s
+      rules:
+        - alert: PredatorHighErrorRate
+          expr: |
+            sum(rate(http_requests_total{
+              service="predator-backend",
+              status=~"5.."
+            }[5m])) /
+            sum(rate(http_requests_total{
+              service="predator-backend"
+            }[5m])) > 0.05
+          for: 2m
+          labels:
+            severity: critical
+            component: backend
+          annotations:
+            summary: "High 5xx error rate (>5%)"
+            description: "Backend error rate is {{ $value | humanizePercentage }}"
+            runbook_url: "https://docs.predator12.io/runbooks/self-healing"
 
-    - alert: PredatorHighLatency
-      expr: |
-        histogram_quantile(0.95,
-          sum(rate(http_server_requests_seconds_bucket{
-            service="predator-backend"
-          }[5m])) by (le)
-        ) > 0.5
-      for: 2m
-      labels:
-        severity: warning
-        component: backend
-      annotations:
-        summary: "High P95 latency (>500ms)"
-        description: "P95 latency is {{ $value }}s"
-        runbook_url: "https://docs.predator12.io/runbooks/latency"
+        - alert: PredatorHighLatency
+          expr: |
+            histogram_quantile(0.95,
+              sum(rate(http_server_requests_seconds_bucket{
+                service="predator-backend"
+              }[5m])) by (le)
+            ) > 0.5
+          for: 2m
+          labels:
+            severity: warning
+            component: backend
+          annotations:
+            summary: "High P95 latency (>500ms)"
+            description: "P95 latency is {{ $value }}s"
+            runbook_url: "https://docs.predator12.io/runbooks/latency"
 
-    - alert: PredatorAgentDown
-      expr: |
-        up{job="predator-agents"} == 0
-      for: 1m
-      labels:
-        severity: critical
-        component: agents
-      annotations:
-        summary: "Agent {{ $labels.instance }} is down"
-        runbook_url: "https://docs.predator12.io/runbooks/agents"
+        - alert: PredatorAgentDown
+          expr: |
+            up{job="predator-agents"} == 0
+          for: 1m
+          labels:
+            severity: critical
+            component: agents
+          annotations:
+            summary: "Agent {{ $labels.instance }} is down"
+            runbook_url: "https://docs.predator12.io/runbooks/agents"
 ```
 
 ---
@@ -323,18 +326,18 @@ spec:
     scaleDown:
       stabilizationWindowSeconds: 300
       policies:
-      - type: Percent
-        value: 50
-        periodSeconds: 60
+        - type: Percent
+          value: 50
+          periodSeconds: 60
     scaleUp:
       stabilizationWindowSeconds: 0
       policies:
-      - type: Percent
-        value: 100
-        periodSeconds: 30
-      - type: Pods
-        value: 2
-        periodSeconds: 30
+        - type: Percent
+          value: 100
+          periodSeconds: 30
+        - type: Pods
+          value: 2
+          periodSeconds: 30
       selectPolicy: Max
   metrics:
     - type: Resource
@@ -579,15 +582,15 @@ jobs:
       - name: Security scan
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'config'
-          scan-ref: 'helm/'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          scan-type: "config"
+          scan-ref: "helm/"
+          format: "sarif"
+          output: "trivy-results.sarif"
 
       - name: Upload Trivy results
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
 
   ai-review:
     runs-on: ubuntu-latest
@@ -621,7 +624,7 @@ jobs:
 
 ### Database Query Optimizer
 
-```python
+````python
 # scripts/db/query_optimizer_agent.py
 """
 Database query optimizer for PostgreSQL.
@@ -777,7 +780,7 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-```
+````
 
 ---
 

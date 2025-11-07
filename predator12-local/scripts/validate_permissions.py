@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Validate that a requested ops action is allowed by .assistant/permissions.yml
+"""
+Validate that a requested ops action is allowed by .assistant/permissions.yml.
 
 Usage: python3 scripts/validate_permissions.py <action> <env>
 Exits non-zero if validation fails.
@@ -11,11 +12,13 @@ import yaml
 
 
 def load_policy(path: Path):
+    """Завантажує політику з YAML-файлу."""
     data = yaml.safe_load(path.read_text())
     return data
 
 
 def main():
+    """Основна функція перевірки дозволу дії."""
     if len(sys.argv) < 3:
         print("Usage: validate_permissions.py <action> <env>")
         sys.exit(2)

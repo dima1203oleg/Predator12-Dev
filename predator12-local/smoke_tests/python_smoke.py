@@ -4,9 +4,7 @@ Smoke тести для Predator12 локального середовища
 """
 import os
 import sys
-import time
 from pathlib import Path
-from typing import List, Tuple
 
 import psycopg2
 import requests

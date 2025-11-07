@@ -1,7 +1,9 @@
 # Information about product item_number: 5
+
 BaseCamp Folding Table, price $60,
 
 ## Brand
+
 CampBuddy
 
 Main Category: CAMPING & HIKING
@@ -9,6 +11,7 @@ Sub Category: OTHER
 Product Type: OTHER
 
 ## Features
+
 - Lightweight and durable aluminum construction
 - Foldable design with a compact size for easy storage and transport
 - Adjustable legs for different height settings and uneven terrain
@@ -22,6 +25,7 @@ Product Type: OTHER
 - Versatile usage for camping, picnics, backyard parties, and other outdoor events
 
 ## Technical Specifications
+
 - Material: Aluminum
 - Color: Silver
 - Dimensions: 48 inches x 24 inches x 24 inches (Length x Width x Height)
@@ -185,38 +189,41 @@ If you have any questions or need further assistance, please contact our custome
 - Customer Support Email: support@example.com
 
 ## Return Policy
-- If Membership status "None":	If you are not satisfied with your purchase, you can return it within 30 days for a full refund. The product must be unused and in its original packaging.
-- If Membership status "Gold":	Gold members can return their camping tables within 60 days of purchase for a full refund or exchange. The product must be unused and in its original packaging.
-- If Membership status "Platinum":	Platinum members can return their camping tables within 90 days of purchase for a full refund or exchange. The product must be unused and in its original packaging. Additionally, Platinum members receive a 10% discount on all camping table purchases but from the same product brand.
+
+- If Membership status "None": If you are not satisfied with your purchase, you can return it within 30 days for a full refund. The product must be unused and in its original packaging.
+- If Membership status "Gold": Gold members can return their camping tables within 60 days of purchase for a full refund or exchange. The product must be unused and in its original packaging.
+- If Membership status "Platinum": Platinum members can return their camping tables within 90 days of purchase for a full refund or exchange. The product must be unused and in its original packaging. Additionally, Platinum members receive a 10% discount on all camping table purchases but from the same product brand.
 
 ## Reviews
-21) Rating: 5
-   Review: The BaseCamp Folding Table is perfect for our camping trips. It's lightweight, portable, and easy to clean. The foldable design makes it convenient to store and transport. Love it!
 
-22) Rating: 4
-   Review: I bought the BaseCamp Folding Table, and while it's sturdy and portable, I wish it had adjustable leg heights. Overall, it's a good camping table.
+21. Rating: 5
+    Review: The BaseCamp Folding Table is perfect for our camping trips. It's lightweight, portable, and easy to clean. The foldable design makes it convenient to store and transport. Love it!
 
-23) Rating: 5
-   Review: The BaseCamp Folding Table has been a fantastic addition to our camping gear. It's easy to set up and provides ample space for cooking and dining. Highly recommend!
+22. Rating: 4
+    Review: I bought the BaseCamp Folding Table, and while it's sturdy and portable, I wish it had adjustable leg heights. Overall, it's a good camping table.
 
-24) Rating: 4
-   Review: I like the BaseCamp Folding Table, but I wish it came with a carrying case. It's lightweight and portable, but a case would make it even easier to transport. Overall, it's a great table.
+23. Rating: 5
+    Review: The BaseCamp Folding Table has been a fantastic addition to our camping gear. It's easy to set up and provides ample space for cooking and dining. Highly recommend!
 
-25) Rating: 5
-   Review: This folding table is perfect for our family camping trips. It's easy to set up, sturdy, and provides enough space for our cooking needs. The lightweight design is a big plus!
+24. Rating: 4
+    Review: I like the BaseCamp Folding Table, but I wish it came with a carrying case. It's lightweight and portable, but a case would make it even easier to transport. Overall, it's a great table.
+
+25. Rating: 5
+    Review: This folding table is perfect for our family camping trips. It's easy to set up, sturdy, and provides enough space for our cooking needs. The lightweight design is a big plus!
 
 ## FAQ
-21) Can the BaseCamp Folding Table support heavy pots and pans?
-   Yes, the BaseCamp Folding Table has a sturdy aluminum construction and can support up to 50 lbs of weight.
 
-22) How do I set up and fold the BaseCamp Folding Table?
-   The BaseCamp Folding Table features a collapsible design with foldable legs and a roll-up tabletop. Simply unfold the legs, secure the tabletop, and attach the support bars. To fold, reverse the process.
+21. Can the BaseCamp Folding Table support heavy pots and pans?
+    Yes, the BaseCamp Folding Table has a sturdy aluminum construction and can support up to 50 lbs of weight.
 
-23) Can the BaseCamp Folding Table be used on uneven terrain?
-   The BaseCamp Folding Table has adjustable leg extensions that can be used to level the table on uneven terrain.
+22. How do I set up and fold the BaseCamp Folding Table?
+    The BaseCamp Folding Table features a collapsible design with foldable legs and a roll-up tabletop. Simply unfold the legs, secure the tabletop, and attach the support bars. To fold, reverse the process.
 
-24) Does the BaseCamp Folding Table come with a carrying case?
-   Yes, the BaseCamp Folding Table includes a carrying case for easy transport and storage.
+23. Can the BaseCamp Folding Table be used on uneven terrain?
+    The BaseCamp Folding Table has adjustable leg extensions that can be used to level the table on uneven terrain.
 
-25) What is the best way to clean the BaseCamp Folding Table?
-   To clean the BaseCamp Folding Table, simply wipe the aluminum surface with a damp cloth and mild detergent, then air dry.
+24. Does the BaseCamp Folding Table come with a carrying case?
+    Yes, the BaseCamp Folding Table includes a carrying case for easy transport and storage.
+
+25. What is the best way to clean the BaseCamp Folding Table?
+    To clean the BaseCamp Folding Table, simply wipe the aluminum surface with a damp cloth and mild detergent, then air dry.

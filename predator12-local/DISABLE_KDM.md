@@ -23,6 +23,7 @@ grep -rn "kdm\|KDM" ~/.zshrc ~/.bashrc ~/.bash_profile ~/.zprofile 2>/dev/null
 ### Варіанти, де може бути KDM
 
 **A) Conda/Mamba**
+
 ```bash
 conda env list
 # Якщо бачите kdm:
@@ -30,18 +31,21 @@ conda info --envs | grep kdm
 ```
 
 **B) Pyenv**
+
 ```bash
 pyenv versions
 pyenv virtualenvs
 ```
 
 **C) Virtualenv/venv**
+
 ```bash
 # Пошук директорій
 find ~ -maxdepth 3 -type d -name "*kdm*" 2>/dev/null
 ```
 
 **D) Poetry**
+
 ```bash
 poetry env list --full-path
 ```
@@ -141,6 +145,7 @@ bash scripts/setup-venv.sh
 ```
 
 Скрипт:
+
 - Перевірить Python 3.11
 - Зробить backup старого venv
 - Створить новий venv
@@ -272,11 +277,13 @@ python --version
 ### Все ще бачу "Активація KDM"
 
 1. Перевірте всі shell конфіги:
+
    ```bash
    grep -rn "kdm" ~/.zshrc ~/.zprofile ~/.bashrc ~/.bash_profile
    ```
 
 2. Перевірте `/etc/zshrc` та `/etc/profile` (системні):
+
    ```bash
    sudo grep -n "kdm" /etc/zshrc /etc/profile
    ```

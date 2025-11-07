@@ -7,7 +7,7 @@ spec:
   args:
     - name: service-name
     - name: threshold
-      value: "0.95"  # 95% success rate
+      value: "0.95" # 95% success rate
 
   metrics:
     - name: success-rate
@@ -41,7 +41,7 @@ spec:
   args:
     - name: service-name
     - name: threshold
-      value: "500"  # 500ms P95 latency
+      value: "500" # 500ms P95 latency
 
   metrics:
     - name: p95-latency
@@ -70,7 +70,7 @@ spec:
   args:
     - name: service-name
     - name: threshold
-      value: "0.05"  # 5% error rate max
+      value: "0.05" # 5% error rate max
 
   metrics:
     - name: error-rate
@@ -136,7 +136,7 @@ spec:
   args:
     - name: service-name
     - name: threshold
-      value: "80"  # 80% CPU max
+      value: "80" # 80% CPU max
 
   metrics:
     - name: cpu-usage
@@ -163,7 +163,7 @@ spec:
   args:
     - name: service-name
     - name: threshold
-      value: "85"  # 85% memory max
+      value: "85" # 85% memory max
 
   metrics:
     - name: memory-usage
@@ -192,7 +192,7 @@ spec:
   args:
     - name: service-name
     - name: threshold
-      value: "80"  # 80% of max connections
+      value: "80" # 80% of max connections
 
   metrics:
     - name: db-connections
@@ -217,7 +217,7 @@ spec:
   args:
     - name: service-name
     - name: threshold
-      value: "1000"  # Max 1000 tasks in queue
+      value: "1000" # Max 1000 tasks in queue
 
   metrics:
     - name: queue-length
@@ -246,7 +246,7 @@ spec:
     - name: agent-health
       interval: 1m
       count: 5
-      successCondition: result >= 0.9  # 90% agents healthy
+      successCondition: result >= 0.9 # 90% agents healthy
       failureLimit: 3
       provider:
         prometheus:

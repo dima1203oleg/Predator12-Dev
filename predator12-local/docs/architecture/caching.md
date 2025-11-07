@@ -12,6 +12,7 @@ graph LR
 ```
 
 ### Memory Cache Layer
+
 - **Purpose**: Ultra-fast access
 - **Capacity**: ~1MB (configurable)
 - **Eviction**: Cost-aware LRU
@@ -25,21 +26,23 @@ cache = AdvancedTieredCache(
 ```
 
 ### Redis Cache Layer
+
 - **Purpose**: Shared cache
 - **TTL**: 5 minutes default
 - **Features**: Automatic expiry
 
 ## Performance Characteristics
 
-| Metric          | Memory Cache | Redis Cache |
-|----------------|-------------|------------|
-| Latency        | ~0.1ms      | ~2ms       |
-| Throughput     | 50k ops/s   | 10k ops/s  |
-| Hit Rate       | 60-70%      | 20-30%     |
+| Metric     | Memory Cache | Redis Cache |
+| ---------- | ------------ | ----------- |
+| Latency    | ~0.1ms       | ~2ms        |
+| Throughput | 50k ops/s    | 10k ops/s   |
+| Hit Rate   | 60-70%       | 20-30%      |
 
 ## Monitoring
 
 Key dashboards:
+
 - `Cache Performance` (Hit rate, memory usage)
 - `Hot Keys` (Top accessed items)
 

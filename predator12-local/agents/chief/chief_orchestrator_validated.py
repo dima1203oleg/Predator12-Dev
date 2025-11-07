@@ -5,7 +5,7 @@ With Enhanced Input Validation
 """
 
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, Field, validator
 
@@ -45,7 +45,7 @@ class ValidatedChiefOrchestrator(ChiefOrchestratorAgent):
 
         @self.app.post("/v2/chief/ask")
         async def validated_ask(request: UserRequest):
-            """Validated version of ask endpoint"""
+            """Validated version of ask endpoint."""
             try:
                 task_id = await self.process_user_request(request)
                 return {"task_id": task_id, "status": "processing", "message": "Task accepted"}
@@ -55,7 +55,7 @@ class ValidatedChiefOrchestrator(ChiefOrchestratorAgent):
 
         @self.app.post("/v2/chief/task")
         async def create_task(task: TaskRequest):
-            """Create a new validated task"""
+            """Create a new validated task."""
             try:
                 # Implementation here
                 pass
@@ -66,7 +66,7 @@ class ValidatedChiefOrchestrator(ChiefOrchestratorAgent):
 
 # Helper Functions
 def sanitize_input(input_str: str, max_length: int = 1000) -> str:
-    """Basic input sanitization"""
+    """Basic input sanitization."""
     if not input_str or not isinstance(input_str, str):
         return ""
 
@@ -75,5 +75,5 @@ def sanitize_input(input_str: str, max_length: int = 1000) -> str:
 
 
 def validate_priority(priority: str) -> bool:
-    """Validate priority value"""
+    """Validate priority value."""
     return priority.lower() in ["low", "medium", "high", "critical"]

@@ -1,5 +1,5 @@
 """
-Агент безпеки та моніторингу загроз
+Агент безпеки та моніторингу загроз.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from .base_agent import BaseAgent
 
 
 class SecurityAgent(BaseAgent):
-    """Агент для виявлення загроз безпеки та моніторингу"""
+    """Агент для виявлення загроз безпеки та моніторингу."""
 
     def __init__(self, config: dict[str, Any] | None = None):
         super().__init__("SecurityAgent", config)
@@ -21,6 +21,7 @@ class SecurityAgent(BaseAgent):
         self.security_events = []
 
     def capabilities(self) -> list[str]:
+        """Повертає список можливостей агента безпеки."""
         return [
             "scan_vulnerabilities",
             "detect_intrusions",
@@ -31,7 +32,7 @@ class SecurityAgent(BaseAgent):
         ]
 
     def _load_threat_patterns(self) -> dict[str, list[str]]:
-        """Завантажує патерни загроз"""
+        """Завантажує патерни загроз."""
         return {
             "sql_injection": [
                 r"(\bUNION\b.*\bSELECT\b)",
@@ -49,27 +50,26 @@ class SecurityAgent(BaseAgent):
         }
 
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виконує завдання безпеки"""
+        """Виконує завдання безпеки."""
 
         self.logger.info("Processing security task", task_type=task_type)
 
         if task_type == "scan_vulnerabilities":
             return await self._scan_vulnerabilities(payload)
-        elif task_type == "detect_intrusions":
+        if task_type == "detect_intrusions":
             return await self._detect_intrusions(payload)
-        elif task_type == "analyze_logs":
+        if task_type == "analyze_logs":
             return await self._analyze_logs(payload)
-        elif task_type == "check_compliance":
+        if task_type == "check_compliance":
             return await self._check_compliance(payload)
-        elif task_type == "monitor_access":
+        if task_type == "monitor_access":
             return await self._monitor_access(payload)
-        elif task_type == "generate_security_report":
+        if task_type == "generate_security_report":
             return await self._generate_security_report(payload)
-        else:
-            raise ValueError(f"Unknown task type: {task_type}")
+        raise ValueError(f"Unknown task type: {task_type}")
 
     async def _scan_vulnerabilities(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Сканує вразливості в системі"""
+        """Сканує вразливості в системі."""
 
         target = payload.get("target")
         scan_type = payload.get("scan_type", "basic")
@@ -111,12 +111,12 @@ class SecurityAgent(BaseAgent):
                 "scan_timestamp": datetime.now().isoformat(),
             }
 
-        except Exception as e:
-            self.logger.error("Failed to scan vulnerabilities", error=str(e), target=target)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to scan vulnerabilities", error=str(exc), target=target)
+            return {"status": "error", "error": str(exc)}
 
     def _check_weak_passwords(self) -> list[dict[str, Any]]:
-        """Перевіряє наявність слабких паролів"""
+        """Перевіряє наявність слабких паролів."""
         return [
             {
                 "type": "weak_password",
@@ -135,7 +135,7 @@ class SecurityAgent(BaseAgent):
         ]
 
     def _check_open_ports(self) -> list[dict[str, Any]]:
-        """Перевіряє відкриті порти"""
+        """Перевіряє відкриті порти."""
         return [
             {
                 "type": "open_port",
@@ -147,7 +147,7 @@ class SecurityAgent(BaseAgent):
         ]
 
     def _check_outdated_components(self) -> list[dict[str, Any]]:
-        """Перевіряє застарілі компоненти"""
+        """Перевіряє застарілі компоненти."""
         return [
             {
                 "type": "outdated_component",
@@ -159,7 +159,7 @@ class SecurityAgent(BaseAgent):
         ]
 
     def _check_configuration_issues(self) -> list[dict[str, Any]]:
-        """Перевіряє проблеми конфігурації"""
+        """Перевіряє проблеми конфігурації."""
         return [
             {
                 "type": "config_issue",
@@ -171,7 +171,7 @@ class SecurityAgent(BaseAgent):
         ]
 
     def _check_permission_issues(self) -> list[dict[str, Any]]:
-        """Перевіряє проблеми з дозволами"""
+        """Перевіряє проблеми з дозволами."""
         return [
             {
                 "type": "permission_issue",
@@ -183,7 +183,7 @@ class SecurityAgent(BaseAgent):
         ]
 
     def _calculate_risk_summary(self, vulnerabilities: list[dict[str, Any]]) -> dict[str, Any]:
-        """Розраховує загальний ризик"""
+        """Розраховує загальний ризик."""
         severity_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
 
         for vuln in vulnerabilities:
@@ -215,7 +215,7 @@ class SecurityAgent(BaseAgent):
         }
 
     async def _detect_intrusions(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виявляє спроби вторгнення"""
+        """Виявляє спроби вторгнення."""
 
         data_source = payload.get("data_source")
         time_window = payload.get("time_window", 3600)  # 1 година
@@ -253,12 +253,12 @@ class SecurityAgent(BaseAgent):
                 "analysis_timestamp": datetime.now().isoformat(),
             }
 
-        except Exception as e:
-            self.logger.error("Failed to detect intrusions", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to detect intrusions", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _analyze_intrusion_patterns(self, attempts: list[dict[str, Any]]) -> dict[str, Any]:
-        """Аналізує патерни вторгнень"""
+        """Аналізує патерни вторгнень."""
 
         ip_counts = {}
         attack_types = {}
@@ -281,7 +281,7 @@ class SecurityAgent(BaseAgent):
         }
 
     async def _analyze_logs(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Аналізує логи на предмет подій безпеки"""
+        """Аналізує логи на предмет подій безпеки."""
 
         log_source = payload.get("log_source")
         log_entries = payload.get("log_entries", [])
@@ -319,12 +319,12 @@ class SecurityAgent(BaseAgent):
                 "summary": event_summary,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to analyze logs", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to analyze logs", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _summarize_security_events(self, events: list[dict[str, Any]]) -> dict[str, Any]:
-        """Підсумовує події безпеки"""
+        """Підсумовує події безпеки."""
 
         threat_counts = {}
         severity_counts = {}
@@ -341,12 +341,14 @@ class SecurityAgent(BaseAgent):
             "threat_breakdown": threat_counts,
             "severity_breakdown": severity_counts,
             "most_common_threat": (
-                max(threat_counts, key=threat_counts.get) if threat_counts else None
+                max(list(threat_counts.keys()), key=lambda k: threat_counts[k])
+                if threat_counts
+                else None
             ),
         }
 
     async def _check_compliance(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Перевіряє відповідність стандартам безпеки"""
+        """Перевіряє відповідність стандартам безпеки."""
 
         framework = payload.get("framework", "gdpr")
         resources = payload.get("resources", [])
@@ -372,12 +374,12 @@ class SecurityAgent(BaseAgent):
                 "assessment_timestamp": datetime.now().isoformat(),
             }
 
-        except Exception as e:
-            self.logger.error("Failed to check compliance", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to check compliance", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _check_gdpr_compliance(self, resources: list[str]) -> list[dict[str, Any]]:
-        """Перевіряє відповідність GDPR"""
+        """Перевіряє відповідність GDPR."""
         return [
             {
                 "requirement": "Data Encryption",
@@ -400,7 +402,7 @@ class SecurityAgent(BaseAgent):
         ]
 
     def _check_pci_compliance(self, resources: list[str]) -> list[dict[str, Any]]:
-        """Перевіряє відповідність PCI DSS"""
+        """Перевіряє відповідність PCI DSS."""
         return [
             {
                 "requirement": "Network Security",
@@ -417,7 +419,7 @@ class SecurityAgent(BaseAgent):
         ]
 
     def _check_iso27001_compliance(self, resources: list[str]) -> list[dict[str, Any]]:
-        """Перевіряє відповідність ISO 27001"""
+        """Перевіряє відповідність ISO 27001."""
         return [
             {
                 "requirement": "Information Security Policy",
@@ -434,7 +436,7 @@ class SecurityAgent(BaseAgent):
         ]
 
     def _calculate_compliance_score(self, results: list[dict[str, Any]]) -> dict[str, Any]:
-        """Розраховує бал відповідності"""
+        """Розраховує бал відповідності."""
 
         if not results:
             return {"score": 0, "level": "unknown"}
@@ -469,7 +471,7 @@ class SecurityAgent(BaseAgent):
         }
 
     async def _monitor_access(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Моніторить доступ до ресурсів"""
+        """Моніторить доступ до ресурсів."""
 
         resource = payload.get("resource")
         time_period = payload.get("time_period", "last_hour")
@@ -514,12 +516,12 @@ class SecurityAgent(BaseAgent):
                 "analysis": access_analysis,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to monitor access", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to monitor access", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _analyze_access_patterns(self, events: list[dict[str, Any]]) -> dict[str, Any]:
-        """Аналізує патерни доступу"""
+        """Аналізує патерни доступу."""
 
         user_activity = {}
         failed_attempts = []
@@ -548,7 +550,7 @@ class SecurityAgent(BaseAgent):
         }
 
     async def _generate_security_report(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Генерує звіт з безпеки"""
+        """Генерує звіт з безпеки."""
 
         report_type = payload.get("report_type", "daily")
         include_recommendations = payload.get("include_recommendations", True)
@@ -583,12 +585,12 @@ class SecurityAgent(BaseAgent):
 
             return {"status": "success", "report": report_data}
 
-        except Exception as e:
-            self.logger.error("Failed to generate security report", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to generate security report", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _get_report_period(self, report_type: str) -> dict[str, str]:
-        """Визначає період звіту"""
+        """Визначає період звіту."""
 
         now = datetime.now()
 
@@ -604,7 +606,7 @@ class SecurityAgent(BaseAgent):
         return {"start": start.isoformat(), "end": now.isoformat()}
 
     def _generate_recommendations(self) -> list[dict[str, Any]]:
-        """Генерує рекомендації з безпеки"""
+        """Генерує рекомендації з безпеки."""
         return [
             {
                 "priority": "high",
@@ -630,7 +632,7 @@ class SecurityAgent(BaseAgent):
         ]
 
     def _generate_report_hash(self, report_data: dict[str, Any]) -> str:
-        """Генерує хеш звіту для перевірки цілісності"""
+        """Генерує хеш звіту для перевірки цілісності."""
 
         report_str = str(report_data)
         return hashlib.sha256(report_str.encode()).hexdigest()[:16]

@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Запуск всіх агентів Predator11 на основі agents.yaml конфігурації
-"""
-import asyncio
+"""Запуск всіх агентів Predator11 на основі agents.yaml конфігурації."""
 import logging
 import os
 import subprocess
@@ -27,7 +24,7 @@ class AgentLauncher:
         os.makedirs(logs_dir, exist_ok=True)
 
     def load_agents_config(self) -> Dict:
-        """Завантажуємо конфігурацію агентів з agents.yaml"""
+        """Завантажуємо конфігурацію агентів з agents.yaml."""
         try:
             with open(self.config_path, "r", encoding="utf-8") as f:
                 config = yaml.safe_load(f)
@@ -38,7 +35,7 @@ class AgentLauncher:
             return {}
 
     def extract_all_agents(self, config: Dict) -> List[Dict]:
-        """Витягуємо всіх агентів з усіх секцій"""
+        """Витягуємо всіх агентів з усіх секцій."""
         all_agents = []
 
         # Секції в agents.yaml
@@ -67,7 +64,7 @@ class AgentLauncher:
         return all_agents
 
     def create_agent_stub(self, agent_info: Dict) -> str:
-        """Створює базовий код агента"""
+        """Створює базовий код агента."""
         agent_name = agent_info["name"]
         port = agent_info["port"]
         role = agent_info["role"]
@@ -342,7 +339,7 @@ if __name__ == "__main__":
 '''
 
     def launch_all_agents(self):
-        """Запускаємо всіх агентів"""
+        """Запускаємо всіх агентів."""
         config = self.load_agents_config()
         if not config:
             logger.error("Не вдалося завантажити конфігурацію агентів")

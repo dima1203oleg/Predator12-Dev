@@ -9,6 +9,7 @@
 ## 🎯 ЩО СТВОРЕНО
 
 ### Новий UI Dashboard для:
+
 - 🤖 **30+ AI Agents** - з registry.yaml
 - 🌟 **58+ Free Models** - з specialized_registry.yaml
 - 🎨 **Beautiful UI** - Glassmorphism cyber theme
@@ -77,6 +78,7 @@ npm run dev
 ### 3. Шукати та Фільтрувати
 
 **Пошук:**
+
 ```
 🔍 Search... → введіть:
    - "Chief" - знайде ChiefOrchestrator
@@ -86,6 +88,7 @@ npm run dev
 ```
 
 **Фільтри:**
+
 ```
 [All] [Active] [Online] [Critical]
 ```
@@ -93,6 +96,7 @@ npm run dev
 ### 4. Переглядати Деталі Агента
 
 **Клікніть на будь-яку Agent Card:**
+
 ```
 ┌────────────────────┐
 │ ChiefOrchestrator │
@@ -123,6 +127,7 @@ npm run dev
 ### 5. Переглядати Моделі по Провайдерам
 
 **Вкладка Models показує:**
+
 ```
 🤖 OpenAI (12 models)
   ├─ GPT-5
@@ -296,6 +301,7 @@ ls -la src/data/AIAgentsModelsData.tsx
 ## 📸 SCREENSHOTS LOCATIONS
 
 ### Main View
+
 ```
 Знайдіть секцію з заголовком:
 🤖 AI Agents & Models Control Center
@@ -303,18 +309,21 @@ Managing 30+ AI agents and 58+ free models
 ```
 
 ### Agent Cards Grid
+
 ```
 Після табів побачите сітку з cards:
 [ChiefOrchestrator] [Arbiter] [ModelRouter] ...
 ```
 
 ### Agent Modal
+
 ```
 Клікніть на будь-який agent card
 → Відкриється повноекранна модалка з деталями
 ```
 
 ### Models View
+
 ```
 Клікніть таб "Models"
 → Побачите групи моделей по провайдерам
@@ -500,6 +509,7 @@ npm run build
 ```
 
 **Команда для старту:**
+
 ```bash
 cd predator12-local/frontend && ./start-ai-dashboard.sh
 ```

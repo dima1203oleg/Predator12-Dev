@@ -4,13 +4,10 @@ Handles 3D avatar rendering, expressions, and animations
 """
 
 import asyncio
-import json
 import logging
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
-
-import numpy as np
 
 from ..vision import EmotionResult
 
@@ -275,7 +272,7 @@ class AvatarAnimator:
         """Execute a single animation"""
         animation_type = animation["type"]
         duration = animation["duration"]
-        start_time = animation["start_time"]
+        animation["start_time"]
 
         # Calculate frames for smooth animation (60 FPS)
         frame_duration = 1.0 / 60.0
@@ -505,12 +502,10 @@ class AvatarRenderer:
     async def _add_speaking_animation(self):
         """Add subtle speaking animation"""
         # Placeholder for speaking lip-sync animation
-        pass
 
     async def _add_listening_animation(self):
         """Add listening state animation"""
         # Placeholder for listening animation (subtle head nods, etc.)
-        pass
 
     async def render_frame(self) -> Dict[str, Any]:
         """Render current frame"""

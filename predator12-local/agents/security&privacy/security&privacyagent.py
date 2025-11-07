@@ -5,24 +5,23 @@ Role: AI-powered security and privacy protection
 Auto-generated from agents.yaml configuration
 """
 import asyncio
-import json
 import logging
 import os
 from datetime import datetime
 
 import aioredis
-import httpx
 from prometheus_client import Counter, Gauge
 
 # Metrics
-TASKS_COUNTER = Counter('security&privacyagent_tasks_total', 'Total tasks processed')
-HEALTH_GAUGE = Gauge('security&privacyagent_health', 'Agent health status')
+TASKS_COUNTER = Counter("security&privacyagent_tasks_total", "Total tasks processed")
+HEALTH_GAUGE = Gauge("security&privacyagent_health", "Agent health status")
 
-class Security&PrivacyAgent:
+
+class SecurityPrivacyAgent:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.running = False
-        self.agent_name = "Security&PrivacyAgent"
+        self.agent_name = "SecurityPrivacyAgent"
         self.port = 9050
         self.role = "AI-powered security and privacy protection"
 
@@ -30,11 +29,12 @@ class Security&PrivacyAgent:
         self.redis = None
 
     async def initialize(self):
-        """Ініціалізація агента"""
+        """Ініціалізація агента."""
         try:
             self.redis = aioredis.from_url(
-                os.getenv('REDIS_URL', 'redis://localhost:6379'),
-                encoding="utf-8", decode_responses=True
+                os.getenv("REDIS_URL", "redis://localhost:6379"),
+                encoding="utf-8",
+                decode_responses=True,
             )
             HEALTH_GAUGE.set(1)  # Healthy
             self.logger.info(f"{self.agent_name} initialized on port {self.port}")
@@ -44,19 +44,22 @@ class Security&PrivacyAgent:
             raise
 
     async def start(self):
-        """Запуск основного циклу агента"""
+        """Запуск основного циклу агента."""
         self.running = True
         self.logger.info(f"Starting {self.agent_name} - {self.role}")
 
         # Реєструємо агента в Redis
         if self.redis:
-            await self.redis.hset(f"agent:{self.agent_name}:status", mapping={
-                "status": "active",
-                "port": self.port,
-                "role": self.role,
-                "last_seen": datetime.utcnow().isoformat(),
-                "tasks_completed": 0
-            })
+            await self.redis.hset(
+                f"agent:{self.agent_name}:status",
+                mapping={
+                    "status": "active",
+                    "port": self.port,
+                    "role": self.role,
+                    "last_seen": datetime.utcnow().isoformat(),
+                    "tasks_completed": 0,
+                },
+            )
 
         task_counter = 0
         while self.running:
@@ -67,10 +70,13 @@ class Security&PrivacyAgent:
 
                 # Оновлюємо статус в Redis
                 if self.redis:
-                    await self.redis.hset(f"agent:{self.agent_name}:status", mapping={
-                        "last_seen": datetime.utcnow().isoformat(),
-                        "tasks_completed": task_counter
-                    })
+                    await self.redis.hset(
+                        f"agent:{self.agent_name}:status",
+                        mapping={
+                            "last_seen": datetime.utcnow().isoformat(),
+                            "tasks_completed": task_counter,
+                        },
+                    )
 
                 self.logger.info(f"{self.agent_name} активний - завдання {task_counter}")
                 await asyncio.sleep(60)  # Цикл кожну хвилину
@@ -81,19 +87,19 @@ class Security&PrivacyAgent:
                 await asyncio.sleep(30)
 
     async def stop(self):
-        """Зупинка агента"""
+        """Зупинка агента."""
         self.running = False
         HEALTH_GAUGE.set(0)
         self.logger.info(f"Stopping {self.agent_name}")
 
         if self.redis:
-            await self.redis.hset(f"agent:{self.agent_name}:status",
-                                 "status", "stopped")
+            await self.redis.hset(f"agent:{self.agent_name}:status", "status", "stopped")
             await self.redis.close()
+
 
 async def main():
     logging.basicConfig(level=logging.INFO)
-    agent = Security&PrivacyAgent()
+    agent = SecurityPrivacyAgent()
 
     try:
         await agent.initialize()
@@ -102,6 +108,7 @@ async def main():
         logging.info("Received interrupt signal")
     finally:
         await agent.stop()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

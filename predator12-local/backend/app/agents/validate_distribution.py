@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""
-🎯 Final Test: Specialized Model Distribution Validation
-Остаточний тест правильного розподілу 58 безкоштовних моделей за спеціалізацією
-"""
+"""🎯 Final Test: Specialized Model Distribution Validation Остаточний тест
+правильного розподілу 58 безкоштовних моделей за спеціалізацією."""
 
 
 def validate_model_distribution():
-    """Валідація правильного розподілу моделей за агентами"""
+    """Валідація правильного розподілу моделей за агентами."""
 
     print("🤖 PREDATOR ANALYTICS - MODEL DISTRIBUTION VALIDATION")
     print("=" * 80)

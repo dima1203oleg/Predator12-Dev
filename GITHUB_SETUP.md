@@ -37,6 +37,7 @@ git push -u origin main
 ## Крок 3: Швидкі команди для роботи
 
 ### Через VS Code Tasks:
+
 1. `Cmd+Shift+P` → `Tasks: Run Task`
 2. Виберіть:
    - **Git: Add All** - додати всі зміни
@@ -45,6 +46,7 @@ git push -u origin main
    - **Git: Quick Commit & Push** - все разом
 
 ### Через скрипт:
+
 ```bash
 # Швидкий коміт і пуш
 ./git-quick.sh "Ваше повідомлення"
@@ -54,6 +56,7 @@ git push -u origin main
 ```
 
 ### Через команди:
+
 ```bash
 # Стандартний процес
 git add .
@@ -85,6 +88,7 @@ cat ~/.ssh/id_ed25519.pub
 ## Автоматизація
 
 Після налаштування ви можете:
+
 - Використовувати `./git-quick.sh "повідомлення"` для швидких комітів
 - Запускати Git задачі через VS Code Command Palette
 - Налаштувати автоматичні коміти через cron (за потребою)

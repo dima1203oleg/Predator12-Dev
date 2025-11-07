@@ -38,11 +38,11 @@ graph LR
 
 ## Technology Stack
 
-| Component       | Technology          |
-|----------------|--------------------|
-| Orchestration | Python/AsyncIO     |
-| Metrics       | Prometheus         |
-| Caching       | Redis              |
-| Storage       | PostgreSQL         |
+| Component     | Technology           |
+| ------------- | -------------------- |
+| Orchestration | Python/AsyncIO       |
+| Metrics       | Prometheus           |
+| Caching       | Redis                |
+| Storage       | PostgreSQL           |
 | Agents        | Python Microservices |
-| API           | FastAPI            |
+| API           | FastAPI              |

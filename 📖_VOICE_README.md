@@ -10,6 +10,7 @@ cd predator12-local
 ```
 
 Це встановить:
+
 - ⚡ **Piper TTS** (100x швидше)
 - 🎯 **Whisper Turbo** (8x швидше)
 - 🔊 **faster-whisper** (оптимізація)
@@ -22,20 +23,20 @@ cd predator12-local
 
 ### Швидкість
 
-| Компонент | Було | Стало | Покращення |
-|-----------|------|-------|------------|
-| **TTS** | 5x RT | **100x RT** | **+1900%** 🚀 |
-| **STT** | 3x RT | **10x RT** | **+233%** ⚡ |
-| **Латентність TTS** | 500ms | **50ms** | **-90%** |
-| **Латентність STT** | 1000ms | **300ms** | **-70%** |
+| Компонент           | Було   | Стало       | Покращення    |
+| ------------------- | ------ | ----------- | ------------- |
+| **TTS**             | 5x RT  | **100x RT** | **+1900%** 🚀 |
+| **STT**             | 3x RT  | **10x RT**  | **+233%** ⚡  |
+| **Латентність TTS** | 500ms  | **50ms**    | **-90%**      |
+| **Латентність STT** | 1000ms | **300ms**   | **-70%**      |
 
 ### Ресурси
 
-| Метрика | Було | Стало | Економія |
-|---------|------|-------|----------|
-| **Розмір моделей** | 5 GB | **1.5 GB** | **-70%** 💾 |
-| **CPU usage** | 80% | **20%** | **-75%** 💻 |
-| **Вартість** | $80/міс | **$35/міс** | **-56%** 💰 |
+| Метрика            | Було    | Стало       | Економія    |
+| ------------------ | ------- | ----------- | ----------- |
+| **Розмір моделей** | 5 GB    | **1.5 GB**  | **-70%** 💾 |
+| **CPU usage**      | 80%     | **20%**     | **-75%** 💻 |
+| **Вартість**       | $80/міс | **$35/міс** | **-56%** 💰 |
 
 ---
 
@@ -44,6 +45,7 @@ cd predator12-local
 ### 🔊 TTS: Piper
 
 **Чому Piper?**
+
 - ⚡ 100x швидше за Coqui
 - 💾 50 MB vs 2+ GB
 - 🎯 Висока якість (⭐⭐⭐⭐)
@@ -52,11 +54,13 @@ cd predator12-local
 - 🔓 Open-source (MIT)
 
 **Встановлення:**
+
 ```bash
 pip install piper-tts
 ```
 
 **Код:**
+
 ```python
 from piper import PiperVoice
 
@@ -69,6 +73,7 @@ audio = voice.synthesize("Привіт!")
 ### 🗣️ STT: Whisper Turbo
 
 **Чому Turbo?**
+
 - ⚡ 10x real-time factor
 - 🎯 95%+ точність для української
 - 💾 1.5 GB (vs 3 GB Large v3)
@@ -76,11 +81,13 @@ audio = voice.synthesize("Привіт!")
 - 🔓 Open-source (MIT)
 
 **Встановлення:**
+
 ```bash
 pip install openai-whisper
 ```
 
 **Код:**
+
 ```python
 import whisper
 
@@ -94,12 +101,14 @@ print(result["text"])
 ### ⚡ Оптимізація: Silero VAD
 
 **Voice Activity Detection:**
+
 - 🎙️ Фільтрація тиші
 - ⚡ <1ms латентність
 - 💾 1 MB модель
 - 📉 -60% викликів STT
 
 **Код:**
+
 ```python
 from silero_vad import load_silero_vad
 
@@ -142,6 +151,7 @@ python benchmark_all_voice.py
 ```
 
 **Очікувані результати:**
+
 - ✅ Piper: 0.05s для 10 символів
 - ✅ Turbo: 0.3s для 10s аудіо
 - ✅ Згенеровані тестові файли
@@ -168,6 +178,7 @@ model = whisper.load_model("turbo")
 ```
 
 Запустити:
+
 ```bash
 python voice_api.py
 # API: http://localhost:8000
@@ -179,14 +190,14 @@ python voice_api.py
 TypeScript SDK залишається без змін:
 
 ```typescript
-import { VoiceAPIClient } from './services/voiceAPI';
+import { VoiceAPIClient } from "./services/voiceAPI";
 
-const voiceAPI = new VoiceAPIClient('http://localhost:8000');
+const voiceAPI = new VoiceAPIClient("http://localhost:8000");
 
 // TTS (тепер Piper)
 const audio = await voiceAPI.synthesizeSpeech({
   text: "Привіт",
-  language: "uk"
+  language: "uk",
 });
 
 // STT (тепер Turbo)
@@ -199,10 +210,10 @@ const text = await voiceAPI.recognizeSpeech(audioBlob, "uk");
 
 ### Економія
 
-| Період | Економія |
-|--------|----------|
-| Місяць | $45 |
-| Рік | **$540** |
+| Період | Економія   |
+| ------ | ---------- |
+| Місяць | $45        |
+| Рік    | **$540**   |
 | 3 роки | **$1,620** |
 
 ### ROI
@@ -248,18 +259,21 @@ const text = await voiceAPI.recognizeSpeech(audioBlob, "uk");
 ## 🐛 Troubleshooting
 
 ### Piper не встановлюється
+
 ```bash
 pip install --upgrade pip
 pip install piper-tts --no-cache-dir
 ```
 
 ### Whisper Turbo не знайдено
+
 ```bash
 pip install --upgrade openai-whisper
 # Використайте: model="turbo"
 ```
 
 ### Помилка ONNX
+
 ```bash
 pip install onnxruntime
 # або
@@ -267,6 +281,7 @@ pip install onnxruntime-cpu
 ```
 
 ### Повільно на CPU
+
 ```python
 # Використайте faster-whisper
 from faster_whisper import WhisperModel
@@ -279,7 +294,7 @@ model = WhisperModel("base", device="cpu", compute_type="int8")
 
 ### Основні документи
 
-1. **🔥_КРАЩІ_АЛЬТЕРНАТИВИ_VOICE_TECH.md**
+1. **🔥*КРАЩІ*АЛЬТЕРНАТИВИ_VOICE_TECH.md**
    - Повний аналіз всіх рішень
    - Технічні характеристики
    - Порівняльні таблиці
@@ -289,7 +304,7 @@ model = WhisperModel("base", device="cpu", compute_type="int8")
    - Troubleshooting
    - Checklist
 
-3. **🎉_ФІНАЛЬНИЙ_ЗВІТ_КРАЩІ_VOICE_TECH.md**
+3. **🎉*ФІНАЛЬНИЙ*ЗВІТ_КРАЩІ_VOICE_TECH.md**
    - Executive summary
    - Економічний аналіз
    - План міграції
@@ -306,23 +321,27 @@ model = WhisperModel("base", device="cpu", compute_type="int8")
 ## ✅ Checklist
 
 ### Встановлення
+
 - [ ] Запустив `./install-new-voice-stack.sh`
 - [ ] Перевірив встановлення пакетів
 - [ ] Завантажив українські моделі
 
 ### Тестування
+
 - [ ] Запустив `test_piper_tts.py`
 - [ ] Запустив `test_whisper_turbo.py`
 - [ ] Перевірив згенеровані аудіо
 - [ ] Порівняв метрики
 
 ### Інтеграція
+
 - [ ] Оновив `voice_api.py`
 - [ ] Протестував API endpoints
 - [ ] Перевірив фронтенд
 - [ ] Налаштував fallback
 
 ### Production
+
 - [ ] Benchmark на сервері
 - [ ] Canary release
 - [ ] Моніторинг метрик
@@ -333,12 +352,14 @@ model = WhisperModel("base", device="cpu", compute_type="int8")
 ## 🎉 Висновок
 
 **Рекомендована конфігурація:**
+
 - 🔊 TTS: **Piper** (100x швидше)
 - 🗣️ STT: **Whisper Turbo** (10x швидше)
 - ⚡ VAD: **Silero** (оптимізація)
 - 🌐 Fallback: **Web Speech API**
 
 **Ключові переваги:**
+
 - ⚡ Швидше в 10-20 разів
 - 💾 Легше на 70%
 - 💰 Дешевше на 56%
@@ -352,6 +373,7 @@ model = WhisperModel("base", device="cpu", compute_type="int8")
 ## 📞 Підтримка
 
 **Питання?** Перевірте:
+
 - 🐛 [GitHub Issues](repository-link)
 - 💬 [Team Chat](chat-link)
 - 📖 [Wiki](wiki-link)

@@ -19,8 +19,8 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-from .ai import ConversationContext, ConversationEngine, PersonalityManager
-from .avatar import AvatarAnimator, AvatarRenderer, ExpressionMapper
+from .ai import ConversationContext, ConversationEngine
+from .avatar import AvatarAnimator, AvatarRenderer
 
 # Import Cyber Face components
 from .config import CyberFaceConfig, config

@@ -1,12 +1,7 @@
 import asyncio
-import json
 import logging
-import os
-import time
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
-
-import httpx
+from datetime import datetime
+from typing import Any, Dict, Optional
 
 # Setup logging
 logger = logging.getLogger("AutoHealAgent")

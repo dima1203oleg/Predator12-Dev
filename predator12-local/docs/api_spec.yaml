@@ -21,9 +21,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRequest'
+              $ref: "#/components/schemas/UserRequest"
       responses:
-        '200':
+        "200":
           description: Task accepted
           content:
             application/json:
@@ -44,15 +44,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ValidatedUserRequest'
+              $ref: "#/components/schemas/ValidatedUserRequest"
       responses:
-        '200':
+        "200":
           description: Task accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaskResponse'
-        '400':
+                $ref: "#/components/schemas/TaskResponse"
+        "400":
           description: Invalid request
 
 components:
@@ -75,7 +75,7 @@ components:
 
     ValidatedUserRequest:
       allOf:
-        - $ref: '#/components/schemas/UserRequest'
+        - $ref: "#/components/schemas/UserRequest"
         - type: object
           required: [query, user_id]
           properties:
@@ -83,7 +83,7 @@ components:
               minLength: 3
               maxLength: 1000
             user_id:
-              pattern: '^[a-zA-Z0-9_-]+$'
+              pattern: "^[a-zA-Z0-9_-]+$"
 
     TaskResponse:
       type: object

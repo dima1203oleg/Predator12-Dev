@@ -1,7 +1,8 @@
 from dagster import Definitions
+
 from .jobs.ingest_job import ingest_job
+from .resources.connections import os_resource, pg_resource
 from .sensors.minio_sensor import minio_sensor
-from .resources.connections import pg_resource, os_resource
 
 all_jobs = [ingest_job]
 all_sensors = [minio_sensor]

@@ -42,6 +42,7 @@
 ## 🎯 МОДЕЛІ (100% БЕЗКОШТОВНІ)
 
 ### 🔊 TTS (Пріоритет):
+
 1. **Coqui TTS** ⭐⭐⭐⭐⭐
    - Українська: `uk/mai/vits`
    - Англійська: `en/ljspeech/vits`
@@ -62,6 +63,7 @@
    - Завжди працює
 
 ### 🎧 STT (Пріоритет):
+
 1. **faster-whisper** ⭐⭐⭐⭐⭐
    - OpenAI Whisper оптимізований
    - 5-10x швидше
@@ -86,26 +88,33 @@
 ## 🚀 ЯК ЗАПУСТИТИ
 
 ### 1. Встановлення (перший раз):
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local
 ./start-voice-premium-free.sh
 ```
+
 **Час**: 5-10 хв (автоматично)
 
 ### 2. Запуск API:
+
 ```bash
 ./start-voice-premium-free.sh
 ```
+
 **URL**: http://localhost:5094
 
 ### 3. Запуск Frontend:
+
 ```bash
 cd frontend
 npm run dev
 ```
+
 **URL**: http://localhost:5173
 
 ### 4. Використання:
+
 1. Відкрийте http://localhost:5173
 2. Voice Control Interface
 3. Натисніть мікрофон 🎤
@@ -117,38 +126,46 @@ npm run dev
 ## 💡 ОСОБЛИВОСТІ
 
 ✅ **100% БЕЗКОШТОВНО**
-   - Без API keys
-   - Без підписок
-   - Без обмежень
+
+- Без API keys
+- Без підписок
+- Без обмежень
 
 ✅ **НАЙКРАЩА ЯКІСТЬ**
-   - Coqui TTS ⭐⭐⭐⭐⭐
-   - faster-whisper ⭐⭐⭐⭐⭐
+
+- Coqui TTS ⭐⭐⭐⭐⭐
+- faster-whisper ⭐⭐⭐⭐⭐
 
 ✅ **УКРАЇНСЬКА МОВА**
-   - Повна підтримка
-   - Висока якість
-   - Пріоритетна мова
+
+- Повна підтримка
+- Висока якість
+- Пріоритетна мова
 
 ✅ **АНГЛІЙСЬКА МОВА**
-   - Повна підтримка
-   - Висока якість
+
+- Повна підтримка
+- Висока якість
 
 ✅ **ОФЛАЙН**
-   - Не потребує інтернету
-   - (після завантаження моделей)
+
+- Не потребує інтернету
+- (після завантаження моделей)
 
 ✅ **АВТОМАТИЧНИЙ FALLBACK**
-   - API → Local → Browser
-   - Завжди працює
+
+- API → Local → Browser
+- Завжди працює
 
 ✅ **ШВИДКІСТЬ**
-   - faster-whisper: 5-10x швидше
-   - Real-time обробка
+
+- faster-whisper: 5-10x швидше
+- Real-time обробка
 
 ✅ **ЛЕГКЕ РОЗГОРТАННЯ**
-   - Один скрипт
-   - Автоматичне встановлення
+
+- Один скрипт
+- Автоматичне встановлення
 
 ---
 
@@ -185,8 +202,11 @@ Fallback: Browser Web Speech API
 ## 🎯 ENDPOINTS
 
 ### GET `/` - Статус API
+
 ### GET `/api/capabilities` - Список моделей
+
 ### POST `/api/tts` - Text-to-Speech
+
 ### POST `/api/stt` - Speech-to-Text
 
 ---
@@ -194,6 +214,7 @@ Fallback: Browser Web Speech API
 ## 📦 ЗАЛЕЖНОСТІ
 
 ### Python:
+
 - TTS==0.22.0 (Coqui TTS)
 - gTTS==2.5.0 (Google TTS)
 - pyttsx3==2.90 (системні голоси)
@@ -202,6 +223,7 @@ Fallback: Browser Web Speech API
 - FastAPI, uvicorn, soundfile, numpy
 
 ### TypeScript:
+
 - premiumFreeVoiceAPI.ts (SDK)
 - React components (AIVoiceInterface.tsx)
 
@@ -233,6 +255,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ```
 
 **Очікуйте:**
+
 1. Створення віртуального середовища
 2. Встановлення залежностей (5-10 хв)
 3. Завантаження моделей Coqui TTS (~500MB)
@@ -240,6 +263,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 5. Запуск API на http://localhost:5094
 
 **Потім:**
+
 ```bash
 cd frontend
 npm run dev
@@ -259,7 +283,7 @@ npm run dev
 ✅ **100% безкоштовно** - без API keys  
 ✅ **Офлайн** - не потребує інтернету  
 ✅ **Автоматичний fallback** - завжди працює  
-✅ **Production ready** - готово до використання  
+✅ **Production ready** - готово до використання
 
 ---
 

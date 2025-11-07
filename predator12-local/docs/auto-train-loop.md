@@ -8,7 +8,7 @@ AutoTrain Loop — автоматичне перенавчання моделе�
 name: AutoTrain Loop
 on:
   schedule:
-    - cron: '0 2 * * 0' # щотижня
+    - cron: "0 2 * * 0" # щотижня
 jobs:
   retrain:
     runs-on: ubuntu-latest
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: "3.10"
       - name: Install requirements
         run: |
           pip install -r ai-llm/requirements.txt

@@ -3,7 +3,7 @@ allowed_actions:
   - id: helm-deploy
     description: Sync Helm-чартів через ArgoCD/Tekton
     environments: [dev, stage]
-    namespaces: ["predator-dev","predator-stage"]
+    namespaces: ["predator-dev", "predator-stage"]
     charts:
       - name: platform/*
         max_version: "<=2.5.0"
@@ -12,7 +12,7 @@ allowed_actions:
     namespaces: ["predator-*"]
   - id: run-local-daemon
     description: Запуск локальних сервісів (docker compose)
-    hosts: ["macbook-pro","dev-node-*"]
+    hosts: ["macbook-pro", "dev-node-*"]
     limits:
       max_runtime_minutes: 120
 require_signed_commits: true

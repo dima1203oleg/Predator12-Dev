@@ -1,37 +1,45 @@
 # New Features and Optimizations in Predator Analytics
 
 ## Memory Optimizations
+
 - **FastAPI Workers**: Limited to 1 worker in `main.py` to reduce memory usage on low-memory environments.
 - **Docker Memory Limits**: Set memory limits for services in `docker-compose.yml` (e.g., FastAPI at 512m, frontend at 256m).
 - **Lazy Loading in React**: Implemented lazy loading for components in `App.jsx` to optimize frontend performance.
 
 ## Remote LLM Integration
+
 - **Remote API Configuration**: Added `remote_api_config.py` and `llm_client.py` to use remote LLM APIs, avoiding local heavy inference.
 - **Backend Endpoints**: Integrated remote LLM clients into `/api/analyze` and `/generate-insight` endpoints in `analytics.py`.
 
 ## Multi-Agent Orchestration
+
 - **LangGraph Implementation**: Created `agent_orchestration.py` for orchestrating multiple agents with fallback mechanisms and contextual awareness using Redis and PostgreSQL.
 - **New Endpoint**: Added `/orchestrated-analysis` endpoint in `analytics.py` for complex analysis tasks.
 
 ## Frontend Enhancements
+
 - **Client Interface**: Developed `AnalysisPanel.jsx` for client-facing analytics results.
 - **Admin Interface**: Created `AdminDashboard.jsx` for administrative tasks, using TailwindCSS and Zustand for state management.
 - **State Management**: Implemented `useStore.js` for Zustand-based state management.
 
 ## Observability and Metrics
+
 - **Prometheus Configuration**: Updated `prometheus-config.yml` with optimized scrape intervals (30s).
 - **Grafana Dashboards**: Created `predator-analytics.json` for visualizing metrics from FastAPI, frontend, Celery, PostgreSQL, and Redis.
 - **FastAPI Metrics**: Added middleware in `metrics.py` for Prometheus metrics.
 - **Celery Metrics**: Instrumented Celery tasks with metrics in `metrics.py` and added a metrics endpoint in `metrics_endpoint.py` on port 5555.
 
 ## Database Configuration
+
 - **PostgreSQL with TimescaleDB**: Optimized `postgresql.conf` for analytical workloads with settings for memory, parallel query execution, and TimescaleDB extension.
 
 ## Deployment
+
 - **Helm Charts**: Added Kubernetes Helm chart templates (`deployment.yaml`, `values.yaml`) for deploying Predator Analytics with optimized resource limits.
 - **Docker Compose**: Updated `docker-compose.yml` to include Celery metrics service and memory limits for all services.
 
 ## Kafka and Celery Integration
+
 - **Task Queuing**: Enhanced Celery tasks in `analytics.py` for asynchronous processing with Kafka streaming for real-time analytics results.
 
 ## Next Steps and Testing Guidelines

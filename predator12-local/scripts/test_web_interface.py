@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """
-Швидкий тест веб-інтерфейсу Predator11
+Швидкий тест веб-інтерфейсу Predator11.
 """
 
 import os
-import signal
 import subprocess
 import sys
 import time
@@ -18,7 +17,7 @@ class WebInterfaceTest:
         self.processes = {}
 
     def check_nodejs(self):
-        """Перевірка Node.js"""
+        """Перевірка Node.js."""
         print("🔍 Перевірка Node.js...")
 
         try:
@@ -34,7 +33,7 @@ class WebInterfaceTest:
             return False
 
     def check_npm(self):
-        """Перевірка npm"""
+        """Перевірка npm."""
         print("🔍 Перевірка npm...")
 
         try:
@@ -50,7 +49,7 @@ class WebInterfaceTest:
             return False
 
     def check_dependencies(self):
-        """Перевірка залежностей"""
+        """Перевірка залежностей."""
         print("📦 Перевірка залежностей...")
 
         node_modules = self.frontend_dir / "node_modules"
@@ -70,7 +69,7 @@ class WebInterfaceTest:
         return True
 
     def install_dependencies(self):
-        """Встановлення залежностей"""
+        """Встановлення залежностей."""
         print("📦 Встановлення залежностей...")
 
         try:
@@ -93,7 +92,7 @@ class WebInterfaceTest:
             return False
 
     def check_typescript(self):
-        """Перевірка TypeScript"""
+        """Перевірка TypeScript."""
         print("🔧 Перевірка TypeScript...")
 
         try:
@@ -122,7 +121,7 @@ class WebInterfaceTest:
             return False
 
     def start_frontend_dev(self):
-        """Запуск frontend в режимі розробки"""
+        """Запуск frontend в режимі розробки."""
         print("🚀 Запуск frontend в режимі розробки...")
 
         try:
@@ -155,7 +154,7 @@ class WebInterfaceTest:
             return False
 
     def check_frontend_running(self):
-        """Перевірка чи працює frontend"""
+        """Перевірка чи працює frontend."""
         print("🌐 Перевірка веб-сервера...")
 
         import urllib.error
@@ -175,7 +174,7 @@ class WebInterfaceTest:
             return False
 
     def check_ports(self):
-        """Перевірка зайнятих портів"""
+        """Перевірка зайнятих портів."""
         print("📡 Перевірка портів...")
 
         ports = [3000, 8000, 5432, 6379]
@@ -194,11 +193,11 @@ class WebInterfaceTest:
                 else:
                     print(f"   ❌ Порт {port}: ВІЛЬНИЙ")
 
-            except Exception as e:
+            except Exception:
                 print(f"   ❌ Порт {port}: Помилка перевірки")
 
     def cleanup(self):
-        """Зупинка процесів"""
+        """Зупинка процесів."""
         print("\n🛑 Зупинка процесів...")
 
         for name, process in self.processes.items():
@@ -213,7 +212,7 @@ class WebInterfaceTest:
                     process.kill()
 
     def run_full_test(self):
-        """Повний тест веб-інтерфейсу"""
+        """Повний тест веб-інтерфейсу."""
         print("🔍 ТЕСТ ВЕБ-ІНТЕРФЕЙСУ PREDATOR11")
         print("=" * 50)
 
@@ -259,8 +258,8 @@ class WebInterfaceTest:
         except KeyboardInterrupt:
             print("\n⚠️ Тест перервано користувачем")
             return False
-        except Exception as e:
-            print(f"\n❌ Помилка тесту: {e}")
+        except Exception as exc:
+            print(f"\n❌ Помилка тесту: {exc}")
             return False
         finally:
             self.cleanup()

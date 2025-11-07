@@ -8,20 +8,20 @@
 
 Всі необхідні порти для Predator12 перевірено та готові:
 
-| Порт  | Сервіс                    | Статус    | Примітка                          |
-|-------|---------------------------|-----------|-----------------------------------|
-| 8000  | Backend FastAPI           | ✅ Вільний | Готовий до запуску               |
-| 3000  | Frontend React/Next.js    | ✅ Вільний | Готовий до запуску               |
-| 5432  | PostgreSQL                | ⚡ Активний | Запущений та готовий             |
-| 6379  | Redis                     | ✅ Вільний | Готовий до запуску               |
-| 9200  | OpenSearch                | ✅ Вільний | Готовий до запуску               |
-| 5601  | OpenSearch Dashboards     | ✅ Вільний | Готовий до запуску               |
-| 5672  | RabbitMQ                  | ✅ Вільний | Готовий до запуску               |
-| 15672 | RabbitMQ Management       | ✅ Вільний | Готовий до запуску               |
-| 6333  | Qdrant Vector DB          | ✅ Вільний | Готовий до запуску               |
-| 9000  | MinIO S3                  | ✅ Вільний | Готовий до запуску               |
-| 9001  | MinIO Console             | ✅ Вільний | Готовий до запуску               |
-| 5555  | Celery Flower             | ✅ Вільний | Готовий до запуску               |
+| Порт  | Сервіс                 | Статус      | Примітка             |
+| ----- | ---------------------- | ----------- | -------------------- |
+| 8000  | Backend FastAPI        | ✅ Вільний  | Готовий до запуску   |
+| 3000  | Frontend React/Next.js | ✅ Вільний  | Готовий до запуску   |
+| 5432  | PostgreSQL             | ⚡ Активний | Запущений та готовий |
+| 6379  | Redis                  | ✅ Вільний  | Готовий до запуску   |
+| 9200  | OpenSearch             | ✅ Вільний  | Готовий до запуску   |
+| 5601  | OpenSearch Dashboards  | ✅ Вільний  | Готовий до запуску   |
+| 5672  | RabbitMQ               | ✅ Вільний  | Готовий до запуску   |
+| 15672 | RabbitMQ Management    | ✅ Вільний  | Готовий до запуску   |
+| 6333  | Qdrant Vector DB       | ✅ Вільний  | Готовий до запуску   |
+| 9000  | MinIO S3               | ✅ Вільний  | Готовий до запуску   |
+| 9001  | MinIO Console          | ✅ Вільний  | Готовий до запуску   |
+| 5555  | Celery Flower          | ✅ Вільний  | Готовий до запуску   |
 
 **Підсумок:** 11 портів вільних, 1 активний (PostgreSQL - як і очікувалося).
 
@@ -30,6 +30,7 @@
 ## 🛠️ Створені інструменти управління
 
 ### 1. Управління портами
+
 ```bash
 # Перевірити статус всіх портів
 ./scripts/manage-ports.sh check
@@ -48,6 +49,7 @@
 ```
 
 ### 2. Health Check
+
 ```bash
 # Перевірити всі залежності та готовність системи
 python3 scripts/health-check.py
@@ -58,6 +60,7 @@ python scripts/health-check.py
 ```
 
 ### 3. Запуск всіх сервісів
+
 ```bash
 # Запустити всі сервіси одразу (інтерактивно)
 ./scripts/start-all.sh
@@ -71,12 +74,14 @@ python scripts/health-check.py
 ## 📋 Швидкий старт (Step by Step)
 
 ### Крок 1: Перевірка портів
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local
 ./scripts/manage-ports.sh check
 ```
 
 ### Крок 2: Створення Python 3.11 venv (якщо ще не створено)
+
 ```bash
 cd backend
 python3.11 -m venv venv
@@ -86,12 +91,14 @@ pip install -r requirements-311-modern.txt
 ```
 
 ### Крок 3: Health Check
+
 ```bash
 source backend/venv/bin/activate
 python scripts/health-check.py
 ```
 
 ### Крок 4: Налаштування .env
+
 ```bash
 cd backend
 cp .env.example .env
@@ -99,6 +106,7 @@ cp .env.example .env
 ```
 
 ### Крок 5: Міграції БД
+
 ```bash
 source backend/venv/bin/activate
 alembic upgrade head
@@ -107,11 +115,13 @@ alembic upgrade head
 ### Крок 6: Запуск сервісів
 
 **Варіант А: Автоматичний запуск всього**
+
 ```bash
 ./scripts/start-all.sh
 ```
 
 **Варіант Б: Ручний запуск по черзі**
+
 ```bash
 # Terminal 1: Backend
 cd backend
@@ -139,6 +149,7 @@ celery -A app.celery_app flower --port=5555
 ## 🔍 Перевірка роботи
 
 ### Backend API
+
 ```bash
 # Health endpoint
 curl http://localhost:8000/health
@@ -151,17 +162,20 @@ curl http://localhost:8000/openapi.json | jq
 ```
 
 ### PostgreSQL
+
 ```bash
 psql -U postgres -d predator12 -c "SELECT version();"
 ```
 
 ### Redis
+
 ```bash
 redis-cli ping
 # Очікувана відповідь: PONG
 ```
 
 ### OpenSearch (якщо запущено)
+
 ```bash
 curl http://localhost:9200/
 # або з auth
@@ -173,6 +187,7 @@ curl -u admin:admin http://localhost:9200/
 ## 📊 Моніторинг
 
 ### Логи
+
 ```bash
 # Backend
 tail -f logs/backend.log
@@ -188,6 +203,7 @@ tail -f logs/flower.log
 ```
 
 ### Процеси
+
 ```bash
 # Подивитися запущені сервіси
 cat .running-services.txt
@@ -199,6 +215,7 @@ ps aux | grep node
 ```
 
 ### Системні ресурси
+
 ```bash
 # CPU/Memory usage
 top -pid $(cat .backend.pid)
@@ -212,18 +229,21 @@ lsof -i -P | grep LISTEN
 ## 🧪 Тестування
 
 ### Базові тести
+
 ```bash
 source backend/venv/bin/activate
 pytest tests/ -v
 ```
 
 ### Smoke tests
+
 ```bash
 # Швидка перевірка критичних endpoints
 pytest tests/smoke/ -v --tb=short
 ```
 
 ### Coverage
+
 ```bash
 pytest tests/ --cov=app --cov-report=html
 open htmlcov/index.html
@@ -234,11 +254,13 @@ open htmlcov/index.html
 ## 🛑 Зупинка сервісів
 
 ### Автоматична зупинка
+
 ```bash
 ./scripts/stop-all.sh
 ```
 
 ### Ручна зупинка
+
 ```bash
 # Backend
 kill $(cat .backend.pid)
@@ -262,6 +284,7 @@ lsof -ti :3000 | xargs kill -9
 ## 🔧 Troubleshooting
 
 ### Порт зайнятий
+
 ```bash
 # Знайти процес
 lsof -i :8000
@@ -274,6 +297,7 @@ kill -9 <PID>
 ```
 
 ### venv не активується
+
 ```bash
 # Пересоздати venv
 rm -rf backend/venv
@@ -284,6 +308,7 @@ pip install -r requirements-311-modern.txt
 ```
 
 ### Помилки імпортів
+
 ```bash
 # Перевірити встановлені пакети
 pip list
@@ -296,6 +321,7 @@ python scripts/health-check.py
 ```
 
 ### PostgreSQL не підключається
+
 ```bash
 # Перевірити статус
 brew services list | grep postgres
@@ -308,6 +334,7 @@ psql -U postgres -d predator12
 ```
 
 ### Redis не підключається
+
 ```bash
 # Перевірити статус
 brew services list | grep redis
@@ -351,6 +378,7 @@ redis-cli ping
 ## 🎯 Наступні кроки
 
 1. **Створити venv та встановити залежності:**
+
    ```bash
    cd backend
    python3.11 -m venv venv
@@ -359,17 +387,20 @@ redis-cli ping
    ```
 
 2. **Налаштувати .env:**
+
    ```bash
    cp .env.example .env
    # Відредагувати .env
    ```
 
 3. **Запустити міграції:**
+
    ```bash
    alembic upgrade head
    ```
 
 4. **Запустити все:**
+
    ```bash
    ./scripts/start-all.sh
    ```

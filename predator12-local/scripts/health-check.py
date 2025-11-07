@@ -5,7 +5,6 @@ PREDATOR12 - Комплексний Health Check
 Перевірка всіх залежностей та готовності до роботи
 """
 
-import subprocess
 import sys
 from pathlib import Path
 

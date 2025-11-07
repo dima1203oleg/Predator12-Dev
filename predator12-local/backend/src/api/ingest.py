@@ -3,14 +3,12 @@
 Backend API for Ingest Hub - File uploads, link crawling, Telegram integration
 """
 
-import asyncio
 import uuid
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel, HttpUrl
 
 # ============= MODELS =============
@@ -441,7 +439,7 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             # Wait for messages from client (ping/pong)
-            data = await websocket.receive_text()
+            await websocket.receive_text()
 
             # Echo back (heartbeat)
             await websocket.send_json({"type": "pong", "timestamp": datetime.now().isoformat()})

@@ -1,35 +1,40 @@
 """
-Агент для керування системою через природну мову
-Використовує Mistral як основний провайдер, Gemini як fallback
+Агент для керування системою через природну мову.
+
+Використовує Mistral як основний провайдер, Gemini як fallback.
 """
 
 from __future__ import annotations
 
-import json
 import re
 from typing import Any, Optional
 
 import structlog
+from agents.supervisor import TaskType
 from pydantic import BaseModel
 
-from agents.supervisor import TaskType
-
-from .base_agent import BaseAgent, TaskPriority
+from .base_agent import BaseAgent
 
 logger = structlog.get_logger()
 
 
 class NaturalLanguageCommand(BaseModel):
-    """Модель для розбору команд природною мовою"""
+    """Модель для розбору команд природною мовою."""
 
     action: str  # start, stop, status, analyze, etc.
     target: Optional[str] = None  # agent name, service name, etc.
-    parameters: dict[str, Any] = {}
+    parameters: dict[str, Any] = None
     urgency: str = "normal"  # low, normal, high, critical
+
+    def __init__(self, **data):
+        """Ініціалізація NaturalLanguageCommand."""
+        if "parameters" not in data or data["parameters"] is None:
+            data["parameters"] = {}
+        super().__init__(**data)
 
 
 class NaturalLanguageController(BaseAgent):
-    """Агент для керування системою через природну мову"""
+    """Агент для керування системою через природну мову."""
 
     def __init__(self, name: str, config: Optional[dict[str, Any]] = None):
         super().__init__(name, config)
@@ -37,7 +42,7 @@ class NaturalLanguageController(BaseAgent):
         self.command_patterns = self._load_command_patterns()
 
     def _load_command_patterns(self) -> dict[str, dict]:
-        """Завантажує патерни для розпізнавання команд"""
+        """Завантажує патерни для розпізнавання команд."""
         return {
             # Статус системи
             "status": {
@@ -124,11 +129,11 @@ class NaturalLanguageController(BaseAgent):
         }
 
     def set_supervisor(self, supervisor):
-        """Встановлює посилання на supervisor для виклику інших агентів"""
+        """Встановлює посилання на supervisor для виклику інших агентів."""
         self.supervisor = supervisor
 
     def parse_natural_command(self, text: str) -> NaturalLanguageCommand:
-        """Розбирає команду природною мовою"""
+        """Розбирає команду природною мовою."""
         text = text.lower().strip()
 
         # Перевіряємо на екстрені ситуації
@@ -141,7 +146,7 @@ class NaturalLanguageController(BaseAgent):
             urgency = "high"
 
         # Знаходимо відповідність патернам
-        for command_type, pattern_data in self.command_patterns.items():
+        for pattern_data in self.command_patterns.values():
             for pattern in pattern_data["patterns"]:
                 match = re.search(pattern, text, re.IGNORECASE)
                 if match:
@@ -161,7 +166,6 @@ class NaturalLanguageController(BaseAgent):
                         "diagnose",
                         "optimize",
                     ]:
-                        # Витягуємо все після ключового слова
                         target = match.group(1).strip() if match.groups() else "system"
 
                     return NaturalLanguageCommand(action=action, target=target, urgency=urgency)
@@ -170,7 +174,7 @@ class NaturalLanguageController(BaseAgent):
         return NaturalLanguageCommand(action="interpret", target=text, urgency=urgency)
 
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виконує завдання через природну мову"""
+        """Виконує завдання через природну мову."""
 
         if task_type != "natural_command":
             return {"error": f"Unsupported task type: {task_type}"}
@@ -193,38 +197,29 @@ class NaturalLanguageController(BaseAgent):
         try:
             if parsed_command.action == "status":
                 return await self._execute_status_command(parsed_command)
-
-            elif parsed_command.action == "start_agent":
+            if parsed_command.action == "start_agent":
                 return await self._execute_start_agent_command(parsed_command)
-
-            elif parsed_command.action == "stop_agent":
+            if parsed_command.action == "stop_agent":
                 return await self._execute_stop_agent_command(parsed_command)
-
-            elif parsed_command.action == "analyze":
+            if parsed_command.action == "analyze":
                 return await self._execute_analyze_command(parsed_command)
-
-            elif parsed_command.action == "generate_report":
+            if parsed_command.action == "generate_report":
                 return await self._execute_report_command(parsed_command)
-
-            elif parsed_command.action == "diagnose":
+            if parsed_command.action == "diagnose":
                 return await self._execute_diagnose_command(parsed_command)
-
-            elif parsed_command.action == "optimize":
+            if parsed_command.action == "optimize":
                 return await self._execute_optimize_command(parsed_command)
-
-            else:
-                return await self._execute_interpret_command(parsed_command)
-
-        except Exception as e:
-            self.logger.error("Command execution failed", error=str(e), command=parsed_command)
+            return await self._execute_interpret_command(parsed_command)
+        except Exception as exc:
+            self.logger.error("Command execution failed", error=str(exc), command=parsed_command)
             return {
                 "success": False,
-                "error": f"Не вдалося виконати команду: {str(e)}",
+                "error": f"Не вдалося виконати команду: {exc}",
                 "original_command": command_text,
             }
 
     async def _execute_status_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
-        """Виконує команду перевірки статусу"""
+        """Виконує команду перевірки статусу."""
         if not self.supervisor:
             return {"error": "Supervisor not available"}
 
@@ -244,7 +239,7 @@ class NaturalLanguageController(BaseAgent):
         }
 
     async def _execute_start_agent_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
-        """Виконує команду запуску агента"""
+        """Виконує команду запуску агента."""
         if not command.target:
             return {"error": "Не вказано ім'я агента"}
 
@@ -261,7 +256,7 @@ class NaturalLanguageController(BaseAgent):
         }
 
     async def _execute_stop_agent_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
-        """Виконує команду зупинки агента"""
+        """Виконує команду зупинки агента."""
         if not command.target:
             return {"error": "Не вказано ім'я агента"}
 
@@ -275,7 +270,7 @@ class NaturalLanguageController(BaseAgent):
         }
 
     async def _execute_analyze_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
-        """Виконує команду аналізу"""
+        """Виконує команду аналізу."""
         target = command.target or "system"
 
         # Викликаємо відповідного агента через supervisor
@@ -302,7 +297,7 @@ class NaturalLanguageController(BaseAgent):
         }
 
     async def _execute_report_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
-        """Виконує команду генерації звіту"""
+        """Виконує команду генерації звіту."""
         target = command.target or "system"
 
         if self.supervisor:
@@ -330,7 +325,7 @@ class NaturalLanguageController(BaseAgent):
         }
 
     async def _execute_diagnose_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
-        """Виконує команду діагностики"""
+        """Виконує команду діагностики."""
         target = command.target or "system"
 
         if self.supervisor:
@@ -356,7 +351,7 @@ class NaturalLanguageController(BaseAgent):
         }
 
     async def _execute_optimize_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
-        """Виконує команду оптимізації"""
+        """Виконує команду оптимізації."""
         target = command.target or "system"
 
         if self.supervisor:
@@ -384,7 +379,7 @@ class NaturalLanguageController(BaseAgent):
         }
 
     async def _execute_interpret_command(self, command: NaturalLanguageCommand) -> dict[str, Any]:
-        """Виконує інтерпретацію довільної команди"""
+        """Виконує інтерпретацію довільної команди."""
         # Використовуємо Mistral через supervisor для розуміння команди
         if self.supervisor:
             try:
@@ -411,7 +406,7 @@ class NaturalLanguageController(BaseAgent):
         }
 
     def capabilities(self) -> list[str]:
-        """Повертає список можливостей агента"""
+        """Повертає список можливостей агента."""
         return [
             "natural_command",  # обробка команд природною мовою
             "system_status",  # перевірка статусу системи

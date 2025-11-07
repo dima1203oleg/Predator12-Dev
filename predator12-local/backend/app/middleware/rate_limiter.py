@@ -5,7 +5,7 @@ Rate Limiting Middleware для Predator12 API
 
 import asyncio
 import time
-from typing import Callable, Dict, Optional, Tuple
+from typing import Callable, Dict, Tuple
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware

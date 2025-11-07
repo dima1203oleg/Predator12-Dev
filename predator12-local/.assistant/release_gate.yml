@@ -10,4 +10,4 @@ prod_requirements:
 approval:
   mode: "one_click_or_timebox"
   timebox_hours: 12
-  approvers: ["owner:dima","role:ops-lead"]
+  approvers: ["owner:dima", "role:ops-lead"]

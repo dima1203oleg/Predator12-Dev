@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
-"""
-🔍 РЕАЛЬНА ПЕРЕВІРКА: ЧИ АГЕНТИ ВИКОРИСТОВУЮТЬ AI МОДЕЛІ
-Чесний тест без фіктивних відповідей
-"""
+"""🔍 РЕАЛЬНА ПЕРЕВІРКА: ЧИ АГЕНТИ ВИКОРИСТОВУЮТЬ AI МОДЕЛІ Чесний тест без
+фіктивних відповідей."""
 import asyncio
-import httpx
-import json
-import subprocess
+import glob
 import logging
 import os
-import glob
+import subprocess
+
+import httpx
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 async def test_real_agent_ai_usage():
-    """Реальна перевірка використання AI моделей агентами"""
+    """Реальна перевірка використання AI моделей агентами."""
 
     print("🔍 РЕАЛЬНА ПЕРЕВІРКА ВИКОРИСТАННЯ AI МОДЕЛЕЙ АГЕНТАМИ")
-    print("="*80)
+    print("=" * 80)
 
     results = {
         "model_sdk_accessible": False,
@@ -27,7 +26,7 @@ async def test_real_agent_ai_usage():
         "containers_healthy": 0,
         "containers_total": 0,
         "real_agents_found": 0,
-        "agents_with_ai_code": 0
+        "agents_with_ai_code": 0,
     }
 
     # 1. Перевірка доступності Model SDK
@@ -44,7 +43,7 @@ async def test_real_agent_ai_usage():
                 models_response = await client.get("http://localhost:3010/v1/models")
                 if models_response.status_code == 200:
                     models_data = models_response.json()
-                    total_models = len(models_data.get('data', []))
+                    total_models = len(models_data.get("data", []))
                     print(f"📊 Доступно моделей через API: {total_models}")
             else:
                 print(f"❌ Model SDK недоступний: HTTP {response.status_code}")
@@ -54,23 +53,28 @@ async def test_real_agent_ai_usage():
     # 2. Перевірка стану контейнерів
     print("\n🐳 Перевіряю стан контейнерів...")
     try:
-        result = subprocess.run(['docker', 'ps', '--format', 'table {{.Names}}\t{{.Status}}'],
-                              capture_output=True, text=True)
+        result = subprocess.run(
+            ["docker", "ps", "--format", "table {{.Names}}\t{{.Status}}"],
+            capture_output=True,
+            text=True,
+        )
 
         if result.returncode == 0:
-            lines = result.stdout.strip().split('\n')[1:]  # Skip header
+            lines = result.stdout.strip().split("\n")[1:]  # Skip header
             results["containers_total"] = len(lines)
 
             healthy_count = 0
             unhealthy_containers = []
 
             for line in lines:
-                parts = line.split('\t')
+                parts = line.split("\t")
                 if len(parts) >= 2:
                     name = parts[0].strip()
                     status = parts[1].strip()
 
-                    if 'healthy' in status or ('Up' in status and 'unhealthy' not in status and 'starting' not in status):
+                    if "healthy" in status or (
+                        "Up" in status and "unhealthy" not in status and "starting" not in status
+                    ):
                         healthy_count += 1
                     else:
                         unhealthy_containers.append(f"{name}: {status}")
@@ -114,15 +118,17 @@ async def test_real_agent_ai_usage():
 
     # 6. Перевірка конфігурації
     print("\n⚙️ Перевіряю конфігурацію системи...")
-    config_check = check_system_configuration()
+    check_system_configuration()
 
     # 7. Фінальні висновки
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("📋 ДЕТАЛЬНІ РЕЗУЛЬТАТИ")
-    print("="*80)
+    print("=" * 80)
 
     print(f"🔌 Model SDK: {'✅ Працює' if results['model_sdk_accessible'] else '❌ Недоступний'}")
-    print(f"🐳 Контейнери: {results['containers_healthy']}/{results['containers_total']} здорових ({(results['containers_healthy']/results['containers_total']*100):.1f}%)")
+    print(
+        f"🐳 Контейнери: {results['containers_healthy']}/{results['containers_total']} здорових ({(results['containers_healthy']/results['containers_total']*100):.1f}%)"
+    )
     print(f"📁 Агенти знайдено: {results['real_agents_found']}")
     print(f"🤖 Агенти з AI кодом: {results['agents_with_ai_code']}")
 
@@ -148,12 +154,18 @@ async def test_real_agent_ai_usage():
     score = 0
     max_score = 6
 
-    if results["model_sdk_accessible"]: score += 1
-    if results["containers_healthy"] / results["containers_total"] > 0.7: score += 1
-    if results["real_agents_found"] > 0: score += 1
-    if results["agents_with_ai_code"] > 0: score += 1
-    if results.get("agents_can_connect"): score += 1
-    if results.get("agents_get_real_responses"): score += 1
+    if results["model_sdk_accessible"]:
+        score += 1
+    if results["containers_healthy"] / results["containers_total"] > 0.7:
+        score += 1
+    if results["real_agents_found"] > 0:
+        score += 1
+    if results["agents_with_ai_code"] > 0:
+        score += 1
+    if results.get("agents_can_connect"):
+        score += 1
+    if results.get("agents_get_real_responses"):
+        score += 1
 
     print(f"📊 Загальний скор системи: {score}/{max_score} ({score/max_score*100:.1f}%)")
 
@@ -168,14 +180,15 @@ async def test_real_agent_ai_usage():
 
     return results
 
+
 def find_real_agent_files():
-    """Знаходить справжні файли агентів в системі"""
+    """Знаходить справжні файли агентів в системі."""
     agent_files = []
 
     # Шукаємо в директоріях агентів
     search_paths = [
         "/Users/dima/Documents/Predator11/agents/**/*.py",
-        "/Users/dima/Documents/Predator11/backend/app/agents/**/*.py"
+        "/Users/dima/Documents/Predator11/backend/app/agents/**/*.py",
     ]
 
     for pattern in search_paths:
@@ -186,17 +199,28 @@ def find_real_agent_files():
 
     return agent_files
 
+
 def check_agent_has_ai_integration(agent_file):
-    """Перевіряє чи має агент інтеграцію з AI"""
+    """Перевіряє чи має агент інтеграцію з AI."""
     try:
-        with open(agent_file, 'r', encoding='utf-8') as f:
+        with open(agent_file, "r", encoding="utf-8") as f:
             content = f.read()
 
         # Шукаємо ознаки AI інтеграції
         ai_indicators = [
-            'model_sdk', 'MODEL_SDK', 'chat_completion', 'openai', 'anthropic',
-            'gpt-', 'claude-', 'llama', 'ai_model', 'LLM', 'language_model',
-            'http://localhost:3010', 'v1/chat/completions'
+            "model_sdk",
+            "MODEL_SDK",
+            "chat_completion",
+            "openai",
+            "anthropic",
+            "gpt-",
+            "claude-",
+            "llama",
+            "ai_model",
+            "LLM",
+            "language_model",
+            "http://localhost:3010",
+            "v1/chat/completions",
         ]
 
         return any(indicator in content for indicator in ai_indicators)
@@ -204,20 +228,21 @@ def check_agent_has_ai_integration(agent_file):
     except Exception:
         return False
 
+
 async def test_model_sdk_responses():
-    """Тестує різні типи відповідей від Model SDK"""
+    """Тестує різні типи відповідей від Model SDK."""
     results = {
         "agents_can_connect": False,
         "agents_get_real_responses": False,
         "demo_responses_detected": False,
-        "error_responses": 0
+        "error_responses": 0,
     }
 
     test_cases = [
         {"model": "gpt-4", "content": "Привіт, це реальний тест"},
         {"model": "claude-3", "content": "Проаналізуй дані системи"},
         {"model": "llama-3.1-70b", "content": "Надай технічні рекомендації"},
-        {"model": "nonexistent-model", "content": "Тест неіснуючої моделі"}
+        {"model": "nonexistent-model", "content": "Тест неіснуючої моделі"},
     ]
 
     try:
@@ -227,11 +252,12 @@ async def test_model_sdk_responses():
                     test_request = {
                         "model": test_case["model"],
                         "messages": [{"role": "user", "content": test_case["content"]}],
-                        "max_tokens": 100
+                        "max_tokens": 100,
                     }
 
-                    response = await client.post("http://localhost:3010/v1/chat/completions",
-                                               json=test_request)
+                    response = await client.post(
+                        "http://localhost:3010/v1/chat/completions", json=test_request
+                    )
 
                     if response.status_code == 200:
                         data = response.json()
@@ -241,7 +267,9 @@ async def test_model_sdk_responses():
                             results["agents_can_connect"] = True
 
                             # Аналізуємо тип відповіді
-                            if any(word in content for word in ["demo", "mock", "fallback", "заглушка"]):
+                            if any(
+                                word in content for word in ["demo", "mock", "fallback", "заглушка"]
+                            ):
                                 results["demo_responses_detected"] = True
                                 print(f"  Test {i+1}: ДЕМО відповідь від {test_case['model']}")
                             elif "api тимчасово недоступний" in content or "error" in content:
@@ -263,13 +291,14 @@ async def test_model_sdk_responses():
 
     return results
 
+
 async def check_agent_logs():
-    """Перевіряє логи агентів на предмет реального використання AI"""
+    """Перевіряє логи агентів на предмет реального використання AI."""
     results = {
         "real_ai_usage": False,
         "mock_usage_detected": False,
         "agents_checked": 0,
-        "ai_requests_found": 0
+        "ai_requests_found": 0,
     }
 
     # Список контейнерів для перевірки
@@ -277,21 +306,32 @@ async def check_agent_logs():
         "predator11-scheduler-1",
         "predator11-celery-worker-1",
         "predator11-worker-1",
-        "predator11-backend-1"
+        "predator11-backend-1",
     ]
 
     for container in agent_containers:
         try:
-            result = subprocess.run(['docker', 'logs', '--tail', '50', container],
-                                  capture_output=True, text=True, timeout=10)
+            result = subprocess.run(
+                ["docker", "logs", "--tail", "50", container],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
 
             if result.returncode == 0:
                 logs = result.stdout.lower()
                 results["agents_checked"] += 1
 
                 # Шукаємо ознаки AI запитів
-                ai_patterns = ['gpt-4', 'claude', 'llama', '/v1/chat/completions', 'model_sdk', 'ai completion']
-                mock_patterns = ['mock', 'demo', 'fallback', 'test response']
+                ai_patterns = [
+                    "gpt-4",
+                    "claude",
+                    "llama",
+                    "/v1/chat/completions",
+                    "model_sdk",
+                    "ai completion",
+                ]
+                mock_patterns = ["mock", "demo", "fallback", "test response"]
 
                 ai_found = sum(1 for pattern in ai_patterns if pattern in logs)
                 mock_found = sum(1 for pattern in mock_patterns if pattern in logs)
@@ -312,15 +352,16 @@ async def check_agent_logs():
 
     return results
 
+
 def check_system_configuration():
-    """Перевіряє конфігурацію системи"""
+    """Перевіряє конфігурацію системи."""
     config_issues = []
 
     # Перевіряємо важливі файли конфігурації
     config_files = [
         "/Users/dima/Documents/Predator11/docker-compose.yml",
         "/Users/dima/Documents/Predator11/.env",
-        "/Users/dima/Documents/Predator11/backend/app/agents/specialized_model_router.py"
+        "/Users/dima/Documents/Predator11/backend/app/agents/specialized_model_router.py",
     ]
 
     for file_path in config_files:
@@ -335,6 +376,7 @@ def check_system_configuration():
         print("✅ Основні файли конфігурації на місці")
 
     return len(config_issues) == 0
+
 
 if __name__ == "__main__":
     asyncio.run(test_real_agent_ai_usage())

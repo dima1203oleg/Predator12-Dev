@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from ..auto_remediation import RemediationAction, RemediationError, remediate
 from ..dependencies import get_settings

@@ -1,6 +1,4 @@
-"""
-Orchestrator Leader Election
-"""
+"""Orchestrator Leader Election."""
 
 import asyncio
 import random
@@ -11,7 +9,7 @@ import redis
 
 
 class LeaderElection:
-    """Redis-based leader election"""
+    """Redis-based leader election."""
 
     def __init__(self, redis_client: redis.Redis, service_id: str):
         self.redis = redis_client
@@ -21,7 +19,7 @@ class LeaderElection:
         self.is_leader = False
 
     async def run_election(self):
-        """Continuously participate in leader election"""
+        """Continuously participate in leader election."""
         while True:
             try:
                 await self._attempt_leadership()
@@ -31,7 +29,7 @@ class LeaderElection:
                 await asyncio.sleep(5 + random.random())
 
     async def _attempt_leadership(self):
-        """Try to acquire/renew leadership"""
+        """Try to acquire/renew leadership."""
         acquired = await self.redis.set(
             self.leader_key,
             self.service_id,
@@ -48,7 +46,7 @@ class LeaderElection:
         self.is_leader = current_leader == self.service_id
 
     async def get_leader_id(self) -> Optional[str]:
-        """Get current leader ID"""
+        """Get current leader ID."""
         return await self.redis.get(self.leader_key)
 
 

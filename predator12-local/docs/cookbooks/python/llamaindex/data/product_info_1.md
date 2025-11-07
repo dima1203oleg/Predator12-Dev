@@ -1,8 +1,9 @@
 # Information about product item_number: 1
+
 TrailMaster X4 Tent, price $250,
 
-
 ## Brand
+
 OutdoorLiving
 
 Main Category: CAMPING & HIKING
@@ -10,6 +11,7 @@ Sub Category: TENTS & SHELTERS
 Product Type: BACKPACKING TENTS
 
 ## Features
+
 - Polyester material for durability
 - Spacious interior to accommodate multiple people
 - Easy setup with included instructions
@@ -23,6 +25,7 @@ Product Type: BACKPACKING TENTS
 - Carry bag included for convenient storage and transportation
 
 ## Technical Specs
+
 Best Use: Camping  
 Capacity: 4-person  
 Season Rating: 3-season  
@@ -46,7 +49,7 @@ Stakes: Aluminum
 Carry Bag: Included  
 Dimensions: 10ft x 8ft x 6ft (length x width x peak height)  
 Packed Size: 24 inches x 8 inches  
-Weight: 12 lbs  
+Weight: 12 lbs
 
 ## TrailMaster X4 Tent User Guide
 
@@ -132,6 +135,7 @@ If any components are missing or damaged, please contact our customer support im
 - Store the tent in a cool, dry place away from direct sunlight.
 
 ## Cautions
+
 1. Avoid Uneven or Rocky Surfaces: Do not place the tent on uneven or rocky surfaces.
 2. Stay Clear of Hazardous Areas: Avoid setting up the tent near hazardous areas.
 3. No Open Flames or Heat Sources: Do not use open flames, candles, or any other flammable heat sources near the tent.
@@ -144,6 +148,7 @@ If any components are missing or damaged, please contact our customer support im
 10. Don't Neglect Maintenance: Regularly clean and maintain the tent according to the provided instructions to ensure its longevity and performance.
 
 ## Warranty Information
+
 Thank you for purchasing the TrailMaster X4 Tent. We are confident in the quality and durability of our product. This warranty provides coverage for any manufacturing defects or issues that may arise during normal use of the tent. Please read the terms and conditions of the warranty below:
 
 1. Warranty Coverage: The TrailMaster X4 Tent is covered by a 2-year limited warranty from the date of purchase. This warranty covers manufacturing defects in materials and workmanship.
@@ -180,38 +185,41 @@ If you have any questions or need further assistance, please contact our custome
 - Customer Support Email: support@example.com
 
 ## Return Policy
-- If Membership status "None        ":	Returns are accepted within 30 days of purchase, provided the tent is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Gold":	Returns are accepted within 60 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Platinum":	Returns are accepted within 90 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+
+- If Membership status "None ": Returns are accepted within 30 days of purchase, provided the tent is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+- If Membership status "Gold": Returns are accepted within 60 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+- If Membership status "Platinum": Returns are accepted within 90 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
 
 ## Reviews
-1) Rating: 5
+
+1. Rating: 5
    Review: I am extremely happy with my TrailMaster X4 Tent! It's spacious, easy to set up, and kept me dry during a storm. The UV protection is a great addition too. Highly recommend it to anyone who loves camping!
 
-2) Rating: 3
+2. Rating: 3
    Review: I bought the TrailMaster X4 Tent, and while it's waterproof and has a spacious interior, I found it a bit difficult to set up. It's a decent tent, but I wish it were easier to assemble.
 
-3) Rating: 5
+3. Rating: 5
    Review: The TrailMaster X4 Tent is a fantastic investment for any serious camper. The easy setup and spacious interior make it perfect for extended trips, and the waterproof design kept us dry in heavy rain.
 
-4) Rating: 4
+4. Rating: 4
    Review: I like the TrailMaster X4 Tent, but I wish it came in more colors. It's comfortable and has many useful features, but the green color just isn't my favorite. Overall, it's a good tent.
 
-5) Rating: 5
+5. Rating: 5
    Review: This tent is perfect for my family camping trips. The spacious interior and convenient storage pocket make it easy to stay organized. It's also super easy to set up, making it a great addition to our gear.
 
 ## FAQ
-1) Can the TrailMaster X4 Tent be used in winter conditions?
+
+1. Can the TrailMaster X4 Tent be used in winter conditions?
    The TrailMaster X4 Tent is designed for 3-season use and may not be suitable for extreme winter conditions with heavy snow and freezing temperatures.
 
-2) How many people can comfortably sleep in the TrailMaster X4 Tent?
+2. How many people can comfortably sleep in the TrailMaster X4 Tent?
    The TrailMaster X4 Tent can comfortably accommodate up to 4 people with room for their gear.
 
-3) Is there a warranty on the TrailMaster X4 Tent?
+3. Is there a warranty on the TrailMaster X4 Tent?
    Yes, the TrailMaster X4 Tent comes with a 2-year limited warranty against manufacturing defects.
 
-4) Are there any additional accessories included with the TrailMaster X4 Tent?
+4. Are there any additional accessories included with the TrailMaster X4 Tent?
    The TrailMaster X4 Tent includes a rainfly, tent stakes, guy lines, and a carry bag for easy transport.
 
-5) Can the TrailMaster X4 Tent be easily carried during hikes?
+5. Can the TrailMaster X4 Tent be easily carried during hikes?
    Yes, the TrailMaster X4 Tent weighs just 12lbs, and when packed in its carry bag, it can be comfortably carried during hikes.

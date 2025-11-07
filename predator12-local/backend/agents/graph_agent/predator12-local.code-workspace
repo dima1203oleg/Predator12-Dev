@@ -1,0 +1,55 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../../../Downloads/codespaces-models 2"
+		}
+	],
+	"settings": {
+		"github.copilot.enable": {
+			"*": true,
+			"yaml": true,
+			"plaintext": false,
+			"markdown": true
+		},
+		"terminal.integrated.defaultProfile.linux": "bash",
+		"terminal.integrated.fontSize": 14,
+		"workbench.colorTheme": "Default Dark Modern",
+		"workbench.iconTheme": "material-icon-theme",
+		"git.confirmSync": false,
+		"task.quickOpen.skip": false,
+		"yaml.validate": true,
+		"yaml.schemas": {
+			"kubernetes": "/*.yaml",
+			"https://json.schemastore.org/github-workflow.json": "/.github/workflows/*.yml"
+		},
+		"chat.tools.terminal.autoApprove": "always",
+		"typescript.tsdk": "frontend/node_modules/typescript/lib",
+		"typescript.enablePromptUseWorkspaceTsdk": true,
+		"extensions.ignoreRecommendations": false,
+		"terminal.integrated.env.osx": {
+			"PYTHONPATH": "${workspaceFolder}",
+			"ENV_FILE": "${workspaceFolder}/.env"
+		},
+		"terminal.integrated.confirmOnExit": "never",
+		"terminal.integrated.confirmOnKill": "never",
+		"mcpServers": {
+			"predator-tools": {
+				"command": "npx",
+				"args": [
+					"ts-node",
+					"src/index.ts"
+				],
+				"transport": "stdio",
+				"env": {
+					"PREDATOR_HOME": "/Users/dima/Documents/Predator12/predator12-local",
+					"OPENAI_API_KEY": "${env:OPENAI_API_KEY}",
+					"OPENSEARCH_API_KEY": "${env:OPENSEARCH_API_KEY}"
+				},
+				"timeoutMs": 120000
+			}
+		}
+	}
+}

@@ -3,6 +3,7 @@
 ## 📋 Огляд
 
 **AIVoiceInterface** - це повнофункціональний голосовий інтерфейс для PREDATOR12 з підтримкою:
+
 - 🎙️ **Голосове розпізнавання** (Speech-to-Text)
 - 🔊 **Синтез мовлення** (Text-to-Speech)
 - 🤖 **AI обробка команд** з інтелектуальним аналізом
@@ -35,6 +36,7 @@ Voice API запуститься на: **http://localhost:5094**
 ### 3️⃣ Відкрийте Voice Interface
 
 У браузері перейдіть до:
+
 ```
 http://localhost:3000/voice
 ```
@@ -55,6 +57,7 @@ http://localhost:3000/voice
 ### Приклади Команд
 
 #### Українська 🇺🇦
+
 ```
 "Привіт"
 "Відкрий дашборд"
@@ -66,6 +69,7 @@ http://localhost:3000/voice
 ```
 
 #### English 🇬🇧
+
 ```
 "Hello"
 "Open dashboard"
@@ -81,18 +85,19 @@ http://localhost:3000/voice
 ## ⚙️ Налаштування
 
 ### Відкрити Налаштування
+
 Натисніть кнопку **⚙️ Settings** у правому верхньому куті
 
 ### Доступні Опції
 
-| Налаштування | Опис | Рекомендовано |
-|--------------|------|---------------|
-| **Мова** | uk-UA / en-US | uk-UA |
-| **Швидкість** | 0.5 - 2.0 | 1.0 |
-| **Висота** | 0.5 - 2.0 | 1.0 |
-| **Гучність** | 0 - 1.0 | 0.8 |
-| **Автоозвучування** | ON/OFF | ON ✅ |
-| **Безперервне прослуховування** | ON/OFF | OFF |
+| Налаштування                    | Опис          | Рекомендовано |
+| ------------------------------- | ------------- | ------------- |
+| **Мова**                        | uk-UA / en-US | uk-UA         |
+| **Швидкість**                   | 0.5 - 2.0     | 1.0           |
+| **Висота**                      | 0.5 - 2.0     | 1.0           |
+| **Гучність**                    | 0 - 1.0       | 0.8           |
+| **Автоозвучування**             | ON/OFF        | ON ✅         |
+| **Безперервне прослуховування** | ON/OFF        | OFF           |
 
 ---
 
@@ -101,6 +106,7 @@ http://localhost:3000/voice
 ### TTS (Text-to-Speech)
 
 #### 1. Coqui TTS ⭐⭐⭐⭐⭐
+
 ```json
 {
   "provider": "coqui",
@@ -112,6 +118,7 @@ http://localhost:3000/voice
 ```
 
 #### 2. gTTS ⭐⭐⭐⭐
+
 ```json
 {
   "provider": "gtts",
@@ -123,6 +130,7 @@ http://localhost:3000/voice
 ```
 
 #### 3. Browser API ⭐⭐⭐
+
 ```json
 {
   "provider": "browser",
@@ -136,6 +144,7 @@ http://localhost:3000/voice
 ### STT (Speech-to-Text)
 
 #### 1. faster-whisper ⭐⭐⭐⭐⭐
+
 ```json
 {
   "provider": "faster-whisper",
@@ -147,6 +156,7 @@ http://localhost:3000/voice
 ```
 
 #### 2. Whisper ⭐⭐⭐⭐
+
 ```json
 {
   "provider": "whisper",
@@ -158,6 +168,7 @@ http://localhost:3000/voice
 ```
 
 #### 3. Browser API ⭐⭐⭐
+
 ```json
 {
   "provider": "browser",
@@ -225,6 +236,7 @@ predator12-local/frontend/src/
 ## 🎨 UI Компоненти
 
 ### Головна Панель
+
 ```tsx
 ┌────────────────────────────────────────┐
 │  🎤 AI Voice Interface                 │
@@ -246,6 +258,7 @@ predator12-local/frontend/src/
 ```
 
 ### Панель Налаштувань
+
 ```tsx
 ┌────────────────────────────────────────┐
 │  ⚙️ Voice Settings                     │
@@ -269,26 +282,34 @@ predator12-local/frontend/src/
 ## 🐛 Troubleshooting
 
 ### Проблема: Мікрофон не працює
+
 ✅ **Рішення:**
+
 1. Перевірте дозволи браузера (🔒 іконка в адресному рядку)
 2. Натисніть "Дозволити" при запиті доступу до мікрофона
 3. Перезавантажте сторінку
 
 ### Проблема: Немає звуку при відповіді
+
 ✅ **Рішення:**
+
 1. Перевірте гучність системи
 2. Увімкніть "Автоозвучування" в налаштуваннях
 3. Натисніть кнопку "Тест голосу" для перевірки
 
 ### Проблема: Погане розпізнавання
+
 ✅ **Рішення:**
+
 1. Говоріть чітко та голосно
 2. Наблизтеся до мікрофона
 3. Зменшіть фоновий шум
 4. Перевірте правильність вибору мови
 
 ### Проблема: API не підключається
+
 ✅ **Рішення:**
+
 1. Запустіть Voice API: `./start-voice-premium-free.sh`
 2. Перевірте що порт 5094 вільний
 3. Interface працюватиме з Browser API як fallback
@@ -297,22 +318,23 @@ predator12-local/frontend/src/
 
 ## 📊 Статуси та Індикатори
 
-| Індикатор | Значення | Дія |
-|-----------|----------|-----|
-| 🟢 Connected | API підключено | Все ОК |
-| 🟡 Browser Mode | Тільки браузер | Запустіть API |
-| 🔴 Disconnected | Помилка | Перезавантажте |
-| 🎙️ Listening | Слухаємо | Говоріть |
-| ⏸️ Paused | Призупинено | - |
-| ⏹️ Stopped | Зупинено | Натисніть мікрофон |
-| 🔊 Speaking | Озвучування | Почекайте |
-| ⚙️ Processing | Обробка | Почекайте |
+| Індикатор       | Значення       | Дія                |
+| --------------- | -------------- | ------------------ |
+| 🟢 Connected    | API підключено | Все ОК             |
+| 🟡 Browser Mode | Тільки браузер | Запустіть API      |
+| 🔴 Disconnected | Помилка        | Перезавантажте     |
+| 🎙️ Listening    | Слухаємо       | Говоріть           |
+| ⏸️ Paused       | Призупинено    | -                  |
+| ⏹️ Stopped      | Зупинено       | Натисніть мікрофон |
+| 🔊 Speaking     | Озвучування    | Почекайте          |
+| ⚙️ Processing   | Обробка        | Почекайте          |
 
 ---
 
 ## 🎯 Roadmap
 
 ### ✅ Completed
+
 - [x] Web Speech API інтеграція
 - [x] Premium FREE Voice API
 - [x] Мультимовна підтримка
@@ -321,12 +343,14 @@ predator12-local/frontend/src/
 - [x] Налаштування
 
 ### 🚧 In Progress
+
 - [ ] Покращення розпізнавання шуму
 - [ ] Додаткові мови (ru, pl, de)
 - [ ] Голосові профілі користувачів
 - [ ] Voice commands history
 
 ### 🔮 Future
+
 - [ ] Custom wake words
 - [ ] Speaker identification
 - [ ] Emotion detection
@@ -339,6 +363,7 @@ predator12-local/frontend/src/
 ### Premium FREE Voice API
 
 #### Health Check
+
 ```typescript
 GET http://localhost:5094/health
 
@@ -352,6 +377,7 @@ Response:
 ```
 
 #### Get Capabilities
+
 ```typescript
 GET http://localhost:5094/api/capabilities
 
@@ -374,6 +400,7 @@ Response:
 ```
 
 #### Text-to-Speech
+
 ```typescript
 POST http://localhost:5094/api/tts
 
@@ -390,6 +417,7 @@ Audio stream (WAV format)
 ```
 
 #### Speech-to-Text
+
 ```typescript
 POST http://localhost:5094/api/stt
 
@@ -415,12 +443,14 @@ Response:
 ## 🔐 Безпека
 
 ### Приватність
+
 - ✅ Голосові дані **НЕ зберігаються** на сервері
 - ✅ Обробка в **реальному часі**
 - ✅ Локальне виконання (офлайн режим доступний)
 - ✅ Без передачі даних третім сторонам
 
 ### Дозволи
+
 - 🎤 Доступ до мікрофона (обов'язковий)
 - 🔊 Відтворення аудіо (автоматично)
 
@@ -429,11 +459,13 @@ Response:
 ## 🎓 Додаткові Ресурси
 
 ### Документація
+
 - [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
 - [Coqui TTS](https://github.com/coqui-ai/TTS)
 - [faster-whisper](https://github.com/guillaumekln/faster-whisper)
 
 ### Відео Туторіали
+
 - 🎥 [Як користуватися Voice Interface](https://example.com)
 - 🎥 [Налаштування голосових команд](https://example.com)
 - 🎥 [Tips & Tricks](https://example.com)
@@ -443,11 +475,13 @@ Response:
 ## 🤝 Підтримка
 
 ### Контакти
+
 - 📧 Email: support@predator12.ai
 - 💬 Discord: [PREDATOR12 Community](https://discord.gg/predator12)
 - 🐦 Twitter: [@Predator12AI](https://twitter.com/predator12ai)
 
 ### Contributing
+
 Хочете допомогти? Відкривайте Issues та Pull Requests на GitHub!
 
 ---

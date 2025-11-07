@@ -6,10 +6,9 @@ Handles conversational AI, intent classification, and personality management
 import asyncio
 import json
 import logging
-from dataclasses import asdict, dataclass
-from datetime import datetime
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 import anthropic
 import openai
@@ -216,7 +215,6 @@ class IntentClassifier:
         # Simple pattern matching (can be enhanced with ML models)
         best_intent = "general_query"
         best_confidence = 0.0
-        matched_entities = {}
 
         for intent_name, patterns in self.intent_patterns.items():
             for pattern in patterns:

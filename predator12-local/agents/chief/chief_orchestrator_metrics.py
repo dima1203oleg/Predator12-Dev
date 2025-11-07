@@ -1,17 +1,9 @@
 #!/usr/bin/env python3
-"""
-Chief Orchestrator with Prometheus Metrics
-"""
+"""Chief Orchestrator with Prometheus Metrics."""
 
 from typing import Any, Dict
 
-from observability.metrics import (
-    AGENT_TASKS,
-    CIRCUIT_BREAKER_STATE,
-    REQUEST_COUNT,
-    REQUEST_LATENCY,
-    RequestMetrics,
-)
+from observability.metrics import AGENT_TASKS, RequestMetrics
 from prometheus_client import start_http_server
 
 # Import base orchestrator and types
@@ -19,7 +11,7 @@ from .chief_orchestrator import AgentTask, ChiefOrchestratorAgent
 
 
 class MetricsChiefOrchestrator(ChiefOrchestratorAgent):
-    """Chief Orchestrator with metrics support"""
+    """Chief Orchestrator with metrics support."""
 
     def __init__(self, *args, metrics_port=8002, **kwargs):
         super().__init__(*args, **kwargs)
@@ -27,27 +19,27 @@ class MetricsChiefOrchestrator(ChiefOrchestratorAgent):
         self._start_metrics_server()
 
     def _start_metrics_server(self):
-        """Start Prometheus metrics endpoint"""
+        """Start Prometheus metrics endpoint."""
         start_http_server(self.metrics_port)
 
     async def _execute_agent_task(self, task: AgentTask, context_results: Dict) -> Dict[str, Any]:
-        """Track agent task execution metrics"""
+        """Track agent task execution metrics."""
         with RequestMetrics("POST", f"agent/{task.agent_name}"):
             try:
                 result = await super()._execute_agent_task(task, context_results)
                 AGENT_TASKS.labels(agent_name=task.agent_name, status="success").inc()
                 return result
-            except Exception as e:
+            except Exception:
                 AGENT_TASKS.labels(agent_name=task.agent_name, status="error").inc()
                 raise
 
     async def _publish_event(self, event_type: str, data: Dict[str, Any]):
-        """Track event publishing metrics"""
+        """Track event publishing metrics."""
         with RequestMetrics("PUBLISH", f"event/{event_type}"):
             await super()._publish_event(event_type, data)
 
     def _setup_routes(self):
-        """Wrap API endpoints with metrics"""
+        """Wrap API endpoints with metrics."""
         super()._setup_routes()
 
         # Store original endpoints to wrap

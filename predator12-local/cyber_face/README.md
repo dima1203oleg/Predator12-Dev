@@ -9,6 +9,7 @@ Cyber Face AI is a sophisticated real-time emotion detection and conversational 
 ## Features
 
 ### 🎯 Core Capabilities
+
 - **Real-time Emotion Detection** - Advanced facial emotion recognition using multiple ML models
 - **Conversational AI** - Multi-LLM powered chat with GPT-4, Claude, and local models
 - **Voice Interface** - Speech recognition and text-to-speech with wake word detection
@@ -16,6 +17,7 @@ Cyber Face AI is a sophisticated real-time emotion detection and conversational 
 - **Dashboard Integration** - Seamless integration with Predator Analytics Command Center
 
 ### 🧠 AI Components
+
 - **Emotion Analysis** - 10 emotion types with confidence scoring and temporal smoothing
 - **Attention Tracking** - Focus level, gaze direction, and fatigue monitoring
 - **Intent Classification** - Natural language understanding for voice commands
@@ -23,6 +25,7 @@ Cyber Face AI is a sophisticated real-time emotion detection and conversational 
 - **Model Selection** - Intelligent routing between different LLM providers
 
 ### 🎨 Avatar System
+
 - **3D Rendering** - WebGL-based avatar with facial expressions
 - **Expression Mapping** - Emotion-to-blend-shape mapping system
 - **Animation Engine** - Smooth transitions and realistic movements
@@ -58,6 +61,7 @@ Cyber Face AI
 ## Installation
 
 ### Prerequisites
+
 - Python 3.11+
 - Node.js 18+ (for frontend components)
 - WebGL-compatible browser
@@ -74,6 +78,7 @@ pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
 ```
 
 ### Key Dependencies
+
 - **Computer Vision**: opencv-python, mediapipe, tensorflow
 - **AI/ML**: openai, anthropic, transformers, torch
 - **Web Framework**: fastapi, uvicorn, websockets
@@ -175,15 +180,15 @@ voice:
 
 # AI Personality Settings
 personality:
-  tone: "professional"        # professional/friendly/analytical
-  response_style: "concise"   # concise/conversational/detailed
-  proactivity: "medium"       # low/medium/high
-  emotional_range: "neutral"  # neutral/positive/focused
+  tone: "professional" # professional/friendly/analytical
+  response_style: "concise" # concise/conversational/detailed
+  proactivity: "medium" # low/medium/high
+  emotional_range: "neutral" # neutral/positive/focused
 
 # Avatar Settings
 avatar:
   model_path: "models/base_avatar.gltf"
-  render_quality: "medium"    # low/medium/high
+  render_quality: "medium" # low/medium/high
   animation_speed: 1.0
   enable_physics: false
 ```
@@ -193,9 +198,11 @@ avatar:
 ### REST Endpoints
 
 #### GET /status
+
 Get system status and component health.
 
 **Response:**
+
 ```json
 {
   "initialized": true,
@@ -217,9 +224,11 @@ Get system status and component health.
 ```
 
 #### POST /process-frame
+
 Process video frame for emotion detection.
 
 **Request:**
+
 ```bash
 curl -X POST "http://localhost:8001/process-frame" \
   -H "Content-Type: application/octet-stream" \
@@ -227,6 +236,7 @@ curl -X POST "http://localhost:8001/process-frame" \
 ```
 
 **Response:**
+
 ```json
 {
   "status": "success",
@@ -253,20 +263,22 @@ curl -X POST "http://localhost:8001/process-frame" \
 ### WebSocket Protocol
 
 #### Connection
+
 ```javascript
-const ws = new WebSocket('ws://localhost:8001/ws');
+const ws = new WebSocket("ws://localhost:8001/ws");
 ```
 
 #### Message Types
 
 **Emotion Updates:**
+
 ```json
 {
   "type": "emotion_update",
   "data": {
     "primary_emotion": "focused",
     "confidence": 0.78,
-    "all_emotions": {"focused": 0.78, "neutral": 0.22},
+    "all_emotions": { "focused": 0.78, "neutral": 0.22 },
     "timestamp": 1703123456.789
   },
   "timestamp": 1703123456.789,
@@ -275,6 +287,7 @@ const ws = new WebSocket('ws://localhost:8001/ws');
 ```
 
 **Voice Commands:**
+
 ```json
 {
   "type": "voice_command",
@@ -290,13 +303,14 @@ const ws = new WebSocket('ws://localhost:8001/ws');
 ```
 
 **AI Responses:**
+
 ```json
 {
   "type": "ai_response",
   "data": {
     "text": "I'll show you the dashboard right away.",
-    "intent": {"name": "navigate_dashboard", "confidence": 0.95},
-    "actions": [{"type": "navigate", "target": "/dashboard"}],
+    "intent": { "name": "navigate_dashboard", "confidence": 0.95 },
+    "actions": [{ "type": "navigate", "target": "/dashboard" }],
     "suggestions": ["View metrics", "Check agents"],
     "model_used": "gpt-4"
   },
@@ -400,12 +414,14 @@ await agent_connector.update_agent_status({
 ### System Requirements
 
 **Minimum:**
+
 - CPU: 4 cores, 2.5 GHz
 - RAM: 8 GB
 - GPU: Integrated graphics
 - Network: 100 Mbps
 
 **Recommended:**
+
 - CPU: 8 cores, 3.0 GHz+
 - RAM: 16 GB+
 - GPU: Dedicated GPU with 4+ GB VRAM
@@ -434,6 +450,7 @@ config = CyberFaceConfig(
 ### Common Issues
 
 #### Camera Access Denied
+
 ```bash
 # Check camera permissions in browser
 # Ensure HTTPS or localhost for camera access
@@ -441,6 +458,7 @@ config = CyberFaceConfig(
 ```
 
 #### WebSocket Connection Failed
+
 ```bash
 # Check if port 8001 is available
 lsof -i :8001
@@ -450,6 +468,7 @@ lsof -i :8001
 ```
 
 #### Emotion Detection Not Working
+
 ```bash
 # Verify camera feed
 # Check face detection model loading
@@ -458,6 +477,7 @@ lsof -i :8001
 ```
 
 #### Voice Recognition Issues
+
 ```bash
 # Check microphone permissions
 # Verify audio input device
@@ -534,21 +554,21 @@ spec:
   template:
     spec:
       containers:
-      - name: cyber-face
-        image: predator/cyber-face:v1.0.0
-        ports:
-        - containerPort: 8001
-        - containerPort: 8002
-        env:
-        - name: CYBER_FACE_ENV
-          value: "production"
-        resources:
-          requests:
-            memory: "2Gi"
-            cpu: "1000m"
-          limits:
-            memory: "4Gi"
-            cpu: "2000m"
+        - name: cyber-face
+          image: predator/cyber-face:v1.0.0
+          ports:
+            - containerPort: 8001
+            - containerPort: 8002
+          env:
+            - name: CYBER_FACE_ENV
+              value: "production"
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "1000m"
+            limits:
+              memory: "4Gi"
+              cpu: "2000m"
 ```
 
 ## Contributing
@@ -606,6 +626,7 @@ Copyright (c) 2024 Predator Analytics. All rights reserved.
 ## Support
 
 For technical support and questions:
+
 - **Documentation**: https://docs.predator-analytics.com/cyber-face
 - **Issues**: https://github.com/predator-analytics/predator12/issues
 - **Discord**: https://discord.gg/predator-analytics

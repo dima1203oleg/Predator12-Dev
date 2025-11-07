@@ -12,9 +12,9 @@ spec:
   selector:
     app: predator-api
   ports:
-  - port: 8000
-    targetPort: 8000
-    name: http
+    - port: 8000
+      targetPort: 8000
+      name: http
   type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
@@ -28,17 +28,17 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
 spec:
   tls:
-  - hosts:
-    - api.predator-analytics.com
-    secretName: predator-api-tls
+    - hosts:
+        - api.predator-analytics.com
+      secretName: predator-api-tls
   rules:
-  - host: api.predator-analytics.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: predator-api
-            port:
-              number: 8000
+    - host: api.predator-analytics.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: predator-api
+                port:
+                  number: 8000

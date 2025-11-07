@@ -14,7 +14,6 @@ import numpy as np
 try:
     import mlflow
     import mlflow.tracking
-    import shap
     from mlflow.tracking import MlflowClient
     from scipy import stats
 
@@ -281,7 +280,7 @@ class MLOpsEnhancedManager:
                     # Регистрируем модель
                     model_uri = f"runs:/{run_id}/model"
 
-                    mv = mlflow.register_model(model_uri, model_name)
+                    mlflow.register_model(model_uri, model_name)
 
                 logger.info(f"✅ Registered model {model_name} version {version} in MLflow")
 

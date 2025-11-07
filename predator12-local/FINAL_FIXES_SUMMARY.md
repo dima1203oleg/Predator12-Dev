@@ -9,6 +9,7 @@
 ## 📝 Короткий підсумок
 
 Виправлено **10 критичних та середніх помилок** у проекті:
+
 - ✅ 6 критичних помилок (блокували запуск)
 - ✅ 2 середні проблеми (потенційні збої)
 - ✅ 2 покращення (якість коду)
@@ -18,12 +19,16 @@
 ## 🔧 Виправлені файли
 
 ### 1. `/docker-compose.yml`
+
 **Зміни:**
+
 - ✅ Виправлено Redis health check (додано автентифікацію)
 - ✅ Виправлено Frontend health check (порт 80→3000, curl→wget)
 
 ### 2. `/.env.example`
+
 **Зміни:**
+
 - ✅ Додано `REDIS_PASSWORD`
 - ✅ Додано `OPENSEARCH_ADMIN_PASSWORD`
 - ✅ Додано `MODEL_SDK_BASE_URL` та `MODEL_SDK_KEY`
@@ -34,24 +39,34 @@
 - ✅ Оновлено `CELERY_BROKER_URL` та `CELERY_RESULT_BACKEND` з паролем
 
 ### 3. `/backend/Dockerfile`
+
 **Зміни:**
+
 - ✅ Видалено `|| true` з команди створення користувача (безпека)
 
 ### 4. `/backend/requirements.txt`
+
 **Зміни:**
+
 - ✅ Реорганізовано з категоріями
 - ✅ Видалено deprecated `aioredis`
 
 ### 5. `/backend/app/main.py`
+
 **Зміни:**
+
 - ✅ Виправлено імпорти: `routes_agents_real` → `app.routes_agents_real`
 
 ### 6. `/backend/app/routes_agents_real.py`
+
 **Зміни:**
+
 - ✅ Виправлено шлях до `registry.yaml` (3 рівні вгору замість 2)
 
 ### 7. `/frontend/vite.config.ts`
+
 **Зміни:**
+
 - ✅ Додано `resolve.alias` для підтримки `@/` імпортів
 
 ---
@@ -59,26 +74,32 @@
 ## 🚨 Критичні помилки (виправлено)
 
 ### ❌ → ✅ Redis не запускався
+
 **Було:** Health check падав через ві��сутність автентифікації  
 **Стало:** Health check працює з паролем
 
 ### ❌ → ✅ Frontend health check завжди падав
+
 **Було:** Перевірка на порту 80 з curl (якого немає в Alpine)  
 **Стало:** Перевірка на порту 3000 з wget
 
 ### ❌ → ✅ Backend не міг підключитися до сервісів
+
 **Було:** Відсутні змінні середовища (паролі, URL)  
 **Стало:** Всі змінні додано в .env.example
 
 ### ❌ → ✅ API endpoints не працювали
+
 **Було:** Неправильні імпорти в main.py  
 **Стало:** Коректні абсолютні імпорти
 
 ### ❌ → ✅ Агенти не завантажувалися
+
 **Було:** Неправильний шлях до registry.yaml  
 **Стало:** Правильний шлях (3 рівні вгору)
 
 ### ❌ → ✅ Frontend build міг падати
+
 **Було:** Vite не знав про TypeScript alias `@/`  
 **Стало:** Додано resolve.alias в vite.config.ts
 
@@ -87,12 +108,14 @@
 ## 📋 Чеклист перед запуском
 
 ### Обов'язково:
+
 - [ ] Створити `.env` файл: `cp .env.example .env`
 - [ ] Змінити всі паролі в `.env` на сильні
 - [ ] Змінити `SECRET_KEY` та `JWT_SECRET`
 - [ ] Змінити `MODEL_SDK_KEY`
 
 ### Рекомендова��о:
+
 - [ ] Перевірити наявність Docker та Docker Compose
 - [ ] Переконатися що порти вільні: 3000, 8000, 5432, 6379, 9200, 9090, 3001
 - [ ] Виділити мінімум 8GB RAM для Docker
@@ -131,18 +154,18 @@ docker-compose down -v
 
 Після запуску `docker-compose up -d`:
 
-| Сервіс | URL | Опис |
-|--------|-----|------|
-| **Frontend** | http://localhost:3000 | Nexus Core UI |
-| **Backend API** | http://localhost:8000 | REST API |
-| **API Docs** | http://localhost:8000/docs | Swagger UI |
-| **Grafana** | http://localhost:3001 | Моніторинг (admin/admin) |
-| **Prometheus** | http://localhost:9090 | Метрики |
-| **OpenSearch** | http://localhost:9200 | Пошук та логи |
-| **OpenSearch Dashboards** | http://localhost:5601 | Візуалізація логів |
-| **MinIO Console** | http://localhost:9001 | Object Storage |
-| **Keycloak** | http://localhost:8080 | Автентифікація |
-| **Redpanda Console** | http://localhost:9644 | Kafka UI |
+| Сервіс                    | URL                        | Опис                     |
+| ------------------------- | -------------------------- | ------------------------ |
+| **Frontend**              | http://localhost:3000      | Nexus Core UI            |
+| **Backend API**           | http://localhost:8000      | REST API                 |
+| **API Docs**              | http://localhost:8000/docs | Swagger UI               |
+| **Grafana**               | http://localhost:3001      | Моніторинг (admin/admin) |
+| **Prometheus**            | http://localhost:9090      | Метрики                  |
+| **OpenSearch**            | http://localhost:9200      | Пошук та логи            |
+| **OpenSearch Dashboards** | http://localhost:5601      | Візуалізація логів       |
+| **MinIO Console**         | http://localhost:9001      | Object Storage           |
+| **Keycloak**              | http://localhost:8080      | Автентифікація           |
+| **Redpanda Console**      | http://localhost:9644      | Kafka UI                 |
 
 ---
 
@@ -166,6 +189,7 @@ MODEL_SDK_KEY=<generated-api-key>
 ```
 
 ### Додаткові рекомендації:
+
 1. Використовувати HTTPS (налаштувати reverse proxy з SSL)
 2. Обмежити доступ до портів через firewall
 3. Регулярно оновлювати Docker образи
@@ -177,6 +201,7 @@ MODEL_SDK_KEY=<generated-api-key>
 ## 📊 Тестування після виправлень
 
 ### Backend Health Checks:
+
 ```bash
 # Перевірка backend
 curl http://localhost:8000/health
@@ -189,6 +214,7 @@ curl http://localhost:8000/api/system/status
 ```
 
 ### Frontend:
+
 ```bash
 # Перевірка frontend
 curl http://localhost:3000
@@ -198,6 +224,7 @@ open http://localhost:3000
 ```
 
 ### Docker Health:
+
 ```bash
 # Перевірити health всіх контейнерів
 docker-compose ps
@@ -210,6 +237,7 @@ docker-compose ps
 ## 🐛 Відомі обмеження
 
 1. **OpenSearch** потребує `vm.max_map_count=262144` на Linux:
+
    ```bash
    sudo sysctl -w vm.max_map_count=262144
    ```
@@ -234,12 +262,14 @@ docker-compose ps
 ## ✅ Висновок
 
 **Всі помилки виправлено!** Проект готовий до:
+
 - ✅ Development
 - ✅ Testing
 - ✅ Staging
 - ⚠️ Production (після зміни паролів та налаштування SSL)
 
 **Наступні кроки:**
+
 1. Створити `.env` з реальними паролями
 2. Запустити `docker-compose up -d`
 3. Відкрити http://localhost:3000

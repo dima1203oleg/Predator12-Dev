@@ -4,20 +4,19 @@
 Триступенева система надійності: API → Local → Browser Fallback
 """
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
-from pydantic import BaseModel
-import uvicorn
-import os
-import io
-import tempfile
 import json
-import httpx
-from datetime import datetime
-from typing import Optional, List, Dict, Any
-import asyncio
+import os
+import tempfile
 import traceback
+from datetime import datetime
+from typing import Any, Dict, Optional
+
+import httpx
+import uvicorn
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
 
 # ============================================
 # Імпорти для локальних моделей
@@ -25,7 +24,8 @@ import traceback
 
 # Локальні TTS
 try:
-    from piper import PiperVoice
+    pass
+
     PIPER_AVAILABLE = True
 except ImportError:
     PIPER_AVAILABLE = False
@@ -33,6 +33,7 @@ except ImportError:
 
 try:
     from TTS.api import TTS
+
     COQUI_TTS_AVAILABLE = True
 except ImportError:
     COQUI_TTS_AVAILABLE = False
@@ -41,6 +42,7 @@ except ImportError:
 # Локальні STT
 try:
     import whisper
+
     WHISPER_AVAILABLE = True
 except ImportError:
     WHISPER_AVAILABLE = False
@@ -48,20 +50,21 @@ except ImportError:
 
 try:
     from faster_whisper import WhisperModel
+
     FASTER_WHISPER_AVAILABLE = True
 except ImportError:
     FASTER_WHISPER_AVAILABLE = False
     print("⚠️  faster-whisper не встановлено")
 
 try:
-    from vosk import Model, KaldiRecognizer
+    from vosk import KaldiRecognizer, Model
+
     VOSK_AVAILABLE = True
 except ImportError:
     VOSK_AVAILABLE = False
     print("⚠️  Vosk не встановлено")
 
 import soundfile as sf
-import numpy as np
 
 # ============================================
 # FastAPI Application
@@ -70,7 +73,7 @@ import numpy as np
 app = FastAPI(
     title="🎤 PREDATOR12 Voice API V3",
     description="Триступенева система голосових технологій: API → Local → Browser",
-    version="5.3.0"
+    version="5.3.0",
 )
 
 app.add_middleware(
@@ -89,23 +92,23 @@ API_CONFIG = {
     "google_tts": {
         "enabled": os.getenv("GOOGLE_TTS_ENABLED", "false").lower() == "true",
         "api_key": os.getenv("GOOGLE_TTS_API_KEY", ""),
-        "endpoint": "https://texttospeech.googleapis.com/v1/text:synthesize"
+        "endpoint": "https://texttospeech.googleapis.com/v1/text:synthesize",
     },
     "coqui_cloud_tts": {
         "enabled": os.getenv("COQUI_CLOUD_ENABLED", "false").lower() == "true",
         "api_key": os.getenv("COQUI_API_KEY", ""),
-        "endpoint": "https://app.coqui.ai/api/v2/samples"
+        "endpoint": "https://app.coqui.ai/api/v2/samples",
     },
     "whisper_api": {
         "enabled": os.getenv("WHISPER_API_ENABLED", "false").lower() == "true",
         "api_key": os.getenv("OPENAI_API_KEY", ""),
-        "endpoint": "https://api.openai.com/v1/audio/transcriptions"
+        "endpoint": "https://api.openai.com/v1/audio/transcriptions",
     },
     "google_stt": {
         "enabled": os.getenv("GOOGLE_STT_ENABLED", "false").lower() == "true",
         "api_key": os.getenv("GOOGLE_STT_API_KEY", ""),
-        "endpoint": "https://speech.googleapis.com/v1/speech:recognize"
-    }
+        "endpoint": "https://speech.googleapis.com/v1/speech:recognize",
+    },
 }
 
 # ============================================
@@ -113,36 +116,20 @@ API_CONFIG = {
 # ============================================
 
 local_models = {
-    "tts": {
-        "piper": None,
-        "coqui": None
-    },
-    "stt": {
-        "whisper": None,
-        "faster_whisper": None,
-        "vosk": None
-    }
+    "tts": {"piper": None, "coqui": None},
+    "stt": {"whisper": None, "faster_whisper": None, "vosk": None},
 }
 
 # Статистика використання
 usage_stats = {
-    "tts": {
-        "api_calls": 0,
-        "api_failures": 0,
-        "local_calls": 0,
-        "browser_fallbacks": 0
-    },
-    "stt": {
-        "api_calls": 0,
-        "api_failures": 0,
-        "local_calls": 0,
-        "browser_fallbacks": 0
-    }
+    "tts": {"api_calls": 0, "api_failures": 0, "local_calls": 0, "browser_fallbacks": 0},
+    "stt": {"api_calls": 0, "api_failures": 0, "local_calls": 0, "browser_fallbacks": 0},
 }
 
 # ============================================
 # Pydantic Models
 # ============================================
+
 
 class TTSRequest(BaseModel):
     text: str
@@ -152,10 +139,12 @@ class TTSRequest(BaseModel):
     prefer_api: bool = True  # Пріоритет API
     quality: str = "high"  # low, medium, high
 
+
 class STTRequest(BaseModel):
     language: str = "uk"
     prefer_api: bool = True
     model: Optional[str] = None  # auto, whisper, vosk
+
 
 class VoiceResponse(BaseModel):
     success: bool
@@ -166,18 +155,21 @@ class VoiceResponse(BaseModel):
     processing_time: float
     timestamp: str
 
+
 class HealthStatus(BaseModel):
     status: str
     api_services: Dict[str, bool]
     local_models: Dict[str, bool]
     usage_stats: Dict[str, Any]
 
+
 # ============================================
 # TTS API Functions (Level 1)
 # ============================================
 
+
 async def google_tts_api(text: str, language: str, voice: Optional[str] = None) -> Optional[bytes]:
-    """Google Cloud Text-to-Speech API"""
+    """Google Cloud Text-to-Speech API."""
     if not API_CONFIG["google_tts"]["enabled"]:
         return None
 
@@ -187,28 +179,25 @@ async def google_tts_api(text: str, language: str, voice: Optional[str] = None) 
                 "input": {"text": text},
                 "voice": {
                     "languageCode": "uk-UA" if language == "uk" else "en-US",
-                    "name": voice or ("uk-UA-Standard-A" if language == "uk" else "en-US-Standard-A")
+                    "name": voice
+                    or ("uk-UA-Standard-A" if language == "uk" else "en-US-Standard-A"),
                 },
-                "audioConfig": {
-                    "audioEncoding": "MP3",
-                    "speakingRate": 1.0
-                }
+                "audioConfig": {"audioEncoding": "MP3", "speakingRate": 1.0},
             }
 
             headers = {
                 "Content-Type": "application/json",
-                "X-Goog-Api-Key": API_CONFIG["google_tts"]["api_key"]
+                "X-Goog-Api-Key": API_CONFIG["google_tts"]["api_key"],
             }
 
             response = await client.post(
-                API_CONFIG["google_tts"]["endpoint"],
-                json=payload,
-                headers=headers
+                API_CONFIG["google_tts"]["endpoint"], json=payload, headers=headers
             )
 
             if response.status_code == 200:
                 result = response.json()
                 import base64
+
                 return base64.b64decode(result["audioContent"])
 
             return None
@@ -216,28 +205,23 @@ async def google_tts_api(text: str, language: str, voice: Optional[str] = None) 
         print(f"❌ Google TTS API Error: {e}")
         return None
 
+
 async def coqui_cloud_tts_api(text: str, language: str) -> Optional[bytes]:
-    """Coqui Cloud TTS API"""
+    """Coqui Cloud TTS API."""
     if not API_CONFIG["coqui_cloud_tts"]["enabled"]:
         return None
 
     try:
         async with httpx.AsyncClient(timeout=30.0) as client:
-            payload = {
-                "text": text,
-                "language": language,
-                "speed": 1.0
-            }
+            payload = {"text": text, "language": language, "speed": 1.0}
 
             headers = {
                 "Authorization": f"Bearer {API_CONFIG['coqui_cloud_tts']['api_key']}",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             }
 
             response = await client.post(
-                API_CONFIG["coqui_cloud_tts"]["endpoint"],
-                json=payload,
-                headers=headers
+                API_CONFIG["coqui_cloud_tts"]["endpoint"], json=payload, headers=headers
             )
 
             if response.status_code == 200:
@@ -248,9 +232,11 @@ async def coqui_cloud_tts_api(text: str, language: str) -> Optional[bytes]:
         print(f"❌ Coqui Cloud API Error: {e}")
         return None
 
+
 # ============================================
 # TTS Local Functions (Level 2)
 # ============================================
+
 
 async def piper_tts_local(text: str, language: str) -> Optional[bytes]:
     """Piper TTS Local (найшвидший)"""
@@ -263,12 +249,14 @@ async def piper_tts_local(text: str, language: str) -> Optional[bytes]:
 
         # Конвертувати в bytes
         import io
+
         output = io.BytesIO()
-        sf.write(output, audio_data[0], voice.config.sample_rate, format='WAV')
+        sf.write(output, audio_data[0], voice.config.sample_rate, format="WAV")
         return output.getvalue()
     except Exception as e:
         print(f"❌ Piper TTS Error: {e}")
         return None
+
 
 async def coqui_tts_local(text: str, language: str) -> Optional[bytes]:
     """Coqui TTS Local (висока якість)"""
@@ -280,14 +268,9 @@ async def coqui_tts_local(text: str, language: str) -> Optional[bytes]:
 
         # Генерувати аудіо
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
-            tts.tts_to_file(
-                text=text,
-                file_path=tmp.name,
-                language=language,
-                speed=1.0
-            )
+            tts.tts_to_file(text=text, file_path=tmp.name, language=language, speed=1.0)
 
-            with open(tmp.name, 'rb') as f:
+            with open(tmp.name, "rb") as f:
                 audio_data = f.read()
 
             os.unlink(tmp.name)
@@ -296,31 +279,25 @@ async def coqui_tts_local(text: str, language: str) -> Optional[bytes]:
         print(f"❌ Coqui TTS Local Error: {e}")
         return None
 
+
 # ============================================
 # STT API Functions (Level 1)
 # ============================================
 
+
 async def whisper_api_stt(audio_file: bytes, language: str) -> Optional[str]:
-    """OpenAI Whisper API"""
+    """OpenAI Whisper API."""
     if not API_CONFIG["whisper_api"]["enabled"]:
         return None
 
     try:
         async with httpx.AsyncClient(timeout=60.0) as client:
             files = {"file": ("audio.wav", audio_file, "audio/wav")}
-            data = {
-                "model": "whisper-1",
-                "language": "uk" if language == "uk" else "en"
-            }
-            headers = {
-                "Authorization": f"Bearer {API_CONFIG['whisper_api']['api_key']}"
-            }
+            data = {"model": "whisper-1", "language": "uk" if language == "uk" else "en"}
+            headers = {"Authorization": f"Bearer {API_CONFIG['whisper_api']['api_key']}"}
 
             response = await client.post(
-                API_CONFIG["whisper_api"]["endpoint"],
-                files=files,
-                data=data,
-                headers=headers
+                API_CONFIG["whisper_api"]["endpoint"], files=files, data=data, headers=headers
             )
 
             if response.status_code == 200:
@@ -332,8 +309,9 @@ async def whisper_api_stt(audio_file: bytes, language: str) -> Optional[str]:
         print(f"❌ Whisper API Error: {e}")
         return None
 
+
 async def google_stt_api(audio_file: bytes, language: str) -> Optional[str]:
-    """Google Cloud Speech-to-Text API"""
+    """Google Cloud Speech-to-Text API."""
     if not API_CONFIG["google_stt"]["enabled"]:
         return None
 
@@ -341,28 +319,24 @@ async def google_stt_api(audio_file: bytes, language: str) -> Optional[str]:
         import base64
 
         async with httpx.AsyncClient(timeout=60.0) as client:
-            audio_content = base64.b64encode(audio_file).decode('utf-8')
+            audio_content = base64.b64encode(audio_file).decode("utf-8")
 
             payload = {
                 "config": {
                     "encoding": "LINEAR16",
                     "sampleRateHertz": 16000,
-                    "languageCode": "uk-UA" if language == "uk" else "en-US"
+                    "languageCode": "uk-UA" if language == "uk" else "en-US",
                 },
-                "audio": {
-                    "content": audio_content
-                }
+                "audio": {"content": audio_content},
             }
 
             headers = {
                 "Content-Type": "application/json",
-                "X-Goog-Api-Key": API_CONFIG["google_stt"]["api_key"]
+                "X-Goog-Api-Key": API_CONFIG["google_stt"]["api_key"],
             }
 
             response = await client.post(
-                API_CONFIG["google_stt"]["endpoint"],
-                json=payload,
-                headers=headers
+                API_CONFIG["google_stt"]["endpoint"], json=payload, headers=headers
             )
 
             if response.status_code == 200:
@@ -375,12 +349,14 @@ async def google_stt_api(audio_file: bytes, language: str) -> Optional[str]:
         print(f"❌ Google STT API Error: {e}")
         return None
 
+
 # ============================================
 # STT Local Functions (Level 2)
 # ============================================
 
+
 async def whisper_local_stt(audio_file: bytes, language: str) -> Optional[str]:
-    """Whisper Local STT"""
+    """Whisper Local STT."""
     if not WHISPER_AVAILABLE or local_models["stt"]["whisper"] is None:
         return None
 
@@ -401,8 +377,9 @@ async def whisper_local_stt(audio_file: bytes, language: str) -> Optional[str]:
         print(f"❌ Whisper Local Error: {e}")
         return None
 
+
 async def faster_whisper_local_stt(audio_file: bytes, language: str) -> Optional[str]:
-    """faster-whisper Local STT"""
+    """Faster-whisper Local STT."""
     if not FASTER_WHISPER_AVAILABLE or local_models["stt"]["faster_whisper"] is None:
         return None
 
@@ -422,6 +399,7 @@ async def faster_whisper_local_stt(audio_file: bytes, language: str) -> Optional
         print(f"❌ faster-whisper Error: {e}")
         return None
 
+
 async def vosk_local_stt(audio_file: bytes, language: str) -> Optional[str]:
     """Vosk Local STT (легкий fallback)"""
     if not VOSK_AVAILABLE or local_models["stt"]["vosk"] is None:
@@ -432,6 +410,7 @@ async def vosk_local_stt(audio_file: bytes, language: str) -> Optional[str]:
 
         # Конвертувати аудіо
         import wave
+
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
             tmp.write(audio_file)
             tmp_path = tmp.name
@@ -459,9 +438,11 @@ async def vosk_local_stt(audio_file: bytes, language: str) -> Optional[str]:
         print(f"❌ Vosk Error: {e}")
         return None
 
+
 # ============================================
 # Main TTS Endpoint (3-Level Fallback)
 # ============================================
+
 
 @app.post("/api/v3/tts", response_model=VoiceResponse)
 async def synthesize_speech_v3(request: TTSRequest):
@@ -524,7 +505,7 @@ async def synthesize_speech_v3(request: TTSRequest):
                 fallback_used=True,
                 error="API і локальні моделі недоступні. Використовуйте Web Speech API.",
                 processing_time=(datetime.now() - start_time).total_seconds(),
-                timestamp=datetime.now().isoformat()
+                timestamp=datetime.now().isoformat(),
             )
 
         # Зберегти аудіо
@@ -534,7 +515,7 @@ async def synthesize_speech_v3(request: TTSRequest):
         filename = f"tts_{datetime.now().strftime('%Y%m%d_%H%M%S')}.wav"
         filepath = os.path.join(output_dir, filename)
 
-        with open(filepath, 'wb') as f:
+        with open(filepath, "wb") as f:
             f.write(audio_data)
 
         processing_time = (datetime.now() - start_time).total_seconds()
@@ -545,12 +526,12 @@ async def synthesize_speech_v3(request: TTSRequest):
                 "audio_url": f"/audio/{filename}",
                 "text": request.text,
                 "language": request.language,
-                "duration": 0.0  # TODO: розрахувати
+                "duration": 0.0,  # TODO: розрахувати
             },
             source=source,
             fallback_used=fallback_used,
             processing_time=processing_time,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
 
     except Exception as e:
@@ -564,15 +545,19 @@ async def synthesize_speech_v3(request: TTSRequest):
             fallback_used=True,
             error=error_msg,
             processing_time=(datetime.now() - start_time).total_seconds(),
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
+
 
 # ============================================
 # Main STT Endpoint (3-Level Fallback)
 # ============================================
 
+
 @app.post("/api/v3/stt", response_model=VoiceResponse)
-async def recognize_speech_v3(file: UploadFile = File(...), language: str = "uk", prefer_api: bool = True):
+async def recognize_speech_v3(
+    file: UploadFile = File(...), language: str = "uk", prefer_api: bool = True
+):
     """
     Триступенева STT система:
     1. API (Whisper/Google)
@@ -640,7 +625,7 @@ async def recognize_speech_v3(file: UploadFile = File(...), language: str = "uk"
                 fallback_used=True,
                 error="API і локальні моделі недоступні. Використовуйте Web Speech API.",
                 processing_time=(datetime.now() - start_time).total_seconds(),
-                timestamp=datetime.now().isoformat()
+                timestamp=datetime.now().isoformat(),
             )
 
         processing_time = (datetime.now() - start_time).total_seconds()
@@ -651,12 +636,12 @@ async def recognize_speech_v3(file: UploadFile = File(...), language: str = "uk"
                 "text": text,
                 "language": language,
                 "confidence": 0.95,
-                "duration": processing_time
+                "duration": processing_time,
             },
             source=source,
             fallback_used=fallback_used,
             processing_time=processing_time,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
 
     except Exception as e:
@@ -670,16 +655,18 @@ async def recognize_speech_v3(file: UploadFile = File(...), language: str = "uk"
             fallback_used=True,
             error=error_msg,
             processing_time=(datetime.now() - start_time).total_seconds(),
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
+
 
 # ============================================
 # Health Check
 # ============================================
 
+
 @app.get("/api/v3/health", response_model=HealthStatus)
 async def health_check():
-    """Перевірка доступності всіх сервісів"""
+    """Перевірка доступності всіх сервісів."""
 
     api_status = {}
     local_status = {}
@@ -692,37 +679,43 @@ async def health_check():
     local_status["piper_tts"] = PIPER_AVAILABLE and local_models["tts"]["piper"] is not None
     local_status["coqui_tts"] = COQUI_TTS_AVAILABLE and local_models["tts"]["coqui"] is not None
     local_status["whisper"] = WHISPER_AVAILABLE and local_models["stt"]["whisper"] is not None
-    local_status["faster_whisper"] = FASTER_WHISPER_AVAILABLE and local_models["stt"]["faster_whisper"] is not None
+    local_status["faster_whisper"] = (
+        FASTER_WHISPER_AVAILABLE and local_models["stt"]["faster_whisper"] is not None
+    )
     local_status["vosk"] = VOSK_AVAILABLE and local_models["stt"]["vosk"] is not None
 
     return HealthStatus(
         status="healthy",
         api_services=api_status,
         local_models=local_status,
-        usage_stats=usage_stats
+        usage_stats=usage_stats,
     )
+
 
 # ============================================
 # Serve Audio Files
 # ============================================
 
+
 @app.get("/audio/{filename}")
 async def serve_audio(filename: str):
-    """Віддати згенероване аудіо"""
+    """Віддати згенероване аудіо."""
     filepath = os.path.join("audio_output", filename)
     if os.path.exists(filepath):
         return FileResponse(filepath, media_type="audio/wav")
     raise HTTPException(status_code=404, detail="Audio file not found")
 
+
 # ============================================
 # Startup: Initialize Models
 # ============================================
 
+
 @app.on_event("startup")
 async def startup_event():
-    """Ініціалізація локальних моделей при старті"""
+    """Ініціалізація локальних моделей при старті."""
     print("\n🚀 Ініціалізація Voice API V3...")
-    print("="*60)
+    print("=" * 60)
 
     # TTS Models
     if PIPER_AVAILABLE:
@@ -731,6 +724,7 @@ async def startup_event():
             model_path = "models/piper/uk_UA-ukrainian-medium.onnx"
             if os.path.exists(model_path):
                 from piper import PiperVoice
+
                 local_models["tts"]["piper"] = PiperVoice.load(model_path)
                 print("✅ Piper TTS завантажено")
             else:
@@ -758,7 +752,9 @@ async def startup_event():
     if FASTER_WHISPER_AVAILABLE:
         try:
             print("⚙️  Завантаження faster-whisper...")
-            local_models["stt"]["faster_whisper"] = WhisperModel("base", device="cpu", compute_type="int8")
+            local_models["stt"]["faster_whisper"] = WhisperModel(
+                "base", device="cpu", compute_type="int8"
+            )
             print("✅ faster-whisper завантажено")
         except Exception as e:
             print(f"❌ Помилка faster-whisper: {e}")
@@ -775,22 +771,19 @@ async def startup_event():
         except Exception as e:
             print(f"❌ Помилка Vosk: {e}")
 
-    print("="*60)
+    print("=" * 60)
     print("✅ Voice API V3 готовий!")
     print(f"📊 API сервіси: {sum(1 for c in API_CONFIG.values() if c['enabled'])}/4")
-    print(f"💻 Локальні моделі: TTS={sum(1 for m in local_models['tts'].values() if m)}/2, STT={sum(1 for m in local_models['stt'].values() if m)}/3")
+    print(
+        f"💻 Локальні моделі: TTS={sum(1 for m in local_models['tts'].values() if m)}/2, STT={sum(1 for m in local_models['stt'].values() if m)}/3"
+    )
     print(f"🌐 Документація: http://localhost:8000/docs")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
+
 
 # ============================================
 # Run Server
 # ============================================
 
 if __name__ == "__main__":
-    uvicorn.run(
-        "voice_api_v3:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
-        log_level="info"
-    )
+    uvicorn.run("voice_api_v3:app", host="0.0.0.0", port=8000, reload=True, log_level="info")

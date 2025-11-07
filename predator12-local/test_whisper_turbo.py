@@ -4,13 +4,14 @@
 """
 
 import time
-import os
 from pathlib import Path
 
+
 def test_whisper_installation():
-    """Перевірка встановлення Whisper"""
+    """Перевірка встановлення Whisper."""
     try:
         import whisper
+
         print("✅ Whisper встановлено")
         print(f"   Версія: {whisper.__version__ if hasattr(whisper, '__version__') else 'unknown'}")
         return True
@@ -19,11 +20,12 @@ def test_whisper_installation():
         print("Встановіть: pip install openai-whisper")
         return False
 
+
 def test_whisper_turbo():
-    """Тест Whisper Large v3 Turbo"""
-    print("\n" + "="*60)
+    """Тест Whisper Large v3 Turbo."""
+    print("\n" + "=" * 60)
     print("⚡ ТЕСТ WHISPER LARGE V3 TURBO")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     try:
         import whisper
@@ -57,11 +59,7 @@ def test_whisper_turbo():
 
             # Розпізнавання
             start = time.time()
-            result = model.transcribe(
-                str(audio_file),
-                language="uk",
-                fp16=False  # CPU-friendly
-            )
+            result = model.transcribe(str(audio_file), language="uk", fp16=False)  # CPU-friendly
             transcribe_time = time.time() - start
 
             # Статистика
@@ -79,9 +77,9 @@ def test_whisper_turbo():
             print()
 
         # Підсумок
-        print("="*60)
+        print("=" * 60)
         print("📊 ПІДСУМОК")
-        print("="*60)
+        print("=" * 60)
         print(f"Загальна тривалість: {total_duration:.2f}s")
         print(f"Загальний час: {total_time:.3f}s")
         avg_rt = total_duration / total_time if total_time > 0 else 0
@@ -92,14 +90,16 @@ def test_whisper_turbo():
     except Exception as e:
         print(f"❌ Помилка: {e}")
         import traceback
+
         traceback.print_exc()
         return False
 
+
 def compare_whisper_models():
-    """Порівняння різних моделей Whisper"""
-    print("\n" + "="*60)
+    """Порівняння різних моделей Whisper."""
+    print("\n" + "=" * 60)
     print("⚔️  ПОРІВНЯННЯ WHISPER МОДЕЛЕЙ")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     try:
         import whisper
@@ -135,7 +135,7 @@ def compare_whisper_models():
                     "load_time": load_time,
                     "transcribe_time": transcribe_time,
                     "text": result["text"],
-                    "rt_factor": result.get("duration", 0) / transcribe_time
+                    "rt_factor": result.get("duration", 0) / transcribe_time,
                 }
 
                 print(f"   ⏱️  Завантаження: {load_time:.2f}s")
@@ -148,26 +148,29 @@ def compare_whisper_models():
 
         # Підсумок
         if results:
-            print("="*60)
+            print("=" * 60)
             print("📊 ПОРІВНЯЛЬНА ТАБЛИЦЯ")
-            print("="*60)
+            print("=" * 60)
             print(f"{'Модель':<10} {'Завант.':<12} {'Розпізн.':<12} {'RT Factor':<12}")
-            print("-"*60)
+            print("-" * 60)
             for name, data in results.items():
-                print(f"{name:<10} {data['load_time']:.2f}s{'':<6} {data['transcribe_time']:.3f}s{'':<6} {data['rt_factor']:.1f}x")
+                print(
+                    f"{name:<10} {data['load_time']:.2f}s{'':<6} {data['transcribe_time']:.3f}s{'':<6} {data['rt_factor']:.1f}x"
+                )
 
             # Найкраща модель
-            fastest = min(results.items(), key=lambda x: x[1]['transcribe_time'])
+            fastest = min(results.items(), key=lambda x: x[1]["transcribe_time"])
             print(f"\n🏆 Найшвидша: {fastest[0]} ({fastest[1]['transcribe_time']:.3f}s)")
 
     except Exception as e:
         print(f"❌ Помилка: {e}")
 
+
 def test_faster_whisper():
-    """Тест faster-whisper"""
-    print("\n" + "="*60)
+    """Тест faster-whisper."""
+    print("\n" + "=" * 60)
     print("🚀 ТЕСТ faster-whisper")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     try:
         from faster_whisper import WhisperModel
@@ -211,11 +214,12 @@ def test_faster_whisper():
         print(f"❌ Помилка: {e}")
         return False
 
+
 def benchmark_all():
-    """Benchmark всіх рішень"""
-    print("\n" + "="*60)
+    """Benchmark всіх рішень."""
+    print("\n" + "=" * 60)
     print("🏁 ФІНАЛЬНИЙ BENCHMARK")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     # Перевірити тестові файли
     test_audio_dir = Path("test_audio")
@@ -231,6 +235,7 @@ def benchmark_all():
     # 1. Whisper Turbo
     try:
         import whisper
+
         model = whisper.load_model("turbo")
         start = time.time()
         result = model.transcribe(str(test_file), language="uk", fp16=False)
@@ -241,6 +246,7 @@ def benchmark_all():
     # 2. faster-whisper
     try:
         from faster_whisper import WhisperModel
+
         model = WhisperModel("base", device="cpu", compute_type="int8")
         start = time.time()
         segments, info = model.transcribe(str(test_file), language="uk")
@@ -252,16 +258,17 @@ def benchmark_all():
     # Підсумок
     if results:
         print("📊 РЕЗУЛЬТАТИ:")
-        print("-"*60)
+        print("-" * 60)
         for name, time_val in sorted(results.items(), key=lambda x: x[1]):
             print(f"{name:<20} {time_val:.3f}s")
 
         fastest = min(results.items(), key=lambda x: x[1])
         print(f"\n🏆 Переможець: {fastest[0]} ({fastest[1]:.3f}s)")
 
+
 if __name__ == "__main__":
     print("\n⚡ WHISPER TURBO BENCHMARK")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     # Перевірка
     if not test_whisper_installation():
@@ -276,4 +283,4 @@ if __name__ == "__main__":
     benchmark_all()
 
     print("\n✅ Benchmark завершено!")
-    print("="*60)
+    print("=" * 60)

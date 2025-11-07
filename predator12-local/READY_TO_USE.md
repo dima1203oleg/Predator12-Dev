@@ -21,7 +21,7 @@ cd frontend && npm run dev
 ✅ **Node.js & npm** - встановлено  
 ✅ **Backend venv** - створено з усіма залежностями  
 ✅ **Frontend node_modules** - встановлено  
-✅ **.env** - налаштовано для локальної розробки  
+✅ **.env** - налаштовано для локальної розробки
 
 ---
 
@@ -34,6 +34,7 @@ cd frontend && npm run dev
 ```
 
 Цей скрипт:
+
 - Перевірить всі prerequisites
 - Створить .env якщо потрібно
 - Встановить залежності
@@ -42,6 +43,7 @@ cd frontend && npm run dev
 ### Спосіб 2: Вручну (2 термінали)
 
 **Термінал 1 (Backend):**
+
 ```bash
 cd backend
 source venv/bin/activate
@@ -49,6 +51,7 @@ uvicorn app.main:app --reload
 ```
 
 **Термінал 2 (Frontend):**
+
 ```bash
 cd frontend
 npm run dev
@@ -64,12 +67,12 @@ make dev
 
 ## 🔗 Посилання
 
-| Сервіс | URL |
-|--------|-----|
-| **Frontend** | http://localhost:3000 |
-| **Backend API** | http://localhost:8000 |
-| **API Docs** | http://localhost:8000/docs |
-| **PostgreSQL** | postgresql://dima@localhost:5432/predator11 |
+| Сервіс          | URL                                         |
+| --------------- | ------------------------------------------- |
+| **Frontend**    | http://localhost:3000                       |
+| **Backend API** | http://localhost:8000                       |
+| **API Docs**    | http://localhost:8000/docs                  |
+| **PostgreSQL**  | postgresql://dima@localhost:5432/predator11 |
 
 ---
 

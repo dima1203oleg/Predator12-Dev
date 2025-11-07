@@ -27,19 +27,19 @@ Try switching to a different model by finding a line like the one below and chan
 Try a different input to the model (prompt) by changing the text following `"content":` in the lines below. Some examples provide multiple turns of conversation history, and you can modify those too.
 
 ```json
-            {
-                "role": "user",
-                "content": "What is the capital of France?"
-            }
+{
+  "role": "user",
+  "content": "What is the capital of France?"
+}
 ```
 
 ### Change the way the model responds
 
-Some (but not all) models allow you to modify the "system prompt", which does not generate a response directly but changes the *way* the model responds. You can modifying the system prompt by finding a section like the lines below and changing the `"content":` value.
+Some (but not all) models allow you to modify the "system prompt", which does not generate a response directly but changes the _way_ the model responds. You can modifying the system prompt by finding a section like the lines below and changing the `"content":` value.
 
 ```json
-            {
-                "role": "system",
-                "content": "You are a helpful assistant."
-            }
+{
+  "role": "system",
+  "content": "You are a helpful assistant."
+}
 ```

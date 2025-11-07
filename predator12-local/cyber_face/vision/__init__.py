@@ -266,7 +266,7 @@ class EmotionDetector:
 
         # Calculate some basic features
         mean_intensity = np.mean(gray_face)
-        std_intensity = np.std(gray_face)
+        np.std(gray_face)
 
         # Very simplified emotion mapping
         if mean_intensity > 120:

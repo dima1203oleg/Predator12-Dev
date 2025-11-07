@@ -14,21 +14,16 @@
 
 import asyncio
 import base64
-import hashlib
-import hmac
 import json
-import os
 import sqlite3
 import sys
 import time
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
-from urllib.parse import urlencode
+from typing import Any, Dict, List, Optional
 
 import aiohttp
-import requests
 
 
 @dataclass
@@ -523,7 +518,7 @@ class AIIntegrationHub:
         """Обробка Telegram webhook"""
         message = payload.get("message", {})
         text = message.get("text", "")
-        chat_id = message.get("chat", {}).get("id")
+        message.get("chat", {}).get("id")
 
         if text.startswith("/"):
             # Обробка команд
@@ -664,7 +659,7 @@ class AIIntegrationHub:
 # Async wrapper для тестування
 async def run_async_demo():
     """Асинхронне демо для тестування API викликів"""
-    hub = AIIntegrationHub()
+    AIIntegrationHub()
 
     print("\n🔄 Тест асинхронних API викликів...")
 

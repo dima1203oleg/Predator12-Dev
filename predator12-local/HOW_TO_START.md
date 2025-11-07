@@ -19,6 +19,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ```
 
 Цей скрипт **автоматично**:
+
 - ✅ Перевірить prerequisites (Python, Node.js, PostgreSQL)
 - ✅ Перевірить доступність портів
 - ✅ Створить .env файл з налаштуваннями
@@ -36,6 +37,7 @@ make dev
 **Або вручну** у двох терміналах:
 
 Термінал 1 (Backend):
+
 ```bash
 cd backend
 source venv/bin/activate
@@ -43,6 +45,7 @@ uvicorn app.main:app --reload
 ```
 
 Термінал 2 (Frontend):
+
 ```bash
 cd frontend
 npm run dev
@@ -66,6 +69,7 @@ cd predator12-local
 ```
 
 Виберіть опцію з меню:
+
 - 🚀 Dev - Запуск розробки
 - 🧪 Test - Тестування
 - 📊 Monitor - Моніторинг
@@ -250,11 +254,13 @@ make clean
 Ви готові до розробки! Всі компоненти налаштовані та готові до використання.
 
 **Для швидкого старту**:
+
 ```bash
 cd predator12-local && ./quick-setup.sh && make dev
 ```
 
 **Для огляду проекту**:
+
 ```bash
 ../project-overview.sh
 ```
@@ -271,5 +277,5 @@ cd predator12-local && ./quick-setup.sh && make dev
 
 **Успішної розробки! 🚀**
 
-*Створено командою Predator12*  
-*Дата: 5 жовтня 2025 р.*
+_Створено командою Predator12_  
+_Дата: 5 жовтня 2025 р._

@@ -1,15 +1,14 @@
 import asyncio
 import json
-import os
 import random
 from datetime import datetime, timedelta
-from typing import AsyncGenerator, Dict, List
+from typing import AsyncGenerator, List
 
 import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 # Імпорт middleware для security та rate limiting
@@ -120,7 +119,7 @@ async def health_check():
 
 
 class ChatMessage(BaseModel):
-    """Модель повідомлення чату"""
+    """Модель повідомлення чату."""
 
     message: str
     trace: bool = False
@@ -128,9 +127,7 @@ class ChatMessage(BaseModel):
 
 @app.post("/api/chat")
 async def hero_chat(msg: ChatMessage):
-    """
-    Обробляє повідомлення користувача Hero Interface
-    """
+    """Обробляє повідомлення користувача Hero Interface."""
     user_msg = msg.message.lower()
 
     # Проста логіка відповідей (можна замінити на реальний AI)
@@ -192,7 +189,7 @@ async def hero_chat(msg: ChatMessage):
 
 
 async def event_generator() -> AsyncGenerator[str, None]:
-    """Генерує SSE події для Hero Interface"""
+    """Генерує SSE події для Hero Interface."""
     events = [
         "Router Agent: Обробка запиту...",
         "Law Agent: Пошук у базі законодавства",
@@ -215,9 +212,7 @@ async def event_generator() -> AsyncGenerator[str, None]:
 
 @app.get("/api/events")
 async def hero_events():
-    """
-    SSE стрім подій агентів для Hero Interface
-    """
+    """SSE стрім подій агентів для Hero Interface."""
     return StreamingResponse(
         event_generator(),
         media_type="text/event-stream",
@@ -230,9 +225,7 @@ async def hero_events():
 
 @app.get("/api/network")
 async def hero_network():
-    """
-    Повертає дані графа для Hero Interface
-    """
+    """Повертає дані графа для Hero Interface."""
     return {
         "nodes": [
             {"id": "Контрагент X", "label": "Контрагент X", "type": "company"},
@@ -255,7 +248,7 @@ async def hero_network():
 
 @app.get("/api/system/status")
 async def get_system_status():
-    """РЕАЛЬНИЙ СТАТУС СИСТЕМИ з 26 агентами"""
+    """РЕАЛЬНИЙ СТАТУС СИСТЕМИ з 26 агентами."""
     from app.routes_agents_real import load_agents_registry
 
     agents_config = load_agents_registry()
@@ -295,7 +288,7 @@ async def get_system_status():
 
 @app.get("/api/agents/status")
 async def get_agents_status():
-    """РЕАЛЬНІ 26 АГЕНТІВ з registry.yaml"""
+    """РЕАЛЬНІ 26 АГЕНТІВ з registry.yaml."""
     from app.routes_agents_real import get_agents_status as real_agents_status
 
     return await real_agents_status()

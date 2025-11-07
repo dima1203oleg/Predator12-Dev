@@ -116,9 +116,20 @@ modelRegistry:
     enabled: true
     evaluationInterval: "5m"
     models:
-      premium: ["gpt-5", "microsoft/phi-4-reasoning", "qwen/qwen2.5-72b-instruct"]
-      coding: ["codestral-2501", "deepseek/deepseek-coder-v2", "phind/phind-codellama-34b-v2"]
-      speed: ["microsoft/phi-3-mini-4k-instruct", "mistral/ministral-3b", "google/gemma-2-2b-it"]
+      premium:
+        ["gpt-5", "microsoft/phi-4-reasoning", "qwen/qwen2.5-72b-instruct"]
+      coding:
+        [
+          "codestral-2501",
+          "deepseek/deepseek-coder-v2",
+          "phind/phind-codellama-34b-v2",
+        ]
+      speed:
+        [
+          "microsoft/phi-3-mini-4k-instruct",
+          "mistral/ministral-3b",
+          "google/gemma-2-2b-it",
+        ]
 
 # Database Configuration
 postgresql:
@@ -210,10 +221,10 @@ monitoring:
       global:
         slack_api_url: ""
       receivers:
-        - name: 'slack-alerts'
+        - name: "slack-alerts"
           slack_configs:
-            - channel: '#predator-alerts'
-              title: 'Predator Analytics Alert'
+            - channel: "#predator-alerts"
+              title: "Predator Analytics Alert"
 
 # Security Configuration
 security:

@@ -16,39 +16,42 @@ Predator11 є комплексною AI-платформою для аналіз
 
 ## Services
 
-| Service | Port | Description |
-|---------|------|-------------|
-| PostgreSQL | 5433 | Main database |
-| Redis | 6379 | Caching layer |
-| OpenSearch | 9201 | Search and analytics engine |
-| OpenSearch Dashboards | 5601 | Visualization for OpenSearch |
-| MinIO | 9000/9001 | Object storage |
-| Qdrant | 6333/6334 | Vector database |
-| Keycloak | 8081 | Identity and access management |
-| Prometheus | 9090 | Metrics collection and alerting |
-| Alertmanager | 9093 | Alert routing and notification |
-| Grafana | 3000 | Metrics visualization |
-| Loki | 3100 | Log aggregation |
-| Promtail | - | Log shipping |
-| pgAdmin | 5050 | PostgreSQL administration |
-| Portainer | 9000 | Container management |
-| Autoheal | 8080 | Container health management |
+| Service               | Port      | Description                     |
+| --------------------- | --------- | ------------------------------- |
+| PostgreSQL            | 5433      | Main database                   |
+| Redis                 | 6379      | Caching layer                   |
+| OpenSearch            | 9201      | Search and analytics engine     |
+| OpenSearch Dashboards | 5601      | Visualization for OpenSearch    |
+| MinIO                 | 9000/9001 | Object storage                  |
+| Qdrant                | 6333/6334 | Vector database                 |
+| Keycloak              | 8081      | Identity and access management  |
+| Prometheus            | 9090      | Metrics collection and alerting |
+| Alertmanager          | 9093      | Alert routing and notification  |
+| Grafana               | 3000      | Metrics visualization           |
+| Loki                  | 3100      | Log aggregation                 |
+| Promtail              | -         | Log shipping                    |
+| pgAdmin               | 5050      | PostgreSQL administration       |
+| Portainer             | 9000      | Container management            |
+| Autoheal              | 8080      | Container health management     |
 
 ## Getting Started
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/your-org/predator-analytics.git
    cd predator-analytics
    ```
 
 2. Create a `.env` file with your configuration:
+
    ```bash
    cp .env.example .env
    # Edit .env with your settings
    ```
 
 3. Start the services:
+
    ```bash
    docker-compose up -d
    ```

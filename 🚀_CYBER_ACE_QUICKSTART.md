@@ -23,16 +23,18 @@ http://localhost:5173
 ### 3. Навігувати до CYBER-ACE
 
 У головному меню (sidebar) знайти:
+
 ```
 🚀 CYBER-ACE Assistant
 ```
 
 або безпосередньо перейти:
+
 ```
 http://localhost:5173/#cyber-ace
 ```
 
-*(потрібно переключити `currentView` на 'cyber-ace')*
+_(потрібно переключити `currentView` на 'cyber-ace')_
 
 ---
 
@@ -47,6 +49,7 @@ http://localhost:5173/#cyber-ace
 5. **Натиснути "Надіслати"** або просто відпустити мікрофон
 
 **Приклади команд:**
+
 - "Проаналізуй дані"
 - "Виявити ризики"
 - "Показати агентів"
@@ -60,6 +63,7 @@ http://localhost:5173/#cyber-ace
 ### Швидкі Дії
 
 Натиснути на одну з 6 швидких дій:
+
 - 📊 Проаналізувати дані
 - 🔍 Виявити ризики
 - 🕸️ Дослідити мережу
@@ -81,23 +85,25 @@ http://localhost:5173/#cyber-ace
 ### Змінити Мову
 
 У коді:
+
 ```typescript
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function Component() {
   const { i18n } = useTranslation();
 
   // Переключити на англійську
-  i18n.changeLanguage('en-US');
+  i18n.changeLanguage("en-US");
 
   // Переключити на українську
-  i18n.changeLanguage('uk-UA');
+  i18n.changeLanguage("uk-UA");
 }
 ```
 
 ### Вимкнути Анімації
 
 У файлі CSS:
+
 ```css
 * {
   animation: none !important;
@@ -114,6 +120,7 @@ function Component() {
 **Причина:** Браузер не має доступу до мікрофона
 
 **Рішення:**
+
 1. Перевірити дозволи браузера (Settings → Privacy → Microphone)
 2. Використовувати Chrome (найкраща підтримка)
 3. HTTPS потрібен для production (localhost працює без HTTPS)
@@ -123,6 +130,7 @@ function Component() {
 **Причина:** Браузер не підтримує Web Speech API
 
 **Рішення:**
+
 - Використовувати Chrome, Edge або Firefox
 - Safari має обмежену підтримку
 - Fallback на текстовий ввід
@@ -132,6 +140,7 @@ function Component() {
 **Причина:** Не встановлені залежності
 
 **Рішення:**
+
 ```bash
 npm install three @react-three/fiber @react-three/drei zustand framer-motion i18next react-i18next
 ```
@@ -141,6 +150,7 @@ npm install three @react-three/fiber @react-three/drei zustand framer-motion i18
 **Причина:** Слабка відеокарта або багато частинок
 
 **Рішення:**
+
 - Зменшити кількість частинок в `AceAvatar.tsx`
 - Вимкнути `autoRotate` в OrbitControls
 - Зменшити `dpr` в Canvas
@@ -179,18 +189,18 @@ const { agents, tasks, currentAgent } = useCyberAceStore();
 
 // Додати завдання
 addTask({
-  id: 'task-1',
-  agentId: 'data-analyst-01',
-  title: 'Аналіз даних',
-  status: 'pending',
-  priority: 'high'
+  id: "task-1",
+  agentId: "data-analyst-01",
+  title: "Аналіз даних",
+  status: "pending",
+  priority: "high",
 });
 
 // Оновити агента
-updateAgent('data-analyst-01', { status: 'busy' });
+updateAgent("data-analyst-01", { status: "busy" });
 
 // Делегувати завдання
-delegateTask('task-1', 'data-analyst-01');
+delegateTask("task-1", "data-analyst-01");
 ```
 
 ---
@@ -198,6 +208,7 @@ delegateTask('task-1', 'data-analyst-01');
 ## 🎯 Наступні Кроки
 
 ### Що Працює ✅
+
 - 3D інтерактивний аватар
 - Голосове розпізнавання (STT)
 - Текстовий ввід
@@ -208,6 +219,7 @@ delegateTask('task-1', 'data-analyst-01');
 - Анімації та ефекти
 
 ### Що Треба Додати 🔄
+
 - Backend API інтеграція
 - AI обробка команд (OpenAI)
 - TTS відповіді
@@ -222,6 +234,7 @@ delegateTask('task-1', 'data-analyst-01');
 ## 💡 Поради
 
 ### Для Розробки
+
 1. Використовувати Chrome DevTools
 2. Увімкнути React DevTools
 3. Перевіряти console для помилок
@@ -229,6 +242,7 @@ delegateTask('task-1', 'data-analyst-01');
 5. Перевіряти різні браузери
 
 ### Для Демо
+
 1. Підготувати тестові команди
 2. Перевірити мікрофон заздалегідь
 3. Використовувати Chrome
@@ -240,24 +254,28 @@ delegateTask('task-1', 'data-analyst-01');
 ## 🌟 Features Showcase
 
 ### 1. 3D Аватар
+
 - Плавні анімації
 - Реакція на прослуховування
 - Частинки навколо
 - Зміна кольору залежно від настрою
 
 ### 2. Голосове Управління
+
 - Real-time транскрипція
 - Підтримка 2 мов
 - Візуальні індикатори
 - Обробка помилок
 
 ### 3. Система Агентів
+
 - 6 спеціалізованих агентів
 - Статус моніторинг
 - Метрики та статистика
 - Делегування завдань
 
 ### 4. UI/UX
+
 - Cyber-punk дизайн
 - Smooth анімації
 - Responsive layout

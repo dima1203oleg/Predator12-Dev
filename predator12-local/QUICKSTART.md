@@ -101,6 +101,7 @@ python scripts/health-check.py
 ```
 
 **Якщо помилки:**
+
 - Перевірте версію Python: `python --version`
 - Переустановіть пакети: `pip install --force-reinstall -r backend/requirements-311-modern.txt`
 - Перегляньте PORTS_READY.md для troubleshooting
@@ -148,6 +149,7 @@ alembic upgrade head
 ```
 
 **Якщо помилки alembic:**
+
 - Перевірте DATABASE_URL у .env
 - Перевірте підключення: `psql -U postgres -d predator12`
 - Перегляньте alembic/versions/
@@ -162,6 +164,7 @@ bash scripts/start-all.sh
 ```
 
 Скрипт запитає:
+
 - Звільнити порти? (якщо зайняті)
 - Запустити OpenSearch?
 - Запустити Celery Worker?

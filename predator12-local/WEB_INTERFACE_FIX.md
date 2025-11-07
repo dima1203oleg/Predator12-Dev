@@ -1,12 +1,15 @@
 # 🔧 ВИПРАВЛЕННЯ: Веб-інтерфейс показує тільки фон
 
 ## ❌ Проблема
+
 Веб-інтерфейс завантажується, але показує тільки градієнтний фон без контенту.
 
 ## ✅ Рішення
 
 ### Причина
+
 React компоненти не рендеряться через проблему з:
+
 1. `@nexus/ui-theme` package (локальна залежність)
 2. Складний `FullNexusCore` компонент
 3. Конфліктуючі .js/.tsx файли
@@ -14,16 +17,20 @@ React компоненти не рендеряться через проблем
 ### Виправлення
 
 #### 1. Створено простий тестовий компонент
+
 **Файл:** `frontend/src/SimpleTestApp.tsx`
 
 Простий компонент який:
+
 - ✅ Використовує MUI без складних залежностей
 - ✅ Показує 3 карточки з іконками
 - ✅ Відображає статус системи
 - ✅ Підтверджує що React працює
 
 #### 2. Оновлено main.tsx
+
 **Зміни:**
+
 ```typescript
 // Вимкнено (тимчасово):
 // import '@nexus/ui-theme/index.css';
@@ -39,6 +46,7 @@ import SimpleTestApp from './SimpleTestApp';
 #### 3. Створено скрипти
 
 **quick-start-web.sh** - швидкий запуск з тестовим компонентом:
+
 ```bash
 ./scripts/quick-start-web.sh
 ```
@@ -48,12 +56,14 @@ import SimpleTestApp from './SimpleTestApp';
 ## 🚀 Як запустити
 
 ### Метод 1: Через скрипт (рекомендовано)
+
 ```bash
 cd /Users/dima/Documents/Predator11
 ./scripts/quick-start-web.sh
 ```
 
 ### Метод 2: Вручну
+
 ```bash
 cd /Users/dima/Documents/Predator11/frontend
 
@@ -69,6 +79,7 @@ npx vite --port 5090 --host
 ```
 
 ### Метод 3: Через npm
+
 ```bash
 cd /Users/dima/Documents/Predator11/frontend
 npm run dev -- --port 5090
@@ -79,6 +90,7 @@ npm run dev -- --port 5090
 ## ✅ Що ви побачите
 
 ### Якщо працює:
+
 ```
 ┌──────────────────────────────────────┐
 │   🚀 Predator Analytics              │
@@ -95,6 +107,7 @@ npm run dev -- --port 5090
 ```
 
 ### Кольори:
+
 - 🟢 Cyan (#00FFC6) - primary
 - 🟣 Purple (#A020F0) - secondary
 - 🟢 Green (#00FF88) - success
@@ -105,24 +118,28 @@ npm run dev -- --port 5090
 ## 🔍 Діагностика
 
 ### Перевірка #1: Чи запущений сервер?
+
 ```bash
 lsof -i :5090
 # Має показати: node ... vite
 ```
 
 ### Перевірка #2: Чи відповідає HTTP?
+
 ```bash
 curl -I http://localhost:5090
 # Має показати: HTTP/1.1 200 OK
 ```
 
 ### Перевірка #3: Чи завантажується HTML?
+
 ```bash
 curl -s http://localhost:5090 | grep "root"
 # Має показати: <div id="root"></div>
 ```
 
 ### Перевірка #4: Browser Console
+
 1. Відкрийте http://localhost:5090
 2. Натисніть F12
 3. Відкрийте Console tab
@@ -133,7 +150,9 @@ curl -s http://localhost:5090 | grep "root"
 ## 🐛 Якщо все ще не працює
 
 ### Проблема: Білий екран
+
 **Рішення:**
+
 ```bash
 # Hard refresh
 Cmd + Shift + R (Mac)
@@ -143,7 +162,9 @@ Ctrl + F5 (Windows)
 ```
 
 ### Проблема: Console errors про import
+
 **Рішення:**
+
 ```bash
 cd frontend
 npm install
@@ -152,7 +173,9 @@ npm run dev
 ```
 
 ### Проблема: TypeScript errors
+
 **Рішення:**
+
 ```bash
 cd frontend
 npx tsc --noEmit | head -20
@@ -160,7 +183,9 @@ npx tsc --noEmit | head -20
 ```
 
 ### Проблема: Port already in use
+
 **Рішення:**
+
 ```bash
 # Знайти процес
 lsof -i :5090
@@ -179,6 +204,7 @@ npx vite --port 5091
 ### Коли SimpleTestApp працює:
 
 1. **Виправити @nexus/ui-theme**
+
    ```bash
    cd packages/ui-theme
    npm install
@@ -212,12 +238,14 @@ npx vite --port 5091
 ## 🎯 Результат
 
 **Після виправлення ви побачите:**
+
 - ✅ Градієнтний фон (чорний → синій → фіолетовий)
 - ✅ Заголовок "Predator Analytics"
 - ✅ 3 карточки з інформацією
 - ✅ Підтвердження що React працює
 
 **Це підтверджує що:**
+
 - ✅ Vite компілює TypeScript
 - ✅ React рендерить компоненти
 - ✅ MUI працює коректно
@@ -230,6 +258,7 @@ npx vite --port 5091
 Якщо проблема залишається:
 
 1. Запустіть діагностику:
+
    ```bash
    ./scripts/diagnose-web-interface.sh
    ```

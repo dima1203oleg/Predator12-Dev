@@ -7,16 +7,19 @@ Predator11 використовує систему з 16 спеціалізов�
 ## Основні агенти
 
 ### NEXUS_SUPERVISOR
+
 - **Призначення**: Головний координатор системи
 - **Primary Model**: meta/llama-3.1-405b
 - **Fallback Models**: mistral-large-2411, phi-4
 
 ### DatasetIngestAgent
+
 - **Призначення**: Завантаження та обробка даних
 - **Primary Model**: phi-4-reasoning
 - **Fallback Models**: gpt-4o-mini, llama-3.1-8b
 
 ### IndexerAgent
+
 - **Призначення**: Індексація з PII маскуванням
 - **Primary Model**: llama-3.1-8b
 - **Fallback Models**: phi-4-mini

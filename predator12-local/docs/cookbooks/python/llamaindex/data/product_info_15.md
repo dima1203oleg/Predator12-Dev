@@ -1,7 +1,9 @@
 # Information about product item_number: 15
+
 SkyView 2-Person Tent, price $200,
 
 ## Brand
+
 OutdoorLiving
 
 Main Category: CAMPING & HIKING
@@ -9,6 +11,7 @@ Sub Category: TENTS & SHELTERS
 Product Type: BACKPACKING TENTS
 
 ## Features
+
 - Spacious interior comfortably accommodates two people
 - Durable and waterproof materials for reliable protection against the elements
 - Easy and quick setup with color-coded poles and intuitive design
@@ -46,6 +49,7 @@ Product Type: BACKPACKING TENTS
 1. Tent Components
 
 The SkyView 2-Person Tent includes the following components:
+
 - Tent body
 - Rainfly
 - Aluminum tent poles
@@ -122,50 +126,55 @@ To extend the lifespan of your SkyView 2-Person Tent, follow these care and main
 4. Claim Process: In the event of a warranty claim, please contact our customer care department using the details provided below. You will be required to provide proof of purchase, a description of the issue, and any supporting documentation or images.
 
 5. Contact Details for Customer Care:
+
 - Address: Customer Care Department
-SkyView Outdoor Gear
-1234 Outdoor Avenue
-Cityville, USA
+  SkyView Outdoor Gear
+  1234 Outdoor Avenue
+  Cityville, USA
 - Phone: 1-800-123-4567
 - Email: support@skyviewgear.com
 
 Please ensure that you have registered your product by completing the warranty registration card or online form available on our website. This will help expedite the warranty claim process.
 
 6. Important Notes:
+
 - Any repairs or replacements made under warranty will not extend the original warranty period.
 - The customer is responsible for shipping costs associated with returning the product for warranty service.
 - SkyView Outdoor Gear reserves the right to assess and determine the validity of warranty claims.
 
 ## Return Policy
-- If Membership status "None        ":	Returns are accepted within 30 days of purchase, provided the tent is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Gold":	Returns are accepted within 60 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Platinum":	Returns are accepted within 90 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+
+- If Membership status "None ": Returns are accepted within 30 days of purchase, provided the tent is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+- If Membership status "Gold": Returns are accepted within 60 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+- If Membership status "Platinum": Returns are accepted within 90 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
 
 ## Reviews
-1) Rating: 5
+
+1. Rating: 5
    Review: I absolutely love the SkyView 2-Person Tent! It's incredibly spacious and provides ample room for two people. The setup is a breeze, and the materials feel durable and reliable. We used it during a rainy camping trip, and it kept us completely dry. Highly recommended!
 
-2) Rating: 4
+2. Rating: 4
    Review: The SkyView 2-Person Tent is a great choice for camping. It offers excellent ventilation and airflow, which is perfect for warm weather. The tent is sturdy and well-built, with high-quality materials. The only minor drawback is that it takes a little longer to set up compared to some other tents I've used.
 
-3) Rating: 5
+3. Rating: 5
    Review: This tent exceeded my expectations! The SkyView 2-Person Tent is incredibly lightweight and packs down small, making it ideal for backpacking trips. Despite its compact size, it offers plenty of room inside for two people and their gear. The waterproof design worked flawlessly during a rainy weekend. Highly satisfied with my purchase!
 
-4) Rating: 3
+4. Rating: 3
    Review: The SkyView 2-Person Tent is decent overall. It provides adequate space for two people and offers good protection against the elements. However, I found the zippers to be a bit flimsy, and they occasionally got stuck. It's a functional tent for the price, but I expected better quality in some aspects.
 
-5) Rating: 5
+5. Rating: 5
    Review: I've used the SkyView 2-Person Tent on multiple camping trips, and it has been fantastic. The tent is spacious, well-ventilated, and keeps us comfortable throughout the night. The setup is straightforward, even for beginners. I appreciate the attention to detail in the design, such as the convenient storage pockets. Highly recommended for camping enthusiasts!
 
 ## FAQ
-67) How easy is it to set up the SkyView 2-Person Tent?
-   The SkyView 2-Person Tent features a simple and intuitive setup process, with color-coded poles and clips, allowing you to pitch the tent within minutes.
 
-68) Is the SkyView 2-Person Tent well-ventilated?
-   Yes, the SkyView 2-Person Tent has mesh windows and vents, providing excellent airflow and reducing condensation inside the tent.
+67. How easy is it to set up the SkyView 2-Person Tent?
+    The SkyView 2-Person Tent features a simple and intuitive setup process, with color-coded poles and clips, allowing you to pitch the tent within minutes.
 
-69) Can the SkyView 2-Person Tent withstand strong winds?
-   The SkyView 2-Person Tent is designed with strong aluminum poles and reinforced guylines, ensuring stability and durability in windy conditions.
+68. Is the SkyView 2-Person Tent well-ventilated?
+    Yes, the SkyView 2-Person Tent has mesh windows and vents, providing excellent airflow and reducing condensation inside the tent.
 
-70) Are there any storage options inside the SkyView 2-Person Tent?
-   Yes, the SkyView 2-Person Tent features interior mesh pockets and a gear loft for keeping your belongings organized and easily accessible.
+69. Can the SkyView 2-Person Tent withstand strong winds?
+    The SkyView 2-Person Tent is designed with strong aluminum poles and reinforced guylines, ensuring stability and durability in windy conditions.
+
+70. Are there any storage options inside the SkyView 2-Person Tent?
+    Yes, the SkyView 2-Person Tent features interior mesh pockets and a gear loft for keeping your belongings organized and easily accessible.

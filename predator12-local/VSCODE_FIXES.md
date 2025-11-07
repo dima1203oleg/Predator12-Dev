@@ -11,6 +11,7 @@
 ### 1. ❌ Comments are not permitted in JSON (settings-local.json)
 
 **Проблема:**
+
 ```
 Comments are not permitted in JSON.
 ```
@@ -20,11 +21,13 @@ Comments are not permitted in JSON.
 Створено новий `/Users/dima/Documents/Predator12/predator12-local/.vscode/settings.json` без коментарів.
 
 **Що змінено:**
+
 - Видалено всі `//` коментарі
 - Оновлено шляхи: `.venv` → `backend/venv`
 - Додано `python.analysis.extraPaths` для кращої роботи Pylance
 
 **Застосувати:**
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/.vscode
 
@@ -39,9 +42,10 @@ cp settings-new.json settings.json
 
 ---
 
-### 2. ⚠️  Python debugger deprecation (launch.json)
+### 2. ⚠️ Python debugger deprecation (launch.json)
 
 **Проблема:**
+
 ```
 This configuration will be deprecated soon.
 Please replace `python` with `debugpy` to use the new Python Debugger extension.
@@ -52,6 +56,7 @@ Please replace `python` with `debugpy` to use the new Python Debugger extension.
 Створено новий `launch.json` з оновленими конфігураціями:
 
 **Було:**
+
 ```json
 {
     "name": "Python: FastAPI",
@@ -61,6 +66,7 @@ Please replace `python` with `debugpy` to use the new Python Debugger extension.
 ```
 
 **Стало:**
+
 ```json
 {
     "name": "Backend: FastAPI (debugpy)",
@@ -71,6 +77,7 @@ Please replace `python` with `debugpy` to use the new Python Debugger extension.
 ```
 
 **Нові конфігурації:**
+
 - ✅ Backend: FastAPI (debugpy)
 - ✅ Backend: Pytest (debugpy)
 - ✅ Backend: Celery Worker (debugpy)
@@ -79,6 +86,7 @@ Please replace `python` with `debugpy` to use the new Python Debugger extension.
 - ✅ Full Stack: Backend + Frontend (compound)
 
 **Застосувати:**
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/.vscode
 
@@ -91,9 +99,10 @@ cp launch-new.json launch.json
 
 ---
 
-### 3. ⚠️  Node debugger (launch.json)
+### 3. ⚠️ Node debugger (launch.json)
 
 **Проблема:**
+
 ```
 Please use type node instead
 ```
@@ -101,6 +110,7 @@ Please use type node instead
 **Рішення:**
 
 Оновлено в новому `launch.json`:
+
 ```json
 {
     "name": "Frontend: Next.js Dev",
@@ -115,12 +125,14 @@ Please use type node instead
 ### 4. ❌ Pylance: Import "sqlalchemy"/"psycopg" could not be resolved
 
 **Проблема:**
+
 ```
 Import "sqlalchemy" could not be resolved
 Import "psycopg" could not be resolved
 ```
 
 **Причина:**
+
 - VS Code дивиться не в той Python interpreter
 - Або залежності не встановлені в активному venv
 
@@ -154,24 +166,27 @@ pip list | grep -E "(sqlalchemy|psycopg|fastapi)"
 #### Крок 2: Вибрати interpreter у VS Code
 
 **Спосіб A: Command Palette**
+
 1. `Cmd+Shift+P` → `Python: Select Interpreter`
 2. Вибрати: `predator12-local/backend/venv/bin/python`
 3. Перезавантажити: `Developer: Reload Window`
 
 **Спосіб B: Status Bar**
+
 1. Клік на Python version внизу справа
 2. Вибрати правильний venv
 
 **Спосіб C: settings.json (автоматично)**
 
 Вже налаштовано в новому `settings.json`:
+
 ```json
 {
-    "python.defaultInterpreterPath": "${workspaceFolder}/backend/venv/bin/python",
-    "python.analysis.extraPaths": [
-        "${workspaceFolder}/backend",
-        "${workspaceFolder}/backend/app"
-    ]
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/venv/bin/python",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/backend",
+    "${workspaceFolder}/backend/app"
+  ]
 }
 ```
 
@@ -226,16 +241,19 @@ cd ..
 ## ✅ Перевірка після виправлення
 
 ### 1. Settings перевірка
+
 - Відкрийте `.vscode/settings.json`
 - Не має бути помилок JSON
 - Перевірте що `python.defaultInterpreterPath` вказує на `backend/venv/bin/python`
 
 ### 2. Launch перевірка
+
 - Відкрийте `.vscode/launch.json`
 - Всі конфігурації мають `type: debugpy` (для Python) або `type: node` (для JS/TS)
 - Спробуйте запустити: `Run and Debug` → `Backend: FastAPI (debugpy)`
 
 ### 3. Python interpreter перевірка
+
 ```bash
 # У VS Code terminal
 which python
@@ -249,6 +267,7 @@ pip list | head -20
 ```
 
 ### 4. Imports перевірка
+
 - Відкрийте файл: `backend/app/main.py` (або інший Python файл)
 - Pylance НЕ має показувати помилки імпорту
 - Автодоповнення має працювати
@@ -312,18 +331,19 @@ python3 -m json.tool settings.json
 
 ## 📝 Підсумок змін
 
-| Файл | Було | Стало | Зміни |
-|------|------|-------|-------|
-| settings.json | З коментарями | Без коментарів | Видалено //, оновлено шляхи |
-| launch.json | type: python | type: debugpy | Оновлено всі конфігурації |
-| Python path | .venv | backend/venv | Правильна структура |
-| Imports | ❌ Помилки | ✅ Працює | Вибрано правильний interpreter |
+| Файл          | Було          | Стало          | Зміни                          |
+| ------------- | ------------- | -------------- | ------------------------------ |
+| settings.json | З коментарями | Без коментарів | Видалено //, оновлено шляхи    |
+| launch.json   | type: python  | type: debugpy  | Оновлено всі конфігурації      |
+| Python path   | .venv         | backend/venv   | Правильна структура            |
+| Imports       | ❌ Помилки    | ✅ Працює      | Вибрано правильний interpreter |
 
 ---
 
 **Результат:** Всі помилки VS Code виправлені! ✅
 
 Після застосування виправлень перезавантажте VS Code:
+
 ```
 Command Palette → Developer: Reload Window
 ```

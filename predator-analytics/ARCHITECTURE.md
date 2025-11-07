@@ -333,17 +333,18 @@ Developer → Git Push → GitHub
 
 ## 🎯 SLO/SLI Metrics
 
-| Service | SLI | SLO | Measurement |
-|---------|-----|-----|-------------|
-| API | Latency (p95) | < 200ms | Histogram |
-| API | Success Rate | > 99.9% | Counter ratio |
-| Tasks | Execution Time | 99% < 60s | Histogram |
-| Redis | Availability | > 99.9% | Up/Down |
-| DB | Query Time | p95 < 100ms | Histogram |
+| Service | SLI            | SLO         | Measurement   |
+| ------- | -------------- | ----------- | ------------- |
+| API     | Latency (p95)  | < 200ms     | Histogram     |
+| API     | Success Rate   | > 99.9%     | Counter ratio |
+| Tasks   | Execution Time | 99% < 60s   | Histogram     |
+| Redis   | Availability   | > 99.9%     | Up/Down       |
+| DB      | Query Time     | p95 < 100ms | Histogram     |
 
 ## 🛠️ Technology Stack Summary
 
 ### Backend
+
 - Python 3.11
 - FastAPI 0.104+
 - Celery 5.3+
@@ -351,6 +352,7 @@ Developer → Git Push → GitHub
 - Pydantic 2.5+
 
 ### Frontend
+
 - Next.js 14
 - React 18
 - Three.js / React Three Fiber
@@ -358,23 +360,27 @@ Developer → Git Push → GitHub
 - TailwindCSS 3.3
 
 ### Infrastructure
+
 - Kubernetes 1.28+
 - Helm 3.12+
 - ArgoCD 2.9+
 - Terraform 1.6+
 
 ### Databases
+
 - PostgreSQL 16
 - Redis 7
 - Qdrant (latest)
 
 ### Monitoring
+
 - Prometheus
 - Grafana
 - Loki
 - Tempo
 
 ### Security
+
 - Keycloak
 - HashiCorp Vault
 

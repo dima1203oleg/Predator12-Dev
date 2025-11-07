@@ -1,6 +1,7 @@
 # Predator11 Development Environment
 
 ## Prerequisites
+
 - Docker
 - VS Code
 - Dev Containers extension
@@ -8,12 +9,14 @@
 ## Setup
 
 1. **Clone repository**:
+
    ```bash
    git clone https://github.com/yourorg/predator11.git
    cd predator11
    ```
 
 2. **Open in VS Code**:
+
    ```bash
    code .
    ```
@@ -50,9 +53,11 @@ flake8 .
 ## Troubleshooting
 
 **Issue**: Container won't start
+
 - Verify Docker is running
 - Check disk space
 
 **Issue**: Missing dependencies
+
 - Run: `pip install -r requirements-dev.txt`
 - Restart container

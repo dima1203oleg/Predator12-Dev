@@ -7,25 +7,21 @@ Optimization Agent
 """
 
 import asyncio
-import json
 import logging
 import subprocess
 import time
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from datetime import datetime
+from typing import Any, Dict, List
 
 import psutil
-import yaml
 
-from .base import AgentStatus, AgentTask, BaseAgent, RiskLevel, TaskPriority
+from .base import AgentTask, BaseAgent, RiskLevel
 
 logger = logging.getLogger(__name__)
 
 
 class OptimizationAgent(BaseAgent):
-    """
-    Агент оптимізації системи
+    """Агент оптимізації системи.
 
     Функції:
     - Оптимізація продуктивності
@@ -81,7 +77,7 @@ class OptimizationAgent(BaseAgent):
         self.last_performance_check = None
 
     async def plan_task(self, task: AgentTask) -> Dict[str, Any]:
-        """Планування завдання оптимізації"""
+        """Планування завдання оптимізації."""
 
         task_type = task.payload.get("type", "performance_analysis")
 
@@ -110,7 +106,7 @@ class OptimizationAgent(BaseAgent):
             }
 
     async def _plan_performance_analysis(self, task: AgentTask) -> Dict[str, Any]:
-        """Планування аналізу продуктивності"""
+        """Планування аналізу продуктивності."""
 
         target_component = task.payload.get("component", "all")
 
@@ -163,7 +159,7 @@ class OptimizationAgent(BaseAgent):
         }
 
     async def _plan_resource_optimization(self, task: AgentTask) -> Dict[str, Any]:
-        """Планування оптимізації ресурсів"""
+        """Планування оптимізації ресурсів."""
 
         resource_type = task.payload.get("resource_type", "all")
 
@@ -223,7 +219,7 @@ class OptimizationAgent(BaseAgent):
         }
 
     async def execute_task(self, task: AgentTask, plan: Dict[str, Any]) -> Dict[str, Any]:
-        """Виконання завдання оптимізації"""
+        """Виконання завдання оптимізації."""
 
         results = {}
         optimization_metrics = {"before": {}, "after": {}, "improvements": {}}
@@ -281,7 +277,7 @@ class OptimizationAgent(BaseAgent):
     async def _execute_optimization_step(
         self, action: str, task: AgentTask, step: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Виконання окремого кроку оптимізації"""
+        """Виконання окремого кроку оптимізації."""
 
         try:
             if action == "collect_baseline_metrics":
@@ -312,7 +308,7 @@ class OptimizationAgent(BaseAgent):
             return {"success": False, "error": str(e), "critical_error": True}
 
     async def _collect_performance_metrics(self) -> Dict[str, Any]:
-        """Збір метрик продуктивності"""
+        """Збір метрик продуктивності."""
 
         try:
             metrics = {}
@@ -377,7 +373,7 @@ class OptimizationAgent(BaseAgent):
             return {"error": f"Помилка збору метрик: {e}", "timestamp": datetime.now().isoformat()}
 
     async def _analyze_system_performance(self) -> Dict[str, Any]:
-        """Аналіз продуктивності системи"""
+        """Аналіз продуктивності системи."""
 
         try:
             # Збір розширених метрик за період
@@ -435,7 +431,7 @@ class OptimizationAgent(BaseAgent):
     def _analyze_metric_trend(
         self, metrics_history: List[Dict], metric_path: str
     ) -> Dict[str, Any]:
-        """Аналіз тенденції для конкретної метрики"""
+        """Аналіз тенденції для конкретної метрики."""
 
         values = []
 
@@ -466,7 +462,7 @@ class OptimizationAgent(BaseAgent):
         }
 
     def _calculate_variance(self, values: List[float]) -> float:
-        """Розрахунок дисперсії"""
+        """Розрахунок дисперсії."""
         if len(values) < 2:
             return 0.0
 
@@ -475,7 +471,7 @@ class OptimizationAgent(BaseAgent):
         return variance
 
     async def _identify_bottlenecks(self) -> Dict[str, Any]:
-        """Виявлення вузьких місць системи"""
+        """Виявлення вузьких місць системи."""
 
         try:
             bottlenecks = []
@@ -568,7 +564,7 @@ class OptimizationAgent(BaseAgent):
             return {"success": False, "error": f"Помилка виявлення вузьких місць: {e}"}
 
     async def _optimize_memory_usage(self) -> Dict[str, Any]:
-        """Оптимізація використання пам'яті"""
+        """Оптимізація використання пам'яті."""
 
         try:
             optimizations_applied = []
@@ -639,7 +635,7 @@ class OptimizationAgent(BaseAgent):
     async def _calculate_improvements(
         self, before: Dict[str, Any], after: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Розрахунок покращень після оптимізації"""
+        """Розрахунок покращень після оптимізації."""
 
         improvements = {}
 
@@ -697,7 +693,7 @@ class OptimizationAgent(BaseAgent):
     def _update_optimization_stats(
         self, task: AgentTask, results: Dict[str, Any], improvements: Dict[str, Any]
     ):
-        """Оновлення статистики оптимізацій"""
+        """Оновлення статистики оптимізацій."""
 
         self.optimization_stats["total_optimizations"] += 1
 
@@ -717,7 +713,7 @@ class OptimizationAgent(BaseAgent):
                 self.optimization_stats["average_improvement"] = new_avg
 
     async def get_optimization_recommendations(self, target: str = "system") -> Dict[str, Any]:
-        """Отримання рекомендацій для оптимізації"""
+        """Отримання рекомендацій для оптимізації."""
 
         try:
             # Збір поточних метрик

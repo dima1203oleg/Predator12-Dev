@@ -69,7 +69,7 @@ class ValuesValidator:
             return
 
         limits = resources.get("limits", {})
-        requests = resources.get("requests", {})
+        resources.get("requests", {})
 
         if limits.get("memory"):
             mem = limits["memory"]

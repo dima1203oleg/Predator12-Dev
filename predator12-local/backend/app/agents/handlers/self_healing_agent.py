@@ -1,5 +1,5 @@
 """
-Агент самовідновлення системи
+Агент самовідновлення системи.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from .base_agent import BaseAgent
 
 
 class SelfHealingAgent(BaseAgent):
-    """Агент для автоматичного відновлення та самолікування системи"""
+    """Агент для автоматичного відновлення та самолікування системи."""
 
     def __init__(self, config: dict[str, Any] | None = None):
         super().__init__("SelfHealingAgent", config)
@@ -21,6 +21,7 @@ class SelfHealingAgent(BaseAgent):
         self.recovery_history = []
 
     def capabilities(self) -> list[str]:
+        """Повертає список можливостей агента самовідновлення."""
         return [
             "monitor_health",
             "detect_failures",
@@ -31,7 +32,7 @@ class SelfHealingAgent(BaseAgent):
         ]
 
     def _load_healing_rules(self) -> dict[str, dict[str, Any]]:
-        """Завантажує правила самовідновлення"""
+        """Завантажує правила самовідновлення."""
         return {
             "high_cpu": {
                 "threshold": 85.0,
@@ -59,27 +60,26 @@ class SelfHealingAgent(BaseAgent):
         }
 
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виконує завдання самовідновлення"""
+        """Виконує завдання самовідновлення."""
 
         self.logger.info("Processing self-healing task", task_type=task_type)
 
         if task_type == "monitor_health":
             return await self._monitor_health(payload)
-        elif task_type == "detect_failures":
+        if task_type == "detect_failures":
             return await self._detect_failures(payload)
-        elif task_type == "execute_recovery":
+        if task_type == "execute_recovery":
             return await self._execute_recovery(payload)
-        elif task_type == "restart_services":
+        if task_type == "restart_services":
             return await self._restart_services(payload)
-        elif task_type == "scale_resources":
+        if task_type == "scale_resources":
             return await self._scale_resources(payload)
-        elif task_type == "rollback_changes":
+        if task_type == "rollback_changes":
             return await self._rollback_changes(payload)
-        else:
-            raise ValueError(f"Unknown task type: {task_type}")
+        raise ValueError(f"Unknown task type: {task_type}")
 
     async def _monitor_health(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Моніторить стан системи"""
+        """Моніторить стан системи."""
 
         try:
             # Отримання метрик системи
@@ -147,12 +147,12 @@ class SelfHealingAgent(BaseAgent):
                 "healing_actions": healing_actions,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to monitor health", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to monitor health", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _determine_overall_health(self, metrics: dict[str, Any]) -> str:
-        """Визначає загальний стан системи"""
+        """Визначає загальний стан системи."""
 
         statuses = [
             metrics["cpu"]["status"],
@@ -169,7 +169,7 @@ class SelfHealingAgent(BaseAgent):
             return "healthy"
 
     def _check_healing_triggers(self, metrics: dict[str, Any]) -> list[dict[str, Any]]:
-        """Перевіряє чи потрібні дії самовідновлення"""
+        """Перевіряє чи потрібні дії самовідновлення."""
 
         actions = []
 
@@ -209,7 +209,7 @@ class SelfHealingAgent(BaseAgent):
         return actions
 
     async def _detect_failures(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виявляє відмови сервісів"""
+        """Виявляє відмови сервісів."""
 
         services_to_check = payload.get("services", ["web", "api", "database", "cache"])
 
@@ -241,12 +241,12 @@ class SelfHealingAgent(BaseAgent):
                 "dependency_issues": dependency_issues,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to detect failures", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to detect failures", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     async def _check_service_status(self, service: str) -> dict[str, Any]:
-        """Перевіряє стан конкретного сервісу"""
+        """Перевіряє стан конкретного сервісу."""
 
         # Симуляція перевірки стану сервісу
         service_configs = {
@@ -275,17 +275,17 @@ class SelfHealingAgent(BaseAgent):
                 "last_seen": (datetime.now() - timedelta(minutes=5)).isoformat(),
             }
 
-        except Exception as e:
+        except Exception as exc:
             return {
                 "is_running": False,
-                "error": str(e),
+                "error": str(exc),
                 "last_seen": datetime.now().isoformat(),
             }
 
     def _check_service_dependencies(
         self, services: list[str], failures: list[dict[str, Any]]
     ) -> list[dict[str, Any]]:
-        """Перевіряє залежності між сервісами"""
+        """Перевіряє залежності між сервісами."""
 
         # Визначення залежностей (спрощена модель)
         dependencies = {
@@ -316,7 +316,7 @@ class SelfHealingAgent(BaseAgent):
         return dependency_issues
 
     async def _execute_recovery(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виконує дії відновлення"""
+        """Виконує дії відновлення."""
 
         recovery_action = payload.get("action")
         target = payload.get("target")
@@ -377,15 +377,15 @@ class SelfHealingAgent(BaseAgent):
                 "recovery_record": recovery_record,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to execute recovery", error=str(e), action=recovery_action)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to execute recovery", error=str(exc), action=recovery_action)
+            return {"status": "error", "error": str(exc)}
 
     async def _restart_services(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Перезапускає сервіси"""
+        """Перезапускає сервіси."""
 
         services = payload.get("services", [])
-        force = payload.get("force", False)
+        payload.get("force", False)
 
         try:
             restart_results = []
@@ -415,12 +415,12 @@ class SelfHealingAgent(BaseAgent):
                 "restart_results": restart_results,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to restart services", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to restart services", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     async def _scale_resources(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Масштабує ресурси системи"""
+        """Масштабує ресурси системи."""
 
         resource_type = payload.get("resource_type", "compute")
         action = payload.get("action", "scale_out")  # scale_out, scale_in
@@ -466,12 +466,12 @@ class SelfHealingAgent(BaseAgent):
             else:
                 raise ValueError(f"Unknown resource type: {resource_type}")
 
-        except Exception as e:
-            self.logger.error("Failed to scale resources", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to scale resources", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _add_compute_instances(self, target: str) -> list[dict[str, Any]]:
-        """Додає обчислювальні інстанси"""
+        """Додає обчислювальні інстанси."""
         return [
             {
                 "instance_id": f"instance_{datetime.now().strftime('%H%M%S')}_1",
@@ -488,11 +488,11 @@ class SelfHealingAgent(BaseAgent):
         ]
 
     def _remove_compute_instances(self, target: str) -> list[str]:
-        """Видаляє обчислювальні інстанси"""
+        """Видаляє обчислювальні інстанси."""
         return ["instance_20240101_120000_1", "instance_20240101_120000_2"]
 
     def _expand_storage(self, target: str) -> dict[str, Any]:
-        """Розширює сховище"""
+        """Розширює сховище."""
         return {
             "volume_id": f"vol_{target}",
             "old_size_gb": 100,
@@ -501,7 +501,7 @@ class SelfHealingAgent(BaseAgent):
         }
 
     async def _cleanup_system_logs(self, parameters: dict[str, Any]) -> dict[str, Any]:
-        """Очищує системні логи"""
+        """Очищує системні логи."""
 
         try:
             retention_days = parameters.get("retention_days", 7)
@@ -529,12 +529,12 @@ class SelfHealingAgent(BaseAgent):
                 "total_space_freed_mb": total_freed_space,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to cleanup logs", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to cleanup logs", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _simulate_log_cleanup(self, log_type: str, retention_days: int) -> dict[str, Any]:
-        """Симулює очищення логів конкретного типу"""
+        """Симулює очищення логів конкретного типу."""
 
         # Симуляція різної кількості логів для різних типів
         cleanup_stats = {
@@ -546,7 +546,7 @@ class SelfHealingAgent(BaseAgent):
         return cleanup_stats.get(log_type, {"files_count": 0, "size_mb": 0})
 
     async def _rollback_changes(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Відкочує зміни до попередньої версії"""
+        """Відкочує зміни до попередньої версії."""
 
         target = payload.get("target")
         rollback_version = payload.get("version", "previous")
@@ -568,6 +568,6 @@ class SelfHealingAgent(BaseAgent):
 
             return {"status": "success", "rollback_result": rollback_result}
 
-        except Exception as e:
-            self.logger.error("Failed to rollback changes", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to rollback changes", error=str(exc))
+            return {"status": "error", "error": str(exc)}

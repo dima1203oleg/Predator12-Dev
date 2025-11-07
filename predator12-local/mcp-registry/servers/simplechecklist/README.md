@@ -5,8 +5,9 @@ Advanced task management system with MCP server integration and Docker-optimized
 ## 🚀 What's New in v1.0.1
 
 **Docker Stability Improvements:**
+
 - Fixed container exit issue - containers now run reliably in Docker environments
-- Changed default mode from 'both' to 'backend' for optimal containerized deployment  
+- Changed default mode from 'both' to 'backend' for optimal containerized deployment
 - Enhanced startup messaging and error handling
 - Improved container lifecycle management
 - Better separation of HTTP API and MCP server modes
@@ -35,12 +36,14 @@ The container will start in 'backend' mode by default, providing a stable HTTP A
 ## 🔧 Configuration
 
 ### Environment Variables
+
 - `MODE`: Deployment mode (`backend`|`mcp`|`both`) - default: `backend`
 - `PORT`: HTTP API port - default: `8355`
 - `DB_PATH`: SQLite database path - default: `/app/data/tasks.db`
 - `LOG_LEVEL`: Logging level - default: `info`
 
 ### Persistent Storage
+
 ```bash
 docker run -d \
   -p 8355:8355 \
@@ -51,13 +54,16 @@ docker run -d \
 ## 🤖 MCP Integration
 
 ### Claude Desktop Configuration
+
 ```json
 {
   "mcpServers": {
     "simplechecklist": {
       "command": "docker",
       "args": [
-        "run", "-i", "--rm",
+        "run",
+        "-i",
+        "--rm",
         "mayurkakade/mcp-server:latest",
         "--mode=mcp"
       ]
@@ -67,6 +73,7 @@ docker run -d \
 ```
 
 ### HTTP-based MCP Clients
+
 Point your client to: `http://localhost:8355/mcp`
 
 ## 📊 API Endpoints
@@ -99,14 +106,17 @@ curl http://localhost:8355/api/health
 ## 🔍 Troubleshooting
 
 **Container exits immediately?**
+
 - Fixed in v1.0.1! Update to the latest image.
 
 **Can't connect to API?**
+
 - Verify port mapping: `-p 8355:8355`
 - Check container status: `docker ps`
 - Test health endpoint
 
 **Need help?**
+
 - Check container logs: `docker logs <container-id>`
 - Review [DOCKER-USAGE-INSTRUCTIONS.txt](DOCKER-USAGE-INSTRUCTIONS.txt)
 - Open issue on [GitHub](https://github.com/DevMayur/SimpleCheckList/issues)
@@ -114,18 +124,21 @@ curl http://localhost:8355/api/health
 ## 📈 Version History
 
 **v1.0.1** (Latest):
+
 - 🚀 Docker stability improvements
 - 🔧 Enhanced container lifecycle
 - 📝 Comprehensive documentation
 - 🏥 Better health checks
 
 **v1.0.0**:
+
 - Initial Docker release
 - Basic MCP functionality
 
 ## 🎯 Registry Impact
 
 This update significantly improves the user experience for Docker deployments:
+
 - ✅ Containers run reliably without manual intervention
 - ✅ Clear documentation reduces support requests
 - ✅ Production-ready deployment options

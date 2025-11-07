@@ -2,10 +2,7 @@
   "mcpServers": {
     "predator-tools": {
       "command": "npx",
-      "args": [
-        "ts-node",
-        "src/index.ts"
-      ],
+      "args": ["ts-node", "src/index.ts"],
       "transport": "stdio",
       "env": {
         "PREDATOR_HOME": "/Users/dima/Projects/PredatorAnalytics",

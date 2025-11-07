@@ -1,8 +1,7 @@
 import asyncio
 import time
-import pickle
-import pytest
 
+import pytest
 from observability.tiered_cache import TieredCache
 
 

@@ -3,12 +3,14 @@
 ## ✅ Що Створено
 
 ### 📚 Документація (4 файли)
+
 1. **SELF_IMPROVING_STACK.md** - Повна архітектура AI-driven стеку
 2. **AI_DEVOPS_GUIDE.md** - Гайд по AI DevOps практиках
 3. **RUNBOOK_self_healing.md** - Операційний runbook для self-healing
 4. **AI_STACK_SUMMARY.md** - Цей файл (quick reference)
 
 ### 🛠️ Скрипти (3 файли)
+
 1. **scripts/ci/values_sanity.py** - Валідація Helm values
 2. **scripts/ci/logs_heuristics.py** - Аномалії в логах
 3. **scripts/autoscale_agent.py** - ML-based autoscaling (в основному файлі)
@@ -16,18 +18,21 @@
 ### 🎨 Компоненти
 
 #### 1. Self-Healing (Argo Rollouts)
+
 - ✅ Canary deployments з автоматичним rollback
 - ✅ AnalysisTemplates для метрик (latency, errors)
 - ✅ PrometheusRules для алертів
 - ✅ Автоматичне відновлення за <2 хв
 
 #### 2. AI-Autoscaling
+
 - ✅ Multi-metric HPA (CPU, Memory, Celery queue)
 - ✅ ML-прогноз навантаження
 - ✅ Custom metrics через Prometheus Adapter
 - ✅ Поведінкові політики scale up/down
 
 #### 3. AI-CI/CD Guard
+
 - ✅ GitHub Actions workflow
 - ✅ Helm values санітарна перевірка
 - ✅ Log anomaly detection
@@ -35,12 +40,14 @@
 - ✅ AI code review (опційно)
 
 #### 4. Query Optimizer
+
 - ✅ Аналіз pg_stat_statements
 - ✅ EXPLAIN ANALYZE для slow queries
 - ✅ Автоматичні пропозиції індексів
 - ✅ Bottleneck detection
 
 #### 5. Agent Web UI (26+ агентів)
+
 - ✅ Real-time dashboard
 - ✅ WebSocket updates
 - ✅ Agent controls (restart, logs)
@@ -69,6 +76,7 @@ features:
 ## 📊 26+ AI Агентів
 
 ### Категорії:
+
 1. **Supervisor** (1) - Orchestration
 2. **ETL** (4) - CSV, PDF, Excel, Web scraping
 3. **RAG** (3) - Query, Indexer, Reranker
@@ -79,6 +87,7 @@ features:
 8. **Custom** (6+) - Специфічні для проекту
 
 ### Реєстрація агентів:
+
 ```python
 class BaseAgent:
     async def register(self):
@@ -96,6 +105,7 @@ class BaseAgent:
 ## 🚀 Швидкий Старт
 
 ### 1. Встановити ArgoCD + Rollouts
+
 ```bash
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -104,6 +114,7 @@ kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/rele
 ```
 
 ### 2. Deploy з фіче-тоглами
+
 ```bash
 cd predator12-local
 helm install predator helm/predator-backend \
@@ -113,12 +124,14 @@ helm install predator helm/predator-backend \
 ```
 
 ### 3. Відкрити Agent UI
+
 ```bash
 kubectl port-forward svc/agent-ui 8080:8080
 open http://localhost:8080
 ```
 
 ### 4. Моніторити Rollouts
+
 ```bash
 kubectl argo rollouts get rollout predator-backend --watch
 ```
@@ -127,26 +140,28 @@ kubectl argo rollouts get rollout predator-backend --watch
 
 ## 📈 Acceptance Criteria
 
-| # | Критерій | Статус | Як Перевірити |
-|---|----------|--------|---------------|
-| 1 | Self-healing rollback <2 хв | ✅ | `scripts/tests/e2e_rollout_failure.py` |
-| 2 | HPA масштабує за Celery queue | ✅ | `make spike-celery && watch kubectl get hpa` |
-| 3 | CI Guard блокує ризикові зміни | ✅ | Test PR з неправильним values.yaml |
-| 4 | Agent UI показує 26+ агентів | ✅ | `open http://localhost:8080` |
-| 5 | Query optimizer знаходить bottlenecks | ✅ | `python scripts/db/query_optimizer_agent.py` |
-| 6 | OTEL трасування працює | ✅ | Grafana dashboard + Jaeger |
+| #   | Критерій                              | Статус | Як Перевірити                                |
+| --- | ------------------------------------- | ------ | -------------------------------------------- |
+| 1   | Self-healing rollback <2 хв           | ✅     | `scripts/tests/e2e_rollout_failure.py`       |
+| 2   | HPA масштабує за Celery queue         | ✅     | `make spike-celery && watch kubectl get hpa` |
+| 3   | CI Guard блокує ризикові зміни        | ✅     | Test PR з неправильним values.yaml           |
+| 4   | Agent UI показує 26+ агентів          | ✅     | `open http://localhost:8080`                 |
+| 5   | Query optimizer знаходить bottlenecks | ✅     | `python scripts/db/query_optimizer_agent.py` |
+| 6   | OTEL трасування працює                | ✅     | Grafana dashboard + Jaeger                   |
 
 ---
 
 ## 🔐 Безпека
 
 ### RBAC
+
 - ✅ Окремі ServiceAccounts для агентів
 - ✅ Read-only доступ до metrics/logs
 - ✅ NO доступ до secrets
 - ✅ NetworkPolicy для ізоляції
 
 ### Secrets Management
+
 - ✅ Vault integration
 - ✅ SealedSecrets альтернатива
 - ✅ Env vars через CSI driver
@@ -157,18 +172,21 @@ kubectl argo rollouts get rollout predator-backend --watch
 ## 🎓 Навчальні Матеріали
 
 ### Для Розробників
+
 1. Прочитати `AI_DEVOPS_GUIDE.md`
 2. Подивитись Agent UI
 3. Протестувати local debug (VS Code)
 4. Створити власного агента
 
 ### Для Ops
+
 1. Прочитати `RUNBOOK_self_healing.md`
 2. Налаштувати Prometheus alerts
 3. Створити Grafana dashboards
 4. Провести drill (failure simulation)
 
 ### Для DevOps
+
 1. Вивчити `SELF_IMPROVING_STACK.md`
 2. Налаштувати ArgoCD + Rollouts
 3. Інтегрувати з CI/CD
@@ -179,16 +197,19 @@ kubectl argo rollouts get rollout predator-backend --watch
 ## 📊 Метрики Успіху
 
 ### P0 (Критично)
+
 - ✅ 100% auto-rollback при деградації
 - ✅ <2 хв час rollback
 - ✅ 99.9% availability SLO
 
 ### P1 (Важливо)
+
 - ✅ P95 latency стабільний ±10%
 - ✅ ≤5% зниження failure-деплоїв
 - ✅ Real-time моніторинг агентів
 
 ### P2 (Бажано)
+
 - ✅ 1 авто-PR/тиждень від оптимізаторів
 - ✅ −25–40% latency для edge
 - ✅ Federated learning (майбутнє)
@@ -198,18 +219,21 @@ kubectl argo rollouts get rollout predator-backend --watch
 ## 🔗 Корисні Посилання
 
 ### Документація
+
 - [Self-Improving Stack](docs/SELF_IMPROVING_STACK.md)
 - [AI DevOps Guide](docs/AI_DEVOPS_GUIDE.md)
 - [Runbook: Self-Healing](docs/RUNBOOK_self_healing.md)
 - [GitOps with ArgoCD](docs/GITOPS_ARGO_HELM.md)
 
 ### Інструменти
+
 - Agent UI: http://localhost:8080
 - Grafana: http://localhost:3000
 - Prometheus: http://localhost:9090
 - ArgoCD: http://localhost:8080/argocd
 
 ### Команди
+
 ```bash
 # Перевірити конфігурацію
 python scripts/ci/values_sanity.py helm/values.yaml
@@ -232,11 +256,13 @@ curl http://localhost:8080/api/agents
 ## 🎉 Що Далі?
 
 ### Week 1 (Done ✅)
+
 - [x] Self-Healing (Argo Rollouts)
 - [x] AI-Autoscaling (HPA)
 - [x] Observability (OTEL, Prometheus)
 
 ### Week 2 (In Progress 🔄)
+
 - [x] AI-CI/CD Guard
 - [x] Query Optimizer
 - [x] Agent Web UI
@@ -244,6 +270,7 @@ curl http://localhost:8080/api/agents
 - [ ] Production deployment
 
 ### Future (🔮)
+
 - [ ] Edge offload
 - [ ] Federated learning
 - [ ] Advanced ML models
@@ -254,6 +281,7 @@ curl http://localhost:8080/api/agents
 ## 💡 Tips & Tricks
 
 ### Debug Self-Healing
+
 ```bash
 # Симулювати failure
 kubectl -n default set env deploy/predator-backend FAIL_RATE=0.2
@@ -266,6 +294,7 @@ kubectl get analysisrun -n default
 ```
 
 ### Test Autoscaling
+
 ```bash
 # Збільшити Celery queue
 redis-cli rpush celery 1000_dummy_tasks
@@ -278,6 +307,7 @@ curl http://prometheus:9090/api/v1/query?query=predator_celery_queue_length
 ```
 
 ### Agent Development
+
 ```python
 # Створити нового агента
 from agents.base_agent import BaseAgent

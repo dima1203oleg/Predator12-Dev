@@ -22,32 +22,38 @@
 ## 📚 Документація
 
 ### 🎯 START HERE
+
 - **[INDEX.md](INDEX.md)** - 📚 **CENTRAL HUB** - Навігація по всій документації (30+ файлів)
 - **[START_HERE.md](START_HERE.md)** - 🎯 Абсолютний початок для новачків
 
 ### 🚀 Quick Start Guides
+
 - **[AI_STACK_SUMMARY.md](docs/AI_STACK_SUMMARY.md)** - ⚡ AI Stack за 5 хвилин
 - **[GITOPS_QUICKSTART.md](GITOPS_QUICKSTART.md)** - ⚡ GitOps за 10 хвилин
 - **[VSCODE_QUICKSTART.md](VSCODE_QUICKSTART.md)** - ⚡ VS Code debug за 3 хвилини
 - **[QUICK_START.md](QUICK_START.md)** - 🚀 Загальний швидкий старт
 
 ### 🤖 AI & DevOps Stack
+
 - **[SELF_IMPROVING_STACK.md](docs/SELF_IMPROVING_STACK.md)** - 🤖 Повна архітектура AI-driven стеку
 - **[AI_DEVOPS_GUIDE.md](docs/AI_DEVOPS_GUIDE.md)** - 📖 AI DevOps практики (26+ агентів)
 - **[RUNBOOK_self_healing.md](docs/RUNBOOK_self_healing.md)** - 🚨 Операційний runbook
 - **Agent Web UI** - http://localhost:8080 (Real-time моніторинг 26+ агентів)
 
 ### 🔧 Development Workflow
+
 - **[GITOPS_ARGO_HELM.md](GITOPS_ARGO_HELM.md)** - 📖 Повний GitOps workflow (Dev → Staging → Prod)
 - **[VSCODE_COMPLETE_REPORT.md](VSCODE_COMPLETE_REPORT.md)** - 📖 Повний гайд по VS Code debugging
 - **[PYTHON311_MIGRATION_README.md](PYTHON311_MIGRATION_README.md)** - 🐍 Міграція на Python 3.11
 
 ### 🛠️ Operations
+
 - **[OPENSEARCH_SETUP_GUIDE.md](OPENSEARCH_SETUP_GUIDE.md)** - 🔍 OpenSearch для macOS
 - **[MIGRATION_GUIDE_PYTHON311.md](MIGRATION_GUIDE_PYTHON311.md)** - 📦 Детальна міграція пакетів
 - **[LOCAL_DEV_STATUS.md](LOCAL_DEV_STATUS.md)** - 📊 Статус локального середовища
 
 ### 📋 Reference
+
 - **[CHEAT_SHEET.md](CHEAT_SHEET.md)** - 💡 Швидкий довідник команд
 - **[VSCODE_CHANGES_SUMMARY.md](VSCODE_CHANGES_SUMMARY.md)** - 📝 Зміни VS Code конфігурації
 
@@ -71,6 +77,7 @@ DEBUG_PY=1 ./scripts/start-all.sh
 ```
 
 **Переваги:**
+
 - ✅ Instant debugging (breakpoints, step-through)
 - ✅ Hot reload для швидких змін
 - ✅ Локальні тести без Docker
@@ -99,6 +106,7 @@ git push
 ```
 
 **Переваги:**
+
 - ✅ Git як single source of truth
 - ✅ Автоматична синхронізація (dev → staging → prod)
 - ✅ Rollback через Git history
@@ -159,7 +167,7 @@ argocd app get predator-backend-dev
 - **🔒 Безпека та PII** - Маскування чутливих даних, контроль доступу
 - **📊 Повне спостереження** - Prometheus, Grafana, Loki, Tempo
 - **🔍 Розширений пошук** - OpenSearch з індексацією PostgreSQL
-- **🧠 Машинне навчання** - MLflow, моделі для аномалій та прогнозування  
+- **🧠 Машинне навчання** - MLflow, моделі для аномалій та прогнозування
 - **🔗 MCP інтеграція** - Робота з GitHub Copilot у VS Code
 - **📈 ETL процеси** - Автоматизована обробка та індексація даних
 - **⚡ Контейнеризація** - Docker Compose + DevContainer
@@ -213,7 +221,7 @@ argocd app get predator-backend-dev
    # Запуск всіх сервісів
    make start
 
-   # Перевірка системи  
+   # Перевірка системи
    make test-system
    ```
 
@@ -268,21 +276,21 @@ code .
 
 ### Основні агенти
 
-| Агент | Призначення | Primary Model | Fallback Models |
-|-------|-------------|---------------|-----------------|
-| **NEXUS_SUPERVISOR** | Головний координатор | meta/llama-3.1-405b | mistral-large-2411, phi-4 |
-| **DatasetIngestAgent** | Завантаження даних | phi-4-reasoning | gpt-4o-mini, llama-3.1-8b |
-| **IndexerAgent** | Індексація з PII | llama-3.1-8b | phi-4-mini |  
-| **SearchPlannerAgent** | Планування запитів | phi-4-reasoning | mistral-large-2411 |
-| **AnomalyAgent** | Виявлення аномалій | deepseek-v3 | phi-4-reasoning |
-| **AutoHealAgent** | Самовідновлення | gpt-4o-mini | codestral-2501, phi-4-mini |
+| Агент                  | Призначення          | Primary Model       | Fallback Models            |
+| ---------------------- | -------------------- | ------------------- | -------------------------- |
+| **NEXUS_SUPERVISOR**   | Головний координатор | meta/llama-3.1-405b | mistral-large-2411, phi-4  |
+| **DatasetIngestAgent** | Завантаження даних   | phi-4-reasoning     | gpt-4o-mini, llama-3.1-8b  |
+| **IndexerAgent**       | Індексація з PII     | llama-3.1-8b        | phi-4-mini                 |
+| **SearchPlannerAgent** | Планування запитів   | phi-4-reasoning     | mistral-large-2411         |
+| **AnomalyAgent**       | Виявлення аномалій   | deepseek-v3         | phi-4-reasoning            |
+| **AutoHealAgent**      | Самовідновлення      | gpt-4o-mini         | codestral-2501, phi-4-mini |
 
 ### Розподіл моделей
 
 Система використовує 58 доступних LLM моделей з автоматичним роутингом за:
 
 - **Якість** (40%) - точність відповідей
-- **Латентність** (30%) - швидкість відповіді  
+- **Латентність** (30%) - швидкість відповіді
 - **Вартість** (30%) - ціна API запитів
 
 ```yaml
@@ -374,7 +382,7 @@ POST /api/v1/search
 Для роботи з GitHub Copilot у VS Code:
 
 1. Переконайтеся, що MCP сервер запущено
-2. Відкрийте VS Code Copilot Chat  
+2. Відкрийте VS Code Copilot Chat
 3. Увімкніть Agent Mode
 4. Оберіть "Predator AI Server"
 
@@ -467,7 +475,7 @@ predator11/
 ├── backend/           # FastAPI backend
 │   ├── app/
 │   │   ├── agents/    # AI агенти
-│   │   ├── api/       # API ендпоінти  
+│   │   ├── api/       # API ендпоінти
 │   │   ├── core/      # Основна логіка
 │   │   └── models/    # Моделі даних
 ├── frontend/          # React frontend
@@ -518,15 +526,15 @@ helm upgrade predator11 ./infra/helm/predator11
 
 ## 🛠️ Команди Makefile
 
-| Команда | Опис |
-|---------|------|
-| `make setup` | Повне налаштування системи |
-| `make start` | Запуск всіх сервісів |
-| `make test-system` | Комплексне тестування |
-| `make agents-status` | Статус агентів |
-| `make monitoring` | Відкрити моніторинг |
-| `make backup` | Резервне копіювання |
-| `make clean` | Очистка системи |
+| Команда              | Опис                       |
+| -------------------- | -------------------------- |
+| `make setup`         | Повне налаштування системи |
+| `make start`         | Запуск всіх сервісів       |
+| `make test-system`   | Комплексне тестування      |
+| `make agents-status` | Статус агентів             |
+| `make monitoring`    | Відкрити моніторинг        |
+| `make backup`        | Резервне копіювання        |
+| `make clean`         | Очистка системи            |
 
 ## 📖 Документація
 
@@ -569,7 +577,7 @@ make agents-status
 # Перевірити конфігурацію
 python3 scripts/indexing/discover_pg_schema.py --dry-run
 
-# Тестування маскування  
+# Тестування маскування
 python3 -c "from backend.app.core.pii import mask_pii; print(mask_pii('test data'))"
 ```
 
@@ -601,7 +609,7 @@ curl http://localhost:8000/api/v1/agents/diagnosis
 ## 📞 Підтримка
 
 - **Issues**: [GitHub Issues](../../issues)
-- **Документація**: [docs/](docs/)  
+- **Документація**: [docs/](docs/)
 - **Email**: support@predator11.ai
 
 ---
@@ -639,16 +647,16 @@ python3 scripts/test-argocd-acceptance.py
 
 ### Key Features
 
-| Feature | Description |
-|---------|-------------|
-| **ApplicationSets** | Auto-generate apps for all environments |
-| **Canary Rollouts** | Progressive delivery with automatic rollback |
-| **Drift Detection** | Automatic sync on configuration drift |
-| **Sync Hooks** | Pre-sync migrations, post-sync tests |
-| **RBAC** | Role-based access (Admin, Developer, Operator) |
-| **Sealed Secrets** | Encrypted secrets in Git |
-| **Policy Enforcement** | OPA/Gatekeeper for security policies |
-| **Monitoring** | 12+ Prometheus alerts, ServiceMonitors |
+| Feature                | Description                                    |
+| ---------------------- | ---------------------------------------------- |
+| **ApplicationSets**    | Auto-generate apps for all environments        |
+| **Canary Rollouts**    | Progressive delivery with automatic rollback   |
+| **Drift Detection**    | Automatic sync on configuration drift          |
+| **Sync Hooks**         | Pre-sync migrations, post-sync tests           |
+| **RBAC**               | Role-based access (Admin, Developer, Operator) |
+| **Sealed Secrets**     | Encrypted secrets in Git                       |
+| **Policy Enforcement** | OPA/Gatekeeper for security policies           |
+| **Monitoring**         | 12+ Prometheus alerts, ServiceMonitors         |
 
 ### Documentation
 

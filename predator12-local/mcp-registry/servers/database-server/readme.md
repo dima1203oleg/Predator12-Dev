@@ -14,48 +14,59 @@ Comprehensive database server supporting PostgreSQL, MySQL, and SQLite with natu
 ## Available MCP Tools
 
 ### `query_database`
+
 **Description**: Execute natural language queries against the database and convert them to SQL
 
 **Usage**: Ask questions like "Show me all users created in the last week" or "Find the top 10 products by sales"
 
 **Arguments**:
+
 - `query` (string): Natural language description of what you want to query from the database
 
 ### `list_tables`
+
 **Description**: List all available tables in the current database
 
 **Usage**: Ask "What tables are available?" or "Show me the database structure"
 
 ### `describe_table`
+
 **Description**: Get detailed schema information for a specific table including columns, types, and constraints
 
 **Usage**: Ask "Describe the users table" or "What columns does the products table have?"
 
 **Arguments**:
+
 - `table_name` (string): Name of the table to describe
 
 ### `execute_sql`
+
 **Description**: Execute raw SQL queries with safety checks and validation
 
 **Usage**: Execute specific SQL commands when you need precise control
 
 **Arguments**:
+
 - `query` (string): SQL query to execute
 
 ### `connect_to_database`
+
 **Description**: Connect to a new database using provided connection details
 
 **Usage**: Switch between different databases during your session
 
 **Arguments**:
+
 - `connection_string` (string): Database connection string
 
 ### `get_connection_examples`
+
 **Description**: Get example connection strings for different database types (SQLite, PostgreSQL, MySQL)
 
 **Usage**: Ask "How do I connect to a PostgreSQL database?" or "Show me connection examples"
 
 ### `get_current_database_info`
+
 **Description**: Get information about the currently connected database including type, version, and connection status
 
 **Usage**: Ask "What database am I connected to?" or "Show me current connection details"
@@ -86,16 +97,19 @@ Here are some example questions you can ask your agent:
 The server requires a `DATABASE_URL` environment variable with your database connection string:
 
 ### SQLite (recommended for testing)
+
 ```
 DATABASE_URL=sqlite+aiosqlite:///data/mydb.db
 ```
 
 ### PostgreSQL
+
 ```
 DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/mydb
 ```
 
 ### MySQL
+
 ```
 DATABASE_URL=mysql+aiomysql://user:password@localhost:3306/mydb
 ```

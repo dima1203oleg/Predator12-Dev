@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import argparse
 import os
-import shlex
 import subprocess
 import sys
 from typing import Dict, Optional

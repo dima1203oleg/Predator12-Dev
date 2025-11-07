@@ -19,23 +19,28 @@ VITE v5.4.20  ready in 169 ms
 ## ✅ Що зроблено
 
 ### 1. Створено SimpleTestApp
+
 **Файл:** `frontend/src/SimpleTestApp.tsx`
 
 Простий React компонент що:
+
 - Показує заголовок "Predator Analytics"
 - Відображає 3 карточки (26 Agents, Self-Healing, Self-Learning)
 - Використовує MUI components
 - Має градієнтний фон
 
 ### 2. Оновлено main.tsx
+
 Тимчасово вимкнуто складний FullNexusCore та використано SimpleTestApp
 
 ### 3. Очищено кеш
+
 ```bash
 rm -rf node_modules/.vite
 ```
 
 ### 4. Запущено Vite
+
 ```bash
 npx vite --port 5090 --host
 ```
@@ -45,9 +50,11 @@ npx vite --port 5090 --host
 ## 🌐 Як отримати доступ
 
 ### Локально (на вашому Mac):
+
 **URL:** http://localhost:5090
 
 ### З іншого пристрою в мережі:
+
 **URL:** http://172.20.10.3:5090
 
 ---
@@ -55,6 +62,7 @@ npx vite --port 5090 --host
 ## 📊 Що ви повинні побачити
 
 ### Екран:
+
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       🚀 Predator Analytics
@@ -78,6 +86,7 @@ npx vite --port 5090 --host
 ```
 
 ### Кольори:
+
 - **Заголовок:** Cyan (#00FFC6) з неоновим glow
 - **Підзаголовок:** Purple (#A020F0)
 - **Фон:** Gradient (чорний → темно-синій → фіолетовий)
@@ -91,18 +100,22 @@ npx vite --port 5090 --host
 ### Якщо бачите тільки фон:
 
 #### 1. Відкрийте DevTools (F12)
+
 ```
 Cmd + Option + I (Mac)
 Ctrl + Shift + I (Windows)
 ```
 
 #### 2. Перейдіть на Console tab
+
 Шукайте червоні помилки (errors)
 
 #### 3. Перевірте Network tab
+
 Перегляньте чи завантажуються всі файли
 
 #### 4. Hard Refresh
+
 ```
 Cmd + Shift + R (Mac)
 Ctrl + F5 (Windows)
@@ -113,11 +126,13 @@ Ctrl + F5 (Windows)
 ## 🛠️ Команди управління
 
 ### Зупинити Vite:
+
 ```bash
 pkill -f "vite"
 ```
 
 ### Перезапустити:
+
 ```bash
 cd /Users/dima/Documents/Predator11/frontend
 rm -rf node_modules/.vite
@@ -125,6 +140,7 @@ npx vite --port 5090 --host
 ```
 
 ### Діагностика:
+
 ```bash
 ./scripts/diagnose-web-interface.sh
 ```
@@ -136,6 +152,7 @@ npx vite --port 5090 --host
 ### Коли SimpleTestApp працює (підтверджує що React OK):
 
 1. **Виправити @nexus/ui-theme package**
+
    ```bash
    cd packages/ui-theme
    npm install
@@ -172,6 +189,7 @@ npx vite --port 5090 --host
 **Якщо ви бачите карточки з текстом - ВСЕ ПРАЦЮЄ!**
 
 Це означає:
+
 - ✅ TypeScript компілюється
 - ✅ React компоненти рендеряться
 - ✅ MUI працює коректно

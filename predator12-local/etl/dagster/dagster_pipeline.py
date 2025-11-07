@@ -2,7 +2,7 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 import requests
-from dagster import Definitions, ScheduleDefinition, job, op, repository, resource, sensor
+from dagster import Definitions, ScheduleDefinition, job, op, resource, sensor
 from dagster_duckdb import DuckDBResource
 from minio import Minio
 

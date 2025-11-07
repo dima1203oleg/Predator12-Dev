@@ -22,7 +22,7 @@ The NotificationCenter can be integrated directly or through the optimized Notif
 
 ```jsx
 // Simple integration
-import NotificationCenter from './Notifications/NotificationCenter';
+import NotificationCenter from "./Notifications/NotificationCenter";
 
 const Header = () => {
   return (
@@ -37,7 +37,7 @@ const Header = () => {
 };
 
 // Optimized integration with batching
-import NotificationManager from './Notifications/NotificationManager';
+import NotificationManager from "./Notifications/NotificationManager";
 
 const Header = () => {
   return (
@@ -52,7 +52,7 @@ const Header = () => {
 };
 
 // Toast notification integration
-import { ToastProvider, useToast } from './Notifications/ToastProvider';
+import { ToastProvider, useToast } from "./Notifications/ToastProvider";
 
 // Wrap your app with the provider
 const App = () => {
@@ -77,15 +77,11 @@ const YourComponent = () => {
     addToast({
       title: "Успіх",
       message: "Операцію успішно виконано",
-      severity: "success"
+      severity: "success",
     });
   };
 
-  return (
-    <button onClick={showSuccessToast}>
-      Показати сповіщення
-    </button>
-  );
+  return <button onClick={showSuccessToast}>Показати сповіщення</button>;
 };
 ```
 
@@ -95,15 +91,12 @@ The system uses global WebSocket context to maintain a shared connection to the 
 
 ```jsx
 // Connect to the notifications WebSocket endpoint
-const { connectionStatus } = useGlobalWebSocket(
-  'notifications',
-  {
-    onMessage: handleNotification,
-    autoReconnect: true,
-    reconnectInterval: 3000,
-    maxReconnectAttempts: 10
-  }
-);
+const { connectionStatus } = useGlobalWebSocket("notifications", {
+  onMessage: handleNotification,
+  autoReconnect: true,
+  reconnectInterval: 3000,
+  maxReconnectAttempts: 10,
+});
 ```
 
 ## Performance Optimization
@@ -114,17 +107,17 @@ The system includes batch processing to optimize performance with high-frequency
 
 ```jsx
 // Initialize batching with custom settings
-const {
-  addNotification,
-  isActive: isBatchingActive
-} = useNotificationBatching({
-  maxBatchSize: 5,       // Maximum batch size
-  flushInterval: 800,    // Interval in ms
-  onBatchProcess: handleBatchProcess
-});
+const { addNotification, isActive: isBatchingActive } = useNotificationBatching(
+  {
+    maxBatchSize: 5, // Maximum batch size
+    flushInterval: 800, // Interval in ms
+    onBatchProcess: handleBatchProcess,
+  },
+);
 ```
 
 Batching provides several performance benefits:
+
 - Reduces DOM updates by processing notifications in groups
 - Decreases CPU usage for high-frequency notifications
 - Optimizes audio playback by only playing for the highest severity
@@ -211,6 +204,7 @@ Users can:
 The ToastContainer component provides pop-up style notifications that appear temporarily and automatically dismiss:
 
 ### Features:
+
 - **Multiple positions**: top-right, top-left, bottom-right, bottom-left
 - **Auto-dismissal**: with animated progress bar
 - **Pause on hover**: pauses the dismissal timer when hovering
@@ -225,20 +219,22 @@ The ToastContainer component provides pop-up style notifications that appear tem
 - **Batch handling**: multiple simultaneous notifications
 
 ### Configuration Options:
+
 ```jsx
 <ToastContainer
-  position="top-right"       // Position on screen
-  autoClose={true}           // Auto-dismiss toasts
-  autoCloseDelay={5000}      // Time before auto-dismiss in ms
-  closeOnClick={true}        // Dismiss on click
-  pauseOnHover={true}        // Pause timer on hover
-  limit={5}                  // Max number of toasts
+  position="top-right" // Position on screen
+  autoClose={true} // Auto-dismiss toasts
+  autoCloseDelay={5000} // Time before auto-dismiss in ms
+  closeOnClick={true} // Dismiss on click
+  pauseOnHover={true} // Pause timer on hover
+  limit={5} // Max number of toasts
   animationStyle="slide-right" // Animation style (slide-right, slide-up, fade, bounce, glitch)
-  onClose={handleClose}      // Callback when toast closes
+  onClose={handleClose} // Callback when toast closes
 />
 ```
 
 ### Using with Context:
+
 The ToastProvider and useToast hook provide a convenient way to trigger toast notifications from anywhere in your app:
 
 ```jsx
@@ -251,8 +247,8 @@ addToast({
   animationStyle: "bounce", // optional, overrides global setting
   action: {
     label: "Переглянути",
-    url: "/data/123"
-  }
+    url: "/data/123",
+  },
 });
 
 // Show an error toast with a glitch animation
@@ -260,7 +256,7 @@ addToast({
   title: "Помилка",
   message: "Не вдалося зберегти дані",
   severity: "error",
-  animationStyle: "glitch" // cyberpunk glitch effect
+  animationStyle: "glitch", // cyberpunk glitch effect
 });
 
 // Show notification with fade animation
@@ -268,7 +264,7 @@ addToast({
   title: "Інформація",
   message: "Оновлення даних завершено",
   severity: "info",
-  animationStyle: "fade"
+  animationStyle: "fade",
 });
 ```
 

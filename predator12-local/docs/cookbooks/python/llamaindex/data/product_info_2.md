@@ -1,7 +1,9 @@
 # Information about product item_number: 2
+
 Adventurer Pro Backpack, price $90,
 
 ## Brand
+
 HikeMate
 
 Main Category: CAMPING & HIKING
@@ -9,6 +11,7 @@ Sub Category: BACKPACKS
 Product Type: DAYPACKS
 
 ## Features
+
 - 40L capacity for ample storage space
 - Ergonomic design for comfortable carrying
 - Durable nylon material for long-lasting performance
@@ -26,8 +29,8 @@ Product Type: DAYPACKS
 - Lightweight construction for reduced burden on long hikes
 - Reinforced haul handle for easy lifting and carrying
 
-
 ## Technical Specs
+
 Best Use: Hiking  
 Capacity: 40 liters  
 Material: Nylon  
@@ -48,7 +51,7 @@ Reflective Accents: Yes
 Back Panel Ventilation: Yes  
 Side Mesh Pockets: Yes  
 Load Compression Straps: Yes  
-Haul Handle: Yes  
+Haul Handle: Yes
 
 ## Adventurer Pro Backpack User Manual
 
@@ -164,38 +167,41 @@ Please retain your proof of purchase as it will be required to verify warranty e
 Kindly note that the warranty period, coverage, and claim process are subject to change. Please refer to the warranty card included with your product for the most up-to-date and accurate information.
 
 ## Return Policy
-- If Membership status "None        ":	Returns are accepted within 30 days of purchase, provided the backpack is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Gold":	Returns are accepted within 60 days of purchase, provided the backpack is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Platinum":	Returns are accepted within 90 days of purchase, provided the backpack is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.  
+
+- If Membership status "None ": Returns are accepted within 30 days of purchase, provided the backpack is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+- If Membership status "Gold": Returns are accepted within 60 days of purchase, provided the backpack is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+- If Membership status "Platinum": Returns are accepted within 90 days of purchase, provided the backpack is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
 
 ## Reviews
-6) Rating: 5
+
+6. Rating: 5
    Review: I am extremely happy with my Adventurer Pro Backpack! It has ample space, multiple compartments, and is super comfortable to wear. The hydration system compatibility is a major plus. I'm thrilled with this purchase!
 
-7) Rating: 4
+7. Rating: 4
    Review: I bought the Adventurer Pro Backpack, and while it's comfortable and has many useful features, I wish it came in more colors. The blue color just isn't my favorite. Overall, it's a good backpack.
 
-8) Rating: 5
+8. Rating: 5
    Review: The Adventurer Pro Backpack is perfect for my hiking trips. The ergonomic design and adjustable straps make it comfortable to wear all day, and the multiple compartments help me stay organized.
 
-9) Rating: 4
+9. Rating: 4
    Review: I like the Adventurer Pro Backpack, but I wish it had more external pockets for easy access to small items. It's comfortable and has many useful features, but this addition would make it even better.
 
-10) Rating: 5
-   Review: This backpack is a game changer for my hiking adventures. The 40L capacity is perfect for extended trips, and the hydration system compatibility is extremely convenient. I highly recommend it to any serious hiker.
+10. Rating: 5
+    Review: This backpack is a game changer for my hiking adventures. The 40L capacity is perfect for extended trips, and the hydration system compatibility is extremely convenient. I highly recommend it to any serious hiker.
 
 ## FAQ
-6) What is the maximum weight capacity of the Adventurer Pro Backpack?
+
+6. What is the maximum weight capacity of the Adventurer Pro Backpack?
    The Adventurer Pro Backpack is designed to hold up to 40 lbs of gear comfortably.
 
-7) Is the Adventurer Pro Backpack suitable for both men and women?
+7. Is the Adventurer Pro Backpack suitable for both men and women?
    Yes, the adjustable straps and ergonomic design of the Adventurer Pro Backpack make it suitable for both men and women.
 
-8) Can I attach additional gear to the outside of the Adventurer Pro Backpack?
+8. Can I attach additional gear to the outside of the Adventurer Pro Backpack?
    Yes, the Adventurer Pro Backpack features external attachment points for items such as trekking poles or a sleeping pad.
 
-9) Is the Adventurer Pro Backpack water-resistant?
+9. Is the Adventurer Pro Backpack water-resistant?
    The Adventurer Pro Backpack is made of water-resistant nylon material, which helps protect your gear from light rain. However, it is not completely waterproof.
 
-10) How do I clean and maintain the Adventurer Pro Backpack?
-   To clean the Adventurer Pro Backpack, use a damp cloth to wipe down the exterior and air dry. Avoid machine washing or using harsh chemicals.
+10. How do I clean and maintain the Adventurer Pro Backpack?
+    To clean the Adventurer Pro Backpack, use a damp cloth to wipe down the exterior and air dry. Avoid machine washing or using harsh chemicals.

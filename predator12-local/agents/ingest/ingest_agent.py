@@ -4,23 +4,18 @@
 Завантаження файлів/потоків з профілюванням та PII сканом
 """
 
-import asyncio
 import hashlib
 import mimetypes
-import os
 import re
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any, BinaryIO, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
-import aiofiles
 import pandas as pd
-import psycopg2
 import redis
 import structlog
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import JSONResponse
 from minio import Minio
 from opensearchpy import OpenSearch
 
@@ -29,7 +24,7 @@ logger = structlog.get_logger(__name__)
 
 @dataclass
 class FileMetadata:
-    """Метадані завантаженого файлу"""
+    """Метадані завантаженого файлу."""
 
     filename: str
     size: int
@@ -41,7 +36,7 @@ class FileMetadata:
 
 @dataclass
 class DataProfile:
-    """Профіль даних"""
+    """Профіль даних."""
 
     row_count: int
     column_count: int
@@ -54,7 +49,7 @@ class DataProfile:
 
 @dataclass
 class PIIFindings:
-    """Знайдені PII дані"""
+    """Знайдені PII дані."""
 
     has_pii: bool
     pii_columns: List[str]
@@ -63,7 +58,7 @@ class PIIFindings:
 
 
 class PIIDetector:
-    """Детектор персональних даних"""
+    """Детектор персональних даних."""
 
     def __init__(self):
         # Регулярні вирази для різних типів PII
@@ -91,7 +86,7 @@ class PIIDetector:
         }
 
     def detect_pii(self, df: pd.DataFrame) -> PIIFindings:
-        """Виявлення PII в DataFrame"""
+        """Виявлення PII в DataFrame."""
 
         pii_columns = []
         pii_types = {}
@@ -133,10 +128,10 @@ class PIIDetector:
 
 
 class DataProfiler:
-    """Профілювання даних"""
+    """Профілювання даних."""
 
     def profile_dataframe(self, df: pd.DataFrame) -> DataProfile:
-        """Створення профілю DataFrame"""
+        """Створення профілю DataFrame."""
 
         columns_info = {}
         data_types = {}
@@ -225,7 +220,7 @@ class IngestAgent:
         self._setup_routes()
 
     def _ensure_bucket(self):
-        """Створення MinIO bucket"""
+        """Створення MinIO bucket."""
         try:
             if not self.minio_client.bucket_exists(self.bucket_name):
                 self.minio_client.make_bucket(self.bucket_name)
@@ -234,7 +229,7 @@ class IngestAgent:
             logger.error("Failed to create bucket", error=str(e))
 
     def _setup_routes(self):
-        """Налаштування HTTP маршрутів"""
+        """Налаштування HTTP маршрутів."""
 
         @self.app.post("/ingest/upload")
         async def upload_file(
@@ -242,7 +237,7 @@ class IngestAgent:
             user_id: str = Form("system"),
             tags: Optional[str] = Form(None),
         ):
-            """Завантаження файлу"""
+            """Завантаження файлу."""
             try:
                 # Валідація розміру
                 if file.size and file.size > self.max_file_size:
@@ -258,7 +253,7 @@ class IngestAgent:
 
         @self.app.post("/ingest/commit/{file_id}")
         async def commit_file(file_id: str):
-            """Підтвердження завантаження та індексація"""
+            """Підтвердження завантаження та індексація."""
             try:
                 result = await self.commit_and_index(file_id)
                 return result
@@ -268,7 +263,7 @@ class IngestAgent:
 
         @self.app.get("/ingest/profile/{file_id}")
         async def get_profile(file_id: str):
-            """Отримання профілю файлу"""
+            """Отримання профілю файлу."""
             try:
                 # Завантаження профілю з Redis
                 profile_data = self.redis_client.get(f"profile:{file_id}")
@@ -284,7 +279,7 @@ class IngestAgent:
 
         @self.app.get("/ingest/health")
         async def health():
-            """Health check"""
+            """Health check."""
             try:
                 # Перевіряємо підключення до сервісів
                 self.redis_client.ping()
@@ -298,7 +293,7 @@ class IngestAgent:
     async def process_upload(
         self, file: UploadFile, user_id: str, tags: Optional[str]
     ) -> Dict[str, Any]:
-        """Обробка завантаження файлу"""
+        """Обробка завантаження файлу."""
 
         # Генерація ID файлу
         file_id = hashlib.md5(f"{file.filename}{datetime.now()}".encode()).hexdigest()
@@ -378,7 +373,7 @@ class IngestAgent:
         }
 
     async def commit_and_index(self, file_id: str) -> Dict[str, Any]:
-        """Підтвердження та індексація файлу"""
+        """Підтвердження та індексація файлу."""
 
         # Отримання профілю
         import json
@@ -443,12 +438,12 @@ class IngestAgent:
         }
 
     def _is_tabular_file(self, filename: str) -> bool:
-        """Перевірка чи є файл табличним"""
+        """Перевірка чи є файл табличним."""
         ext = Path(filename).suffix.lower()
         return ext in [".csv", ".xlsx", ".xls", ".tsv", ".parquet"]
 
     async def _read_tabular_file(self, content: bytes, filename: str) -> pd.DataFrame:
-        """Читання табличного файлу"""
+        """Читання табличного файлу."""
         ext = Path(filename).suffix.lower()
 
         if ext == ".csv":
@@ -463,7 +458,7 @@ class IngestAgent:
             raise ValueError(f"Unsupported file type: {ext}")
 
     async def _publish_event(self, event_type: str, data: Dict[str, Any]):
-        """Публікація події в Redis Streams"""
+        """Публікація події в Redis Streams."""
         try:
             event_data = {
                 "event_type": event_type,

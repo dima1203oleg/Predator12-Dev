@@ -6,7 +6,7 @@
 **Розташування:** `/predator12-local/frontend/src/components/voice/`  
 **Тип:** React Functional Component  
 **Мова:** TypeScript  
-**UI Framework:** Material-UI (MUI) + Framer Motion  
+**UI Framework:** Material-UI (MUI) + Framer Motion
 
 ---
 
@@ -40,7 +40,7 @@ import { premiumFreeVoiceAPI } from '../../services/premiumFreeVoiceAPI';
 // Основний стан
 const [isListening, setIsListening] = useState<boolean>(false);
 const [isConnected, setIsConnected] = useState<boolean>(false);
-const [currentCommand, setCurrentCommand] = useState<string>('');
+const [currentCommand, setCurrentCommand] = useState<string>("");
 const [confidence, setConfidence] = useState<number>(0);
 
 // UI стан
@@ -49,23 +49,24 @@ const [voiceEnabled, setVoiceEnabled] = useState<boolean>(true);
 
 // Дані
 const [recentCommands, setRecentCommands] = useState<VoiceCommand[]>([]);
-const [aiResponse, setAiResponse] = useState<string>('');
+const [aiResponse, setAiResponse] = useState<string>("");
 const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
 // API стан
-const [voiceCapabilities, setVoiceCapabilities] = useState<VoiceCapabilities | null>(null);
-const [currentProvider, setCurrentProvider] = useState<string>('auto');
+const [voiceCapabilities, setVoiceCapabilities] =
+  useState<VoiceCapabilities | null>(null);
+const [currentProvider, setCurrentProvider] = useState<string>("auto");
 
 // Налаштування
 const [settings, setSettings] = useState<VoiceSettings>({
-  language: 'uk-UA',
-  voice: 'Lesya',
+  language: "uk-UA",
+  voice: "Lesya",
   speed: 1,
   pitch: 1,
   volume: 0.8,
   autoSpeak: true,
   continuousListening: false,
-  wakeWord: 'Нексус'
+  wakeWord: "Нексус",
 });
 ```
 
@@ -114,12 +115,12 @@ const initVoiceAPI = async () => {
       setVoiceCapabilities(capabilities);
       setCurrentProvider(capabilities.recommended_tts);
 
-      console.log('✅ Premium FREE Voice API готовий');
+      console.log("✅ Premium FREE Voice API готовий");
     } else {
-      console.warn('⚠️  API недоступний. Browser fallback.');
+      console.warn("⚠️  API недоступний. Browser fallback.");
     }
   } catch (error) {
-    console.error('❌ Помилка API:', error);
+    console.error("❌ Помилка API:", error);
   }
 };
 ```
@@ -129,8 +130,8 @@ const initVoiceAPI = async () => {
 ```typescript
 const initWebSpeechAPI = () => {
   // 1. Перевірка підтримки
-  if (!('webkitSpeechRecognition' in window)) {
-    console.error('❌ Web Speech API недоступний');
+  if (!("webkitSpeechRecognition" in window)) {
+    console.error("❌ Web Speech API недоступний");
     return;
   }
 
@@ -141,7 +142,7 @@ const initWebSpeechAPI = () => {
   // 3. Налаштування
   recognitionRef.current.continuous = true;
   recognitionRef.current.interimResults = true;
-  recognitionRef.current.lang = 'uk-UA';
+  recognitionRef.current.lang = "uk-UA";
   recognitionRef.current.maxAlternatives = 1;
 
   // 4. Обробники подій
@@ -151,7 +152,7 @@ const initWebSpeechAPI = () => {
   recognitionRef.current.onend = handleRecognitionEnd;
 
   // 5. Ініціалізація Speech Synthesis
-  if ('speechSynthesis' in window) {
+  if ("speechSynthesis" in window) {
     synthRef.current = window.speechSynthesis;
     loadVoices();
   }
@@ -202,30 +203,30 @@ Generate AI Response
 const startListening = async () => {
   // 1. Валідація
   if (!recognitionRef.current) {
-    alert('Голосове розпізнавання недоступне');
+    alert("Голосове розпізнавання недоступне");
     return;
   }
 
   if (isListening) {
-    console.warn('Вже слухаємо');
+    console.warn("Вже слухаємо");
     return;
   }
 
   // 2. Запит дозволу на мікрофон
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    stream.getTracks().forEach(track => track.stop());
+    stream.getTracks().forEach((track) => track.stop());
   } catch (error) {
-    alert('Доступ до мікрофона заборонено');
+    alert("Доступ до мікрофона заборонено");
     return;
   }
 
   // 3. Запуск розпізнавання
   try {
     recognitionRef.current.start();
-    console.log('🎤 Розпізнавання запущено');
+    console.log("🎤 Розпізнавання запущено");
   } catch (error) {
-    console.error('Помилка запуску:', error);
+    console.error("Помилка запуску:", error);
   }
 };
 ```
@@ -237,7 +238,7 @@ const stopListening = () => {
   if (recognitionRef.current && isListening) {
     recognitionRef.current.stop();
     setIsListening(false);
-    console.log('🛑 Розпізнавання зупинено');
+    console.log("🛑 Розпізнавання зупинено");
   }
 };
 ```
@@ -246,8 +247,8 @@ const stopListening = () => {
 
 ```typescript
 const handleRecognitionResult = (event: SpeechRecognitionEvent) => {
-  let finalTranscript = '';
-  let interimTranscript = '';
+  let finalTranscript = "";
+  let interimTranscript = "";
 
   // Обробка результатів
   for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -275,27 +276,24 @@ const handleRecognitionResult = (event: SpeechRecognitionEvent) => {
 ### processVoiceCommand()
 
 ```typescript
-const processVoiceCommand = async (
-  transcript: string,
-  confidence: number
-) => {
+const processVoiceCommand = async (transcript: string, confidence: number) => {
   // 1. Створення об'єкта команди
   const command: VoiceCommand = {
     id: Date.now().toString(),
     phrase: transcript,
-    action: 'processing',
-    module: 'voice',
+    action: "processing",
+    module: "voice",
     confidence: confidence * 100,
     timestamp: new Date(),
-    executed: false
+    executed: false,
   };
 
   // 2. Додавання до історії
-  setRecentCommands(prev => [command, ...prev.slice(0, 9)]);
+  setRecentCommands((prev) => [command, ...prev.slice(0, 9)]);
   setIsProcessing(true);
 
   // 3. Симуляція обробки
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // 4. Генерація відповіді
   const response = generateAIResponse(transcript);
@@ -308,16 +306,16 @@ const processVoiceCommand = async (
 
   // 6. Оновлення статусу
   command.executed = true;
-  setRecentCommands(prev =>
-    prev.map(cmd =>
+  setRecentCommands((prev) =>
+    prev.map((cmd) =>
       cmd.id === command.id
-        ? { ...cmd, action: 'completed', executed: true }
-        : cmd
-    )
+        ? { ...cmd, action: "completed", executed: true }
+        : cmd,
+    ),
   );
 
   setIsProcessing(false);
-  setCurrentCommand('');
+  setCurrentCommand("");
 };
 ```
 
@@ -329,9 +327,9 @@ const generateAIResponse = (command: string): string => {
 
   // Маппінг команд на відповіді
   const commandMap: Record<string, string> = {
-    'дашборд': 'Відкриваю головний дашборд...',
-    'агент': 'Переходжу до модуля AI агентів...',
-    'безпека': 'Відкриваю центр кібербезпеки...',
+    дашборд: "Відкриваю головний дашборд...",
+    агент: "Переходжу до модуля AI агентів...",
+    безпека: "Відкриваю центр кібербезпеки...",
     // ... інші команди
   };
 
@@ -376,19 +374,19 @@ const speakResponsePremiumFree = async (text: string) => {
   if (!voiceEnabled) return;
 
   try {
-    const lang = settings.language.startsWith('uk') ? 'uk' : 'en';
+    const lang = settings.language.startsWith("uk") ? "uk" : "en";
 
     await premiumFreeVoiceAPI.textToSpeech({
       text,
       language: lang,
       speed: settings.speed,
-      provider: 'auto'
+      provider: "auto",
     });
 
-    console.log('✅ TTS успішно (Premium FREE)');
+    console.log("✅ TTS успішно (Premium FREE)");
   } catch (error) {
-    console.error('❌ Помилка Premium FREE TTS:', error);
-    speakResponseBrowser(text);  // Fallback
+    console.error("❌ Помилка Premium FREE TTS:", error);
+    speakResponseBrowser(text); // Fallback
   }
 };
 ```
@@ -411,8 +409,8 @@ const speakResponseBrowser = (text: string) => {
 
   // 3. Вибір голосу
   const voices = synthRef.current.getVoices();
-  const selectedVoice = voices.find(v =>
-    v.lang === settings.language || v.name === settings.voice
+  const selectedVoice = voices.find(
+    (v) => v.lang === settings.language || v.name === settings.voice,
   );
 
   if (selectedVoice) {
@@ -420,9 +418,9 @@ const speakResponseBrowser = (text: string) => {
   }
 
   // 4. Обробники подій
-  utterance.onstart = () => console.log('🔊 TTS START');
-  utterance.onend = () => console.log('✅ TTS END');
-  utterance.onerror = (e) => console.error('❌ TTS ERROR:', e);
+  utterance.onstart = () => console.log("🔊 TTS START");
+  utterance.onend = () => console.log("✅ TTS END");
+  utterance.onerror = (e) => console.error("❌ TTS ERROR:", e);
 
   // 5. Озвучування
   synthRef.current.speak(utterance);
@@ -436,11 +434,15 @@ const speakResponseBrowser = (text: string) => {
 ### Основна Структура
 
 ```tsx
-<Box sx={{ /* стилі */ }}>
+<Box
+  sx={
+    {
+      /* стилі */
+    }
+  }
+>
   {/* Заголовок */}
-  <Typography variant="h4">
-    🎤 AI Voice Interface
-  </Typography>
+  <Typography variant="h4">🎤 AI Voice Interface</Typography>
 
   {/* Головна Кнопка Мікрофона */}
   <VoicePulseButton />
@@ -469,12 +471,12 @@ const speakResponseBrowser = (text: string) => {
   animate={{
     scale: isListening ? [1, 1.2, 1] : 1,
     boxShadow: isListening
-      ? ['0 0 0 0 rgba(0, 255, 157, 0.7)', '0 0 0 20px rgba(0, 255, 157, 0)']
-      : '0 0 0 0 rgba(0, 255, 157, 0)'
+      ? ["0 0 0 0 rgba(0, 255, 157, 0.7)", "0 0 0 20px rgba(0, 255, 157, 0)"]
+      : "0 0 0 0 rgba(0, 255, 157, 0)",
   }}
   transition={{
     duration: 1.5,
-    repeat: isListening ? Infinity : 0
+    repeat: isListening ? Infinity : 0,
   }}
 >
   <IconButton
@@ -495,22 +497,16 @@ const speakResponseBrowser = (text: string) => {
 ### Status Indicators
 
 ```tsx
-<Box sx={{ display: 'flex', gap: 2 }}>
+<Box sx={{ display: "flex", gap: 2 }}>
   <Chip
     icon={isConnected ? <CheckCircle /> : <Cancel />}
-    label={isConnected ? 'Connected' : 'Disconnected'}
-    color={isConnected ? 'success' : 'error'}
+    label={isConnected ? "Connected" : "Disconnected"}
+    color={isConnected ? "success" : "error"}
   />
 
-  <Chip
-    icon={<AccessTime />}
-    label={formatTime(listeningTime)}
-  />
+  <Chip icon={<AccessTime />} label={formatTime(listeningTime)} />
 
-  <Chip
-    icon={<TrendingUp />}
-    label={`Confidence: ${confidence.toFixed(0)}%`}
-  />
+  <Chip icon={<TrendingUp />} label={`Confidence: ${confidence.toFixed(0)}%`} />
 </Box>
 ```
 
@@ -557,10 +553,12 @@ const speakResponseBrowser = (text: string) => {
       <InputLabel>Language</InputLabel>
       <Select
         value={settings.language}
-        onChange={(e) => setSettings(prev => ({
-          ...prev,
-          language: e.target.value
-        }))}
+        onChange={(e) =>
+          setSettings((prev) => ({
+            ...prev,
+            language: e.target.value,
+          }))
+        }
       >
         <MenuItem value="uk-UA">🇺🇦 Українська</MenuItem>
         <MenuItem value="en-US">🇬🇧 English</MenuItem>
@@ -575,10 +573,12 @@ const speakResponseBrowser = (text: string) => {
         min={0.5}
         max={2}
         step={0.1}
-        onChange={(e, value) => setSettings(prev => ({
-          ...prev,
-          speed: value as number
-        }))}
+        onChange={(e, value) =>
+          setSettings((prev) => ({
+            ...prev,
+            speed: value as number,
+          }))
+        }
       />
     </Box>
 
@@ -590,10 +590,12 @@ const speakResponseBrowser = (text: string) => {
         min={0.5}
         max={2}
         step={0.1}
-        onChange={(e, value) => setSettings(prev => ({
-          ...prev,
-          pitch: value as number
-        }))}
+        onChange={(e, value) =>
+          setSettings((prev) => ({
+            ...prev,
+            pitch: value as number,
+          }))
+        }
       />
     </Box>
 
@@ -605,10 +607,12 @@ const speakResponseBrowser = (text: string) => {
         min={0}
         max={1}
         step={0.1}
-        onChange={(e, value) => setSettings(prev => ({
-          ...prev,
-          volume: value as number
-        }))}
+        onChange={(e, value) =>
+          setSettings((prev) => ({
+            ...prev,
+            volume: value as number,
+          }))
+        }
       />
     </Box>
 
@@ -617,10 +621,12 @@ const speakResponseBrowser = (text: string) => {
       control={
         <Switch
           checked={settings.autoSpeak}
-          onChange={(e) => setSettings(prev => ({
-            ...prev,
-            autoSpeak: e.target.checked
-          }))}
+          onChange={(e) =>
+            setSettings((prev) => ({
+              ...prev,
+              autoSpeak: e.target.checked,
+            }))
+          }
         />
       }
       label="Auto-speak responses"
@@ -644,7 +650,7 @@ const speakResponseBrowser = (text: string) => {
 // /services/premiumFreeVoiceAPI.ts
 
 class PremiumFreeVoiceAPI {
-  private baseUrl: string = 'http://localhost:5094';
+  private baseUrl: string = "http://localhost:5094";
 
   async checkHealth(): Promise<boolean> {
     try {
@@ -662,9 +668,9 @@ class PremiumFreeVoiceAPI {
 
   async textToSpeech(request: TTSRequest): Promise<void> {
     const response = await fetch(`${this.baseUrl}/api/tts`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(request)
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(request),
     });
 
     if (!response.ok) {
@@ -679,12 +685,12 @@ class PremiumFreeVoiceAPI {
 
   async speechToText(audio: Blob, language: string): Promise<STTResponse> {
     const formData = new FormData();
-    formData.append('audio', audio);
-    formData.append('language', language);
+    formData.append("audio", audio);
+    formData.append("language", language);
 
     const response = await fetch(`${this.baseUrl}/api/stt`, {
-      method: 'POST',
-      body: formData
+      method: "POST",
+      body: formData,
     });
 
     return await response.json();
@@ -701,20 +707,20 @@ export const premiumFreeVoiceAPI = new PremiumFreeVoiceAPI();
 ### Unit Tests
 
 ```typescript
-describe('AIVoiceInterface', () => {
-  it('should initialize Web Speech API', () => {
+describe("AIVoiceInterface", () => {
+  it("should initialize Web Speech API", () => {
     // Test initialization
   });
 
-  it('should start/stop listening', () => {
+  it("should start/stop listening", () => {
     // Test voice recognition
   });
 
-  it('should process voice commands', () => {
+  it("should process voice commands", () => {
     // Test command processing
   });
 
-  it('should speak responses', () => {
+  it("should speak responses", () => {
     // Test TTS
   });
 });
@@ -723,13 +729,13 @@ describe('AIVoiceInterface', () => {
 ### Integration Tests
 
 ```typescript
-describe('Voice API Integration', () => {
-  it('should connect to Premium FREE API', async () => {
+describe("Voice API Integration", () => {
+  it("should connect to Premium FREE API", async () => {
     const isHealthy = await premiumFreeVoiceAPI.checkHealth();
     expect(isHealthy).toBe(true);
   });
 
-  it('should get capabilities', async () => {
+  it("should get capabilities", async () => {
     const capabilities = await premiumFreeVoiceAPI.getCapabilities();
     expect(capabilities.tts_providers).toBeDefined();
   });
@@ -743,21 +749,23 @@ describe('Voice API Integration', () => {
 ### Оптимізації
 
 1. **Lazy Loading голосів**
+
    ```typescript
    useEffect(() => {
      const loadVoices = () => {
        const voices = synthRef.current.getVoices();
        // Cache voices
      };
-     synthRef.current.addEventListener('voiceschanged', loadVoices);
+     synthRef.current.addEventListener("voiceschanged", loadVoices);
    }, []);
    ```
 
 2. **Debouncing обробки команд**
+
    ```typescript
    const debouncedProcess = useCallback(
      debounce((transcript) => processVoiceCommand(transcript), 500),
-     []
+     [],
    );
    ```
 
@@ -770,13 +778,13 @@ describe('Voice API Integration', () => {
 
 ### Metrics
 
-| Метрика | Значення |
-|---------|----------|
-| Initial Load | < 2s |
-| Recognition Start | < 500ms |
-| TTS Latency (Browser) | < 100ms |
-| TTS Latency (Premium FREE) | < 3s |
-| Memory Usage | < 50MB |
+| Метрика                    | Значення |
+| -------------------------- | -------- |
+| Initial Load               | < 2s     |
+| Recognition Start          | < 500ms  |
+| TTS Latency (Browser)      | < 100ms  |
+| TTS Latency (Premium FREE) | < 3s     |
+| Memory Usage               | < 50MB   |
 
 ---
 
@@ -791,7 +799,7 @@ const requestMicrophonePermission = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     return true;
   } catch (error) {
-    console.error('Permission denied:', error);
+    console.error("Permission denied:", error);
     return false;
   }
 };
@@ -808,8 +816,8 @@ const validateCommand = (command: string): boolean => {
   if (command.length > 500) return false;
 
   // Перевірка на шкідливі команди
-  const blacklist = ['<script>', 'javascript:', 'onerror='];
-  return !blacklist.some(item => command.toLowerCase().includes(item));
+  const blacklist = ["<script>", "javascript:", "onerror="];
+  return !blacklist.some((item) => command.toLowerCase().includes(item));
 };
 ```
 
@@ -822,10 +830,10 @@ const validateCommand = (command: string): boolean => {
 ```typescript
 const handleRecognitionError = (event: SpeechRecognitionError) => {
   const errorMessages = {
-    'no-speech': 'Не вдалося почути мовлення',
-    'audio-capture': 'Мікрофон недоступний',
-    'not-allowed': 'Доступ до мікрофона заборонено',
-    'network': 'Проблема з мережею'
+    "no-speech": "Не вдалося почути мовлення",
+    "audio-capture": "Мікрофон недоступний",
+    "not-allowed": "Доступ до мікрофона заборонено",
+    network: "Проблема з мережею",
   };
 
   const message = errorMessages[event.error] || event.error;
@@ -842,14 +850,14 @@ const handleRecognitionError = (event: SpeechRecognitionError) => {
 try {
   await speakResponsePremiumFree(text);
 } catch (error) {
-  console.error('Premium FREE TTS failed:', error);
+  console.error("Premium FREE TTS failed:", error);
 
   // Fallback to browser API
   try {
     speakResponseBrowser(text);
   } catch (fallbackError) {
-    console.error('Browser TTS also failed:', fallbackError);
-    alert('Озвучування недоступне');
+    console.error("Browser TTS also failed:", fallbackError);
+    alert("Озвучування недоступне");
   }
 }
 ```
@@ -859,6 +867,7 @@ try {
 ## 📝 Changelog
 
 ### v1.0.0 (2025-10-12)
+
 - ✅ Initial release
 - ✅ Web Speech API integration
 - ✅ Premium FREE Voice API support
@@ -868,6 +877,7 @@ try {
 - ✅ Command history
 
 ### v1.1.0 (Planned)
+
 - [ ] Improved noise reduction
 - [ ] Additional languages
 - [ ] Voice profiles
@@ -878,13 +888,15 @@ try {
 ## 🎯 Best Practices
 
 1. **Завжди перевіряйте підтримку браузера**
+
    ```typescript
-   if (!('webkitSpeechRecognition' in window)) {
+   if (!("webkitSpeechRecognition" in window)) {
      // Show error
    }
    ```
 
 2. **Використовуйте fallback стратегії**
+
    ```typescript
    try {
      await premiumAPI();
@@ -894,12 +906,14 @@ try {
    ```
 
 3. **Обробляйте всі помилки**
+
    ```typescript
    recognition.onerror = handleError;
    utterance.onerror = handleError;
    ```
 
 4. **Зупиняйте попередні операції**
+
    ```typescript
    synthRef.current.cancel();
    recognitionRef.current.stop();

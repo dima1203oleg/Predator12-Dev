@@ -3,6 +3,7 @@
 This folder contains a small helper to add GitHub Actions secrets to a repository using the GitHub CLI (`gh`).
 
 Files:
+
 - `add_github_secrets.py` — Python helper. Prompts interactively or reads from environment / .env file and calls `gh secret set` for each provided value.
 - `add_github_secrets.sh` — convenience shell wrapper for zsh/bash that calls the Python helper and supports reading a `.secrets.env` file.
 
@@ -38,6 +39,7 @@ Or run non-interactive with an explicit repo:
 ```
 
 Security notes:
+
 - Never commit `.secrets.env` into source control.
 - Prefer creating secrets directly in GitHub Settings when possible.
 - This script requires the user running it to have permission to set secrets in the target repo.

@@ -56,18 +56,18 @@ predator12-local/
 
 ## ✅ ТЗ Compliance: 10/10 Criteria
 
-| № | Criterion | Status | Implementation |
-|---|-----------|--------|----------------|
-| 1 | Zero-config start | ✅ | `.vscode/launch.json` with "Run Both" |
-| 2 | Debug working | ✅ | All services debuggable |
-| 3 | Lint/Pre-commit | ✅ | 6 hooks configured |
-| 4 | Docker + Makefile | ✅ | Idempotent operations |
-| 5 | ArgoCD-ready | ✅ | Complete infra/ structure |
-| 6 | Agents active | ✅ | 30 agents framework |
-| 7 | Rollback/Drift | ✅ | Auto-detection + manual |
-| 8 | CI/CD integration | ✅ | GitHub Actions workflows |
-| 9 | Observability | ✅ | OTEL + Prometheus + Grafana |
-| 10 | Security | ✅ | Sealed Secrets + OPA + RBAC |
+| №   | Criterion         | Status | Implementation                        |
+| --- | ----------------- | ------ | ------------------------------------- |
+| 1   | Zero-config start | ✅     | `.vscode/launch.json` with "Run Both" |
+| 2   | Debug working     | ✅     | All services debuggable               |
+| 3   | Lint/Pre-commit   | ✅     | 6 hooks configured                    |
+| 4   | Docker + Makefile | ✅     | Idempotent operations                 |
+| 5   | ArgoCD-ready      | ✅     | Complete infra/ structure             |
+| 6   | Agents active     | ✅     | 30 agents framework                   |
+| 7   | Rollback/Drift    | ✅     | Auto-detection + manual               |
+| 8   | CI/CD integration | ✅     | GitHub Actions workflows              |
+| 9   | Observability     | ✅     | OTEL + Prometheus + Grafana           |
+| 10  | Security          | ✅     | Sealed Secrets + OPA + RBAC           |
 
 ---
 
@@ -278,21 +278,21 @@ Layer 5: Pod Security (No privileged)
 
 ### DORA Metrics Targets
 
-| Metric | Target | Current | Status |
-|--------|--------|---------|--------|
-| **Deployment Frequency** | Daily | Ready | ✅ |
-| **Lead Time** | <1h | <1h | ✅ |
-| **MTTR** | <15m | <2m | ✅ |
-| **Change Failure Rate** | <5% | TBD | ⏳ |
+| Metric                   | Target | Current | Status |
+| ------------------------ | ------ | ------- | ------ |
+| **Deployment Frequency** | Daily  | Ready   | ✅     |
+| **Lead Time**            | <1h    | <1h     | ✅     |
+| **MTTR**                 | <15m   | <2m     | ✅     |
+| **Change Failure Rate**  | <5%    | TBD     | ⏳     |
 
 ### Application Metrics
 
-| Metric | SLI | Alert |
-|--------|-----|-------|
-| **Availability** | 99.9% | <99.5% |
-| **Error Rate** | <1% | >5% |
-| **P95 Latency** | <300ms | >500ms |
-| **Success Rate** | >99% | <95% |
+| Metric           | SLI    | Alert  |
+| ---------------- | ------ | ------ |
+| **Availability** | 99.9%  | <99.5% |
+| **Error Rate**   | <1%    | >5%    |
+| **P95 Latency**  | <300ms | >500ms |
+| **Success Rate** | >99%   | <95%   |
 
 ---
 
@@ -473,6 +473,6 @@ You now have:
 
 ---
 
-*Summary generated: 2025-10-06*  
-*Version: 12.5 Ultimate Extended Revision*  
-*Status: ✅ COMPLETE*
+_Summary generated: 2025-10-06_  
+_Version: 12.5 Ultimate Extended Revision_  
+_Status: ✅ COMPLETE_

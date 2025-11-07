@@ -437,7 +437,7 @@ class ILMOrchestrator:
                 {"prefix": "temp/", "expiration_days": 7},
             ]
 
-            lifecycle_xml = self.minio_manager.create_lifecycle_policy("predator-data", minio_rules)
+            self.minio_manager.create_lifecycle_policy("predator-data", minio_rules)
             logger.info("MinIO lifecycle policy created")
 
             # Setup Redis cache policies

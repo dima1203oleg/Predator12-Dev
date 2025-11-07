@@ -195,6 +195,7 @@ kubectl get analysisrun -n predator12-prod
 ```
 
 **Go/No-Go Decision**:
+
 - ✅ **GO**: All metrics within thresholds → Continue to 25%
 - ❌ **NO-GO**: Any metric out of bounds → Rollback
 
@@ -210,6 +211,7 @@ kubectl argo rollouts get rollout predator12-backend -n predator12-prod
 ```
 
 **Go/No-Go Decision**:
+
 - ✅ **GO**: All metrics stable → Continue to 50%
 - ❌ **NO-GO**: Any degradation → Rollback
 
@@ -218,6 +220,7 @@ kubectl argo rollouts get rollout predator12-backend -n predator12-prod
 **Duration**: 5 minutes
 
 **Go/No-Go Decision**:
+
 - ✅ **GO**: All metrics stable → Full rollout
 - ❌ **NO-GO**: Any degradation → Rollback
 
@@ -284,6 +287,7 @@ curl -X POST $SLACK_WEBHOOK \
 ### When to Rollback
 
 Rollback immediately if:
+
 - Error rate >5%
 - P95 latency >500ms
 - Success rate <95%
@@ -426,46 +430,49 @@ kubectl logs -n predator12-prod <analysisrun-pod>
 
 ### Deployment Metrics
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| Deployment Frequency | Daily | ArgoCD sync count |
-| Lead Time for Changes | <1 hour | Commit to production |
-| Mean Time to Recovery | <15 minutes | Rollback duration |
-| Change Failure Rate | <5% | Failed deployments / total |
+| Metric                | Target      | Measurement                |
+| --------------------- | ----------- | -------------------------- |
+| Deployment Frequency  | Daily       | ArgoCD sync count          |
+| Lead Time for Changes | <1 hour     | Commit to production       |
+| Mean Time to Recovery | <15 minutes | Rollback duration          |
+| Change Failure Rate   | <5%         | Failed deployments / total |
 
 ### Application Metrics
 
-| Metric | SLI Target | Alert Threshold |
-|--------|------------|-----------------|
-| Availability | 99.9% | <99.5% |
-| Error Rate | <1% | >5% |
-| P95 Latency | <300ms | >500ms |
-| Success Rate | >99% | <95% |
+| Metric       | SLI Target | Alert Threshold |
+| ------------ | ---------- | --------------- |
+| Availability | 99.9%      | <99.5%          |
+| Error Rate   | <1%        | >5%             |
+| P95 Latency  | <300ms     | >500ms          |
+| Success Rate | >99%       | <95%            |
 
 ### Infrastructure Metrics
 
-| Metric | Target | Alert Threshold |
-|--------|--------|-----------------|
-| CPU Usage | <70% | >80% |
-| Memory Usage | <75% | >85% |
-| Disk Usage | <80% | >90% |
-| Network Errors | <0.1% | >1% |
+| Metric         | Target | Alert Threshold |
+| -------------- | ------ | --------------- |
+| CPU Usage      | <70%   | >80%            |
+| Memory Usage   | <75%   | >85%            |
+| Disk Usage     | <80%   | >90%            |
+| Network Errors | <0.1%  | >1%             |
 
 ---
 
 ## 📞 Escalation
 
 ### Level 1: On-Call Engineer
+
 - Initial triage
 - Execute standard runbooks
 - Monitor deployment
 
 ### Level 2: Team Lead
+
 - Complex issues
 - Architectural decisions
 - Stakeholder communication
 
 ### Level 3: CTO/Senior Leadership
+
 - Critical outages
 - Security incidents
 - Major architectural changes
@@ -507,26 +514,31 @@ After any incident or rollback, complete a post-mortem:
 **Severity**: Critical/High/Medium/Low
 
 ### Timeline
+
 - HH:MM - Deployment started
 - HH:MM - Issue detected
 - HH:MM - Rollback initiated
 - HH:MM - Service restored
 
 ### Root Cause
+
 [Detailed explanation]
 
 ### Impact
+
 - Users affected: X
 - Downtime: Y minutes
 - Revenue impact: $Z
 
 ### Action Items
+
 - [ ] Fix root cause
 - [ ] Add test coverage
 - [ ] Update runbook
 - [ ] Team training
 
 ### Lessons Learned
+
 [What went well, what didn't]
 ```
 
@@ -535,6 +547,7 @@ After any incident or rollback, complete a post-mortem:
 ## 🎓 Training
 
 New team members should:
+
 1. Read this runbook thoroughly
 2. Shadow a production deployment
 3. Perform deployment in staging
@@ -542,6 +555,7 @@ New team members should:
 5. Conduct post-deployment review
 
 Quarterly disaster recovery drills:
+
 - Simulate production outage
 - Practice rollback procedures
 - Test backup restoration

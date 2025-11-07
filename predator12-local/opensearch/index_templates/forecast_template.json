@@ -1,9 +1,7 @@
 {
   "index_template": {
     "name": "forecast_template",
-    "index_patterns": [
-      "forecast_*"
-    ],
+    "index_patterns": ["forecast_*"],
     "template": {
       "settings": {
         "number_of_shards": 2,

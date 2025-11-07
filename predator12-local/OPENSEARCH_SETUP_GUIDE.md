@@ -29,6 +29,7 @@ open http://localhost:5601
 ```
 
 **Дефолтні порти:**
+
 - OpenSearch: `http://localhost:9200`
 - Dashboards: `http://localhost:5601`
 
@@ -84,7 +85,6 @@ discovery.type: single-node
 
 # Для dev без TLS (не для production!)
 plugins.security.disabled: true
-
 # Heap size (512MB для dev)
 # Встановлюється через OPENSEARCH_JAVA_OPTS
 ```
@@ -103,12 +103,11 @@ server.port: 5601
 server.name: "predator-dashboards"
 
 # Підключення до OpenSearch
-opensearch.hosts: ["http://localhost:9200"]  # HTTP для dev
+opensearch.hosts: ["http://localhost:9200"] # HTTP для dev
 # opensearch.hosts: ["https://localhost:9200"]  # HTTPS для production
 
 # Для dev без SSL
 opensearch.ssl.verificationMode: none
-
 # Для production з TLS
 # opensearch.ssl.verificationMode: full
 # opensearch.username: "admin"
@@ -251,10 +250,10 @@ pip install 'opensearch-py==3.0.0'
 
 ## 🔧 Сумісність версій
 
-| OpenSearch Server | opensearch-py Client | Примітка |
-|-------------------|---------------------|----------|
-| 2.x (2.19.3)      | `>=2.4.1,<3.0`     | Brew default, стабільно |
-| 3.x               | `==3.0.0`          | Breaking changes |
+| OpenSearch Server | opensearch-py Client | Примітка                |
+| ----------------- | -------------------- | ----------------------- |
+| 2.x (2.19.3)      | `>=2.4.1,<3.0`       | Brew default, стабільно |
+| 3.x               | `==3.0.0`            | Breaking changes        |
 
 **Важливо:** Перевірте версію кластера перед встановленням клієнта!
 
@@ -265,6 +264,7 @@ curl http://localhost:9200 | grep number
 ### 📌 Різниця між opensearch-py 2.x та 3.x
 
 **opensearch-py 2.x (Рекомендовано для Predator12):**
+
 - ✅ Стабільний, тестований
 - ✅ Сумісний з OpenSearch 2.x clusters
 - ✅ Ретроспективна сумісність з Elasticsearch API
@@ -280,6 +280,7 @@ client = OpenSearch(hosts=['http://localhost:9200'])
 ```
 
 **opensearch-py 3.x (Тільки для OpenSearch 3.x):**
+
 - ⚠️ Breaking changes в API
 - ⚠️ Може потребувати рефакторингу існуючого коду
 - ⚠️ Не працює з OpenSearch 2.x
@@ -296,6 +297,7 @@ opensearch-py==3.0.0
 ```
 
 **Наша рекомендація для Predator12:**
+
 ```bash
 # Використовуйте 2.x для максимальної стабільності
 pip install 'opensearch-py>=2.4.1,<3.0'
@@ -402,7 +404,6 @@ plugins.security.ssl.http.enabled: true
 plugins.security.ssl.http.pemcert_filepath: certs/node.pem
 plugins.security.ssl.http.pemkey_filepath: certs/node-key.pem
 plugins.security.ssl.http.pemtrustedcas_filepath: certs/root-ca.pem
-
 # Heap
 # export OPENSEARCH_JAVA_OPTS="-Xms2g -Xmx2g"
 ```

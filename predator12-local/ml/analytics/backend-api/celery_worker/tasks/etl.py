@@ -1,17 +1,11 @@
-import asyncio
-import json
 import logging
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import httpx
-import pandas as pd
-from bs4 import BeautifulSoup
 from celery import shared_task
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from telethon import TelegramClient
-from telethon.errors import SessionPasswordNeededError
 
 # Setup logging
 logger = logging.getLogger(__name__)

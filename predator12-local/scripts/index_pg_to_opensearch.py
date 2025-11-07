@@ -1,6 +1,6 @@
+import json
 import os
 import sys
-import json
 from datetime import datetime
 from typing import Any, Dict, List
 
@@ -80,14 +80,14 @@ def ensure_index_and_alias() -> None:
     r = requests.head(f"{OS_URL}/{base_index}")
     if r.status_code == 404:
         settings = {
-            "settings": {
-                "index": {"opendistro.index_state_management.policy_id": "customs_policy"}
-            }
+            "settings": {"index": {"opendistro.index_state_management.policy_id": "customs_policy"}}
         }
         cr = requests.put(f"{OS_URL}/{base_index}", json=settings)
         cr.raise_for_status()
         print(f"✅ Created index {base_index}")
-    actions = {"actions": [{"add": {"index": base_index, "alias": ALIAS_NAME, "is_write_index": True}}]}
+    actions = {
+        "actions": [{"add": {"index": base_index, "alias": ALIAS_NAME, "is_write_index": True}}]
+    }
     ar = requests.post(f"{OS_URL}/_aliases", json=actions)
     if ar.status_code not in (200, 201):
         print("⚠️ Alias resp:", ar.status_code, ar.text)
@@ -112,7 +112,11 @@ def bulk_index(rows: List[Dict[str, Any]]):
                 r["ts"] = None
         ndjson_lines.append(json.dumps(r, ensure_ascii=False))
     payload = "\n".join(ndjson_lines) + "\n"
-    resp = requests.post(f"{OS_URL}/_bulk", data=payload.encode("utf-8"), headers={"Content-Type": "application/x-ndjson"})
+    resp = requests.post(
+        f"{OS_URL}/_bulk",
+        data=payload.encode("utf-8"),
+        headers={"Content-Type": "application/x-ndjson"},
+    )
     resp.raise_for_status()
     j = resp.json()
     if j.get("errors"):

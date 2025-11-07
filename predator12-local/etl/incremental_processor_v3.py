@@ -2,9 +2,8 @@
 ETL Pipeline with Incremental Processing & Error Recovery
 """
 
-import asyncio
-from datetime import datetime, timedelta
-from typing import Any, Dict, Optional
+from datetime import datetime
+from typing import Optional
 
 import pandas as pd
 from observability.metrics import ETL_PROCESSED_COUNT
@@ -32,7 +31,6 @@ class ETLProcessor:
             data = await extract(since=self.last_success)
 
             # Process in batches
-            success = False
             for batch in self._chunk_data(data, chunk_size=1000):
                 processed = self._process_batch(batch, transform)
                 await load(processed)
@@ -76,4 +74,3 @@ class ETLProcessor:
         # Log error
         # Alert monitoring
         # Prepare for retry
-        pass

@@ -9,6 +9,7 @@ Grafana має вбудовані ML-плагіни для anomaly detection (н
 3. Додайте новий ML Job (наприклад, anomaly detection для метрик FastAPI, Kafka, Redis)
 
 ## Приклад використання
+
 - Виберіть метрику (наприклад, http_requests_total)
 - Налаштуйте job на anomaly detection
 - Grafana автоматично створить алерти при виявленні аномалій

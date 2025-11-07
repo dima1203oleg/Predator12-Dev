@@ -1,13 +1,14 @@
-import os
 import json
-from typing import List, Dict
+import os
+from typing import Dict, List
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from datetime import datetime
 
 STATUS_FILE = os.getenv("ETL_STATUS_FILE", "etl_status.json")
 
 app = FastAPI(title="ETL Watcher Status API")
+
 
 class ETLJob(BaseModel):
     filename: str
@@ -17,6 +18,7 @@ class ETLJob(BaseModel):
     rows: int = None
     error: str = None
 
+
 # Simple file-based status store
 def load_status() -> List[Dict]:
     if not os.path.exists(STATUS_FILE):
@@ -24,13 +26,16 @@ def load_status() -> List[Dict]:
     with open(STATUS_FILE, "r") as f:
         return json.load(f)
 
+
 def save_status(status: List[Dict]):
     with open(STATUS_FILE, "w") as f:
         json.dump(status, f, indent=2)
 
+
 @app.get("/api/etl/status", response_model=List[ETLJob])
 def get_status():
     return load_status()
+
 
 @app.post("/api/etl/manual-trigger")
 def manual_trigger(filename: str):
@@ -41,6 +46,7 @@ def manual_trigger(filename: str):
     os.utime(data_path, None)
     return {"message": f"Triggered ETL for {filename}"}
 
+
 @app.get("/api/etl/log/{filename}")
 def get_log(filename: str):
     log_path = os.path.join("logs", f"etl_{filename}.log")
@@ -48,6 +54,7 @@ def get_log(filename: str):
         return {"log": "No log found."}
     with open(log_path, "r") as f:
         return {"log": f.read()}
+
 
 @app.get("/api/etl/history", response_model=List[ETLJob])
 def get_history():

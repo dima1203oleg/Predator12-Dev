@@ -12,34 +12,34 @@ frontend/src/
 
 ## 🎯 7 Доступних тем
 
-| ID | Назва | Тип | Основні кольори | Emoji |
-|----|-------|-----|-----------------|-------|
-| `dark-cyber` | Dark Cyber | Dark | Cyan + Purple | 🌌 |
-| `matrix` | Matrix | Dark | Neon Green | 🟢 |
-| `sunset` | Sunset | Dark | Orange + Purple | 🌅 |
-| `ocean` | Ocean | Dark | Deep Blue | 🌊 |
-| `neon-tokyo` | Neon Tokyo | Dark | Pink + Cyan | 🗼 |
-| `retro-terminal` | Retro Terminal | Dark | Amber | 💾 |
-| `light` | Light | Light | Sky Blue + Purple | ☀️ |
+| ID               | Назва          | Тип   | Основні кольори   | Emoji |
+| ---------------- | -------------- | ----- | ----------------- | ----- |
+| `dark-cyber`     | Dark Cyber     | Dark  | Cyan + Purple     | 🌌    |
+| `matrix`         | Matrix         | Dark  | Neon Green        | 🟢    |
+| `sunset`         | Sunset         | Dark  | Orange + Purple   | 🌅    |
+| `ocean`          | Ocean          | Dark  | Deep Blue         | 🌊    |
+| `neon-tokyo`     | Neon Tokyo     | Dark  | Pink + Cyan       | 🗼    |
+| `retro-terminal` | Retro Terminal | Dark  | Amber             | 💾    |
+| `light`          | Light          | Light | Sky Blue + Purple | ☀️    |
 
 ## ⚡ Швидкий старт
 
 ### 1. Обгорнути додаток
 
 ```tsx
-import { NexusThemeProvider } from './contexts/ThemeContext';
-import ThemeSwitcher from './components/theme/ThemeSwitcher';
+import { NexusThemeProvider } from "./contexts/ThemeContext";
+import ThemeSwitcher from "./components/theme/ThemeSwitcher";
 
 <NexusThemeProvider defaultThemeId="dark-cyber">
   <App />
   <ThemeSwitcher />
-</NexusThemeProvider>
+</NexusThemeProvider>;
 ```
 
 ### 2. Використати в компоненті
 
 ```tsx
-import { useNexusTheme } from '../contexts/ThemeContext';
+import { useNexusTheme } from "../contexts/ThemeContext";
 
 const MyComponent = () => {
   const { colors, currentTheme, setTheme } = useNexusTheme();
@@ -49,9 +49,7 @@ const MyComponent = () => {
       <Typography sx={{ color: colors.text.primary }}>
         Current: {currentTheme.name}
       </Typography>
-      <Button onClick={() => setTheme('matrix')}>
-        Switch to Matrix
-      </Button>
+      <Button onClick={() => setTheme("matrix")}>Switch to Matrix</Button>
     </Box>
   );
 };
@@ -78,11 +76,11 @@ colors = {
 
 ```tsx
 const {
-  currentTheme,    // ThemeConfig - вся конфігурація
-  currentThemeId,  // string - ID поточної теми
-  setTheme,        // (id: string) => void
-  toggleTheme,     // () => void - dark ↔ light
-  colors           // ThemeColorPalette - кольори
+  currentTheme, // ThemeConfig - вся конфігурація
+  currentThemeId, // string - ID поточної теми
+  setTheme, // (id: string) => void
+  toggleTheme, // () => void - dark ↔ light
+  colors, // ThemeColorPalette - кольори
 } = useNexusTheme();
 ```
 
@@ -90,12 +88,12 @@ const {
 
 ```tsx
 import {
-  getThemeById,      // (id: string) => ThemeConfig
-  getDefaultTheme,   // () => ThemeConfig
+  getThemeById, // (id: string) => ThemeConfig
+  getDefaultTheme, // () => ThemeConfig
   getCurrentThemeId, // () => string | null
-  onThemeChange,     // (callback) => unsubscribe
-  allThemes          // ThemeConfig[]
-} from '../theme/themes';
+  onThemeChange, // (callback) => unsubscribe
+  allThemes, // ThemeConfig[]
+} from "../theme/themes";
 ```
 
 ## 💡 Приклади
@@ -106,9 +104,9 @@ import {
 <Typography
   sx={{
     background: colors.gradients.primary,
-    backgroundClip: 'text',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
   }}
 >
   Gradient Text
@@ -120,7 +118,7 @@ import {
 ```tsx
 <Button
   sx={{
-    '&:hover': {
+    "&:hover": {
       boxShadow: `0 0 20px ${colors.primary.glow}`,
     },
   }}
@@ -136,7 +134,7 @@ import {
   sx={{
     background: colors.background.paper,
     border: `1px solid ${colors.border.light}`,
-    '&:hover': {
+    "&:hover": {
       borderColor: colors.primary.main,
       boxShadow: `0 8px 32px ${colors.primary.glow}`,
     },
@@ -154,6 +152,7 @@ import {
 ```
 
 **Функції:**
+
 - Floating кнопка (bottom-right)
 - Діалог з preview всіх тем
 - Color palette preview
@@ -164,55 +163,58 @@ import {
 
 ```tsx
 interface ThemeConfig {
-  id: string;                    // Унікальний ID
-  name: string;                  // Назва для UI
-  description: string;           // Опис теми
-  icon: string;                  // Emoji іконка
-  type: 'dark' | 'light';       // Тип теми
-  colors: ThemeColorPalette;    // Колірна палітра
+  id: string; // Унікальний ID
+  name: string; // Назва для UI
+  description: string; // Опис теми
+  icon: string; // Emoji іконка
+  type: "dark" | "light"; // Тип теми
+  colors: ThemeColorPalette; // Колірна палітра
 }
 ```
 
 ## 🔥 Best Practices
 
 1. **Завжди використовуйте colors з контексту**
+
    ```tsx
    const { colors } = useNexusTheme();
    ```
 
 2. **Застосовуйте transitions для плавності**
+
    ```tsx
    sx={{ transition: 'all 0.3s ease' }}
    ```
 
 3. **Використовуйте gradients для акцентів**
+
    ```tsx
-   background: colors.gradients.primary
+   background: colors.gradients.primary;
    ```
 
 4. **Додавайте glow effects для hover**
    ```tsx
-   boxShadow: `0 0 20px ${colors.primary.glow}`
+   boxShadow: `0 0 20px ${colors.primary.glow}`;
    ```
 
 ## 🎯 Створення власної теми
 
 ```tsx
 export const myTheme: ThemeConfig = {
-  id: 'my-theme',
-  name: 'My Theme',
-  description: 'Моя кастомна тема',
-  icon: '🌟',
-  type: 'dark',
+  id: "my-theme",
+  name: "My Theme",
+  description: "Моя кастомна тема",
+  icon: "🌟",
+  type: "dark",
   colors: {
     // ... колірна палітра
-  }
+  },
 };
 
 // Додати до allThemes в themes.ts
 export const allThemes = [
   darkCyberTheme,
-  myTheme,  // <-- Додати тут
+  myTheme, // <-- Додати тут
 ];
 ```
 
@@ -220,9 +222,9 @@ export const allThemes = [
 
 ```tsx
 <IconButton
-  onClick={() => setTheme('matrix')}
+  onClick={() => setTheme("matrix")}
   sx={{
-    position: 'fixed',
+    position: "fixed",
     bottom: 24,
     right: 24,
     background: colors.gradients.primary,
@@ -235,6 +237,7 @@ export const allThemes = [
 ## 🌐 LocalStorage
 
 Тема автоматично зберігається в localStorage:
+
 - **Key:** `predator12-theme`
 - **Value:** theme ID (наприклад, `dark-cyber`)
 - **Auto-load:** При перезавантаженні автоматично завантажується

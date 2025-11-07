@@ -37,12 +37,14 @@ python3 -m uvicorn app.main:app --reload --port 8000
 ```
 
 **Очікуваний результат:**
+
 ```
 INFO:     Uvicorn running on http://127.0.0.1:8000
 INFO:     Application startup complete.
 ```
 
 **Перевірка:**
+
 - Відкрити: <http://localhost:8000/docs>
 - Перевірити: <http://localhost:8000/api/cyber-ace/health>
 
@@ -61,12 +63,14 @@ npm run dev
 ```
 
 **Очікуваний результат:**
+
 ```
 VITE ready in XXX ms
 Local:   http://localhost:5173/
 ```
 
 **Перевірка:**
+
 - Відкрити: <http://localhost:5173>
 - Відкрити: <http://localhost:5173/cyber-ace>
 
@@ -86,6 +90,7 @@ chmod +x test-cyber-ace-integration.sh
 ```
 
 **Очікуваний результат:**
+
 ```
 🧪 CYBER-ACE INTEGRATION TEST
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -128,6 +133,7 @@ Testing agents endpoint... ✓ PASS
 ## 📋 CHECKLIST ЗАПУСКУ
 
 ### Backend
+
 - [ ] Python 3.11+ встановлено
 - [ ] Dependencies встановлено
 - [ ] Server запущено на port 8000
@@ -135,6 +141,7 @@ Testing agents endpoint... ✓ PASS
 - [ ] Swagger UI доступний
 
 ### Frontend
+
 - [ ] Node.js встановлено
 - [ ] npm dependencies встановлено
 - [ ] Dev server запущено на port 5173
@@ -142,6 +149,7 @@ Testing agents endpoint... ✓ PASS
 - [ ] CYBER-ACE сторінка доступна
 
 ### Integration
+
 - [ ] Health test пройшов
 - [ ] Chat test пройшов
 - [ ] Agents test пройшов
@@ -149,6 +157,7 @@ Testing agents endpoint... ✓ PASS
 - [ ] CORS налаштовано правильно
 
 ### Функціонал
+
 - [ ] 3D аватар відображається
 - [ ] Голосові команди працюють
 - [ ] Quick actions працюють
@@ -258,6 +267,7 @@ chmod +x cyber-ace-start.sh
 ```
 
 Цей скрипт:
+
 1. Перевірить поточний стан
 2. Запустить backend (якщо не запущено)
 3. Запустить frontend (якщо не запущено)
@@ -307,34 +317,38 @@ Testing agents endpoint... ✓ PASS
 
 ## ⏱️ TIMELINE
 
-| Task | Time | Status |
-|------|------|--------|
-| Запуск Backend | 2-3 хв | ⏳ Pending |
-| Запуск Frontend | 1-2 хв | ⏳ Pending |
-| Запуск Тестів | 30 сек | ⏳ Pending |
-| Функціональне Тестування | 5-10 хв | ⏳ Pending |
-| **TOTAL** | **10-15 хв** | ⏳ Pending |
+| Task                     | Time         | Status     |
+| ------------------------ | ------------ | ---------- |
+| Запуск Backend           | 2-3 хв       | ⏳ Pending |
+| Запуск Frontend          | 1-2 хв       | ⏳ Pending |
+| Запуск Тестів            | 30 сек       | ⏳ Pending |
+| Функціональне Тестування | 5-10 хв      | ⏳ Pending |
+| **TOTAL**                | **10-15 хв** | ⏳ Pending |
 
 ---
 
 ## 🎯 SUCCESS CRITERIA
 
 ✅ **Backend:**
+
 - Server запущено
 - Health endpoint відповідає 200
 - Swagger UI доступний
 
 ✅ **Frontend:**
+
 - Dev server запущено
 - Сторінка завантажується
 - Аватар відображається
 
 ✅ **Integration:**
+
 - Всі API tests пройшли
 - Frontend підключився до backend
 - Дані передаються коректно
 
 ✅ **Функціонал:**
+
 - Голосові команди працюють
 - Quick actions виконуються
 - Chat отримує відповіді

@@ -15,6 +15,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ```
 
 Скрипт автоматично:
+
 - ✅ Перевірить Python 3.11
 - ✅ Створить backup venv та requirements
 - ✅ Створить новий Python 3.11 venv
@@ -31,41 +32,49 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ### Modern Stack (requirements-311-modern.txt):
 
 **Web Framework:**
+
 - ✅ FastAPI 0.118.0
 - ✅ Uvicorn 0.37.0 with uvloop
 - ✅ Pydantic 2.11.10 (v2!)
 
 **Database:**
+
 - ✅ SQLAlchemy 2.0.43 (modern async)
 - ✅ Alembic 1.16.5
 - ✅ psycopg 3.2.10 (async PostgreSQL)
 
 **Performance:**
+
 - ✅ uvloop 0.21.0
 - ✅ orjson 0.10.14
 - ✅ aiocache 0.12.3
 
 **AI/ML:**
+
 - ✅ OpenAI 1.58.1
 - ✅ Anthropic 0.42.0
 - ✅ LangChain 0.3.14
 - ✅ faiss-cpu 1.12.0
 
 **Observability:**
+
 - ✅ OpenTelemetry SDK
 - ✅ Prometheus client
 - ✅ Sentry SDK
 
 **Logging:**
+
 - ✅ structlog 25.4.0
 - ✅ loguru 0.7.3
 
 **Testing:**
+
 - ✅ pytest 8.3.4
 - ✅ pytest-asyncio 0.24.0
 - ✅ pytest-cov 6.0.0
 
 **Code Quality:**
+
 - ✅ black 25.1.0
 - ✅ ruff 0.9.3
 - ✅ mypy 1.14.1
@@ -77,6 +86,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ### 1. Оновлення коду
 
 **Pydantic v2:**
+
 ```python
 # Було
 user_dict = user.dict()
@@ -88,6 +98,7 @@ user_json = user.model_dump_json()
 ```
 
 **SQLAlchemy 2.0:**
+
 ```python
 # Було
 users = session.query(User).filter(User.name == "John").all()
@@ -99,6 +110,7 @@ users = session.scalars(stmt).all()
 ```
 
 **psycopg3:**
+
 ```bash
 # Було
 DATABASE_URL=postgresql://user:pass@localhost/db
@@ -170,18 +182,21 @@ Backup знаходиться в `backups/migration-*/`
 ## 🎯 Переваги
 
 **Продуктивність:**
+
 - ⚡ uvloop для швидкого event loop
 - ⚡ orjson для швидкої JSON серіалізації
 - ⚡ psycopg3 з connection pooling
 - ⚡ aiocache для async кешування
 
 **Сучасність:**
+
 - 🎯 Pydantic v2 (до 17x швидше)
 - 🎯 SQLAlchemy 2.0 (modern async patterns)
 - 🎯 Type hints для всього
 - 🎯 Async/await всюди
 
 **Якість:**
+
 - 🔍 mypy для type checking
 - 🔍 ruff для швидкого linting
 - 🔍 black для форматування

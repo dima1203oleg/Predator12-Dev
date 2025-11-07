@@ -15,11 +15,13 @@
 ## Вимоги
 
 ### Локальна Розробка
+
 - Docker Desktop 4.0+
 - Docker Compose 2.0+
 - Git
 
 ### Production
+
 - Kubernetes 1.28+
 - Helm 3.12+
 - kubectl
@@ -47,6 +49,7 @@ cp frontend/.env.example frontend/.env
 ```
 
 **Відредагуйте backend/.env:**
+
 ```bash
 DEBUG=true
 SECRET_KEY=your-dev-secret-key
@@ -64,6 +67,7 @@ docker-compose up -d
 ```
 
 **Це запустить:**
+
 - ✅ PostgreSQL (база даних)
 - ✅ Redis (кеш і черги)
 - ✅ Qdrant (векторна БД)
@@ -90,16 +94,19 @@ docker-compose ps
 ### 1. Відкрийте Інтерфейси
 
 **Frontend (Головна сторінка з 3D Аватаром)**
+
 ```
 http://localhost:3000
 ```
 
 **Backend API Docs (Swagger)**
+
 ```
 http://localhost:8000/api/docs
 ```
 
 **Grafana (Моніторинг)**
+
 ```
 http://localhost:3001
 Login: admin / admin
@@ -120,6 +127,7 @@ curl http://localhost:8000/api/v1/agents/system/status
 Backend автоматично створить таблиці при старті.
 
 Перевірка:
+
 ```bash
 docker-compose exec postgres psql -U postgres -d predator_analytics -c "\dt"
 ```
@@ -167,6 +175,7 @@ http://localhost:3000/dashboard
 ```
 
 Тут ви побачите:
+
 - Загальну статистику завдань
 - Графіки активності за 7 днів
 - Статистику по агентам
@@ -175,11 +184,13 @@ http://localhost:3000/dashboard
 ### 4. Моніторинг та Метрики
 
 **Prometheus:**
+
 ```
 http://localhost:9090
 ```
 
 Приклади запитів:
+
 ```promql
 # API latency
 predator:api:latency:p95
@@ -192,11 +203,13 @@ predator_active_tasks
 ```
 
 **Grafana:**
+
 ```
 http://localhost:3001
 ```
 
 Імпортуйте dashboard:
+
 ```bash
 # Dashboard вже налаштований у monitoring/grafana/dashboard-overview.json
 ```
@@ -296,6 +309,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 Login: admin
 Password:
+
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```

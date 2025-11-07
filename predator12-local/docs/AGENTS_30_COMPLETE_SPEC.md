@@ -30,9 +30,11 @@
 ## 🔧 Category 1: Self-Heal Agents (10 агентів)
 
 ### Призначення
+
 Відновлення та стабілізація системи при збоях. Реагують на alerts з Prometheus, виконують playbooks (restart/scale/rollback), логують у `logs/agents/self_heal.log`.
 
 ### Architecture Pattern
+
 ```
 Alert (Prometheus) → SelfDiagnosis → AutoHeal Playbook → Verify → Log/Escalate
 ```
@@ -216,7 +218,7 @@ triggers:
   - type: pre_commit_failure
     hook: pip-audit
   - type: cron
-    schedule: "0 2 * * *"  # Daily 2am
+    schedule: "0 2 * * *" # Daily 2am
 
 execution:
   steps:
@@ -237,7 +239,7 @@ execution:
 
 metrics:
   dependencies_clean: <5min
-  pr_merge_rate: >80%
+  pr_merge_rate: >80
 
 llm_config:
   primary: openai/gpt-4o
@@ -338,7 +340,7 @@ execution:
       check: hit_rate > 95%
 
 metrics:
-  hit_rate_restore: >95%
+  hit_rate_restore: >95
   eviction_time: <2min
 
 llm_config:
@@ -421,7 +423,7 @@ dependencies:
 
 triggers:
   - type: scheduled
-    cron: "0 3 * * *"  # Daily 3am
+    cron: "0 3 * * *" # Daily 3am
   - type: backup_failure_alert
     source: prometheus
 
@@ -559,9 +561,11 @@ llm_config:
 ## ⚙️ Category 2: Optimize Agents (10 агентів)
 
 ### Призначення
+
 Оптимізація коду, даних, процесів. Працюють у dry-run mode (no write), генерують артефакти (tests/migrations), з human review для PR.
 
 ### Architecture Pattern
+
 ```
 Trigger (code change/metric) → Analyze → Generate Artifacts → Dry-Run Test → PR Review → Merge
 ```
@@ -834,7 +838,7 @@ triggers:
   - type: slow_query_detected
     condition: latency > 2s
   - type: scheduled_optimization
-    cron: "0 4 * * 0"  # Weekly Sunday 4am
+    cron: "0 4 * * 0" # Weekly Sunday 4am
 
 execution:
   steps:
@@ -939,7 +943,7 @@ execution:
         - memory_usage
 
 metrics:
-  hit_rate: >95%
+  hit_rate: >95
   memory_savings: 20%
 
 llm_config:
@@ -1040,7 +1044,7 @@ dependencies:
 
 triggers:
   - type: scheduled
-    cron: "*/15 * * * *"  # Every 15min
+    cron: "*/15 * * * *" # Every 15min
   - type: argocd_sync_failure
 
 execution:
@@ -1217,9 +1221,11 @@ llm_config:
 ## 🚀 Category 3: Modernize Agents (10 агентів)
 
 ### Призначення
+
 Модернізація залежностей, архітектури, функціоналу. Пропонують PR з тегом `[auto-deps]`, dry-run, human review для ризикових змін.
 
 ### Architecture Pattern
+
 ```
 Trigger (cron/alert) → Scan → Analyze → Generate PR → Human Review → Merge/Reject
 ```
@@ -1244,7 +1250,7 @@ dependencies:
 
 triggers:
   - type: scheduled
-    cron: "0 2 * * 1"  # Weekly Monday 2am
+    cron: "0 2 * * 1" # Weekly Monday 2am
   - type: vulnerability_alert
     source: GitHub Security Advisories
 
@@ -1336,7 +1342,7 @@ execution:
         - Test coverage gaps
     - name: apply_automated_refactoring
       commands:
-        - ruff --fix --select UP  # pyupgrade rules
+        - ruff --fix --select UP # pyupgrade rules
         - black .
     - name: manual_refactoring
       llm_prompt: |
@@ -1423,7 +1429,7 @@ execution:
 
 metrics:
   feature_prs: 5/week
-  acceptance_rate: >60%
+  acceptance_rate: >60
 
 llm_config:
   primary: anthropic/claude-3.5-sonnet

@@ -46,7 +46,7 @@ docker-compose up -d
 
 ### 🇺🇦 Українською
 
-1. **🎉_ПРОЄКТ_ЗАВЕРШЕНО.md** ← **ПОЧНІТЬ ЗВІДСИ!**
+1. **🎉*ПРОЄКТ*ЗАВЕРШЕНО.md** ← **ПОЧНІТЬ ЗВІДСИ!**
 2. **QUICKSTART_UK.md** - Детальний гайд
 3. **README.md** - Повна документація
 
@@ -63,6 +63,7 @@ docker-compose up -d
 ## 🎨 ЩО ВСЕРЕДИНІ
 
 ### ✅ Backend (Python FastAPI)
+
 - REST API з документацією
 - AI Agents (Arbiter, DatasetInspector)
 - Celery фонові завдання
@@ -70,12 +71,14 @@ docker-compose up -d
 - Українська TTS/STT
 
 ### ✅ Frontend (Next.js React)
+
 - 3D Аватар (Three.js)
 - Голосовий інтерфейс
 - Чат з AI
 - Dashboard аналітики
 
 ### ✅ Infrastructure
+
 - Kubernetes Helm Charts
 - Terraform IaC
 - ArgoCD GitOps
@@ -83,6 +86,7 @@ docker-compose up -d
 - Prometheus + Grafana
 
 ### ✅ Документація
+
 - 7 детальних guides
 - API documentation
 - Architecture diagrams
@@ -123,7 +127,7 @@ make help
 🔐 **Production Security** (Keycloak + Vault ready)  
 📈 **Auto-scaling** для Kubernetes  
 🚀 **CI/CD** з GitHub Actions + ArgoCD  
-📝 **Повна документація** українською та англійською  
+📝 **Повна документація** українською та англійською
 
 ---
 
@@ -144,16 +148,19 @@ make help
 ## 🎓 ДЛЯ КОГО
 
 ### 👨‍💻 Розробники
+
 - `CONTRIBUTING.md` - гайд розробника
 - `ARCHITECTURE.md` - технічні деталі
 - Код у `backend/` та `frontend/`
 
 ### 🚀 DevOps
+
 - `helm/` - Kubernetes charts
 - `terraform/` - Infrastructure
 - `.github/` - CI/CD pipelines
 
 ### 📊 Аналітики
+
 - Frontend dashboard
 - API endpoints
 - Grafana моніторинг
@@ -214,18 +221,20 @@ curl -X POST http://localhost:8000/api/v1/voice/tts \
 ✅ Автоматичні скрипти запуску  
 ✅ GitHub Issue templates  
 ✅ Contributing guide  
-✅ Детальна документація українською  
+✅ Детальна документація українською
 
 ---
 
 ## 🚀 НАСТУПНІ КРОКИ
 
 1. **Запустіть проєкт**
+
    ```bash
    cd predator-analytics && make dev
    ```
 
 2. **Відкрийте frontend**
+
    ```
    http://localhost:3000
    ```

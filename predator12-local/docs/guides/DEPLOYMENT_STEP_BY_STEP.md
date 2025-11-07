@@ -10,14 +10,14 @@
 
 ## 📋 Quick Navigation
 
-| Section | Time | Difficulty |
-|---------|------|-----------|
-| [Requirements](#requirements) | 5 min | ⭐ Easy |
-| [Environment Setup](#environment-setup) | 10 min | ⭐ Easy |
+| Section                                                 | Time   | Difficulty  |
+| ------------------------------------------------------- | ------ | ----------- |
+| [Requirements](#requirements)                           | 5 min  | ⭐ Easy     |
+| [Environment Setup](#environment-setup)                 | 10 min | ⭐ Easy     |
 | [Docker Compose Deployment](#docker-compose-deployment) | 15 min | ⭐⭐ Medium |
-| [Kubernetes Deployment](#kubernetes-deployment) | 30 min | ⭐⭐⭐ Hard |
-| [Verification & Testing](#verification--testing) | 10 min | ⭐ Easy |
-| [Monitoring & Alerts](#monitoring--alerts) | 15 min | ⭐⭐ Medium |
+| [Kubernetes Deployment](#kubernetes-deployment)         | 30 min | ⭐⭐⭐ Hard |
+| [Verification & Testing](#verification--testing)        | 10 min | ⭐ Easy     |
+| [Monitoring & Alerts](#monitoring--alerts)              | 15 min | ⭐⭐ Medium |
 
 ---
 
@@ -215,7 +215,7 @@ bash scripts/verify-deployment.sh
 # Should show:
 # ✅ API healthy on http://localhost:8000
 # ✅ Database connected
-# ✅ Redis connected  
+# ✅ Redis connected
 # ✅ Celery workers running
 # ✅ Prometheus scraping metrics
 # ✅ Rate limiting active
@@ -416,14 +416,14 @@ open http://localhost:9093
 
 ### Key Metrics to Monitor
 
-| Metric | Target | Warning | Critical |
-|--------|--------|---------|----------|
-| API Response Time | <100ms | >500ms | >1000ms |
-| Error Rate | <0.1% | >1% | >5% |
-| CPU Usage | <30% | >70% | >90% |
-| Memory Usage | <50% | >80% | >95% |
-| Database Connections | <50 | >100 | >150 |
-| Redis Memory | <1GB | >2GB | >3GB |
+| Metric               | Target | Warning | Critical |
+| -------------------- | ------ | ------- | -------- |
+| API Response Time    | <100ms | >500ms  | >1000ms  |
+| Error Rate           | <0.1%  | >1%     | >5%      |
+| CPU Usage            | <30%   | >70%    | >90%     |
+| Memory Usage         | <50%   | >80%    | >95%     |
+| Database Connections | <50    | >100    | >150     |
+| Redis Memory         | <1GB   | >2GB    | >3GB     |
 
 ### Configure Alerting
 

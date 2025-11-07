@@ -5,7 +5,6 @@ Replaces http://localhost:3000 -> http://localhost:5173 in non-whitelisted files
 Prints changed files and counts.
 """
 import fnmatch
-import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]

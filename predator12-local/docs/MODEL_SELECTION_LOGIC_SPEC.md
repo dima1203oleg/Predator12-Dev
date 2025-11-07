@@ -220,7 +220,7 @@ models:
       - self_heal
       - optimize
       - modernize
-    cost_per_1m_tokens: 0.00  # Free tier
+    cost_per_1m_tokens: 0.00 # Free tier
     avg_latency_ms: 600
     context_window: 32768
     status: alive
@@ -278,7 +278,7 @@ models:
       - trend_analysis
     domains:
       - modernize
-    cost_per_1m_tokens: 0.00  # Free tier
+    cost_per_1m_tokens: 0.00 # Free tier
     avg_latency_ms: 900
     context_window: 1000000
     status: alive
@@ -316,10 +316,10 @@ models:
     domains:
       - self_heal
       - optimize
-    cost_per_1m_tokens: 0.00  # Local or free
+    cost_per_1m_tokens: 0.00 # Local or free
     avg_latency_ms: 1800
     context_window: 16384
-    status: degraded  # Slower but available
+    status: degraded # Slower but available
     health_check_url: http://localhost:8003/health
     tags:
       - free
@@ -846,6 +846,7 @@ def heal_port_collision(port: int, service_name: str):
 ```
 
 **Expected Model Selection**:
+
 - **Primary**: `llama-3.3-70b-versatile` (free, fast, simple task)
 - **Fallback**: `gpt-4o-mini-self-heal`, `deepseek-coder-33b-instruct`
 
@@ -853,7 +854,7 @@ def heal_port_collision(port: int, service_name: str):
 
 ### Example 2: Optimize Agent (QueryOptimizer)
 
-```python
+````python
 # agents/optimize/query_optimizer.py
 from agents.core.task_context import TaskContext
 from agents.core.model_selector import ModelSelector
@@ -912,9 +913,10 @@ def optimize_sql_query(slow_query: str, explain_plan: str):
 
     print(f"✅ Query optimized using {result['model_used']} (cost: ${result['cost_usd']:.4f})")
     return result['response']
-```
+````
 
 **Expected Model Selection**:
+
 - **Primary**: `claude-3.5-sonnet` (best for complex optimization)
 - **Fallback**: `qwen-2.5-coder-32b-instruct`, `gpt-4o-mini-self-heal`
 
@@ -922,7 +924,7 @@ def optimize_sql_query(slow_query: str, explain_plan: str):
 
 ### Example 3: Modernize Agent (DependencyUpgrader)
 
-```python
+````python
 # agents/modernize/dependency_upgrader.py
 from agents.core.task_context import TaskContext
 from agents.core.model_selector import ModelSelector
@@ -977,9 +979,10 @@ def upgrade_dependencies(requirements_txt: str, current_python: str):
 
     print(f"✅ Dependencies upgraded using {result['model_used']}")
     return result['response']
-```
+````
 
 **Expected Model Selection**:
+
 - **Primary**: `gemini-2.0-flash-exp` (free, huge context for deps)
 - **Fallback**: `mistral-large-latest`, `claude-3.5-sonnet`
 
@@ -1115,6 +1118,7 @@ autotrain:
 ### Full Model Registry (58 Models)
 
 See `config/model_registry.yaml` (partial shown above). Full version includes:
+
 - **10 Self-Heal models** (GPT-4o-mini, DeepSeek Coder, Llama 3.3, etc.)
 - **15 Optimize models** (Claude 3.5, Qwen 2.5 Coder, Codestral, etc.)
 - **12 Modernize models** (Gemini 2.0 Flash, Mistral Large, etc.)
@@ -1158,6 +1162,7 @@ policies:
 ## 🚀 Deployment Notes
 
 ### Local Development
+
 ```bash
 # Start Redis for registry
 brew services start redis
@@ -1170,6 +1175,7 @@ python agents/self_heal/port_collision_healer.py
 ```
 
 ### Production (K8s)
+
 ```yaml
 # k8s/model-selector-service.yaml
 apiVersion: v1
@@ -1240,6 +1246,7 @@ spec:
 ---
 
 **Next Steps**:
+
 1. Implement `model_registry.yaml` with all 58 models
 2. Deploy Redis for health/usage tracking
 3. Integrate with existing 30 agents

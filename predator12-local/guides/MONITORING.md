@@ -15,6 +15,7 @@ This guide describes the built-in monitoring stack configured via `observability
 Config file: `observability/prometheus/prometheus.yml`
 
 Scrape targets:
+
 - `mcp-server:3010/metrics`
 - `keycloak:8080/metrics`
 - `minio:9000/minio/v2/metrics/cluster`
@@ -26,6 +27,7 @@ Open UI: `http://localhost:9090`
 ## Grafana
 
 Provisioned via:
+
 - Datasource: `observability/grafana/provisioning/datasources/datasource.yml`
 - Dashboards provider: `observability/grafana/provisioning/dashboards/dashboards.yml`
 - Example dashboard: `observability/grafana/dashboards/mcp-overview.json`
@@ -42,10 +44,10 @@ Default receiver is `dev-null`. To enable real notifications, add a receiver (e.
 
 ```yaml
 receivers:
-  - name: 'slack'
+  - name: "slack"
     slack_configs:
       - api_url: https://hooks.slack.com/services/XXX/YYY/ZZZ
-        channel: '#alerts'
+        channel: "#alerts"
 ```
 
 Then set `route.receiver: 'slack'`.

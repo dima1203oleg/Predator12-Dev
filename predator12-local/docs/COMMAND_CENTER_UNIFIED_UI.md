@@ -112,6 +112,7 @@ export function Dashboard() {
 ```
 
 **Функції**:
+
 - ✅ 3D візуалізація кластерів (Three.js)
 - ✅ Fallback на 2D при відсутності WebGL
 - ✅ Інтерактивні вузли (клік → деталі)
@@ -205,6 +206,7 @@ function AnomalyCard({ anomaly, onDrillDown, onDismiss, onEscalate }) {
 ```
 
 **Функції**:
+
 - ✅ Real-time streaming через WebSocket
 - ✅ Infinite scroll з lazy loading
 - ✅ Кольорове кодування за рівнем ризику
@@ -368,6 +370,7 @@ function MessageBubble({ message }) {
 ```
 
 **Функції**:
+
 - ✅ Natural language queries
 - ✅ RAG з Qdrant/PG/OpenSearch
 - ✅ File upload (PDF/Excel/CSV)
@@ -464,6 +467,7 @@ export function AnalyticsDeck() {
 ```
 
 **Функції**:
+
 - ✅ Embedded OpenSearch Dashboards
 - ✅ Multiple pre-built dashboards
 - ✅ Filter synchronization
@@ -593,6 +597,7 @@ function getStatusColor(status: string): string {
 ```
 
 **Функції**:
+
 - ✅ Real-time agent status
 - ✅ Task flow visualization
 - ✅ Interactive nodes (click → details)
@@ -759,6 +764,7 @@ function UploadCard({ upload }) {
 ```
 
 **Функції**:
+
 - ✅ Drag-drop interface
 - ✅ Multi-file upload
 - ✅ Real-time progress (WebSocket)

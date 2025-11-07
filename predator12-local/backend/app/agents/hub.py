@@ -7,11 +7,13 @@ from app.fastapi_app.routes_ws import alerts_manager, progress_manager
 
 
 class AgentHub:
-    """Minimal AgentHub scaffold to orchestrate background tasks and broadcast WS updates.
+    """Minimal AgentHub scaffold to orchestrate background tasks and broadcast
+    WS updates.
 
-    This is a simplified placeholder. Real implementation will dispatch to
-    DatasetAgent/AnomalyAgent/etc. via queues or RPC. For now, we simulate
-    a short-running task and publish progress and a final alert.
+    This is a simplified placeholder. Real implementation will dispatch
+    to DatasetAgent/AnomalyAgent/etc. via queues or RPC. For now, we
+    simulate a short-running task and publish progress and a final
+    alert.
     """
 
     def __init__(self) -> None:

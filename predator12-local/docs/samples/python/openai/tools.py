@@ -1,6 +1,7 @@
 """A language model can be given a set of tools it can invoke,
 for running specific actions depending on the context of the conversation.
-This sample demonstrates how to define a function tool and how to act on a request from the model to invoke it."""
+This sample demonstrates how to define a function tool and how to act on a request from the model to invoke it.
+"""
 
 import json
 import os

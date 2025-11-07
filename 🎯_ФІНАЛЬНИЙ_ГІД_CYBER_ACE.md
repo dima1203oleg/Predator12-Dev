@@ -14,6 +14,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ```
 
 **Це все!** Скрипт автоматично:
+
 - Перевірить поточний стан
 - Запустить backend (якщо потрібно)
 - Покаже інструкції для frontend
@@ -108,12 +109,12 @@ cd /Users/dima/Documents/Predator12/predator12-local
 
 ## 🌐 URLs
 
-| Сервіс | URL | Опис |
-|--------|-----|------|
-| Frontend | http://localhost:5173 | Головна сторінка |
-| CYBER-ACE | http://localhost:5173/cyber-ace | AI Assistant UI |
-| Backend API | http://localhost:8000 | REST API |
-| API Docs | http://localhost:8000/docs | Swagger UI |
+| Сервіс       | URL                                        | Опис              |
+| ------------ | ------------------------------------------ | ----------------- |
+| Frontend     | http://localhost:5173                      | Головна сторінка  |
+| CYBER-ACE    | http://localhost:5173/cyber-ace            | AI Assistant UI   |
+| Backend API  | http://localhost:8000                      | REST API          |
+| API Docs     | http://localhost:8000/docs                 | Swagger UI        |
 | Health Check | http://localhost:8000/api/cyber-ace/health | Перевірка статусу |
 
 ---
@@ -224,13 +225,13 @@ tail -f backend/logs/cyber_ace.log
 
 ### Швидкі довідники
 
-| Файл | Коли використовувати |
-|------|---------------------|
-| 📚_CYBER_ACE_DOCS_INDEX.md | Повний індекс документації |
-| ⚡_ЗАПУСК_CYBER_ACE.md | Перший запуск |
-| 🎯_ACTION_PLAN_CYBER_ACE.md | Детальний план + troubleshooting |
-| 📊_CYBER_ACE_FINAL_SUMMARY.md | Огляд системи |
-| 🎯_CYBER_ACE_NEXT_STEPS.md | Розробка та розширення |
+| Файл                          | Коли використовувати             |
+| ----------------------------- | -------------------------------- |
+| 📚_CYBER_ACE_DOCS_INDEX.md    | Повний індекс документації       |
+| ⚡_ЗАПУСК_CYBER_ACE.md        | Перший запуск                    |
+| 🎯_ACTION_PLAN_CYBER_ACE.md   | Детальний план + troubleshooting |
+| 📊_CYBER_ACE_FINAL_SUMMARY.md | Огляд системи                    |
+| 🎯_CYBER_ACE_NEXT_STEPS.md    | Розробка та розширення           |
 
 ### Технічна документація
 
@@ -415,7 +416,7 @@ cd backend
 ✅ **Один скрипт для всього:** `./cyber-ace.sh`  
 ✅ **Автоматичні тести:** `./cyber-ace.sh test`  
 ✅ **Швидка перевірка:** `./cyber-ace.sh status`  
-✅ **Повна документація:** 10+ файлів  
+✅ **Повна документація:** 10+ файлів
 
 **Запуск за 30 секунд:**
 
@@ -436,13 +437,13 @@ cd /Users/dima/Documents/Predator12/predator12-local
 
 ## 📞 ШВИДКА ДОПОМОГА
 
-| Проблема | Рішення |
-|----------|---------|
-| Backend не запускається | `./cyber-ace.sh stop && ./cyber-ace.sh start` |
-| Frontend не підключається | Перевірити `.env.development` |
-| Тести не проходять | `./cyber-ace.sh health` |
-| Потрібні логи | `./cyber-ace.sh logs` |
-| Забули команду | `./cyber-ace.sh help` |
+| Проблема                  | Рішення                                       |
+| ------------------------- | --------------------------------------------- |
+| Backend не запускається   | `./cyber-ace.sh stop && ./cyber-ace.sh start` |
+| Frontend не підключається | Перевірити `.env.development`                 |
+| Тести не проходять        | `./cyber-ace.sh health`                       |
+| Потрібні логи             | `./cyber-ace.sh logs`                         |
+| Забули команду            | `./cyber-ace.sh help`                         |
 
 ---
 

@@ -1,5 +1,7 @@
 FROM python:3.9-slim
 
+LABEL Name="dagster-etl" Version="1.0.0"
+
 WORKDIR /app
 
 COPY requirements.txt .

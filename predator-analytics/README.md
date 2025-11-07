@@ -17,6 +17,7 @@
 ## 🏗️ Архітектура
 
 ### Backend
+
 - **FastAPI** - Асинхронний Python веб-фреймворк
 - **Celery** - Розподілена черга завдань
 - **Redis** - Кеш та брокер повідомлень
@@ -24,18 +25,21 @@
 - **Qdrant** - Векторна база даних
 
 ### Frontend
+
 - **Next.js 14** - React фреймворк
 - **React Three Fiber** - 3D графіка (WebGL/Three.js)
 - **TailwindCSS** - Стилізація
 - **TypeScript** - Type safety
 
 ### AI Agents
+
 1. **ArbiterAgent** - Центральний координатор задач
 2. **DatasetInspectorAgent** - Аналіз та перевірка датасетів
 3. **DataProcessorAgent** - Обробка даних
 4. **ModelTrainerAgent** - Навчання ML-моделей
 
 ### Infrastructure
+
 - **Kubernetes** - Оркестрація контейнерів
 - **Helm** - Управління пакетами K8s
 - **ArgoCD** - GitOps деплоймент
@@ -62,6 +66,7 @@ docker-compose ps
 ```
 
 **Доступні сервіси:**
+
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000
 - API Docs: http://localhost:8000/api/docs
@@ -158,6 +163,7 @@ predator-analytics/
 ### Environment Variables
 
 **Backend (.env)**
+
 ```bash
 # Database
 DB_HOST=localhost
@@ -181,6 +187,7 @@ VAULT_ADDR=http://vault:8200
 ```
 
 **Frontend (.env)**
+
 ```bash
 NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 ```
@@ -189,12 +196,12 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 
 ### Service Level Objectives (SLO)
 
-| Метрика | SLO | Алерт |
-|---------|-----|-------|
-| API Latency (p95) | < 200ms | > 200ms for 5min |
-| Success Rate | > 99.9% | < 99.9% for 5min |
-| Redis Availability | > 99.9% | < 99.9% for 5min |
-| Task Execution | 99% < 1s | > 1s for 10min |
+| Метрика            | SLO      | Алерт            |
+| ------------------ | -------- | ---------------- |
+| API Latency (p95)  | < 200ms  | > 200ms for 5min |
+| Success Rate       | > 99.9%  | < 99.9% for 5min |
+| Redis Availability | > 99.9%  | < 99.9% for 5min |
+| Task Execution     | 99% < 1s | > 1s for 10min   |
 
 ### Grafana Dashboards
 
@@ -216,10 +223,12 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 Підтримка українських голосів:
 
 ### Google Cloud TTS
+
 - `uk-UA-Wavenet-A` (жіночий, висока якість)
 - `uk-UA-Standard-A` (жіночий, стандарт)
 
 ### Azure Speech Services
+
 - `uk-UA-PolinaNeural` (жіночий, Neural)
 - `uk-UA-OstapNeural` (чоловічий, Neural)
 

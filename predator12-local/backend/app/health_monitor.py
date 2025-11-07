@@ -1,6 +1,5 @@
-"""
-Health monitor adapter that connects the SelfHealingAgent implementation
-to the FastAPI self-heal loop. Exposes two objects used by `main.lifespan`:
+"""Health monitor adapter that connects the SelfHealingAgent implementation to
+the FastAPI self-heal loop. Exposes two objects used by `main.lifespan`:
 
 - `health_checker` with `run_comprehensive_health_check()` async method
 - `self_healing_manager` with `auto_heal_issues(health_report)` async method

@@ -3,6 +3,7 @@
 ## 📊 РЕЗУЛЬТАТИ ДІАГНОСТИКИ
 
 ### ❌ ОСНОВНА ПРОБЛЕМА
+
 **Docker daemon не запущений** - це корінь всіх проблем.
 
 ```
@@ -21,6 +22,7 @@ Is the docker daemon running?
 ### 🛠️ ПЛАН ВИПРАВЛЕННЯ
 
 #### Крок 1: Запустити Docker Desktop
+
 ```bash
 # Запуск Docker Desktop на macOS
 open -a Docker
@@ -29,24 +31,28 @@ open -a Docker
 Або запустіть Docker Desktop вручну з Applications.
 
 #### Крок 2: Перевірити статус Docker
+
 ```bash
 docker --version
 docker info
 ```
 
 #### Крок 3: Виправити застарілі версії в docker-compose
+
 ```yaml
 # Видалити з docker-compose.yml та docker-compose.override.yml
-version: '3.8'  # ← Ця строка застаріла
+version: "3.8" # ← Ця строка застаріла
 ```
 
 #### Крок 4: Запустити stack
+
 ```bash
 cd /Users/dima/Documents/Predator11
 docker-compose up -d
 ```
 
 #### Крок 5: Перевірити статус контейнерів
+
 ```bash
 docker-compose ps
 docker-compose logs --tail=20
@@ -57,10 +63,12 @@ docker-compose logs --tail=20
 Коли Docker запрацює, оранжеві статуси можуть з'явитися через:
 
 #### 1. 🕐 **Повільний запуск (starting)**
+
 - **Причина**: Великі образи, повільне завантаження
 - **Рішення**: Зачекати 2-3 хвилини
 
 #### 2. 🏥 **Неуспішні health checks (unhealthy)**
+
 - **Причина**: Сервіс не відповідає на health check
 - **Типові проблеми**:
   - OpenSearch потребує більше пам'яті
@@ -68,11 +76,13 @@ docker-compose logs --tail=20
   - Backend не може підключитися до DB
 
 #### 3. 🔧 **Проблеми конфігурації**
+
 - **Змінні оточення**: Неправильні або відсутні
 - **Порти**: Конфлікти портів
 - **Volumes**: Неправильні шляхи
 
 #### 4. 🐌 **Недостатньо ресурсів**
+
 - **RAM**: < 8GB для всього стеку
 - **CPU**: Високе навантаження
 - **Disk**: Мало місця
@@ -129,6 +139,7 @@ docker inspect predator11_opensearch_1 | jq '.[0].State.Health'
 ### 🚀 АВТОМАТИЗАЦІЯ
 
 Створений скрипт для автоматичної діагностики:
+
 ```bash
 python3 scripts/quick_stack_check.py
 ```

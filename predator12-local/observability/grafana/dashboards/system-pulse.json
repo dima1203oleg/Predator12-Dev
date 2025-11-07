@@ -22,13 +22,13 @@
             },
             "thresholds": {
               "steps": [
-                {"color": "red", "value": 0},
-                {"color": "green", "value": 1}
+                { "color": "red", "value": 0 },
+                { "color": "green", "value": 1 }
               ]
             }
           }
         },
-        "gridPos": {"h": 4, "w": 3, "x": 0, "y": 0}
+        "gridPos": { "h": 4, "w": 3, "x": 0, "y": 0 }
       },
       {
         "id": 2,
@@ -41,7 +41,7 @@
             "legendFormat": "95th percentile"
           }
         ],
-        "gridPos": {"h": 8, "w": 12, "x": 3, "y": 0}
+        "gridPos": { "h": 8, "w": 12, "x": 3, "y": 0 }
       },
       {
         "id": 3,
@@ -53,7 +53,7 @@
             "refId": "A"
           }
         ],
-        "gridPos": {"h": 6, "w": 6, "x": 15, "y": 0}
+        "gridPos": { "h": 6, "w": 6, "x": 15, "y": 0 }
       },
       {
         "id": 4,
@@ -70,14 +70,14 @@
             "unit": "percent",
             "thresholds": {
               "steps": [
-                {"color": "red", "value": 0},
-                {"color": "yellow", "value": 90},
-                {"color": "green", "value": 95}
+                { "color": "red", "value": 0 },
+                { "color": "yellow", "value": 90 },
+                { "color": "green", "value": 95 }
               ]
             }
           }
         },
-        "gridPos": {"h": 4, "w": 3, "x": 21, "y": 0}
+        "gridPos": { "h": 4, "w": 3, "x": 21, "y": 0 }
       },
       {
         "id": 5,
@@ -95,7 +95,7 @@
             "legendFormat": "{{name}} Memory %"
           }
         ],
-        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 }
       },
       {
         "id": 6,
@@ -108,7 +108,7 @@
             "legendFormat": "{{service}} errors/sec"
           }
         ],
-        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 }
       }
     ],
     "time": {

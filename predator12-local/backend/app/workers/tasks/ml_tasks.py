@@ -3,13 +3,9 @@ Machine Learning Tasks for Celery Workers
 Handles model training, evaluation, and performance monitoring
 """
 
-import json
 import logging
-import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional
-
-from celery import current_task
 
 from ..celery_app import celery_app
 

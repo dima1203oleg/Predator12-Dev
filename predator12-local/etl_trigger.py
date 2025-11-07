@@ -1,7 +1,7 @@
 """Compatibility shim for ETL trigger used by FastAPI routes/tests.
 
-Re-exports EtlTrigger from backend.app.fastapi_app.etl_trigger when available.
-Provides a small no-op fallback used in dev/test mode.
+Re-exports EtlTrigger from backend.app.fastapi_app.etl_trigger when
+available. Provides a small no-op fallback used in dev/test mode.
 """
 
 try:

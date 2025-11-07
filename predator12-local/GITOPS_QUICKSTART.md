@@ -56,6 +56,7 @@ open https://localhost:8080
 Детальний опис GitOps workflow з ArgoCD + Helm: [GITOPS_ARGO_HELM.md](GITOPS_ARGO_HELM.md)
 
 **Включає:**
+
 - 🔧 Локальна розробка з VS Code
 - 🚀 GitOps workflow
 - 📦 Helm charts structure
@@ -68,11 +69,11 @@ open https://localhost:8080
 
 ## 🛠️ Доступні Скрипти
 
-| Скрипт | Призначення |
-|--------|-------------|
-| `argocd-setup.sh` | Встановити ArgoCD + CLI |
-| `create-helm-structure.sh` | Створити Helm charts |
-| `helm-deploy.sh` | Deploy через Helm (без ArgoCD) |
+| Скрипт                     | Призначення                    |
+| -------------------------- | ------------------------------ |
+| `argocd-setup.sh`          | Встановити ArgoCD + CLI        |
+| `create-helm-structure.sh` | Створити Helm charts           |
+| `helm-deploy.sh`           | Deploy через Helm (без ArgoCD) |
 
 ---
 
@@ -120,29 +121,32 @@ graph LR
 
 ## 🎨 Environments
 
-| Environment | Auto-Sync | Replicas | Resources |
-|-------------|-----------|----------|-----------|
-| **dev** | ✅ | 1 | Small |
-| **staging** | ✅ | 2 | Medium |
-| **prod** | ❌ Manual | 5+ | Large + HPA |
+| Environment | Auto-Sync | Replicas | Resources   |
+| ----------- | --------- | -------- | ----------- |
+| **dev**     | ✅        | 1        | Small       |
+| **staging** | ✅        | 2        | Medium      |
+| **prod**    | ❌ Manual | 5+       | Large + HPA |
 
 ---
 
 ## 🔐 Secrets Management
 
 ### Варіант 1: External Secrets Operator + Vault
+
 ```bash
 # Install External Secrets Operator
 helm install external-secrets external-secrets/external-secrets -n external-secrets-system --create-namespace
 ```
 
 ### Варіант 2: Sealed Secrets
+
 ```bash
 # Install Sealed Secrets
 helm install sealed-secrets sealed-secrets/sealed-secrets -n kube-system
 ```
 
 ### Варіант 3: SOPS
+
 ```bash
 # Encrypt secrets
 sops -e helm/overlays/prod/secrets.yaml > helm/overlays/prod/secrets.enc.yaml
@@ -153,6 +157,7 @@ sops -e helm/overlays/prod/secrets.yaml > helm/overlays/prod/secrets.enc.yaml
 ## 📊 Monitoring
 
 ### ArgoCD Metrics
+
 ```bash
 # Port-forward Prometheus
 kubectl port-forward -n argocd svc/argocd-metrics 8082:8082
@@ -162,6 +167,7 @@ open http://localhost:8082/metrics
 ```
 
 ### Application Metrics
+
 ```bash
 # Backend metrics (FastAPI + Prometheus)
 curl http://api.predator.local/metrics
@@ -177,6 +183,7 @@ curl http://api.predator.local/metrics
 ## 🐛 Troubleshooting
 
 ### ArgoCD Не Синхронізується
+
 ```bash
 # Check application status
 argocd app get predator-backend-dev
@@ -189,6 +196,7 @@ kubectl logs -n argocd deployment/argocd-application-controller
 ```
 
 ### Helm Chart Помилки
+
 ```bash
 # Lint chart
 helm lint helm/charts/backend/
@@ -201,6 +209,7 @@ helm template test helm/charts/backend/ | kubeval
 ```
 
 ### Application Не Стартує
+
 ```bash
 # Check pods
 kubectl get pods -n dev
@@ -217,6 +226,7 @@ kubectl get events -n dev --sort-by='.lastTimestamp'
 ## 🔗 Корисні Команди
 
 ### ArgoCD
+
 ```bash
 # List apps
 argocd app list
@@ -235,6 +245,7 @@ argocd app delete <app-name>
 ```
 
 ### Helm
+
 ```bash
 # List releases
 helm list -A
@@ -250,6 +261,7 @@ helm rollback <release-name> <revision> -n <namespace>
 ```
 
 ### Kubernetes
+
 ```bash
 # Get all resources
 kubectl get all -n dev
@@ -279,11 +291,13 @@ kubectl exec -it -n dev <pod-name> -- /bin/bash
 ## 🚀 Наступні Кроки
 
 ### Локально:
+
 - [x] ✅ VS Code debugging налаштовано
 - [x] ✅ Python 3.11 environment готовий
 - [ ] 🔄 Створити Docker images для backend/frontend
 
 ### GitOps:
+
 - [ ] 🔄 Встановити ArgoCD (`./scripts/argocd-setup.sh`)
 - [ ] 🔄 Створити Helm charts (`./scripts/create-helm-structure.sh`)
 - [ ] 🔄 Налаштувати Git repository
@@ -291,6 +305,7 @@ kubectl exec -it -n dev <pod-name> -- /bin/bash
 - [ ] 🔄 Налаштувати monitoring (Prometheus + Grafana)
 
 ### Production:
+
 - [ ] 🔄 Налаштувати staging environment
 - [ ] 🔄 Налаштувати prod environment з HPA
 - [ ] 🔄 Налаштувати secrets management

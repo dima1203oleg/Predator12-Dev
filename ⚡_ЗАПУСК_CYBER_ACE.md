@@ -44,6 +44,7 @@ npm run dev
 Перейдіть на: <http://localhost:5173/cyber-ace>
 
 ✅ **Очікуваний результат:**
+
 - 3D аватар CYBER-ACE
 - Кнопка мікрофону
 - Швидкі дії (Quick Actions)
@@ -65,15 +66,18 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ## 🎯 Швидкі Тести
 
 ### 1. Голосова Команда
+
 1. Натисніть кнопку мікрофону 🎤
 2. Скажіть: **"Привіт"** або **"Hello"**
 3. Має з'явитися відповідь від CYBER-ACE
 
 ### 2. Quick Action
+
 1. Натисніть **"System Status"**
 2. Має виконатися перевірка статусу системи
 
 ### 3. Chat
+
 1. Натисніть на аватар або кнопку чату
 2. Введіть: **"Аналізувати блокчейн"**
 3. Отримайте AI відповідь
@@ -89,6 +93,7 @@ nano /Users/dima/Documents/Predator12/predator12-local/backend/cyber_ace/.env
 ```
 
 Додайте:
+
 ```env
 OPENAI_API_KEY=sk-your-key-here
 ```
@@ -98,6 +103,7 @@ OPENAI_API_KEY=sk-your-key-here
 ## 🐛 Проблеми?
 
 ### Backend не запускається
+
 ```bash
 # Перевірити port 8000
 lsof -ti:8000
@@ -107,6 +113,7 @@ kill -9 $(lsof -ti:8000)
 ```
 
 ### Frontend не підключається
+
 ```bash
 # Перевірити .env.development
 cat /Users/dima/Documents/Predator12/predator12-local/frontend/.env.development
@@ -115,6 +122,7 @@ cat /Users/dima/Documents/Predator12/predator12-local/frontend/.env.development
 ```
 
 ### OpenAI помилки
+
 - Додайте API key у backend/.env
 - Перезапустіть backend server
 

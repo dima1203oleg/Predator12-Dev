@@ -32,7 +32,7 @@ class AnomalyMethod(Enum):
 
 @dataclass
 class AnomalyDetectionRequest:
-    """Запит на детекцію аномалій"""
+    """Запит на детекцію аномалій."""
 
     index: str
     field: str
@@ -44,7 +44,7 @@ class AnomalyDetectionRequest:
 
 @dataclass
 class AnomalyPoint:
-    """Точка аномалії"""
+    """Точка аномалії."""
 
     timestamp: datetime
     value: float
@@ -56,7 +56,7 @@ class AnomalyPoint:
 
 @dataclass
 class AnomalyDetectionResult:
-    """Результат детекції аномалій"""
+    """Результат детекції аномалій."""
 
     request_id: str
     method: str
@@ -69,11 +69,11 @@ class AnomalyDetectionResult:
 
 
 class StatisticalDetector:
-    """Статистичний детектор аномалій"""
+    """Статистичний детектор аномалій."""
 
     @staticmethod
     def z_score_detection(data: pd.Series, threshold: float = 3.0) -> Dict[str, Any]:
-        """Z-score детекція"""
+        """Z-score детекція."""
         mean = data.mean()
         std = data.std()
 
@@ -93,7 +93,7 @@ class StatisticalDetector:
 
     @staticmethod
     def iqr_detection(data: pd.Series, k: float = 1.5) -> Dict[str, Any]:
-        """IQR (Interquartile Range) детекція"""
+        """IQR (Interquartile Range) детекція."""
         Q1 = data.quantile(0.25)
         Q3 = data.quantile(0.75)
         IQR = Q3 - Q1
@@ -127,7 +127,7 @@ class StatisticalDetector:
     def seasonal_esd_detection(
         data: pd.Series, seasonality: int = 24, alpha: float = 0.05
     ) -> Dict[str, Any]:
-        """Seasonal Extreme Studentized Deviate (ESD) детекція"""
+        """Seasonal Extreme Studentized Deviate (ESD) детекція."""
 
         # Спрощена версія Seasonal ESD
         # В повній реалізації використовували б STL декомпозицію
@@ -147,7 +147,7 @@ class StatisticalDetector:
 
     @staticmethod
     def _simple_esd(data: pd.Series, alpha: float = 0.05) -> Dict[str, Any]:
-        """Спрощений ESD тест"""
+        """Спрощений ESD тест."""
         from scipy import stats
 
         n = len(data)
@@ -159,7 +159,7 @@ class StatisticalDetector:
 
         outliers = []
         working_data = data.copy()
-        original_indices = data.index.tolist()
+        data.index.tolist()
 
         for i in range(max_outliers):
             if len(working_data) < 3:
@@ -206,13 +206,13 @@ class StatisticalDetector:
 
 
 class MLDetector:
-    """ML-based детектор аномалій"""
+    """ML-based детектор аномалій."""
 
     @staticmethod
     def isolation_forest_detection(
         data: pd.DataFrame, contamination: float = 0.1
     ) -> Dict[str, Any]:
-        """Isolation Forest детекція"""
+        """Isolation Forest детекція."""
 
         if len(data) < 10:
             return {"anomalies": [], "scores": np.zeros(len(data))}
@@ -252,7 +252,7 @@ class MLDetector:
 
 
 class AnomalyAgent:
-    """Anomaly Detection Agent"""
+    """Anomaly Detection Agent."""
 
     def __init__(self):
         self.app = FastAPI(title="Anomaly Agent", version="1.0.0")
@@ -268,11 +268,11 @@ class AnomalyAgent:
         self._setup_routes()
 
     def _setup_routes(self):
-        """Налаштування HTTP маршрутів"""
+        """Налаштування HTTP маршрутів."""
 
         @self.app.post("/anomaly/run")
         async def run_detection(request: dict):
-            """Запуск детекції аномалій"""
+            """Запуск детекції аномалій."""
             try:
                 detection_request = AnomalyDetectionRequest(
                     index=request["index"],
@@ -292,7 +292,7 @@ class AnomalyAgent:
 
         @self.app.get("/anomaly/methods")
         async def get_methods():
-            """Список доступних методів"""
+            """Список доступних методів."""
             return [
                 {"method": method.value, "description": self._get_method_description(method)}
                 for method in AnomalyMethod
@@ -300,7 +300,7 @@ class AnomalyAgent:
 
         @self.app.get("/anomaly/health")
         async def health():
-            """Health check"""
+            """Health check."""
             try:
                 self.redis_client.ping()
                 self.opensearch_client.cluster.health()
@@ -310,7 +310,7 @@ class AnomalyAgent:
                 return {"status": "unhealthy", "error": str(e)}
 
     async def detect_anomalies(self, request: AnomalyDetectionRequest) -> AnomalyDetectionResult:
-        """Основний метод детекції аномалій"""
+        """Основний метод детекції аномалій."""
 
         request_id = f"anomaly_{int(datetime.now().timestamp())}"
         logger.info(
@@ -420,7 +420,7 @@ class AnomalyAgent:
         return result
 
     async def _load_data_from_opensearch(self, request: AnomalyDetectionRequest) -> pd.DataFrame:
-        """Завантаження даних з OpenSearch"""
+        """Завантаження даних з OpenSearch."""
 
         # Розрахунок часового вікна
         now = datetime.now()
@@ -484,7 +484,7 @@ class AnomalyAgent:
             return self._generate_test_data(request.field)
 
     def _generate_test_data(self, field: str) -> pd.DataFrame:
-        """Генерація тестових даних"""
+        """Генерація тестових даних."""
 
         dates = pd.date_range(
             start=datetime.now() - timedelta(days=7), end=datetime.now(), freq="1H"
@@ -507,7 +507,7 @@ class AnomalyAgent:
     def _generate_explanation(
         self, method: AnomalyMethod, detection_result: Dict, idx: int, data: pd.DataFrame
     ) -> str:
-        """Генерація пояснення аномалії"""
+        """Генерація пояснення аномалії."""
 
         if method == AnomalyMethod.Z_SCORE:
             z_score = detection_result["scores"][idx]
@@ -529,7 +529,7 @@ class AnomalyAgent:
     def _generate_summary(
         self, method: AnomalyMethod, total_points: int, anomaly_count: int
     ) -> str:
-        """Генерація підсумку"""
+        """Генерація підсумку."""
 
         percentage = (anomaly_count / max(1, total_points)) * 100
 
@@ -548,7 +548,7 @@ class AnomalyAgent:
     def _generate_recommendations(
         self, method: AnomalyMethod, anomaly_count: int, total_points: int
     ) -> List[str]:
-        """Генерація рекомендацій"""
+        """Генерація рекомендацій."""
 
         recommendations = []
         percentage = (anomaly_count / max(1, total_points)) * 100
@@ -574,7 +574,7 @@ class AnomalyAgent:
         return recommendations
 
     def _get_method_description(self, method: AnomalyMethod) -> str:
-        """Опис методу детекції"""
+        """Опис методу детекції."""
 
         descriptions = {
             AnomalyMethod.Z_SCORE: "Statistical method using Z-score (3 sigma rule)",
@@ -587,7 +587,7 @@ class AnomalyAgent:
         return descriptions.get(method, "Unknown method")
 
     async def _publish_event(self, event_type: str, data: Dict[str, Any]):
-        """Публікація події в Redis Streams"""
+        """Публікація події в Redis Streams."""
         try:
             event_data = {
                 "event_type": event_type,

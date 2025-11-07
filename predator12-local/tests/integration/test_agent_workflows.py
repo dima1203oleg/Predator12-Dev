@@ -2,7 +2,6 @@
 """
 Integration Tests for Agent Workflows
 """
-import asyncio
 
 import pytest
 from agents.chief.chief_orchestrator import Priority, UserRequest
@@ -71,4 +70,3 @@ async def test_supervisor_operations(supervisor):
 async def test_circuit_breaker_recovery(chief_orchestrator):
     """Test circuit breaker recovery mechanism"""
     # This would test failing scenarios and recovery
-    pass

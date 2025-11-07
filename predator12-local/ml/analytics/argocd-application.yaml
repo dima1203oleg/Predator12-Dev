@@ -6,20 +6,20 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/your-org/PredatorAnalytics.git'
+    repoURL: "https://github.com/your-org/PredatorAnalytics.git"
     targetRevision: HEAD
     path: helm/mas-backend
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: "https://kubernetes.default.svc"
     namespace: mas
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
+      - CreateNamespace=true
   info:
-    - name: 'Maintainer'
-      value: 'DevOps Team'
-    - name: 'GitOps'
-      value: 'ArgoCD'
+    - name: "Maintainer"
+      value: "DevOps Team"
+    - name: "GitOps"
+      value: "ArgoCD"

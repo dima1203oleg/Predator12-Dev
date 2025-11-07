@@ -1,18 +1,17 @@
 """
-Агент автоматичного покращення системи
+Агент автоматичного покращення системи.
 """
 
 from __future__ import annotations
 
-import json
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 from .base_agent import BaseAgent
 
 
 class AutoImproveAgent(BaseAgent):
-    """Агент для автоматичного аналізу та покращення системи"""
+    """Агент для автоматичного аналізу та покращення системи."""
 
     def __init__(self, config: dict[str, Any] | None = None):
         super().__init__("AutoImproveAgent", config)
@@ -20,6 +19,7 @@ class AutoImproveAgent(BaseAgent):
         self.learning_data = {}
 
     def capabilities(self) -> list[str]:
+        """Повертає список можливостей агента автопокращення."""
         return [
             "analyze_performance",
             "suggest_optimizations",
@@ -30,27 +30,26 @@ class AutoImproveAgent(BaseAgent):
         ]
 
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виконує завдання автопокращення"""
+        """Виконує завдання автопокращення."""
 
         self.logger.info("Processing auto-improvement task", task_type=task_type)
 
         if task_type == "analyze_performance":
             return await self._analyze_performance(payload)
-        elif task_type == "suggest_optimizations":
+        if task_type == "suggest_optimizations":
             return await self._suggest_optimizations(payload)
-        elif task_type == "auto_tune_parameters":
+        if task_type == "auto_tune_parameters":
             return await self._auto_tune_parameters(payload)
-        elif task_type == "learn_from_patterns":
+        if task_type == "learn_from_patterns":
             return await self._learn_from_patterns(payload)
-        elif task_type == "generate_improvements":
+        if task_type == "generate_improvements":
             return await self._generate_improvements(payload)
-        elif task_type == "evaluate_changes":
+        if task_type == "evaluate_changes":
             return await self._evaluate_changes(payload)
-        else:
-            raise ValueError(f"Unknown task type: {task_type}")
+        raise ValueError(f"Unknown task type: {task_type}")
 
     async def _analyze_performance(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Аналізує продуктивність системи"""
+        """Аналізує продуктивність системи."""
 
         component = payload.get("component", "system")
         time_period = payload.get("time_period", "last_hour")
@@ -80,14 +79,14 @@ class AutoImproveAgent(BaseAgent):
                 "analysis_timestamp": datetime.now().isoformat(),
             }
 
-        except Exception as e:
-            self.logger.error("Failed to analyze performance", error=str(e), component=component)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to analyze performance", error=str(exc), component=component)
+            return {"status": "error", "error": str(exc)}
 
     def _collect_performance_metrics(
         self, component: str, period: str, metrics: list[str]
     ) -> dict[str, Any]:
-        """Збирає метрики продуктивності"""
+        """Збирає метрики продуктивності."""
 
         # Симуляція історичних даних
         base_data = {
@@ -131,7 +130,7 @@ class AutoImproveAgent(BaseAgent):
         return {metric: base_data.get(metric, {}) for metric in metrics}
 
     def _analyze_performance_trends(self, data: dict[str, Any]) -> dict[str, Any]:
-        """Аналізує тенденції продуктивності"""
+        """Аналізує тенденції продуктивності."""
 
         trends = {}
 
@@ -152,7 +151,7 @@ class AutoImproveAgent(BaseAgent):
         return trends
 
     def _assess_trend_severity(self, change_percent: float, metric: str) -> str:
-        """Оцінює серйозність зміни тренду"""
+        """Оцінює серйозність зміни тренду."""
 
         abs_change = abs(change_percent)
 
@@ -175,7 +174,7 @@ class AutoImproveAgent(BaseAgent):
             return "normal"
 
     def _get_trend_recommendation(self, trend: str, metric: str, change_percent: float) -> str:
-        """Генерує рекомендації на основі тренду"""
+        """Генерує рекомендації на основі тренду."""
 
         if metric == "response_time" and trend == "increasing":
             return "Consider optimizing database queries and adding caching"
@@ -189,7 +188,7 @@ class AutoImproveAgent(BaseAgent):
             return "Monitor trend and investigate if it continues"
 
     def _identify_bottlenecks(self, data: dict[str, Any]) -> list[dict[str, Any]]:
-        """Виявляє вузькі місця"""
+        """Виявляє вузькі місця."""
 
         bottlenecks = []
 
@@ -215,7 +214,7 @@ class AutoImproveAgent(BaseAgent):
         return bottlenecks
 
     def _assess_bottleneck_impact(self, metric: str, utilization: float) -> str:
-        """Оцінює вплив вузького місця"""
+        """Оцінює вплив вузького місця."""
 
         impact_map = {
             "response_time": "User experience degradation",
@@ -227,7 +226,7 @@ class AutoImproveAgent(BaseAgent):
         return impact_map.get(metric, "Performance degradation")
 
     def _calculate_performance_score(self, data: dict[str, Any]) -> dict[str, Any]:
-        """Розраховує загальний бал продуктивності"""
+        """Розраховує загальний бал продуктивності."""
 
         # Ваги для різних метрик
         weights = {
@@ -282,7 +281,7 @@ class AutoImproveAgent(BaseAgent):
         }
 
     async def _suggest_optimizations(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Пропонує оптимізації системи"""
+        """Пропонує оптимізації системи."""
 
         performance_data = payload.get("performance_data", {})
         constraints = payload.get("constraints", {})
@@ -323,12 +322,12 @@ class AutoImproveAgent(BaseAgent):
                 "priority_filter": priority,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to suggest optimizations", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to suggest optimizations", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _get_response_time_optimizations(self, rt_data: dict[str, Any]) -> list[dict[str, Any]]:
-        """Отримує оптимізації для часу відгуку"""
+        """Отримує оптимізації для часу відгуку."""
         return [
             {
                 "type": "caching",
@@ -351,7 +350,7 @@ class AutoImproveAgent(BaseAgent):
         ]
 
     def _get_memory_optimizations(self, mem_data: dict[str, Any]) -> list[dict[str, Any]]:
-        """Отримує оптимізації для пам'яті"""
+        """Отримує оптимізації для пам'яті."""
         return [
             {
                 "type": "memory",
@@ -374,7 +373,7 @@ class AutoImproveAgent(BaseAgent):
         ]
 
     def _get_cpu_optimizations(self, cpu_data: dict[str, Any]) -> list[dict[str, Any]]:
-        """Отримує оптимізації для CPU"""
+        """Отримує оптимізації для CPU."""
         return [
             {
                 "type": "algorithms",
@@ -402,7 +401,7 @@ class AutoImproveAgent(BaseAgent):
         priority: str,
         constraints: dict[str, Any],
     ) -> list[dict[str, Any]]:
-        """Пріоритизує оптимізації"""
+        """Пріоритизує оптимізації."""
 
         # Визначення ваг для різних факторів
         if priority == "performance":
@@ -450,7 +449,7 @@ class AutoImproveAgent(BaseAgent):
         return optimizations
 
     def _text_to_score(self, text: str, category: str) -> float:
-        """Перетворює текстові оцінки на числові бали"""
+        """Перетворює текстові оцінки на числові бали."""
 
         scoring_maps = {
             "urgency": {"high": 3, "medium": 2, "low": 1},
@@ -477,7 +476,7 @@ class AutoImproveAgent(BaseAgent):
         return scoring_maps.get(category, {}).get(text.lower(), 2)
 
     def _assess_optimization_impact(self, optimizations: list[dict[str, Any]]) -> dict[str, Any]:
-        """Оцінює потенційний вплив оптимізацій"""
+        """Оцінює потенційний вплив оптимізацій."""
 
         total_optimizations = len(optimizations)
         high_impact = len([o for o in optimizations if "30%" in str(o.get("estimated_impact", ""))])
@@ -494,7 +493,7 @@ class AutoImproveAgent(BaseAgent):
     def _estimate_implementation_timeline(
         self, optimizations: list[dict[str, Any]]
     ) -> dict[str, Any]:
-        """Оцінює часові рамки імплементації"""
+        """Оцінює часові рамки імплементації."""
 
         effort_to_weeks = {"low": 1, "medium": 3, "high": 8}
 
@@ -512,7 +511,7 @@ class AutoImproveAgent(BaseAgent):
         }
 
     def _assess_implementation_risks(self, optimizations: list[dict[str, Any]]) -> dict[str, Any]:
-        """Оцінює ризики імплементації"""
+        """Оцінює ризики імплементації."""
 
         high_risk_types = ["algorithms", "database"]
         medium_risk_types = ["caching", "scaling"]
@@ -536,7 +535,7 @@ class AutoImproveAgent(BaseAgent):
         }
 
     async def _auto_tune_parameters(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Автоматично налаштовує параметри системи"""
+        """Автоматично налаштовує параметри системи."""
 
         component = payload.get("component")
         parameters = payload.get("parameters", {})
@@ -583,14 +582,14 @@ class AutoImproveAgent(BaseAgent):
                 "tuning_timestamp": datetime.now().isoformat(),
             }
 
-        except Exception as e:
-            self.logger.error("Failed to auto-tune parameters", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to auto-tune parameters", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _calculate_optimal_parameter(
         self, param_name: str, current_value: float, goal: str
     ) -> float:
-        """Розраховує оптимальне значення параметра"""
+        """Розраховує оптимальне значення параметра."""
 
         # Спрощена логіка оптимізації (в реальності використовувався б ML)
         optimization_rules = {
@@ -618,7 +617,7 @@ class AutoImproveAgent(BaseAgent):
     def _estimate_parameter_improvement(
         self, param_name: str, optimal_value: float, current_value: float
     ) -> str:
-        """Оцінює очікуване покращення від зміни параметра"""
+        """Оцінює очікуване покращення від зміни параметра."""
 
         change_percent = (
             abs((optimal_value - current_value) / current_value * 100) if current_value != 0 else 0
@@ -634,7 +633,7 @@ class AutoImproveAgent(BaseAgent):
             return "minimal change expected"
 
     async def _learn_from_patterns(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Навчається з патернів використання та продуктивності"""
+        """Навчається з патернів використання та продуктивності."""
 
         data_source = payload.get("data_source")
         learning_period = payload.get("period", "last_week")
@@ -662,12 +661,12 @@ class AutoImproveAgent(BaseAgent):
                 "model_updated": True,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to learn from patterns", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to learn from patterns", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _collect_learning_data(self, source: str, period: str) -> dict[str, Any]:
-        """Збирає дані для навчання"""
+        """Збирає дані для навчання."""
 
         return {
             "usage_patterns": [
@@ -689,7 +688,7 @@ class AutoImproveAgent(BaseAgent):
         }
 
     def _identify_patterns(self, data: dict[str, Any]) -> list[dict[str, Any]]:
-        """Виявляє патерни в даних"""
+        """Виявляє патерни в даних."""
 
         patterns = []
 
@@ -736,7 +735,7 @@ class AutoImproveAgent(BaseAgent):
         return patterns
 
     def _generate_insights(self, patterns: list[dict[str, Any]]) -> list[dict[str, Any]]:
-        """Генерує insights на основі патернів"""
+        """Генерує insights на основі патернів."""
 
         insights = []
 
@@ -779,7 +778,7 @@ class AutoImproveAgent(BaseAgent):
     def _update_learning_model(
         self, patterns: list[dict[str, Any]], insights: list[dict[str, Any]]
     ):
-        """Оновлює модель машинного навчання"""
+        """Оновлює модель машинного навчання."""
 
         # Симуляція оновлення моделі
         self.learning_data["model_version"] = self.learning_data.get("model_version", 0) + 1
@@ -788,7 +787,7 @@ class AutoImproveAgent(BaseAgent):
         self.learning_data["insights_generated"] = len(insights)
 
     async def _generate_improvements(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Генерує конкретні покращення на основі аналізу"""
+        """Генерує конкретні покращення на основі аналізу."""
 
         focus_area = payload.get("focus_area", "overall")
         timeframe = payload.get("timeframe", "short_term")
@@ -817,12 +816,12 @@ class AutoImproveAgent(BaseAgent):
                 "generated_at": datetime.now().isoformat(),
             }
 
-        except Exception as e:
-            self.logger.error("Failed to generate improvements", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to generate improvements", error=str(exc))
+            return {"status": "error", "error": str(exc)}
 
     def _generate_performance_improvements(self, timeframe: str) -> list[dict[str, Any]]:
-        """Генерує покращення продуктивності"""
+        """Генерує покращення продуктивності."""
 
         if timeframe == "short_term":
             return [
@@ -848,7 +847,7 @@ class AutoImproveAgent(BaseAgent):
             ]
 
     def _generate_reliability_improvements(self, timeframe: str) -> list[dict[str, Any]]:
-        """Генерує покращення надійності"""
+        """Генерує покращення надійності."""
 
         return [
             {
@@ -862,7 +861,7 @@ class AutoImproveAgent(BaseAgent):
         ]
 
     def _generate_efficiency_improvements(self, timeframe: str) -> list[dict[str, Any]]:
-        """Генерує покращення ефективності"""
+        """Генерує покращення ефективності."""
 
         return [
             {
@@ -878,7 +877,7 @@ class AutoImproveAgent(BaseAgent):
     def _prioritize_improvements(
         self, improvements: list[dict[str, Any]], timeframe: str
     ) -> list[dict[str, Any]]:
-        """Пріоритизує покращення"""
+        """Пріоритизує покращення."""
 
         # Простий алгоритм пріоритизації
         for improvement in improvements:
@@ -903,7 +902,7 @@ class AutoImproveAgent(BaseAgent):
         return improvements
 
     async def _evaluate_changes(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Оцінює ефективність внесених змін"""
+        """Оцінює ефективність внесених змін."""
 
         change_id = payload.get("change_id")
         evaluation_period = payload.get("period", "24h")
@@ -944,6 +943,6 @@ class AutoImproveAgent(BaseAgent):
 
             return {"status": "success", "evaluation": evaluation_results}
 
-        except Exception as e:
-            self.logger.error("Failed to evaluate changes", error=str(e))
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to evaluate changes", error=str(exc))
+            return {"status": "error", "error": str(exc)}

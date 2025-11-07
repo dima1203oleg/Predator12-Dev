@@ -3,6 +3,7 @@
 ## Common Operations
 
 ### Restarting Services
+
 ```bash
 # Graceful restart of chief orchestrator
 sudo systemctl restart predator-chief-orchestrator
@@ -12,6 +13,7 @@ sudo systemctl restart predator-supervisor
 ```
 
 ### Monitoring Circuit Breakers
+
 ```bash
 # Check circuit breaker states
 curl http://localhost:9001/metrics | grep circuit_breaker_state
@@ -21,6 +23,7 @@ curl http://localhost:9001/metrics | grep circuit_breaker_state
 ```
 
 ### Clearing Caches
+
 ```bash
 # Flush Redis cache
 redis-cli FLUSHALL
@@ -32,6 +35,7 @@ curl http://localhost:9001/metrics | grep cache_size_bytes
 ## Troubleshooting
 
 ### High Error Rates
+
 1. Check metrics:
    ```bash
    curl http://localhost:9001/metrics | grep '_error'
@@ -44,6 +48,7 @@ curl http://localhost:9001/metrics | grep cache_size_bytes
    ```
 
 ### Performance Issues
+
 1. Check latency metrics:
    ```bash
    curl http://localhost:9001/metrics | grep latency
@@ -54,12 +59,14 @@ curl http://localhost:9001/metrics | grep cache_size_bytes
 ## Maintenance Procedures
 
 ### Deploying Updates
+
 1. Drain traffic from node
 2. Deploy new version
 3. Warm up caches
 4. Return to service
 
 ### Scaling Up
+
 1. Add new orchestrator instance
 2. Configure load balancing
 3. Verify metrics aggregation
@@ -67,6 +74,7 @@ curl http://localhost:9001/metrics | grep cache_size_bytes
 ## Emergency Procedures
 
 ### Complete Outage
+
 1. Fail over to backup region
 2. Disable non-critical agents
 3. Gradually restore services

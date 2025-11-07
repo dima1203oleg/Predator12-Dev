@@ -44,7 +44,7 @@ cd predator12-local && ./ULTRA_QUICK_START.sh
 cd predator12-local/backend
 python3 -m uvicorn app.main:app --reload --port 8000
 
-# Terminal 2 - Frontend  
+# Terminal 2 - Frontend
 cd predator12-local/frontend
 npm run dev
 ```
@@ -60,19 +60,23 @@ npm run dev
 ## ✨ Features
 
 ### 🤖 AI Brain
+
 - **Multi-Model Support**: OpenAI GPT-4/Claude
 - **Conversational AI**: Context-aware responses
 - **Intent Recognition**: Smart command understanding
 - **Bilingual**: Ukrainian + English
 
 ### 🎤 Voice Control
+
 - **Speech-to-Text**: Azure Speech / Google Speech
 - **Text-to-Speech**: Natural voice synthesis
 - **Real-time Input**: Live voice recognition
 - **Visual Feedback**: Mic status indicators
 
 ### 👥 Agent System
+
 5 Specialized Agents:
+
 - 🔍 **Data Analyst** - Data insights & analysis
 - 🎨 **UI/UX Expert** - Interface optimization
 - 🔒 **Security** - Threat detection & prevention
@@ -80,6 +84,7 @@ npm run dev
 - 🤖 **ML/AI** - Machine learning tasks
 
 ### 🎨 Beautiful UI
+
 - **3D Avatar**: Interactive Three.js avatar
 - **Responsive Design**: Works on all devices
 - **Dark Theme**: Easy on the eyes
@@ -87,6 +92,7 @@ npm run dev
 - **Accessibility**: ARIA labels & keyboard nav
 
 ### 🛠️ Developer Tools
+
 - **Helper Scripts**: 8 automation scripts
 - **Auto Testing**: 6 integration tests
 - **Hot Reload**: Instant code updates
@@ -98,11 +104,13 @@ npm run dev
 ## 📚 Documentation
 
 ### Start Here (Top 3):
+
 1. **[⚡ Швидкий старт](⚡_ШВИДКИЙ_СТАРТ_CYBER_ACE.md)** ← Read this first!
 2. **[🎊 Абсолютний фінал](🎊🎊🎊_АБСОЛЮТНИЙ_ФІНАЛ_CYBER_ACE_V1.0.md)** ← Complete overview
 3. **[ONE_PAGE_SUMMARY.md](ONE_PAGE_SUMMARY.md)** ← Quick reference
 
 ### Navigation:
+
 - **[📚 Global Index](📚_CYBER_ACE_GLOBAL_INDEX.md)** - Navigate all 20 docs
 - **[🎯 Фінальний гайд](🎯_ФІНАЛЬНИЙ_ГІД_CYBER_ACE.md)** - Step-by-step guide
 - **[🎊 Верифікація](🎊_ФІНАЛЬНА_ВЕРИФІКАЦІЯ_CYBER_ACE.md)** - System verification
@@ -160,16 +168,16 @@ cyber-ace/
 
 8 automation scripts in `predator12-local/`:
 
-| Script | Purpose | Usage |
-|--------|---------|-------|
-| **🚦_ШВИДКИЙ_СТАТУС_ПЕРЕВІРКА.sh** | Quick status check | `./🚦_ШВИДКИЙ_СТАТУС_ПЕРЕВІРКА.sh` |
-| **ULTRA_QUICK_START.sh** | One-command start | `./ULTRA_QUICK_START.sh` |
-| **cyber-ace.sh** | Main helper (15+ cmds) | `./cyber-ace.sh help` |
-| **cyber-ace-start.sh** | Auto start both | `./cyber-ace-start.sh` |
-| **cyber-ace-status.sh** | Detailed status | `./cyber-ace-status.sh` |
-| **test-cyber-ace-integration.sh** | Run tests | `./test-cyber-ace-integration.sh` |
-| **cyber-ace-install.sh** | Install deps | `./cyber-ace-install.sh` |
-| **cyber-ace-quick-commands.sh** | Quick commands | `./cyber-ace-quick-commands.sh` |
+| Script                             | Purpose                | Usage                              |
+| ---------------------------------- | ---------------------- | ---------------------------------- |
+| **🚦*ШВИДКИЙ*СТАТУС_ПЕРЕВІРКА.sh** | Quick status check     | `./🚦_ШВИДКИЙ_СТАТУС_ПЕРЕВІРКА.sh` |
+| **ULTRA_QUICK_START.sh**           | One-command start      | `./ULTRA_QUICK_START.sh`           |
+| **cyber-ace.sh**                   | Main helper (15+ cmds) | `./cyber-ace.sh help`              |
+| **cyber-ace-start.sh**             | Auto start both        | `./cyber-ace-start.sh`             |
+| **cyber-ace-status.sh**            | Detailed status        | `./cyber-ace-status.sh`            |
+| **test-cyber-ace-integration.sh**  | Run tests              | `./test-cyber-ace-integration.sh`  |
+| **cyber-ace-install.sh**           | Install deps           | `./cyber-ace-install.sh`           |
+| **cyber-ace-quick-commands.sh**    | Quick commands         | `./cyber-ace-quick-commands.sh`    |
 
 ### Main Helper Commands
 
@@ -198,8 +206,9 @@ cd predator12-local
 ```
 
 **Tests**:
+
 - ✅ Health endpoint
-- ✅ Chat endpoint  
+- ✅ Chat endpoint
 - ✅ Voice transcription
 - ✅ Voice synthesis
 - ✅ Agents list
@@ -228,19 +237,20 @@ curl http://localhost:8000/api/cyber-ace/agents
 
 After starting, access:
 
-| Service | URL |
-|---------|-----|
-| **CYBER-ACE UI** | http://localhost:5173/cyber-ace |
-| Frontend | http://localhost:5173 |
-| Backend API | http://localhost:8000 |
-| API Docs (Swagger) | http://localhost:8000/docs |
-| Health Check | http://localhost:8000/api/cyber-ace/health |
+| Service            | URL                                        |
+| ------------------ | ------------------------------------------ |
+| **CYBER-ACE UI**   | http://localhost:5173/cyber-ace            |
+| Frontend           | http://localhost:5173                      |
+| Backend API        | http://localhost:8000                      |
+| API Docs (Swagger) | http://localhost:8000/docs                 |
+| Health Check       | http://localhost:8000/api/cyber-ace/health |
 
 ---
 
 ## 📊 Project Stats
 
 ### Code
+
 - **Backend**: 3 services (~800 lines)
 - **Frontend**: 7 components (~1,300 lines)
 - **API Layer**: 2 services (~490 lines)
@@ -248,11 +258,13 @@ After starting, access:
 - **Total**: ~3,651 lines of code
 
 ### Documentation
+
 - **20 documents** (~5,860 lines)
 - **6 categories** (guides, summaries, reports, etc.)
 - **2 languages** (Ukrainian/English)
 
 ### Testing
+
 - **6 integration tests**
 - **Automated test runner**
 - **Health monitoring**
@@ -263,6 +275,7 @@ After starting, access:
 ## 🎯 Production Checklist
 
 ### ✅ Ready
+
 - [x] Backend infrastructure
 - [x] Frontend integration
 - [x] API layer
@@ -272,6 +285,7 @@ After starting, access:
 - [x] Localization
 
 ### 📝 Before Production
+
 - [ ] Add real API keys to `.env`:
   - `OPENAI_API_KEY` or `CLAUDE_API_KEY`
   - `AZURE_SPEECH_KEY` + `AZURE_SPEECH_REGION`
@@ -288,12 +302,14 @@ After starting, access:
 ## 🤝 Tech Stack
 
 ### Backend
+
 - **Framework**: FastAPI
 - **AI**: OpenAI GPT-4 / Anthropic Claude
 - **Voice**: Azure Speech Services / Google Cloud Speech
 - **Language**: Python 3.11+
 
 ### Frontend
+
 - **Framework**: React 18 + TypeScript
 - **State**: Zustand
 - **Styling**: Tailwind CSS
@@ -302,6 +318,7 @@ After starting, access:
 - **i18n**: react-i18next
 
 ### DevOps
+
 - **Bundler**: Vite
 - **Package Manager**: npm
 - **Testing**: Custom integration tests
@@ -312,17 +329,20 @@ After starting, access:
 ## 📖 Quick Links
 
 ### Documentation
+
 - [⚡ Quick Start](⚡_ШВИДКИЙ_СТАРТ_CYBER_ACE.md)
 - [🎊 Final Report](🎊🎊🎊_АБСОЛЮТНИЙ_ФІНАЛ_CYBER_ACE_V1.0.md)
 - [📚 Global Index](📚_CYBER_ACE_GLOBAL_INDEX.md)
 - [✅ Session Complete](✅_ГОТОВО_ФІНАЛЬНА_СЕСІЯ.md)
 
 ### Scripts
+
 - [🚦 Quick Status](🚦_ШВИДКИЙ_СТАТУС_ПЕРЕВІРКА.sh)
 - [🗺️ Project Map](🗺️_ПОВНА_КАРТА_ПРОЕКТУ.sh)
 - [🚀 Ultra Start](predator12-local/ULTRA_QUICK_START.sh)
 
 ### Code
+
 - [Backend](predator12-local/backend/cyber_ace/)
 - [Frontend](predator12-local/frontend/src/modules/cyber-ace/)
 
@@ -331,6 +351,7 @@ After starting, access:
 ## 🆘 Troubleshooting
 
 ### Backend won't start?
+
 ```bash
 cd predator12-local/backend
 pip install -r cyber_ace/requirements.txt
@@ -338,6 +359,7 @@ python3 -m uvicorn app.main:app --reload --port 8000
 ```
 
 ### Frontend won't start?
+
 ```bash
 cd predator12-local/frontend
 npm install
@@ -345,6 +367,7 @@ npm run dev
 ```
 
 ### Port already in use?
+
 ```bash
 # Kill process on port
 lsof -ti:8000 | xargs kill -9  # Backend
@@ -358,6 +381,7 @@ lsof -ti:5173 | xargs kill -9  # Frontend
 ## 🎉 What's Included
 
 ### ✅ Complete System
+
 - 🤖 **AI Engine** with multi-model support
 - 🎤 **Voice Control** (STT/TTS)
 - 👥 **5 Specialized Agents**
@@ -366,6 +390,7 @@ lsof -ti:5173 | xargs kill -9  # Frontend
 - 🔌 **Full Integration** (frontend ↔ backend)
 
 ### ✅ Developer Experience
+
 - 🛠️ **8 Helper Scripts**
 - 🧪 **Automated Testing**
 - 📚 **20 Documents**
@@ -374,6 +399,7 @@ lsof -ti:5173 | xargs kill -9  # Frontend
 - 📖 **API Documentation**
 
 ### ✅ Production Ready
+
 - ✅ **Error Handling**
 - ✅ **Logging System**
 - ✅ **Health Checks**
@@ -420,6 +446,7 @@ lsof -ti:5173 | xargs kill -9  # Frontend
 ```
 
 **Start now**:
+
 ```bash
 cd predator12-local && ./ULTRA_QUICK_START.sh
 ```

@@ -9,9 +9,11 @@
 ## 🔧 Виправлені Файли
 
 ### 1. `.vscode/settings.json`
+
 **Проблема:** Коментарі в JSON файлі (не дозволені в чистому JSON)
 
 **Виправлення:**
+
 - ✅ Видалено всі коментарі
 - ✅ Додано `python.analysis.extraPaths` для Pylance
 - ✅ Додано `python.analysis.typeCheckingMode: "basic"`
@@ -19,6 +21,7 @@
 - ✅ Збережено всі функціональні налаштування
 
 **Ключові налаштування:**
+
 ```json
 "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python"
 "python.analysis.extraPaths": ["${workspaceFolder}", "${workspaceFolder}/backend", "${workspaceFolder}/agents"]
@@ -28,9 +31,11 @@
 ---
 
 ### 2. `.vscode/launch.json`
+
 **Проблема:** Застаріла конфігурація `"type": "python"` та `"type": "pwa-node"`
 
 **Виправлення:**
+
 - ✅ Змінено `"type": "python"` → `"type": "debugpy"` (у всіх 7 конфігураціях)
 - ✅ Змінено `"type": "pwa-node"` → `"type": "node"` (для фронтенду)
 - ✅ Видалено застарілі параметри `python`, `autoReload`
@@ -38,6 +43,7 @@
 - ✅ Оновлено Node конфігурацію для використання `npm run dev`
 
 **Оновлені конфігурації:**
+
 1. 🐍 **Python: FastAPI Backend Debug** - `type: debugpy`, `module: uvicorn`
 2. 🌐 **Node: Frontend Debug** - `type: node`, `runtimeExecutable: npm`
 3. 🔧 **Python: Backend Module Debug** - `type: debugpy`
@@ -51,6 +57,7 @@
 ## 📝 Залишкові Попередження (Не Критичні)
 
 ### Settings.json - Formatters
+
 ```
 Value is not accepted for "editor.defaultFormatter": "esbenp.prettier-vscode"
 ```
@@ -58,6 +65,7 @@ Value is not accepted for "editor.defaultFormatter": "esbenp.prettier-vscode"
 **Пояснення:** Це попередження з'являється тому, що розширення Prettier ще не встановлено.
 
 **Рішення:**
+
 ```bash
 # Встановити рекомендовані розширення VS Code
 code --install-extension esbenp.prettier-vscode
@@ -69,6 +77,7 @@ code --install-extension ms-python.black-formatter
 ---
 
 ### Launch.json - Compounds
+
 ```
 Value is not accepted for configurations: "🐍 Python: FastAPI Backend Debug"
 ```
@@ -82,6 +91,7 @@ Value is not accepted for configurations: "🐍 Python: FastAPI Backend Debug"
 ## 🎯 Результат
 
 ### ✅ ПОВНІСТЮ ВИПРАВЛЕНО:
+
 - ❌ Коментарі в JSON файлах
 - ❌ Застаріла конфігурація `"type": "python"`
 - ❌ Застаріла конфігурація `"type": "pwa-node"`
@@ -89,11 +99,13 @@ Value is not accepted for configurations: "🐍 Python: FastAPI Backend Debug"
 - ❌ Прямі посилання на `.venv/bin/python`
 
 ### ⚠️ ПОТРЕБУЄ ВСТАНОВЛЕННЯ РОЗШИРЕНЬ:
+
 - Prettier (`esbenp.prettier-vscode`)
 - Black Formatter (`ms-python.black-formatter`)
 - Python Debugger (вже встановлено як частина Python extension)
 
 ### 🔄 НЕЗНАЧНІ (можна ігнорувати):
+
 - Емодзі в назвах compounds (не впливає на функціональність)
 
 ---
@@ -101,18 +113,21 @@ Value is not accepted for configurations: "🐍 Python: FastAPI Backend Debug"
 ## 🚀 Як Використовувати
 
 ### 1. Перезавантажте VS Code
+
 ```bash
 # Закрийте і відкрийте VS Code або виконайте:
 # Command Palette (Cmd+Shift+P) → "Developer: Reload Window"
 ```
 
 ### 2. Виберіть Python Interpreter
+
 ```bash
 # Command Palette (Cmd+Shift+P) → "Python: Select Interpreter"
 # Виберіть: ./.venv/bin/python
 ```
 
 ### 3. Встановіть Рекомендовані Розширення
+
 ```bash
 # Натисніть на іконку Extensions (⇧⌘X)
 # VS Code покаже рекомендації з .vscode/extensions.json
@@ -127,6 +142,7 @@ code --install-extension dbaeumer.vscode-eslint
 ```
 
 ### 4. Запустіть Debug
+
 ```bash
 # F5 або Debug Panel → Виберіть конфігурацію
 # Наприклад: "🐍 Python: FastAPI Backend Debug"
@@ -137,6 +153,7 @@ code --install-extension dbaeumer.vscode-eslint
 ## 📚 Додаткова Інформація
 
 ### Перевірка Конфігурації
+
 ```bash
 # Перевірте поточний Python interpreter
 Command Palette → "Python: Show Interpreter Information"
@@ -146,6 +163,7 @@ Command Palette → "Python: Show Interpreter Information"
 ```
 
 ### Debug Shortcuts
+
 - **F5** - Start Debugging
 - **⇧F5** - Stop Debugging
 - **⇧⌘F5** - Restart Debugging
@@ -155,19 +173,23 @@ Command Palette → "Python: Show Interpreter Information"
 - **⇧F11** - Step Out
 
 ### Troubleshooting
+
 Якщо після виправлень досі є помилки:
 
 1. **Перезавантажте VS Code:**
+
    ```bash
    Command Palette → "Developer: Reload Window"
    ```
 
 2. **Очистіть кеш:**
+
    ```bash
    rm -rf ~/.vscode/extensions/ms-python.python-*/languageServer*
    ```
 
 3. **Перевірте venv:**
+
    ```bash
    source .venv/bin/activate
    which python  # Має показати шлях до .venv/bin/python
@@ -187,6 +209,7 @@ Command Palette → "Python: Show Interpreter Information"
 ## 🎉 Готово!
 
 Всі критичні попередження VS Code виправлено. Тепер середовище повністю готове для розробки з:
+
 - ✅ Правильною конфігурацією Python debugger
 - ✅ Правильною конфігурацією Node debugger
 - ✅ Коректними JSON файлами без коментарів
@@ -194,6 +217,7 @@ Command Palette → "Python: Show Interpreter Information"
 - ✅ Сучасними налаштуваннями для Python 3.11
 
 **Наступні кроки:**
+
 1. Перезавантажте VS Code (`Developer: Reload Window`)
 2. Встановіть рекомендовані розширення
 3. Виберіть Python interpreter (.venv/bin/python)

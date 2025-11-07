@@ -1,7 +1,10 @@
 {
   "editor.inlineSuggest.enabled": true,
-  "editor.quickSuggestions": { "other": true, "comments": true, "strings": true },
-  "github.copilot.enable": { "*": true },
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": true,
+    "strings": true
+  },
   "github.copilot.chat.enable": true,
   "# codegpt.apiKey": "(store your OpenAI key in .env.local as OPENAI_API_KEY)",
   "# codegpt.model": "gpt-5",
@@ -9,13 +12,12 @@
   "codegpt.response.showCode": true,
   "chatgpt.session.autoStart": true,
   "files.autoSave": "onFocusChange",
+  "files.autoSaveDelay": 500,
   "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.fontSize": 14,
   "workbench.colorTheme": "Default Dark Modern",
   "workbench.iconTheme": "material-icon-theme",
   "# note": "Не зберігайте реальні API-ключі у репозиторії. Використовуйте секрети або environment variables.",
-  "files.autoSave": "onFocusChange",
-  "files.autoSaveDelay": 500,
   "git.enableSmartCommit": true,
   "git.postCommitCommand": "sync",
   "git.confirmSync": false,
@@ -41,14 +43,8 @@
   "continue.confirmBeforeExecute": false,
   "cline.enableCommandExecution": "always",
   "cline.confirmEdits": false,
-  "editor.inlineSuggest.enabled": true,
-  "editor.quickSuggestions": {
-    "other": true,
-    "comments": false,
-    "strings": false
-  },
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": null,
   "telemetry.telemetryLevel": "off",
   "github.copilot.inlineSuggest.enable": true,
   "github.copilot.chat.terminalExecution.showConfirmation": "never",
@@ -106,25 +102,25 @@
   "terminal.integrated.confirmOnKill": "never",
   "workbench.confirmBeforeClose": "never",
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.defaultFormatter": null,
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit"
     }
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": null,
     "editor.formatOnSave": true
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": null,
     "editor.formatOnSave": true
   },
   "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": null
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": null
   },
   "github.copilot.enable": {
     "*": true,
@@ -160,10 +156,6 @@
       "timeoutMs": 120000
     }
   },
-  "extensions.autoInstall": [
-    "predator-auto-approve"
-  ]
-},
   "extensions.autoInstall": [
     "predator-auto-approve"
   ]

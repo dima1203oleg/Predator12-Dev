@@ -131,34 +131,34 @@ agents:
     max_concurrent: 3
 kafka_topics:
   agents_communication:
-  - agents.requests
-  - agents.responses
-  - agents.status
-  - agents.tuning
+    - agents.requests
+    - agents.responses
+    - agents.status
+    - agents.tuning
   data_flow:
-  - data.ingest
-  - data.quality
-  - data.processed
-  - etl.status
+    - data.ingest
+    - data.quality
+    - data.processed
+    - etl.status
   models:
-  - models.requests
-  - models.responses
-  - models.health
-  - models.failover
+    - models.requests
+    - models.responses
+    - models.health
+    - models.failover
   orchestrator:
-  - orchestrator.tasks
-  - orchestrator.results
-  - orchestrator.scaling
+    - orchestrator.tasks
+    - orchestrator.results
+    - orchestrator.scaling
   system_events:
-  - system.incidents
-  - system.notifications
-  - system.health
-  - system.alerts
+    - system.incidents
+    - system.notifications
+    - system.health
+    - system.alerts
 llm_profiles:
   code_generation_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - qwen/qwen2.5-3b-instruct
+      - qwen/qwen2.5-3b-instruct
     max_tokens: 4096
     model_id: core42/jais-30b-chat
     provider: sdk
@@ -166,9 +166,9 @@ llm_profiles:
   code_generation_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - ai21/ai21-jamba-1-5-mini
-    - core42/jais-30b-chat
-    - microsoft/phi-3-small-8k-instruct
+      - ai21/ai21-jamba-1-5-mini
+      - core42/jais-30b-chat
+      - microsoft/phi-3-small-8k-instruct
     max_tokens: 4096
     model_id: deepseek/deepseek-coder-v2
     provider: sdk
@@ -183,7 +183,7 @@ llm_profiles:
   compliance_check_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - deepseek/deepseek-v3
+      - deepseek/deepseek-v3
     max_tokens: 4096
     model_id: microsoft/phi-3-vision-128k-instruct
     provider: sdk
@@ -191,7 +191,7 @@ llm_profiles:
   critical_planning_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - cohere/command-r-plus-08-2024
+      - cohere/command-r-plus-08-2024
     max_tokens: 4096
     model_id: qwen/qwen2.5-32b-instruct
     provider: sdk
@@ -199,9 +199,9 @@ llm_profiles:
   critical_planning_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - microsoft/phi-3-medium-128k-instruct
-    - qwen/qwen2.5-32b-instruct
-    - mistral/mistral-large-2411
+      - microsoft/phi-3-medium-128k-instruct
+      - qwen/qwen2.5-32b-instruct
+      - mistral/mistral-large-2411
     max_tokens: 4096
     model_id: openai/gpt-4o-mini-2024-07-18
     provider: sdk
@@ -209,7 +209,7 @@ llm_profiles:
   critical_reasoning_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - openai/gpt-4o-2024-11-20
+      - openai/gpt-4o-2024-11-20
     max_tokens: 4096
     model_id: qwen/qwen2.5-72b-instruct
     provider: sdk
@@ -217,9 +217,9 @@ llm_profiles:
   critical_reasoning_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - meta/meta-llama-3.3-70b-instruct
-    - qwen/qwen2.5-72b-instruct
-    - mistral/mixtral-8x22b-instruct
+      - meta/meta-llama-3.3-70b-instruct
+      - qwen/qwen2.5-72b-instruct
+      - mistral/mixtral-8x22b-instruct
     max_tokens: 4096
     model_id: deepseek/deepseek-r1
     provider: sdk
@@ -227,7 +227,7 @@ llm_profiles:
   critical_routing_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - meta/meta-llama-3.2-90b-vision-instruct
+      - meta/meta-llama-3.2-90b-vision-instruct
     max_tokens: 4096
     model_id: openai/o1-preview-2024-09-12
     provider: sdk
@@ -235,9 +235,9 @@ llm_profiles:
   critical_routing_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - deepseek/deepseek-v3
-    - openai/o1-preview-2024-09-12
-    - xai/grok-2-1212
+      - deepseek/deepseek-v3
+      - openai/o1-preview-2024-09-12
+      - xai/grok-2-1212
     max_tokens: 4096
     model_id: microsoft/phi-4
     provider: sdk
@@ -252,7 +252,7 @@ llm_profiles:
   data_generation_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - deepseek/deepseek-coder-v2
+      - deepseek/deepseek-coder-v2
     max_tokens: 4096
     model_id: core42/jais-30b-chat
     provider: sdk
@@ -260,7 +260,7 @@ llm_profiles:
   data_transformation_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - mistral/mistral-nemo-2407
+      - mistral/mistral-nemo-2407
     max_tokens: 4096
     model_id: openai/gpt-4o-2024-08-06
     provider: sdk
@@ -268,9 +268,9 @@ llm_profiles:
   data_transformation_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - openai/chatgpt-4o-latest
-    - openai/gpt-4o-2024-08-06
-    - openai/gpt-4o-2024-05-13
+      - openai/chatgpt-4o-latest
+      - openai/gpt-4o-2024-08-06
+      - openai/gpt-4o-2024-05-13
     max_tokens: 4096
     model_id: openai/gpt-3.5-turbo-1106
     provider: sdk
@@ -285,7 +285,7 @@ llm_profiles:
   decision_making_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - mistral/mistral-large-2411
+      - mistral/mistral-large-2411
     max_tokens: 4096
     model_id: qwen/qwen2.5-32b-instruct
     provider: sdk
@@ -300,7 +300,7 @@ llm_profiles:
   document_generation_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - meta/meta-llama-3.1-8b-instruct
+      - meta/meta-llama-3.1-8b-instruct
     max_tokens: 4096
     model_id: xai/grok-2-vision-1212
     provider: sdk
@@ -308,7 +308,7 @@ llm_profiles:
   embeddings_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - microsoft/phi-3-mini-4k-instruct
+      - microsoft/phi-3-mini-4k-instruct
     max_tokens: 4096
     model_id: meta/meta-llama-3.2-3b-instruct
     provider: sdk
@@ -316,9 +316,9 @@ llm_profiles:
   embeddings_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - cohere/embed-multilingual-v3.0
-    - meta/meta-llama-3.2-3b-instruct
-    - qwen/qwen2.5-1.5b-instruct
+      - cohere/embed-multilingual-v3.0
+      - meta/meta-llama-3.2-3b-instruct
+      - qwen/qwen2.5-1.5b-instruct
     max_tokens: 4096
     model_id: cohere/embed-english-v3.0
     provider: sdk
@@ -326,7 +326,7 @@ llm_profiles:
   fast_processing_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - openai/gpt-3.5-turbo-0125
+      - openai/gpt-3.5-turbo-0125
     max_tokens: 4096
     model_id: openai/gpt-4-0613
     provider: sdk
@@ -334,9 +334,9 @@ llm_profiles:
   fast_processing_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - openai/gpt-4-turbo-2024-04-09
-    - openai/gpt-4-0613
-    - openai/gpt-4-0125-preview
+      - openai/gpt-4-turbo-2024-04-09
+      - openai/gpt-4-0613
+      - openai/gpt-4-0125-preview
     max_tokens: 4096
     model_id: meta/meta-llama-3.1-405b-instruct
     provider: sdk
@@ -351,7 +351,7 @@ llm_profiles:
   financial_analysis_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - microsoft/phi-3-mini-128k-instruct
+      - microsoft/phi-3-mini-128k-instruct
     max_tokens: 4096
     model_id: qwen/qwen2.5-3b-instruct
     provider: sdk
@@ -366,7 +366,7 @@ llm_profiles:
   graph_analysis_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - mistral/ministral-3b-2410
+      - mistral/ministral-3b-2410
     max_tokens: 4096
     model_id: microsoft/phi-3-small-8k-instruct
     provider: sdk
@@ -374,7 +374,7 @@ llm_profiles:
   high_load_analysis_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - ai21/ai21-jamba-1-5-large
+      - ai21/ai21-jamba-1-5-large
     max_tokens: 4096
     model_id: microsoft/phi-3-vision-128k-instruct
     provider: sdk
@@ -382,9 +382,9 @@ llm_profiles:
   high_load_analysis_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - openai/o1-mini-2024-09-12
-    - microsoft/phi-3-vision-128k-instruct
-    - deepseek/deepseek-coder-v2-lite
+      - openai/o1-mini-2024-09-12
+      - microsoft/phi-3-vision-128k-instruct
+      - deepseek/deepseek-coder-v2-lite
     max_tokens: 4096
     model_id: meta/meta-llama-3.2-11b-vision-instruct
     provider: sdk
@@ -392,7 +392,7 @@ llm_profiles:
   indexing_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - cohere/command-light
+      - cohere/command-light
     max_tokens: 4096
     model_id: openai/o4-2024-12-17
     provider: sdk
@@ -400,9 +400,9 @@ llm_profiles:
   indexing_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - openai/o3-mini-2024-12-17
-    - openai/o4-2024-12-17
-    - mistral/codestral-2405
+      - openai/o3-mini-2024-12-17
+      - openai/o4-2024-12-17
+      - mistral/codestral-2405
     max_tokens: 4096
     model_id: openai/o2-2024-12-17
     provider: sdk
@@ -417,7 +417,7 @@ llm_profiles:
   optimization_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - ai21/ai21-jamba-1-5-large
+      - ai21/ai21-jamba-1-5-large
     max_tokens: 4096
     model_id: deepseek/deepseek-coder-v2-lite
     provider: sdk
@@ -432,7 +432,7 @@ llm_profiles:
   performance_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - meta/meta-llama-3.2-11b-vision-instruct
+      - meta/meta-llama-3.2-11b-vision-instruct
     max_tokens: 4096
     model_id: openai/o1-mini-2024-09-12
     provider: sdk
@@ -440,7 +440,7 @@ llm_profiles:
   predictive_analytics_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - meta/meta-llama-3.2-1b-instruct
+      - meta/meta-llama-3.2-1b-instruct
     max_tokens: 4096
     model_id: mistral/ministral-3b-2410
     provider: sdk
@@ -448,9 +448,9 @@ llm_profiles:
   predictive_analytics_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - microsoft/phi-3-mini-128k-instruct
-    - mistral/ministral-3b-2410
-    - cohere/command-r7b-12-2024
+      - microsoft/phi-3-mini-128k-instruct
+      - mistral/ministral-3b-2410
+      - cohere/command-r7b-12-2024
     max_tokens: 4096
     model_id: qwen/qwen2.5-7b-instruct
     provider: sdk
@@ -465,7 +465,7 @@ llm_profiles:
   privacy_protection_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - cohere/command-r-08-2024
+      - cohere/command-r-08-2024
     max_tokens: 4096
     model_id: mistral/ministral-8b-2410
     provider: sdk
@@ -473,7 +473,7 @@ llm_profiles:
   real_time_detection_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - cohere/command-r-08-2024
+      - cohere/command-r-08-2024
     max_tokens: 4096
     model_id: qwen/qwen2.5-14b-instruct
     provider: sdk
@@ -481,9 +481,9 @@ llm_profiles:
   real_time_detection_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - microsoft/phi-3-small-128k-instruct
-    - qwen/qwen2.5-14b-instruct
-    - mistral/ministral-8b-2410
+      - microsoft/phi-3-small-128k-instruct
+      - qwen/qwen2.5-14b-instruct
+      - mistral/ministral-8b-2410
     max_tokens: 4096
     model_id: meta/meta-llama-3.2-3b-instruct
     provider: sdk
@@ -498,7 +498,7 @@ llm_profiles:
   schema_analysis_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - mistral/ministral-8b-2410
+      - mistral/ministral-8b-2410
     max_tokens: 4096
     model_id: qwen/qwen2.5-14b-instruct
     provider: sdk
@@ -513,7 +513,7 @@ llm_profiles:
   security_testing_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - openai/o1-preview-2024-09-12
+      - openai/o1-preview-2024-09-12
     max_tokens: 4096
     model_id: meta/meta-llama-3.2-90b-vision-instruct
     provider: sdk
@@ -528,7 +528,7 @@ llm_profiles:
   simulation_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - ai21/ai21-jamba-1-5-mini
+      - ai21/ai21-jamba-1-5-mini
     max_tokens: 4096
     model_id: cohere/command-r7b-12-2024
     provider: sdk
@@ -536,7 +536,7 @@ llm_profiles:
   system_analysis_backup:
     cost_per_1k_tokens: 0.0
     emergency_models:
-    - meta/meta-llama-3.1-70b-instruct
+      - meta/meta-llama-3.1-70b-instruct
     max_tokens: 4096
     model_id: qwen/qwen2.5-1.5b-instruct
     provider: sdk
@@ -544,9 +544,9 @@ llm_profiles:
   system_analysis_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - meta/meta-llama-3.1-8b-instruct
-    - qwen/qwen2.5-1.5b-instruct
-    - qwen/qwen2.5-0.5b-instruct
+      - meta/meta-llama-3.1-8b-instruct
+      - qwen/qwen2.5-1.5b-instruct
+      - qwen/qwen2.5-0.5b-instruct
     max_tokens: 4096
     model_id: xai/grok-2-vision-1212
     provider: sdk
@@ -561,7 +561,7 @@ llm_profiles:
   user_assistance_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - microsoft/phi-3-medium-128k-instruct
+      - microsoft/phi-3-medium-128k-instruct
     max_tokens: 4096
     model_id: cohere/command-r-plus-08-2024
     provider: sdk
@@ -576,7 +576,7 @@ llm_profiles:
   web_analysis_primary:
     cost_per_1k_tokens: 0.0
     fallback_models:
-    - qwen/qwen2.5-0.5b-instruct
+      - qwen/qwen2.5-0.5b-instruct
     max_tokens: 4096
     model_id: meta/meta-llama-3.2-1b-instruct
     provider: sdk

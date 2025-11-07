@@ -1,8 +1,8 @@
 """Minimal telemetry shim for agents package.
 
-Provides a lightweight AgentTelemetry class used by imports during tests.
-The real project may integrate OpenTelemetry; this shim keeps tests/imports
-working in dev/workspace runs.
+Provides a lightweight AgentTelemetry class used by imports during
+tests. The real project may integrate OpenTelemetry; this shim keeps
+tests/imports working in dev/workspace runs.
 """
 
 from typing import Any, Dict, Optional

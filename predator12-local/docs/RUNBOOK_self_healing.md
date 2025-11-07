@@ -7,12 +7,14 @@ This runbook covers self-healing operations for Predator12, including automatic 
 ## 📊 Metrics & Thresholds
 
 ### Critical Metrics
+
 - **Error Rate:** <5% (5xx responses)
 - **P95 Latency:** <250ms
 - **Availability:** >99.9%
 - **Pod Restart Rate:** <10/hour
 
 ### Warning Thresholds
+
 - Error Rate: 3-5%
 - P95 Latency: 200-250ms
 - CPU Usage: >70%
@@ -23,14 +25,17 @@ This runbook covers self-healing operations for Predator12, including automatic 
 ## 🚨 Alerts
 
 ### PredatorHighErrorRate
+
 **Trigger:** 5xx error rate >5% for 2 minutes
 
 **Auto-Actions:**
+
 1. Argo Rollouts automatically pauses canary deployment
 2. Traffic stays on stable version
 3. Slack notification sent to #alerts channel
 
 **Manual Steps:**
+
 ```bash
 # 1. Check current rollout status
 kubectl argo rollouts get rollout predator-backend -n default
@@ -51,13 +56,16 @@ curl 'http://prometheus:9090/api/v1/query?query=rate(http_requests_total{status=
 ---
 
 ### PredatorHighLatency
+
 **Trigger:** P95 latency >500ms for 2 minutes
 
 **Auto-Actions:**
+
 1. HPA scales up replicas (if autoscaling enabled)
 2. Alert sent to on-call engineer
 
 **Manual Steps:**
+
 ```bash
 # 1. Check current pod count
 kubectl get pods -l app=predator-backend -n default
@@ -78,13 +86,16 @@ python scripts/db/query_optimizer_agent.py
 ---
 
 ### PredatorAgentDown
+
 **Trigger:** Agent pod down for >1 minute
 
 **Auto-Actions:**
+
 1. Kubernetes restarts pod automatically
 2. Alert sent if restart count >3
 
 **Manual Steps:**
+
 ```bash
 # 1. Check pod status
 kubectl get pods -l component=agents -n default
@@ -109,6 +120,7 @@ kubectl rollout restart deployment predator-agents -n default
 ### Automatic Rollback (Argo Rollouts)
 
 When analysis fails, Argo Rollouts automatically:
+
 1. Stops canary promotion
 2. Shifts 100% traffic to stable version
 3. Marks rollout as "Degraded"
@@ -295,6 +307,7 @@ EOF
 ### 2. Update Runbooks
 
 If incident revealed gaps:
+
 - Update this runbook
 - Add new alerts
 - Improve monitoring
@@ -311,10 +324,12 @@ If incident revealed gaps:
 ## 📞 Contacts
 
 ### On-Call
+
 - **Primary:** Slack #oncall
 - **Backup:** ops@predator12.io
 
 ### Escalation
+
 1. L1: Team Lead
 2. L2: Engineering Manager
 3. L3: CTO

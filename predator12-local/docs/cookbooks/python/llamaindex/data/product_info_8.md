@@ -1,7 +1,9 @@
 # Information about product item_number: 8
+
 Alpine Explorer Tent, price $350,
 
 ## Brand
+
 AlpineGear
 
 Main Category: CAMPING & HIKING
@@ -9,6 +11,7 @@ Sub Category: TENTS & SHELTERS
 Product Type: FAMILY CAMPING TENTS
 
 ### Features
+
 - Waterproof: Provides reliable protection against rain and moisture.
 - Easy Setup: Simple and quick assembly process, making it convenient for camping.
 - Room Divider: Includes a detachable divider to create separate living spaces within the tent.
@@ -16,6 +19,7 @@ Product Type: FAMILY CAMPING TENTS
 - Gear Loft: Built-in gear loft or storage pockets for organizing and storing camping gear.
 
 ## Technical Specs
+
 Best Use: Camping  
 Capacity: 8-person  
 Season Rating: 3-season  
@@ -132,6 +136,7 @@ If you have any questions or need further assistance, please contact our custome
 We hope you enjoy your Alpine Explorer Tent and have a great outdoor experience!
 
 ## Cautions:
+
 1. Stable Setup: Ensure the tent is pitched on level ground and avoid uneven or sloping terrain to maintain stability.
 2. Safe Location: Choose a safe and secure location away from hazardous areas like cliffs, rivers, or flood-prone zones.
 3. Windproof: Do not leave the tent unattended during strong winds or severe weather conditions; properly secure all guy lines and stakes for added stability.
@@ -142,7 +147,7 @@ We hope you enjoy your Alpine Explorer Tent and have a great outdoor experience!
 8. Capacity Check: Do not exceed the tent's recommended weight capacity to maintain its structural integrity and prevent potential damage.
 9. Sharp Object Safety: Keep sharp objects and tools away from the tent to avoid punctures or fabric damage; handle the tent and its components with care.
 10. Original Structure: Do not modify or alter the tent structure or components, as it may compromise the tent's performance and void the warranty.
-By following these cautionary guidelines, you can ensure safe and optimal use of the Alpine Explorer Tent.
+    By following these cautionary guidelines, you can ensure safe and optimal use of the Alpine Explorer Tent.
 
 ## Warranty Information:
 
@@ -159,38 +164,41 @@ For any warranty-related inquiries or to initiate a warranty claim, please conta
 Please retain your proof of purchase as it will be required to verify warranty eligibility. Kindly note that the warranty information provided here is for reference purposes. For the most accurate and up-to-date warranty details, please refer to the warranty card included with your Alpine Explorer Tent.
 
 ## Return Policy
-- If Membership status "None        ":	Returns are accepted within 30 days of purchase, provided the tent is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Gold":	Returns are accepted within 60 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Platinum":	Returns are accepted within 90 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+
+- If Membership status "None ": Returns are accepted within 30 days of purchase, provided the tent is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+- If Membership status "Gold": Returns are accepted within 60 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+- If Membership status "Platinum": Returns are accepted within 90 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
 
 ## Reviews
-36) Rating: 5
-   Review: The Alpine Explorer Tent is amazing! It's easy to set up, has excellent ventilation, and the room divider is a great feature for added privacy. Highly recommend it for family camping trips!
 
-37) Rating: 4
-   Review: I bought the Alpine Explorer Tent, and while it's waterproof and spacious, I wish it had more storage pockets. Overall, it's a good tent for camping.
+36. Rating: 5
+    Review: The Alpine Explorer Tent is amazing! It's easy to set up, has excellent ventilation, and the room divider is a great feature for added privacy. Highly recommend it for family camping trips!
 
-38) Rating: 5
-   Review: The Alpine Explorer Tent is perfect for my family's camping adventures. It's easy to set up, has great ventilation, and the gear loft is an excellent addition. Love it!
+37. Rating: 4
+    Review: I bought the Alpine Explorer Tent, and while it's waterproof and spacious, I wish it had more storage pockets. Overall, it's a good tent for camping.
 
-39) Rating: 4
-   Review: I like the Alpine Explorer Tent, but I wish it came with a footprint. It's comfortable and has many useful features, but a footprint would make it even better. Overall, it's a great tent.
+38. Rating: 5
+    Review: The Alpine Explorer Tent is perfect for my family's camping adventures. It's easy to set up, has great ventilation, and the gear loft is an excellent addition. Love it!
 
-40) Rating: 5
-   Review: This tent is perfect for our family camping trips. It's spacious, easy to set up, and the room divider is a great feature for added privacy. The gear loft is a nice bonus for extra storage.
+39. Rating: 4
+    Review: I like the Alpine Explorer Tent, but I wish it came with a footprint. It's comfortable and has many useful features, but a footprint would make it even better. Overall, it's a great tent.
+
+40. Rating: 5
+    Review: This tent is perfect for our family camping trips. It's spacious, easy to set up, and the room divider is a great feature for added privacy. The gear loft is a nice bonus for extra storage.
 
 ## FAQ
-34) How easy is it to set up the Alpine Explorer Tent?
-   The Alpine Explorer Tent features a quick and easy setup, thanks to color-coded poles and intuitive design. Most users can set it up in just a few minutes.
 
-35) Can the Alpine Explorer Tent accommodate two queen-sized air mattresses?
-   Yes, the Alpine Explorer Tent is spacious enough to accommodate two queen-sized air mattresses, making it an ideal choice for comfortable family camping.
+34. How easy is it to set up the Alpine Explorer Tent?
+    The Alpine Explorer Tent features a quick and easy setup, thanks to color-coded poles and intuitive design. Most users can set it up in just a few minutes.
 
-36) What is the purpose of the room divider in the Alpine Explorer Tent?
-   The room divider in the Alpine Explorer Tent allows you to create separate sleeping and living spaces, providing privacy and organization for your camping experience.
+35. Can the Alpine Explorer Tent accommodate two queen-sized air mattresses?
+    Yes, the Alpine Explorer Tent is spacious enough to accommodate two queen-sized air mattresses, making it an ideal choice for comfortable family camping.
 
-37) How does the gear loft in the Alpine Explorer Tent work?
-   The gear loft in the Alpine Explorer Tent is a suspended mesh shelf that provides additional storage space for small items, keeping them organized and easily accessible.
+36. What is the purpose of the room divider in the Alpine Explorer Tent?
+    The room divider in the Alpine Explorer Tent allows you to create separate sleeping and living spaces, providing privacy and organization for your camping experience.
 
-38) Can the Alpine Explorer Tent be used in snowy conditions?
-   The Alpine Explorer Tent is designed primarily for three-season use. While it can withstand light snowfall, it may not provide adequate structural support and insulation during heavy snow or extreme winter conditions.
+37. How does the gear loft in the Alpine Explorer Tent work?
+    The gear loft in the Alpine Explorer Tent is a suspended mesh shelf that provides additional storage space for small items, keeping them organized and easily accessible.
+
+38. Can the Alpine Explorer Tent be used in snowy conditions?
+    The Alpine Explorer Tent is designed primarily for three-season use. While it can withstand light snowfall, it may not provide adequate structural support and insulation during heavy snow or extreme winter conditions.

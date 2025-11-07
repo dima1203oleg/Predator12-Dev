@@ -100,6 +100,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 ```
 
 **Types:**
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation
@@ -109,6 +110,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 - `chore`: Maintenance
 
 **Examples:**
+
 ```
 feat(agents): add ModelTrainerAgent for ML training
 fix(frontend): resolve 3D avatar rendering issue
@@ -141,6 +143,7 @@ def process_data(data: Dict[str, Any]) -> Dict[str, Any]:
 ```
 
 **Tools:**
+
 ```bash
 black backend/
 flake8 backend/
@@ -166,6 +169,7 @@ export function AIAvatar({ isListening, isProcessing }: AIAvatarProps) {
 ```
 
 **Tools:**
+
 ```bash
 npm run lint
 npm run format
@@ -190,6 +194,7 @@ pytest tests/ -v --cov
 ```
 
 **Test Structure:**
+
 ```python
 def test_arbiter_agent_delegation():
     """Test that Arbiter correctly delegates tasks"""
@@ -209,6 +214,7 @@ npm run test
 ```
 
 **Test Structure:**
+
 ```typescript
 describe('AIAvatar', () => {
   it('should render 3D avatar', () => {
@@ -256,20 +262,24 @@ git push origin feature/your-feature-name
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] All tests pass
 - [ ] New tests added
 - [ ] Manual testing completed
 
 ## Checklist
+
 - [ ] Code follows style guidelines
 - [ ] Documentation updated
 - [ ] No breaking changes (or documented)
@@ -285,6 +295,7 @@ Brief description of changes
 ### 5. Merge
 
 Once approved:
+
 - Squash and merge (preferred)
 - Rebase and merge
 - Create merge commit
@@ -334,12 +345,14 @@ predator-analytics/
 ### Hot Reload
 
 **Backend:**
+
 ```bash
 # FastAPI auto-reloads on file changes
 docker-compose logs -f backend
 ```
 
 **Frontend:**
+
 ```bash
 # Next.js hot reloads automatically
 docker-compose logs -f frontend
@@ -348,15 +361,17 @@ docker-compose logs -f frontend
 ### Debugging
 
 **Backend:**
+
 ```python
 # Add breakpoint
 import pdb; pdb.set_trace()
 ```
 
 **Frontend:**
+
 ```typescript
 // Use browser DevTools
-console.log('Debug info:', data);
+console.log("Debug info:", data);
 ```
 
 ### Database Migrations
@@ -403,6 +418,7 @@ We use [Semantic Versioning](https://semver.org/):
 ## Questions?
 
 Feel free to:
+
 - Open an issue
 - Start a discussion
 - Reach out to maintainers

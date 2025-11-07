@@ -3,28 +3,34 @@
 ## 🚀 3 КОМАНДИ ДЛЯ ЗАПУСКУ
 
 ### 1. Встановлення (перший раз)
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local
 ./start-voice-premium-free.sh
 ```
+
 **Час**: 5-10 хв (автоматично встановить все)
 
 ---
 
 ### 2. Запуск API (кожен раз)
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local
 ./start-voice-premium-free.sh
 ```
+
 **URL**: http://localhost:5094
 
 ---
 
 ### 3. Запуск Frontend
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/frontend
 npm run dev
 ```
+
 **URL**: http://localhost:5173
 
 ---

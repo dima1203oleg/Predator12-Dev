@@ -11,6 +11,7 @@
 Dashboard тепер відображає **всі 25 запущених контейнерів/сервісів** з правильною категоризацією та іконками.
 
 ### Статистика
+
 - **Всього сервісів:** 25
 - **Онлайн:** 24
 - **Warning:** 1 (Qdrant - це нормально)
@@ -21,89 +22,97 @@ Dashboard тепер відображає **всі 25 запущених кон�
 ## 🗂️ Повний Список Сервісів
 
 ### 1. 🚀 Core Application Services (5)
+
 Основні компоненти програми
 
-| Сервіс | Статус | Uptime | Requests/min | Опис |
-|--------|--------|--------|--------------|------|
-| **Backend API** | ✅ Online | 99.9% | 1,247 | FastAPI REST API |
-| **Frontend React** | ✅ Online | 100% | 2,156 | React + Vite UI |
-| **Celery Worker** | ✅ Online | 99.7% | 234 | Async task processor |
-| **Celery Scheduler** | ✅ Online | 99.8% | 156 | Scheduled tasks |
-| **Agent Supervisor** | ✅ Online | 99.6% | 834 | AI agent coordinator |
+| Сервіс               | Статус    | Uptime | Requests/min | Опис                 |
+| -------------------- | --------- | ------ | ------------ | -------------------- |
+| **Backend API**      | ✅ Online | 99.9%  | 1,247        | FastAPI REST API     |
+| **Frontend React**   | ✅ Online | 100%   | 2,156        | React + Vite UI      |
+| **Celery Worker**    | ✅ Online | 99.7%  | 234          | Async task processor |
+| **Celery Scheduler** | ✅ Online | 99.8%  | 156          | Scheduled tasks      |
+| **Agent Supervisor** | ✅ Online | 99.6%  | 834          | AI agent coordinator |
 
 ---
 
 ### 2. 💾 Database & Storage (4)
+
 Системи зберігання даних
 
-| Сервіс | Статус | Uptime | Requests/min | Опис |
-|--------|--------|--------|--------------|------|
-| **PostgreSQL** | ✅ Online | 100% | 892 | Primary database |
-| **Redis Cache** | ✅ Online | 99.8% | 3,421 | In-memory cache |
-| **MinIO Storage** | ✅ Online | 100% | 678 | S3-compatible object storage |
-| **Qdrant Vector** | ⚠️ Warning | 98.5% | 456 | Vector database (technical warning) |
+| Сервіс            | Статус     | Uptime | Requests/min | Опис                                |
+| ----------------- | ---------- | ------ | ------------ | ----------------------------------- |
+| **PostgreSQL**    | ✅ Online  | 100%   | 892          | Primary database                    |
+| **Redis Cache**   | ✅ Online  | 99.8%  | 3,421        | In-memory cache                     |
+| **MinIO Storage** | ✅ Online  | 100%   | 678          | S3-compatible object storage        |
+| **Qdrant Vector** | ⚠️ Warning | 98.5%  | 456          | Vector database (technical warning) |
 
 ---
 
 ### 3. 🔍 Search & Indexing (2)
+
 Повнотекстовий пошук та аналітика
 
-| Сервіс | Статус | Uptime | Requests/min | Опис |
-|--------|--------|--------|--------------|------|
-| **OpenSearch** | ✅ Online | 99.9% | 2,145 | Elasticsearch-compatible search |
-| **OpenSearch Dashboard** | ✅ Online | 99.8% | 567 | Search visualization UI |
+| Сервіс                   | Статус    | Uptime | Requests/min | Опис                            |
+| ------------------------ | --------- | ------ | ------------ | ------------------------------- |
+| **OpenSearch**           | ✅ Online | 99.9%  | 2,145        | Elasticsearch-compatible search |
+| **OpenSearch Dashboard** | ✅ Online | 99.8%  | 567          | Search visualization UI         |
 
 ---
 
 ### 4. 📨 Message Queue & Event Streaming (1)
+
 Обробка подій та повідомлень
 
-| Сервіс | Статус | Uptime | Requests/min | Опис |
-|--------|--------|--------|--------------|------|
-| **Redpanda Kafka** | ✅ Online | 99.7% | 1,876 | Fast Kafka-compatible streaming |
+| Сервіс             | Статус    | Uptime | Requests/min | Опис                            |
+| ------------------ | --------- | ------ | ------------ | ------------------------------- |
+| **Redpanda Kafka** | ✅ Online | 99.7%  | 1,876        | Fast Kafka-compatible streaming |
 
 ---
 
 ### 5. 🤖 AI/ML Services (1)
+
 Сервіси штучного інтелекту
 
-| Сервіс | Статус | Uptime | Requests/min | Опис |
-|--------|--------|--------|--------------|------|
-| **Model SDK** | ✅ Online | 99.5% | 743 | AI model management & inference |
+| Сервіс        | Статус    | Uptime | Requests/min | Опис                            |
+| ------------- | --------- | ------ | ------------ | ------------------------------- |
+| **Model SDK** | ✅ Online | 99.5%  | 743          | AI model management & inference |
 
 ---
 
 ### 6. 📊 Monitoring Stack (7)
+
 Повний стек моніторингу та спостережуваності
 
-| Сервіс | Статус | Uptime | Requests/min | Опис |
-|--------|--------|--------|--------------|------|
-| **Prometheus** | ✅ Online | 100% | 445 | Metrics collection |
-| **Grafana** | ✅ Online | 100% | 789 | Visualization & dashboards |
-| **Loki Logs** | ✅ Online | 99.9% | 2,341 | Log aggregation |
-| **Promtail** | ✅ Online | 99.9% | 3,567 | Log shipper |
-| **Tempo Tracing** | ✅ Online | 99.8% | 1,234 | Distributed tracing |
-| **AlertManager** | ✅ Online | 100% | 67 | Alert routing |
-| **Blackbox Exporter** | ✅ Online | 100% | 234 | Endpoint monitoring |
+| Сервіс                | Статус    | Uptime | Requests/min | Опис                       |
+| --------------------- | --------- | ------ | ------------ | -------------------------- |
+| **Prometheus**        | ✅ Online | 100%   | 445          | Metrics collection         |
+| **Grafana**           | ✅ Online | 100%   | 789          | Visualization & dashboards |
+| **Loki Logs**         | ✅ Online | 99.9%  | 2,341        | Log aggregation            |
+| **Promtail**          | ✅ Online | 99.9%  | 3,567        | Log shipper                |
+| **Tempo Tracing**     | ✅ Online | 99.8%  | 1,234        | Distributed tracing        |
+| **AlertManager**      | ✅ Online | 100%   | 67           | Alert routing              |
+| **Blackbox Exporter** | ✅ Online | 100%   | 234          | Endpoint monitoring        |
 
 ---
 
 ### 7. 📈 System Metrics (2)
+
 Системні метрики та ресурси
 
-| Сервіс | Статус | Uptime | Requests/min | Опис |
-|--------|--------|--------|--------------|------|
-| **cAdvisor** | ✅ Online | 100% | 567 | Container metrics |
-| **Node Exporter** | ✅ Online | 100% | 890 | Host system metrics |
+| Сервіс            | Статус    | Uptime | Requests/min | Опис                |
+| ----------------- | --------- | ------ | ------------ | ------------------- |
+| **cAdvisor**      | ✅ Online | 100%   | 567          | Container metrics   |
+| **Node Exporter** | ✅ Online | 100%   | 890          | Host system metrics |
 
 ---
 
 ### 8. 🔐 Security & Auth (1)
+
 Автентифікація та безпека
 
-| Сервіс | Статус | Uptime | Requests/min | Опис |
-|--------|--------|--------|--------------|------|
-| **Keycloak Auth** | ✅ Online | 100% | 445 | Identity & access management |
+| Сервіс            | Статус    | Uptime | Requests/min | Опис                         |
+| ----------------- | --------- | ------ | ------------ | ---------------------------- |
+| **Keycloak Auth** | ✅ Online | 100%   | 445          | Identity & access management |
 
 ---
 
@@ -115,7 +124,7 @@ Dashboard тепер відображає **всі 25 запущених кон�
 ✅ **Повна видимість** - всі 25 сервісів  
 ✅ **Візуальна організація** - легко знайти потрібний сервіс  
 ✅ **Статистика категорій** - кількість сервісів у кожній групі  
-✅ **Іконки категорій** - швидка візуальна навігація  
+✅ **Іконки категорій** - швидка візуальна навігація
 
 ### Кольорова Система
 
@@ -128,11 +137,13 @@ Dashboard тепер відображає **всі 25 запущених кон�
 ## 📱 Доступ
 
 ### Production (Docker)
+
 ```bash
 http://localhost:3000
 ```
 
 ### Development (Vite)
+
 ```bash
 cd predator12-local/frontend
 npm run dev
@@ -146,11 +157,13 @@ npm run dev
 ### Що Змінилося
 
 **Було (v1.1):**
+
 - 10 сервісів
 - Без категоризації
 - Всі в одному списку
 
 **Стало (v2.0):**
+
 - 25 сервісів (+150%)
 - 7 категорій
 - Організований по групах
@@ -252,6 +265,7 @@ docker compose up -d frontend
 ## 📈 Metrics
 
 ### Build Stats
+
 - **Bundle Size:** ~157 KB (gzipped: ~50 KB)
 - **Build Time:** ~1.2s
 - **Components:** 4 (App, MetricCard, ServiceCard, CategoryHeader)
@@ -259,6 +273,7 @@ docker compose up -d frontend
 - **Categories:** 7
 
 ### Performance
+
 - **Load Time:** < 500ms
 - **Render Time:** < 100ms
 - **Memory Usage:** ~8MB (container)
@@ -270,16 +285,18 @@ docker compose up -d frontend
 ### Phase 2: Dynamic Service Discovery
 
 **Цілі:**
+
 1. Fetch services from Docker API
 2. Auto-detect new containers
 3. Real-time status updates
 4. Health check integration
 
 **Implementation:**
+
 ```typescript
 // Example: Fetch from backend
 const fetchServices = async () => {
-  const response = await fetch('/api/services');
+  const response = await fetch("/api/services");
   const services = await response.json();
   return services;
 };

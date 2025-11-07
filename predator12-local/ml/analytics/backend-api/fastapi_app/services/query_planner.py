@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 # Placeholder for LLM integration (e.g., Ollama or remote API)
 from langgraph.graph import StateGraph
@@ -8,12 +8,11 @@ logger = logging.getLogger(__name__)
 
 
 class QueryPlannerAgent:
-    def __init__(self, config: Dict[str, Any] = None):
+    def __init__(self, config: Optional[Dict[str, Any]] = None):
         self.config = config or {}
-        self.llm_enabled = self.config.get('llm_enabled', False)
-        self.llm_endpoint = self.config.get('llm_endpoint',
-                                           'http://localhost:11434/api/generate')
-        self.llm_model = self.config.get('llm_model', 'llama3')
+        self.llm_enabled = self.config.get("llm_enabled", False)
+        self.llm_endpoint = self.config.get("llm_endpoint", "http://localhost:11434/api/generate")
+        self.llm_model = self.config.get("llm_model", "llama3")
         # Initialize LangGraph workflow for agent orchestration
         self.workflow = self._build_workflow()
 
@@ -29,7 +28,9 @@ class QueryPlannerAgent:
         # workflow.set_entry_point('parse_query')
         return workflow
 
-    async def plan_query(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def plan_query(
+        self, query: str, context: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """Plans the execution of a user query, potentially using LLM for
         natural language understanding.
 
@@ -57,10 +58,7 @@ class QueryPlannerAgent:
         return {
             "status": "planned",
             "query": query,
-            "plan": {
-                "agent_type": "llm_placeholder",
-                "steps": ["parse_intent", "route_to_agent"]
-            }
+            "plan": {"agent_type": "llm_placeholder", "steps": ["parse_intent", "route_to_agent"]},
         }
 
     async def _plan_without_llm(self, query: str, context: Dict[str, Any]) -> Dict[str, Any]:
@@ -79,17 +77,13 @@ class QueryPlannerAgent:
         return {
             "status": "planned",
             "query": query,
-            "plan": {
-                "agent_type": agent_type,
-                "steps": ["basic_parse", "route_to_agent"]
-            }
+            "plan": {"agent_type": agent_type, "steps": ["basic_parse", "route_to_agent"]},
         }
 
     async def _call_llm(self, query: str, context: Dict[str, Any]) -> str:
         """Placeholder for calling an LLM endpoint (e.g., Ollama or remote
         API)."""
-        logger.info(f"Calling LLM at {self.llm_endpoint} with model "
-                    f"{self.llm_model}")
+        logger.info(f"Calling LLM at {self.llm_endpoint} with model " f"{self.llm_model}")
         # Implement actual API call here when integrating with Ollama or other
         # lightweight LLM service
         return "LLM response placeholder"
@@ -99,8 +93,10 @@ class QueryPlannerAgent:
         return {
             "intent": "placeholder_intent",
             "target_agent": "placeholder_agent",
-            "parameters": {}
+            "parameters": {},
         }
 
     async def decompose_query(self, query: str) -> Dict[str, Any]:
-        # ... existing code ...
+        """Decompose a complex query into sub-queries or steps (stub)."""
+        # TODO: Implement actual decomposition logic
+        return {"status": "not_implemented"}

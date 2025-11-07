@@ -10,17 +10,17 @@
 
 ### 🔊 TTS (Text-to-Speech)
 
-| Рішення | Тип | Якість | Українська | Статус |
-|---------|-----|--------|------------|--------|
-| **Coqui TTS** | Локальна | ⭐⭐⭐⭐⭐ | ✅ Повна | ✅ Встановлено |
-| **XTTS v2** | Мультимовна | ⭐⭐⭐⭐⭐ | ✅ Нейронний | ✅ Рекомендовано |
+| Рішення       | Тип         | Якість     | Українська   | Статус           |
+| ------------- | ----------- | ---------- | ------------ | ---------------- |
+| **Coqui TTS** | Локальна    | ⭐⭐⭐⭐⭐ | ✅ Повна     | ✅ Встановлено   |
+| **XTTS v2**   | Мультимовна | ⭐⭐⭐⭐⭐ | ✅ Нейронний | ✅ Рекомендовано |
 
 ### 🗣️ STT (Speech-to-Text)
 
-| Рішення | Тип | Точність | Українська | Статус |
-|---------|-----|----------|------------|--------|
-| **Whisper Large v3** | Локальна | ⭐⭐⭐⭐⭐ | ✅ 95%+ | ✅ Доступно |
-| **faster-whisper** | Оптимізована | ⭐⭐⭐⭐⭐ | ✅ Швидка | ✅ Встановлено |
+| Рішення              | Тип          | Точність   | Українська | Статус         |
+| -------------------- | ------------ | ---------- | ---------- | -------------- |
+| **Whisper Large v3** | Локальна     | ⭐⭐⭐⭐⭐ | ✅ 95%+    | ✅ Доступно    |
+| **faster-whisper**   | Оптимізована | ⭐⭐⭐⭐⭐ | ✅ Швидка  | ✅ Встановлено |
 
 ---
 
@@ -37,6 +37,7 @@ cd predator12-local
 ```
 
 **Що встановиться:**
+
 - ✅ Coqui TTS з українською моделлю
 - ✅ Whisper (base/small/medium)
 - ✅ faster-whisper (оптимізована версія)
@@ -110,13 +111,13 @@ curl -X POST "http://localhost:8000/api/tts" \
 #### TypeScript/React
 
 ```typescript
-import { voiceAPI } from './services/voiceAPI';
+import { voiceAPI } from "./services/voiceAPI";
 
 // Озвучування тексту
 const audioURL = await voiceAPI.textToSpeech(
   "Привіт! Я голосовий асистент.",
   "uk",
-  1.0
+  1.0,
 );
 
 // Програвання
@@ -155,14 +156,14 @@ curl -X POST "http://localhost:8000/api/stt" \
 #### TypeScript/React
 
 ```typescript
-import { voiceAPI } from './services/voiceAPI';
+import { voiceAPI } from "./services/voiceAPI";
 
 // Запис аудіо
 const audioBlob = await voiceAPI.recordAudio(5000); // 5 секунд
 
 // Розпізнавання
 const text = await voiceAPI.speechToText(audioBlob);
-console.log('Розпізнано:', text);
+console.log("Розпізнано:", text);
 ```
 
 ---
@@ -170,15 +171,15 @@ console.log('Розпізнано:', text);
 ## 🔄 Повний Цикл Voice Interaction
 
 ```typescript
-import { voiceAPI } from './services/voiceAPI';
+import { voiceAPI } from "./services/voiceAPI";
 
 // Запис -> Розпізнавання -> Обробка -> Озвучування
 const audioBlob = await voiceAPI.recordAudio(5000);
 
 await voiceAPI.voiceInteraction(
   audioBlob,
-  (text) => console.log('Розпізнано:', text),
-  (response) => console.log('Відповідь:', response)
+  (text) => console.log("Розпізнано:", text),
+  (response) => console.log("Відповідь:", response),
 );
 ```
 
@@ -255,23 +256,23 @@ model = WhisperModel("large-v3") # ~10GB RAM (найточніша)
 ### 1. Оновлення AIVoiceInterface
 
 ```tsx
-import { voiceAPI } from '../../services/voiceAPI';
+import { voiceAPI } from "../../services/voiceAPI";
 
 // У компоненті
 useEffect(() => {
   // Перевірка доступності API
-  voiceAPI.checkHealth().then(isHealthy => {
+  voiceAPI.checkHealth().then((isHealthy) => {
     if (isHealthy) {
-      console.log('✅ Voice API готовий');
+      console.log("✅ Voice API готовий");
     } else {
-      console.log('⚠️ Voice API недоступний, використовується Web Speech API');
+      console.log("⚠️ Voice API недоступний, використовується Web Speech API");
     }
   });
 }, []);
 
 // TTS через API
 const speakWithAPI = async (text: string) => {
-  const audioURL = await voiceAPI.textToSpeech(text, 'uk');
+  const audioURL = await voiceAPI.textToSpeech(text, "uk");
   if (audioURL) {
     await voiceAPI.playAudio(audioURL);
   }
@@ -282,7 +283,7 @@ const listenWithAPI = async () => {
   const audioBlob = await voiceAPI.recordAudio(5000);
   if (audioBlob) {
     const text = await voiceAPI.speechToText(audioBlob);
-    console.log('Розпізнано:', text);
+    console.log("Розпізнано:", text);
   }
 };
 ```
@@ -294,18 +295,18 @@ const listenWithAPI = async () => {
 const speak = async (text: string) => {
   // Спроба 1: Backend API (якісніше)
   try {
-    const audioURL = await voiceAPI.textToSpeech(text, 'uk');
+    const audioURL = await voiceAPI.textToSpeech(text, "uk");
     if (audioURL) {
       await voiceAPI.playAudio(audioURL);
       return;
     }
   } catch (error) {
-    console.log('Backend недоступний, використовується Web Speech API');
+    console.log("Backend недоступний, використовується Web Speech API");
   }
 
   // Спроба 2: Web Speech API (браузер)
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'uk-UA';
+  utterance.lang = "uk-UA";
   window.speechSynthesis.speak(utterance);
 };
 ```
@@ -330,13 +331,13 @@ model = WhisperModel("base", device="cpu", compute_type="int8")
 
 ### Швидкість vs Якість
 
-| Модель | Розмір | Швидкість | Якість | RAM |
-|--------|--------|-----------|--------|-----|
-| tiny | 39M | ⚡⚡⚡⚡⚡ | ⭐⭐ | ~1GB |
-| base | 74M | ⚡⚡⚡⚡ | ⭐⭐⭐ | ~1GB |
-| small | 244M | ⚡⚡⚡ | ⭐⭐⭐⭐ | ~2GB |
-| medium | 769M | ⚡⚡ | ⭐⭐⭐⭐⭐ | ~5GB |
-| large-v3 | 1550M | ⚡ | ⭐⭐⭐⭐⭐ | ~10GB |
+| Модель   | Розмір | Швидкість  | Якість     | RAM   |
+| -------- | ------ | ---------- | ---------- | ----- |
+| tiny     | 39M    | ⚡⚡⚡⚡⚡ | ⭐⭐       | ~1GB  |
+| base     | 74M    | ⚡⚡⚡⚡   | ⭐⭐⭐     | ~1GB  |
+| small    | 244M   | ⚡⚡⚡     | ⭐⭐⭐⭐   | ~2GB  |
+| medium   | 769M   | ⚡⚡       | ⭐⭐⭐⭐⭐ | ~5GB  |
+| large-v3 | 1550M  | ⚡         | ⭐⭐⭐⭐⭐ | ~10GB |
 
 ---
 
@@ -438,10 +439,10 @@ predator12-local/
 ✅ **REST API** - Доступ з будь-якого клієнта  
 ✅ **TypeScript SDK** - Готова інтеграція для фронтенду  
 ✅ **Fallback** - Web Speech API як резерв  
-✅ **95%+ точність** - Найкращі моделі  
+✅ **95%+ точність** - Найкращі моделі
 
 ---
 
 **🚀 PREDATOR12 NEXUS Voice Technologies - Ready to Use!**
 
-*Створено командою PREDATOR12 ❤️*
+_Створено командою PREDATOR12 ❤️_

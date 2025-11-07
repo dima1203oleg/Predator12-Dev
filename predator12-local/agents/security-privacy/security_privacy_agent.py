@@ -9,11 +9,11 @@ import re
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
 import redis
 import structlog
-from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException
 
 logger = structlog.get_logger(__name__)
 
@@ -39,7 +39,7 @@ class MaskingMethod(Enum):
 
 @dataclass
 class PIIPattern:
-    """Патерн для виявлення PII"""
+    """Патерн для виявлення PII."""
 
     pii_type: PIIType
     regex_pattern: str
@@ -49,7 +49,7 @@ class PIIPattern:
 
 @dataclass
 class AccessLog:
-    """Запис журналу доступу"""
+    """Запис журналу доступу."""
 
     user_id: str
     resource: str
@@ -63,7 +63,7 @@ class AccessLog:
 
 
 class SecurityPrivacyAgent:
-    """Агент безпеки та приватності"""
+    """Агент безпеки та приватності."""
 
     def __init__(self):
         self.app = FastAPI(title="Security & Privacy Agent", version="1.0.0")
@@ -78,7 +78,7 @@ class SecurityPrivacyAgent:
         self._setup_routes()
 
     def _init_pii_patterns(self) -> List[PIIPattern]:
-        """Ініціалізація патернів для виявлення PII"""
+        """Ініціалізація патернів для виявлення PII."""
         return [
             PIIPattern(
                 pii_type=PIIType.EMAIL,
@@ -119,7 +119,7 @@ class SecurityPrivacyAgent:
         ]
 
     def _init_rbac_roles(self) -> Dict[str, Dict[str, Any]]:
-        """Ініціалізація ролей RBAC"""
+        """Ініціалізація ролей RBAC."""
         return {
             "admin": {
                 "permissions": ["*"],
@@ -159,11 +159,11 @@ class SecurityPrivacyAgent:
         }
 
     def _setup_routes(self):
-        """Налаштування HTTP маршрутів"""
+        """Налаштування HTTP маршрутів."""
 
         @self.app.post("/security/mask")
         async def mask_pii_data(request: dict):
-            """Маскування PII в даних"""
+            """Маскування PII в даних."""
             try:
                 data = request["data"]
                 method = MaskingMethod(request.get("method", "full_mask"))
@@ -178,7 +178,7 @@ class SecurityPrivacyAgent:
 
         @self.app.post("/security/detect")
         async def detect_pii(request: dict):
-            """Виявлення PII в тексті або даних"""
+            """Виявлення PII в тексті або даних."""
             try:
                 text = request.get("text", "")
                 data = request.get("data", {})
@@ -197,7 +197,7 @@ class SecurityPrivacyAgent:
             x_forwarded_for: str = Header(None),
             user_agent: str = Header(None),
         ):
-            """Журналювання доступу до ресурсів"""
+            """Журналювання доступу до ресурсів."""
             try:
                 resource = request["resource"]
                 action = request["action"]
@@ -226,7 +226,7 @@ class SecurityPrivacyAgent:
 
         @self.app.get("/security/permissions/{user_role}")
         async def get_role_permissions(user_role: str):
-            """Отримання дозволів для ролі"""
+            """Отримання дозволів для ролі."""
             if user_role not in self.rbac_roles:
                 raise HTTPException(status_code=404, detail="Role not found")
 
@@ -234,7 +234,7 @@ class SecurityPrivacyAgent:
 
         @self.app.post("/security/authorize")
         async def authorize_access(request: dict):
-            """Авторизація доступу до ресурсу"""
+            """Авторизація доступу до ресурсу."""
             try:
                 user_role = request["user_role"]
                 resource = request["resource"]
@@ -255,7 +255,7 @@ class SecurityPrivacyAgent:
 
         @self.app.get("/security/audit/report")
         async def get_audit_report(hours: int = 24, user_id: Optional[str] = None):
-            """Звіт аудиту доступу"""
+            """Звіт аудиту доступу."""
             try:
                 report = await self.generate_audit_report(hours, user_id)
                 return report
@@ -266,7 +266,7 @@ class SecurityPrivacyAgent:
 
         @self.app.get("/security/health")
         async def health():
-            """Health check"""
+            """Health check."""
             return {
                 "status": "healthy",
                 "pii_patterns_count": len(self.pii_patterns),
@@ -277,7 +277,7 @@ class SecurityPrivacyAgent:
     async def mask_pii(
         self, data: Any, method: MaskingMethod, specific_fields: List[str] = None
     ) -> Dict[str, Any]:
-        """Маскування PII в даних"""
+        """Маскування PII в даних."""
 
         if isinstance(data, str):
             # Маскування в тексті
@@ -320,7 +320,7 @@ class SecurityPrivacyAgent:
             return {"original_type": "other", "masked_data": data}
 
     def _mask_text(self, text: str, method: MaskingMethod) -> str:
-        """Маскування PII в тексті"""
+        """Маскування PII в тексті."""
 
         masked_text = text
 
@@ -347,7 +347,7 @@ class SecurityPrivacyAgent:
     def _mask_field_value(
         self, field_name: str, value: str, method: MaskingMethod
     ) -> tuple[str, List[str]]:
-        """Маскування значення поля"""
+        """Маскування значення поля."""
 
         pii_found = []
 
@@ -401,7 +401,7 @@ class SecurityPrivacyAgent:
         return value, pii_found
 
     def _partial_mask(self, text: str, pii_type: PIIType) -> str:
-        """Часткове маскування залежно від типу PII"""
+        """Часткове маскування залежно від типу PII."""
 
         if pii_type == PIIType.EMAIL:
             if "@" in text:
@@ -431,7 +431,7 @@ class SecurityPrivacyAgent:
             return "***"
 
     async def detect_pii_in_data(self, text: str, data: Dict) -> List[Dict[str, Any]]:
-        """Виявлення PII в тексті та даних"""
+        """Виявлення PII в тексті та даних."""
 
         detected = []
 
@@ -470,7 +470,7 @@ class SecurityPrivacyAgent:
         return detected
 
     async def check_authorization(self, user_role: str, resource: str, action: str) -> bool:
-        """Перевірка авторизації доступу"""
+        """Перевірка авторизації доступу."""
 
         if user_role not in self.rbac_roles:
             return False
@@ -493,7 +493,7 @@ class SecurityPrivacyAgent:
         )
 
     def _calculate_risk_score(self, action: str, pii_accessed: List[str]) -> float:
-        """Розрахунок ризику доступу"""
+        """Розрахунок ризику доступу."""
 
         base_risk = {"read": 0.1, "write": 0.3, "delete": 0.7, "export": 0.5, "admin": 0.8}.get(
             action.lower(), 0.2
@@ -508,7 +508,7 @@ class SecurityPrivacyAgent:
         return round(total_risk, 3)
 
     async def _store_access_log(self, access_log: AccessLog):
-        """Зберігання журналу доступу"""
+        """Зберігання журналу доступу."""
 
         log_data = {
             "user_id": access_log.user_id,
@@ -540,7 +540,7 @@ class SecurityPrivacyAgent:
             )
 
     async def generate_audit_report(self, hours: int, user_id: Optional[str]) -> Dict[str, Any]:
-        """Генерація звіту аудиту"""
+        """Генерація звіту аудиту."""
 
         # Симуляція звіту (в реальності запит до Redis)
         report = {
@@ -562,7 +562,7 @@ class SecurityPrivacyAgent:
         return report
 
     async def _publish_event(self, event_type: str, data: Dict[str, Any]):
-        """Публікація події в Redis Streams"""
+        """Публікація події в Redis Streams."""
         try:
             event_data = {
                 "event_type": event_type,

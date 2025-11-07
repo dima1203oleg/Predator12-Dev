@@ -4,9 +4,9 @@ Integration tests for Rate Limiting Middleware
 """
 
 import asyncio
+
 import httpx
 import pytest
-
 
 BASE_URL = "http://localhost:8000"
 
@@ -47,7 +47,7 @@ class TestRateLimitingIntegration:
 
         # Health endpoint should have high limit
         health_response = await client.get("/health")
-        health_limit = int(health_response.headers["X-RateLimit-Limit"])
+        int(health_response.headers["X-RateLimit-Limit"])
 
         # Make multiple requests to health endpoint
         for _ in range(5):
@@ -73,7 +73,9 @@ class TestRateLimitingIntegration:
         responses = await asyncio.gather(*tasks, return_exceptions=True)
 
         # At least some requests should succeed
-        successful = [r for r in responses if isinstance(r, httpx.Response) and r.status_code == 200]
+        successful = [
+            r for r in responses if isinstance(r, httpx.Response) and r.status_code == 200
+        ]
         assert len(successful) > 0
 
     @pytest.mark.asyncio
@@ -217,10 +219,7 @@ class TestCORSPolicy:
         ]
 
         for origin in allowed_origins:
-            response = await client.options(
-                "/health",
-                headers={"Origin": origin}
-            )
+            response = await client.options("/health", headers={"Origin": origin})
             # OPTIONS request should be handled or 405 if not available
             assert response.status_code in [200, 405]
 
@@ -233,7 +232,7 @@ class TestCORSPolicy:
             headers={
                 "Origin": "http://localhost:3000",
                 "Access-Control-Request-Method": "GET",
-            }
+            },
         )
 
         # Should allow or handle the preflight

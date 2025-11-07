@@ -18,6 +18,7 @@ async def agents_status() -> Dict[str, Any]:
 @router.post("/restart")
 async def agents_restart() -> Dict[str, Any]:
     """Restart all configured agents.
+
     Matches Makefile target `agents-restart` which POSTs without body.
     """
     sup = await get_supervisor()

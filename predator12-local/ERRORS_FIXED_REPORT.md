@@ -16,17 +16,28 @@
 ### 1. **Docker Compose - Redis Health Check**
 
 **Проблема:**
+
 ```yaml
 healthcheck:
   test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
 ```
+
 - Неправильна команда health check для Redis з паролем
 - Відсутність обробки паролю в команді перевірки
 
 **Виправлення:**
+
 ```yaml
 healthcheck:
-  test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "${REDIS_PASSWORD:-redis_secure_pass}", "ping"]
+  test:
+    [
+      "CMD",
+      "redis-cli",
+      "--no-auth-warning",
+      "-a",
+      "${REDIS_PASSWORD:-redis_secure_pass}",
+      "ping",
+    ]
 ```
 
 **Вплив:** ❌ Критичний - контейнер Redis не проходив health check
@@ -36,17 +47,28 @@ healthcheck:
 ### 2. **Docker Compose - Frontend Health Check**
 
 **Проблема:**
+
 ```yaml
 healthcheck:
   test: ["CMD", "curl", "-f", "http://localhost:80/"]
 ```
+
 - Неправильний порт (80 замість 3000)
 - Використання `curl` в Alpine образі, де його немає
 
 **Виправлення:**
+
 ```yaml
 healthcheck:
-  test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+  test:
+    [
+      "CMD",
+      "wget",
+      "--no-verbose",
+      "--tries=1",
+      "--spider",
+      "http://localhost:3000/",
+    ]
 ```
 
 **Вплив:** ❌ Критичний - health check завжди падав
@@ -57,6 +79,7 @@ healthcheck:
 
 **Проблема:**
 Відсутні критичні змінні:
+
 - `REDIS_PASSWORD`
 - `OPENSEARCH_ADMIN_PASSWORD`
 - `MODEL_SDK_KEY`
@@ -102,13 +125,16 @@ MINIO_URL=http://minio:9000
 ### 4. **Backend Dockerfile - Створення користувача**
 
 **Проблема:**
+
 ```dockerfile
 RUN groupadd -r predator11 || true && useradd -r -g predator11 predator11 || true
 ```
+
 - Використання `|| true` маскує помилки
 - Може призвести до запуску контейнера з root правами
 
 **Виправлення:**
+
 ```dockerfile
 RUN groupadd -r predator11 && useradd -r -g predator11 predator11
 ```
@@ -120,12 +146,14 @@ RUN groupadd -r predator11 && useradd -r -g predator11 predator11
 ### 5. **Backend requirements.txt - Структура за��ежностей**
 
 **Проблема:**
+
 - Відсутня організація залежностей
 - Важко відстежувати призначення пакетів
 - Видалено застарілий пакет `aioredis` (deprecated, використовується `redis>=4.2.0`)
 
 **Виправлення:**
 Реорганізовано requirements.txt з категоріями:
+
 - Core FastAPI and Web Framework
 - Authentication & Security
 - HTTP Clients
@@ -145,6 +173,7 @@ RUN groupadd -r predator11 && useradd -r -g predator11 predator11
 ## 🔍 Перевірені компоненти без помилок
 
 ### ✅ Docker Compose Services
+
 - **Backend:** Правильна конфігурація портів, volumes, health checks
 - **Worker/Scheduler:** Коректні команди Celery
 - **Agent Supervisor:** Правильний шлях до конфігурації
@@ -157,12 +186,14 @@ RUN groupadd -r predator11 && useradd -r -g predator11 predator11
 - **Keycloak:** Коректна інтеграція з PostgreSQL
 
 ### ✅ Frontend Configuration
+
 - **package.json:** Всі залежності коректні, без конфліктів версій
 - **nginx.conf:** Правильна конфігурація для production
 - **nginx-default.conf:** Коректний proxy для API, security headers
 - **Dockerfile:** Multi-stage build з правильними permissions
 
 ### ✅ Backend Configuration
+
 - **Dockerfile:** Оптимізований multi-stage build
 - **requirements.txt:** Всі залежності сумісні (після виправлення)
 
@@ -171,14 +202,17 @@ RUN groupadd -r predator11 && useradd -r -g predator11 predator11
 ### 6. **Backend - Неправильні імпорти в main.py**
 
 **Проблема:**
+
 ```python
 from routes_agents_real import load_agents_registry
 from routes_agents_real import get_agents_status as real_agents_status
 ```
+
 - Відносні імпорти без вказівки пакету
 - Призводить до ModuleNotFoundError
 
 **Виправлення:**
+
 ```python
 from app.routes_agents_real import load_agents_registry
 from app.routes_agents_real import get_agents_status as real_agents_status
@@ -191,16 +225,19 @@ from app.routes_agents_real import get_agents_status as real_agents_status
 ### 7. **Backend - Неправильний шлях до registry.yaml**
 
 **Проблема:**
+
 ```python
 REGISTRY_PATH = os.path.join(
     os.path.dirname(__file__),
     "../../agents/registry.yaml"
 )
 ```
+
 - Неправильна кількість рівнів вгору
 - Файл не знаходився
 
 **Виправлення:**
+
 ```python
 REGISTRY_PATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
@@ -215,25 +252,28 @@ REGISTRY_PATH = os.path.join(
 ### 8. **Frontend - Відсутній alias в vite.config.ts**
 
 **Проблема:**
+
 ```typescript
 // tsconfig.json має alias "@/*": ["./src/*"]
 // але vite.config.ts не має відповідного resolve.alias
 ```
+
 - TypeScript знає про alias, але Vite ні
 - Призводить до помилок імпорту під час build
 
 **Виправлення:**
+
 ```typescript
-import path from 'path'
+import path from "path";
 
 export default defineConfig({
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-    }
+      "@": path.resolve(__dirname, "./src"),
+    },
   },
   // ...
-})
+});
 ```
 
 **Вплив:** ⚠️ Середній - build міг падати на імпортах з @/
@@ -242,18 +282,19 @@ export default defineConfig({
 
 ## 📊 Статистика виправлень
 
-| Категорія | Кількість | Критичність |
-|-----------|-----------|-------------|
-| Критичні помилки | 6 | ❌ Високо |
-| Середні проблеми | 2 | ⚠️ Середньо |
-| Покращення | 2 | ✅ Низько |
-| **Всього** | **10** | - |
+| Категорія        | Кількість | Критичність |
+| ---------------- | --------- | ----------- |
+| Критичні помилки | 6         | ❌ Високо   |
+| Середні проблеми | 2         | ⚠️ Середньо |
+| Покращення       | 2         | ✅ Низько   |
+| **Всього**       | **10**    | -           |
 
 ---
 
 ## 🎯 Рекомендації для production
 
 ### 1. Змінні середовищ��
+
 Обов'язково змініть наступні значення перед deployment:
 
 ```env
@@ -281,7 +322,9 @@ MINIO_ROOT_PASSWORD=<strong-password>
 ```
 
 ### 2. Health Checks
+
 Всі health checks тепер працюють коректно:
+
 - ✅ Backend: HTTP перевірка на `/health`
 - ✅ Frontend: wget перевірка на порту 3000
 - ✅ Redis: redis-cli ping з автентифікацією
@@ -290,13 +333,16 @@ MINIO_ROOT_PASSWORD=<strong-password>
 - ✅ Prometheus/Grafana/Loki/Tempo: HTTP health endpoints
 
 ### 3. Безпека
+
 - ✅ Всі контейнери працюють від non-root користувачів
 - ✅ Security headers налаштовані в nginx
 - ✅ Rate limiting налаштовано
 - ✅ OpenSearch працює з увімкненою безпекою
 
 ### 4. Observability
+
 Повний стек моніторингу готовий:
+
 - ✅ Prometheus для метрик
 - ✅ Grafana для візуалізації
 - ✅ Loki для логів
@@ -309,22 +355,26 @@ MINIO_ROOT_PASSWORD=<strong-password>
 ## 🚀 Наступні кроки
 
 1. **Створ��ти .env файл:**
+
    ```bash
    cp .env.example .env
    # Відредагувати .env з реальними значеннями
    ```
 
 2. **Запустити систему:**
+
    ```bash
    docker-compose up -d
    ```
 
 3. **Перевірити health checks:**
+
    ```bash
    docker-compose ps
    ```
 
 4. **Перевірити логи:**
+
    ```bash
    docker-compose logs -f backend
    docker-compose logs -f frontend

@@ -1,12 +1,13 @@
 """Stubs for modernization agents.
 
-These are lightweight placeholder implementations so test discovery/import
-succeeds in environments where the full implementations are not required.
+These are lightweight placeholder implementations so test
+discovery/import succeeds in environments where the full implementations
+are not required.
 """
 
 from typing import Any, Dict
 
-from agents.base import AgentResult, AgentStatus, AgentTask, BaseAgent, ExecutionPlan
+from agents.base import AgentTask, BaseAgent, ExecutionPlan
 
 
 class _SimpleModernizer(BaseAgent):

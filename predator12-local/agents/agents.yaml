@@ -29,17 +29,17 @@ orchestration:
       # Складна логіка вибору моделі на основі контексту
       selection_strategy: "context_adaptive"
       primary_pool:
-        - "meta/meta-llama-3.1-70b-instruct"     # Найпотужніша для складних задач
-        - "mistral/mixtral-8x22b-instruct"       # Альтернатива для міркування
-        - "qwen/qwen2.5-72b-instruct"            # Азійська альтернатива
+        - "meta/meta-llama-3.1-70b-instruct" # Найпотужніша для складних задач
+        - "mistral/mixtral-8x22b-instruct" # Альтернатива для міркування
+        - "qwen/qwen2.5-72b-instruct" # Азійська альтернатива
       reasoning_pool:
-        - "meta/meta-llama-3.1-8b-instruct"     # Швидше міркування
-        - "microsoft/phi-3-medium-4k-instruct"   # Логічні задачі
-        - "google/gemma-2-27b-it"                # Google альтернатива
+        - "meta/meta-llama-3.1-8b-instruct" # Швидше міркування
+        - "microsoft/phi-3-medium-4k-instruct" # Логічні задачі
+        - "google/gemma-2-27b-it" # Google альтернатива
       fast_pool:
-        - "microsoft/phi-3-mini-4k-instruct"    # Швидкі відповіді
-        - "qwen/qwen2.5-3b-instruct"            # Ультра-швидкі
-        - "meta/meta-llama-3.2-3b-instruct"     # Компактні відповіді
+        - "microsoft/phi-3-mini-4k-instruct" # Швидкі відповіді
+        - "qwen/qwen2.5-3b-instruct" # Ультра-швидкі
+        - "meta/meta-llama-3.2-3b-instruct" # Компактні відповіді
       # Логіка селекції
       context_rules:
         - condition: "task_complexity > 0.8"
@@ -75,9 +75,15 @@ orchestration:
     # Розширена логіка роутингу з множинними стратегіями
     routing_strategies:
       reasoning:
-        tier_1: ["meta/meta-llama-3.1-70b-instruct", "mistral/mixtral-8x22b-instruct"]
-        tier_2: ["qwen/qwen2.5-72b-instruct", "microsoft/phi-3-medium-128k-instruct"]
-        tier_3: ["meta/meta-llama-3.1-8b-instruct", "mistral/mistral-7b-instruct-v0.3"]
+        tier_1:
+          ["meta/meta-llama-3.1-70b-instruct", "mistral/mixtral-8x22b-instruct"]
+        tier_2:
+          ["qwen/qwen2.5-72b-instruct", "microsoft/phi-3-medium-128k-instruct"]
+        tier_3:
+          [
+            "meta/meta-llama-3.1-8b-instruct",
+            "mistral/mistral-7b-instruct-v0.3",
+          ]
         selection_criteria:
           - metric: "context_length"
             threshold: 32000
@@ -90,17 +96,20 @@ orchestration:
             preferred: "tier_2"
       code:
         tier_1: ["deepseek/deepseek-coder-v2", "bigcode/starcoder2-15b"]
-        tier_2: ["qwen/qwen2.5-coder-32b-instruct", "wizardcoder/wizardcoder-15b"]
+        tier_2:
+          ["qwen/qwen2.5-coder-32b-instruct", "wizardcoder/wizardcoder-15b"]
         tier_3: ["replit/replit-code-v1.5", "qwen/qwen2.5-coder-7b-instruct"]
         specialization:
-          python: ["deepseek/deepseek-coder-v2", "qwen/qwen2.5-coder-32b-instruct"]
+          python:
+            ["deepseek/deepseek-coder-v2", "qwen/qwen2.5-coder-32b-instruct"]
           javascript: ["bigcode/starcoder2-15b", "replit/replit-code-v1.5"]
           rust: ["deepseek/deepseek-coder-v2", "wizardcoder/wizardcoder-15b"]
           sql: ["qwen/qwen2.5-coder-32b-instruct", "deepseek/deepseek-coder-v2"]
       embed:
         tier_1: ["BAAI/bge-m3", "intfloat/multilingual-e5-large"]
         tier_2: ["jinaai/jina-embeddings-v3", "intfloat/e5-large-v2"]
-        tier_3: ["BAAI/bge-base-en-v1.5", "sentence-transformers/all-MiniLM-L6-v2"]
+        tier_3:
+          ["BAAI/bge-base-en-v1.5", "sentence-transformers/all-MiniLM-L6-v2"]
         specialization:
           multilingual: ["BAAI/bge-m3", "intfloat/multilingual-e5-large"]
           english_only: ["intfloat/e5-large-v2", "BAAI/bge-base-en-v1.5"]
@@ -110,13 +119,23 @@ orchestration:
         tier_2: ["meta/llama-3.2-11b-vision-instruct", "llava-hf/llava-1.6-34b"]
         tier_3: ["moondream/moondream2", "llava-hf/llava-1.5-7b"]
         specialization:
-          document_analysis: ["Qwen/Qwen2-VL-7B-Instruct", "llava-hf/llava-1.6-34b"]
-          general_vision: ["llava-hf/llava-1.6-mistral-7b", "meta/llama-3.2-11b-vision-instruct"]
+          document_analysis:
+            ["Qwen/Qwen2-VL-7B-Instruct", "llava-hf/llava-1.6-34b"]
+          general_vision:
+            [
+              "llava-hf/llava-1.6-mistral-7b",
+              "meta/llama-3.2-11b-vision-instruct",
+            ]
           lightweight: ["moondream/moondream2", "llava-hf/llava-1.5-7b"]
       fast:
         tier_1: ["microsoft/phi-3-mini-4k-instruct", "qwen/qwen2.5-3b-instruct"]
-        tier_2: ["meta/meta-llama-3.2-3b-instruct", "mistral/mistral-7b-instruct-v0.3"]
-        tier_3: ["microsoft/phi-3-mini-128k-instruct", "qwen/qwen2.5-1.5b-instruct"]
+        tier_2:
+          [
+            "meta/meta-llama-3.2-3b-instruct",
+            "mistral/mistral-7b-instruct-v0.3",
+          ]
+        tier_3:
+          ["microsoft/phi-3-mini-128k-instruct", "qwen/qwen2.5-1.5b-instruct"]
     # Інтелектуальні правила балансування навантаження
     load_balancing:
       strategy: "weighted_round_robin"
@@ -124,7 +143,12 @@ orchestration:
       failure_threshold: 3
       recovery_time: 300
     events:
-      publishes: ["router.model_selected", "router.fallback_used", "router.performance_alert"]
+      publishes:
+        [
+          "router.model_selected",
+          "router.fallback_used",
+          "router.performance_alert",
+        ]
 
   ArbiterAgent:
     port: 9003
@@ -142,15 +166,15 @@ orchestration:
       # Складна логіка арбітрації з множинними моделями
       arbitration_strategy: "multi_model_ensemble"
       primary_arbiters:
-        - "meta/meta-llama-3.1-70b-instruct"    # Головний арбітр
-        - "mistral/mixtral-8x22b-instruct"      # Альтернативний арбітр
-        - "qwen/qwen2.5-72b-instruct"           # Третій арбітр
+        - "meta/meta-llama-3.1-70b-instruct" # Головний арбітр
+        - "mistral/mixtral-8x22b-instruct" # Альтернативний арбітр
+        - "qwen/qwen2.5-72b-instruct" # Третій арбітр
       quality_assessors:
-        - "microsoft/phi-3-medium-4k-instruct"  # Оцінка логічності
-        - "google/gemma-2-27b-it"               # Оцінка якості
+        - "microsoft/phi-3-medium-4k-instruct" # Оцінка логічності
+        - "google/gemma-2-27b-it" # Оцінка якості
       embedding_models:
-        - "BAAI/bge-m3"                         # Семантичне порівняння
-        - "intfloat/multilingual-e5-large"     # Багатомовні ембединги
+        - "BAAI/bge-m3" # Семантичне порівняння
+        - "intfloat/multilingual-e5-large" # Багатомовні ембединги
       consensus_rules:
         - min_agreements: 2
         - confidence_threshold: 0.75
@@ -179,16 +203,16 @@ data_layer:
     models:
       # Складна логіка для різних типів аналізу
       schema_inference:
-        primary: "qwen/qwen2.5-14b-instruct"     # Добре розуміє структури
+        primary: "qwen/qwen2.5-14b-instruct" # Добре розуміє структури
         fallback: "microsoft/phi-3-medium-4k-instruct"
         specialization:
           json: "qwen/qwen2.5-14b-instruct"
           csv: "microsoft/phi-3-medium-4k-instruct"
           xml: "meta/meta-llama-3.1-8b-instruct"
       pii_detection:
-        primary: "microsoft/phi-3-medium-4k-instruct"  # Добре для класифікації
-        secondary: "meta/meta-llama-3.1-8b-instruct"   # Перевірка
-        embedding: "BAAI/bge-m3"                        # Семантичний пошук PII
+        primary: "microsoft/phi-3-medium-4k-instruct" # Добре для класифікації
+        secondary: "meta/meta-llama-3.1-8b-instruct" # Перевірка
+        embedding: "BAAI/bge-m3" # Семантичний пошук PII
         confidence_threshold: 0.85
       content_analysis:
         text_analysis: "mistral/mistral-7b-instruct-v0.3"
@@ -199,7 +223,8 @@ data_layer:
       gold: "postgres://datasets"
       index: "opensearch://safe_*"
     events:
-      publishes: ["dataset.created", "dataset.indexed", "dataset.failed", "pii.detected"]
+      publishes:
+        ["dataset.created", "dataset.indexed", "dataset.failed", "pii.detected"]
 
   Schema&LineageAgent:
     port: 9011
@@ -216,11 +241,11 @@ data_layer:
       - "/schema/predict_changes"
     models:
       schema_analysis:
-        primary: "qwen/qwen2.5-32b-instruct"      # Найкраща для структурного аналізу
+        primary: "qwen/qwen2.5-32b-instruct" # Найкраща для структурного аналізу
         secondary: "microsoft/phi-3-medium-128k-instruct"
         fallback: "meta/meta-llama-3.1-8b-instruct"
       lineage_tracking:
-        graph_analysis: "meta/meta-llama-3.1-70b-instruct"  # Для складних зв'язків
+        graph_analysis: "meta/meta-llama-3.1-70b-instruct" # Для складних зв'язків
         relationship_detection: "mistral/mixtral-8x7b-instruct"
       version_control:
         change_analysis: "microsoft/phi-3-medium-4k-instruct"
@@ -241,15 +266,15 @@ data_layer:
       - "/quality/suggest_fixes"
     models:
       rule_generation:
-        primary: "microsoft/phi-3-medium-4k-instruct"   # Логічні правила
-        secondary: "qwen/qwen2.5-14b-instruct"          # Структурний аналіз
+        primary: "microsoft/phi-3-medium-4k-instruct" # Логічні правила
+        secondary: "qwen/qwen2.5-14b-instruct" # Структурний аналіз
       quality_assessment:
-        statistical: "meta/meta-llama-3.1-8b-instruct"  # Статистичний аналіз
-        semantic: "mistral/mistral-7b-instruct-v0.3"    # Семантична якість
+        statistical: "meta/meta-llama-3.1-8b-instruct" # Статистичний аналіз
+        semantic: "mistral/mistral-7b-instruct-v0.3" # Семантична якість
         completeness: "microsoft/phi-3-mini-4k-instruct" # Повнота даних
       anomaly_detection:
-        primary: "qwen/qwen2.5-14b-instruct"            # Виявлення аномалій
-        embedding: "BAAI/bge-m3"                         # Семантичні аномалії
+        primary: "qwen/qwen2.5-14b-instruct" # Виявлення аномалій
+        embedding: "BAAI/bge-m3" # Семантичні аномалії
     events:
       publishes: ["quality.passed", "quality.failed", "quality.improved"]
 
@@ -268,9 +293,9 @@ data_layer:
     models:
       # Повністю безплатні моделі для entity resolution
       entity_matching:
-        primary: "BAAI/bge-m3"                           # Найкращі ембединги
-        secondary: "intfloat/multilingual-e5-large"     # Багатомовні
-        fallback: "jinaai/jina-embeddings-v3"           # Запасний варіант
+        primary: "BAAI/bge-m3" # Найкращі ембединги
+        secondary: "intfloat/multilingual-e5-large" # Багатомовні
+        fallback: "jinaai/jina-embeddings-v3" # Запасний варіант
       similarity_analysis:
         semantic: "BAAI/bge-m3"
         lexical: "intfloat/e5-large-v2"
@@ -298,14 +323,14 @@ data_layer:
       - "/geo/analyze"
     models:
       address_parsing:
-        primary: "microsoft/phi-3-medium-4k-instruct"   # Структурний парсинг
-        secondary: "qwen/qwen2.5-14b-instruct"          # Контекстуальне розуміння
+        primary: "microsoft/phi-3-medium-4k-instruct" # Структурний парсинг
+        secondary: "qwen/qwen2.5-14b-instruct" # Контекстуальне розуміння
       location_analysis:
-        spatial: "meta/meta-llama-3.1-8b-instruct"     # Просторовий аналіз
-        contextual: "mistral/mistral-7b-instruct-v0.3"  # Контекстуальний
+        spatial: "meta/meta-llama-3.1-8b-instruct" # Просторовий аналіз
+        contextual: "mistral/mistral-7b-instruct-v0.3" # Контекстуальний
       route_optimization:
         algorithm: "microsoft/phi-3-medium-4k-instruct" # Алгоритмічні рішення
-        traffic_analysis: "qwen/qwen2.5-14b-instruct"   # Аналіз трафіку
+        traffic_analysis: "qwen/qwen2.5-14b-instruct" # Аналіз трафіку
 
   SyntheticDataAgent:
     port: 9015
@@ -322,12 +347,12 @@ data_layer:
     models:
       # Складна логіка генерації для різних типів даних
       tabular_generation:
-        primary: "meta/meta-llama-3.1-70b-instruct"    # Найкращий для структур
-        secondary: "mistral/mixtral-8x22b-instruct"     # Альтернатива
+        primary: "meta/meta-llama-3.1-70b-instruct" # Найкращий для структур
+        secondary: "mistral/mixtral-8x22b-instruct" # Альтернатива
         validation: "microsoft/phi-3-medium-4k-instruct" # Валідація результатів
       text_generation:
-        creative: "mistral/mixtral-8x22b-instruct"      # Креативні тексти
-        technical: "qwen/qwen2.5-32b-instruct"          # Технічні тексти
+        creative: "mistral/mixtral-8x22b-instruct" # Креативні тексти
+        technical: "qwen/qwen2.5-32b-instruct" # Технічні тексти
         conversational: "meta/meta-llama-3.1-8b-instruct" # Діалоги
       anonymization:
         pii_detection: "microsoft/phi-3-medium-4k-instruct"
@@ -366,17 +391,17 @@ analytics_layer:
     models:
       # Багаторівнева система виявлення аномалій
       statistical_analysis:
-        primary: "qwen/qwen2.5-32b-instruct"           # Найкращий для статистики
+        primary: "qwen/qwen2.5-32b-instruct" # Найкращий для статистики
         secondary: "microsoft/phi-3-medium-128k-instruct" # Логічний аналіз
-        fallback: "meta/meta-llama-3.1-8b-instruct"    # Базовий аналіз
+        fallback: "meta/meta-llama-3.1-8b-instruct" # Базовий аналіз
       pattern_recognition:
         time_series: "meta/meta-llama-3.1-70b-instruct" # Часові ряди
-        multivariate: "mistral/mixtral-8x22b-instruct"   # Багатовимірні
-        categorical: "qwen/qwen2.5-14b-instruct"         # Категоріальні
+        multivariate: "mistral/mixtral-8x22b-instruct" # Багатовимірні
+        categorical: "qwen/qwen2.5-14b-instruct" # Категоріальні
       explanation_generation:
-        technical: "microsoft/phi-3-medium-4k-instruct"  # Технічні пояснення
-        business: "meta/meta-llama-3.1-8b-instruct"      # Бізнес-пояснення
-        visual: "mistral/mistral-7b-instruct-v0.3"       # Візуальні описи
+        technical: "microsoft/phi-3-medium-4k-instruct" # Технічні пояснення
+        business: "meta/meta-llama-3.1-8b-instruct" # Бізнес-пояснення
+        visual: "mistral/mistral-7b-instruct-v0.3" # Візуальні описи
       adaptive_learning:
         threshold_optimization: "qwen/qwen2.5-14b-instruct"
         model_selection: "microsoft/phi-3-medium-4k-instruct"
@@ -405,19 +430,19 @@ analytics_layer:
     models:
       # Спеціалізовані моделі для прогнозування
       time_series_analysis:
-        primary: "meta/meta-llama-3.1-70b-instruct"    # Довгий контекст для TS
-        secondary: "mistral/mixtral-8x22b-instruct"     # Альтернативний аналіз
-        pattern_detection: "qwen/qwen2.5-32b-instruct"  # Виявлення паттернів
+        primary: "meta/meta-llama-3.1-70b-instruct" # Довгий контекст для TS
+        secondary: "mistral/mixtral-8x22b-instruct" # Альтернативний аналіз
+        pattern_detection: "qwen/qwen2.5-32b-instruct" # Виявлення паттернів
       seasonality_detection:
         advanced: "microsoft/phi-3-medium-128k-instruct" # Складна сезонність
-        basic: "qwen/qwen2.5-14b-instruct"               # Базова сезонність
+        basic: "qwen/qwen2.5-14b-instruct" # Базова сезонність
       trend_analysis:
-        long_term: "meta/meta-llama-3.1-70b-instruct"   # Довгострокові тренди
-        short_term: "mistral/mistral-7b-instruct-v0.3"  # Короткострокові
+        long_term: "meta/meta-llama-3.1-70b-instruct" # Довгострокові тренди
+        short_term: "mistral/mistral-7b-instruct-v0.3" # Короткострокові
       scenario_modeling:
-        what_if: "microsoft/phi-3-medium-4k-instruct"   # Сценарії "що якщо"
-        sensitivity: "qwen/qwen2.5-14b-instruct"        # Аналіз чутливості
-        monte_carlo: "meta/meta-llama-3.1-8b-instruct"  # Монте-Карло
+        what_if: "microsoft/phi-3-medium-4k-instruct" # Сценарії "що якщо"
+        sensitivity: "qwen/qwen2.5-14b-instruct" # Аналіз чутливості
+        monte_carlo: "meta/meta-llama-3.1-8b-instruct" # Монте-Карло
     events:
       publishes: ["forecast.ready", "forecast.updated", "scenario.analyzed"]
 
@@ -442,22 +467,22 @@ analytics_layer:
     models:
       # Багаторівнева система аналізу графів
       graph_construction:
-        relationship_extraction: "meta/meta-llama-3.1-70b-instruct"  # Вилучення зв'язків
-        entity_linking: "qwen/qwen2.5-32b-instruct"                  # Зв'язування сутностей
-        validation: "microsoft/phi-3-medium-4k-instruct"             # Валідація графа
+        relationship_extraction: "meta/meta-llama-3.1-70b-instruct" # Вилучення зв'язків
+        entity_linking: "qwen/qwen2.5-32b-instruct" # Зв'язування сутностей
+        validation: "microsoft/phi-3-medium-4k-instruct" # Валідація графа
       community_detection:
-        algorithm_selection: "microsoft/phi-3-medium-4k-instruct"    # Вибір алгоритму
-        parameter_tuning: "qwen/qwen2.5-14b-instruct"                # Настройка параметрів
-        validation: "meta/meta-llama-3.1-8b-instruct"                # Валідація спільнот
+        algorithm_selection: "microsoft/phi-3-medium-4k-instruct" # Вибір алгоритму
+        parameter_tuning: "qwen/qwen2.5-14b-instruct" # Настройка параметрів
+        validation: "meta/meta-llama-3.1-8b-instruct" # Валідація спільнот
       centrality_analysis:
-        multi_metric: "mistral/mixtral-8x22b-instruct"               # Множинні метрики
-        interpretation: "microsoft/phi-3-medium-4k-instruct"         # Інтерпретація
+        multi_metric: "mistral/mixtral-8x22b-instruct" # Множинні метрики
+        interpretation: "microsoft/phi-3-medium-4k-instruct" # Інтерпретація
       anomaly_detection:
-        structural: "qwen/qwen2.5-14b-instruct"                      # Структурні аномалії
-        behavioral: "meta/meta-llama-3.1-8b-instruct"                # Поведінкові аномалії
+        structural: "qwen/qwen2.5-14b-instruct" # Структурні аномалії
+        behavioral: "meta/meta-llama-3.1-8b-instruct" # Поведінкові аномалії
       visualization_guidance:
-        layout_optimization: "microsoft/phi-3-medium-4k-instruct"    # Оптимізація макету
-        color_coding: "qwen/qwen2.5-3b-instruct"                     # Кольорове кодування
+        layout_optimization: "microsoft/phi-3-medium-4k-instruct" # Оптимізація макету
+        color_coding: "qwen/qwen2.5-3b-instruct" # Кольорове кодування
     events:
       publishes: ["graph.ready", "community.detected", "anomaly.found"]
 
@@ -480,16 +505,16 @@ analytics_layer:
       - "/patterns/sequences"
     models:
       pattern_discovery:
-        primary: "qwen/qwen2.5-32b-instruct"           # Найкращий для паттернів
+        primary: "qwen/qwen2.5-32b-instruct" # Найкращий для паттернів
         secondary: "microsoft/phi-3-medium-128k-instruct" # Логічний аналіз
-        validation: "meta/meta-llama-3.1-8b-instruct"   # Валідація паттернів
+        validation: "meta/meta-llama-3.1-8b-instruct" # Валідація паттернів
       association_rules:
         rule_generation: "microsoft/phi-3-medium-4k-instruct" # Генерація правил
-        significance_testing: "qwen/qwen2.5-14b-instruct"     # Тести значущості
-        interpretation: "mistral/mistral-7b-instruct-v0.3"    # Інтерпретація
+        significance_testing: "qwen/qwen2.5-14b-instruct" # Тести значущості
+        interpretation: "mistral/mistral-7b-instruct-v0.3" # Інтерпретація
       sequence_analysis:
-        temporal: "meta/meta-llama-3.1-70b-instruct"    # Часові послідовності
-        behavioral: "mistral/mixtral-8x7b-instruct"     # Поведінкові паттерни
+        temporal: "meta/meta-llama-3.1-70b-instruct" # Часові послідовності
+        behavioral: "mistral/mixtral-8x7b-instruct" # Поведінкові паттерни
 
   RiskScoringAgent:
     port: 9024
@@ -506,20 +531,20 @@ analytics_layer:
     models:
       # Складна система оцінки ризиків
       risk_calculation:
-        primary: "meta/meta-llama-3.1-70b-instruct"     # Комплексний аналіз ризиків
-        secondary: "mistral/mixtral-8x22b-instruct"      # Альтернативна оцінка
+        primary: "meta/meta-llama-3.1-70b-instruct" # Комплексний аналіз ризиків
+        secondary: "mistral/mixtral-8x22b-instruct" # Альтернативна оцінка
         validation: "microsoft/phi-3-medium-4k-instruct" # Валідація оцінок
       factor_analysis:
-        statistical: "qwen/qwen2.5-32b-instruct"        # Статистичний аналіз
-        behavioral: "meta/meta-llama-3.1-8b-instruct"   # Поведінковий аналіз
-        market: "mistral/mistral-7b-instruct-v0.3"      # Ринковий аналіз
+        statistical: "qwen/qwen2.5-32b-instruct" # Статистичний аналіз
+        behavioral: "meta/meta-llama-3.1-8b-instruct" # Поведінковий аналіз
+        market: "mistral/mistral-7b-instruct-v0.3" # Ринковий аналіз
       explanation_generation:
         technical: "microsoft/phi-3-medium-4k-instruct" # Технічні пояснення
-        business: "qwen/qwen2.5-14b-instruct"           # Бізнес-пояснення
-        regulatory: "meta/meta-llama-3.1-8b-instruct"   # Регуляторні аспекти
+        business: "qwen/qwen2.5-14b-instruct" # Бізнес-пояснення
+        regulatory: "meta/meta-llama-3.1-8b-instruct" # Регуляторні аспекти
       scenario_modeling:
         stress_testing: "mistral/mixtral-8x22b-instruct" # Стрес-тестування
-        monte_carlo: "qwen/qwen2.5-14b-instruct"         # Симуляції
+        monte_carlo: "qwen/qwen2.5-14b-instruct" # Симуляції
         sensitivity: "microsoft/phi-3-medium-4k-instruct" # Аналіз чутливості
 
   ReportGenAgent:
@@ -537,16 +562,16 @@ analytics_layer:
     models:
       # Спеціалізовані моделі для генерації звітів
       narrative_generation:
-        primary: "meta/meta-llama-3.1-70b-instruct"     # Найкращий для наративів
-        creative: "mistral/mixtral-8x22b-instruct"       # Креативне письмо
-        technical: "qwen/qwen2.5-32b-instruct"           # Технічні звіти
+        primary: "meta/meta-llama-3.1-70b-instruct" # Найкращий для наративів
+        creative: "mistral/mixtral-8x22b-instruct" # Креативне письмо
+        technical: "qwen/qwen2.5-32b-instruct" # Технічні звіти
       executive_summaries:
-        business: "microsoft/phi-3-medium-4k-instruct"  # Бізнес-резюме
-        technical: "qwen/qwen2.5-14b-instruct"          # Технічні резюме
-        strategic: "meta/meta-llama-3.1-8b-instruct"    # Стратегічні
+        business: "microsoft/phi-3-medium-4k-instruct" # Бізнес-резюме
+        technical: "qwen/qwen2.5-14b-instruct" # Технічні резюме
+        strategic: "meta/meta-llama-3.1-8b-instruct" # Стратегічні
       visual_descriptions:
         chart_analysis: "mistral/mistral-7b-instruct-v0.3" # Аналіз графіків
-        trend_description: "qwen/qwen2.5-14b-instruct"     # Опис трендів
+        trend_description: "qwen/qwen2.5-14b-instruct" # Опис трендів
         insight_extraction: "microsoft/phi-3-medium-4k-instruct" # Вилучення інсайтів
 
 # ═══════════════════════════════════════════════════════════════════════════════════
@@ -569,18 +594,18 @@ llm_ux_layer:
     models:
       # Спеціалізована система для роботи з запитами
       sql_generation:
-        primary: "deepseek/deepseek-coder-v2"           # Найкращий для SQL
-        secondary: "qwen/qwen2.5-coder-32b-instruct"    # Альтернатива для коду
+        primary: "deepseek/deepseek-coder-v2" # Найкращий для SQL
+        secondary: "qwen/qwen2.5-coder-32b-instruct" # Альтернатива для коду
         validation: "microsoft/phi-3-medium-4k-instruct" # Валідація запитів
       query_optimization:
-        performance: "qwen/qwen2.5-32b-instruct"        # Оптимізація продуктивності
-        readability: "meta/meta-llama-3.1-8b-instruct"  # Читабельність
+        performance: "qwen/qwen2.5-32b-instruct" # Оптимізація продуктивності
+        readability: "meta/meta-llama-3.1-8b-instruct" # Читабельність
       semantic_understanding:
         intent_detection: "mistral/mixtral-8x22b-instruct" # Розуміння намірів
         entity_extraction: "microsoft/phi-3-medium-4k-instruct" # Вилучення сутностей
       fast_responses:
         simple_queries: "microsoft/phi-3-mini-4k-instruct" # Прості запити
-        quick_validation: "qwen/qwen2.5-3b-instruct"       # Швидка валідація
+        quick_validation: "qwen/qwen2.5-3b-instruct" # Швидка валідація
 
   PromptEngineeringAgent:
     port: 9031
@@ -596,16 +621,16 @@ llm_ux_layer:
       - "/prompts/test"
     models:
       prompt_generation:
-        creative: "mistral/mixtral-8x22b-instruct"       # Креативні промпти
-        technical: "qwen/qwen2.5-32b-instruct"           # Технічні промпти
+        creative: "mistral/mixtral-8x22b-instruct" # Креативні промпти
+        technical: "qwen/qwen2.5-32b-instruct" # Технічні промпти
         conversational: "meta/meta-llama-3.1-70b-instruct" # Розмовні
       optimization:
         performance: "microsoft/phi-3-medium-4k-instruct" # Оптимізація продуктивності
-        clarity: "qwen/qwen2.5-14b-instruct"              # Ясність
-        effectiveness: "meta/meta-llama-3.1-8b-instruct"  # Ефективність
+        clarity: "qwen/qwen2.5-14b-instruct" # Ясність
+        effectiveness: "meta/meta-llama-3.1-8b-instruct" # Ефективність
       testing:
         ab_analysis: "microsoft/phi-3-medium-4k-instruct" # A/B аналіз
-        bias_detection: "qwen/qwen2.5-14b-instruct"       # Детекція упереджень
+        bias_detection: "qwen/qwen2.5-14b-instruct" # Детекція упереджень
         quality_assessment: "mistral/mistral-7b-instruct-v0.3" # Оцінка якості
 
   DashboardBuilderAgent:
@@ -622,16 +647,16 @@ llm_ux_layer:
       - "/dashboard/suggest"
     models:
       layout_design:
-        visual: "meta/meta-llama-3.1-8b-instruct"        # Візуальний дизайн
+        visual: "meta/meta-llama-3.1-8b-instruct" # Візуальний дизайн
         ux_optimization: "microsoft/phi-3-medium-4k-instruct" # UX оптимізація
-        accessibility: "qwen/qwen2.5-14b-instruct"       # Доступність
+        accessibility: "qwen/qwen2.5-14b-instruct" # Доступність
       kpi_selection:
-        business: "mistral/mistral-7b-instruct-v0.3"     # Бізнес KPI
-        technical: "qwen/qwen2.5-14b-instruct"           # Технічні KPI
+        business: "mistral/mistral-7b-instruct-v0.3" # Бізнес KPI
+        technical: "qwen/qwen2.5-14b-instruct" # Технічні KPI
         operational: "microsoft/phi-3-medium-4k-instruct" # Операційні
       configuration:
-        grafana: "deepseek/deepseek-coder-v2"            # Grafana конфіги
-        opensearch: "qwen/qwen2.5-coder-7b-instruct"     # OpenSearch дашборди
+        grafana: "deepseek/deepseek-coder-v2" # Grafana конфіги
+        opensearch: "qwen/qwen2.5-coder-7b-instruct" # OpenSearch дашборди
 
 # ═══════════════════════════════════════════════════════════════════════════════════
 #                            🛡️ OPERATIONAL LAYER
@@ -653,21 +678,21 @@ operational_layer:
     models:
       # Складна система діагностики
       metrics_analysis:
-        primary: "qwen/qwen2.5-32b-instruct"            # Аналіз метрик
+        primary: "qwen/qwen2.5-32b-instruct" # Аналіз метрик
         time_series: "meta/meta-llama-3.1-70b-instruct" # Часові ряди метрик
         anomaly_detection: "microsoft/phi-3-medium-128k-instruct" # Детекція аномалій
       log_analysis:
         pattern_recognition: "mistral/mixtral-8x22b-instruct" # Розпізнавання паттернів
-        error_classification: "qwen/qwen2.5-14b-instruct"     # Класифікація помилок
-        correlation: "microsoft/phi-3-medium-4k-instruct"     # Кореляційний аналіз
+        error_classification: "qwen/qwen2.5-14b-instruct" # Класифікація помилок
+        correlation: "microsoft/phi-3-medium-4k-instruct" # Кореляційний аналіз
       root_cause_analysis:
-        causal_inference: "meta/meta-llama-3.1-70b-instruct"  # Каузальний висновок
+        causal_inference: "meta/meta-llama-3.1-70b-instruct" # Каузальний висновок
         hypothesis_generation: "mistral/mixtral-8x22b-instruct" # Генерація гіпотез
-        evidence_collection: "qwen/qwen2.5-14b-instruct"       # Збір доказів
+        evidence_collection: "qwen/qwen2.5-14b-instruct" # Збір доказів
       predictive_analysis:
         failure_prediction: "microsoft/phi-3-medium-4k-instruct" # Прогноз збоїв
-        capacity_planning: "qwen/qwen2.5-32b-instruct"           # Планування потужності
-        trend_analysis: "meta/meta-llama-3.1-8b-instruct"       # Аналіз трендів
+        capacity_planning: "qwen/qwen2.5-32b-instruct" # Планування потужності
+        trend_analysis: "meta/meta-llama-3.1-8b-instruct" # Аналіз трендів
 
   SelfHealingAgent:
     port: 8008
@@ -685,21 +710,22 @@ operational_layer:
     models:
       # Розумна система самовідновлення
       decision_making:
-        primary: "microsoft/phi-3-medium-4k-instruct"   # Швидкі рішення
-        secondary: "qwen/qwen2.5-14b-instruct"          # Аналіз ситуації
-        validation: "meta/meta-llama-3.1-8b-instruct"   # Валідація дій
+        primary: "microsoft/phi-3-medium-4k-instruct" # Швидкі рішення
+        secondary: "qwen/qwen2.5-14b-instruct" # Аналіз ситуації
+        validation: "meta/meta-llama-3.1-8b-instruct" # Валідація дій
       action_planning:
         sequence_optimization: "microsoft/phi-3-medium-4k-instruct" # Оптимізація послідовності
-        risk_assessment: "qwen/qwen2.5-14b-instruct"                # Оцінка ризиків
-        rollback_planning: "meta/meta-llama-3.1-8b-instruct"        # Планування відкату
+        risk_assessment: "qwen/qwen2.5-14b-instruct" # Оцінка ризиків
+        rollback_planning: "meta/meta-llama-3.1-8b-instruct" # Планування відкату
       monitoring:
-        health_assessment: "qwen/qwen2.5-3b-instruct"       # Швидка оцінка здоров'я
+        health_assessment: "qwen/qwen2.5-3b-instruct" # Швидка оцінка здоров'я
         performance_tracking: "microsoft/phi-3-mini-4k-instruct" # Відстеження продуктивності
       learning:
         pattern_learning: "mistral/mistral-7b-instruct-v0.3" # Навчання на паттернах
-        success_analysis: "qwen/qwen2.5-14b-instruct"        # Аналіз успіхів
+        success_analysis: "qwen/qwen2.5-14b-instruct" # Аналіз успіхів
     events:
-      publishes: ["healing.action_taken", "system_health_report", "healing.learned"]
+      publishes:
+        ["healing.action_taken", "system_health_report", "healing.learned"]
       subscribes: ["diagnosis.incident_detected", "anomaly.detected"]
 
   AutoTrainAgent:
@@ -716,17 +742,17 @@ operational_layer:
       - "/train/monitor"
     models:
       drift_detection:
-        statistical: "qwen/qwen2.5-32b-instruct"            # Статистичний дрифт
-        performance: "microsoft/phi-3-medium-4k-instruct"   # Дрифт продуктивності
-        data_quality: "meta/meta-llama-3.1-8b-instruct"     # Дрифт якості даних
+        statistical: "qwen/qwen2.5-32b-instruct" # Статистичний дрифт
+        performance: "microsoft/phi-3-medium-4k-instruct" # Дрифт продуктивності
+        data_quality: "meta/meta-llama-3.1-8b-instruct" # Дрифт якості даних
       retraining_decisions:
         strategy_selection: "mistral/mixtral-8x22b-instruct" # Вибір стратегії
-        resource_planning: "qwen/qwen2.5-14b-instruct"       # Планування ресурсів
+        resource_planning: "qwen/qwen2.5-14b-instruct" # Планування ресурсів
         risk_assessment: "microsoft/phi-3-medium-4k-instruct" # Оцінка ризиків
       deployment:
-        canary_analysis: "meta/meta-llama-3.1-8b-instruct"   # Канарковий аналіз
-        rollout_planning: "qwen/qwen2.5-14b-instruct"        # Планування розгортання
-        validation: "microsoft/phi-3-medium-4k-instruct"     # Валідація моделей
+        canary_analysis: "meta/meta-llama-3.1-8b-instruct" # Канарковий аналіз
+        rollout_planning: "qwen/qwen2.5-14b-instruct" # Планування розгортання
+        validation: "microsoft/phi-3-medium-4k-instruct" # Валідація моделей
 
   ReleaseManagerAgent:
     port: 9043
@@ -742,16 +768,16 @@ operational_layer:
       - "/release/validate"
     models:
       deployment_strategy:
-        risk_analysis: "microsoft/phi-3-medium-4k-instruct"  # Аналіз ризиків релізу
-        strategy_selection: "qwen/qwen2.5-14b-instruct"      # Вибір стратегії
+        risk_analysis: "microsoft/phi-3-medium-4k-instruct" # Аналіз ризиків релізу
+        strategy_selection: "qwen/qwen2.5-14b-instruct" # Вибір стратегії
         timeline_optimization: "meta/meta-llama-3.1-8b-instruct" # Оптимізація часу
       validation:
-        automated_testing: "deepseek/deepseek-coder-v2"      # Автоматизоване тестування
-        performance_validation: "qwen/qwen2.5-14b-instruct"  # Валідація продуктивності
+        automated_testing: "deepseek/deepseek-coder-v2" # Автоматизоване тестування
+        performance_validation: "qwen/qwen2.5-14b-instruct" # Валідація продуктивності
         security_check: "microsoft/phi-3-medium-4k-instruct" # Перевірка безпеки
       rollback_decisions:
         failure_analysis: "mistral/mistral-7b-instruct-v0.3" # Аналіз збоїв
-        impact_assessment: "qwen/qwen2.5-14b-instruct"       # Оцінка впливу
+        impact_assessment: "qwen/qwen2.5-14b-instruct" # Оцінка впливу
         recovery_planning: "meta/meta-llama-3.1-8b-instruct" # Планування відновлення
 
   Security&PrivacyAgent:
@@ -769,21 +795,21 @@ operational_layer:
     models:
       # Комплексна система безпеки
       pii_detection:
-        primary: "microsoft/phi-3-medium-4k-instruct"   # Детекція PII
-        secondary: "qwen/qwen2.5-14b-instruct"          # Контекстуальна детекція
-        validation: "meta/meta-llama-3.1-8b-instruct"   # Валідація результатів
+        primary: "microsoft/phi-3-medium-4k-instruct" # Детекція PII
+        secondary: "qwen/qwen2.5-14b-instruct" # Контекстуальна детекція
+        validation: "meta/meta-llama-3.1-8b-instruct" # Валідація результатів
       threat_detection:
-        behavioral: "mistral/mixtral-8x22b-instruct"    # Поведінкові загрози
-        pattern_based: "qwen/qwen2.5-32b-instruct"      # Паттерн-базовані
+        behavioral: "mistral/mixtral-8x22b-instruct" # Поведінкові загрози
+        pattern_based: "qwen/qwen2.5-32b-instruct" # Паттерн-базовані
         anomaly: "microsoft/phi-3-medium-128k-instruct" # Аномальна активність
       privacy_analysis:
         gdpr_compliance: "meta/meta-llama-3.1-70b-instruct" # GDPR відповідність
-        data_classification: "qwen/qwen2.5-14b-instruct"    # Класифікація даних
+        data_classification: "qwen/qwen2.5-14b-instruct" # Класифікація даних
         risk_assessment: "microsoft/phi-3-medium-4k-instruct" # Оцінка ризиків
       access_control:
-        rbac_analysis: "qwen/qwen2.5-14b-instruct"          # Аналіз RBAC
+        rbac_analysis: "qwen/qwen2.5-14b-instruct" # Аналіз RBAC
         permission_optimization: "microsoft/phi-3-medium-4k-instruct" # Оптимізація дозволів
-        audit_trail: "meta/meta-llama-3.1-8b-instruct"     # Аудиторський слід
+        audit_trail: "meta/meta-llama-3.1-8b-instruct" # Аудиторський слід
 
   ComplianceAgent:
     port: 9051
@@ -799,17 +825,17 @@ operational_layer:
       - "/compliance/report"
     models:
       gdpr_analysis:
-        primary: "meta/meta-llama-3.1-70b-instruct"     # Комплексний GDPR аналіз
+        primary: "meta/meta-llama-3.1-70b-instruct" # Комплексний GDPR аналіз
         legal_interpretation: "mistral/mixtral-8x22b-instruct" # Правова інтерпретація
-        policy_mapping: "qwen/qwen2.5-32b-instruct"     # Мапування політик
+        policy_mapping: "qwen/qwen2.5-32b-instruct" # Мапування політик
       audit_generation:
         report_creation: "microsoft/phi-3-medium-4k-instruct" # Створення звітів
-        evidence_collection: "qwen/qwen2.5-14b-instruct"      # Збір доказів
-        gap_analysis: "meta/meta-llama-3.1-8b-instruct"       # Аналіз прогалин
+        evidence_collection: "qwen/qwen2.5-14b-instruct" # Збір доказів
+        gap_analysis: "meta/meta-llama-3.1-8b-instruct" # Аналіз прогалин
       policy_enforcement:
         rule_validation: "microsoft/phi-3-medium-4k-instruct" # Валідація правил
-        violation_detection: "qwen/qwen2.5-14b-instruct"      # Детекція порушень
-        remediation: "meta/meta-llama-3.1-8b-instruct"        # Виправлення
+        violation_detection: "qwen/qwen2.5-14b-instruct" # Детекція порушень
+        remediation: "meta/meta-llama-3.1-8b-instruct" # Виправлення
 
   Billing&QuotaAgent:
     port: 9052
@@ -825,16 +851,16 @@ operational_layer:
       - "/billing/optimize"
     models:
       usage_analysis:
-        pattern_detection: "qwen/qwen2.5-32b-instruct"       # Детекція паттернів використання
+        pattern_detection: "qwen/qwen2.5-32b-instruct" # Детекція паттернів використання
         anomaly_detection: "microsoft/phi-3-medium-4k-instruct" # Аномалії використання
-        forecasting: "meta/meta-llama-3.1-8b-instruct"       # Прогнозування використання
+        forecasting: "meta/meta-llama-3.1-8b-instruct" # Прогнозування використання
       quota_management:
         allocation_optimization: "mistral/mistral-7b-instruct-v0.3" # Оптимізація розподілу
-        threshold_management: "qwen/qwen2.5-14b-instruct"           # Керування порогами
-        fair_use_analysis: "microsoft/phi-3-medium-4k-instruct"    # Аналіз справедливого використання
+        threshold_management: "qwen/qwen2.5-14b-instruct" # Керування порогами
+        fair_use_analysis: "microsoft/phi-3-medium-4k-instruct" # Аналіз справедливого використання
       cost_optimization:
-        efficiency_analysis: "qwen/qwen2.5-14b-instruct"     # Аналіз ефективності
-        recommendation: "meta/meta-llama-3.1-8b-instruct"    # Рекомендації
+        efficiency_analysis: "qwen/qwen2.5-14b-instruct" # Аналіз ефективності
+        recommendation: "meta/meta-llama-3.1-8b-instruct" # Рекомендації
         roi_calculation: "microsoft/phi-3-medium-4k-instruct" # Розрахунок ROI
 
   CostOptimizerAgent:
@@ -851,14 +877,14 @@ operational_layer:
       - "/cost/analyze"
     models:
       resource_optimization:
-        allocation: "qwen/qwen2.5-32b-instruct"              # Оптимізація розподілу
-        scheduling: "microsoft/phi-3-medium-4k-instruct"     # Планування ресурсів
-        scaling: "meta/meta-llama-3.1-8b-instruct"           # Масштабування
+        allocation: "qwen/qwen2.5-32b-instruct" # Оптимізація розподілу
+        scheduling: "microsoft/phi-3-medium-4k-instruct" # Планування ресурсів
+        scaling: "meta/meta-llama-3.1-8b-instruct" # Масштабування
       cost_analysis:
-        trend_analysis: "mistral/mistral-7b-instruct-v0.3"   # Аналіз трендів вартості
-        driver_identification: "qwen/qwen2.5-14b-instruct"   # Ідентифікація драйверів
+        trend_analysis: "mistral/mistral-7b-instruct-v0.3" # Аналіз трендів вартості
+        driver_identification: "qwen/qwen2.5-14b-instruct" # Ідентифікація драйверів
         benchmark_comparison: "microsoft/phi-3-medium-4k-instruct" # Порівняння з бенчмарками
       waste_detection:
-        underutilization: "qwen/qwen2.5-14b-instruct"        # Недовикористання
-        redundancy: "microsoft/phi-3-medium-4k-instruct"     # Надлишковість
-        inefficiency: "meta/meta-llama-3.1-8b-instruct"      # Неефективність
+        underutilization: "qwen/qwen2.5-14b-instruct" # Недовикористання
+        redundancy: "microsoft/phi-3-medium-4k-instruct" # Надлишковість
+        inefficiency: "meta/meta-llama-3.1-8b-instruct" # Неефективність

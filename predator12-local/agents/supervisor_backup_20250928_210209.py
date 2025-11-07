@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
 import argparse
-import time
-import yaml
-import random
-from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
-from enum import Enum
 import logging
+import random
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
 import structlog
+import yaml
 
 # Structured logging setup
 logger = structlog.get_logger(__name__)
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
-
 """
 NEXUS_SUPERVISOR v3.0 — Advanced Agent Orchestrator with Intelligent Routing
 - Loads complex agent ecosystem from `agents.yaml`
@@ -23,6 +22,7 @@ NEXUS_SUPERVISOR v3.0 — Advanced Agent Orchestrator with Intelligent Routing
 - Context-adaptive model selection
 - Real-time intelligent routing decisions
 """
+
 
 class TaskType(Enum):
     REASONING = "reasoning"
@@ -32,18 +32,22 @@ class TaskType(Enum):
     FAST = "fast"
     GEN = "gen"
 
+
 @dataclass
 class RoutingTier:
-    """Represents a routing tier with multiple models"""
+    """Represents a routing tier with multiple models."""
+
     tier_1: List[str] = field(default_factory=list)
     tier_2: List[str] = field(default_factory=list)
     tier_3: List[str] = field(default_factory=list)
     specialization: Dict[str, List[str]] = field(default_factory=dict)
     selection_criteria: List[Dict[str, Any]] = field(default_factory=list)
 
+
 @dataclass
 class ModelSelectionLogic:
-    """Complex model selection logic for agents"""
+    """Complex model selection logic for agents."""
+
     selection_strategy: str = "default"
     primary_pool: List[str] = field(default_factory=list)
     reasoning_pool: List[str] = field(default_factory=list)
@@ -51,9 +55,11 @@ class ModelSelectionLogic:
     context_rules: List[Dict[str, Any]] = field(default_factory=list)
     routing_strategies: Dict[str, RoutingTier] = field(default_factory=dict)
 
+
 @dataclass
 class AgentConfig:
-    """Full agent configuration with advanced capabilities"""
+    """Full agent configuration with advanced capabilities."""
+
     name: str
     port: int
     role: str
@@ -64,8 +70,9 @@ class AgentConfig:
     algorithms: List[str] = field(default_factory=list)
     storage: Dict[str, str] = field(default_factory=dict)
 
+
 class IntelligentModelRouter:
-    """Advanced model routing with multi-tier fallbacks and specialization"""
+    """Advanced model routing with multi-tier fallbacks and specialization."""
 
     def __init__(self, routing_strategies: Dict[str, RoutingTier]):
         self.routing_strategies = routing_strategies
@@ -73,48 +80,51 @@ class IntelligentModelRouter:
         self.performance_metrics = {}  # Tracks model performance
 
     def select_model_for_task(self, task_type: TaskType, context: Dict[str, Any]) -> Optional[str]:
-        """Select best model using tier-based fallback with context awareness"""
+        """Select best model using tier-based fallback with context
+        awareness."""
         strategy = self.routing_strategies.get(task_type.value)
         if not strategy:
             logger.warning("No routing strategy found", task_type=task_type.value)
             return None
 
         # Check for specialization first
-        specialization = context.get('specialization')
+        specialization = context.get("specialization")
         if specialization and specialization in strategy.specialization:
             specialized_models = strategy.specialization[specialization]
             for model in specialized_models:
                 if self.is_model_healthy(model):
-                    logger.info("Selected specialized model",
-                              task_type=task_type.value,
-                              specialization=specialization,
-                              model=model)
+                    logger.info(
+                        "Selected specialized model",
+                        task_type=task_type.value,
+                        specialization=specialization,
+                        model=model,
+                    )
                     return model
 
         # Apply selection criteria
         for criteria in strategy.selection_criteria:
-            metric = criteria.get('metric')
-            threshold = criteria.get('threshold')
-            preferred_tier = criteria.get('preferred')
+            metric = criteria.get("metric")
+            threshold = criteria.get("threshold")
+            preferred_tier = criteria.get("preferred")
 
             if metric in context and context[metric] > threshold:
                 tier_models = getattr(strategy, preferred_tier, [])
                 for model in tier_models:
                     if self.is_model_healthy(model):
-                        logger.info("Selected model by criteria",
-                                  metric=metric,
-                                  threshold=threshold,
-                                  model=model)
+                        logger.info(
+                            "Selected model by criteria",
+                            metric=metric,
+                            threshold=threshold,
+                            model=model,
+                        )
                         return model
 
         # Fallback through tiers
-        for tier_name in ['tier_1', 'tier_2', 'tier_3']:
+        for tier_name in ["tier_1", "tier_2", "tier_3"]:
             tier_models = getattr(strategy, tier_name, [])
             for model in tier_models:
                 if self.is_model_healthy(model):
-                    logger.info("Selected model by tier fallback",
-                              tier=tier_name,
-                              model=model)
+                    logger.info("Selected model by tier fallback", tier=tier_name, model=model)
                     return model
 
         logger.error("No healthy model found", task_type=task_type.value)
@@ -125,6 +135,7 @@ class IntelligentModelRouter:
         # Mock: 90% of models are healthy
         return self.model_health.get(model, random.random() > 0.1)
 
+
 class Supervisor:
     def __init__(self, config_path: str, dry_run: bool = True):
         self.config_path = config_path
@@ -132,71 +143,80 @@ class Supervisor:
         self.agents: Dict[str, AgentConfig] = {}
         self.model_router: Optional[IntelligentModelRouter] = None
         self.self_improve_enabled = True
-        logger.info("Supervisor v3.0 initialized",
-                   config_path=config_path,
-                   dry_run=dry_run)
+        logger.info("Supervisor v3.0 initialized", config_path=config_path, dry_run=dry_run)
 
     def load_config(self):
-        """Loads complex agent ecosystem with intelligent routing"""
+        """Loads complex agent ecosystem with intelligent routing."""
         logger.info("Loading advanced agent ecosystem", config_path=self.config_path)
-        with open(self.config_path, 'r') as f:
+        with open(self.config_path, "r") as f:
             full_config = yaml.safe_load(f) or {}
 
-        agent_sections = ['orchestration', 'data_layer', 'analytics_layer', 'llm_ux_layer', 'operational_layer']
+        agent_sections = [
+            "orchestration",
+            "data_layer",
+            "analytics_layer",
+            "llm_ux_layer",
+            "operational_layer",
+        ]
 
         # Load ModelRouterAgent configuration for intelligent routing
-        model_router_config = None
 
         for section in agent_sections:
             for agent_name, cfg in full_config.get(section, {}).items():
                 # Parse model configuration
-                models_cfg = cfg.get('models', {})
+                models_cfg = cfg.get("models", {})
 
                 # Handle routing strategies (for ModelRouterAgent)
                 routing_strategies = {}
-                if 'routing_strategies' in models_cfg:
-                    for task_type, strategy_cfg in models_cfg['routing_strategies'].items():
+                if "routing_strategies" in models_cfg:
+                    for task_type, strategy_cfg in models_cfg["routing_strategies"].items():
                         routing_strategies[task_type] = RoutingTier(
-                            tier_1=strategy_cfg.get('tier_1', []),
-                            tier_2=strategy_cfg.get('tier_2', []),
-                            tier_3=strategy_cfg.get('tier_3', []),
-                            specialization=strategy_cfg.get('specialization', {}),
-                            selection_criteria=strategy_cfg.get('selection_criteria', [])
+                            tier_1=strategy_cfg.get("tier_1", []),
+                            tier_2=strategy_cfg.get("tier_2", []),
+                            tier_3=strategy_cfg.get("tier_3", []),
+                            specialization=strategy_cfg.get("specialization", {}),
+                            selection_criteria=strategy_cfg.get("selection_criteria", []),
                         )
 
                 model_logic = ModelSelectionLogic(
-                    selection_strategy=models_cfg.get('selection_strategy', 'default'),
-                    primary_pool=models_cfg.get('primary_pool', []),
-                    reasoning_pool=models_cfg.get('reasoning_pool', []),
-                    fast_pool=models_cfg.get('fast_pool', []),
-                    context_rules=models_cfg.get('context_rules', []),
-                    routing_strategies=routing_strategies
+                    selection_strategy=models_cfg.get("selection_strategy", "default"),
+                    primary_pool=models_cfg.get("primary_pool", []),
+                    reasoning_pool=models_cfg.get("reasoning_pool", []),
+                    fast_pool=models_cfg.get("fast_pool", []),
+                    context_rules=models_cfg.get("context_rules", []),
+                    routing_strategies=routing_strategies,
                 )
 
                 self.agents[agent_name] = AgentConfig(
                     name=agent_name,
-                    port=cfg.get('port'),
-                    role=cfg.get('role'),
-                    capabilities=cfg.get('capabilities', []),
-                    endpoints=cfg.get('endpoints', []),
+                    port=cfg.get("port"),
+                    role=cfg.get("role"),
+                    capabilities=cfg.get("capabilities", []),
+                    endpoints=cfg.get("endpoints", []),
                     models=model_logic,
-                    events=cfg.get('events', {}),
-                    algorithms=cfg.get('algorithms', []),
-                    storage=cfg.get('storage', {})
+                    events=cfg.get("events", {}),
+                    algorithms=cfg.get("algorithms", []),
+                    storage=cfg.get("storage", {}),
                 )
 
                 # Initialize intelligent model router if this is ModelRouterAgent
-                if agent_name == 'ModelRouterAgent' and routing_strategies:
+                if agent_name == "ModelRouterAgent" and routing_strategies:
                     self.model_router = IntelligentModelRouter(routing_strategies)
-                    logger.info("Intelligent Model Router initialized",
-                              strategies=list(routing_strategies.keys()))
+                    logger.info(
+                        "Intelligent Model Router initialized",
+                        strategies=list(routing_strategies.keys()),
+                    )
 
-        logger.info("Advanced agent ecosystem loaded",
-                   agent_count=len(self.agents),
-                   has_intelligent_router=self.model_router is not None)
+        logger.info(
+            "Advanced agent ecosystem loaded",
+            agent_count=len(self.agents),
+            has_intelligent_router=self.model_router is not None,
+        )
 
-    def select_model_for_context_adaptive_task(self, agent_name: str, task_context: Dict[str, Any]) -> Optional[str]:
-        """Context-adaptive model selection for ChiefOrchestratorAgent"""
+    def select_model_for_context_adaptive_task(
+        self, agent_name: str, task_context: Dict[str, Any]
+    ) -> Optional[str]:
+        """Context-adaptive model selection for ChiefOrchestratorAgent."""
         agent = self.agents.get(agent_name)
         if not agent or not agent.models.context_rules:
             return agent.models.primary_pool[0] if agent and agent.models.primary_pool else None
@@ -205,41 +225,45 @@ class Supervisor:
 
         # Evaluate context rules in order
         for rule in agent.models.context_rules:
-            condition = rule.get('condition')
-            if condition == 'default':
+            condition = rule.get("condition")
+            if condition == "default":
                 continue
 
             try:
                 # Simple condition evaluation (in production, use proper rule engine)
                 if self._evaluate_condition(condition, task_context):
-                    target_pool_name = rule.get('models')
+                    target_pool_name = rule.get("models")
                     target_pool = getattr(agent.models, target_pool_name, [])
                     if target_pool:
                         selected = target_pool[0]  # Take first available
-                        logger.info("Rule matched",
-                                  condition=condition,
-                                  selected_pool=target_pool_name,
-                                  selected_model=selected)
+                        logger.info(
+                            "Rule matched",
+                            condition=condition,
+                            selected_pool=target_pool_name,
+                            selected_model=selected,
+                        )
                         return selected
             except Exception as e:
                 logger.warning("Rule evaluation failed", rule=condition, error=str(e))
 
         # Apply default rule
-        default_rule = next((r for r in agent.models.context_rules if r.get('condition') == 'default'), None)
+        default_rule = next(
+            (r for r in agent.models.context_rules if r.get("condition") == "default"), None
+        )
         if default_rule:
-            target_pool_name = default_rule.get('models')
+            target_pool_name = default_rule.get("models")
             target_pool = getattr(agent.models, target_pool_name, [])
             if target_pool:
                 selected = target_pool[0]
-                logger.info("Applied default rule",
-                          selected_pool=target_pool_name,
-                          selected_model=selected)
+                logger.info(
+                    "Applied default rule", selected_pool=target_pool_name, selected_model=selected
+                )
                 return selected
 
         return None
 
     def _evaluate_condition(self, condition: str, context: Dict[str, Any]) -> bool:
-        """Safely evaluate condition expressions"""
+        """Safely evaluate condition expressions."""
         try:
             # Replace condition variables with context values
             if "task_complexity > 0.8" in condition:
@@ -257,7 +281,7 @@ class Supervisor:
             return False
 
     def simulate_routing_decisions(self):
-        """Simulate intelligent routing decisions"""
+        """Simulate intelligent routing decisions."""
         if not self.model_router:
             logger.warning("No intelligent router available for simulation")
             return
@@ -267,40 +291,41 @@ class Supervisor:
             {
                 "task_type": TaskType.CODE,
                 "specialization": "python",
-                "context": {"complexity_score": 0.8, "language": "python"}
+                "context": {"complexity_score": 0.8, "language": "python"},
             },
             {
                 "task_type": TaskType.REASONING,
-                "context": {"context_length": 35000, "complexity_score": 0.9}
+                "context": {"context_length": 35000, "complexity_score": 0.9},
             },
             {
                 "task_type": TaskType.EMBED,
                 "specialization": "multilingual",
-                "context": {"language": "ukrainian", "task": "semantic_search"}
+                "context": {"language": "ukrainian", "task": "semantic_search"},
             },
             {
                 "task_type": TaskType.VISION,
                 "specialization": "document_analysis",
-                "context": {"image_type": "document", "ocr_required": True}
-            }
+                "context": {"image_type": "document", "ocr_required": True},
+            },
         ]
 
         logger.info("Starting routing simulation", scenarios_count=len(test_scenarios))
 
         for i, scenario in enumerate(test_scenarios):
             selected_model = self.model_router.select_model_for_task(
-                scenario["task_type"],
-                scenario["context"]
+                scenario["task_type"], scenario["context"]
             )
-            logger.info("Routing simulation result",
-                       scenario_id=i+1,
-                       task_type=scenario["task_type"].value,
-                       specialization=scenario.get("specialization"),
-                       selected_model=selected_model)
+            logger.info(
+                "Routing simulation result",
+                scenario_id=i + 1,
+                task_type=scenario["task_type"].value,
+                specialization=scenario.get("specialization"),
+                selected_model=selected_model,
+            )
 
     def simulate_context_adaptive_selection(self):
-        """Simulate ChiefOrchestratorAgent context-adaptive selection"""
-        if 'ChiefOrchestratorAgent' not in self.agents:
+        """Simulate ChiefOrchestratorAgent context-adaptive selection."""
+        if "ChiefOrchestratorAgent" not in self.agents:
             logger.warning("ChiefOrchestratorAgent not found for simulation")
             return
 
@@ -308,33 +333,41 @@ class Supervisor:
             {"task_complexity": 0.9, "reasoning_required": True},
             {"task_complexity": 0.2, "response_time_required": 2},
             {"task_complexity": 0.6, "reasoning_required": False},
-            {"task_complexity": 0.95, "response_time_required": 10}
+            {"task_complexity": 0.95, "response_time_required": 10},
         ]
 
         logger.info("Starting context-adaptive simulation", contexts_count=len(test_contexts))
 
         for i, context in enumerate(test_contexts):
             selected_model = self.select_model_for_context_adaptive_task(
-                'ChiefOrchestratorAgent',
-                context
+                "ChiefOrchestratorAgent", context
             )
-            logger.info("Context-adaptive selection result",
-                       context_id=i+1,
-                       context=context,
-                       selected_model=selected_model)
+            logger.info(
+                "Context-adaptive selection result",
+                context_id=i + 1,
+                context=context,
+                selected_model=selected_model,
+            )
 
     def status(self):
-        logger.info("Advanced Agent Ecosystem Status",
-                   agent_count=len(self.agents),
-                   self_improve_status=self.self_improve_enabled,
-                   intelligent_router=self.model_router is not None)
+        logger.info(
+            "Advanced Agent Ecosystem Status",
+            agent_count=len(self.agents),
+            self_improve_status=self.self_improve_enabled,
+            intelligent_router=self.model_router is not None,
+        )
 
         # Show agents by category
         sections = {
-            'orchestration': ['ChiefOrchestratorAgent', 'ModelRouterAgent', 'ArbiterAgent'],
-            'data_layer': ['IngestAgent', 'DataQualityAgent', 'SyntheticDataAgent', 'EntityResolutionAgent'],
-            'analytics_layer': ['AnomalyAgent', 'ForecastAgent', 'GraphAgent', 'RiskScoringAgent'],
-            'operational_layer': ['SelfHealingAgent', 'SelfDiagnosisAgent', 'AutoTrainAgent']
+            "orchestration": ["ChiefOrchestratorAgent", "ModelRouterAgent", "ArbiterAgent"],
+            "data_layer": [
+                "IngestAgent",
+                "DataQualityAgent",
+                "SyntheticDataAgent",
+                "EntityResolutionAgent",
+            ],
+            "analytics_layer": ["AnomalyAgent", "ForecastAgent", "GraphAgent", "RiskScoringAgent"],
+            "operational_layer": ["SelfHealingAgent", "SelfDiagnosisAgent", "AutoTrainAgent"],
         }
 
         for section, agent_list in sections.items():
@@ -344,8 +377,14 @@ class Supervisor:
                     cfg = self.agents[agent_name]
                     strategy = cfg.models.selection_strategy
                     pools = f"Pools: {len(cfg.models.primary_pool)}+{len(cfg.models.reasoning_pool)}+{len(cfg.models.fast_pool)}"
-                    routing = f"Routes: {len(cfg.models.routing_strategies)}" if cfg.models.routing_strategies else "Simple"
-                    logger.info(f"  ✅ {agent_name} (:{cfg.port}) - {strategy} - {pools} - {routing}")
+                    routing = (
+                        f"Routes: {len(cfg.models.routing_strategies)}"
+                        if cfg.models.routing_strategies
+                        else "Simple"
+                    )
+                    logger.info(
+                        f"  ✅ {agent_name} (:{cfg.port}) - {strategy} - {pools} - {routing}"
+                    )
                 else:
                     logger.info(f"  ❌ {agent_name} - NOT CONFIGURED")
 
@@ -362,17 +401,19 @@ class Supervisor:
         # In production: stop all agent processes, close connections, etc.
 
     def run_loop(self):
-        """Main orchestration loop with intelligent routing simulation"""
+        """Main orchestration loop with intelligent routing simulation."""
         logger.info("Advanced Orchestrator Loop Starting", dry_run=self.dry_run)
 
         try:
             hb = 0
             while True:
                 hb += 1
-                logger.info("=== Heartbeat ===",
-                           count=hb,
-                           agents=len(self.agents),
-                           self_improve=self.self_improve_enabled)
+                logger.info(
+                    "=== Heartbeat ===",
+                    count=hb,
+                    agents=len(self.agents),
+                    self_improve=self.self_improve_enabled,
+                )
 
                 # Simulate intelligent routing decisions
                 if hb % 3 == 1:  # Every 3rd heartbeat
@@ -397,7 +438,7 @@ class Supervisor:
             raise
 
     def run_self_improvement_cycle(self):
-        """Run self-improvement analysis"""
+        """Run self-improvement analysis."""
         logger.info("🔍 Analyzing system performance")
 
         # Mock performance analysis
@@ -405,37 +446,46 @@ class Supervisor:
             "Model selection latency reduced by 15%",
             "Tier-2 models showing 98% availability",
             "Specialization routing improved accuracy by 12%",
-            "Context-adaptive rules optimized for 3 agents"
+            "Context-adaptive rules optimized for 3 agents",
         ]
 
         selected_improvement = random.choice(improvements)
         logger.info("Self-improvement insight", insight=selected_improvement)
 
+
 def main():
     ap = argparse.ArgumentParser(description="Predator11 Advanced Supervisor v3.0")
-    ap.add_argument('--config', default='agents/agents.yaml',
-                   help="Path to the main agent ecosystem config file")
-    ap.add_argument('--dry-run', action='store_true',
-                   help='Run in simulation mode without spawning real agents')
-    ap.add_argument('--cmd', default='status',
-                   choices=['status','start_self_improve','stop_self_improve','run','shutdown'],
-                   help='Command to execute')
+    ap.add_argument(
+        "--config",
+        default="agents/agents.yaml",
+        help="Path to the main agent ecosystem config file",
+    )
+    ap.add_argument(
+        "--dry-run", action="store_true", help="Run in simulation mode without spawning real agents"
+    )
+    ap.add_argument(
+        "--cmd",
+        default="status",
+        choices=["status", "start_self_improve", "stop_self_improve", "run", "shutdown"],
+        help="Command to execute",
+    )
     args = ap.parse_args()
 
     sup = Supervisor(config_path=args.config, dry_run=args.dry_run)
     sup.load_config()
 
-    if args.cmd == 'status':
+    if args.cmd == "status":
         sup.status()
-    elif args.cmd == 'start_self_improve':
+    elif args.cmd == "start_self_improve":
         sup.start_self_improve()
-    elif args.cmd == 'stop_self_improve':
+    elif args.cmd == "stop_self_improve":
         sup.stop_self_improve()
-    elif args.cmd == 'shutdown':
+    elif args.cmd == "shutdown":
         sup.shutdown()
-    elif args.cmd == 'run':
+    elif args.cmd == "run":
         sup.status()
         sup.run_loop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

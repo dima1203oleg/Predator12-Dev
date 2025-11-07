@@ -18,8 +18,8 @@ npm install @mui/material @emotion/react @emotion/styled
 ### 2️⃣ Додай в App.tsx
 
 ```tsx
-import { NexusThemeProvider } from './contexts/ThemeContext';
-import ThemeSwitcher from './components/theme/ThemeSwitcher';
+import { NexusThemeProvider } from "./contexts/ThemeContext";
+import ThemeSwitcher from "./components/theme/ThemeSwitcher";
 
 function App() {
   return (
@@ -43,15 +43,15 @@ npm start
 
 ## 🎨 Доступно 7 тем
 
-| Емодзі | Назва | Коли використовувати |
-|--------|-------|---------------------|
-| 🌌 | Dark Cyber | Основна робота (за замовчуванням) |
-| 🟢 | Matrix | Робота в терміналі, код |
-| 🌅 | Sunset | Вечірня робота, креатив |
-| 🌊 | Ocean | Аналіз даних, фокус |
-| 🗼 | Neon Tokyo | Демо, презентації |
-| 💾 | Retro Terminal | Ностальгія, SSH |
-| ☀️ | Light | Денна робота, зустрічі |
+| Емодзі | Назва          | Коли використовувати              |
+| ------ | -------------- | --------------------------------- |
+| 🌌     | Dark Cyber     | Основна робота (за замовчуванням) |
+| 🟢     | Matrix         | Робота в терміналі, код           |
+| 🌅     | Sunset         | Вечірня робота, креатив           |
+| 🌊     | Ocean          | Аналіз даних, фокус               |
+| 🗼     | Neon Tokyo     | Демо, презентації                 |
+| 💾     | Retro Terminal | Ностальгія, SSH                   |
+| ☀️     | Light          | Денна робота, зустрічі            |
 
 ---
 
@@ -60,16 +60,18 @@ npm start
 ### Отримати кольори теми
 
 ```tsx
-import { useNexusTheme } from '../contexts/ThemeContext';
+import { useNexusTheme } from "../contexts/ThemeContext";
 
 const MyComponent = () => {
   const { colors } = useNexusTheme();
 
   return (
-    <Box sx={{
-      background: colors.background.paper,
-      color: colors.text.primary
-    }}>
+    <Box
+      sx={{
+        background: colors.background.paper,
+        color: colors.text.primary,
+      }}
+    >
       Контент
     </Box>
   );
@@ -81,19 +83,19 @@ const MyComponent = () => {
 ```tsx
 const { setTheme } = useNexusTheme();
 
-<Button onClick={() => setTheme('matrix')}>
-  Матриця! 🟢
-</Button>
+<Button onClick={() => setTheme("matrix")}>Матриця! 🟢</Button>;
 ```
 
 ### Застосувати градієнт
 
 ```tsx
-<Typography sx={{
-  background: colors.gradients.primary,
-  backgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-}}>
+<Typography
+  sx={{
+    background: colors.gradients.primary,
+    backgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  }}
+>
   Градієнтний текст
 </Typography>
 ```
@@ -101,11 +103,13 @@ const { setTheme } = useNexusTheme();
 ### Додати ефект свічення
 
 ```tsx
-<Card sx={{
-  '&:hover': {
-    boxShadow: `0 0 20px ${colors.primary.glow}`,
-  },
-}}>
+<Card
+  sx={{
+    "&:hover": {
+      boxShadow: `0 0 20px ${colors.primary.glow}`,
+    },
+  }}
+>
   Наведи мишку
 </Card>
 ```
@@ -115,16 +119,19 @@ const { setTheme } = useNexusTheme();
 ## 📚 Документація
 
 ### Для швидкого старту
+
 - 📖 **THEME_ULTRA_QUICK_START.md** - 3 хвилини до запуску
 - 🎨 **THEME_VISUAL_GUIDE.md** - Візуальний огляд всіх тем
 - ⚡ **THEME_SYSTEM_QUICK_REF.md** - Швидкий довідник
 
 ### Для розробників
+
 - 📘 **MULTI_THEME_GUIDE.md** - Повна документація
 - 🔧 **THEME_INTEGRATION_EXAMPLES.md** - Приклади інтеграції
 - 📊 **MULTI_THEME_COMPLETION_REPORT.md** - Технічний звіт
 
 ### Для менеджерів
+
 - ✅ **MULTI_THEME_SYSTEM_FINAL_STATUS.md** - Статус проекту
 - 🎉 **🎨_COMPLETE_PROJECT_SUMMARY.md** - Загальний огляд
 
@@ -139,6 +146,7 @@ const { setTheme } = useNexusTheme();
 ```
 
 **Що можна зробити:**
+
 - 📦 Встановити залежності
 - 🔍 Перевірити файли
 - 📊 Показати статистику
@@ -162,7 +170,7 @@ const { setTheme } = useNexusTheme();
 ```tsx
 const { currentTheme } = useNexusTheme();
 console.log(currentTheme.name); // "Dark Cyber"
-console.log(currentTheme.id);   // "dark-cyber"
+console.log(currentTheme.id); // "dark-cyber"
 ```
 
 ### Перемикати між темною/світлою
@@ -171,7 +179,7 @@ console.log(currentTheme.id);   // "dark-cyber"
 const { toggleTheme } = useNexusTheme();
 <IconButton onClick={toggleTheme}>
   <Brightness4Icon />
-</IconButton>
+</IconButton>;
 ```
 
 ### Використати колір зі статусів
@@ -181,7 +189,7 @@ const { toggleTheme } = useNexusTheme();
   label="Успіх"
   sx={{
     background: colors.status.success,
-    color: '#fff'
+    color: "#fff",
   }}
 />
 ```
@@ -215,7 +223,7 @@ const { colors } = useNexusTheme();
 
 Перед тим як почати:
 
-- [ ] Встановлені залежності (@mui/material, @emotion/*)
+- [ ] Встановлені залежності (@mui/material, @emotion/\*)
 - [ ] App обгорнутий в `NexusThemeProvider`
 - [ ] `ThemeSwitcher` доданий до UI
 - [ ] Hardcoded кольори замінені на `colors.*`
@@ -252,7 +260,7 @@ const { colors } = useNexusTheme();
 ✅ **Material-UI** - нативна інтеграція  
 ✅ **Детальна документація** - все описано  
 ✅ **Приклади коду** - швидкий старт  
-✅ **Production-ready** - готово до бою  
+✅ **Production-ready** - готово до бою
 
 ---
 
@@ -272,7 +280,7 @@ const { colors } = useNexusTheme();
 - 🎨 **Експериментуй з темами** - кожна має свій настрій
 - 🌟 **Використовуй градієнти** - для заголовків та акцентів
 - ✨ **Додавай glow ефекти** - для інтерактивних елементів
-- 🎯 **Дотримуйся colors.*** - не використовуй hardcoded значення
+- 🎯 **Дотримуйся colors.\*** - не використовуй hardcoded значення
 - 📱 **Тестуй на мобільних** - все responsive
 
 ---
@@ -309,4 +317,4 @@ const { colors } = useNexusTheme();
 **Створено:** 2024  
 **Проект:** Predator12 Nexus Core V3
 
-🎨 *"Seven themes, infinite possibilities!"*
+🎨 _"Seven themes, infinite possibilities!"_

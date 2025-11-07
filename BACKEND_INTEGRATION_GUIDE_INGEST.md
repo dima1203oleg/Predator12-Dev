@@ -588,7 +588,7 @@ async def upload_file(file: UploadFile):
 ### Docker Compose
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   backend:

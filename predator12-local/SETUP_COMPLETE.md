@@ -7,17 +7,20 @@
 ## 🎉 Що зроблено:
 
 ### 1. Середовище ✅
+
 - ✅ Python 3.11 встановлено та налаштовано
 - ✅ Node.js та npm готові
 - ✅ PostgreSQL 14 запущено
 - ✅ Git налаштовано
 
 ### 2. База даних ✅
+
 - ✅ Користувач `predator` створено
 - ✅ База даних `predator11` створена
 - ✅ Підключення працює
 
 ### 3. Залежності ✅
+
 - ✅ Backend Python venv створено
 - ✅ Backend залежності встановлено
 - ✅ Frontend node_modules готові
@@ -34,6 +37,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ```
 
 Або через Makefile:
+
 ```bash
 make migrate
 ```
@@ -41,6 +45,7 @@ make migrate
 ### Крок 2: Запустити backend
 
 **У першому терміналі:**
+
 ```bash
 cd backend
 source venv/bin/activate
@@ -48,6 +53,7 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 Або через Makefile:
+
 ```bash
 make backend
 ```
@@ -55,12 +61,14 @@ make backend
 ### Крок 3: Запустити frontend
 
 **У другому терміналі:**
+
 ```bash
 cd frontend
 npm run dev
 ```
 
 Або через Makefile:
+
 ```bash
 make frontend
 ```
@@ -99,6 +107,7 @@ psql -U predator -d predator11 -c "\dt"
 ## 📋 Корисні команди
 
 ### Makefile:
+
 ```bash
 make help       # Список команд
 make setup      # Перевірка системи
@@ -109,11 +118,13 @@ make status     # Статус системи
 ```
 
 ### VS Code:
+
 1. Відкрийте проект у VS Code
 2. `Cmd+Shift+P` → "Tasks: Run Task"
 3. Виберіть потрібну задачу
 
 ### PostgreSQL:
+
 ```bash
 # Запуск
 brew services start postgresql
@@ -136,12 +147,14 @@ psql -U predator -d predator11
 ## 🐛 Troubleshooting
 
 ### База даних не підключається:
+
 ```bash
 brew services restart postgresql
 psql -U predator -d predator11
 ```
 
 ### Порти зайняті:
+
 ```bash
 lsof -i :8000  # Backend
 lsof -i :3000  # Frontend
@@ -149,6 +162,7 @@ kill -9 <PID>
 ```
 
 ### Python не знайдено:
+
 ```bash
 # Додайте до ~/.zshrc:
 export PATH="/opt/homebrew/bin:$PATH"
@@ -174,6 +188,7 @@ source ~/.zshrc
 **Система готова до розробки!**
 
 Всі основні компоненти налаштовані:
+
 - ✅ Python 3.11
 - ✅ Node.js
 - ✅ PostgreSQL

@@ -9,11 +9,13 @@
 ## 🎯 Live Зараз
 
 ### Dev Server (Працює):
+
 ```
 http://localhost:5091
 ```
 
 **Features:**
+
 - ⚡ Hot Module Replacement (HMR)
 - 🔄 Instant updates при збереженні
 - 🐛 Source maps для debugging
@@ -24,17 +26,20 @@ http://localhost:5091
 ## 🚀 Команди
 
 ### Запуск Dev Server:
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/frontend
 npm run dev
 ```
 
 ### Build для Production:
+
 ```bash
 npm run build
 ```
 
 ### Preview Production Build:
+
 ```bash
 npm run preview
 ```
@@ -54,6 +59,7 @@ predator12-local/frontend/src/main.tsx
 ## ✨ Що Включено
 
 ### Візуальні Ефекти:
+
 - ✅ Animated particle background (Canvas, 50+ частинок)
 - ✅ Glassmorphism cards з backdrop blur
 - ✅ Gradient backgrounds та effects
@@ -62,6 +68,7 @@ predator12-local/frontend/src/main.tsx
 - ✅ Smooth 60 FPS анімації
 
 ### Компоненти:
+
 - ✅ **4 Metric Cards** - CPU, Memory, Disk, Network
   - Real-time updates
   - Animated progress bars
@@ -77,6 +84,7 @@ predator12-local/frontend/src/main.tsx
 - ✅ **Live Status Badge** - System online indicator
 
 ### Responsive Design:
+
 - ✅ Desktop (1400px+ container)
 - ✅ Tablet (768-1200px, 2 columns)
 - ✅ Mobile (<768px, single column)
@@ -88,6 +96,7 @@ predator12-local/frontend/src/main.tsx
 ### 1. Змінити Заголовок:
 
 Відкрийте `src/main.tsx` і знайдіть:
+
 ```typescript
 🚀 PREDATOR12
 ```
@@ -135,12 +144,14 @@ const colors = ['#YOUR_COLOR_1', '#YOUR_COLOR_2', ...];
 ## 📊 Build Info
 
 **Останній Build:**
+
 - ✅ Success
 - 📦 Bundle Size: ~150KB (gzipped)
 - 📁 Output: `dist/`
 - 🎯 Vite v5.4.20
 
 **Files:**
+
 ```
 dist/
 ├── index.html
@@ -154,6 +165,7 @@ dist/
 ## 🐛 Troubleshooting
 
 ### Dev Server не запускається:
+
 ```bash
 # Перевірте зайнятий порт
 lsof -i :5091
@@ -163,6 +175,7 @@ npm run dev -- --port 5092
 ```
 
 ### Білий екран:
+
 ```bash
 # 1. Відкрийте Console (Cmd+Option+J)
 # 2. Перегляньте errors
@@ -172,6 +185,7 @@ npm run dev
 ```
 
 ### Build errors:
+
 ```bash
 rm -rf node_modules dist
 npm install
@@ -183,6 +197,7 @@ npm run build
 ## 📚 Документація
 
 ### Основні Файли:
+
 1. **OVERVIEW.md** ⭐ - Загальний огляд проекту
 2. **MEGA_DASHBOARD_FINAL_REPORT.md** ⭐ - Повний технічний звіт
 3. **NEXT_STEPS.md** ⭐ - Детальний гід по розвитку
@@ -191,6 +206,7 @@ npm run build
 6. **MEGA_DASHBOARD_COMPLETE.md** - Технічна документація
 
 ### Структура Коду:
+
 ```
 src/
 ├── main.tsx                 ← Entry point (MEGA Dashboard)
@@ -209,12 +225,14 @@ src/
 **Все детально описано в NEXT_STEPS.md:**
 
 ### Phase 2: API Integration
+
 - Replace mock data з real backend
 - WebSocket для real-time updates
 - Error handling + retry logic
 - Loading states + skeleton screens
 
 ### Phase 3: Advanced Features
+
 - Dark/Light mode toggle
 - Advanced charts (Chart.js)
 - User authentication (Keycloak)
@@ -223,6 +241,7 @@ src/
 - Custom themes
 
 ### Phase 4: Scaling
+
 - Mobile app (React Native)
 - PWA support (offline mode)
 - Multi-language
@@ -252,9 +271,10 @@ src/
 
 **Live:** http://localhost:5091  
 **Status:** ✅ Working  
-**Quality:** 🏆 5/5 Excellent  
+**Quality:** 🏆 5/5 Excellent
 
 ### Почніть Розробку:
+
 ```bash
 cd predator12-local/frontend
 code src/main.tsx

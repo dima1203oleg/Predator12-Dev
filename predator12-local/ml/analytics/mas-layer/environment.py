@@ -1,14 +1,7 @@
-import json
 import logging
-import os
-import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
-import httpx
-import redis
-from kafka import KafkaProducer
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # Setup logging

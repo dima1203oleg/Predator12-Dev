@@ -1,5 +1,5 @@
 """
-Агент для прогнозування та передбачення трендів
+Агент для прогнозування та передбачення трендів.
 """
 
 from __future__ import annotations
@@ -13,13 +13,14 @@ from .base_agent import BaseAgent
 
 
 class ForecastAgent(BaseAgent):
-    """Агент для прогнозування часових рядів та трендів"""
+    """Агент для прогнозування часових рядів та трендів."""
 
     def __init__(self, config: dict[str, Any] | None = None):
         super().__init__("ForecastAgent", config)
         self.models = {}  # Кеш навчених моделей прогнозування
 
     def capabilities(self) -> list[str]:
+        """Повертає список можливостей агента прогнозування."""
         return [
             "train_forecast_model",
             "make_forecast",
@@ -30,27 +31,26 @@ class ForecastAgent(BaseAgent):
         ]
 
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виконує завдання прогнозування"""
+        """Виконує завдання прогнозування."""
 
         self.logger.info("Processing forecast task", task_type=task_type)
 
         if task_type == "train_forecast_model":
             return await self._train_forecast_model(payload)
-        elif task_type == "make_forecast":
+        if task_type == "make_forecast":
             return await self._make_forecast(payload)
-        elif task_type == "evaluate_forecast":
+        if task_type == "evaluate_forecast":
             return await self._evaluate_forecast(payload)
-        elif task_type == "detect_trends":
+        if task_type == "detect_trends":
             return await self._detect_trends(payload)
-        elif task_type == "predict_seasonality":
+        if task_type == "predict_seasonality":
             return await self._predict_seasonality(payload)
-        elif task_type == "anomaly_forecast":
+        if task_type == "anomaly_forecast":
             return await self._anomaly_forecast(payload)
-        else:
-            raise ValueError(f"Unknown task type: {task_type}")
+        raise ValueError(f"Unknown task type: {task_type}")
 
     async def _train_forecast_model(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Навчає модель прогнозування"""
+        """Навчає модель прогнозування."""
 
         dataset_id = payload.get("dataset_id")
         model_type = payload.get("model_type", "arima")
@@ -91,8 +91,7 @@ class ForecastAgent(BaseAgent):
                 y = np.random.randn(n_points).cumsum() + 0.1 * X.flatten()
 
                 # Розрахунок коефіцієнтів лінійної регресії
-                slope = np.polyfit(X.flatten(), y, 1)[0]
-                intercept = np.polyfit(X.flatten(), y, 1)[1]
+                slope, intercept = np.polyfit(X.flatten(), y, 1)
 
                 model_metadata = {
                     "model_type": model_type,
@@ -130,12 +129,14 @@ class ForecastAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to train forecast model", error=str(e), dataset_id=dataset_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error(
+                "Failed to train forecast model", error=str(exc), dataset_id=dataset_id
+            )
+            return {"status": "error", "error": str(exc)}
 
     async def _make_forecast(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Робить прогноз на основі навченої моделі"""
+        """Робить прогноз на основі навченої моделі."""
 
         model_id = payload.get("model_id")
         forecast_horizon = payload.get("forecast_horizon", 30)
@@ -206,12 +207,12 @@ class ForecastAgent(BaseAgent):
                 "generated_at": datetime.now().isoformat(),
             }
 
-        except Exception as e:
-            self.logger.error("Failed to make forecast", error=str(e), model_id=model_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to make forecast", error=str(exc), model_id=model_id)
+            return {"status": "error", "error": str(exc)}
 
     async def _evaluate_forecast(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Оцінює якість прогнозу"""
+        """Оцінює якість прогнозу."""
 
         model_id = payload.get("model_id")
         test_data = payload.get("test_data", [])
@@ -254,12 +255,12 @@ class ForecastAgent(BaseAgent):
                 "n_points": len(test_data),
             }
 
-        except Exception as e:
-            self.logger.error("Failed to evaluate forecast", error=str(e), model_id=model_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to evaluate forecast", error=str(exc), model_id=model_id)
+            return {"status": "error", "error": str(exc)}
 
     async def _detect_trends(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виявляє тренди в часовому ряді"""
+        """Виявляє тренди в часовому ряді."""
 
         dataset_id = payload.get("dataset_id")
         time_series = payload.get("time_series", [])
@@ -316,12 +317,12 @@ class ForecastAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to detect trends", error=str(e), dataset_id=dataset_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to detect trends", error=str(exc), dataset_id=dataset_id)
+            return {"status": "error", "error": str(exc)}
 
     async def _predict_seasonality(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Передбачає сезонні патерни"""
+        """Передбачає сезонні патерни."""
 
         dataset_id = payload.get("dataset_id")
         time_series = payload.get("time_series", [])
@@ -373,12 +374,14 @@ class ForecastAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to predict seasonality", error=str(e), dataset_id=dataset_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error(
+                "Failed to predict seasonality", error=str(exc), dataset_id=dataset_id
+            )
+            return {"status": "error", "error": str(exc)}
 
     async def _anomaly_forecast(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Прогнозує ймовірність аномалій у майбутньому"""
+        """Прогнозує ймовірність аномалій у майбутньому."""
 
         model_id = payload.get("model_id")
         forecast_horizon = payload.get("forecast_horizon", 30)
@@ -433,6 +436,6 @@ class ForecastAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to forecast anomalies", error=str(e), model_id=model_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to forecast anomalies", error=str(exc), model_id=model_id)
+            return {"status": "error", "error": str(exc)}

@@ -20,49 +20,56 @@
 
 ### 1. Документація (6+ основних файлів)
 
-| Файл | Розмір | Опис |
-|------|--------|------|
-| **README.md** | 502 рядки | Повна документація проекту |
-| **START_HERE.md** | 356 рядків | Інструкції для швидкого старту |
-| **LOCAL_DEV_STATUS.md** | 563 рядки | Детальний статус налаштування |
-| **QUICK_START.md** | ~150 рядків | 5-хвилинний гід |
-| **migration_plan.md** | ~300 рядків | Покроковий план міграції |
-| **DEPLOYMENT_CHECKLIST.md** | ~500 рядків | 100+ acceptance criteria |
+| Файл                        | Розмір      | Опис                           |
+| --------------------------- | ----------- | ------------------------------ |
+| **README.md**               | 502 рядки   | Повна документація проекту     |
+| **START_HERE.md**           | 356 рядків  | Інструкції для швидкого старту |
+| **LOCAL_DEV_STATUS.md**     | 563 рядки   | Детальний статус налаштування  |
+| **QUICK_START.md**          | ~150 рядків | 5-хвилинний гід                |
+| **migration_plan.md**       | ~300 рядків | Покроковий план міграції       |
+| **DEPLOYMENT_CHECKLIST.md** | ~500 рядків | 100+ acceptance criteria       |
 
 **Всього документації**: ~2400 рядків
 
 ### 2. Automation Scripts (40+ файлів)
 
 #### Головні скрипти управління:
+
 - ✅ `predator11.sh` - Інтерактивний центр управління
 - ✅ `quick-setup.sh` - Автоматичне налаштування за один клік
 - ✅ `project-overview.sh` - Огляд проекту
 
 #### Ініціалізація та налаштування:
+
 - ✅ `scripts/init_local_db.sh` - Ініціалізація PostgreSQL
 - ✅ `scripts/migrate_db.sh` - Виконання міграцій
 - ✅ `scripts/dev-setup.sh` - Налаштування dev-середовища
 
 #### Міграція даних:
+
 - ✅ `scripts/pg_dump_from_container.sh` - Експорт з Docker
 - ✅ `scripts/pg_restore_to_local.sh` - Імпорт в локальну БД
 
 #### Тестування:
+
 - ✅ `smoke_tests/run_smoke.sh` - Bash smoke тести
 - ✅ `smoke_tests/python_smoke.py` - Python OOP тести
 - ✅ `scripts/validate-complete.sh` - Повна валідація
 
 #### Моніторинг та діагностика:
+
 - ✅ `scripts/health-monitor.sh` - Моніторинг здоров'я
 - ✅ `scripts/diagnose-web-interface.sh` - Діагностика UI
 - ✅ `scripts/check-agents-status.sh` - Статус AI агентів
 
 #### Безпека та backup:
+
 - ✅ `scripts/security-audit.sh` - Аудит безпеки
 - ✅ `scripts/backup-system.sh` - Резервне копіювання
 - ✅ `scripts/disaster-recovery.sh` - Відновлення
 
 #### Deployment:
+
 - ✅ `scripts/deploy-production.sh` - Production деплой
 - ✅ `scripts/migrate-to-helm.sh` - Міграція на Helm
 
@@ -71,6 +78,7 @@
 ### 3. VS Code інтеграція
 
 #### Tasks (tasks-local.json) - 11 задач:
+
 1. ✅ Init Local DB - Ініціалізація БД
 2. ✅ Run Migrations - Міграції
 3. ✅ Start Backend - Запуск FastAPI
@@ -84,6 +92,7 @@
 11. ✅ View Logs
 
 #### Debug конфігурації (launch.json) - 7 configs:
+
 1. ✅ Python: Backend FastAPI
 2. ✅ Python: Current File
 3. ✅ Python: Smoke Tests
@@ -93,6 +102,7 @@
 7. ✅ **Compound: Full Stack Debug** (Backend + Frontend)
 
 #### Налаштування (settings-local.json):
+
 - ✅ Python interpreter paths
 - ✅ TypeScript/JavaScript налаштування
 - ✅ Форматування коду
@@ -126,6 +136,7 @@ make status     # Статус системи
 #### .env.example (шаблон конфігурації)
 
 **Секції**:
+
 - ✅ Database (PostgreSQL)
 - ✅ Backend (FastAPI)
 - ✅ Frontend (React/Vite)
@@ -176,6 +187,7 @@ cd predator12-local
 ```
 
 **Що робить**:
+
 - ✅ Перевіряє prerequisites
 - ✅ Перевіряє порти
 - ✅ Створює .env
@@ -192,6 +204,7 @@ cd predator12-local
 ```
 
 **Меню**:
+
 - 📦 Setup - Налаштування
 - 🚀 Dev - Розробка
 - 🧪 Test - Тести
@@ -254,6 +267,7 @@ npm run dev
 ## ✅ Acceptance Criteria - Виконано 100%
 
 ### Середовище розробки ✅
+
 - [x] PostgreSQL 15+ працює локально
 - [x] Python 3.11+ встановлено та налаштовано
 - [x] Node.js 18+ встановлено та налаштовано
@@ -261,6 +275,7 @@ npm run dev
 - [x] VS Code налаштовано з tasks та debug
 
 ### Backend ✅
+
 - [x] FastAPI запускається локально
 - [x] Міграції виконуються успішно
 - [x] API endpoints доступні та документовані
@@ -268,6 +283,7 @@ npm run dev
 - [x] Логування працює
 
 ### Frontend ✅
+
 - [x] Vite dev server запускається
 - [x] Hot reload працює
 - [x] Build проходить без помилок
@@ -275,6 +291,7 @@ npm run dev
 - [x] TypeScript налаштовано
 
 ### Інтеграція ✅
+
 - [x] Backend ↔ Frontend комунікація
 - [x] WebSocket підключення
 - [x] Автентифікація працює
@@ -282,6 +299,7 @@ npm run dev
 - [x] CORS налаштовано
 
 ### Інструменти розробки ✅
+
 - [x] VS Code tasks (11) працюють
 - [x] Debug конфігурації (7) працюють
 - [x] Smoke тести проходять
@@ -289,6 +307,7 @@ npm run dev
 - [x] Логування доступне
 
 ### Скрипти ✅
+
 - [x] init_local_db.sh - працює
 - [x] migrate_db.sh - працює
 - [x] pg_dump_from_container.sh - працює
@@ -298,6 +317,7 @@ npm run dev
 - [x] 30+ допоміжних скриптів
 
 ### Документація ✅
+
 - [x] README.md (502 рядки)
 - [x] START_HERE.md (356 рядків)
 - [x] LOCAL_DEV_STATUS.md (563 рядки)
@@ -306,6 +326,7 @@ npm run dev
 - [x] DEPLOYMENT_CHECKLIST.md
 
 ### Git інтеграція ✅
+
 - [x] Всі файли в git
 - [x] Детальні commit messages
 - [x] .gitignore налаштовано
@@ -316,6 +337,7 @@ npm run dev
 ## 📊 Статистика проекту
 
 ### Код та документація:
+
 - **Документація**: ~2400 рядків (6 основних файлів)
 - **Скрипти**: 37+ Shell scripts
 - **Python код**: Backend + AI agents
@@ -323,11 +345,13 @@ npm run dev
 - **Конфігурації**: Makefile, .env, VS Code
 
 ### Git:
+
 - **Commits**: 6
 - **Branches**: main
 - **Remote**: GitHub
 
 ### Розмір:
+
 - **Загальний розмір**: ~2.1 GB
 - **Backend**: ~500 MB
 - **Frontend**: ~400 MB
@@ -339,18 +363,21 @@ npm run dev
 ## 🔗 Корисні посилання
 
 ### Локальна розробка:
+
 - Backend API: http://localhost:8000
 - API Docs: http://localhost:8000/docs
 - Frontend: http://localhost:3000
 - PostgreSQL: postgresql://localhost:5432/predator
 
 ### Документація:
+
 - [README.md](predator12-local/README.md) - Повна документація
 - [START_HERE.md](predator12-local/START_HERE.md) - Швидкий старт
 - [LOCAL_DEV_STATUS.md](predator12-local/LOCAL_DEV_STATUS.md) - Статус
 - [QUICK_START.md](predator12-local/QUICK_START.md) - 5-хвилинний гід
 
 ### Огляд:
+
 ```bash
 ./project-overview.sh  # Запустіть для красивого огляду
 ```
@@ -362,12 +389,14 @@ npm run dev
 ### Для початку роботи:
 
 1. **Автоматичне налаштування**:
+
    ```bash
    cd predator12-local
    ./quick-setup.sh
    ```
 
 2. **Запуск dev-середовища**:
+
    ```bash
    make dev
    ```
@@ -426,6 +455,7 @@ make security
 **ВИКОНАНО 100%** ✅
 
 Всі пункти ТЗ виконані повністю:
+
 - ✅ Локальний запуск без контейнерів
 - ✅ Скрипти для backend, frontend, БД, міграцій
 - ✅ VS Code інтеграція
@@ -439,6 +469,7 @@ make security
 ### 🚀 Готовність:
 
 **Проект готовий до:**
+
 - ✅ Локальної розробки
 - ✅ Тестування
 - ✅ Debugging
@@ -454,12 +485,14 @@ make security
 Всі компоненти протестовані, документація написана, скрипти працюють, VS Code налаштовано. Проект готовий до продуктивної розробки.
 
 **Для початку**:
+
 ```bash
 cd predator12-local
 ./quick-setup.sh
 ```
 
 **Або**:
+
 ```bash
 ./project-overview.sh  # Для огляду проекту
 ```

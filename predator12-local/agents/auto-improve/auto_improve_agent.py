@@ -40,9 +40,7 @@ class CodeImprovement:
 
 
 class AutoImproveAgent:
-    """
-    Агент самовдосконалення коду згідно з технічним завданням
-    """
+    """Агент самовдосконалення коду згідно з технічним завданням."""
 
     def __init__(self):
         self.project_root = Path("/app")
@@ -77,7 +75,7 @@ class AutoImproveAgent:
         ]
 
     async def initialize(self):
-        """Ініціалізує агент самовдосконалення"""
+        """Ініціалізує агент самовдосконалення."""
         logger.info("🚀 Initializing AutoImprove Agent...")
 
         try:
@@ -94,7 +92,7 @@ class AutoImproveAgent:
         await self.analyze_current_codebase()
 
     async def start_continuous_improvement(self):
-        """Запускає режим постійного самовдосконалення"""
+        """Запускає режим постійного самовдосконалення."""
         logger.info("🔄 Starting continuous code improvement...")
 
         while True:
@@ -120,7 +118,7 @@ class AutoImproveAgent:
                 await asyncio.sleep(300)  # 5 хвилин при помилці
 
     async def analyze_current_codebase(self):
-        """Аналізує поточну кодову базу"""
+        """Аналізує поточну кодову базу."""
         logger.info("📊 Analyzing current codebase...")
 
         self.analysis_results.clear()
@@ -144,7 +142,7 @@ class AutoImproveAgent:
         )
 
     async def find_files_to_analyze(self) -> List[Path]:
-        """Знаходить файли для аналізу"""
+        """Знаходить файли для аналізу."""
         files = []
 
         for pattern in self.file_patterns:
@@ -158,7 +156,7 @@ class AutoImproveAgent:
         return files
 
     async def analyze_file(self, file_path: Path):
-        """Аналізує окремий файл"""
+        """Аналізує окремий файл."""
         try:
             async with aiofiles.open(file_path, "r", encoding="utf-8") as f:
                 content = await f.read()
@@ -178,7 +176,7 @@ class AutoImproveAgent:
             logger.error(f"Failed to analyze {file_path}: {e}")
 
     async def analyze_python_file(self, file_path: Path, content: str):
-        """Аналізує Python файл"""
+        """Аналізує Python файл."""
         issues = []
 
         try:
@@ -241,7 +239,7 @@ class AutoImproveAgent:
         self.analysis_results.extend(issues)
 
     def calculate_cyclomatic_complexity(self, node: ast.FunctionDef) -> int:
-        """Обчислює цикломатичну складність функції"""
+        """Обчислює цикломатичну складність функції."""
         complexity = 1  # Базова складність
 
         for child in ast.walk(node):
@@ -257,7 +255,7 @@ class AutoImproveAgent:
     async def check_docstrings(
         self, file_path: Path, tree: ast.AST, content: str, issues: List[CodeIssue]
     ):
-        """Перевіряє наявність docstrings"""
+        """Перевіряє наявність docstrings."""
         lines = content.split("\n")
 
         for node in ast.walk(tree):
@@ -277,7 +275,7 @@ class AutoImproveAgent:
                     )
 
     async def check_python_style(self, file_path: Path, content: str, issues: List[CodeIssue]):
-        """Перевіряє стиль Python коду"""
+        """Перевіряє стиль Python коду."""
         lines = content.split("\n")
 
         for i, line in enumerate(lines, 1):
@@ -310,7 +308,7 @@ class AutoImproveAgent:
                 )
 
     async def analyze_javascript_file(self, file_path: Path, content: str):
-        """Аналізує JavaScript/TypeScript файл"""
+        """Аналізує JavaScript/TypeScript файл."""
         issues = []
         lines = content.split("\n")
 
@@ -346,7 +344,7 @@ class AutoImproveAgent:
         self.analysis_results.extend(issues)
 
     async def analyze_yaml_file(self, file_path: Path, content: str):
-        """Аналізує YAML файл"""
+        """Аналізує YAML файл."""
         issues = []
 
         try:
@@ -369,7 +367,7 @@ class AutoImproveAgent:
         self.analysis_results.extend(issues)
 
     async def analyze_json_file(self, file_path: Path, content: str):
-        """Аналізує JSON файл"""
+        """Аналізує JSON файл."""
         issues = []
 
         try:
@@ -390,7 +388,7 @@ class AutoImproveAgent:
         self.analysis_results.extend(issues)
 
     async def identify_improvements(self) -> List[CodeImprovement]:
-        """Ідентифікує можливості для покращень"""
+        """Ідентифікує можливості для покращень."""
         improvements = []
 
         # Групуємо проблеми за файлами
@@ -410,7 +408,7 @@ class AutoImproveAgent:
     async def generate_file_improvements(
         self, file_path: str, issues: List[CodeIssue]
     ) -> List[CodeImprovement]:
-        """Генерує покращення для файлу"""
+        """Генерує покращення для файлу."""
         improvements = []
 
         try:
@@ -436,7 +434,7 @@ class AutoImproveAgent:
     async def generate_llm_improvements(
         self, file_path: str, content: str, issues: List[CodeIssue]
     ) -> List[CodeImprovement]:
-        """Генерує покращення за допомогою LLM"""
+        """Генерує покращення за допомогою LLM."""
         improvements = []
 
         try:
@@ -499,7 +497,7 @@ Provide the improved code sections.
     async def generate_automatic_improvements(
         self, file_path: str, content: str, issues: List[CodeIssue]
     ) -> List[CodeImprovement]:
-        """Генерує автоматичні покращення з високою довірою"""
+        """Генерує автоматичні покращення з високою довірою."""
         improvements = []
 
         lines = content.split("\n")
@@ -536,7 +534,7 @@ Provide the improved code sections.
         return improvements
 
     async def apply_safe_improvements(self, improvements: List[CodeImprovement]):
-        """Застосовує безпечні покращення з високим рівнем довіри"""
+        """Застосовує безпечні покращення з високим рівнем довіри."""
         applied_count = 0
 
         for improvement in improvements:
@@ -565,7 +563,7 @@ Provide the improved code sections.
                 await self.create_improvement_commit(applied_count)
 
     async def apply_improvement(self, improvement: CodeImprovement):
-        """Застосовує конкретне покращення"""
+        """Застосовує конкретне покращення."""
         # Створюємо бекап оригінального файлу
         backup_path = Path(improvement.file_path + ".bak")
 
@@ -599,7 +597,7 @@ Provide the improved code sections.
                 backup_path.unlink()
 
     async def create_improvement_commit(self, changes_count: int):
-        """Створює commit з покращеннями"""
+        """Створює commit з покращеннями."""
         try:
             # Додаємо всі змінені файли
             self.repo.git.add(".")
@@ -620,7 +618,7 @@ Provide the improved code sections.
             logger.error(f"Failed to create improvement commit: {e}")
 
     async def calculate_code_quality_metrics(self):
-        """Обчислює метрики якості коду"""
+        """Обчислює метрики якості коду."""
         total_issues = len(self.analysis_results)
         error_issues = sum(1 for issue in self.analysis_results if issue.severity == "error")
         warning_issues = sum(1 for issue in self.analysis_results if issue.severity == "warning")
@@ -646,7 +644,7 @@ Provide the improved code sections.
         logger.info(f"📊 Code quality score: {quality_score:.1f}/100")
 
     async def generate_improvement_report(self) -> Dict[str, Any]:
-        """Генерує звіт про покращення"""
+        """Генерує звіт про покращення."""
         report = {
             "timestamp": datetime.now().isoformat(),
             "code_quality_metrics": self.code_quality_metrics,
@@ -672,7 +670,7 @@ Provide the improved code sections.
         return report
 
     async def generate_improvement_suggestions(self) -> List[Dict[str, Any]]:
-        """Генерує пропозиції для покращення"""
+        """Генерує пропозиції для покращення."""
         suggestions = []
 
         # Аналізуємо найбільш поширені проблеми
@@ -696,7 +694,7 @@ Provide the improved code sections.
         return suggestions
 
     async def get_improvement_suggestion(self, issue_type: str) -> str:
-        """Повертає пропозицію для типу проблеми"""
+        """Повертає пропозицію для типу проблеми."""
         suggestions = {
             "missing_docstring": "Add comprehensive docstrings to improve code documentation",
             "high_complexity": "Refactor complex functions into smaller, more manageable pieces",
@@ -710,7 +708,7 @@ Provide the improved code sections.
         return suggestions.get(issue_type, "Review and address this code issue")
 
     async def get_status(self) -> Dict[str, Any]:
-        """Повертає поточний статус агента"""
+        """Повертає поточний статус агента."""
         return {
             "timestamp": datetime.now().isoformat(),
             "code_quality_metrics": self.code_quality_metrics,
@@ -726,7 +724,7 @@ auto_improve_agent = AutoImproveAgent()
 
 
 async def main():
-    """Основна функція для запуску агента"""
+    """Основна функція для запуску агента."""
     logger.info("🚀 Starting Predator Analytics AutoImprove Agent...")
 
     try:

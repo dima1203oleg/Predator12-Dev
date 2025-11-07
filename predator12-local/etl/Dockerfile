@@ -1,5 +1,7 @@
 FROM python:3.11-slim
 
+LABEL Name="etl" Version="1.0.0"
+
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \

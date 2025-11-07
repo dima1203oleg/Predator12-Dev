@@ -3,6 +3,7 @@
 ## Docusaurus автогенерація
 
 1. Додайте у CI/CD pipeline крок для генерації документації:
+
 ```yaml
 - name: Build Docusaurus docs
   run: |
@@ -10,12 +11,14 @@
     npm install
     npm run build
 ```
+
 2. Для автопублікації на GitHub Pages або інший хостинг використовуйте офіційний Docusaurus GitHub Action.
 
 ## Knowledge Graph автогенерація
 
 - Використовуйте Sourcegraph Cody або власний скрипт на базі OpenAI/HuggingFace embeddings для побудови knowledge graph по коду.
 - Додавайте крок у CI/CD для оновлення knowledge graph після кожного мерджу:
+
 ```yaml
 - name: Update Knowledge Graph
   run: |

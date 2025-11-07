@@ -7,6 +7,7 @@
 ## 🌐 ДОСТУП ДО ІНТЕРФЕЙСУ
 
 ### 🚀 URLs:
+
 ```
 ✅ DEVELOPMENT:  http://localhost:5091/
 ✅ PRODUCTION:   http://localhost:3000/
@@ -20,18 +21,22 @@
 ### 📱 ОСНОВНІ СЕКЦІЇ
 
 #### 1. 🔍 SEARCH BAR (ВЕРХ СТОРІНКИ)
+
 ```
 ┌──────────────────────────────────────────────────┐
 │ 🔍 Search services...                           │
 └──────────────────────────────────────────────────┘
 ```
+
 **Функціональність**:
+
 - Real-time пошук по назвам сервісів
 - Glassmorphism дизайн
 - Focus ефект з підсвічуванням фіолетовим (#8B5CF6)
 - Placeholder: "🔍 Search services..."
 
 **Як використовувати**:
+
 1. Клікнути в поле пошуку
 2. Почати вводити назву сервісу (наприклад, "postgres")
 3. Список сервісів миттєво фільтрується
@@ -39,12 +44,15 @@
 ---
 
 #### 2. 🎯 FILTER CHIPS (ПІД ПОШУКОМ)
+
 ```
 ┌──────────────────────────────────────────────────────────────────┐
 │  [All Services 25]  [Core 5]  [Database 4]  [Search 2]  ...    │
 └──────────────────────────────────────────────────────────────────┘
 ```
+
 **Категорії**:
+
 - **All Services (25)** - всі сервіси
 - **Core (5)** - Backend API, Frontend, Celery, etc.
 - **Database (4)** - PostgreSQL, Redis, MinIO, Qdrant
@@ -54,6 +62,7 @@
 - **Security (1)** - Keycloak Auth
 
 **Візуальні стани**:
+
 ```css
 /* Активний фільтр */
 background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)
@@ -70,6 +79,7 @@ background: rgba(255, 255, 255, 0.08)
 ```
 
 **Як використовувати**:
+
 1. Клікнути на будь-який chip
 2. Список сервісів фільтрується миттєво
 3. Лічильники оновлюються динамічно
@@ -77,6 +87,7 @@ background: rgba(255, 255, 255, 0.08)
 ---
 
 #### 3. 📊 METRICS GRID (4 КАРТИ)
+
 ```
 ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
 │ ⚡ CPU       │  │ 💾 Memory    │  │ 💿 Disk      │  │ 🌐 Network   │
@@ -87,6 +98,7 @@ background: rgba(255, 255, 255, 0.08)
 ```
 
 **Features**:
+
 - Великі іконки з gradient background
 - Progress bar з кольоровим градієнтом
 - Trend indicators (↗/↘) з відсотками
@@ -94,6 +106,7 @@ background: rgba(255, 255, 255, 0.08)
 - Real-time оновлення кожні 2 секунди
 
 **Кольори**:
+
 - CPU: #8B5CF6 (фіолетовий)
 - Memory: #EC4899 (рожевий)
 - Disk: #3B82F6 (синій)
@@ -102,6 +115,7 @@ background: rgba(255, 255, 255, 0.08)
 ---
 
 #### 4. 📈 SYSTEM PERFORMANCE CHART
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ System Performance                              │
@@ -122,6 +136,7 @@ background: rgba(255, 255, 255, 0.08)
 ```
 
 **Features**:
+
 - Canvas-based smooth line chart
 - Gradient fill під лінією
 - 3 Quick Stats внизу
@@ -130,6 +145,7 @@ background: rgba(255, 255, 255, 0.08)
 ---
 
 #### 5. 🗂️ SERVICE STATUS LIST
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ Service Status                                  │
@@ -155,12 +171,14 @@ background: rgba(255, 255, 255, 0.08)
 ```
 
 **Категорії Header**:
+
 ```
 [ICON] Category Name                        [COUNT]
 ────────────────────────────────────────────────────
 ```
 
 **Service Card States**:
+
 ```
 🟢 ONLINE   - зелений (#10B981) + pulse animation
 🟠 WARNING  - жовтий  (#F59E0B)
@@ -168,16 +186,19 @@ background: rgba(255, 255, 255, 0.08)
 ```
 
 **Hover ефект**:
+
 - Картка зсувається вправо (translateX(5px))
 - Border підсвічується кольором статусу
 - Cursor: pointer
 
 **Клік**:
+
 - Відкриває модальне вікно з деталями
 
 ---
 
 #### 6. 🔍 SERVICE DETAILS MODAL
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ Backend API                              ×     │
@@ -197,6 +218,7 @@ background: rgba(255, 255, 255, 0.08)
 ```
 
 **Features**:
+
 - Backdrop з blur ефектом
 - Gradient background (#1a1a2e → #16213e)
 - Status badge з пульсуючою точкою
@@ -204,11 +226,13 @@ background: rgba(255, 255, 255, 0.08)
 - 3 action buttons внизу
 
 **Buttons**:
+
 - **View Logs** - фіолетовий (#8B5CF6)
 - **Restart** - жовтий (#F59E0B) warning style
 - **Configure** - фіолетовий (#8B5CF6)
 
 **Закриття**:
+
 1. Клік на × кнопку
 2. Клік поза модальним вікном
 3. ESC клавіша (TODO)
@@ -216,6 +240,7 @@ background: rgba(255, 255, 255, 0.08)
 ---
 
 #### 7. 📢 ALERT NOTIFICATIONS (FIXED TOP-RIGHT)
+
 ```
                     ┌────────────────────────────┐
                     │ ⚠️ WARNING              × │
@@ -231,6 +256,7 @@ background: rgba(255, 255, 255, 0.08)
 **Position**: Fixed, top: 20px, right: 20px
 
 **Типи**:
+
 ```
 ❌ ERROR   - червоний (#EF4444)
 ⚠️ WARNING - жовтий  (#F59E0B)
@@ -238,10 +264,17 @@ background: rgba(255, 255, 255, 0.08)
 ```
 
 **Animation**: slideInRight
+
 ```css
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(100px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 ```
 
@@ -252,27 +285,26 @@ background: rgba(255, 255, 255, 0.08)
 ## 🎨 КОЛЬОРОВА СХЕМА
 
 ### Primary Colors:
+
 ```css
---purple:     #8B5CF6  /* Фіолетовий - primary accent */
---pink:       #EC4899  /* Рожевий - gradient accent */
---blue:       #3B82F6  /* Синій - disk, info */
---green:      #10B981  /* Зелений - online, network */
---yellow:     #F59E0B  /* Жовтий - warning */
---red:        #EF4444  /* Червоний - error, offline */
+--purple: #8b5cf6 /* Фіолетовий - primary accent */ --pink: #ec4899
+  /* Рожевий - gradient accent */ --blue: #3b82f6 /* Синій - disk, info */
+  --green: #10b981 /* Зелений - online, network */ --yellow: #f59e0b
+  /* Жовтий - warning */ --red: #ef4444 /* Червоний - error, offline */;
 ```
 
 ### Background:
+
 ```css
---bg-dark:    #0a0a14  /* Темний фон */
---bg-mid:     #1a1a2e  /* Середній фон */
---bg-light:   #0f0f1e  /* Світліший фон */
+--bg-dark: #0a0a14 /* Темний фон */ --bg-mid: #1a1a2e /* Середній фон */
+  --bg-light: #0f0f1e /* Світліший фон */;
 ```
 
 ### Text:
+
 ```css
---text-white: #fff     /* Основний текст */
---text-gray:  #888     /* Вторинний текст */
---text-dark:  #666     /* Темний текст */
+--text-white: #fff /* Основний текст */ --text-gray: #888 /* Вторинний текст */
+  --text-dark: #666 /* Темний текст */;
 ```
 
 ---
@@ -280,26 +312,46 @@ background: rgba(255, 255, 255, 0.08)
 ## 🎭 АНІМАЦІЇ
 
 ### 1. Pulse (для online статусу)
+
 ```css
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 ```
 
 ### 2. FadeIn (для основного контенту)
+
 ```css
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 ```
 
 ### 3. SlideInRight (для alerts)
+
 ```css
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(100px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 ```
 
@@ -308,6 +360,7 @@ background: rgba(255, 255, 255, 0.08)
 ## 🖱️ ІНТЕРАКТИВНІ ЕЛЕМЕНТИ
 
 ### Hover States:
+
 ```css
 /* Metric Card */
 MetricCard:hover {
@@ -340,6 +393,7 @@ ActionButton:hover {
 ## 📱 RESPONSIVE BEHAVIOR
 
 ### Breakpoints:
+
 ```css
 /* Desktop (> 1400px) */
 - 2-column grid (Chart + Services)
@@ -356,12 +410,13 @@ ActionButton:hover {
 ```
 
 ### Grid Layout:
+
 ```css
 /* Metrics Grid */
 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 
 /* Content Grid */
-grid-template-columns: 2fr 1fr;  /* Chart : Services */
+grid-template-columns: 2fr 1fr; /* Chart : Services */
 
 /* Filter Chips */
 display: flex;
@@ -373,6 +428,7 @@ flex-wrap: wrap;
 ## 🔧 ВИКОРИСТАННЯ ФУНКЦІЙ
 
 ### 1. Пошук Сервісів
+
 ```
 1. Натиснути в search bar
 2. Ввести "postgres"
@@ -381,6 +437,7 @@ flex-wrap: wrap;
 ```
 
 ### 2. Фільтрація по Категорії
+
 ```
 1. Клік на "Database" chip
 2. Побачити 4 database сервіси
@@ -388,6 +445,7 @@ flex-wrap: wrap;
 ```
 
 ### 3. Перегляд Деталей Сервісу
+
 ```
 1. Клік на будь-яку Service Card
 2. Модальне вікно відкривається
@@ -396,6 +454,7 @@ flex-wrap: wrap;
 ```
 
 ### 4. Закриття Alert
+
 ```
 1. Побачити alert у верхньому правому куті
 2. Натиснути × для закриття
@@ -403,6 +462,7 @@ flex-wrap: wrap;
 ```
 
 ### 5. Комбінований Пошук + Фільтр
+
 ```
 1. Ввести "prom" в search
 2. Клікнути "Monitoring" filter
@@ -414,6 +474,7 @@ flex-wrap: wrap;
 ## 🎯 EMPTY STATES
 
 ### Немає результатів пошуку:
+
 ```
 ┌─────────────────────────────────────┐
 │                                     │
@@ -428,6 +489,7 @@ flex-wrap: wrap;
 ```
 
 **Коли з'являється**:
+
 - Пошук не знайшов результатів
 - Фільтр + пошук не дали збігів
 
@@ -436,12 +498,14 @@ flex-wrap: wrap;
 ## ⚡ PERFORMANCE TIPS
 
 ### Best Practices:
+
 1. **Пошук**: Вводити мінімум 2-3 символи для точності
 2. **Фільтри**: Використовувати для швидкого доступу до категорії
 3. **Модальні вікна**: Закривати після перегляду для кращої продуктивності
 4. **Alerts**: Закривати старі для очищення UI
 
 ### Shortcuts (майбутнє):
+
 ```
 ⌘/Ctrl + K  - Фокус на пошук
 ESC         - Закрити модальне вікно
@@ -453,6 +517,7 @@ ESC         - Закрити модальне вікно
 ## 📊 SERVICE CATEGORIES BREAKDOWN
 
 ### ⚙️ Core Application Services (5)
+
 ```
 1. Backend API         - 99.9% uptime, 1,247 req/min, 45ms
 2. Frontend React      - 100% uptime, 2,156 req/min, 12ms
@@ -462,6 +527,7 @@ ESC         - Закрити модальне вікно
 ```
 
 ### 🗄️ Database & Storage (4)
+
 ```
 1. PostgreSQL      - 100% uptime, 892 req/min, 15ms
 2. Redis Cache     - 99.8% uptime, 3,421 req/min, 3ms
@@ -470,22 +536,26 @@ ESC         - Закрити модальне вікно
 ```
 
 ### 🔍 Search & Indexing (2)
+
 ```
 1. OpenSearch           - 99.9% uptime, 2,145 req/min, 67ms
 2. OpenSearch Dashboard - 99.8% uptime, 567 req/min, 123ms
 ```
 
 ### 📦 Message Queue (1)
+
 ```
 1. Redpanda Kafka - 99.7% uptime, 1,876 req/min, 34ms
 ```
 
 ### 🤖 AI/ML Services (1)
+
 ```
 1. Model SDK - 99.5% uptime, 743 req/min, 234ms
 ```
 
 ### 📊 Monitoring Stack (7)
+
 ```
 1. Prometheus       - 100% uptime, 445 req/min, 56ms
 2. Grafana          - 100% uptime, 789 req/min, 78ms
@@ -497,12 +567,14 @@ ESC         - Закрити модальне вікно
 ```
 
 ### 📈 System Metrics (2)
+
 ```
 1. cAdvisor      - 100% uptime, 567 req/min, 34ms
 2. Node Exporter - 100% uptime, 890 req/min, 23ms
 ```
 
 ### 🔒 Security & Auth (1)
+
 ```
 1. Keycloak Auth - 100% uptime, 445 req/min, 89ms
 ```
@@ -512,6 +584,7 @@ ESC         - Закрити модальне вікно
 ## 🚀 ЗАПУСК DASHBOARD
 
 ### Development Mode:
+
 ```bash
 cd predator12-local/frontend
 npm run dev
@@ -521,6 +594,7 @@ http://localhost:5091/
 ```
 
 ### Production Mode:
+
 ```bash
 cd predator12-local/frontend
 npm run build
@@ -545,7 +619,7 @@ http://localhost:3000/
 ✅ **Alerts** - Система сповіщень (error/warning/info)  
 ✅ **Animations** - Плавні transitions та hover effects  
 ✅ **Responsive** - Адаптивний дизайн для всіх екранів  
-✅ **Glassmorphism** - Сучасний UI з blur ефектами  
+✅ **Glassmorphism** - Сучасний UI з blur ефектами
 
 ---
 

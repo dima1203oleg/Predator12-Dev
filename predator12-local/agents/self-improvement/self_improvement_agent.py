@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-Self-Improvement Agent for Predator11
-Continuously analyzes system performance and implements improvements
-"""
+"""Self-Improvement Agent for Predator11 Continuously analyzes system
+performance and implements improvements."""
 
 import asyncio
 import json
@@ -16,7 +14,7 @@ from typing import Any, Dict, List, Optional
 import aioredis
 import asyncpg
 import qdrant_client
-from kafka import KafkaConsumer, KafkaProducer
+from kafka import KafkaProducer
 from prometheus_client import Counter, Gauge, Histogram
 from qdrant_client.models import Distance, PointStruct, VectorParams
 
@@ -62,7 +60,7 @@ class SelfImprovementAgent:
         self.analysis_interval = config.get("analysis_interval", 300)  # 5 minutes
 
     async def initialize(self):
-        """Initialize connections and resources"""
+        """Initialize connections and resources."""
         try:
             # Redis connection
             self.redis = aioredis.from_url(
@@ -95,7 +93,7 @@ class SelfImprovementAgent:
             raise
 
     async def _initialize_qdrant_collection(self):
-        """Initialize Qdrant collection for improvement vectors"""
+        """Initialize Qdrant collection for improvement vectors."""
         collection_name = "improvement_vectors"
 
         try:
@@ -110,7 +108,7 @@ class SelfImprovementAgent:
             self.logger.error(f"Failed to initialize Qdrant collection: {e}")
 
     async def start(self):
-        """Start the self-improvement agent"""
+        """Start the self-improvement agent."""
         self.running = True
         self.logger.info("Starting SelfImprovementAgent")
 
@@ -123,7 +121,7 @@ class SelfImprovementAgent:
         await asyncio.gather(improvement_task, monitoring_task)
 
     async def stop(self):
-        """Stop the agent gracefully"""
+        """Stop the agent gracefully."""
         self.running = False
         self.logger.info("Stopping SelfImprovementAgent")
 
@@ -135,7 +133,7 @@ class SelfImprovementAgent:
             self.kafka_producer.close()
 
     async def _improvement_loop(self):
-        """Main improvement analysis and implementation loop"""
+        """Main improvement analysis and implementation loop."""
         while self.running:
             try:
                 with ANALYSIS_DURATION.time():
@@ -162,7 +160,7 @@ class SelfImprovementAgent:
                 await asyncio.sleep(60)  # Wait before retry
 
     async def _collect_system_metrics(self) -> Dict[str, Any]:
-        """Collect comprehensive system metrics"""
+        """Collect comprehensive system metrics."""
         metrics = {
             "timestamp": datetime.utcnow().isoformat(),
             "database": await self._collect_database_metrics(),
@@ -184,7 +182,7 @@ class SelfImprovementAgent:
         return metrics
 
     async def _collect_database_metrics(self) -> Dict[str, Any]:
-        """Collect database performance metrics"""
+        """Collect database performance metrics."""
         try:
             async with self.postgres_pool.acquire() as conn:
                 # Query performance stats
@@ -234,7 +232,7 @@ class SelfImprovementAgent:
             return {}
 
     async def _collect_api_metrics(self) -> Dict[str, Any]:
-        """Collect API performance metrics from Redis"""
+        """Collect API performance metrics from Redis."""
         try:
             # Get API response times
             response_times = await self.redis.hgetall("api:response_times")
@@ -255,7 +253,7 @@ class SelfImprovementAgent:
             return {}
 
     async def _collect_agent_metrics(self) -> Dict[str, Any]:
-        """Collect metrics from other agents"""
+        """Collect metrics from other agents."""
         try:
             # Get agent statuses
             agent_statuses = await self.redis.hgetall("agents:status")
@@ -272,7 +270,7 @@ class SelfImprovementAgent:
             return {}
 
     async def _collect_resource_metrics(self) -> Dict[str, Any]:
-        """Collect system resource metrics"""
+        """Collect system resource metrics."""
         try:
             # Get resource usage from Redis (updated by monitoring agents)
             cpu_usage = await self.redis.get("metrics:cpu_usage")
@@ -289,7 +287,7 @@ class SelfImprovementAgent:
             return {}
 
     async def _collect_external_api_metrics(self) -> Dict[str, Any]:
-        """Collect external API performance metrics"""
+        """Collect external API performance metrics."""
         try:
             # Get external API response times and error rates
             external_apis = await self.redis.hgetall("external_apis:performance")
@@ -302,7 +300,8 @@ class SelfImprovementAgent:
     async def _analyze_performance_trends(
         self, current_metrics: Dict[str, Any]
     ) -> List[ImprovementAction]:
-        """Analyze performance trends and identify improvement opportunities"""
+        """Analyze performance trends and identify improvement
+        opportunities."""
         improvements = []
 
         # Database performance analysis
@@ -332,7 +331,7 @@ class SelfImprovementAgent:
     async def _analyze_database_performance(
         self, db_metrics: Dict[str, Any]
     ) -> List[ImprovementAction]:
-        """Analyze database performance and suggest improvements"""
+        """Analyze database performance and suggest improvements."""
         improvements = []
 
         # Check for tables with high sequential scans
@@ -384,7 +383,7 @@ class SelfImprovementAgent:
     async def _analyze_api_performance(
         self, api_metrics: Dict[str, Any]
     ) -> List[ImprovementAction]:
-        """Analyze API performance and suggest improvements"""
+        """Analyze API performance and suggest improvements."""
         improvements = []
 
         # Check response times
@@ -420,7 +419,7 @@ class SelfImprovementAgent:
     async def _analyze_resource_utilization(
         self, resource_metrics: Dict[str, Any]
     ) -> List[ImprovementAction]:
-        """Analyze resource utilization and suggest scaling"""
+        """Analyze resource utilization and suggest scaling."""
         improvements = []
 
         # CPU utilization
@@ -456,7 +455,7 @@ class SelfImprovementAgent:
     async def _analyze_agent_performance(
         self, agent_metrics: Dict[str, Any]
     ) -> List[ImprovementAction]:
-        """Analyze agent performance and suggest improvements"""
+        """Analyze agent performance and suggest improvements."""
         improvements = []
 
         # Check agent performance
@@ -478,7 +477,7 @@ class SelfImprovementAgent:
     async def _prioritize_improvements(
         self, improvements: List[ImprovementAction]
     ) -> List[ImprovementAction]:
-        """Prioritize improvements based on impact and complexity"""
+        """Prioritize improvements based on impact and complexity."""
 
         def priority_score(improvement: ImprovementAction) -> float:
             complexity_weights = {"low": 1.0, "medium": 0.7, "high": 0.4}
@@ -489,7 +488,7 @@ class SelfImprovementAgent:
         return sorted(improvements, key=priority_score, reverse=True)
 
     async def _implement_improvements(self, improvements: List[ImprovementAction]):
-        """Implement the highest priority improvements"""
+        """Implement the highest priority improvements."""
         for improvement in improvements:
             try:
                 success = await self._execute_improvement(improvement)
@@ -512,7 +511,7 @@ class SelfImprovementAgent:
                 self.logger.error(f"Error implementing improvement {improvement.description}: {e}")
 
     async def _execute_improvement(self, improvement: ImprovementAction) -> bool:
-        """Execute a specific improvement action"""
+        """Execute a specific improvement action."""
         try:
             if improvement.type == ImprovementType.RESOURCE_SCALING:
                 return await self._handle_resource_scaling(improvement)
@@ -533,7 +532,7 @@ class SelfImprovementAgent:
             return False
 
     async def _handle_resource_scaling(self, improvement: ImprovementAction) -> bool:
-        """Handle resource scaling improvements"""
+        """Handle resource scaling improvements."""
         # Send scaling request to orchestrator
         scaling_request = {
             "type": "scale_request",
@@ -547,7 +546,7 @@ class SelfImprovementAgent:
         return True
 
     async def _handle_performance_optimization(self, improvement: ImprovementAction) -> bool:
-        """Handle performance optimization improvements"""
+        """Handle performance optimization improvements."""
         # For database index optimization
         if improvement.metadata.get("type") == "index_optimization":
             table = improvement.metadata.get("table")
@@ -564,7 +563,7 @@ class SelfImprovementAgent:
         return False
 
     async def _handle_algorithm_tuning(self, improvement: ImprovementAction) -> bool:
-        """Handle algorithm tuning improvements"""
+        """Handle algorithm tuning improvements."""
         # Send tuning request to relevant agent
         tuning_request = {
             "type": "algorithm_tuning",
@@ -577,7 +576,7 @@ class SelfImprovementAgent:
         return True
 
     async def _handle_model_optimization(self, improvement: ImprovementAction) -> bool:
-        """Handle ML model optimization improvements"""
+        """Handle ML model optimization improvements."""
         # Send model optimization request
         model_request = {
             "type": "model_optimization",
@@ -590,7 +589,7 @@ class SelfImprovementAgent:
         return True
 
     async def _handle_workflow_improvement(self, improvement: ImprovementAction) -> bool:
-        """Handle workflow improvement changes"""
+        """Handle workflow improvement changes."""
         # Send workflow improvement request
         workflow_request = {
             "type": "workflow_improvement",
@@ -603,7 +602,7 @@ class SelfImprovementAgent:
         return True
 
     async def _store_improvement_vector(self, improvement: ImprovementAction):
-        """Store improvement as vector for future learning"""
+        """Store improvement as vector for future learning."""
         try:
             # Create embedding from improvement description
             # This would typically use a proper embedding model
@@ -627,7 +626,7 @@ class SelfImprovementAgent:
             self.logger.error(f"Failed to store improvement vector: {e}")
 
     async def _notify_improvement_implemented(self, improvement: ImprovementAction):
-        """Notify other systems about implemented improvement"""
+        """Notify other systems about implemented improvement."""
         notification = {
             "type": "improvement_implemented",
             "improvement": {
@@ -643,7 +642,7 @@ class SelfImprovementAgent:
         self.kafka_producer.send("system.notifications", notification)
 
     async def _calculate_performance_score(self, metrics: Dict[str, Any]) -> float:
-        """Calculate overall system performance score"""
+        """Calculate overall system performance score."""
         scores = []
 
         # Database performance score
@@ -673,11 +672,11 @@ class SelfImprovementAgent:
         return sum(scores) / len(scores) if scores else 0.5
 
     async def _performance_monitoring_loop(self):
-        """Continuous performance monitoring"""
+        """Continuous performance monitoring."""
         while self.running:
             try:
                 # Update performance metrics in Redis for other agents
-                metrics = await self._collect_system_metrics()
+                await self._collect_system_metrics()
                 await self.redis.hset(
                     "system:performance",
                     "self_improvement_agent",
@@ -699,7 +698,7 @@ class SelfImprovementAgent:
 
 
 async def main():
-    """Main entry point for the Self-Improvement Agent"""
+    """Main entry point for the Self-Improvement Agent."""
     import os
 
     config = {

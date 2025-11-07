@@ -1,16 +1,13 @@
-"""
-Zero-Downtime Configuration Reload
-"""
+"""Zero-Downtime Configuration Reload."""
 
 import asyncio
 import signal
-from typing import Any, Dict
 
 from leader_election import LeaderElection
 
 
 class GracefulReloader:
-    """Handles config reloads without dropping requests"""
+    """Handles config reloads without dropping requests."""
 
     def __init__(self, election: LeaderElection):
         self.election = election
@@ -18,7 +15,7 @@ class GracefulReloader:
         self.reload_requested = False
 
     async def handle_reload(self):
-        """Coordinate safe reload process"""
+        """Coordinate safe reload process."""
         if not self.election.is_leader:
             return
 
@@ -34,7 +31,7 @@ class GracefulReloader:
         self.reload_requested = False
 
     async def request_context(self):
-        """Track active requests"""
+        """Track active requests."""
         if self.reload_requested:
             raise HTTPException(503, "Service reloading")
 
@@ -45,14 +42,13 @@ class GracefulReloader:
             self.active_requests -= 1
 
     async def _load_new_config(self):
-        """Load updated configuration"""
+        """Load updated configuration."""
         # Implementation depends on your config system
-        pass
 
 
 # Signal handler example
 def register_handlers(reloader: GracefulReloader):
-    """Register OS signal handlers"""
+    """Register OS signal handlers."""
     loop = asyncio.get_event_loop()
 
     def handle_sighup():

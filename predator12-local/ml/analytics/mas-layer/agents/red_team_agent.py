@@ -1,13 +1,8 @@
 import asyncio
-import json
 import logging
-import os
 import random
-import time
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
-
-import httpx
+from typing import Any, Dict, List
 
 # Setup logging
 logger = logging.getLogger("RedTeamAgent")

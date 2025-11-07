@@ -56,7 +56,6 @@ from .routes_ingest import router as ingest_router
 try:
     # Prefer local fastapi_app routes module (routes_agents) for agent endpoints
     from ai_assistant import ai_assistant
-    from billing_manager import get_billing_manager, initialize_billing_manager
     from data_governance import data_governance_manager as data_governance
     from dr_manager import dr_manager as dr_enhanced
     from error_system import (
@@ -66,11 +65,9 @@ try:
         predator_exception_handler,
         validation_exception_handler,
     )
-    from export_worker import get_export_worker, initialize_export_worker
     from fastapi.exceptions import RequestValidationError
 
     # Delta Revision 1.2 - Enhanced Production Modules
-    from ilm_manager import ilm_orchestrator
     from ilm_manager import ilm_orchestrator as ilm_enhanced
     from middleware_audit import AuditMiddleware
     from ml_manager import ml_manager
@@ -82,7 +79,6 @@ try:
     from routes_search import router as search_router
     from routes_security import router as security_router
     from routes_ws import router as ws_router
-    from security_manager import get_security_manager, initialize_security_manager
     from starlette.exceptions import HTTPException as StarletteHTTPException
     from supply_chain_security import supply_chain_security_manager as supply_chain_sec
 

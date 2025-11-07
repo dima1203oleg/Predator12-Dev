@@ -23,7 +23,6 @@ import argparse
 import datetime
 import os
 import subprocess
-import sys
 from pathlib import Path
 from typing import List, Optional
 
@@ -89,7 +88,7 @@ def generate_basic_improvements(target_files: List[Path], repo_root: Path) -> bo
 
             # Find functions without docstrings
             func_pattern = r'def (\w+)\([^)]*\):(?:\s*\n\s*""".*?""")?'
-            functions = re.findall(func_pattern, content, re.MULTILINE | re.DOTALL)
+            re.findall(func_pattern, content, re.MULTILINE | re.DOTALL)
 
             # 2. Check for common issues
             issues = []

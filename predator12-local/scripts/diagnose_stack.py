@@ -67,7 +67,7 @@ class Predator11Diagnostics:
     def check_docker_compose_config(self):
         """Перевірка конфігурації docker-compose"""
         compose_file = self.project_root / "docker-compose.yml"
-        override_file = self.project_root / "docker-compose.override.yml"
+        self.project_root / "docker-compose.override.yml"
 
         if not compose_file.exists():
             self.log_issue("Docker Compose", "docker-compose.yml не знайдено")

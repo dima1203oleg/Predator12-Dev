@@ -45,6 +45,7 @@ uvicorn main:app --reload --port 8000
 ## 📡 API Endpoints
 
 ### Chat
+
 ```bash
 POST /api/cyber-ace/chat
 Body: {
@@ -55,6 +56,7 @@ Body: {
 ```
 
 ### Voice
+
 ```bash
 POST /api/cyber-ace/voice
 Content-Type: multipart/form-data
@@ -62,6 +64,7 @@ Body: audio file
 ```
 
 ### Agents
+
 ```bash
 GET /api/cyber-ace/agents
 ```

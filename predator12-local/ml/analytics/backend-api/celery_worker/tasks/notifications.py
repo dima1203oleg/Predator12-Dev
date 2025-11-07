@@ -1,9 +1,7 @@
-import json
 import logging
 import os
 from datetime import datetime
 
-import httpx
 from celery import shared_task
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -253,7 +251,7 @@ def send_batch_notifications(notification_type, user_ids, title, message, data=N
                 # Simulate sending to individual user
                 # In a real implementation, this would be more efficient
                 successful_count += 1
-            except Exception as e:
+            except Exception:
                 failed_count += 1
                 failed_user_ids.append(user_id)
 

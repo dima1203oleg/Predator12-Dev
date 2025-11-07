@@ -1,9 +1,7 @@
 {
   "index_template": {
     "name": "osint_template",
-    "index_patterns": [
-      "osint_*"
-    ],
+    "index_patterns": ["osint_*"],
     "template": {
       "settings": {
         "number_of_shards": 3,

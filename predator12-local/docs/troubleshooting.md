@@ -5,6 +5,7 @@
 ### Проблеми з запуском
 
 #### Сервіси не запускаються
+
 ```bash
 # Перевірити статус контейнерів
 docker ps -a
@@ -21,6 +22,7 @@ make clean && make start
 ```
 
 #### Порти зайняті
+
 ```bash
 # Знайти процеси на портах
 lsof -i :8000  # Backend
@@ -34,6 +36,7 @@ sudo kill -9 <PID>
 ### Проблеми з агентами
 
 #### Агенти не відповідають
+
 ```bash
 # Перезапуск агентів
 make agents-restart
@@ -46,6 +49,7 @@ curl http://localhost:8000/api/v1/agents/diagnosis
 ```
 
 #### Помилки моделей
+
 ```bash
 # Перевірити API ключі
 grep -E "(OPENAI|GITHUB|BING)" .env
@@ -57,6 +61,7 @@ curl -X POST http://localhost:8000/api/v1/agents/test-models
 ### Проблеми з даними
 
 #### Помилки ETL
+
 ```bash
 # Статус ETL процесів
 curl http://localhost:8000/api/v1/etl/status
@@ -71,6 +76,7 @@ curl -X POST http://localhost:8000/api/v1/etl/index \
 ```
 
 #### Проблеми з PII маскуванням
+
 ```bash
 # Перевірити конфігурацію PII
 python3 scripts/indexing/discover_pg_schema.py --dry-run
@@ -85,6 +91,7 @@ curl -X POST http://localhost:8000/api/v1/etl/reindex-pii
 ### Проблеми з продуктивністю
 
 #### Повільні відповіді агентів
+
 ```bash
 # Перевірити метрики в Grafana
 # http://localhost:3001
@@ -94,6 +101,7 @@ curl -X POST http://localhost:8000/api/v1/agents/optimize-routing
 ```
 
 #### Високе навантаження на систему
+
 ```bash
 # Моніторинг ресурсів
 htop
@@ -106,6 +114,7 @@ docker-compose up -d --scale backend=3
 ### Проблеми з безпекою
 
 #### Помилки автентифікації
+
 ```bash
 # Перевірити Keycloak
 curl http://localhost:8080/auth/realms/predator11/.well-known/openid_configuration
@@ -115,6 +124,7 @@ curl http://localhost:8080/auth/realms/predator11/.well-known/openid_configurati
 ```
 
 #### Проблеми доступу до PII
+
 ```bash
 # Перевірити ролі користувача
 curl -H "Authorization: Bearer $JWT_TOKEN" \
@@ -127,6 +137,7 @@ curl http://localhost:8000/api/v1/audit/pii-access?limit=100
 ## Діагностичні команди
 
 ### Системна діагностика
+
 ```bash
 # Повна перевірка системи
 make health-check
@@ -139,6 +150,7 @@ make test-system
 ```
 
 ### Налагодження розробки
+
 ```bash
 # Режим розробки з детальними логами
 DEBUG=true make dev
@@ -156,10 +168,10 @@ docker exec -it predator11_backend_1 /bin/bash
 
 ## Часті помилки
 
-| Помилка | Причина | Рішення |
-|---------|---------|---------|
-| `Connection refused` | Сервіс не запущений | `make start` |
-| `Permission denied` | Проблеми з Docker | `sudo usermod -aG docker $USER` |
-| `Port already in use` | Конфлікт портів | Змініть порти в .env |
-| `Model API error` | Невірні API ключі | Перевірте .env файл |
-| `PII detection failed` | Помилка маскування | Перевірте PII_SALT |
+| Помилка                | Причина             | Рішення                         |
+| ---------------------- | ------------------- | ------------------------------- |
+| `Connection refused`   | Сервіс не запущений | `make start`                    |
+| `Permission denied`    | Проблеми з Docker   | `sudo usermod -aG docker $USER` |
+| `Port already in use`  | Конфлікт портів     | Змініть порти в .env            |
+| `Model API error`      | Невірні API ключі   | Перевірте .env файл             |
+| `PII detection failed` | Помилка маскування  | Перевірте PII_SALT              |

@@ -2,60 +2,60 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
   external_labels:
-    cluster: 'predator11'
-    environment: 'development'
+    cluster: "predator11"
+    environment: "development"
 
 rule_files:
   - "/etc/prometheus/rules/*.yml"
 
 scrape_configs:
   # Predator11 Backend API
-  - job_name: 'predator11-backend'
+  - job_name: "predator11-backend"
     static_configs:
-      - targets: ['backend:8000']
+      - targets: ["backend:8000"]
     metrics_path: /metrics
     scrape_interval: 15s
 
   # Keycloak
-  - job_name: 'keycloak'
+  - job_name: "keycloak"
     static_configs:
-      - targets: ['keycloak:8080']
+      - targets: ["keycloak:8080"]
     metrics_path: /metrics
     scrape_interval: 30s
 
   # OpenSearch Exporter
-  - job_name: 'opensearch-exporter'
+  - job_name: "opensearch-exporter"
     static_configs:
-      - targets: ['opensearch-exporter:9114']
+      - targets: ["opensearch-exporter:9114"]
     scrape_interval: 30s
 
   # Node Exporter
-  - job_name: 'node-exporter'
+  - job_name: "node-exporter"
     static_configs:
-      - targets: ['node-exporter:9100']
+      - targets: ["node-exporter:9100"]
     scrape_interval: 15s
 
   # cAdvisor
-  - job_name: 'cadvisor'
+  - job_name: "cadvisor"
     static_configs:
-      - targets: ['cadvisor:8080']
+      - targets: ["cadvisor:8080"]
     scrape_interval: 15s
 
   # Agents Supervisor
-  - job_name: 'agents-supervisor'
+  - job_name: "agents-supervisor"
     static_configs:
-      - targets: ['agents-supervisor:8001']
+      - targets: ["agents-supervisor:8001"]
     metrics_path: /metrics
     scrape_interval: 15s
 
   # Redis Exporter (если есть)
-  - job_name: 'redis'
+  - job_name: "redis"
     static_configs:
-      - targets: ['redis:6379']
+      - targets: ["redis:6379"]
     scrape_interval: 30s
 
   # Blackbox Exporter для проверки endpoints
-  - job_name: 'blackbox'
+  - job_name: "blackbox"
     metrics_path: /probe
     params:
       module: [http_2xx]
@@ -73,15 +73,15 @@ scrape_configs:
         replacement: blackbox:9115
 
   # OTEL Collector metrics
-  - job_name: 'otel-collector'
+  - job_name: "otel-collector"
     static_configs:
-      - targets: ['otel-collector:9464']
+      - targets: ["otel-collector:9464"]
     scrape_interval: 30s
 
   # Qdrant metrics (если поддерживается)
-  - job_name: 'qdrant'
+  - job_name: "qdrant"
     static_configs:
-      - targets: ['qdrant:6333']
+      - targets: ["qdrant:6333"]
     metrics_path: /metrics
     scrape_interval: 30s
 

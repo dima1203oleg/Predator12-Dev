@@ -14,14 +14,14 @@ from typing import Any, Dict, List, Optional, Type
 
 import yaml
 
-from .base import AgentStatus, BaseAgent
+from .base import BaseAgent
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
 class AgentRegistration:
-    """Agent registration information"""
+    """Agent registration information."""
 
     name: str
     agent_class: str
@@ -42,7 +42,7 @@ class AgentRegistration:
 
 @dataclass
 class ModelRegistration:
-    """Model registration information"""
+    """Model registration information."""
 
     name: str
     model_type: str
@@ -63,7 +63,7 @@ class ModelRegistration:
 
 
 class AgentRegistry:
-    """Central registry for all agents"""
+    """Central registry for all agents."""
 
     def __init__(self, registry_file: str = "agents/registry.yaml"):
         self.registry_file = Path(registry_file)
@@ -72,7 +72,7 @@ class AgentRegistry:
         self._load_registry()
 
     def _load_registry(self):
-        """Load agent registry from file"""
+        """Load agent registry from file."""
         if self.registry_file.exists():
             try:
                 with open(self.registry_file, "r") as f:
@@ -93,7 +93,7 @@ class AgentRegistry:
             self._create_default_registry()
 
     def _create_default_registry(self):
-        """Create default agent registry"""
+        """Create default agent registry."""
 
         # Self-healing agents
         self_heal_agents = [
@@ -181,7 +181,7 @@ class AgentRegistry:
         dependencies: List[str] = None,
         config_schema: Dict[str, Any] = None,
     ) -> bool:
-        """Register a new agent"""
+        """Register a new agent."""
 
         agent_name = agent_class.__name__
 
@@ -208,10 +208,9 @@ class AgentRegistry:
         return True
 
     def _determine_agent_type(self, agent_class: Type[BaseAgent]) -> str:
-        """Determine agent type from class information"""
+        """Determine agent type from class information."""
         module_name = agent_class.__module__.lower()
         class_name = agent_class.__name__.lower()
-
         if "self_heal" in module_name or any(
             kw in class_name for kw in ["recovery", "restart", "fix", "heal"]
         ):
@@ -228,13 +227,13 @@ class AgentRegistry:
             return "general"
 
     def get_agent(self, name: str) -> Optional[AgentRegistration]:
-        """Get agent registration by name"""
+        """Get agent registration by name."""
         return self.agents.get(name)
 
     def list_agents(
         self, agent_type: str = None, enabled_only: bool = True
     ) -> List[AgentRegistration]:
-        """List agents with optional filtering"""
+        """List agents with optional filtering."""
         agents = list(self.agents.values())
 
         if agent_type:
@@ -246,7 +245,7 @@ class AgentRegistry:
         return agents
 
     def enable_agent(self, name: str) -> bool:
-        """Enable an agent"""
+        """Enable an agent."""
         if name in self.agents:
             self.agents[name].enabled = True
             self._save_registry()
@@ -255,7 +254,7 @@ class AgentRegistry:
         return False
 
     def disable_agent(self, name: str) -> bool:
-        """Disable an agent"""
+        """Disable an agent."""
         if name in self.agents:
             self.agents[name].enabled = False
             self._save_registry()
@@ -264,14 +263,14 @@ class AgentRegistry:
         return False
 
     def update_health_status(self, name: str, status: str):
-        """Update agent health status"""
+        """Update agent health status."""
         if name in self.agents:
             self.agents[name].health_status = status
             self.agents[name].last_health_check = datetime.now().isoformat()
             # Don't save on every health check to avoid I/O overhead
 
     def get_agents_by_capability(self, capability: str) -> List[AgentRegistration]:
-        """Get agents that have a specific capability"""
+        """Get agents that have a specific capability."""
         return [
             agent
             for agent in self.agents.values()
@@ -279,7 +278,7 @@ class AgentRegistry:
         ]
 
     def validate_dependencies(self, name: str) -> Dict[str, bool]:
-        """Validate agent dependencies"""
+        """Validate agent dependencies."""
         agent = self.agents.get(name)
         if not agent:
             return {}
@@ -294,7 +293,7 @@ class AgentRegistry:
         return dependency_status
 
     def _save_registry(self):
-        """Save registry to file"""
+        """Save registry to file."""
         try:
             # Create directory if it doesn't exist
             self.registry_file.parent.mkdir(parents=True, exist_ok=True)
@@ -314,7 +313,7 @@ class AgentRegistry:
             logger.error(f"Failed to save agent registry: {e}")
 
     def export_registry(self, format: str = "yaml") -> str:
-        """Export registry in specified format"""
+        """Export registry in specified format."""
         registry_data = {
             "version": "1.0.0",
             "exported_at": datetime.now().isoformat(),
@@ -327,7 +326,7 @@ class AgentRegistry:
             return yaml.dump(registry_data, default_flow_style=False)
 
     def get_registry_stats(self) -> Dict[str, Any]:
-        """Get registry statistics"""
+        """Get registry statistics."""
         agents_by_type = {}
         enabled_count = 0
         disabled_count = 0
@@ -357,7 +356,7 @@ class AgentRegistry:
 
 
 class ModelRegistry:
-    """Central registry for AI models"""
+    """Central registry for AI models."""
 
     def __init__(self, registry_file: str = "agents/models.yaml"):
         self.registry_file = Path(registry_file)
@@ -365,7 +364,7 @@ class ModelRegistry:
         self._load_registry()
 
     def _load_registry(self):
-        """Load model registry from file"""
+        """Load model registry from file."""
         if self.registry_file.exists():
             try:
                 with open(self.registry_file, "r") as f:
@@ -385,7 +384,7 @@ class ModelRegistry:
             self._create_default_registry()
 
     def _create_default_registry(self):
-        """Create default model registry"""
+        """Create default model registry."""
 
         default_models = [
             {
@@ -446,7 +445,7 @@ class ModelRegistry:
         logger.info(f"Created default model registry with {len(self.models)} models")
 
     def register_model(self, model_data: Dict[str, Any]) -> bool:
-        """Register a new model"""
+        """Register a new model."""
 
         registration = ModelRegistration(**model_data)
         self.models[registration.name] = registration
@@ -456,13 +455,13 @@ class ModelRegistry:
         return True
 
     def get_model(self, name: str) -> Optional[ModelRegistration]:
-        """Get model registration by name"""
+        """Get model registration by name."""
         return self.models.get(name)
 
     def list_models(
         self, model_type: str = None, provider: str = None, enabled_only: bool = True
     ) -> List[ModelRegistration]:
-        """List models with optional filtering"""
+        """List models with optional filtering."""
         models = list(self.models.values())
 
         if model_type:
@@ -477,7 +476,7 @@ class ModelRegistry:
         return models
 
     def get_models_by_capability(self, capability: str) -> List[ModelRegistration]:
-        """Get models that have a specific capability"""
+        """Get models that have a specific capability."""
         return [
             model
             for model in self.models.values()
@@ -485,7 +484,7 @@ class ModelRegistry:
         ]
 
     def _save_registry(self):
-        """Save registry to file"""
+        """Save registry to file."""
         try:
             self.registry_file.parent.mkdir(parents=True, exist_ok=True)
 

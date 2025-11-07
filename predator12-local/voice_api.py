@@ -4,22 +4,21 @@
 Повноцінний API сервер для TTS/STT з українською мовою
 """
 
-from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
-from pydantic import BaseModel
-import uvicorn
 import os
-import io
 import tempfile
-import json
 from datetime import datetime
-from typing import Optional, List
-import asyncio
+from typing import Optional
+
+import uvicorn
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
 
 # Імпорти для TTS/STT
 try:
     from TTS.api import TTS
+
     TTS_AVAILABLE = True
 except ImportError:
     TTS_AVAILABLE = False
@@ -27,6 +26,7 @@ except ImportError:
 
 try:
     import whisper
+
     WHISPER_AVAILABLE = True
 except ImportError:
     WHISPER_AVAILABLE = False
@@ -34,13 +34,13 @@ except ImportError:
 
 try:
     from faster_whisper import WhisperModel
+
     FASTER_WHISPER_AVAILABLE = True
 except ImportError:
     FASTER_WHISPER_AVAILABLE = False
     print("⚠️  faster-whisper не встановлено")
 
 import soundfile as sf
-import numpy as np
 
 # ============================================
 # FastAPI Application
@@ -49,7 +49,7 @@ import numpy as np
 app = FastAPI(
     title="🎤 PREDATOR12 Voice API",
     description="Голосовий API з TTS/STT підтримкою української мови",
-    version="5.2.0"
+    version="5.2.0",
 )
 
 # CORS для фронтенду
@@ -73,11 +73,13 @@ faster_whisper_model = None
 # Pydantic Models
 # ============================================
 
+
 class TTSRequest(BaseModel):
     text: str
     language: str = "uk"  # uk, en
     speed: float = 1.0
     voice: Optional[str] = None
+
 
 class STTResponse(BaseModel):
     text: str
@@ -86,6 +88,7 @@ class STTResponse(BaseModel):
     duration: float
     timestamp: str
 
+
 class TTSResponse(BaseModel):
     audio_url: str
     text: str
@@ -93,13 +96,15 @@ class TTSResponse(BaseModel):
     duration: float
     timestamp: str
 
+
 # ============================================
 # Startup Event
 # ============================================
 
+
 @app.on_event("startup")
 async def startup_event():
-    """Ініціалізація моделей при запуску"""
+    """Ініціалізація моделей при запуску."""
     global tts_model, whisper_model, faster_whisper_model
 
     print("🚀 Запуск PREDATOR12 Voice API...")
@@ -140,13 +145,15 @@ async def startup_event():
     print(f"📚 Документація: http://localhost:8000/docs")
     print("=" * 50)
 
+
 # ============================================
 # Health Check
 # ============================================
 
+
 @app.get("/")
 async def root():
-    """Головна сторінка API"""
+    """Головна сторінка API."""
     return {
         "service": "PREDATOR12 Voice API",
         "version": "5.2.0",
@@ -154,34 +161,31 @@ async def root():
         "capabilities": {
             "tts": TTS_AVAILABLE and tts_model is not None,
             "stt": (WHISPER_AVAILABLE or FASTER_WHISPER_AVAILABLE),
-            "languages": ["uk", "en"]
+            "languages": ["uk", "en"],
         },
-        "endpoints": {
-            "tts": "/api/tts",
-            "stt": "/api/stt",
-            "health": "/health",
-            "docs": "/docs"
-        }
+        "endpoints": {"tts": "/api/tts", "stt": "/api/stt", "health": "/health", "docs": "/docs"},
     }
+
 
 @app.get("/health")
 async def health_check():
-    """Перевірка стану системи"""
+    """Перевірка стану системи."""
     return {
         "status": "healthy",
         "tts_ready": tts_model is not None,
         "stt_ready": whisper_model is not None or faster_whisper_model is not None,
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
     }
+
 
 # ============================================
 # TTS Endpoint
 # ============================================
 
+
 @app.post("/api/tts", response_model=TTSResponse)
 async def text_to_speech(request: TTSRequest):
-    """
-    Синтез мовлення з тексту
+    """Синтез мовлення з тексту.
 
     - **text**: Текст для озвучування
     - **language**: Мова (uk/en)
@@ -193,7 +197,7 @@ async def text_to_speech(request: TTSRequest):
 
     try:
         # Створюємо тимчасовий файл
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as tmp_file:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
             output_path = tmp_file.name
 
         # Генеруємо аудіо
@@ -204,10 +208,7 @@ async def text_to_speech(request: TTSRequest):
 
         # Генеруємо
         tts_model.tts_to_file(
-            text=request.text,
-            file_path=output_path,
-            language=lang_code,
-            speed=request.speed
+            text=request.text, file_path=output_path, language=lang_code, speed=request.speed
         )
 
         # Отримуємо тривалість
@@ -227,21 +228,22 @@ async def text_to_speech(request: TTSRequest):
             text=request.text,
             language=request.language,
             duration=duration,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
 
     except Exception as e:
         print(f"❌ Помилка TTS: {e}")
         raise HTTPException(status_code=500, detail=f"Помилка TTS: {str(e)}")
 
+
 # ============================================
 # STT Endpoint
 # ============================================
 
+
 @app.post("/api/stt", response_model=STTResponse)
 async def speech_to_text(audio: UploadFile = File(...)):
-    """
-    Розпізнавання мовлення з аудіо
+    """Розпізнавання мовлення з аудіо.
 
     - **audio**: Аудіо файл (WAV, MP3, FLAC)
     """
@@ -250,7 +252,9 @@ async def speech_to_text(audio: UploadFile = File(...)):
 
     try:
         # Зберігаємо завантажений файл
-        with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(audio.filename)[1]) as tmp_file:
+        with tempfile.NamedTemporaryFile(
+            delete=False, suffix=os.path.splitext(audio.filename)[1]
+        ) as tmp_file:
             content = await audio.read()
             tmp_file.write(content)
             audio_path = tmp_file.name
@@ -259,11 +263,7 @@ async def speech_to_text(audio: UploadFile = File(...)):
 
         # Використовуємо faster-whisper якщо доступно
         if faster_whisper_model:
-            segments, info = faster_whisper_model.transcribe(
-                audio_path,
-                language="uk",
-                beam_size=5
-            )
+            segments, info = faster_whisper_model.transcribe(audio_path, language="uk", beam_size=5)
 
             text = " ".join([segment.text for segment in segments])
             language = info.language
@@ -272,11 +272,7 @@ async def speech_to_text(audio: UploadFile = File(...)):
 
         else:
             # Використовуємо звичайний Whisper
-            result = whisper_model.transcribe(
-                audio_path,
-                language="uk",
-                task="transcribe"
-            )
+            result = whisper_model.transcribe(audio_path, language="uk", task="transcribe")
 
             text = result["text"]
             language = result.get("language", "uk")
@@ -296,7 +292,7 @@ async def speech_to_text(audio: UploadFile = File(...)):
             language=language,
             confidence=confidence,
             duration=duration,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
 
     except Exception as e:
@@ -305,48 +301,56 @@ async def speech_to_text(audio: UploadFile = File(...)):
             os.unlink(audio_path)
         raise HTTPException(status_code=500, detail=f"Помилка STT: {str(e)}")
 
+
 # ============================================
 # Audio File Serving
 # ============================================
 
+
 @app.get("/audio/{filename}")
 async def get_audio(filename: str):
-    """Отримати згенероване аудіо"""
+    """Отримати згенероване аудіо."""
     file_path = f"static/audio/{filename}"
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Аудіо не знайдено")
     return FileResponse(file_path, media_type="audio/wav")
 
+
 # ============================================
 # Quick Test Endpoints
 # ============================================
 
+
 @app.get("/test/tts")
 async def test_tts():
-    """Швидкий тест TTS"""
+    """Швидкий тест TTS."""
     test_text = "Привіт! Я голосовий асистент Нексус. Тестування системи озвучування."
 
     request = TTSRequest(text=test_text, language="uk")
     return await text_to_speech(request)
 
+
 @app.get("/test/models")
 async def test_models():
-    """Перевірка доступних моделей"""
+    """Перевірка доступних моделей."""
     models_info = {
         "tts": {
             "available": TTS_AVAILABLE,
             "loaded": tts_model is not None,
             "model": "xtts_v2" if tts_model else None,
-            "languages": ["uk", "en"] if tts_model else []
+            "languages": ["uk", "en"] if tts_model else [],
         },
         "stt": {
             "available": WHISPER_AVAILABLE or FASTER_WHISPER_AVAILABLE,
             "loaded": whisper_model is not None or faster_whisper_model is not None,
-            "model": "faster-whisper" if faster_whisper_model else "whisper" if whisper_model else None,
-            "languages": ["uk", "en", "auto"]
-        }
+            "model": (
+                "faster-whisper" if faster_whisper_model else "whisper" if whisper_model else None
+            ),
+            "languages": ["uk", "en", "auto"],
+        },
     }
     return models_info
+
 
 # ============================================
 # Main
@@ -354,9 +358,4 @@ async def test_models():
 
 if __name__ == "__main__":
     print("🚀 Запуск PREDATOR12 Voice API Server...")
-    uvicorn.run(
-        app,
-        host="0.0.0.0",
-        port=8000,
-        log_level="info"
-    )
+    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")

@@ -21,7 +21,7 @@ datasources:
     editable: false
     jsonData:
       interval: Daily
-      timeField: '@timestamp'
+      timeField: "@timestamp"
       esVersion: 1.0.0
       maxConcurrentShardRequests: 5
     version: 1

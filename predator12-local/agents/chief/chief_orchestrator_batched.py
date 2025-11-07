@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Chief Orchestrator with Request Batching
-"""
+"""Chief Orchestrator with Request Batching."""
 import asyncio
 from typing import Any, Dict, List, Tuple
 
@@ -9,7 +7,7 @@ from agents.chief.chief_orchestrator_cached import CachedChiefOrchestrator
 
 
 class BatchedChiefOrchestrator(CachedChiefOrchestrator):
-    """ChiefOrchestrator with batched agent requests"""
+    """ChiefOrchestrator with batched agent requests."""
 
     def __init__(self, *args, batch_window=0.1, **kwargs):
         """
@@ -22,7 +20,7 @@ class BatchedChiefOrchestrator(CachedChiefOrchestrator):
         self._batch_processor_task = asyncio.create_task(self._process_batches())
 
     async def _execute_agent_task(self, task: AgentTask, context_results: Dict) -> Dict[str, Any]:
-        """Execute task with batching support"""
+        """Execute task with batching support."""
         # For batchable tasks, add to queue
         if self._is_batchable(task):
             future = asyncio.Future()
@@ -33,11 +31,11 @@ class BatchedChiefOrchestrator(CachedChiefOrchestrator):
         return await super()._execute_agent_task(task, context_results)
 
     def _is_batchable(self, task: AgentTask) -> bool:
-        """Determine if a task can be batched"""
+        """Determine if a task can be batched."""
         return task.task_type in ["quality_check", "detect_anomalies", "validate"]
 
     async def _process_batches(self):
-        """Process batch queue"""
+        """Process batch queue."""
         while True:
             batch = []
 
@@ -60,7 +58,7 @@ class BatchedChiefOrchestrator(CachedChiefOrchestrator):
                 await self._execute_batch(batch)
 
     async def _execute_batch(self, batch: List[Tuple[AgentTask, Dict, asyncio.Future]]):
-        """Execute a batch of tasks"""
+        """Execute a batch of tasks."""
         # Group by agent
         tasks_by_agent: Dict[str, List] = {}
         for task, context, future in batch:
@@ -95,7 +93,7 @@ class BatchedChiefOrchestrator(CachedChiefOrchestrator):
     async def _execute_batch_call(
         self, agent_name: str, port: int, tasks: List[AgentTask], contexts: List[Dict]
     ) -> List[Dict]:
-        """Make batched HTTP call to agent"""
+        """Make batched HTTP call to agent."""
         agent_url = f"http://localhost:{port}"
         batch_payload = [
             {"task_type": task.task_type, "parameters": {**task.parameters, "context": ctx}}

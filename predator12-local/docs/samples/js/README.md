@@ -7,6 +7,7 @@ Multiple model-specific SDKs are compatible with the endpoint served under the G
 You can also use the [`azure-ai-inference`](./azure_ai_inference/README.md) package for a cross-model unified SDK.
 
 ## SDKs
+
 - [`openai`](./openai/README.md)
 - [`azure-ai-inference`](./azure_ai_inference/README.md)
 - [`mistralai`](./mistralai/README.md)

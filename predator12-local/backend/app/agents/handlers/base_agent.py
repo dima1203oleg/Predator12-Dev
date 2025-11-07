@@ -1,5 +1,5 @@
 """
-Базовий клас агента для Predator Analytics
+Base agent class for Predator Analytics.
 """
 
 from __future__ import annotations
@@ -45,19 +45,20 @@ class AgentTask(BaseModel):
 
 
 class BaseAgent(ABC):
-    """Базовий клас для всіх агентів системи"""
+    """Base class for all system agents."""
 
     def __init__(self, name: str, config: Optional[dict[str, Any]] = None):
+        """Initialize the base agent."""
         self.name = name
         self.config = config or {}
         self.status = AgentStatus.IDLE
         self.tasks: dict[str, AgentTask] = {}
-        # store background asyncio.Task handles to avoid premature GC
+        # Store background asyncio.Task handles to avoid premature GC
         self._background_tasks: dict[str, asyncio.Task] = {}
         self.logger = logger.bind(agent=name)
 
     def generate_task_id(self) -> str:
-        """Генерує унікальний ID завдання"""
+        """Generate a unique task ID."""
         return str(uuid.uuid4())
 
     async def submit_task(
@@ -66,7 +67,7 @@ class BaseAgent(ABC):
         payload: dict[str, Any],
         priority: TaskPriority = TaskPriority.MEDIUM,
     ) -> str:
-        """Підтверджує завдання для виконання"""
+        """Submit a task for execution."""
         task_id = self.generate_task_id()
         task = AgentTask(
             id=task_id,
@@ -79,13 +80,13 @@ class BaseAgent(ABC):
         self.tasks[task_id] = task
         self.logger.info("Task submitted", task_id=task_id, task_type=task_type)
 
-        # Запускаємо завдання асинхронно і зберігаємо handle, щоб уникнути GC
+        # Start the task asynchronously and store handle to avoid GC
         _handle = asyncio.create_task(self._execute_task(task_id))
         self._background_tasks[task_id] = _handle
         return task_id
 
     async def _execute_task(self, task_id: str):
-        """Виконує завдання"""
+        """Execute a task."""
         if task_id not in self.tasks:
             self.logger.error("Task not found", task_id=task_id)
             return
@@ -106,15 +107,15 @@ class BaseAgent(ABC):
 
             self.logger.info("Task completed", task_id=task_id)
 
-        except Exception as e:
-            self.logger.error("Task failed", task_id=task_id, error=str(e))
-            task.error = str(e)
+        except Exception as exc:
+            self.logger.error("Task failed", task_id=task_id, error=str(exc))
+            task.error = str(exc)
             task.status = AgentStatus.ERROR
             task.completed_at = datetime.now(timezone.utc)
             self.status = AgentStatus.ERROR
 
     def get_task_status(self, task_id: str) -> Optional[dict[str, Any]]:
-        """Повертає статус завдання"""
+        """Return the status of a task."""
         if task_id not in self.tasks:
             return None
 
@@ -131,25 +132,29 @@ class BaseAgent(ABC):
         }
 
     def get_all_tasks(self) -> list[dict[str, Any]]:
-        """Повертає всі завдання агента"""
-        return [self.get_task_status(task_id) for task_id in self.tasks.keys()]
+        """Return all agent tasks."""
+        return [
+            t
+            for t in (self.get_task_status(task_id) for task_id in self.tasks.keys())
+            if t is not None
+        ]
 
     def get_capabilities(self) -> list[str]:
-        """Повертає список можливостей агента"""
+        """Return the list of agent capabilities."""
         return self.capabilities()
 
     @abstractmethod
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виконує конкретне завдання (має бути реалізовано в дочірньому класі)"""
+        """Execute a specific task (must be implemented in subclass)."""
         ...
 
     @abstractmethod
     def capabilities(self) -> list[str]:
-        """Повертає список типів завдань, які може виконувати агент"""
+        """Return the list of task types the agent can perform."""
         ...
 
     def health_check(self) -> dict[str, Any]:
-        """Перевіряє стан агента"""
+        """Check the agent's health status."""
         return {
             "name": self.name,
             "status": self.status.value,

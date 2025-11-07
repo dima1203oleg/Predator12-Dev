@@ -9,14 +9,13 @@ To connect Cline to this MCP server, you need to add the following configuration
 **Copy the content from `mcp/predator-tools/vscode-mcp-config.json` and add it to your VS Code settings.**
 
 The content of `mcp/predator-tools/vscode-mcp-config.json` is:
+
 ```json
 {
   "mcpServers": {
     "predator-tools": {
       "command": "ts-node",
-      "args": [
-        "src/index.ts"
-      ],
+      "args": ["src/index.ts"],
       "transport": "stdio",
       "env": {
         "PREDATOR_HOME": "/Users/dima/Projects/PredatorAnalytics",
@@ -30,9 +29,10 @@ The content of `mcp/predator-tools/vscode-mcp-config.json` is:
 ```
 
 **Important Notes:**
-*   Ensure the `command` (`ts-node`) and `args` (`src/index.ts`) are correct for your environment.
-*   The `PREDATOR_HOME` environment variable should point to your main project directory.
-*   `OPENAI_API_KEY` and `OPENSEARCH_API_KEY` should be set in your system's environment variables or VS Code's secrets.
+
+- Ensure the `command` (`ts-node`) and `args` (`src/index.ts`) are correct for your environment.
+- The `PREDATOR_HOME` environment variable should point to your main project directory.
+- `OPENAI_API_KEY` and `OPENSEARCH_API_KEY` should be set in your system's environment variables or VS Code's secrets.
 
 ## 2. Running the Server (Development)
 

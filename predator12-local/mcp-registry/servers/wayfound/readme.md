@@ -18,6 +18,7 @@ MCP (Model Context Protocol) is an open standard that allows AI applications to 
 The Wayfound MCP server provides the following tools for interacting with your organization's agents:
 
 ### `list_agents`
+
 **Description**: Get the list of all Agents in your Wayfound organization.
 
 **Usage**: Ask questions like "What agents are in my organization?" or "List all available agents"
@@ -25,11 +26,13 @@ The Wayfound MCP server provides the following tools for interacting with your o
 **Returns**: A comprehensive list of all agents configured in your Wayfound organization, including their names and basic information.
 
 ### `get_agent_details`
+
 **Description**: Get the details of a specific Agent in your Wayfound organization.
 
 **Usage**: Ask questions like "Tell me about the Customer Support agent" or "What are the details for agent X?"
 
 **Returns**: Detailed information about a specific agent including:
+
 - Agent role and purpose
 - Goals and objectives
 - Guidelines and constraints
@@ -37,11 +40,13 @@ The Wayfound MCP server provides the following tools for interacting with your o
 - Other relevant metadata
 
 ### `get_manager_analysis_for_agent`
+
 **Description**: Get Wayfound Manager analysis for a specific Agent. This includes top topics, potential issues, tool call data, knowledge gaps, user ratings, sentiment, and guideline issues.
 
 **Usage**: Ask questions like "What's the performance analysis for my Sales agent?" or "Show me the manager analysis for agent X"
 
 **Returns**: Comprehensive performance analysis including:
+
 - **Top Topics**: Most frequently discussed subjects
 - **Potential Issues**: Identified problems or concerns
 - **Tool Call Data**: Usage statistics and patterns
@@ -51,11 +56,13 @@ The Wayfound MCP server provides the following tools for interacting with your o
 - **Guideline Issues**: Violations or deviations from established guidelines
 
 ### `get_improvement_suggestions_for_agent`
+
 **Description**: Get improvement suggestions for a specific Agent. This includes suggested system prompt updates and additional knowledge needed.
 
 **Usage**: Ask questions like "How can I improve my Customer Service agent?" or "What suggestions do you have for agent X?"
 
 **Returns**: Actionable improvement recommendations including:
+
 - **System Prompt Updates**: Suggested modifications to the agent's instructions
 - **Additional Knowledge**: Recommended knowledge base additions
 - **Training Suggestions**: Areas for further development
@@ -82,7 +89,6 @@ Here are some example questions you can ask your agent:
 "List all agents and show me which ones have the most issues"
 "Compare the performance of my Sales and Marketing agents"
 ```
-
 
 ## Project Structure
 
@@ -124,6 +130,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 **Important**:
+
 - Replace `your_api_key_here` with your actual Wayfound MCP API key
 - Replace `your_openai_api_key_here` with your OpenAI API key
 - Keep the `.env` file secure and never commit it to version control

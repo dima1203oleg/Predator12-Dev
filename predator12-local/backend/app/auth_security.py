@@ -1,8 +1,4 @@
-"""
-JWT Token Validation & Security Utilities
-"""
-
-from typing import Optional
+"""JWT Token Validation & Security Utilities."""
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -17,12 +13,12 @@ ALGORITHM = "HS256"
 
 
 async def validate_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    """Validate JWT token"""
+    """Validate JWT token."""
     try:
         token = credentials.credentials
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except PyJWTError as e:
+    except PyJWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",

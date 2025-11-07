@@ -68,11 +68,7 @@
     {
       "step": 3,
       "action": "Налаштувати fallback для критичних агентів",
-      "priority_agents": [
-        "ChiefOrchestrator",
-        "ModelRouter",
-        "QueryPlanner"
-      ]
+      "priority_agents": ["ChiefOrchestrator", "ModelRouter", "QueryPlanner"]
     }
   ]
 }

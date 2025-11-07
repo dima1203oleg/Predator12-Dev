@@ -60,9 +60,7 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": ["lastNotNull"],
           "fields": "",
           "values": false
         },
@@ -182,11 +180,7 @@
   "refresh": "10s",
   "schemaVersion": 38,
   "style": "dark",
-  "tags": [
-    "websocket",
-    "predator",
-    "monitoring"
-  ],
+  "tags": ["websocket", "predator", "monitoring"],
   "templating": {
     "list": []
   },

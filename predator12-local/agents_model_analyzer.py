@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-"""
-🔗 ПІДКЛЮЧЕННЯ АГЕНТІВ ДО MODEL SDK
-Автоматично підключає всіх агентів до центрального Model SDK з 49 моделями
-"""
+"""🔗 ПІДКЛЮЧЕННЯ АГЕНТІВ ДО MODEL SDK Автоматично підключає всіх агентів до
+центрального Model SDK з 49 моделями."""
 import glob
 import os
-import re
 from pathlib import Path
 
 
@@ -16,7 +13,7 @@ class AgentModelConnector:
         self.connected_agents = []
 
     def find_agent_files(self):
-        """Знаходить всі файли агентів"""
+        """Знаходить всі файли агентів."""
         agent_files = []
         for pattern in ["**/*agent*.py", "**/agent.py", "**/main.py"]:
             files = glob.glob(os.path.join(self.agents_dir, pattern), recursive=True)
@@ -24,7 +21,7 @@ class AgentModelConnector:
         return list(set(agent_files))  # Унікальні файли
 
     def analyze_agent_model_usage(self, file_path):
-        """Аналізує як агент використовує моделі"""
+        """Аналізує як агент використовує моделі."""
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
@@ -48,7 +45,7 @@ class AgentModelConnector:
             return {"error": str(e), "agent_name": self.extract_agent_name(file_path)}
 
     def extract_agent_name(self, file_path):
-        """Витягує назву агента з шляху файлу"""
+        """Витягує назву агента з шляху файлу."""
         path = Path(file_path)
         if "agent" in path.name:
             return path.name.replace(".py", "")
@@ -56,7 +53,7 @@ class AgentModelConnector:
             return path.parent.name + "_agent"
 
     def generate_model_integration_code(self, agent_name):
-        """Генерує код для інтеграції з Model SDK"""
+        """Генерує код для інтеграції з Model SDK."""
         return f'''
 # AUTO-GENERATED MODEL SDK INTEGRATION
 import httpx
@@ -101,7 +98,7 @@ model_sdk_client = ModelSDKClient()
 '''
 
     def analyze_all_agents(self):
-        """Аналізує всіх агентів в системі"""
+        """Аналізує всіх агентів в системі."""
         agent_files = self.find_agent_files()
         analysis = {}
 
@@ -115,7 +112,7 @@ model_sdk_client = ModelSDKClient()
         return analysis
 
     def check_agents_real_work(self):
-        """Перевіряє чи агенти виконують реальну роботу"""
+        """Перевіряє чи агенти виконують реальну роботу."""
         analysis = self.analyze_all_agents()
 
         print("\n📊 АНАЛІЗ РОБОТИ АГЕНТІВ:")

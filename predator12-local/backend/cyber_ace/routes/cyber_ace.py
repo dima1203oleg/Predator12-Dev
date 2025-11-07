@@ -8,7 +8,7 @@ Author: CYBER-ACE Team
 Version: 1.0.0
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 from pydantic import BaseModel

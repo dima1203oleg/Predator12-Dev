@@ -3,18 +3,13 @@ Agent Tasks for Celery Workers
 Handles background execution of various agent operations
 """
 
-import asyncio
-import json
 import logging
 from datetime import datetime
 from typing import Any, Dict, List
 
-from celery import current_task
-
 from ...agents.chief.chief_orchestrator import ChiefOrchestratorAgent
 from ...agents.data_quality.data_quality_agent import DataQualityAgent
 from ...agents.osint.osint_agent import OSINTAgent
-from ...agents.self_healing.self_healing_agent import SelfHealingAgent
 from ..celery_app import celery_app
 
 logger = logging.getLogger(__name__)
@@ -31,7 +26,7 @@ def execute_chief_orchestrator(self, user_request: Dict[str, Any]) -> Dict[str, 
         )
 
         # Create and run orchestrator
-        orchestrator = ChiefOrchestratorAgent()
+        ChiefOrchestratorAgent()
 
         self.update_state(
             state="PROGRESS", meta={"status": "Processing user request", "progress": 30}
@@ -73,7 +68,7 @@ def execute_osint_analysis(
         )
 
         # Initialize OSINT agent
-        osint_agent = OSINTAgent()
+        OSINTAgent()
 
         self.update_state(
             state="PROGRESS",
@@ -122,7 +117,7 @@ def execute_data_quality_check(self, dataset_id: str, checks: List[str] = None) 
         )
 
         # Initialize Data Quality agent
-        dq_agent = DataQualityAgent()
+        DataQualityAgent()
 
         results = {}
         progress_step = 80 / len(checks)

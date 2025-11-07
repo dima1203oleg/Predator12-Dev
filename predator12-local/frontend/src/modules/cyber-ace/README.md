@@ -7,18 +7,21 @@
 ## Основні можливості
 
 ### 1. 3D Інтерактивний Аватар
+
 - Анімований 3D аватар з Three.js
 - Візуальні ефекти в залежності від стану (активний, слухає, говорить)
 - Пульсація та частинки навколо аватара
 - Smooth анімації та переходи
 
 ### 2. Голосове Управління
+
 - Розпізнавання мови (Web Speech API)
 - Підтримка української та англійської мов
 - Real-time транскрипція
 - Візуальні індикатори прослуховування
 
 ### 3. Система Агентів
+
 - 6 спеціалізованих AI-агентів:
   - **Data Analyst** 📊 — аналіз даних
   - **Risk Detective** 🔍 — виявлення ризиків
@@ -28,11 +31,13 @@
   - **Pattern Finder** 🔮 — знаходження патернів
 
 ### 4. Швидкі Дії
+
 - Попередньо налаштовані команди
 - Одним кліком запускати аналіз
 - Візуальні індикатори прогресу
 
 ### 5. Управління Станом
+
 - Zustand для управління станом
 - Persistent storage для налаштувань
 - Real-time оновлення статусу агентів
@@ -64,8 +69,8 @@ cyber-ace/
 ### Основна інтеграція
 
 ```tsx
-import { CyberAcePage } from './modules/cyber-ace/CyberAcePage';
-import './modules/cyber-ace/styles/cyber-ace.css';
+import { CyberAcePage } from "./modules/cyber-ace/CyberAcePage";
+import "./modules/cyber-ace/styles/cyber-ace.css";
 
 function App() {
   return <CyberAcePage />;
@@ -75,17 +80,15 @@ function App() {
 ### Використання Store
 
 ```tsx
-import { useCyberAceStore } from './modules/cyber-ace/state/cyberAceStore';
+import { useCyberAceStore } from "./modules/cyber-ace/state/cyberAceStore";
 
 function MyComponent() {
   const { agents, currentAgent, setCurrentAgent } = useCyberAceStore();
 
   return (
     <div>
-      {agents.map(agent => (
-        <button onClick={() => setCurrentAgent(agent)}>
-          {agent.name}
-        </button>
+      {agents.map((agent) => (
+        <button onClick={() => setCurrentAgent(agent)}>{agent.name}</button>
       ))}
     </div>
   );
@@ -98,35 +101,30 @@ function MyComponent() {
 const { addTask } = useCyberAceStore();
 
 addTask({
-  id: 'task-1',
-  agentId: 'data-analyst-01',
-  title: 'Аналіз даних за липень',
-  description: 'Проаналізувати всі транзакції за липень 2024',
-  status: 'pending',
-  priority: 'high',
+  id: "task-1",
+  agentId: "data-analyst-01",
+  title: "Аналіз даних за липень",
+  description: "Проаналізувати всі транзакції за липень 2024",
+  status: "pending",
+  priority: "high",
   createdAt: new Date(),
-  completedAt: null
+  completedAt: null,
 });
 ```
 
 ### Робота з Агентами
 
 ```tsx
-const {
-  agents,
-  getAgentById,
-  updateAgent,
-  delegateTask
-} = useCyberAceStore();
+const { agents, getAgentById, updateAgent, delegateTask } = useCyberAceStore();
 
 // Отримати агента
-const analyst = getAgentById('data-analyst-01');
+const analyst = getAgentById("data-analyst-01");
 
 // Оновити статус
-updateAgent('data-analyst-01', { status: 'busy' });
+updateAgent("data-analyst-01", { status: "busy" });
 
 // Делегувати завдання
-delegateTask('task-1', 'data-analyst-01');
+delegateTask("task-1", "data-analyst-01");
 ```
 
 ## API
@@ -134,6 +132,7 @@ delegateTask('task-1', 'data-analyst-01');
 ### CyberAceStore
 
 #### Стан
+
 - `isActive: boolean` — чи активний CYBER-ACE
 - `systemStatus: SystemStatus` — статус системи
 - `mood: AceMood` — настрій аватара
@@ -144,6 +143,7 @@ delegateTask('task-1', 'data-analyst-01');
 - `conversationHistory` — історія розмов
 
 #### Дії
+
 - `initializeAce()` — ініціалізація
 - `setSystemStatus(status)` — встановити статус
 - `setMood(mood)` — встановити настрій
@@ -158,6 +158,7 @@ delegateTask('task-1', 'data-analyst-01');
 ## Типи
 
 ### Agent
+
 ```typescript
 interface Agent {
   id: string;
@@ -173,14 +174,15 @@ interface Agent {
 ```
 
 ### Task
+
 ```typescript
 interface Task {
   id: string;
   agentId: string;
   title: string;
   description: string;
-  status: 'pending' | 'in-progress' | 'completed' | 'failed';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  status: "pending" | "in-progress" | "completed" | "failed";
+  priority: "low" | "medium" | "high" | "critical";
   createdAt: Date;
   completedAt: Date | null;
   result?: any;
@@ -190,18 +192,20 @@ interface Task {
 ## Локалізація
 
 Модуль підтримує дві мови:
+
 - Українська (`uk-UA`) — за замовчуванням
 - Англійська (`en-US`)
 
 Зміна мови:
+
 ```tsx
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function LanguageSwitcher() {
   const { i18n } = useTranslation();
 
   return (
-    <button onClick={() => i18n.changeLanguage('en-US')}>
+    <button onClick={() => i18n.changeLanguage("en-US")}>
       Switch to English
     </button>
   );
@@ -211,6 +215,7 @@ function LanguageSwitcher() {
 ## Стилізація
 
 Модуль використовує кастомні CSS змінні для кольорів:
+
 - `--cyber-primary: #00ffff` — основний колір
 - `--cyber-secondary: #0099ff` — вторинний колір
 - `--cyber-danger: #e74c3c` — колір помилок
@@ -220,6 +225,7 @@ function LanguageSwitcher() {
 ## Анімації
 
 Використовує Framer Motion для:
+
 - Плавних переходів
 - Stagger анімацій
 - Hover ефектів

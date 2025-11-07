@@ -23,10 +23,10 @@ config:
   env:
     - name: REPLY_TO_EMAIL_ADDRESSES
       example: YOUR_REPLY_TO_EMAIL_ADDRESSES
-      value: '{{resend.reply_to}}'
+      value: "{{resend.reply_to}}"
     - name: SENDER_EMAIL_ADDRESS
       example: YOUR_SENDER_EMAIL_ADDRESS
-      value: '{{resend.sender}}'
+      value: "{{resend.sender}}"
   parameters:
     type: object
     properties:

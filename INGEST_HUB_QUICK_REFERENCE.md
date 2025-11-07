@@ -1,7 +1,9 @@
 # 📚 INGEST HUB - QUICK REFERENCE
 
 ## 🎯 Overview
+
 The Ingest Hub is a unified data ingestion center supporting multiple sources:
+
 - 📁 Files (CSV, XLSX, PDF, Images, Videos)
 - 🔗 Links (URL, RSS, Sitemap)
 - 📱 Telegram (Channels & Groups)
@@ -26,6 +28,7 @@ The Ingest Hub is a unified data ingestion center supporting multiple sources:
 ## 🚀 Quick Start
 
 ### Import in Your App
+
 ```typescript
 import IngestPage from './modules/ingest/IngestPage';
 
@@ -34,6 +37,7 @@ import IngestPage from './modules/ingest/IngestPage';
 ```
 
 ### Component Usage
+
 ```typescript
 // Use individual components
 import FileDropzone from './modules/ingest/FileDropzone';
@@ -59,6 +63,7 @@ import TaskStream from './modules/ingest/TaskStream';
 ## 🔧 API Integration Points
 
 ### File Upload
+
 ```typescript
 POST /api/ingest/upload
 Content-Type: multipart/form-data
@@ -75,6 +80,7 @@ Response:
 ```
 
 ### Link Crawl
+
 ```typescript
 POST /api/ingest/crawl
 Content-Type: application/json
@@ -96,6 +102,7 @@ Response:
 ```
 
 ### Telegram Connection
+
 ```typescript
 // Step 1: Connect API
 POST /api/ingest/telegram/connect
@@ -142,28 +149,29 @@ Response:
 ```
 
 ### Task Status (WebSocket)
+
 ```typescript
 // Connect to WebSocket
-const ws = new WebSocket('ws://backend/ws/ingest');
+const ws = new WebSocket("ws://backend/ws/ingest");
 
 // Events
 ws.onmessage = (event) => {
   const data = JSON.parse(event.data);
 
   switch (data.type) {
-    case 'task.created':
+    case "task.created":
       // { id, type, name, status: 'pending' }
       break;
-    case 'task.progress':
+    case "task.progress":
       // { id, progress: 45, itemsProcessed: 45, itemsTotal: 100 }
       break;
-    case 'task.completed':
+    case "task.completed":
       // { id, status: 'success', itemsProcessed: 100 }
       break;
-    case 'task.failed':
+    case "task.failed":
       // { id, status: 'error', error: 'message' }
       break;
-    case 'task.log':
+    case "task.log":
       // { id, log: 'Processing...' }
       break;
   }
@@ -175,31 +183,33 @@ ws.onmessage = (event) => {
 ## 🎨 Theme Customization
 
 ### Color Variables
+
 ```typescript
-import { nexusColorsDark as nexusColors } from '../../theme/nexusThemeV2';
+import { nexusColorsDark as nexusColors } from "../../theme/nexusThemeV2";
 
 // Background
-nexusColors.background.default  // #0a0e1a
-nexusColors.background.paper    // #111827
-nexusColors.background.elevated // #1a1f35
+nexusColors.background.default; // #0a0e1a
+nexusColors.background.paper; // #111827
+nexusColors.background.elevated; // #1a1f35
 
 // Primary
-nexusColors.primary.main        // #00f2ff
-nexusColors.primary.glow        // rgba(0, 242, 255, 0.3)
+nexusColors.primary.main; // #00f2ff
+nexusColors.primary.glow; // rgba(0, 242, 255, 0.3)
 
 // Status
-nexusColors.status.success      // #00ff88
-nexusColors.status.warning      // #ffd700
-nexusColors.status.error        // #ff006e
-nexusColors.status.info         // #00f2ff
+nexusColors.status.success; // #00ff88
+nexusColors.status.warning; // #ffd700
+nexusColors.status.error; // #ff006e
+nexusColors.status.info; // #00f2ff
 
 // Accent
-nexusColors.accent.cyan         // #00f2ff
-nexusColors.accent.purple       // #8a2be2
-nexusColors.accent.green        // #00ff88
+nexusColors.accent.cyan; // #00f2ff
+nexusColors.accent.purple; // #8a2be2
+nexusColors.accent.green; // #00ff88
 ```
 
 ### Custom Styling
+
 ```typescript
 // Example: Custom card style
 <Card sx={{
@@ -216,6 +226,7 @@ nexusColors.accent.green        // #00ff88
 ## 📊 Component Props
 
 ### FileDropzone
+
 ```typescript
 interface FileDropzoneProps {
   // No props - fully self-contained
@@ -223,6 +234,7 @@ interface FileDropzoneProps {
 ```
 
 ### LinkCollector
+
 ```typescript
 interface LinkCollectorProps {
   // No props - fully self-contained
@@ -230,6 +242,7 @@ interface LinkCollectorProps {
 ```
 
 ### TelegramConnector
+
 ```typescript
 interface TelegramConnectorProps {
   // No props - fully self-contained
@@ -237,6 +250,7 @@ interface TelegramConnectorProps {
 ```
 
 ### TaskStream
+
 ```typescript
 interface TaskStreamProps {
   onTaskCountChange?: (count: number) => void;
@@ -252,6 +266,7 @@ interface TaskStreamProps {
 ```
 
 ### FlowCanvas
+
 ```typescript
 interface FlowCanvasProps {
   // No props - fully self-contained
@@ -265,6 +280,7 @@ interface FlowCanvasProps {
 ### Manual Testing
 
 #### FileDropzone
+
 1. Drag a file onto the dropzone
 2. Verify file appears in list with "pending" status
 3. Click "Upload" button
@@ -275,6 +291,7 @@ interface FlowCanvasProps {
 8. Test "Clear All" button
 
 #### LinkCollector
+
 1. Enter a URL (e.g., https://example.com)
 2. Verify type auto-detected as "url"
 3. Configure crawl depth and options
@@ -285,6 +302,7 @@ interface FlowCanvasProps {
 8. Verify items found count
 
 #### TelegramConnector
+
 1. Enter API token
 2. Click "Connect API"
 3. Verify connection success
@@ -298,6 +316,7 @@ interface FlowCanvasProps {
 11. Verify messages collected updates
 
 #### TaskStream
+
 1. Open Status tab
 2. Verify tasks listed
 3. Observe auto-refresh
@@ -312,18 +331,23 @@ interface FlowCanvasProps {
 ## 🐛 Troubleshooting
 
 ### Issue: Files not uploading
+
 **Solution:** Currently using mock upload. Connect to backend API.
 
 ### Issue: Progress not updating
+
 **Solution:** Check auto-refresh is enabled. Verify WebSocket connection.
 
 ### Issue: Theme colors not applied
+
 **Solution:** Verify `nexusThemeV2.ts` is imported correctly.
 
 ### Issue: Animations not smooth
+
 **Solution:** Check framer-motion is installed. Verify browser performance.
 
 ### Issue: Telegram connection fails
+
 **Solution:** Currently using mock connection. Implement real Telegram API.
 
 ---
@@ -331,6 +355,7 @@ interface FlowCanvasProps {
 ## 📈 Performance Tips
 
 ### Optimize Re-renders
+
 ```typescript
 // Use useCallback for handlers
 const handleUpload = useCallback(() => {
@@ -338,13 +363,17 @@ const handleUpload = useCallback(() => {
 }, [dependencies]);
 
 // Use useMemo for computed values
-const stats = useMemo(() => ({
-  total: files.length,
-  pending: files.filter(f => f.status === 'pending').length
-}), [files]);
+const stats = useMemo(
+  () => ({
+    total: files.length,
+    pending: files.filter((f) => f.status === "pending").length,
+  }),
+  [files],
+);
 ```
 
 ### Lazy Loading
+
 ```typescript
 // Lazy load components
 const FileDropzone = lazy(() => import('./FileDropzone'));
@@ -357,8 +386,9 @@ const LinkCollector = lazy(() => import('./LinkCollector'));
 ```
 
 ### Debounce Input
+
 ```typescript
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 
 const handleInputChange = debounce((value) => {
   // Handle change
@@ -370,18 +400,21 @@ const handleInputChange = debounce((value) => {
 ## 🔐 Security Considerations
 
 ### File Upload
+
 - ✅ Validate file types
 - ✅ Check file size limits
 - ✅ Scan for malware
 - ✅ Sanitize filenames
 
 ### Link Crawl
+
 - ✅ Validate URLs
 - ✅ Check robots.txt
 - ✅ Rate limiting
 - ✅ Timeout handling
 
 ### Telegram
+
 - ✅ Secure token storage
 - ✅ Encrypt credentials
 - ✅ Validate API responses
@@ -425,6 +458,7 @@ npm run format
 ## 🤝 Contributing
 
 ### Adding a New Source Type
+
 1. Create new component in `/modules/ingest/`
 2. Add tab in `IngestPage.tsx`
 3. Add icon and description
@@ -432,6 +466,7 @@ npm run format
 5. Add to documentation
 
 ### Modifying Existing Component
+
 1. Locate component file
 2. Update UI/logic
 3. Test thoroughly

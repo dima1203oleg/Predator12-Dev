@@ -4,14 +4,12 @@ Handles export and report generation using MinIO storage
 """
 
 import io
-import json
 import logging
 import os
 from datetime import datetime, timedelta
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import pandas as pd
-from celery import current_task
 
 from ..celery_app import celery_app
 
@@ -27,7 +25,6 @@ except ImportError:
 # Report generation imports
 try:
     import matplotlib.pyplot as plt
-    import seaborn as sns
     from reportlab.lib.pagesizes import letter
     from reportlab.pdfgen import canvas
 
@@ -64,7 +61,7 @@ def generate_csv_report(self, report_config: Dict[str, Any]) -> Dict[str, Any]:
         # Extract configuration
         report_type = report_config.get("type", "data_export")
         dataset_id = report_config.get("dataset_id")
-        filters = report_config.get("filters", {})
+        report_config.get("filters", {})
 
         self.update_state(
             state="PROGRESS",

@@ -97,24 +97,24 @@
 ```css
 :root {
   /* Background */
-  --cyber-void: #05070A;
-  --cyber-dark: #0A0E14;
+  --cyber-void: #05070a;
+  --cyber-dark: #0a0e14;
   --cyber-surface: #141820;
 
   /* Neon Accents */
-  --neon-cyan: #00FFC6;
-  --neon-blue: #0A75FF;
-  --neon-purple: #A020F0;
-  --neon-red: #FF0033;
-  --neon-gold: #FFD700;
+  --neon-cyan: #00ffc6;
+  --neon-blue: #0a75ff;
+  --neon-purple: #a020f0;
+  --neon-red: #ff0033;
+  --neon-gold: #ffd700;
 
   /* Gradients */
-  --gradient-cyber: linear-gradient(135deg, #00FFC6, #0A75FF, #A020F0);
-  --gradient-alert: linear-gradient(90deg, #FF0033, #FFD700);
+  --gradient-cyber: linear-gradient(135deg, #00ffc6, #0a75ff, #a020f0);
+  --gradient-alert: linear-gradient(90deg, #ff0033, #ffd700);
 
   /* Glows */
-  --glow-cyan: 0 0 20px #00FFC6, 0 0 40px #00FFC6;
-  --glow-red: 0 0 20px #FF0033, 0 0 40px #FF0033;
+  --glow-cyan: 0 0 20px #00ffc6, 0 0 40px #00ffc6;
+  --glow-red: 0 0 20px #ff0033, 0 0 40px #ff0033;
 }
 ```
 
@@ -122,10 +122,10 @@
 
 ```css
 /* Cyber Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Fira+Code:wght@300;400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Fira+Code:wght@300;400;700&display=swap");
 
 .cyber-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -133,7 +133,7 @@
 }
 
 .cyber-body {
-  font-family: 'Fira Code', monospace;
+  font-family: "Fira Code", monospace;
   font-weight: 400;
   line-height: 1.6;
 }
@@ -146,7 +146,7 @@
 const iridescenceMaterial = new THREE.ShaderMaterial({
   uniforms: {
     time: { value: 0 },
-    resolution: { value: new THREE.Vector2() }
+    resolution: { value: new THREE.Vector2() },
   },
   vertexShader: `
     varying vec3 vNormal;
@@ -172,7 +172,7 @@ const iridescenceMaterial = new THREE.ShaderMaterial({
       );
       gl_FragColor = vec4(iridescent, 0.8);
     }
-  `
+  `,
 });
 
 // Glitch Effect
@@ -181,8 +181,8 @@ const glitchAnimation = {
   glitch: {
     x: [0, -5, 5, -3, 3, 0],
     opacity: [1, 0.8, 1, 0.9, 1],
-    transition: { duration: 0.3, repeat: Infinity, repeatDelay: 2 }
-  }
+    transition: { duration: 0.3, repeat: Infinity, repeatDelay: 2 },
+  },
 };
 ```
 
@@ -544,21 +544,22 @@ function getStatusColor(state: 'active' | 'idle' | 'error' | 'busy'): THREE.Colo
 
 ```typescript
 // hooks/useSpeechRecognition.ts
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 export function useSpeechRecognition() {
-  const [transcript, setTranscript] = useState('');
+  const [transcript, setTranscript] = useState("");
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
-      const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+    if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
+      const SpeechRecognition =
+        window.webkitSpeechRecognition || window.SpeechRecognition;
       const recognition = new SpeechRecognition();
 
       recognition.continuous = false;
       recognition.interimResults = false;
-      recognition.lang = 'uk-UA'; // Ukrainian
+      recognition.lang = "uk-UA"; // Ukrainian
 
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
@@ -567,7 +568,7 @@ export function useSpeechRecognition() {
       };
 
       recognition.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
+        console.error("Speech recognition error:", event.error);
         setIsListening(false);
       };
 
@@ -597,14 +598,14 @@ export function useSpeechRecognition() {
 
 ```typescript
 // hooks/useSpeechSynthesis.ts
-import { useState, useRef } from 'react';
+import { useState, useRef } from "react";
 
 export function useSpeechSynthesis() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const synthRef = useRef<SpeechSynthesis | null>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       synthRef.current = window.speechSynthesis;
     }
   }, []);
@@ -613,7 +614,7 @@ export function useSpeechSynthesis() {
     if (!synthRef.current) return;
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = options?.lang || 'uk-UA';
+    utterance.lang = options?.lang || "uk-UA";
     utterance.rate = options?.rate || 1.0;
     utterance.pitch = options?.pitch || 1.0;
     utterance.volume = options?.volume || 1.0;
@@ -721,28 +722,29 @@ async def cyber_face_stream(websocket: WebSocket):
 // Example: Port collision detected
 const alertScenario = {
   event: {
-    type: 'port_collision',
+    type: "port_collision",
     port: 8000,
-    severity: 'high'
+    severity: "high",
   },
   faceResponse: {
-    message: "Commander, port 8000 collision detected. I recommend activating PortCollisionHealer agent. Shall I proceed?",
-    emotion: 'alert',
+    message:
+      "Commander, port 8000 collision detected. I recommend activating PortCollisionHealer agent. Shall I proceed?",
+    emotion: "alert",
     action: {
-      type: 'agent_command',
-      agent: 'PortCollisionHealer',
-      command: 'heal',
-      requiresConfirmation: true
-    }
-  }
+      type: "agent_command",
+      agent: "PortCollisionHealer",
+      command: "heal",
+      requiresConfirmation: true,
+    },
+  },
 };
 
 // User confirms → Execute
-await sendCommand('PortCollisionHealer', 'heal');
+await sendCommand("PortCollisionHealer", "heal");
 
 // After execution
 speak("Port 8000 cleared. Service restarted successfully. System stable.");
-setCurrentEmotion('calm');
+setCurrentEmotion("calm");
 ```
 
 ### 2. Optimization Opportunity
@@ -751,21 +753,22 @@ setCurrentEmotion('calm');
 // Example: High query latency detected
 const optimizationScenario = {
   event: {
-    type: 'performance_degradation',
-    metric: 'query_latency',
+    type: "performance_degradation",
+    metric: "query_latency",
     value: 3.2,
-    threshold: 2.0
+    threshold: 2.0,
   },
   faceResponse: {
-    message: "Query latency increased to 3.2 seconds. QueryOptimizer can reduce this by 30%. Would you like me to analyze and optimize?",
-    emotion: 'concerned',
+    message:
+      "Query latency increased to 3.2 seconds. QueryOptimizer can reduce this by 30%. Would you like me to analyze and optimize?",
+    emotion: "concerned",
     action: {
-      type: 'agent_command',
-      agent: 'QueryOptimizer',
-      command: 'analyze',
-      requiresConfirmation: true
-    }
-  }
+      type: "agent_command",
+      agent: "QueryOptimizer",
+      command: "analyze",
+      requiresConfirmation: true,
+    },
+  },
 };
 ```
 
@@ -775,21 +778,22 @@ const optimizationScenario = {
 // Example: Model accuracy dropped
 const driftScenario = {
   event: {
-    type: 'model_drift',
-    model: 'anomaly_detector',
-    accuracy_drop: 0.12
+    type: "model_drift",
+    model: "anomaly_detector",
+    accuracy_drop: 0.12,
   },
   faceResponse: {
-    message: "Model drift detected: Anomaly detector accuracy dropped 12%. I suggest retraining with recent data. Shall I initiate LoRA fine-tuning?",
-    emotion: 'alert',
+    message:
+      "Model drift detected: Anomaly detector accuracy dropped 12%. I suggest retraining with recent data. Shall I initiate LoRA fine-tuning?",
+    emotion: "alert",
     action: {
-      type: 'agent_command',
-      agent: 'ModelUpgrader',
-      command: 'retrain',
-      parameters: { model: 'anomaly_detector', method: 'lora' },
-      requiresConfirmation: true
-    }
-  }
+      type: "agent_command",
+      agent: "ModelUpgrader",
+      command: "retrain",
+      parameters: { model: "anomaly_detector", method: "lora" },
+      requiresConfirmation: true,
+    },
+  },
 };
 ```
 
@@ -801,7 +805,8 @@ const driftScenario = {
 
 ```css
 @keyframes glitch {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0);
     filter: hue-rotate(0deg);
   }
@@ -859,9 +864,16 @@ const driftScenario = {
 
 ```css
 @keyframes hologram-flicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-  75% { opacity: 0.95; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 0.95;
+  }
 }
 
 .hologram {
@@ -874,14 +886,21 @@ const driftScenario = {
     transparent 70%
   );
   background-size: 200% 200%;
-  animation: hologram-flicker 4s ease-in-out infinite,
-             gradient-shift 3s linear infinite;
+  animation:
+    hologram-flicker 4s ease-in-out infinite,
+    gradient-shift 3s linear infinite;
 }
 
 @keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 ```
 
@@ -920,21 +939,21 @@ interface CyberFaceMetrics {
 // Prometheus Metrics
 const metrics = {
   cyber_face_response_time: new Histogram({
-    name: 'cyber_face_response_time_seconds',
-    help: 'Time to respond to user input',
-    buckets: [0.1, 0.5, 1, 2, 5]
+    name: "cyber_face_response_time_seconds",
+    help: "Time to respond to user input",
+    buckets: [0.1, 0.5, 1, 2, 5],
   }),
 
   cyber_face_interactions: new Counter({
-    name: 'cyber_face_interactions_total',
-    help: 'Total interactions with Cyber Face',
-    labelNames: ['type', 'outcome']
+    name: "cyber_face_interactions_total",
+    help: "Total interactions with Cyber Face",
+    labelNames: ["type", "outcome"],
   }),
 
   cyber_face_frame_rate: new Gauge({
-    name: 'cyber_face_frame_rate_fps',
-    help: 'Current frame rate of 3D rendering'
-  })
+    name: "cyber_face_frame_rate_fps",
+    help: "Current frame rate of 3D rendering",
+  }),
 };
 ```
 
@@ -942,40 +961,44 @@ const metrics = {
 
 ## 🎯 Acceptance Criteria
 
-| # | Criterion | Target | Status |
-|---|-----------|--------|--------|
-| 1 | **Voice Recognition** | Accuracy ≥ 90% (Ukrainian) | ⚠️ Testing |
-| 2 | **Response Latency** | < 2s (LLM + TTS) | ⚠️ Testing |
-| 3 | **3D Performance** | FPS ≥ 30 on recommended HW | ⚠️ Testing |
-| 4 | **Agent Orchestration** | Command → Status < 5s | ⚠️ Testing |
-| 5 | **Emotion Accuracy** | ≥ 85% match to events | ⚠️ Testing |
-| 6 | **Proactive Suggestions** | ≥ 80% user acceptance | ⚠️ Testing |
-| 7 | **Accessibility** | WCAG 2.1 AA (voice-off mode) | ⚠️ Testing |
-| 8 | **Multi-language** | UA/EN full support | ⚠️ Testing |
+| #   | Criterion                 | Target                       | Status     |
+| --- | ------------------------- | ---------------------------- | ---------- |
+| 1   | **Voice Recognition**     | Accuracy ≥ 90% (Ukrainian)   | ⚠️ Testing |
+| 2   | **Response Latency**      | < 2s (LLM + TTS)             | ⚠️ Testing |
+| 3   | **3D Performance**        | FPS ≥ 30 on recommended HW   | ⚠️ Testing |
+| 4   | **Agent Orchestration**   | Command → Status < 5s        | ⚠️ Testing |
+| 5   | **Emotion Accuracy**      | ≥ 85% match to events        | ⚠️ Testing |
+| 6   | **Proactive Suggestions** | ≥ 80% user acceptance        | ⚠️ Testing |
+| 7   | **Accessibility**         | WCAG 2.1 AA (voice-off mode) | ⚠️ Testing |
+| 8   | **Multi-language**        | UA/EN full support           | ⚠️ Testing |
 
 ---
 
 ## 🚀 Implementation Roadmap
 
 ### Phase 1: Foundation (Weeks 1-2)
+
 - [ ] 3D face mesh (Three.js + GLTF model)
 - [ ] Basic animations (breathing, morph targets)
 - [ ] Voice hooks (Speech API)
 - [ ] LLM integration (GPT-4o)
 
 ### Phase 2: Agent Integration (Weeks 3-4)
+
 - [ ] NEXUS_SUPERVISOR proxy
 - [ ] WebSocket real-time events
 - [ ] Agent swarm visualization
 - [ ] Proactive suggestion system
 
 ### Phase 3: Polish & Effects (Weeks 5-6)
+
 - [ ] Visual effects (iridescence, glitch, hologram)
 - [ ] Sound design (Howler.js)
 - [ ] Emotion system refinement
 - [ ] Multi-language support
 
 ### Phase 4: Testing & Optimization (Weeks 7-8)
+
 - [ ] Performance optimization (GPU fallback)
 - [ ] Accessibility audit
 - [ ] User testing
@@ -1023,18 +1046,21 @@ open http://localhost:3000/cyber-face
 ## 🔒 Security Considerations
 
 ### Data Privacy
+
 - Voice data encrypted in transit (WebRTC)
 - No permanent storage of voice recordings
 - PII masking in Cyber Face responses
 - User consent required for emotion tracking (camera/microphone)
 
 ### Access Control
+
 - Role-based: `view_cyber_face` permission required
 - Pro tier: Full voice features
 - Free tier: Text-only mode
 - Admin: Full system control via Cyber Face
 
 ### Audit Logging
+
 ```typescript
 {
   timestamp: "2025-01-06T12:34:56Z",

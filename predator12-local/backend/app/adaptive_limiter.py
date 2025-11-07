@@ -1,9 +1,4 @@
-"""
-Adaptive Rate Limiting
-"""
-
-import time
-from typing import Optional
+"""Adaptive Rate Limiting."""
 
 import redis
 from prometheus_client import Gauge
@@ -13,7 +8,7 @@ LOAD_FACTOR = Gauge("system_load_factor", "Current system load factor")
 
 
 class AdaptiveRateLimiter:
-    """Limits that adjust based on system load"""
+    """Limits that adjust based on system load."""
 
     def __init__(self, redis_client: redis.Redis):
         self.redis = redis_client
@@ -40,7 +35,7 @@ class AdaptiveRateLimiter:
         return int(limit)
 
     async def check_request(self, user_id: str, user_tier: str, endpoint: str) -> bool:
-        """Check if request is allowed"""
+        """Check if request is allowed."""
         # Get dynamic limit
         limit = await self.get_current_limit(user_tier)
 

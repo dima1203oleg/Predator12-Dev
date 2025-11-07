@@ -10,7 +10,6 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-import numpy as np
 import pandas as pd
 import redis
 import structlog
@@ -28,7 +27,7 @@ class ValidationSeverity(Enum):
 
 @dataclass
 class ValidationRule:
-    """Правило валідації"""
+    """Правило валідації."""
 
     name: str
     field: str
@@ -40,7 +39,7 @@ class ValidationRule:
 
 @dataclass
 class ValidationResult:
-    """Результат валідації"""
+    """Результат валідації."""
 
     rule_name: str
     field: str
@@ -54,7 +53,7 @@ class ValidationResult:
 
 
 class DataQualityAgent:
-    """Агент контролю якості даних"""
+    """Агент контролю якості даних."""
 
     def __init__(self):
         self.app = FastAPI(title="Data Quality Agent", version="1.0.0")
@@ -66,7 +65,7 @@ class DataQualityAgent:
         self._setup_routes()
 
     def _init_default_rules(self) -> List[ValidationRule]:
-        """Ініціалізація базових правил валідації"""
+        """Ініціалізація базових правил валідації."""
         rules = [
             ValidationRule(
                 name="not_null_amount",
@@ -120,11 +119,11 @@ class DataQualityAgent:
         return rules
 
     def _setup_routes(self):
-        """Налаштування HTTP маршрутів"""
+        """Налаштування HTTP маршрутів."""
 
         @self.app.post("/quality/run")
         async def run_validation(request: dict):
-            """Запуск валідації якості даних"""
+            """Запуск валідації якості даних."""
             try:
                 dataset_id = request.get("dataset_id")
                 index_name = request.get("index", "customs_safe_current")
@@ -141,7 +140,7 @@ class DataQualityAgent:
 
         @self.app.get("/quality/rules")
         async def list_rules():
-            """Список доступних правил валідації"""
+            """Список доступних правил валідації."""
             rules_info = []
             for rule in self.default_rules:
                 rules_info.append(
@@ -157,7 +156,7 @@ class DataQualityAgent:
 
         @self.app.post("/quality/rules")
         async def add_custom_rule(rule_data: dict):
-            """Додавання кастомного правила"""
+            """Додавання кастомного правила."""
             try:
                 rule = ValidationRule(
                     name=rule_data["name"],
@@ -188,7 +187,7 @@ class DataQualityAgent:
 
         @self.app.get("/quality/report/{dataset_id}")
         async def get_quality_report(dataset_id: str):
-            """Звіт по якості конкретного датасету"""
+            """Звіт по якості конкретного датасету."""
             try:
                 # Отримуємо збережені результати з Redis
                 report_key = f"quality:reports:{dataset_id}"
@@ -205,7 +204,7 @@ class DataQualityAgent:
 
         @self.app.get("/quality/health")
         async def health():
-            """Health check"""
+            """Health check."""
             return {
                 "status": "healthy",
                 "rules_count": len(self.default_rules),
@@ -215,7 +214,7 @@ class DataQualityAgent:
     async def validate_dataset(
         self, dataset_id: Optional[str], index_name: str, custom_rules: List[dict]
     ) -> Dict[str, Any]:
-        """Валідація датасету за правилами"""
+        """Валідація датасету за правилами."""
 
         start_time = time.time()
 
@@ -307,7 +306,7 @@ class DataQualityAgent:
         }
 
     def _validate_field(self, df: pd.DataFrame, rule: ValidationRule) -> ValidationResult:
-        """Валідація окремого поля за правилом"""
+        """Валідація окремого поля за правилом."""
 
         field_data = df[rule.field]
         total_count = len(field_data)
@@ -354,7 +353,7 @@ class DataQualityAgent:
                     ][:10]
 
             elif rule.rule_type == "regex":
-                import re
+                pass
 
                 pattern = rule.parameters.get("pattern", ".*")
 
@@ -398,7 +397,7 @@ class DataQualityAgent:
         )
 
     def _calculate_quality_grade(self, quality_score: float, critical_errors: int) -> str:
-        """Розрахунок класу якості"""
+        """Розрахунок класу якості."""
         if critical_errors > 0:
             return "F"
         elif quality_score >= 0.95:
@@ -413,7 +412,7 @@ class DataQualityAgent:
             return "F"
 
     def _generate_recommendations(self, results: List[ValidationResult]) -> List[str]:
-        """Генерація рекомендацій по покращенню якості"""
+        """Генерація рекомендацій по покращенню якості."""
         recommendations = []
 
         for result in results:
@@ -439,7 +438,7 @@ class DataQualityAgent:
         return recommendations
 
     def _result_to_dict(self, result: ValidationResult) -> Dict[str, Any]:
-        """Конвертація результату в словник"""
+        """Конвертація результату в словник."""
         return {
             "rule_name": result.rule_name,
             "field": result.field,
@@ -453,7 +452,7 @@ class DataQualityAgent:
         }
 
     def _simulate_data(self) -> List[Dict[str, Any]]:
-        """Симуляція даних для тестування"""
+        """Симуляція даних для тестування."""
         import random
 
         data = []
@@ -503,7 +502,7 @@ class DataQualityAgent:
         return data
 
     async def _publish_event(self, event_type: str, data: Dict[str, Any]):
-        """Публікація події в Redis Streams"""
+        """Публікація події в Redis Streams."""
         try:
             event_data = {
                 "event_type": event_type,

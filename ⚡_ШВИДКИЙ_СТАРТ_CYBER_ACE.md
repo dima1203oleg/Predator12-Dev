@@ -7,11 +7,13 @@
 ## ⚡ ЗАПУСТИТИ ПРЯМО ЗАРАЗ
 
 ### Варіант 1: Один клік (Найпростіше)
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local && ./ULTRA_QUICK_START.sh
 ```
 
 ### Варіант 2: Helper script
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local && ./cyber-ace.sh start
 ```
@@ -33,14 +35,16 @@ cd /Users/dima/Documents/Predator12 && ./🚦_ШВИДКИЙ_СТАТУС_ПЕР
 ## 📚 ДОКУМЕНТАЦІЯ - ДЕ ПОЧАТИ?
 
 ### 🔴 Прочитайте перші 3:
-1. **✅_ГОТОВО_ФІНАЛЬНА_СЕСІЯ.md** ← Почніть звідси! Найсвіжіше!
-2. **🎊🎊🎊_АБСОЛЮТНИЙ_ФІНАЛ_CYBER_ACE_V1.0.md** ← Повний огляд проекту
+
+1. **✅*ГОТОВО*ФІНАЛЬНА_СЕСІЯ.md** ← Почніть звідси! Найсвіжіше!
+2. **🎊🎊🎊*АБСОЛЮТНИЙ*ФІНАЛ_CYBER_ACE_V1.0.md** ← Повний огляд проекту
 3. **ONE_PAGE_SUMMARY.md** ← Швидкий summary
 
 ### 🟡 Для роботи:
+
 4. **📚_CYBER_ACE_GLOBAL_INDEX.md** ← Навігація по всіх файлах
-5. **🎯_ФІНАЛЬНИЙ_ГІД_CYBER_ACE.md** ← Покрокові інструкції
-6. **🎊_ФІНАЛЬНА_ВЕРИФІКАЦІЯ_CYBER_ACE.md** ← Верифікація компонентів
+5. **🎯*ФІНАЛЬНИЙ*ГІД_CYBER_ACE.md** ← Покрокові інструкції
+6. **🎊*ФІНАЛЬНА*ВЕРИФІКАЦІЯ_CYBER_ACE.md** ← Верифікація компонентів
 
 **Всього 20 документів**. Повний список: `📚_CYBER_ACE_GLOBAL_INDEX.md`
 
@@ -49,6 +53,7 @@ cd /Users/dima/Documents/Predator12 && ./🚦_ШВИДКИЙ_СТАТУС_ПЕР
 ## 🛠️ HELPER SCRIPTS
 
 ### Основні 3 команди:
+
 ```bash
 # 1. Запустити
 cd predator12-local && ./ULTRA_QUICK_START.sh
@@ -61,7 +66,8 @@ cd predator12-local && ./cyber-ace.sh help
 ```
 
 ### Всі 8 скриптів:
-- **🚦_ШВИДКИЙ_СТАТУС_ПЕРЕВІРКА.sh** - Швидка перевірка ⭐
+
+- **🚦*ШВИДКИЙ*СТАТУС_ПЕРЕВІРКА.sh** - Швидка перевірка ⭐
 - **ULTRA_QUICK_START.sh** - Ultra старт
 - **cyber-ace.sh** - 15+ команд
 - **cyber-ace-start.sh** - Авто запуск
@@ -74,13 +80,13 @@ cd predator12-local && ./cyber-ace.sh help
 
 ## 🌐 URLS (після запуску)
 
-| Сервіс | URL |
-|--------|-----|
-| **CYBER-ACE UI** | http://localhost:5173/cyber-ace |
-| Frontend | http://localhost:5173 |
-| Backend API | http://localhost:8000 |
-| API Docs | http://localhost:8000/docs |
-| Health | http://localhost:8000/api/cyber-ace/health |
+| Сервіс           | URL                                        |
+| ---------------- | ------------------------------------------ |
+| **CYBER-ACE UI** | http://localhost:5173/cyber-ace            |
+| Frontend         | http://localhost:5173                      |
+| Backend API      | http://localhost:8000                      |
+| API Docs         | http://localhost:8000/docs                 |
+| Health           | http://localhost:8000/api/cyber-ace/health |
 
 **Швидко відкрити UI**: `cd predator12-local && ./cyber-ace.sh ui`
 
@@ -100,11 +106,13 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ## 📦 ЩО ВСЕРЕДИНІ?
 
 ### Backend (3 services):
+
 - **AI Engine** (OpenAI/Claude)
 - **Voice Service** (STT/TTS)
 - **Agent Manager** (5 агентів)
 
 ### Frontend (7 components):
+
 - **CyberAcePage** - головна сторінка
 - **AceAvatar** - 3D аватар
 - **VoiceInput** - голосове управління
@@ -113,9 +121,11 @@ cd /Users/dima/Documents/Predator12/predator12-local
 - **StatusBar** - статус
 
 ### Helper Scripts (8 шт.):
+
 - Запуск, статус, тести, встановлення, etc.
 
 ### Documentation (20 файлів):
+
 - Гайди, summaries, reports, troubleshooting
 
 **Загалом**: ~3,651 рядок коду + ~5,860 рядків docs
@@ -125,6 +135,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ## 🎯 PRODUCTION CHECKLIST
 
 ### ✅ Готово:
+
 - [x] Backend ✅
 - [x] Frontend ✅
 - [x] API ✅
@@ -133,6 +144,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 - [x] Tests ✅
 
 ### 📝 Треба додати:
+
 - [ ] API ключі в `.env`:
   - `OPENAI_API_KEY` або `CLAUDE_API_KEY`
   - `AZURE_SPEECH_KEY` + `AZURE_SPEECH_REGION`
@@ -166,6 +178,7 @@ help       # Допомога
 ## 🆘 TROUBLESHOOTING
 
 ### Backend не стартує?
+
 ```bash
 cd predator12-local/backend
 pip install -r cyber_ace/requirements.txt
@@ -173,6 +186,7 @@ python3 -m uvicorn app.main:app --reload --port 8000
 ```
 
 ### Frontend не стартує?
+
 ```bash
 cd predator12-local/frontend
 npm install
@@ -180,6 +194,7 @@ npm run dev
 ```
 
 ### Порт зайнятий?
+
 ```bash
 # Знайти і завершити процес
 lsof -ti:8000 | xargs kill -9  # Backend
@@ -195,18 +210,21 @@ lsof -ti:5173 | xargs kill -9  # Frontend
 ### Швидкі посилання:
 
 **Документація**:
+
 - [✅ Готово (Фінальна сесія)](✅_ГОТОВО_ФІНАЛЬНА_СЕСІЯ.md) ⭐
 - [🎊 Абсолютний фінал](🎊🎊🎊_АБСОЛЮТНИЙ_ФІНАЛ_CYBER_ACE_V1.0.md) ⭐
 - [📚 Global Index](📚_CYBER_ACE_GLOBAL_INDEX.md)
 - [📄 One Page Summary](ONE_PAGE_SUMMARY.md)
 
 **Scripts**:
+
 - [🚦 Quick Status](🚦_ШВИДКИЙ_СТАТУС_ПЕРЕВІРКА.sh) ⭐
 - [🗺️ Повна карта](🗺️_ПОВНА_КАРТА_ПРОЕКТУ.sh) ⭐
 - [🚀 Ultra Start](predator12-local/ULTRA_QUICK_START.sh)
 - [🎮 Main Helper](predator12-local/cyber-ace.sh)
 
 **Code**:
+
 - Backend: `predator12-local/backend/cyber_ace/`
 - Frontend: `predator12-local/frontend/src/modules/cyber-ace/`
 
@@ -228,12 +246,14 @@ lsof -ti:5173 | xargs kill -9  # Frontend
 ```
 
 ### Почніть прямо зараз:
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local
 ./ULTRA_QUICK_START.sh
 ```
 
 ### Або перегляньте карту:
+
 ```bash
 cd /Users/dima/Documents/Predator12
 ./🗺️_ПОВНА_КАРТА_ПРОЕКТУ.sh
@@ -251,6 +271,6 @@ cd /Users/dima/Documents/Predator12
 
 ---
 
-*Created: GitHub Copilot*  
-*Project: PREDATOR12 - CYBER-ACE v1.0*  
-*Status: ✅ Production Ready*
+_Created: GitHub Copilot_  
+_Project: PREDATOR12 - CYBER-ACE v1.0_  
+_Status: ✅ Production Ready_

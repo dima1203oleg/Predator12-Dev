@@ -1,7 +1,9 @@
 # Information about product item_number: 3
+
 Summit Breeze Jacket, price $120,
 
 ## Brand
+
 MountainStyle
 
 Main Category: APPAREL
@@ -9,6 +11,7 @@ Sub Category: MEN'S CLOTHING
 Product Type: JACKETS & VESTS
 
 ## Features
+
 - Lightweight design for easy carrying
 - Windproof construction for protection against strong winds
 - Water-resistant material to keep you dry in light rain
@@ -26,6 +29,7 @@ Product Type: JACKETS & VESTS
 - Reflective accents for enhanced visibility in low light conditions
 
 ## Technical Specs
+
 Best Use: Hiking Clothing  
 Material: Polyester  
 Color: Black  
@@ -50,9 +54,10 @@ Chin Guard: Yes
 Articulated Elbows: No  
 DWR Coating: No  
 UPF Rating: Not specified  
-Care Instructions: Machine washable  
+Care Instructions: Machine washable
 
 ## Summit Breeze Jacket User Manual
+
 ### Introduction
 
 Thank you for choosing the Summit Breeze Jacket. This user manual provides instructions on how to properly use and maintain your hiking jacket. Please read this manual carefully before using the product to ensure optimal performance and longevity.
@@ -137,38 +142,41 @@ For any warranty-related inquiries or to initiate a warranty claim, please conta
 Please retain your proof of purchase as it will be required to verify warranty eligibility.
 
 ## Return Policy
-- If Membership status "None":	Customers can return the hiking clothing within 30 days of purchase for a full refund. The clothing must be unworn and in its original packaging with all tags attached. The return shipping cost will be borne by the customer.
-- If Membership status "Gold":	Customers can return the hiking clothing within 60 days of purchase for a full refund or exchange. The clothing must be unworn and in its original packaging with all tags attached. The return shipping cost will be borne by the company.
-- If Membership status "Platinum  ":	Platinum members can return their hiking clothing within 90 days of purchase for a full refund or exchange. The product must be unused and in its original packaging. Additionally, Platinum members receive a 10% discount on all hiking clothing purchases.
+
+- If Membership status "None": Customers can return the hiking clothing within 30 days of purchase for a full refund. The clothing must be unworn and in its original packaging with all tags attached. The return shipping cost will be borne by the customer.
+- If Membership status "Gold": Customers can return the hiking clothing within 60 days of purchase for a full refund or exchange. The clothing must be unworn and in its original packaging with all tags attached. The return shipping cost will be borne by the company.
+- If Membership status "Platinum ": Platinum members can return their hiking clothing within 90 days of purchase for a full refund or exchange. The product must be unused and in its original packaging. Additionally, Platinum members receive a 10% discount on all hiking clothing purchases.
 
 ## Reviews
-11) Rating: 5
-   Review: The Summit Breeze Jacket is perfect for my hikes! It's lightweight, windproof, and breathable. I love the adjustable cuffs and water-resistant feature. Highly recommend!
 
-12) Rating: 4
-   Review: I bought the Summit Breeze Jacket, and while it's water-resistant and breathable, I wish it had more pockets. It's still a great jacket for outdoor activities!
+11. Rating: 5
+    Review: The Summit Breeze Jacket is perfect for my hikes! It's lightweight, windproof, and breathable. I love the adjustable cuffs and water-resistant feature. Highly recommend!
 
-13) Rating: 5
-   Review: The Summit Breeze Jacket is my go-to for all my outdoor adventures. It keeps me warm and dry without being too heavy. The windproof feature is truly amazing on windy days!
+12. Rating: 4
+    Review: I bought the Summit Breeze Jacket, and while it's water-resistant and breathable, I wish it had more pockets. It's still a great jacket for outdoor activities!
 
-14) Rating: 4
-   Review: I like the Summit Breeze Jacket, but I wish it came in more colors. It's comfortable and has many useful features, but the black color just isn't my favorite. Overall, it's a good jacket.
+13. Rating: 5
+    Review: The Summit Breeze Jacket is my go-to for all my outdoor adventures. It keeps me warm and dry without being too heavy. The windproof feature is truly amazing on windy days!
 
-15) Rating: 5
-   Review: This jacket is a fantastic addition to my hiking gear. It's lightweight, windproof, and water-resistant, making it perfect for unpredictable weather. Love it!
+14. Rating: 4
+    Review: I like the Summit Breeze Jacket, but I wish it came in more colors. It's comfortable and has many useful features, but the black color just isn't my favorite. Overall, it's a good jacket.
+
+15. Rating: 5
+    Review: This jacket is a fantastic addition to my hiking gear. It's lightweight, windproof, and water-resistant, making it perfect for unpredictable weather. Love it!
 
 ## FAQ
-11) Can I wear the Summit Breeze Jacket as a standalone or as a layer?
-   The Summit Breeze Jacket can be worn as a standalone in mild weather or as a mid-layer in colder conditions.
 
-12) Are there any special care instructions for the Summit Breeze Jacket?
-   To maintain the Summit Breeze Jacket, machine wash on a gentle cycle with cold water and air dry. Do not use bleach or fabric softeners.
+11. Can I wear the Summit Breeze Jacket as a standalone or as a layer?
+    The Summit Breeze Jacket can be worn as a standalone in mild weather or as a mid-layer in colder conditions.
 
-13) Does the Summit Breeze Jacket have any reflective elements for visibility?
-   Yes, the Summit Breeze Jacket features reflective accents to help improve visibility in low-light conditions.
+12. Are there any special care instructions for the Summit Breeze Jacket?
+    To maintain the Summit Breeze Jacket, machine wash on a gentle cycle with cold water and air dry. Do not use bleach or fabric softeners.
 
-14) Are the Summit Breeze Jacket's cuffs adjustable for a better fit?
-   Yes, the Summit Breeze Jacket has Velcro-adjustable cuffs to ensure a secure and comfortable fit.
+13. Does the Summit Breeze Jacket have any reflective elements for visibility?
+    Yes, the Summit Breeze Jacket features reflective accents to help improve visibility in low-light conditions.
 
-15) How breathable is the Summit Breeze Jacket during high-intensity activities?
-   The Summit Breeze Jacket is made of a breathable polyester material, which allows moisture to escape while maintaining wind and water resistance.
+14. Are the Summit Breeze Jacket's cuffs adjustable for a better fit?
+    Yes, the Summit Breeze Jacket has Velcro-adjustable cuffs to ensure a secure and comfortable fit.
+
+15. How breathable is the Summit Breeze Jacket during high-intensity activities?
+    The Summit Breeze Jacket is made of a breathable polyester material, which allows moisture to escape while maintaining wind and water resistance.

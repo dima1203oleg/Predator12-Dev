@@ -9,27 +9,32 @@
 ## 🎯 Quick Navigation
 
 ### 🚀 Getting Started
+
 1. **[START_HERE.md](../START_HERE.md)** — Швидкий старт для розробників
 2. **[QUICKSTART.md](../QUICKSTART.md)** — One-command setup
 3. **[CHEAT_SHEET.md](../CHEAT_SHEET.md)** — Команди та порти
 
 ### 📖 Core Documentation
+
 - **[NEXUS_CORE_TZ_V11.md](./NEXUS_CORE_TZ_V11.md)** — Головна технічна специфікація v11.0
 - **[COMMAND_CENTER_UNIFIED_UI.md](./COMMAND_CENTER_UNIFIED_UI.md)** — Документація уніфікованого веб-інтерфейсу
 - **[AGENTS_30_COMPLETE_SPEC.md](./AGENTS_30_COMPLETE_SPEC.md)** — Повний каталог 30 AI-агентів
 - **[MODEL_SELECTION_LOGIC_SPEC.md](./MODEL_SELECTION_LOGIC_SPEC.md)** — Логіка вибору моделей з прикладами коду
 
 ### 🏗️ Architecture
+
 - **[architecture/system_architecture.md](./architecture/system_architecture.md)** — Загальна архітектура системи
 - **[architecture/caching.md](./architecture/caching.md)** — Redis/Qdrant кешування
 - **[agents.md](./agents.md)** — AI Agents огляд
 
 ### 🔧 Implementation Guides
+
 - **[IMPLEMENTATION_ROADMAP.md](./IMPLEMENTATION_ROADMAP.md)** — Дорожня карта розробки
 - **[DEVELOPMENT_ROADMAP.md](../DEVELOPMENT_ROADMAP.md)** — План розробки
 - **[GITOPS_QUICKSTART_GUIDE.md](./GITOPS_QUICKSTART_GUIDE.md)** — GitOps з ArgoCD
 
 ### 📊 Status Reports
+
 - **[FINAL_PROJECT_STATUS.md](../FINAL_PROJECT_STATUS.md)** — Поточний статус проекту
 - **[IMPLEMENTATION_COMPLETE.md](../IMPLEMENTATION_COMPLETE.md)** — Завершені компоненти
 
@@ -79,6 +84,7 @@ docs/
 **Головна технічна специфікація системи Predator Analytics v11.0**
 
 #### Зміст:
+
 - **Executive Summary**: Ключові відмінності, current vs future стан
 - **Architecture Overview**: Діаграма системи, компоненти
 - **Unified Command Center**: Структура веб-інтерфейсу (3D Dashboard, Data Feed, Simulator, etc.)
@@ -91,20 +97,34 @@ docs/
 - **Acceptance Criteria**: Критерії готовності до production
 
 #### Key Sections:
+
 ```markdown
 ## 1. Executive Summary
+
 ## 2. Architecture Overview
+
 ## 3. Unified Command Center (Пульт Керування)
+
 ## 4. Multi-Agent System (30 Agents + 58 Models)
+
 ## 5. Data Sources & Processing
+
 ## 6. Storage Layer
+
 ## 7. Analytics & ML
+
 ## 8. DevOps & Infrastructure
+
 ## 9. Security & Compliance
+
 ## 10. Testing Strategy
+
 ## 11. Monitoring & Observability
+
 ## 12. Disaster Recovery
+
 ## 13. Timeline & Milestones
+
 ## 14. Acceptance Criteria
 ```
 
@@ -115,6 +135,7 @@ docs/
 **Документація уніфікованого веб-інтерфейсу "Пульт Керування"**
 
 #### Зміст:
+
 - **UI Architecture**: React 18 + TypeScript + Vite
 - **Component Structure**: 9 головних модулів інтерфейсу
 - **3D/2D Dashboard**: Three.js візуалізації
@@ -126,6 +147,7 @@ docs/
 - **UI/UX Principles**: Dark theme, accessibility, responsive design
 
 #### Модулі інтерфейсу:
+
 1. **3D/2D Dashboard** — Volumetric/heatmap візуалізації
 2. **Data Feed** — Real-time anomalies/alerts
 3. **Simulator** — What-if scenarios with ML forecasts
@@ -137,6 +159,7 @@ docs/
 9. **Command Palette** — Cmd+K quick actions
 
 #### Технічний стек:
+
 ```yaml
 frontend:
   framework: React 18 + TypeScript
@@ -155,6 +178,7 @@ frontend:
 **Повний структурований каталог 30 AI-агентів з YAML конфігами**
 
 #### Зміст:
+
 - **Overview**: 10 Self-Heal + 10 Optimize + 10 Modernize
 - **Agent Architecture**: Plan-then-Execute, HITL, Sandboxing
 - **Self-Heal Agents (10)**:
@@ -168,6 +192,7 @@ frontend:
 - **Metrics & Telemetry**: OpenTelemetry traces для всіх агентів
 
 #### Приклад агента:
+
 ```yaml
 agent:
   name: PortCollisionHealer
@@ -191,9 +216,9 @@ agent:
       cron: "*/5 * * * *"
 
   metrics:
-    success_rate: '>= 95%'
-    response_time: '<= 30s'
-    false_positive_rate: '<= 5%'
+    success_rate: ">= 95%"
+    response_time: "<= 30s"
+    false_positive_rate: "<= 5%"
 
   llm_selection:
     primary: llama-3.3-70b-versatile
@@ -208,11 +233,11 @@ agent:
 
 #### Категорії агентів:
 
-| Category | Count | Focus | Models Priority |
-|----------|-------|-------|-----------------|
-| **Self-Heal** | 10 | Відновлення, стабілізація | Fast + Reliable (Llama 3.3, GPT-4o-mini) |
-| **Optimize** | 10 | Оптимізація коду/даних | Quality + Cost (Claude, Qwen Coder) |
-| **Modernize** | 10 | Модернізація, міграції | Innovation (Gemini 2.0, Mistral Large) |
+| Category      | Count | Focus                     | Models Priority                          |
+| ------------- | ----- | ------------------------- | ---------------------------------------- |
+| **Self-Heal** | 10    | Відновлення, стабілізація | Fast + Reliable (Llama 3.3, GPT-4o-mini) |
+| **Optimize**  | 10    | Оптимізація коду/даних    | Quality + Cost (Claude, Qwen Coder)      |
+| **Modernize** | 10    | Модернізація, міграції    | Innovation (Gemini 2.0, Mistral Large)   |
 
 ---
 
@@ -221,6 +246,7 @@ agent:
 **Детальна специфікація логіки вибору моделей з прикладами коду**
 
 #### Зміст:
+
 - **Architecture**: Router → Scorer → Registry → Executor → Feedback
 - **Router Layer**: Task context analysis + model selection
 - **Model Registry**: 58 моделей з metadata (capabilities, cost, latency)
@@ -284,12 +310,12 @@ class FeedbackLoop:
 
 #### Model Distribution:
 
-| Category | Count | Examples | Use Cases |
-|----------|-------|----------|-----------|
-| **Self-Heal** | 10 | Llama 3.3, GPT-4o-mini, DeepSeek Coder | Code fixes, restarts, quick diagnosis |
-| **Optimize** | 15 | Claude 3.5, Qwen Coder, Codestral | Code/query optimization, refactoring |
-| **Modernize** | 12 | Gemini 2.0, Mistral Large, GPT-4 Turbo | Architecture, migrations, tech debt |
-| **Specialized** | 21 | CodeLlama, Phi-3, Granite Code | Domain-specific tasks |
+| Category        | Count | Examples                               | Use Cases                             |
+| --------------- | ----- | -------------------------------------- | ------------------------------------- |
+| **Self-Heal**   | 10    | Llama 3.3, GPT-4o-mini, DeepSeek Coder | Code fixes, restarts, quick diagnosis |
+| **Optimize**    | 15    | Claude 3.5, Qwen Coder, Codestral      | Code/query optimization, refactoring  |
+| **Modernize**   | 12    | Gemini 2.0, Mistral Large, GPT-4 Turbo | Architecture, migrations, tech debt   |
+| **Specialized** | 21    | CodeLlama, Phi-3, Granite Code         | Domain-specific tasks                 |
 
 ---
 
@@ -410,6 +436,7 @@ python agents/core/test_executor.py \
 Доступно за адресою: `http://localhost:5090/agents/metrics`
 
 **Метрики на дашборді**:
+
 - **Agent Health**: Status (active/idle/failed)
 - **Execution Stats**: Success rate, avg latency, cost per run
 - **Model Usage**: Top models by request count, fallback frequency
@@ -438,6 +465,7 @@ open http://localhost:3001
 ### PII Masking
 
 Всі дані проходять через PII-маскування перед відправкою до LLM:
+
 - **Emails**: `user@example.com` → `[EMAIL]`
 - **Phones**: `+380991234567` → `[PHONE]`
 - **Names**: `Іван Петренко` → `[NAME]`
@@ -466,6 +494,7 @@ roles:
 ### Audit Trail
 
 Всі дії логуються у `logs/audit/`:
+
 - Agent executions
 - Model selections
 - PII access requests
@@ -504,11 +533,11 @@ spec:
   strategy:
     canary:
       steps:
-        - setWeight: 20  # 1 pod
-        - pause: {duration: 5m}
-        - setWeight: 50  # 2-3 pods
-        - pause: {duration: 10m}
-        - setWeight: 100  # All pods
+        - setWeight: 20 # 1 pod
+        - pause: { duration: 5m }
+        - setWeight: 50 # 2-3 pods
+        - pause: { duration: 10m }
+        - setWeight: 100 # All pods
 ```
 
 ---
@@ -516,20 +545,24 @@ spec:
 ## 📚 Additional Resources
 
 ### Developer Onboarding
+
 - **[guides/developer_onboarding.md](./guides/developer_onboarding.md)** — Onboarding guide
 - **[CHEAT_SHEET.md](../CHEAT_SHEET.md)** — Quick reference
 
 ### API Documentation
+
 - **[api/rest_api.md](./api/rest_api.md)** — REST API endpoints
 - **[api/websocket_api.md](./api/websocket_api.md)** — WebSocket events
 - **[agents_api_documentation.md](./agents_api_documentation.md)** — Agents API
 
 ### Operations
+
 - **[operations/monitoring.md](./operations/monitoring.md)** — Prometheus/Grafana setup
 - **[operations/security.md](./operations/security.md)** — Security best practices
 - **[operations/disaster_recovery.md](./operations/disaster_recovery.md)** — Backup/restore procedures
 
 ### GitOps
+
 - **[GITOPS_QUICKSTART_GUIDE.md](./GITOPS_QUICKSTART_GUIDE.md)** — ArgoCD setup
 - **[GITOPS_IMPLEMENTATION_COMPLETE.md](../GITOPS_IMPLEMENTATION_COMPLETE.md)** — GitOps status
 
@@ -538,6 +571,7 @@ spec:
 ## 🎯 Acceptance Criteria Checklist
 
 ### Core Functionality
+
 - [x] 30 AI агентів імплементовані
 - [x] 58 LLM моделей інтегровані
 - [x] Intelligent model routing працює
@@ -549,11 +583,13 @@ spec:
 - [x] Redis caching layer
 
 ### Agent System
+
 - [x] Self-Heal agents (10) — port collision, OOM, env vars, Docker, deps, logs, network, DB, certs, config
 - [x] Optimize agents (10) — code refactor, query opt, cache, bundle, images, API latency, memory, tests, duplication, load balancer
 - [x] Modernize agents (10) — deps upgrade, API migration, security patches, feature flags, Dockerfile, CI/CD, K8s, observability, tech debt, legacy code
 
 ### Model Selection
+
 - [x] Router layer з task context
 - [x] Model registry (YAML + Redis)
 - [x] Scoring engine (capability + cost + latency + health)
@@ -562,6 +598,7 @@ spec:
 - [x] OpenTelemetry tracing
 
 ### UI/UX
+
 - [x] 3D/2D Dashboard з Three.js
 - [x] Real-time Data Feed (WebSocket)
 - [x] Simulator module (what-if scenarios)
@@ -571,6 +608,7 @@ spec:
 - [x] Dark theme + responsive design
 
 ### Security
+
 - [x] PII masking (emails, phones, names, IBANs)
 - [x] RBAC (admin, analyst, viewer)
 - [x] Audit trail logging
@@ -578,6 +616,7 @@ spec:
 - [x] SBOM signing (Sigstore/Cosign)
 
 ### DevOps
+
 - [x] Local-first development (brew/apt)
 - [x] Docker Compose для staging
 - [x] Kubernetes manifests для production
@@ -587,6 +626,7 @@ spec:
 - [x] DR plan (RPO≤15min, RTO≤30min)
 
 ### Testing
+
 - [x] Unit tests (pytest)
 - [x] Integration tests
 - [x] E2E tests (Playwright)
@@ -594,6 +634,7 @@ spec:
 - [x] Security scans (Trivy, Grype)
 
 ### Documentation
+
 - [x] Technical specification (NEXUS_CORE_TZ_V11.md)
 - [x] UI documentation (COMMAND_CENTER_UNIFIED_UI.md)
 - [x] Agent catalog (AGENTS_30_COMPLETE_SPEC.md)
@@ -608,20 +649,21 @@ spec:
 
 **Overall Progress**: **95% Complete** ✅
 
-| Component | Status | Progress |
-|-----------|--------|----------|
-| **Core Platform** | ✅ Ready | 100% |
-| **30 AI Agents** | ✅ Implemented | 100% |
-| **58 LLM Models** | ✅ Integrated | 100% |
-| **Model Selection Logic** | ✅ Specified | 100% (implementation pending) |
-| **Unified UI** | ✅ Ready | 100% |
-| **WebSocket Feeds** | ✅ Working | 100% |
-| **Security (PII/RBAC)** | ✅ Implemented | 100% |
-| **Testing** | 🟡 In Progress | 85% |
-| **Documentation** | ✅ Complete | 100% |
-| **Production Deploy** | 🟡 In Progress | 80% |
+| Component                 | Status         | Progress                      |
+| ------------------------- | -------------- | ----------------------------- |
+| **Core Platform**         | ✅ Ready       | 100%                          |
+| **30 AI Agents**          | ✅ Implemented | 100%                          |
+| **58 LLM Models**         | ✅ Integrated  | 100%                          |
+| **Model Selection Logic** | ✅ Specified   | 100% (implementation pending) |
+| **Unified UI**            | ✅ Ready       | 100%                          |
+| **WebSocket Feeds**       | ✅ Working     | 100%                          |
+| **Security (PII/RBAC)**   | ✅ Implemented | 100%                          |
+| **Testing**               | 🟡 In Progress | 85%                           |
+| **Documentation**         | ✅ Complete    | 100%                          |
+| **Production Deploy**     | 🟡 In Progress | 80%                           |
 
 **Next Milestones**:
+
 1. ✅ Complete model registry YAML (58 models)
 2. ⏳ Implement model selector/scorer/executor
 3. ⏳ Deploy Redis for health tracking
@@ -651,6 +693,7 @@ spec:
 ## 🙏 Credits
 
 Розроблено командою Predator Analytics з використанням:
+
 - **CrewAI** — Multi-agent orchestration
 - **LangGraph** — Agent workflows
 - **LiteLLM** — Universal LLM interface

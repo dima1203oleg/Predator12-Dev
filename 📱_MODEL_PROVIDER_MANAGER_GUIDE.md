@@ -24,6 +24,7 @@
 ```
 
 **Можливості:**
+
 - 🔄 Швидке перемикання між моделями та агентами
 - 📊 Автоматичне оновлення категорій
 - 🎨 Плавна анімація переходів
@@ -33,6 +34,7 @@
 ### 2️⃣ Фільтрація по категоріях
 
 **Model Categories:**
+
 - 🧠 **Reasoning** (12 моделей) - Складне міркування
 - 💻 **Code Generation** (10 моделей) - Генерація коду
 - 👁️ **Vision** (8 моделей) - Розпізнавання зображень
@@ -41,6 +43,7 @@
 - 🎨 **Generation** (4 моделей) - Генерація контенту
 
 **Agent Categories:**
+
 - ⚙️ **Core Agents** (5 агентів) - Основні системні
 - 🎯 **Specialized** (10 агентів) - Спеціалізовані
 - 📊 **Data Processing** (8 агентів) - Обробка даних
@@ -60,25 +63,26 @@
 
 **Підтримувані провайдери:**
 
-| Провайдер | Іконка | Моделі | API Required |
-|-----------|--------|--------|--------------|
-| OpenAI | 🤖 | GPT-4, GPT-3.5, DALL-E | ✅ Yes |
-| Anthropic | 🧬 | Claude 3.5, Claude 3 | ✅ Yes |
-| Google | 🌐 | Gemini Pro, Gemma | ✅ Yes |
-| Mistral AI | 🌀 | Mixtral, Mistral Large | ✅ Yes |
-| Meta | 🦙 | Llama 3, Llama 4 | ❌ No |
-| Microsoft | 🔷 | Phi-4, Azure OpenAI | ✅ Yes |
-| Cohere | 🎯 | Command R+, Embed | ✅ Yes |
-| DeepSeek | 🧠 | DeepSeek R1, V3 | ✅ Yes |
+| Провайдер  | Іконка | Моделі                 | API Required |
+| ---------- | ------ | ---------------------- | ------------ |
+| OpenAI     | 🤖     | GPT-4, GPT-3.5, DALL-E | ✅ Yes       |
+| Anthropic  | 🧬     | Claude 3.5, Claude 3   | ✅ Yes       |
+| Google     | 🌐     | Gemini Pro, Gemma      | ✅ Yes       |
+| Mistral AI | 🌀     | Mixtral, Mistral Large | ✅ Yes       |
+| Meta       | 🦙     | Llama 3, Llama 4       | ❌ No        |
+| Microsoft  | 🔷     | Phi-4, Azure OpenAI    | ✅ Yes       |
+| Cohere     | 🎯     | Command R+, Embed      | ✅ Yes       |
+| DeepSeek   | 🧠     | DeepSeek R1, V3        | ✅ Yes       |
 
 **Форма додавання:**
+
 ```tsx
 interface NewProviderForm {
-  providerId: string;         // ID провайдера
-  accountName: string;        // Назва акаунту (Production/Dev)
-  apiKey: string;             // API ключ
-  apiEndpoint?: string;       // Endpoint (опціонально)
-  models: string[];           // Список моделей
+  providerId: string; // ID провайдера
+  accountName: string; // Назва акаунту (Production/Dev)
+  apiKey: string; // API ключ
+  apiEndpoint?: string; // Endpoint (опціонально)
+  models: string[]; // Список моделей
 }
 ```
 
@@ -92,25 +96,26 @@ interface NewProviderForm {
 // Різні акаунти OpenAI
 const accounts: ProviderAccount[] = [
   {
-    id: '1',
-    providerName: 'OpenAI',
-    accountName: 'Production Account',
-    apiKey: 'sk-prod-***',
+    id: "1",
+    providerName: "OpenAI",
+    accountName: "Production Account",
+    apiKey: "sk-prod-***",
     isActive: true,
-    models: ['gpt-4-turbo', 'gpt-4']
+    models: ["gpt-4-turbo", "gpt-4"],
   },
   {
-    id: '2',
-    providerName: 'OpenAI',
-    accountName: 'Development Account',
-    apiKey: 'sk-dev-***',
+    id: "2",
+    providerName: "OpenAI",
+    accountName: "Development Account",
+    apiKey: "sk-dev-***",
     isActive: false,
-    models: ['gpt-3.5-turbo']
-  }
+    models: ["gpt-3.5-turbo"],
+  },
 ];
 ```
 
 **Функції для акаунтів:**
+
 - ✅ **Активація/Деактивація** - Switch для вкл/викл
 - ✏️ **Редагування** - Змінити налаштування
 - 🗑️ **Видалення** - Повне видалення акаунту
@@ -139,9 +144,7 @@ const accounts: ProviderAccount[] = [
     <Chip label={`${category.modelCount} models`} />
 
     {/* Actions */}
-    <Button endIcon={<AddIcon />}>
-      Add Model
-    </Button>
+    <Button endIcon={<AddIcon />}>Add Model</Button>
   </Stack>
 </Card>
 ```
@@ -152,7 +155,9 @@ const accounts: ProviderAccount[] = [
 <Accordion>
   <AccordionSummary>
     <Stack direction="row" spacing={2}>
-      <Typography>{provider.icon} {provider.name}</Typography>
+      <Typography>
+        {provider.icon} {provider.name}
+      </Typography>
       <Badge badgeContent={stats.accounts} />
       <Chip label={`${stats.active} active`} />
     </Stack>
@@ -160,7 +165,7 @@ const accounts: ProviderAccount[] = [
 
   <AccordionDetails>
     <List>
-      {accounts.map(account => (
+      {accounts.map((account) => (
         <ListItem>
           <ListItemText
             primary={account.accountName}
@@ -168,14 +173,18 @@ const accounts: ProviderAccount[] = [
               <Stack>
                 <Typography>🔑 {account.apiKey}</Typography>
                 <Typography>📊 Requests: {account.requestCount}</Typography>
-                <Typography>🤖 Models: {account.models.join(', ')}</Typography>
+                <Typography>🤖 Models: {account.models.join(", ")}</Typography>
               </Stack>
             }
           />
           <ListItemSecondaryAction>
             <Switch checked={account.isActive} />
-            <IconButton><EditIcon /></IconButton>
-            <IconButton><DeleteIcon /></IconButton>
+            <IconButton>
+              <EditIcon />
+            </IconButton>
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
       ))}
@@ -192,16 +201,16 @@ const accounts: ProviderAccount[] = [
 
 ```typescript
 interface ProviderAccount {
-  id: string;                  // Унікальний ID
-  providerName: string;        // Назва провайдера
-  accountName: string;         // Назва акаунту
-  apiKey: string;              // API ключ
-  apiEndpoint?: string;        // Custom endpoint
-  isActive: boolean;           // Статус активності
-  addedAt: string;             // Дата додавання
-  lastUsed?: string;           // Остання активність
-  requestCount?: number;       // Кількість запитів
-  models?: string[];           // Доступні моделі
+  id: string; // Унікальний ID
+  providerName: string; // Назва провайдера
+  accountName: string; // Назва акаунту
+  apiKey: string; // API ключ
+  apiEndpoint?: string; // Custom endpoint
+  isActive: boolean; // Статус активності
+  addedAt: string; // Дата додавання
+  lastUsed?: string; // Остання активність
+  requestCount?: number; // Кількість запитів
+  models?: string[]; // Доступні моделі
 }
 ```
 
@@ -209,11 +218,11 @@ interface ProviderAccount {
 
 ```typescript
 interface ModelCategory {
-  id: string;                  // Унікальний ID
-  name: string;                // Назва категорії
-  icon: string;                // Emoji іконка
-  description: string;         // Опис
-  modelCount: number;          // Кількість моделей
+  id: string; // Унікальний ID
+  name: string; // Назва категорії
+  icon: string; // Emoji іконка
+  description: string; // Опис
+  modelCount: number; // Кількість моделей
 }
 ```
 
@@ -221,13 +230,13 @@ interface ModelCategory {
 
 ```typescript
 interface Provider {
-  id: string;                  // Унікальний ID
-  name: string;                // Назва провайдера
-  icon: string;                // Emoji іконка
-  description: string;         // Опис та моделі
-  requiresApiKey: boolean;     // Чи потрібен API ключ
-  defaultEndpoint?: string;    // Стандартний endpoint
-  supportedModels: string[];   // Підтримувані моделі
+  id: string; // Унікальний ID
+  name: string; // Назва провайдера
+  icon: string; // Emoji іконка
+  description: string; // Опис та моделі
+  requiresApiKey: boolean; // Чи потрібен API ключ
+  defaultEndpoint?: string; // Стандартний endpoint
+  supportedModels: string[]; // Підтримувані моделі
 }
 ```
 
@@ -238,7 +247,7 @@ interface Provider {
 ### 1. Імпорт компонента
 
 ```tsx
-import ModelProviderManager from './components/models/ModelProviderManager';
+import ModelProviderManager from "./components/models/ModelProviderManager";
 
 function App() {
   return (
@@ -266,18 +275,18 @@ function App() {
 // API endpoints
 const API_ENDPOINTS = {
   // Provider accounts
-  getAccounts: '/api/providers/accounts',
-  addAccount: '/api/providers/accounts',
-  updateAccount: '/api/providers/accounts/:id',
-  deleteAccount: '/api/providers/accounts/:id',
+  getAccounts: "/api/providers/accounts",
+  addAccount: "/api/providers/accounts",
+  updateAccount: "/api/providers/accounts/:id",
+  deleteAccount: "/api/providers/accounts/:id",
 
   // Models
-  getModels: '/api/models',
-  addModel: '/api/models',
+  getModels: "/api/models",
+  addModel: "/api/models",
 
   // Categories
-  getCategories: '/api/models/categories',
-  getCategoryModels: '/api/models/categories/:id'
+  getCategories: "/api/models/categories",
+  getCategoryModels: "/api/models/categories/:id",
 };
 ```
 
@@ -332,11 +341,11 @@ handleDeleteAccount(accountId);
 const providerStats = useMemo(() => {
   const stats = new Map();
 
-  providerAccounts.forEach(account => {
+  providerAccounts.forEach((account) => {
     const current = stats.get(account.providerName) || {
       accounts: 0,
       active: 0,
-      requests: 0
+      requests: 0,
     };
 
     current.accounts++;
@@ -351,6 +360,7 @@ const providerStats = useMemo(() => {
 ```
 
 **Відображення:**
+
 - 📊 Загальна кількість акаунтів
 - ✅ Активні акаунти
 - 📈 Загальна кількість запитів
@@ -366,9 +376,7 @@ const providerStats = useMemo(() => {
 const [showApiKey, setShowApiKey] = useState(false);
 
 // 2. Захист від витоку
-const maskedKey = showApiKey
-  ? account.apiKey
-  : '••••••••••••••••••••••••••';
+const maskedKey = showApiKey ? account.apiKey : "••••••••••••••••••••••••••";
 
 // 3. Валідація формату
 const validateApiKey = (key: string) => {
@@ -380,6 +388,7 @@ const validateApiKey = (key: string) => {
 ```
 
 **Рекомендації:**
+
 - ❌ Ніколи не логувати API ключі
 - ✅ Використовувати HTTPS
 - ✅ Зберігати ключі в environment variables
@@ -489,11 +498,13 @@ CMD ["npm", "start"]
 ## 📚 ДОДАТКОВІ РЕСУРСИ
 
 ### Документація
+
 - [Model Registry Spec](./MODEL_SELECTION_LOGIC_SPEC.md)
 - [Agent Configuration](./AGENTS_30_COMPLETE_SPEC.md)
 - [API Documentation](./API_REFERENCE.md)
 
 ### Приклади
+
 - [Provider Integration Examples](./examples/provider-integration.ts)
 - [Model Selection Logic](./examples/model-selection.ts)
 

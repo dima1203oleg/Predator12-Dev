@@ -244,7 +244,6 @@ critical:
     - vision
   paths: []
 
-
 canary:
   enabled: true
   default_sample_rate: 0.1
@@ -439,7 +438,12 @@ arbiter_competitions:
 
   # Scenario 2: Code generation specialists
   coding_showdown:
-    models: ["codestral-2501", "deepseek/deepseek-coder-v2", "phind/phind-codellama-34b-v2"]
+    models:
+      [
+        "codestral-2501",
+        "deepseek/deepseek-coder-v2",
+        "phind/phind-codellama-34b-v2",
+      ]
     tasks: ["algorithm_design", "code_optimization", "bug_fixing"]
 
   # Scenario 3: Quick response models
@@ -449,7 +453,8 @@ arbiter_competitions:
 
   # Scenario 4: Multilingual capabilities
   language_masters:
-    models: ["qwen/qwen2.5-14b-instruct", "gemma-2-9b-it", "llama-3.1-8b-instruct"]
+    models:
+      ["qwen/qwen2.5-14b-instruct", "gemma-2-9b-it", "llama-3.1-8b-instruct"]
     tasks: ["translation", "multilingual_understanding", "cultural_context"]
 
 # Agent-to-model assignments (default routing)

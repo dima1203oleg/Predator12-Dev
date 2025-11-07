@@ -5,13 +5,11 @@ Role: Routes requests to 58 FREE models via SDK with advanced fallbacks
 Auto-generated from agents.yaml configuration
 """
 import asyncio
-import json
 import logging
 import os
 from datetime import datetime
 
 import aioredis
-import httpx
 from prometheus_client import Counter, Gauge
 
 # Metrics
@@ -31,7 +29,7 @@ class ModelRouterAgent:
         self.redis = None
 
     async def initialize(self):
-        """Ініціалізація агента"""
+        """Ініціалізація агента."""
         try:
             self.redis = aioredis.from_url(
                 os.getenv("REDIS_URL", "redis://localhost:6379"),
@@ -46,7 +44,7 @@ class ModelRouterAgent:
             raise
 
     async def start(self):
-        """Запуск основного циклу агента"""
+        """Запуск основного циклу агента."""
         self.running = True
         self.logger.info(f"Starting {self.agent_name} - {self.role}")
 
@@ -89,7 +87,7 @@ class ModelRouterAgent:
                 await asyncio.sleep(30)
 
     async def stop(self):
-        """Зупинка агента"""
+        """Зупинка агента."""
         self.running = False
         HEALTH_GAUGE.set(0)
         self.logger.info(f"Stopping {self.agent_name}")

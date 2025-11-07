@@ -3,6 +3,7 @@
 ## ✅ Що створено
 
 ### 📊 Статистика:
+
 - **Документація**: 15,212 рядків (4 основні файли)
 - **Скрипти**: 82 файли (Shell + Python)
 - **Розмір проекту**: 2.1 GB
@@ -11,12 +12,14 @@
 ### 🎯 Основні компоненти:
 
 #### 📚 Документація (4 файли, ~1000+ рядків кожен):
+
 1. **README.md** - Повна документація проекту
 2. **QUICK_START.md** - Швидкий старт за 5 хвилин
 3. **migration_plan.md** - Детальний план міграції даних
 4. **DEPLOYMENT_CHECKLIST.md** - Чек-ліст прийняття (100+ пунктів)
 
 #### 🛠️ Скрипти (6 основних):
+
 1. **scripts/init_local_db.sh** - Ініціалізація PostgreSQL
 2. **scripts/migrate_db.sh** - Виконання міграцій
 3. **scripts/pg_dump_from_container.sh** - Експорт з Docker
@@ -25,11 +28,13 @@
 6. **smoke_tests/python_smoke.py** - Python тести
 
 #### ⚙️ Конфігурації VS Code:
+
 1. **.vscode/tasks-local.json** - 11 задач
 2. **.vscode/launch.json** - 7 debug конфігурацій
 3. **.vscode/settings-local.json** - Налаштування редактора
 
 #### 🎛️ Автоматизація:
+
 - **Makefile** - 15+ команд для управління проектом
 - **.env.example** - Приклад конфігурації для локальної розробки
 
@@ -38,6 +43,7 @@
 ## 🚀 Як почати (3 варіанти)
 
 ### Варіант 1: Швидкий старт (Makefile)
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local
 
@@ -59,18 +65,21 @@ make smoke
 ```
 
 ### Варіант 2: VS Code (рекомендовано)
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local
 code .
 ```
 
 Потім в VS Code:
+
 1. `Cmd+Shift+P` → `Tasks: Run Task` → `🚀 Install Dependencies`
 2. `Cmd+Shift+P` → `Tasks: Run Task` → `🗄️ Initialize Database`
 3. `Cmd+Shift+P` → `Tasks: Run Task` → `🔄 Run Migrations`
 4. `F5` → Вибрати `🚀 Full Stack Debug`
 
 ### Варіант 3: Ручний (покроковий)
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local
 
@@ -140,12 +149,14 @@ npm run dev
 ## 🔗 Посилання
 
 ### Локальні сервіси:
+
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000
 - **API Docs**: http://localhost:8000/docs
 - **Alternative Docs**: http://localhost:8000/redoc
 
 ### Git репозиторій:
+
 - **Local**: `/Users/dima/Documents/Predator12/predator12-local`
 - **Remote**: (налаштуйте згідно з інструкціями в README.md)
 
@@ -187,6 +198,7 @@ make logs         # Показати логи
 ## 🎓 Навчальні матеріали
 
 ### Структура проекту:
+
 ```
 predator12-local/
 ├── 📚 Документація/
@@ -230,6 +242,7 @@ predator12-local/
 ## 🎯 Acceptance Criteria
 
 Система готова коли:
+
 - ✅ `make smoke` показує >= 90% успішності
 - ✅ Backend відповідає на http://localhost:8000/health
 - ✅ Frontend завантажується на http://localhost:3000
@@ -243,22 +256,26 @@ predator12-local/
 ### Якщо щось не працює:
 
 1. **Читайте документацію**:
+
    ```bash
    cat QUICK_START.md
    cat README.md
    ```
 
 2. **Перевірте статус**:
+
    ```bash
    make status
    ```
 
 3. **Запустіть діагностику**:
+
    ```bash
    make smoke
    ```
 
 4. **Дивіться логи**:
+
    ```bash
    make logs
    tail -f logs/predator.log
@@ -276,6 +293,7 @@ predator12-local/
 ## 📞 Наступні кроки
 
 ### 1. Прочитати документацію
+
 ```bash
 cat QUICK_START.md      # Швидкий старт
 cat README.md           # Повна документація
@@ -283,29 +301,34 @@ cat migration_plan.md   # Міграція даних
 ```
 
 ### 2. Налаштувати .env
+
 ```bash
 cp .env.example .env
 nano .env
 ```
 
 ### 3. Встановити залежності
+
 ```bash
 make install
 ```
 
 ### 4. Ініціалізувати БД
+
 ```bash
 make initdb
 make migrate
 ```
 
 ### 5. Мігрувати дані (опційно)
+
 ```bash
 make dump     # З Predator11
 make restore  # В локальну БД
 ```
 
 ### 6. Запустити проект
+
 ```bash
 # Через VS Code (F5)
 # Або через Makefile
@@ -314,6 +337,7 @@ make frontend  # Terminal 2
 ```
 
 ### 7. Протестувати
+
 ```bash
 make smoke
 open http://localhost:3000
@@ -329,6 +353,7 @@ open http://localhost:8000/docs
 **Predator12 локальна розробницька версія повністю готова!**
 
 ✨ **Створено**:
+
 - 📚 4 повні гайди (~15,000+ рядків документації)
 - 🛠️ 82 скрипти для автоматизації
 - ⚙️ Повна інтеграція з VS Code
@@ -336,6 +361,7 @@ open http://localhost:8000/docs
 - 🎯 100+ пунктів acceptance criteria
 
 🎯 **Готово для**:
+
 - Локальної розробки без Docker
 - Швидкого дебагу в VS Code
 - Міграції даних з продакшн

@@ -14,7 +14,7 @@ class EventProducer:
     def send_event(self, topic: str, event: dict):
         """Send event to Kafka topic"""
         try:
-            future = self.producer.send(topic, event)
+            self.producer.send(topic, event)
             self.producer.flush()
             return f"Event sent to {topic}"
         except Exception as e:

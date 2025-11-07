@@ -7,11 +7,9 @@ This script creates the database schema and populates it with sample data.
 import logging
 import os
 import random
-import string
 import sys
 from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 import psycopg2
 from dotenv import load_dotenv
@@ -20,11 +18,8 @@ from psycopg2.extras import execute_batch
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler('init_db.log')
-    ]
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler(), logging.FileHandler("init_db.log")],
 )
 logger = logging.getLogger(__name__)
 
@@ -33,12 +28,13 @@ load_dotenv()
 
 # Database configuration
 DB_CONFIG = {
-    'dbname': os.getenv('POSTGRES_DB', 'predator_analytics'),
-    'user': os.getenv('POSTGRES_USER', 'predator_user'),
-    'password': os.getenv('POSTGRES_PASSWORD', 'predator_password'),
-    'host': os.getenv('POSTGRES_HOST', 'localhost'),
-    'port': os.getenv('POSTGRES_PORT', '5433')
+    "dbname": os.getenv("POSTGRES_DB", "predator_analytics"),
+    "user": os.getenv("POSTGRES_USER", "predator_user"),
+    "password": os.getenv("POSTGRES_PASSWORD", "predator_password"),
+    "host": os.getenv("POSTGRES_HOST", "localhost"),
+    "port": os.getenv("POSTGRES_PORT", "5433"),
 }
+
 
 class Database:
     """A simple database wrapper for PostgreSQL operations."""
@@ -124,12 +120,13 @@ class Database:
             logger.error(f"❌ Failed to fetch one row: {e}")
             return None
 
+
 def create_schema(db: Database) -> bool:
     """Create the database schema."""
     logger.info("🔄 Creating database schema...")
 
     # Enable UUID extension
-    if not db.execute("CREATE EXTENSION IF NOT EXISTS "uuid-ossp""):
+    if not db.execute('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'):
         return False
 
     # Create tables
@@ -217,7 +214,7 @@ def create_schema(db: Database) -> bool:
         """
         CREATE INDEX IF NOT EXISTS idx_api_keys_user_id ON api_keys(user_id);
         CREATE INDEX IF NOT EXISTS idx_api_keys_key_hash ON api_keys(key_hash);
-        """
+        """,
     ]
 
     for query in schema_queries:
@@ -226,6 +223,7 @@ def create_schema(db: Database) -> bool:
 
     logger.info("✅ Database schema created successfully")
     return True
+
 
 def create_default_roles_and_permissions(db: Database) -> bool:
     """Create default roles and permissions."""
@@ -242,17 +240,14 @@ def create_default_roles_and_permissions(db: Database) -> bool:
         ("audit:read", "View audit logs"),
         ("api_key:manage", "Manage API keys"),
         ("settings:read", "Read application settings"),
-        ("settings:write", "Update application settings")
+        ("settings:write", "Update application settings"),
     ]
 
     # Insert permissions
     permission_ids = {}
     for name, description in permissions:
         # Check if permission exists
-        existing = db.fetch_one(
-            "SELECT id FROM permissions WHERE name = %s",
-            (name,)
-        )
+        existing = db.fetch_one("SELECT id FROM permissions WHERE name = %s", (name,))
 
         if not existing:
             if not db.execute(
@@ -261,7 +256,7 @@ def create_default_roles_and_permissions(db: Database) -> bool:
                 VALUES (%s, %s)
                 RETURNING id
                 """,
-                (name, description)
+                (name, description),
             ):
                 return False
 
@@ -279,28 +274,35 @@ def create_default_roles_and_permissions(db: Database) -> bool:
 
     # Default roles
     roles = [
-        ("admin", "Administrator with full access", [
-            "user:read", "user:write", "user:delete",
-            "role:read", "role:write", "role:delete",
-            "audit:read", "api_key:manage",
-            "settings:read", "settings:write"
-        ]),
-        ("user", "Regular user with basic access", [
-            "user:read", "api_key:manage"
-        ]),
-        ("auditor", "Auditor with read-only access", [
-            "user:read", "role:read", "audit:read", "settings:read"
-        ])
+        (
+            "admin",
+            "Administrator with full access",
+            [
+                "user:read",
+                "user:write",
+                "user:delete",
+                "role:read",
+                "role:write",
+                "role:delete",
+                "audit:read",
+                "api_key:manage",
+                "settings:read",
+                "settings:write",
+            ],
+        ),
+        ("user", "Regular user with basic access", ["user:read", "api_key:manage"]),
+        (
+            "auditor",
+            "Auditor with read-only access",
+            ["user:read", "role:read", "audit:read", "settings:read"],
+        ),
     ]
 
     # Insert roles and role-permission mappings
     role_ids = {}
     for name, description, perm_names in roles:
         # Check if role exists
-        existing = db.fetch_one(
-            "SELECT id FROM roles WHERE name = %s",
-            (name,)
-        )
+        existing = db.fetch_one("SELECT id FROM roles WHERE name = %s", (name,))
 
         if not existing:
             if not db.execute(
@@ -309,7 +311,7 @@ def create_default_roles_and_permissions(db: Database) -> bool:
                 VALUES (%s, %s)
                 RETURNING id
                 """,
-                (name, description)
+                (name, description),
             ):
                 return False
 
@@ -329,7 +331,7 @@ def create_default_roles_and_permissions(db: Database) -> bool:
             # Update role description if needed
             db.execute(
                 "UPDATE roles SET description = %s, updated_at = NOW() WHERE id = %s",
-                (description, role_id)
+                (description, role_id),
             )
 
         # Assign permissions to role
@@ -345,7 +347,7 @@ def create_default_roles_and_permissions(db: Database) -> bool:
                 SELECT 1 FROM role_permissions
                 WHERE role_id = %s AND permission_id = %s
                 """,
-                (role_id, perm_id)
+                (role_id, perm_id),
             )
 
             if not exists:
@@ -354,7 +356,7 @@ def create_default_roles_and_permissions(db: Database) -> bool:
                     INSERT INTO role_permissions (role_id, permission_id)
                     VALUES (%s, %s)
                     """,
-                    (role_id, perm_id)
+                    (role_id, perm_id),
                 ):
                     return False
 
@@ -363,25 +365,20 @@ def create_default_roles_and_permissions(db: Database) -> bool:
     logger.info("✅ Default roles and permissions created successfully")
     return True
 
+
 def create_admin_user(db: Database) -> bool:
     """Create an admin user if one doesn't exist."""
     logger.info("🔄 Creating admin user...")
 
     # Check if admin user already exists
-    admin_exists = db.fetch_one(
-        "SELECT 1 FROM users WHERE username = %s",
-        ("admin",)
-    )
+    admin_exists = db.fetch_one("SELECT 1 FROM users WHERE username = %s", ("admin",))
 
     if admin_exists:
         logger.info("ℹ️ Admin user already exists")
         return True
 
     # Get admin role ID
-    admin_role = db.fetch_one(
-        "SELECT id FROM roles WHERE name = %s",
-        ("admin",)
-    )
+    admin_role = db.fetch_one("SELECT id FROM roles WHERE name = %s", ("admin",))
 
     if not admin_role:
         logger.error("❌ Admin role not found")
@@ -400,15 +397,12 @@ def create_admin_user(db: Database) -> bool:
         VALUES (%s, %s, %s, %s, %s, %s)
         RETURNING id
         """,
-        ("admin", "admin@predator.ai", password_hash, True, "Admin", "User")
+        ("admin", "admin@predator.ai", password_hash, True, "Admin", "User"),
     ):
         return False
 
     # Get the new user ID
-    admin_user = db.fetch_one(
-        "SELECT id FROM users WHERE username = %s",
-        ("admin",)
-    )
+    admin_user = db.fetch_one("SELECT id FROM users WHERE username = %s", ("admin",))
 
     if not admin_user:
         logger.error("❌ Failed to get ID for admin user")
@@ -422,7 +416,7 @@ def create_admin_user(db: Database) -> bool:
         INSERT INTO user_roles (user_id, role_id)
         VALUES (%s, %s)
         """,
-        (admin_user_id, admin_role_id)
+        (admin_user_id, admin_role_id),
     ):
         return False
 
@@ -432,15 +426,13 @@ def create_admin_user(db: Database) -> bool:
     logger.warning("⚠️  Please change the default password immediately after first login!")
     return True
 
+
 def generate_sample_data(db: Database, num_users: int = 10) -> bool:
     """Generate sample data for testing."""
     logger.info(f"🔄 Generating {num_users} sample users...")
 
     # Get user role ID
-    user_role = db.fetch_one(
-        "SELECT id FROM roles WHERE name = %s",
-        ("user",)
-    )
+    user_role = db.fetch_one("SELECT id FROM roles WHERE name = %s", ("user",))
 
     if not user_role:
         logger.error("❌ User role not found")
@@ -449,8 +441,30 @@ def generate_sample_data(db: Database, num_users: int = 10) -> bool:
     user_role_id = user_role[0]
 
     # Generate sample users
-    first_names = ["John", "Jane", "Michael", "Emily", "David", "Sarah", "Robert", "Lisa", "William", "Emma"]
-    last_names = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Miller", "Davis", "Garcia", "Rodriguez", "Wilson"]
+    first_names = [
+        "John",
+        "Jane",
+        "Michael",
+        "Emily",
+        "David",
+        "Sarah",
+        "Robert",
+        "Lisa",
+        "William",
+        "Emma",
+    ]
+    last_names = [
+        "Smith",
+        "Johnson",
+        "Williams",
+        "Brown",
+        "Jones",
+        "Miller",
+        "Davis",
+        "Garcia",
+        "Rodriguez",
+        "Wilson",
+    ]
     domains = ["example.com", "test.com", "demo.org", "predator.ai"]
 
     users = []
@@ -459,22 +473,24 @@ def generate_sample_data(db: Database, num_users: int = 10) -> bool:
     for i in range(1, num_users + 1):
         first_name = random.choice(first_names)
         last_name = random.choice(last_names)
-        username = f"{first_name.lower()}.{last_name.lower()}"
-        email = f"{first_name.lower()}.{last_name.lower()}@{random.choice(domains)}"
+        f"{first_name.lower()}.{last_name.lower()}"
+        f"{first_name.lower()}.{last_name.lower()}@{random.choice(domains)}"
         password_hash = "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW"  # 'secret'
 
-        users.append((
-            f"user{i}",
-            f"user{i}@example.com",
-            password_hash,
-            first_name,
-            last_name,
-            random.choice([True, False]),  # is_active
-            False,  # is_superuser
-            datetime.utcnow() - timedelta(days=random.randint(1, 365)),
-            datetime.utcnow() - timedelta(days=random.randint(1, 30)),
-            datetime.utcnow() - timedelta(days=random.randint(1, 30))
-        ))
+        users.append(
+            (
+                f"user{i}",
+                f"user{i}@example.com",
+                password_hash,
+                first_name,
+                last_name,
+                random.choice([True, False]),  # is_active
+                False,  # is_superuser
+                datetime.utcnow() - timedelta(days=random.randint(1, 365)),
+                datetime.utcnow() - timedelta(days=random.randint(1, 30)),
+                datetime.utcnow() - timedelta(days=random.randint(1, 30)),
+            )
+        )
 
     # Insert users
     user_ids = []
@@ -488,14 +504,13 @@ def generate_sample_data(db: Database, num_users: int = 10) -> bool:
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
             """,
-            user
+            user,
         ):
             return False
 
         # Get the new user ID
         result = db.fetch_one(
-            "SELECT id FROM users WHERE username = %s",
-            (user[0],)  # username is the first element
+            "SELECT id FROM users WHERE username = %s", (user[0],)  # username is the first element
         )
 
         if not result:
@@ -513,7 +528,7 @@ def generate_sample_data(db: Database, num_users: int = 10) -> bool:
         VALUES (%s, %s)
         ON CONFLICT DO NOTHING
         """,
-        user_roles
+        user_roles,
     ):
         return False
 
@@ -541,40 +556,44 @@ def generate_sample_data(db: Database, num_users: int = 10) -> bool:
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15",
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0",
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36",
         ]
         user_agent = random.choice(user_agents)
 
         # Generate timestamps within the last 30 days
-        created_at = datetime.utcnow() - timedelta(days=random.randint(0, 30), hours=random.randint(0, 23))
+        created_at = datetime.utcnow() - timedelta(
+            days=random.randint(0, 30), hours=random.randint(0, 23)
+        )
 
         # Generate some random data for previous and new values
         if random.choice([True, False]):  # 50% chance to have previous/new values
             previous_values = {
                 "field1": f"old_value_{random.randint(1, 100)}",
                 "field2": random.choice([True, False]),
-                "count": random.randint(1, 100)
+                "count": random.randint(1, 100),
             }
             new_values = {
                 "field1": f"new_value_{random.randint(1, 100)}",
                 "field2": not previous_values["field2"],
-                "count": previous_values["count"] + random.randint(1, 10)
+                "count": previous_values["count"] + random.randint(1, 10),
             }
         else:
             previous_values = None
             new_values = None
 
-        audit_logs.append((
-            user_id,
-            action,
-            resource_type,
-            resource_id,
-            json.dumps(previous_values) if previous_values else None,
-            json.dumps(new_values) if new_values else None,
-            ip_address,
-            user_agent,
-            created_at
-        ))
+        audit_logs.append(
+            (
+                user_id,
+                action,
+                resource_type,
+                resource_id,
+                json.dumps(previous_values) if previous_values else None,
+                json.dumps(new_values) if new_values else None,
+                ip_address,
+                user_agent,
+                created_at,
+            )
+        )
 
     # Insert audit logs
     if not db.execute_many(
@@ -585,12 +604,13 @@ def generate_sample_data(db: Database, num_users: int = 10) -> bool:
         )
         VALUES (%s, %s, %s, %s, %s::jsonb, %s::jsonb, %s::inet, %s, %s)
         """,
-        audit_logs
+        audit_logs,
     ):
         return False
 
     logger.info("✅ Generated sample audit logs")
     return True
+
 
 def main():
     """Main function to initialize the database."""
@@ -631,6 +651,7 @@ def main():
 
     finally:
         db.disconnect()
+
 
 if __name__ == "__main__":
     main()

@@ -367,7 +367,7 @@ class DataGovernanceManager:
                     # Замаскувати поле
                     field_name = field_path[-1]
                     if field_name in current_obj:
-                        original_value = current_obj[field_name]
+                        current_obj[field_name]
                         current_obj[field_name] = pii_field.mask_pattern
 
                         logger.debug(f"🔒 Masked PII field: {pii_field.field_path}")

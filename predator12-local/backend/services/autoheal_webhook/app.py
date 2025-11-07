@@ -1,10 +1,9 @@
-import asyncio
 import logging
 import os
 from typing import Any, Dict
 
 import httpx
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI
 
 app = FastAPI(title="PredatorAnalytics AutoHeal Webhook")
 

@@ -47,6 +47,7 @@
 ## 🎯 Key Features
 
 ### ✨ Visual Effects
+
 ```
 🎨 Glassmorphism Design
    └─ Frosted glass cards з blur(20px)
@@ -164,11 +165,13 @@ Optimization:
 ## 🚀 Quick Start
 
 ### 1. View Current Dashboard
+
 ```bash
 open http://localhost:3000
 ```
 
 ### 2. Manual Rebuild
+
 ```bash
 cd predator12-local/frontend
 cp src/main-mega.tsx src/main.tsx
@@ -178,6 +181,7 @@ docker-compose up -d frontend
 ```
 
 ### 3. Automated Rebuild
+
 ```bash
 ./rebuild-mega-dashboard.sh
 ```
@@ -253,15 +257,15 @@ Docs:         /MEGA_DASHBOARD_COMPLETE.md
 
 ## 🎨 Visual Elements Summary
 
-| Component      | Count | Animation    | Color       |
-|----------------|-------|--------------|-------------|
-| Particles      | 50+   | Continuous   | 5 colors    |
-| Metric Cards   | 4     | Hover        | Individual  |
-| Service Cards  | 6     | Hover+Pulse  | Status-based|
-| Charts         | 1     | Real-time    | Purple      |
-| Quick Stats    | 3     | None         | Mixed       |
-| Status Badges  | 6     | Pulse        | Green/Orange|
-| Progress Bars  | 4     | Width        | Gradient    |
+| Component     | Count | Animation   | Color        |
+| ------------- | ----- | ----------- | ------------ |
+| Particles     | 50+   | Continuous  | 5 colors     |
+| Metric Cards  | 4     | Hover       | Individual   |
+| Service Cards | 6     | Hover+Pulse | Status-based |
+| Charts        | 1     | Real-time   | Purple       |
+| Quick Stats   | 3     | None        | Mixed        |
+| Status Badges | 6     | Pulse       | Green/Orange |
+| Progress Bars | 4     | Width       | Gradient     |
 
 ---
 

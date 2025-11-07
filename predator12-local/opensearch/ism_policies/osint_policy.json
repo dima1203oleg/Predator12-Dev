@@ -31,8 +31,6 @@
         "transitions": []
       }
     ],
-    "ism_template": [
-      { "index_patterns": ["osint_*"], "priority": 90 }
-    ]
+    "ism_template": [{ "index_patterns": ["osint_*"], "priority": 90 }]
   }
 }

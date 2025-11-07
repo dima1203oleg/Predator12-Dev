@@ -4,10 +4,9 @@ Provides what-if scenario modeling and simulation capabilities
 """
 
 import asyncio
-import json
 import random
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Union
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException

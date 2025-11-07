@@ -1,5 +1,7 @@
 FROM python:3.11-slim
 
+LABEL Name="agents" Version="1.0.0"
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \

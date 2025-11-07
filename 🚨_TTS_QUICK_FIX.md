@@ -1,16 +1,19 @@
 # 🎤 Швидке вирішення проблеми TTS
 
 ## Проблема
+
 Система чує голосові команди (STT працює), але не дає голосової відповіді (TTS не працює).
 
 ## ✅ Швидке рішення
 
 ### 1. Перевірте браузер
+
 - **Chrome/Edge** - найкраща підтримка Web Speech API
 - **Safari** - обмежена підтримка
 - **Firefox** - може не працювати
 
 ### 2. Перевірте налаштування браузера
+
 - Дозвольте доступ до мікрофона
 - Перевірте що звук не вимкнений
 - Закрийте інші вкладки що можуть використовувати аудіо
@@ -27,12 +30,12 @@
 
 ```javascript
 // Перевірка доступності Speech Synthesis
-console.log('speechSynthesis:', window.speechSynthesis);
-console.log('voices:', window.speechSynthesis.getVoices());
+console.log("speechSynthesis:", window.speechSynthesis);
+console.log("voices:", window.speechSynthesis.getVoices());
 
 // Тест озвучування
-const utterance = new SpeechSynthesisUtterance('Тест українського озвучування');
-utterance.lang = 'uk-UA';
+const utterance = new SpeechSynthesisUtterance("Тест українського озвучування");
+utterance.lang = "uk-UA";
 window.speechSynthesis.speak(utterance);
 ```
 
@@ -56,6 +59,7 @@ window.speechSynthesis.speak(utterance);
 ## 🚨 Якщо все ще не працює
 
 ### Варіант 1: Перезапуск
+
 ```bash
 # Перезапустіть браузер
 # Очистіть кеш (Ctrl+Shift+Delete)
@@ -63,18 +67,22 @@ window.speechSynthesis.speak(utterance);
 ```
 
 ### Варіант 2: Інший браузер
+
 ```bash
 # Chrome - найкраща підтримка
-# Edge - також добре працює  
+# Edge - також добре працює
 # Safari - обмежено, але працює
 ```
 
 ### Варіант 3: Налаштування мови
+
 ```javascript
 // В консолі браузера
 const voices = speechSynthesis.getVoices();
-console.log('Доступні українські голоси:',
-  voices.filter(v => v.lang.includes('uk')));
+console.log(
+  "Доступні українські голоси:",
+  voices.filter((v) => v.lang.includes("uk")),
+);
 ```
 
 ## ✅ Успішний результат
@@ -82,7 +90,7 @@ console.log('Доступні українські голоси:',
 Якщо все працює правильно:
 
 1. **Натискаєте мікрофон** 🎤
-2. **Говорите команду** (наприклад: "привіт")  
+2. **Говорите команду** (наприклад: "привіт")
 3. **Чуєте звуковий сигнал** що команда розпізнана
 4. **Система озвучує відповідь** українською мовою
 

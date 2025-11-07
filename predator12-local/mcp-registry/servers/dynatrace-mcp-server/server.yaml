@@ -27,7 +27,7 @@ config:
   env:
     - name: DT_ENVIRONMENT
       example: https://abc12345.apps.dynatrace.com
-      value: '{{dynatrace-mcp-server.url}}'
+      value: "{{dynatrace-mcp-server.url}}"
   parameters:
     type: object
     properties:

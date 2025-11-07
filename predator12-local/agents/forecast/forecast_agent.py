@@ -8,12 +8,11 @@ import asyncio
 import json
 import os
 from dataclasses import dataclass
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 import aiohttp
 import numpy as np
-import pandas as pd
 import structlog
 
 logger = structlog.get_logger(__name__)
@@ -39,7 +38,7 @@ class ForecastResult:
 
 
 class ForecastModelSelector:
-    """Інтелектуальний вибір моделей для прогнозування"""
+    """Інтелектуальний вибір моделей для прогнозування."""
 
     def __init__(self):
         # Спеціалізовані моделі для прогнозування
@@ -61,7 +60,7 @@ class ForecastModelSelector:
         }
 
     def select_for_time_series(self, data_points: int, complexity: float) -> str:
-        """Вибір моделі для аналізу часових рядів"""
+        """Вибір моделі для аналізу часових рядів."""
         if data_points > 10000 and complexity > 0.8:
             return self.time_series_models["primary"]
         elif complexity > 0.6:
@@ -70,19 +69,19 @@ class ForecastModelSelector:
             return self.time_series_models["pattern_detection"]
 
     def select_for_seasonality(self, seasonal_patterns: int) -> str:
-        """Вибір моделі для аналізу сезонності"""
+        """Вибір моделі для аналізу сезонності."""
         if seasonal_patterns > 2:
             return self.seasonality_models["advanced"]
         else:
             return self.seasonality_models["basic"]
 
     def select_for_scenario(self, scenario_type: str) -> str:
-        """Вибір моделі для сценарного моделювання"""
+        """Вибір моделі для сценарного моделювання."""
         return self.scenario_models.get(scenario_type, self.scenario_models["what_if"])
 
 
 class ForecastAgent:
-    """AI-powered агент прогнозування з ensemble методами"""
+    """AI-powered агент прогнозування з ensemble методами."""
 
     def __init__(self):
         self.model_selector = ForecastModelSelector()
@@ -91,13 +90,13 @@ class ForecastAgent:
         self.session: Optional[aiohttp.ClientSession] = None
 
     async def get_session(self) -> aiohttp.ClientSession:
-        """Отримати HTTP сесію"""
+        """Отримати HTTP сесію."""
         if self.session is None or self.session.closed:
             self.session = aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=60))
         return self.session
 
     async def query_model(self, model_name: str, messages: List[Dict[str, str]]) -> str:
-        """Запит до моделі через SDK"""
+        """Запит до моделі через SDK."""
         try:
             session = await self.get_session()
             payload = {
@@ -120,7 +119,7 @@ class ForecastAgent:
             return "Error in model query"
 
     async def detect_seasonality(self, data: List[float]) -> Dict[str, Any]:
-        """AI-powered детекція сезонності"""
+        """AI-powered детекція сезонності."""
         try:
             # Підготовка даних для AI аналізу
             data_stats = {
@@ -167,7 +166,7 @@ class ForecastAgent:
             return {"error": str(e)}
 
     def _recommend_algorithms(self, seasonal_patterns: int, data_length: int) -> List[str]:
-        """Рекомендація алгоритмів на основі характеристик даних"""
+        """Рекомендація алгоритмів на основі характеристик даних."""
         recommendations = []
 
         if seasonal_patterns > 0:
@@ -182,7 +181,7 @@ class ForecastAgent:
         return recommendations[:3]  # Максимум 3 алгоритми для ensemble
 
     async def generate_forecast(self, request: ForecastRequest) -> ForecastResult:
-        """Генерація прогнозу з ensemble методами"""
+        """Генерація прогнозу з ensemble методами."""
         try:
             logger.info(f"Generating forecast for dataset {request.dataset_id}")
 
@@ -267,7 +266,7 @@ class ForecastAgent:
     async def what_if_analysis(
         self, base_forecast: ForecastResult, scenarios: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
-        """Сценарний аналіз "що якщо" """
+        """Сценарний аналіз "що якщо"."""
         try:
             logger.info(f"Running what-if analysis with {len(scenarios)} scenarios")
 
@@ -314,13 +313,13 @@ class ForecastAgent:
             return {"error": str(e)}
 
     async def close(self):
-        """Закрити HTTP сесію"""
+        """Закрити HTTP сесію."""
         if self.session and not self.session.closed:
             await self.session.close()
 
 
 async def main():
-    """Тестування ForecastAgent"""
+    """Тестування ForecastAgent."""
     print("📈 FORECAST AGENT DEMO")
     print("=" * 50)
 

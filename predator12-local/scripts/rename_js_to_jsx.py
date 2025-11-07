@@ -12,7 +12,6 @@ This script:
 
 This is an automated, reversible change (keeps git history). Review the resulting branch and run the dev server.
 """
-import os
 import re
 import subprocess
 from pathlib import Path

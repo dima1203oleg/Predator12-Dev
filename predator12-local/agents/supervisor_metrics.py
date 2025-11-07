@@ -1,32 +1,22 @@
 #!/usr/bin/env python3
-"""
-NEXUS_SUPERVISOR with Prometheus Metrics
-"""
+"""NEXUS_SUPERVISOR with Prometheus Metrics."""
 
-import time
 
-from observability.metrics import (
-    AGENT_TASKS,
-    CIRCUIT_BREAKER_STATE,
-    REQUEST_COUNT,
-    REQUEST_LATENCY,
-    RequestMetrics,
-    start_metrics_server,
-)
+from observability.metrics import RequestMetrics, start_metrics_server
 
 # Import base supervisor class
 from .supervisor import AgentSupervisor as Supervisor
 
 
 class MetricsSupervisor(Supervisor):
-    """Supervisor with integrated Prometheus metrics"""
+    """Supervisor with integrated Prometheus metrics."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.metrics_started = False
 
     def start_metrics(self, port=8001):
-        """Start metrics server"""
+        """Start metrics server."""
         if not self.metrics_started:
             start_metrics_server(port)
             self.metrics_started = True

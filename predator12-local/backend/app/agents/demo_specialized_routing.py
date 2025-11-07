@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
-"""
-🎯 Demonstration: Proper Model Distribution by Agent Specialization
-Демонстрація правильного розподілу 58 безкоштовних моделей за спеціалізацією агентів
-"""
+"""🎯 Demonstration: Proper Model Distribution by Agent Specialization
+Демонстрація правильного розподілу 58 безкоштовних моделей за спеціалізацією
+агентів."""
 
-from specialized_model_router import AgentType, SpecializedModelRouter, TaskComplexity
+from specialized_model_router import SpecializedModelRouter, TaskComplexity
 
 
 def demonstrate_specialized_routing():
-    """Демонстрація спеціалізованого роутингу моделей"""
+    """Демонстрація спеціалізованого роутингу моделей."""
 
     print("🤖 PREDATOR ANALYTICS - SPECIALIZED MODEL DISTRIBUTION DEMO")
     print("=" * 80)
@@ -190,7 +189,7 @@ def demonstrate_specialized_routing():
             task_type = test["type"]
 
             model = router.get_optimal_model(agent, complexity, task_type)
-            embedding_model = router.get_embedding_model(agent)
+            router.get_embedding_model(agent)
 
             complexity_icon = {
                 TaskComplexity.SIMPLE: "🟢",

@@ -3,11 +3,8 @@
 Повний тест системи Predator11 - перевірка всіх агентів та компонентів
 """
 
-import json
 import subprocess
 import sys
-import time
-from datetime import datetime
 from pathlib import Path
 
 import requests

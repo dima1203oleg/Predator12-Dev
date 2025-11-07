@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
-"""
-Simplified Backend API for Predator Analytics
-Fixed version without import issues
-"""
+"""Simplified Backend API for Predator Analytics Fixed version without import
+issues."""
 
-import json
 from typing import Any, Dict, List
 
 import numpy as np
@@ -195,7 +192,7 @@ async def predict_anomalies(request: AnomalyData):
 
 @app.post("/simulations/run")
 async def run_simulation(request: SimulationRequest):
-    """Run what-if scenario simulation"""
+    """Run what-if scenario simulation."""
 
     simulation_id = len(mock_simulations) + 1
 
@@ -220,7 +217,7 @@ async def run_simulation(request: SimulationRequest):
 
 @app.get("/datasets")
 async def get_datasets():
-    """Get available datasets"""
+    """Get available datasets."""
     return {
         "datasets": [
             {
@@ -250,7 +247,7 @@ async def get_datasets():
 
 @app.get("/metrics")
 async def get_system_metrics():
-    """System performance metrics"""
+    """System performance metrics."""
     return {
         "system_status": "operational",
         "api_uptime": "99.7%",

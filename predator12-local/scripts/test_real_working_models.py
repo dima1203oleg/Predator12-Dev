@@ -8,7 +8,7 @@ import asyncio
 import json
 import logging
 from datetime import datetime
-from typing import Any, Dict, Tuple
+from typing import Dict, Tuple
 
 import aiohttp
 
@@ -93,6 +93,7 @@ SERVERS = [
 
 class RealModelTester:
     def __init__(self):
+        """Ініціалізує тестер реальних моделей."""
         self.results = {
             "tested_at": datetime.now().isoformat(),
             "total_models": len(REAL_MODELS),
@@ -104,7 +105,7 @@ class RealModelTester:
     async def test_model_on_server(
         self, session: aiohttp.ClientSession, model: str, server: Dict[str, str]
     ) -> Tuple[bool, str]:
-        """Тестує одну модель на одному сервері"""
+        """Тестує одну модель на одному сервері."""
         try:
             # Основний OpenAI-compatible endpoint
             endpoint = f"{server['url']}/v1/chat/completions"
@@ -129,6 +130,8 @@ class RealModelTester:
                         content = data["choices"][0].get("message", {}).get("content", "")
                         logging.info(f"✅ {model} працює на {server['name']}: {content[:50]}")
                         return True, f"Response: {content[:100]}"
+                    else:
+                        return False, "No choices in response"
 
                 elif response.status == 404:
                     return False, "Model not found (404)"
@@ -151,15 +154,19 @@ class RealModelTester:
             logging.error(f"❌ Помилка для {model} на {server['name']}: {error_msg}")
             return False, error_msg
 
+        return False, "Unknown error"
+
     async def test_all_models(self):
-        """Тестує всі моделі на всіх серверах"""
+        """Тестує всі моделі на всіх серверах."""
         logging.info(
-            f"🚀 Починаю тестування {len(REAL_MODELS)} реальних моделей на {len(SERVERS)} серверах..."
+            "🚀 Починаю тестування %d реальних моделей на %d серверах...",
+            len(REAL_MODELS),
+            len(SERVERS),
         )
 
         async with aiohttp.ClientSession() as session:
             for i, model in enumerate(REAL_MODELS, 1):
-                logging.info(f"\n📊 [{i}/{len(REAL_MODELS)}] Тестую модель: {model}")
+                logging.info("\n📊 [%d/%d] Тестую модель: %s", i, len(REAL_MODELS), model)
 
                 model_results = {}
                 model_working = False
@@ -195,18 +202,20 @@ class RealModelTester:
                         self.results["summary"]["failed"] += 1
 
                     self.results["summary"]["errors"].append({"model": model, "reason": message})
-                    logging.error(f"❌ {model} - НЕ ПРАЦЮЄ: {message}")
+                    logging.error("❌ %s - НЕ ПРАЦЮЄ: %s", model, message)
 
                 # Пауза між тестами для rate limiting
                 await asyncio.sleep(1)
 
+    def log_summary(self):
+        """Логує підсумкову статистику після тестування."""
         logging.info("🏁 Тестування завершено!")
-        logging.info(f"✅ Працюючих моделей: {self.results['summary']['working']}")
-        logging.info(f"❌ Не працюючих моделей: {self.results['summary']['failed']}")
-        logging.info(f"🚫 Недоступних моделей: {self.results['summary']['unavailable']}")
+        logging.info("✅ Працюючих моделей: %d", self.results["summary"]["working"])
+        logging.info("❌ Не працюючих моделей: %d", self.results["summary"]["failed"])
+        logging.info("🚫 Недоступних моделей: %d", self.results["summary"]["unavailable"])
 
     def save_results(self):
-        """Зберігає результати тестування"""
+        """Зберігає результати тестування."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
         # Детальний звіт
@@ -274,7 +283,7 @@ class RealModelTester:
 
 
 async def main():
-    """Головна функція"""
+    """Головна функція."""
     print("🧪 ТЕСТУВАННЯ РЕАЛЬНИХ AI МОДЕЛЕЙ З СЕРВЕРА")
     print("=" * 50)
 
@@ -290,7 +299,11 @@ async def main():
         print(
             f"🚫 Недоступних моделей: {tester.results['summary']['unavailable']}/{len(REAL_MODELS)}"
         )
-        print(f"🎯 Успішність: {(tester.results['summary']['working']/len(REAL_MODELS)*100):.1f}%")
+        print(
+            "🎯 Успішність: {:.1f}%".format(
+                tester.results["summary"]["working"] / len(REAL_MODELS) * 100
+            )
+        )
         print(f"\n📊 Файли збережені:")
         print(f"   📄 Детальний звіт: {report_path}")
         print(f"   📋 Короткий звіт: {summary_path}")
@@ -301,11 +314,17 @@ async def main():
             model for model, result in tester.results["results"].items() if result["working"]
         ]
         if len(working_models) > 20:  # Достатньо для розподілу
-            print(f"\n🎯 Створюю оновлений розподіл з {len(working_models)} працюючими моделями...")
+            print(
+                "\n🎯 Створюю оновлений розподіл з {} працюючими моделями...".format(
+                    len(working_models)
+                )
+            )
             await create_optimized_distribution(working_models)
         else:
             print(
-                f"\n⚠️ Недостатньо працюючих моделей ({len(working_models)}) для повного розподілу"
+                "\n⚠️ Недостатньо працюючих моделей ({}) для повного розподілу.".format(
+                    len(working_models)
+                )
             )
 
     except Exception as e:
@@ -314,7 +333,7 @@ async def main():
 
 
 async def create_optimized_distribution(working_models):
-    """Створює оптимізований розподіл тільки з працюючими моделями"""
+    """Створює оптимізований розподіл тільки з працюючими моделями."""
 
     # Імпортуємо оригінальний розподіл
     import sys
@@ -397,7 +416,7 @@ async def create_optimized_distribution(working_models):
     with open(optimized_path, "w", encoding="utf-8") as f:
         json.dump(optimized_config, f, indent=2, ensure_ascii=False)
 
-    print(f"🎯 Оптимізований розподіл збережено: {optimized_path}")
+    print(f"🎯 Оптимізований розподіл збережено: {optimized_path}.")
 
 
 if __name__ == "__main__":

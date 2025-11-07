@@ -3,6 +3,7 @@
 ## 1. Визначте задачу (наприклад, пошук нових схем, аномалій, фірм-прокладок)
 
 ## 2. Створіть клас агента у agents/
+
 ```python
 class NewSchemeAgent:
     def analyze(self, data):
@@ -11,6 +12,7 @@ class NewSchemeAgent:
 ```
 
 ## 3. Інтегруйте агента у ETL/аналітичний пайплайн
+
 ```python
 from agents.new_scheme_agent import NewSchemeAgent
 agent = NewSchemeAgent()

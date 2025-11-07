@@ -33,7 +33,7 @@ async def get_notification_preferences(current_user: User = Depends(get_current_
         # Тут би був код для отримання з бази даних
         # У спрощеному випадку, повертаємо стандартні налаштування
         # В реальному використанні - витяг з PostgreSQL/Redis
-        user_id = current_user.id
+        current_user.id
 
         # Для прикладу Redis:
         # preferences_json = await redis.get(
@@ -67,7 +67,7 @@ async def update_notification_preferences(
     Оновити налаштування сповіщень для поточного користувача
     """
     try:
-        user_id = current_user.id
+        current_user.id
 
         # Встановлюємо час оновлення
         preferences.updated_at = datetime.utcnow()
@@ -116,7 +116,7 @@ async def reset_notification_preferences(current_user: User = Depends(get_curren
     Скинути налаштування сповіщень до стандартних
     """
     try:
-        user_id = current_user.id
+        current_user.id
 
         # Тут код для видалення налаштувань з бази даних
         # Приклад для Redis:

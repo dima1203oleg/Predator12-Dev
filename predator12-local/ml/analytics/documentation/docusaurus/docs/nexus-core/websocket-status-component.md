@@ -17,10 +17,10 @@ The `WebSocketStatus` component provides standardized visual feedback about WebS
 ### Basic Implementation
 
 ```jsx
-import WebSocketStatus from '../components/nexus_visuals/WebSocketStatus';
+import WebSocketStatus from "../components/nexus_visuals/WebSocketStatus";
 
 // In your component
-const [connectionStatus, setConnectionStatus] = useState('disconnected');
+const [connectionStatus, setConnectionStatus] = useState("disconnected");
 
 // Update connectionStatus to 'connecting' or 'connected' based on WebSocket events
 
@@ -49,16 +49,16 @@ Use the minimal mode when space is limited or when you need a less obtrusive ind
 
 ### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `wsEndpoint` | string | Required | The WebSocket endpoint this status reflects |
-| `connectionStatus` | string | Required | Current connection status: 'connected', 'connecting', or 'disconnected' |
-| `onConnected` | function | - | Callback fired when connection is established |
-| `onDisconnected` | function | - | Callback fired when connection is lost |
-| `showReconnectButton` | boolean | true | Whether to show the reconnect button when disconnected |
-| `onReconnect` | function | - | Callback to attempt reconnection |
-| `minimal` | boolean | false | Whether to use the minimal display mode |
-| `className` | string | '' | Additional CSS class names |
+| Prop                  | Type     | Default  | Description                                                             |
+| --------------------- | -------- | -------- | ----------------------------------------------------------------------- |
+| `wsEndpoint`          | string   | Required | The WebSocket endpoint this status reflects                             |
+| `connectionStatus`    | string   | Required | Current connection status: 'connected', 'connecting', or 'disconnected' |
+| `onConnected`         | function | -        | Callback fired when connection is established                           |
+| `onDisconnected`      | function | -        | Callback fired when connection is lost                                  |
+| `showReconnectButton` | boolean  | true     | Whether to show the reconnect button when disconnected                  |
+| `onReconnect`         | function | -        | Callback to attempt reconnection                                        |
+| `minimal`             | boolean  | false    | Whether to use the minimal display mode                                 |
+| `className`           | string   | ''       | Additional CSS class names                                              |
 
 ## Connection States
 
@@ -75,24 +75,24 @@ This component is designed to work with the WebSocket connection pattern used th
 
 ```jsx
 // Initialize state
-const [connectionStatus, setConnectionStatus] = useState('disconnected');
+const [connectionStatus, setConnectionStatus] = useState("disconnected");
 const ws = useRef(null);
 
 // Connection function
 const connectWebSocket = () => {
-  setConnectionStatus('connecting');
+  setConnectionStatus("connecting");
   ws.current = new WebSocket(wsUrl);
 
   ws.current.onopen = () => {
-    setConnectionStatus('connected');
+    setConnectionStatus("connected");
   };
 
   ws.current.onclose = () => {
-    setConnectionStatus('disconnected');
+    setConnectionStatus("disconnected");
   };
 
   ws.current.onerror = () => {
-    setConnectionStatus('disconnected');
+    setConnectionStatus("disconnected");
   };
 };
 

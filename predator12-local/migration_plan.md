@@ -1,26 +1,31 @@
 # 📋 План міграції даних з Predator11 на Predator12
 
 ## 🎯 Мета
+
 Перенести всі дані з контейнерного середовища Predator11 у локальну розробницьку версію Predator12 без втрати даних.
 
 ## 📊 Що потрібно мігрувати
 
 ### 1. База даних PostgreSQL
+
 - **Джерело**: Docker контейнер `predator_db` або `postgres`
 - **Призначення**: Локальний PostgreSQL на `127.0.0.1:5432`
 - **Обсяг**: ~100-500MB (залежить від даних)
 
 ### 2. Файлове сховище (MinIO → Local)
+
 - **Джерело**: MinIO контейнер `/data` bucket
 - **Призначення**: `./local_storage/`
 - **Обсяг**: ~50-200MB
 
 ### 3. Векторна БД (Qdrant)
+
 - **Джерело**: Qdrant контейнер
 - **Призначення**: Mock або локальний Qdrant
 - **Обсяг**: ~10-50MB
 
 ### 4. Redis дані (опційно)
+
 - **Джерело**: Redis контейнер
 - **Призначення**: Локальний Redis або не потрібно для dev
 
@@ -48,6 +53,7 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ### Крок 2: Експорт даних з контейнерів (15-20 хв)
 
 #### 2.1. Експорт PostgreSQL
+
 ```bash
 # Варіант А: Автоматичний експорт
 make dump
@@ -64,6 +70,7 @@ docker exec predator11-db-1 pg_dump -U postgres -F c -d predator11 > backups/pre
 ```
 
 #### 2.2. Експорт файлів з MinIO
+
 ```bash
 # Створити папку для експорту
 mkdir -p backups/minio_export
@@ -78,6 +85,7 @@ mc mirror predator/predator11 backups/minio_export/
 ```
 
 #### 2.3. Експорт Qdrant векторів (опційно)
+
 ```bash
 # Створити snapshot через API
 curl -X POST "http://localhost:6333/collections/predator_vectors/snapshots" \
@@ -104,6 +112,7 @@ psql -h 127.0.0.1 -U predator_user -d predator -c "SELECT version();"
 ### Крок 4: Імпорт даних (10-15 хв)
 
 #### 4.1. Імпорт PostgreSQL
+
 ```bash
 # Варіант А: Автоматичний імпорт
 make restore
@@ -116,6 +125,7 @@ pg_restore -h 127.0.0.1 -U predator_user -d predator --clean --if-exists backups
 ```
 
 #### 4.2. Імпорт файлів
+
 ```bash
 # Копіювати файли в локальне сховище
 cp -r backups/minio_export/* local_storage/
@@ -125,6 +135,7 @@ chmod -R 755 local_storage/
 ```
 
 #### 4.3. Налаштування моделей
+
 ```bash
 # Скопіювати конфігурації моделей
 cp Predator11/agents/registry_production.yaml agents/registry_local.yaml
@@ -237,6 +248,7 @@ make smoke
 ## 🚨 Можливі проблеми та рішення
 
 ### Проблема 1: Помилка підключення до PostgreSQL
+
 ```bash
 # Рішення
 brew services restart postgresql
@@ -245,6 +257,7 @@ tail -f /usr/local/var/log/postgres.log
 ```
 
 ### Проблема 2: Дамп занадто великий
+
 ```bash
 # Використати бінарний формат з компресією
 docker exec predator_db pg_dump -U postgres -F c -Z 9 -f /tmp/dump.gz predator11
@@ -252,6 +265,7 @@ docker cp predator_db:/tmp/dump.gz backups/
 ```
 
 ### Проблема 3: Конфлікт версій схеми
+
 ```bash
 # Видалити всі таблиці і створити заново
 psql -U predator_user -d predator -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
@@ -259,6 +273,7 @@ psql -U predator_user -d predator -c "DROP SCHEMA public CASCADE; CREATE SCHEMA 
 ```
 
 ### Проблема 4: Відсутні залежності Python
+
 ```bash
 # Перевстановити все
 rm -rf .venv
@@ -270,6 +285,7 @@ pip install -r backend/requirements.txt
 ## 📈 Очікувані результати
 
 Після успішної міграції:
+
 - ✅ Локальна БД містить всі дані з продакшн
 - ✅ Backend API працює на `localhost:8000`
 - ✅ Frontend працює на `localhost:3000`
@@ -286,6 +302,7 @@ pip install -r backend/requirements.txt
 ## 📞 Допомога
 
 Якщо виникли проблеми:
+
 1. Перевірте логи: `tail -f logs/predator.log`
 2. Перевірте статус: `make status`
 3. Запустіть діагностику: `make smoke`

@@ -12,11 +12,9 @@ import time
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Generator, List, Optional
+from typing import Dict, List
 
 import pandas as pd
-import psycopg2
-from psycopg2.extras import execute_values
 
 # Configure logging
 logging.basicConfig(

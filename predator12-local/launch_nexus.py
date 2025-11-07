@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
-"""
-🚀 ПОВНИЙ ЗАПУСК PREDATOR ANALYTICS NEXUS CORE V2.0
-Система автоматичного самовдосконалення та бізнес-аналітики
-"""
+"""🚀 ПОВНИЙ ЗАПУСК PREDATOR ANALYTICS NEXUS CORE V2.0 Система автоматичного
+самовдосконалення та бізнес-аналітики."""
 
-import json
 import os
 import subprocess
 import time
@@ -15,7 +12,7 @@ import requests
 
 
 class NexusLauncher:
-    """Запуск та моніторинг системи Nexus"""
+    """Запуск та моніторинг системи Nexus."""
 
     def __init__(self):
         self.services = {
@@ -28,7 +25,7 @@ class NexusLauncher:
         }
 
     def print_header(self):
-        """Відображення заголовка"""
+        """Відображення заголовка."""
         print("=" * 80)
         print("🚀 PREDATOR ANALYTICS NEXUS CORE V2.0")
         print("   Система безперервного самовдосконалення та бізнес-аналітики")
@@ -41,7 +38,7 @@ class NexusLauncher:
         print()
 
     def check_docker(self):
-        """Перевірка Docker"""
+        """Перевірка Docker."""
         print("🔍 Перевірка Docker...")
         try:
             result = subprocess.run(
@@ -55,7 +52,7 @@ class NexusLauncher:
             return False
 
     def start_services(self):
-        """Запуск всіх сервісів"""
+        """Запуск всіх сервісів."""
         print("🐳 Запуск контейнерів...")
 
         try:
@@ -81,7 +78,7 @@ class NexusLauncher:
             return False
 
     def wait_for_services(self, timeout=180):
-        """Очікування запуску сервісів"""
+        """Очікування запуску сервісів."""
         print(f"⏳ Очікування запуску сервісів ({timeout}s)...")
 
         for i in range(timeout):
@@ -98,7 +95,7 @@ class NexusLauncher:
         return False
 
     def check_services_health(self):
-        """Перевірка здоров'я сервісів"""
+        """Перевірка здоров'я сервісів."""
         ready_count = 0
 
         # Перевірка основних сервісів
@@ -120,7 +117,7 @@ class NexusLauncher:
         return ready_count
 
     def show_services_status(self):
-        """Відображення статусу сервісів"""
+        """Відображення статусу сервісів."""
         print("\n🌐 ДОСТУПНІ ІНТЕРФЕЙСИ:")
         print("=" * 50)
 
@@ -137,7 +134,7 @@ class NexusLauncher:
         print("=" * 50)
 
     def run_agent_tests(self):
-        """Запуск тестів агентів"""
+        """Запуск тестів агентів."""
         print("\n🤖 ТЕСТУВАННЯ АГЕНТІВ САМОВДОСКОНАЛЕННЯ:")
         print("=" * 50)
 
@@ -172,7 +169,7 @@ class NexusLauncher:
                 print(f"   ⚠️  Скрипт {script} не знайдено")
 
     def open_interfaces(self):
-        """Відкриття web-інтерфейсів"""
+        """Відкриття web-інтерфейсів."""
         print("\n🌐 ВІДКРИТТЯ WEB-ІНТЕРФЕЙСІВ:")
         print("=" * 50)
 
@@ -188,7 +185,7 @@ class NexusLauncher:
             print(f"   📋 Відкрийте вручну: {main_url}")
 
     def show_final_summary(self):
-        """Фінальне резюме"""
+        """Фінальне резюме."""
         print("\n" + "=" * 80)
         print("🎉 СИСТЕМА PREDATOR ANALYTICS NEXUS CORE V2.0 ЗАПУЩЕНА!")
         print("=" * 80)
@@ -222,7 +219,7 @@ class NexusLauncher:
         print("=" * 80)
 
     def run(self):
-        """Основна функція запуску"""
+        """Основна функція запуску."""
         self.print_header()
 
         # Перевірка Docker
@@ -252,7 +249,7 @@ class NexusLauncher:
 
 
 def main():
-    """Головна функція"""
+    """Головна функція."""
     launcher = NexusLauncher()
 
     try:

@@ -11,6 +11,7 @@
 ### 🎨 **Візуальні Ефекти**
 
 #### 1. **Animated Particle Background**
+
 - ✅ Canvas-based анімація з 50+ частинками
 - ✅ Динамічні з'єднання між частинками (distance-based)
 - ✅ 5 різних кольорів з напівпрозорістю
@@ -18,6 +19,7 @@
 - ✅ Smooth 60 FPS анімація
 
 #### 2. **Glassmorphism Cards**
+
 - ✅ Backdrop blur + rgba transparency
 - ✅ Subtle border glow
 - ✅ Hover animations (translateY/translateX)
@@ -25,6 +27,7 @@
 - ✅ Border color transitions
 
 #### 3. **Gradient Effects**
+
 - ✅ Multi-stop linear gradients для тексту
 - ✅ Radial gradients для декоративних елементів
 - ✅ Text shadow з glow effect
@@ -35,7 +38,9 @@
 ## 📊 **Компоненти**
 
 ### 1. **MetricCard** - Системні Метрики
+
 **Features:**
+
 - 📈 Real-time значення (CPU, Memory, Disk, Network)
 - 🎯 Анімований progress bar з gradient
 - 📉 Trend indicators (↗/↘ з %)
@@ -44,6 +49,7 @@
 - 🎭 Color-coded по типу метрики
 
 **Metrics:**
+
 ```typescript
 {
   cpu: 45%,      // Purple (#8B5CF6)
@@ -54,7 +60,9 @@
 ```
 
 ### 2. **ServiceCard** - Статус Сервісів
+
 **Features:**
+
 - 🟢 Status indicator з pulse animation
 - 📊 Uptime percentage
 - 🔢 Requests per minute
@@ -62,6 +70,7 @@
 - ⚡ Hover slide effect
 
 **Services:**
+
 - Backend API (99.9% uptime)
 - PostgreSQL (100% uptime)
 - Redis Cache (99.8% uptime)
@@ -70,7 +79,9 @@
 - MinIO Storage (100% uptime)
 
 ### 3. **MiniChart** - Real-Time Графік
+
 **Features:**
+
 - 📈 Canvas-based line chart
 - 🎨 Gradient fill під лінією
 - ⚡ Smooth animations
@@ -78,7 +89,9 @@
 - 🔄 Real-time data updates
 
 ### 4. **Quick Stats** - Швидкі Статистики
+
 **Metrics:**
+
 - 📊 Total Requests: 12.4K (+12%)
 - ⚡ Avg Response Time: 45ms (-8%)
 - 🚨 Error Rate: 0.02% (-15%)
@@ -88,19 +101,32 @@
 ## 🎯 **Анімації**
 
 ### CSS Animations
+
 ```css
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 ```
 
 ### Interactive Animations
+
 - 🎯 Hover lift effects (translateY -5px)
 - 💫 Box-shadow glow transitions
 - 🎨 Border color animations
@@ -112,10 +138,12 @@
 ## 🎨 **Колірна Схема**
 
 ### Background
+
 - Gradient: `#0a0a14` → `#1a1a2e` → `#0f0f1e`
 - Particles: 5 accent colors з alpha channels
 
 ### Accent Colors
+
 ```typescript
 Purple: #8B5CF6  // CPU, Primary
 Pink:   #EC4899  // Memory
@@ -126,6 +154,7 @@ Red:    #EF4444  // Error, Offline
 ```
 
 ### Glass Effects
+
 - Background: `rgba(255, 255, 255, 0.05)`
 - Border: `rgba(255, 255, 255, 0.1)`
 - Backdrop filter: `blur(20px)`
@@ -135,11 +164,13 @@ Red:    #EF4444  // Error, Offline
 ## 📱 **Responsive Design**
 
 ### Breakpoints
+
 - Desktop: 1400px max-width container
 - Tablet: Auto-fit grid (min 280px)
 - Mobile: Single column stack
 
 ### Grid Layouts
+
 ```css
 /* Metrics Grid */
 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -155,6 +186,7 @@ gap: 24px;
 ## 🚀 **Performance**
 
 ### Optimization
+
 - ✅ RequestAnimationFrame для smooth animations
 - ✅ Canvas для particle system (GPU accelerated)
 - ✅ CSS transforms замість position
@@ -162,11 +194,14 @@ gap: 24px;
 - ✅ Debounced resize handlers
 
 ### Real-Time Updates
+
 ```typescript
 useEffect(() => {
   const interval = setInterval(() => {
     // Update metrics every 2 seconds
-    setMetrics({ /* dynamic values */ });
+    setMetrics({
+      /* dynamic values */
+    });
   }, 2000);
   return () => clearInterval(interval);
 }, [metrics]);
@@ -177,10 +212,12 @@ useEffect(() => {
 ## 🎭 **Typography**
 
 ### Fonts
+
 - Primary: Inter
 - Fallback: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto
 
 ### Font Sizes
+
 - Mega Title: 48px (bold 900)
 - Section Headers: 24px (bold 700)
 - Metric Values: 28px (bold 700)
@@ -192,12 +229,14 @@ useEffect(() => {
 ## 🛠 **Технічний Stack**
 
 ### Core
+
 - React 18+ (createRoot)
 - TypeScript (strict types)
 - Canvas API (particles + charts)
 - CSS-in-JS (inline styles)
 
 ### Features
+
 - ✅ Real-time data simulation
 - ✅ State management (useState, useEffect)
 - ✅ Refs для canvas (useRef)
@@ -229,6 +268,7 @@ frontend/
 ## 🎯 **Build Process**
 
 ### Commands
+
 ```bash
 # 1. Backup поточної версії
 cp src/main.tsx src/main-backup-v3.tsx
@@ -250,6 +290,7 @@ docker-compose up -d frontend
 ## ✅ **Checklist**
 
 ### Completed
+
 - [x] Animated particle background з Canvas API
 - [x] 4 MetricCards з real-time updates
 - [x] 6 ServiceCards з status indicators
@@ -268,6 +309,7 @@ docker-compose up -d frontend
 - [x] Footer з metadata
 
 ### Ready for Deployment
+
 - [x] TypeScript без errors
 - [x] React 18 best practices
 - [x] Performance optimizations
@@ -280,6 +322,7 @@ docker-compose up -d frontend
 ## 🔮 **Наступні Кроки**
 
 ### Phase 2: Real API Integration
+
 1. **Backend Connection**
    - Replace mock data з real API calls
    - WebSocket для real-time updates
@@ -310,6 +353,7 @@ docker-compose up -d frontend
    - Role-based access
 
 ### Phase 3: Advanced Features
+
 - 📊 Advanced analytics dashboard
 - 🤖 AI-powered insights
 - 📈 Predictive analytics
@@ -324,6 +368,7 @@ docker-compose up -d frontend
 ## 📸 **Screenshots**
 
 ### Current Features
+
 1. **Hero Section**
    - Gradient mega-title з glow
    - Live status badge з pulse
@@ -347,6 +392,7 @@ docker-compose up -d frontend
 ## 🎉 **Висновок**
 
 **MEGA Dashboard** — це повністю функціональний, сучасний, інтерактивний інтерфейс з:
+
 - ✅ Передовими візуальними ефектами
 - ✅ Real-time моніторингом
 - ✅ Професійним дизайном
@@ -354,6 +400,7 @@ docker-compose up -d frontend
 - ✅ Можливістю масштабування
 
 **Готово до:**
+
 - 🚀 Production deployment
 - 🔌 API integration
 - 📊 Advanced features

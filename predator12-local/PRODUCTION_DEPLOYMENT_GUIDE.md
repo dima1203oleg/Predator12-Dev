@@ -7,6 +7,7 @@
 ## 🎯 Архітектура
 
 ### Компоненти системи:
+
 - **Backend API** - FastAPI додаток (3 репліки з автоскейлінгом)
 - **Frontend** - React додаток з NGINX (2 репліки)
 - **Agents** - Багатоагентна система (супервізор + 5 воркерів)
@@ -17,6 +18,7 @@
 - **Keycloak** - Система автентифікації (2 репліки)
 
 ### Зовнішні інтеграції:
+
 - Платіжні системи (Stripe, LiqPay)
 - SMS сервіс (Twilio)
 - Email сервіс (SMTP/SES)
@@ -37,18 +39,21 @@ curl -sSL https://github.com/argoproj/argo-cd/releases/latest/download/argocd-li
 ### Розгортання
 
 1. **Клонування репозиторію:**
+
 ```bash
 git clone https://github.com/predator11/predator11.git
 cd predator11
 ```
 
 2. **Запуск автоматичного розгортання:**
+
 ```bash
 chmod +x scripts/deploy-production.sh
 ./scripts/deploy-production.sh
 ```
 
 3. **Або покрокове розгортання:**
+
 ```bash
 # Крок 1: Розгортання RKE2 кластера
 ./scripts/deploy-production.sh rke2
@@ -68,12 +73,14 @@ chmod +x scripts/deploy-production.sh
 ### Управління секретами через Vault
 
 1. **Ініціалізація Vault:**
+
 ```bash
 kubectl exec -it vault-0 -n predator11-security -- vault operator init
 kubectl exec -it vault-0 -n predator11-security -- vault operator unseal
 ```
 
 2. **Налаштування автентифікації Kubernetes:**
+
 ```bash
 vault auth enable kubernetes
 vault write auth/kubernetes/config \
@@ -83,6 +90,7 @@ vault write auth/kubernetes/config \
 ```
 
 3. **Створення політик та ролей:**
+
 ```bash
 vault policy write predator11-backend k8s/security/policies/backend-policy.hcl
 vault policy write predator11-agents k8s/security/policies/agents-policy.hcl
@@ -107,6 +115,7 @@ kubectl describe certificate predator11-tls -n predator11
 ### Network Policies
 
 Всі компоненти ізольовані мережевими політиками:
+
 - Backend може спілкуватися тільки з БД, Redis, OpenSearch
 - Frontend має доступ тільки до Backend API
 - Зовнішній трафік дозволений тільки через Ingress
@@ -142,6 +151,7 @@ curl -s http://prometheus:9090/api/v1/alerts | jq '.data.alerts'
 ### GitHub Actions
 
 Pipeline автоматично:
+
 1. Запускає тести та лінтери
 2. Будує Docker образи
 3. Сканує на вразливості
@@ -284,18 +294,18 @@ spec:
   minReplicas: 3
   maxReplicas: 10
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
 ```
 
 ### Налаштування resource limits

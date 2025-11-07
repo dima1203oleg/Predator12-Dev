@@ -18,22 +18,22 @@ The `useWebSocket` hook provides a standardized way to manage WebSocket connecti
 The hook is located in the `src/hooks` directory and can be imported into any component:
 
 ```jsx
-import useWebSocket from '../../hooks/useWebSocket';
+import useWebSocket from "../../hooks/useWebSocket";
 ```
 
 ## Basic Usage
 
 ```jsx
-import React from 'react';
-import useWebSocket from '../../hooks/useWebSocket';
-import WebSocketStatus from '../components/nexus_visuals/WebSocketStatus';
+import React from "react";
+import useWebSocket from "../../hooks/useWebSocket";
+import WebSocketStatus from "../components/nexus_visuals/WebSocketStatus";
 
-const API_WS_URL = process.env.REACT_APP_API_WS_URL || 'ws://localhost:8000/ws';
+const API_WS_URL = process.env.REACT_APP_API_WS_URL || "ws://localhost:8000/ws";
 
 const MyComponent = () => {
   // Handle incoming messages
   const handleMessage = (data) => {
-    console.log('Received message:', data);
+    console.log("Received message:", data);
     // Update component state based on the message
   };
 
@@ -42,18 +42,18 @@ const MyComponent = () => {
     `${API_WS_URL}/my-endpoint`,
     {
       onMessage: handleMessage,
-      autoReconnect: true
-    }
+      autoReconnect: true,
+    },
   );
 
   // Send a message through the WebSocket
   const sendSomeData = () => {
     sendMessage({
-      type: 'request_data',
+      type: "request_data",
       filters: {
-        region: 'EU',
-        date: new Date().toISOString()
-      }
+        region: "EU",
+        date: new Date().toISOString(),
+      },
     });
   };
 
@@ -65,9 +65,7 @@ const MyComponent = () => {
         connectionStatus={connectionStatus}
       />
 
-      <button onClick={sendSomeData}>
-        Request Data
-      </button>
+      <button onClick={sendSomeData}>Request Data</button>
     </div>
   );
 };
@@ -84,24 +82,24 @@ The `useWebSocket` hook accepts two parameters:
 
 #### Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `onMessage` | function | `() => {}` | Callback function that receives parsed messages from the WebSocket. |
-| `autoReconnect` | boolean | `true` | Whether to automatically attempt reconnection when the connection is lost. |
-| `reconnectInterval` | number | `5000` | Time in milliseconds to wait before attempting to reconnect. |
-| `maxReconnectAttempts` | number | `5` | Maximum number of reconnection attempts before giving up. |
+| Option                 | Type     | Default    | Description                                                                |
+| ---------------------- | -------- | ---------- | -------------------------------------------------------------------------- |
+| `onMessage`            | function | `() => {}` | Callback function that receives parsed messages from the WebSocket.        |
+| `autoReconnect`        | boolean  | `true`     | Whether to automatically attempt reconnection when the connection is lost. |
+| `reconnectInterval`    | number   | `5000`     | Time in milliseconds to wait before attempting to reconnect.               |
+| `maxReconnectAttempts` | number   | `5`        | Maximum number of reconnection attempts before giving up.                  |
 
 ### Return Value
 
 The hook returns an object with the following properties:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `connectionStatus` | string | Current WebSocket connection status: 'connected', 'connecting', or 'disconnected'. |
-| `lastMessage` | any | The most recent message received from the WebSocket (parsed from JSON if possible). |
-| `sendMessage` | function | Function to send a message through the WebSocket. Accepts string or object (automatically stringified). |
-| `connect` | function | Function to manually initiate a connection or reconnection. |
-| `disconnect` | function | Function to manually close the WebSocket connection. |
+| Property           | Type     | Description                                                                                             |
+| ------------------ | -------- | ------------------------------------------------------------------------------------------------------- |
+| `connectionStatus` | string   | Current WebSocket connection status: 'connected', 'connecting', or 'disconnected'.                      |
+| `lastMessage`      | any      | The most recent message received from the WebSocket (parsed from JSON if possible).                     |
+| `sendMessage`      | function | Function to send a message through the WebSocket. Accepts string or object (automatically stringified). |
+| `connect`          | function | Function to manually initiate a connection or reconnection.                                             |
+| `disconnect`       | function | Function to manually close the WebSocket connection.                                                    |
 
 ## Advanced Usage
 
@@ -110,15 +108,11 @@ The hook returns an object with the following properties:
 For components that need to maintain multiple WebSocket connections, simply use the hook multiple times with different endpoints:
 
 ```jsx
-const {
-  connectionStatus: dataStatus,
-  sendMessage: sendDataRequest
-} = useWebSocket(`${API_WS_URL}/data-stream`);
+const { connectionStatus: dataStatus, sendMessage: sendDataRequest } =
+  useWebSocket(`${API_WS_URL}/data-stream`);
 
-const {
-  connectionStatus: controlStatus,
-  sendMessage: sendControlCommand
-} = useWebSocket(`${API_WS_URL}/control`);
+const { connectionStatus: controlStatus, sendMessage: sendControlCommand } =
+  useWebSocket(`${API_WS_URL}/control`);
 ```
 
 ### Custom Reconnection Logic
@@ -126,15 +120,13 @@ const {
 If you need custom reconnection behavior, you can disable the automatic reconnection and implement your own logic:
 
 ```jsx
-const {
-  connectionStatus,
-  connect,
-  disconnect
-} = useWebSocket(url, { autoReconnect: false });
+const { connectionStatus, connect, disconnect } = useWebSocket(url, {
+  autoReconnect: false,
+});
 
 // Custom reconnection logic
 useEffect(() => {
-  if (connectionStatus === 'disconnected' && shouldReconnect) {
+  if (connectionStatus === "disconnected" && shouldReconnect) {
     const timer = setTimeout(() => {
       connect();
     }, customInterval);

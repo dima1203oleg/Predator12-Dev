@@ -25,17 +25,20 @@ This time-series graph shows the number of active WebSocket connections over tim
 ### Normal Operations
 
 In normal operation, you should expect to see:
+
 - Active connections corresponding to the number of frontend clients actively using the WebSocket-based features.
 - Relatively stable connection counts with gradual changes as users connect and disconnect.
 
 ### Troubleshooting
 
 If you observe abnormal patterns, such as:
+
 - Sudden drops in connections
 - Unusually high connection counts
 - Zero connections when users are expected to be connected
 
 Consider checking:
+
 1. The `/ws/health` endpoint to verify the WebSocket service is running.
 2. Network connectivity between clients and the server.
 3. The backend logs for any errors related to WebSocket connections.
@@ -44,11 +47,13 @@ Consider checking:
 ## Integration with Alerts
 
 This dashboard can be configured to trigger alerts when certain conditions are met, such as:
+
 - Zero active connections during expected operational hours
 - Connection count exceeding a certain threshold (indicating potential abuse)
 - Rapid changes in connection counts (indicating potential service instability)
 
 To set up alerts:
+
 1. Navigate to the alert icon in the panel you want to add an alert to.
 2. Configure the conditions that should trigger the alert.
 3. Set up notification channels (Slack, email, etc.) to receive the alerts.
@@ -56,6 +61,7 @@ To set up alerts:
 ## Relationship to Other Monitoring Components
 
 This dashboard works in conjunction with:
+
 - The `/ws/health` endpoint, which provides basic health status of the WebSocket service.
 - The `/ws/metrics` endpoint, which provides the raw Prometheus metrics used by this dashboard.
 - Other Predator Analytics monitoring dashboards, giving a complete picture of system health.

@@ -1,5 +1,5 @@
 """
-Агент для детекції аномалій
+Агент для детекції аномалій.
 """
 
 from __future__ import annotations
@@ -8,19 +8,19 @@ from typing import Any
 
 import numpy as np
 from sklearn.ensemble import IsolationForest
-from sklearn.preprocessing import StandardScaler
 
 from .base_agent import BaseAgent
 
 
 class AnomalyDetectionAgent(BaseAgent):
-    """Агент для виявлення аномалій в даних"""
+    """Агент для виявлення аномалій в даних."""
 
     def __init__(self, config: dict[str, Any] | None = None):
         super().__init__("AnomalyDetectionAgent", config)
         self.models = {}  # Кеш навчених моделей
 
     def capabilities(self) -> list[str]:
+        """Повертає список можливостей агента детекції аномалій."""
         return [
             "detect_anomalies",
             "train_anomaly_model",
@@ -30,25 +30,24 @@ class AnomalyDetectionAgent(BaseAgent):
         ]
 
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виконує завдання з детекції аномалій"""
+        """Виконує завдання з детекції аномалій."""
 
         self.logger.info("Processing anomaly detection task", task_type=task_type)
 
         if task_type == "detect_anomalies":
             return await self._detect_anomalies(payload)
-        elif task_type == "train_anomaly_model":
+        if task_type == "train_anomaly_model":
             return await self._train_anomaly_model(payload)
-        elif task_type == "evaluate_model":
+        if task_type == "evaluate_model":
             return await self._evaluate_model(payload)
-        elif task_type == "get_anomaly_score":
+        if task_type == "get_anomaly_score":
             return await self._get_anomaly_score(payload)
-        elif task_type == "set_threshold":
+        if task_type == "set_threshold":
             return await self._set_threshold(payload)
-        else:
-            raise ValueError(f"Unknown task type: {task_type}")
+        raise ValueError(f"Unknown task type: {task_type}")
 
     async def _detect_anomalies(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виявляє аномалії в датасеті"""
+        """Виявляє аномалії в датасеті."""
 
         dataset_id = payload.get("dataset_id")
         model_type = payload.get("model_type", "isolation_forest")
@@ -94,12 +93,12 @@ class AnomalyDetectionAgent(BaseAgent):
                 "parameters": payload,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to detect anomalies", error=str(e), dataset_id=dataset_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to detect anomalies", error=str(exc), dataset_id=dataset_id)
+            return {"status": "error", "error": str(exc)}
 
     async def _train_anomaly_model(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Навчає модель для детекції аномалій"""
+        """Навчає модель для детекції аномалій."""
 
         dataset_id = payload.get("dataset_id")
         model_type = payload.get("model_type", "isolation_forest")
@@ -153,12 +152,14 @@ class AnomalyDetectionAgent(BaseAgent):
                 "trained_at": "2024-01-01T00:00:00Z",
             }
 
-        except Exception as e:
-            self.logger.error("Failed to train anomaly model", error=str(e), dataset_id=dataset_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error(
+                "Failed to train anomaly model", error=str(exc), dataset_id=dataset_id
+            )
+            return {"status": "error", "error": str(exc)}
 
     async def _evaluate_model(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Оцінює якість моделі детекції аномалій"""
+        """Оцінює якість моделі детекції аномалій."""
 
         model_id = payload.get("model_id")
         test_dataset_id = payload.get("test_dataset_id")
@@ -196,12 +197,12 @@ class AnomalyDetectionAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to evaluate model", error=str(e), model_id=model_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to evaluate model", error=str(exc), model_id=model_id)
+            return {"status": "error", "error": str(exc)}
 
     async def _get_anomaly_score(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Отримує оцінку аномальності для конкретних точок"""
+        """Отримує оцінку аномальності для конкретних точок."""
 
         model_id = payload.get("model_id")
         data_points = payload.get("data_points", [])
@@ -242,12 +243,12 @@ class AnomalyDetectionAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to get anomaly scores", error=str(e), model_id=model_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to get anomaly scores", error=str(exc), model_id=model_id)
+            return {"status": "error", "error": str(exc)}
 
     async def _set_threshold(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Встановлює поріг для класифікації аномалій"""
+        """Встановлює поріг для класифікації аномалій."""
 
         model_id = payload.get("model_id")
         threshold = payload.get("threshold")

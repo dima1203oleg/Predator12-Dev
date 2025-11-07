@@ -257,7 +257,7 @@ async def upload_dataset(
                 columns = len(data[0]) if isinstance(data[0], dict) else 1
                 if isinstance(data[0], dict):
                     schema = {key: type(value).__name__ for key, value in data[0].items()}
-    except Exception as e:
+    except Exception:
         # If analysis fails, use defaults
         pass
 

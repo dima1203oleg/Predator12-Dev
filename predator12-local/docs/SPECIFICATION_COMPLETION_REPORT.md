@@ -13,14 +13,14 @@
 
 ### Deliverables Summary
 
-| Deliverable | Status | Document | Lines | Size |
-|-------------|--------|----------|-------|------|
-| **Main Technical Specification** | ✅ Complete | `NEXUS_CORE_TZ_V11.md` | 1,236 | 76 KB |
-| **Unified UI Documentation** | ✅ Complete | `COMMAND_CENTER_UNIFIED_UI.md` | 1,450 | 89 KB |
-| **30 Agents Complete Spec** | ✅ Complete | `AGENTS_30_COMPLETE_SPEC.md` | 2,112 | 142 KB |
-| **Model Selection Logic** | ✅ Complete | `MODEL_SELECTION_LOGIC_SPEC.md` | 1,850 | 118 KB |
-| **Documentation Index** | ✅ Complete | `DOCUMENTATION_INDEX.md` | 950 | 58 KB |
-| **Developer Quick Start** | ✅ Complete | `DEVELOPER_README.md` | 680 | 42 KB |
+| Deliverable                      | Status      | Document                        | Lines | Size   |
+| -------------------------------- | ----------- | ------------------------------- | ----- | ------ |
+| **Main Technical Specification** | ✅ Complete | `NEXUS_CORE_TZ_V11.md`          | 1,236 | 76 KB  |
+| **Unified UI Documentation**     | ✅ Complete | `COMMAND_CENTER_UNIFIED_UI.md`  | 1,450 | 89 KB  |
+| **30 Agents Complete Spec**      | ✅ Complete | `AGENTS_30_COMPLETE_SPEC.md`    | 2,112 | 142 KB |
+| **Model Selection Logic**        | ✅ Complete | `MODEL_SELECTION_LOGIC_SPEC.md` | 1,850 | 118 KB |
+| **Documentation Index**          | ✅ Complete | `DOCUMENTATION_INDEX.md`        | 950   | 58 KB  |
+| **Developer Quick Start**        | ✅ Complete | `DEVELOPER_README.md`           | 680   | 42 KB  |
 
 **Total Documentation**: **8,278 lines**, **525 KB** of comprehensive, implementation-ready specifications.
 
@@ -33,6 +33,7 @@
 **Purpose**: Головна технічна специфікація системи Predator Analytics v11.0
 
 **Sections (14 major)**:
+
 1. **Executive Summary** — Key differentiators, current vs future state
 2. **Architecture Overview** — System diagram, components breakdown
 3. **Unified Command Center** — Single web interface structure
@@ -49,6 +50,7 @@
 14. **Acceptance Criteria** — Production readiness checklist
 
 **Key Highlights**:
+
 - ✅ Повна архітектура системи з діаграмами
 - ✅ Детальний опис уніфікованого веб-інтерфейсу
 - ✅ Розподіл 30 агентів та 58 моделей
@@ -65,6 +67,7 @@
 **Purpose**: Детальна документація уніфікованого веб-інтерфейсу "Пульт Керування"
 
 **Sections (12 major)**:
+
 1. **Overview** — Single interface for all functionality
 2. **UI Architecture** — React 18 + TypeScript + Vite stack
 3. **Component Structure** — 9 core modules breakdown
@@ -79,6 +82,7 @@
 12. **Technical Implementation** — State management, WebSocket, routing
 
 **Key Highlights**:
+
 - ✅ 9 детальних модулів з компонентами
 - ✅ Three.js 3D візуалізації (volumetric/heatmap)
 - ✅ Real-time WebSocket data feed
@@ -97,16 +101,18 @@
 **Purpose**: Повний структурований каталог 30 AI-агентів з YAML конфігами та прикладами коду
 
 **Sections (35 major)**:
+
 1. **Overview** — 3 категорії агентів (Self-Heal, Optimize, Modernize)
 2. **Agent Architecture** — Plan-then-Execute, HITL, Sandboxing
-3-12. **Self-Heal Agents (10)** — PortCollision, OOMKiller, EnvVarFixer, DockerRestarter, DependencyResolver, LogAnalyzer, NetworkDiagnostic, DBConnectionHealer, CertificateRenewer, ConfigSyncAgent
-13-22. **Optimize Agents (10)** — CodeRefactorer, QueryOptimizer, CacheOptimizer, BundleSizeReducer, ImageCompressor, APILatencyReducer, MemoryProfiler, TestCoverageBooster, CodeDuplicationRemover, LoadBalancerTuner
-23-32. **Modernize Agents (10)** — DependencyUpgrader, APIVersionMigrator, SecurityPatcher, FeatureFlagMigrator, DockerfileModernizer, CICDPipelineUpgrader, K8sManifestUpdater, ObservabilityEnhancer, TechDebtAnalyzer, LegacyCodeModernizer
-33. **Orchestration Example** — Python код для supervisor
-34. **Metrics & Telemetry** — OpenTelemetry integration
-35. **Testing & Deployment** — Unit tests + K8s manifests
+   3-12. **Self-Heal Agents (10)** — PortCollision, OOMKiller, EnvVarFixer, DockerRestarter, DependencyResolver, LogAnalyzer, NetworkDiagnostic, DBConnectionHealer, CertificateRenewer, ConfigSyncAgent
+   13-22. **Optimize Agents (10)** — CodeRefactorer, QueryOptimizer, CacheOptimizer, BundleSizeReducer, ImageCompressor, APILatencyReducer, MemoryProfiler, TestCoverageBooster, CodeDuplicationRemover, LoadBalancerTuner
+   23-32. **Modernize Agents (10)** — DependencyUpgrader, APIVersionMigrator, SecurityPatcher, FeatureFlagMigrator, DockerfileModernizer, CICDPipelineUpgrader, K8sManifestUpdater, ObservabilityEnhancer, TechDebtAnalyzer, LegacyCodeModernizer
+3. **Orchestration Example** — Python код для supervisor
+4. **Metrics & Telemetry** — OpenTelemetry integration
+5. **Testing & Deployment** — Unit tests + K8s manifests
 
 **Key Highlights**:
+
 - ✅ 30 агентів з детальними YAML конфігами
 - ✅ Кожен агент: role, dependencies, triggers, metrics, LLM selection
 - ✅ Python приклади з CrewAI/LangGraph
@@ -120,11 +126,11 @@
 
 **Agent Distribution**:
 
-| Category | Count | Models Priority | Focus |
-|----------|-------|-----------------|-------|
-| **Self-Heal** | 10 | Fast + Reliable | Відновлення, стабілізація |
-| **Optimize** | 10 | Quality + Cost | Оптимізація коду/даних |
-| **Modernize** | 10 | Innovation | Модернізація, міграції |
+| Category      | Count | Models Priority | Focus                     |
+| ------------- | ----- | --------------- | ------------------------- |
+| **Self-Heal** | 10    | Fast + Reliable | Відновлення, стабілізація |
+| **Optimize**  | 10    | Quality + Cost  | Оптимізація коду/даних    |
+| **Modernize** | 10    | Innovation      | Модернізація, міграції    |
 
 ---
 
@@ -133,6 +139,7 @@
 **Purpose**: Детальна специфікація логіки вибору моделей з конкретними прикладами коду та архітектурою
 
 **Sections (15 major)**:
+
 1. **Executive Summary** — Router + Scorer + Registry + Executor + Feedback
 2. **Architecture Overview** — Flow diagram з компонентами
 3. **Component 1: Router Layer** — Task context analysis + selection
@@ -150,6 +157,7 @@
 15. **References & Acceptance Criteria**
 
 **Key Highlights**:
+
 - ✅ Повна архітектура model selection flow
 - ✅ Router Layer з TaskContext dataclass
 - ✅ Model Registry (YAML + Redis) з 58 моделями
@@ -173,6 +181,7 @@ Score = 0.40 * capability_match  # Can model do the task?
 ```
 
 **Fallback Chains**:
+
 - Self-Heal: `llama-3.3-70b` → `gpt-4o-mini` → `deepseek-coder-33b`
 - Optimize: `claude-3.5-sonnet` → `qwen-2.5-coder` → `gpt-4o-mini`
 - Modernize: `gemini-2.0-flash` → `mistral-large` → `claude-3.5-sonnet`
@@ -184,6 +193,7 @@ Score = 0.40 * capability_match  # Can model do the task?
 **Purpose**: Централізований індекс всієї документації з навігацією та cross-references
 
 **Sections (12 major)**:
+
 1. **Quick Navigation** — Getting started links
 2. **Core Documentation** — 4 main specs
 3. **Architecture** — System/caching/data pipeline docs
@@ -198,6 +208,7 @@ Score = 0.40 * capability_match  # Can model do the task?
 12. **Production Deployment** — K8s + canary
 
 **Key Highlights**:
+
 - ✅ Повна навігація по всіх документах
 - ✅ Summaries для кожного main spec
 - ✅ Agent → Model mapping для всіх 30 агентів
@@ -215,6 +226,7 @@ Score = 0.40 * capability_match  # Can model do the task?
 **Purpose**: Швидкий старт для розробників з посиланнями на всі key docs
 
 **Sections (12 major)**:
+
 1. **TL;DR** — Get started in 5 minutes
 2. **Complete Documentation** — Links to 5 main docs
 3. **Architecture at a Glance** — ASCII diagram
@@ -229,6 +241,7 @@ Score = 0.40 * capability_match  # Can model do the task?
 12. **Quick Links** — All service URLs
 
 **Key Highlights**:
+
 - ✅ 5-minute quickstart bash script
 - ✅ Links до всіх 5 main specs
 - ✅ ASCII architecture diagram
@@ -262,24 +275,24 @@ Score = 0.40 * capability_match  # Can model do the task?
 
 ### 30 AI Agents Distribution
 
-| Category | Agents | Examples | Priority Models |
-|----------|--------|----------|-----------------|
-| **Self-Heal** | 10 | PortCollision, OOMKiller, EnvVarFixer | Llama 3.3, GPT-4o-mini, DeepSeek |
-| **Optimize** | 10 | CodeRefactor, QueryOpt, CacheOpt | Claude 3.5, Qwen Coder, Codestral |
-| **Modernize** | 10 | DepsUpgrade, APIMigrate, SecurityPatch | Gemini 2.0, Mistral Large, GPT-4 |
+| Category      | Agents | Examples                               | Priority Models                   |
+| ------------- | ------ | -------------------------------------- | --------------------------------- |
+| **Self-Heal** | 10     | PortCollision, OOMKiller, EnvVarFixer  | Llama 3.3, GPT-4o-mini, DeepSeek  |
+| **Optimize**  | 10     | CodeRefactor, QueryOpt, CacheOpt       | Claude 3.5, Qwen Coder, Codestral |
+| **Modernize** | 10     | DepsUpgrade, APIMigrate, SecurityPatch | Gemini 2.0, Mistral Large, GPT-4  |
 
 ### 58 LLM Models Distribution
 
-| Provider | Count | Examples | Use Cases |
-|----------|-------|----------|-----------|
-| **OpenAI** | 8 | GPT-4o, GPT-4o-mini, GPT-4-turbo | General-purpose, reliable |
-| **Anthropic** | 6 | Claude 3.5 Sonnet, Claude 3 Opus | Complex reasoning, optimization |
-| **Google** | 5 | Gemini 2.0 Flash, Gemini 1.5 Pro | Huge context, innovation |
-| **Meta** | 6 | Llama 3.3 70B, CodeLlama 70B | Free, fast, versatile |
-| **DeepSeek** | 4 | DeepSeek Coder 33B, DeepSeek V3 | Coding specialist |
-| **Mistral** | 5 | Mistral Large, Codestral | Reasoning, architecture |
-| **Qwen** | 4 | Qwen 2.5 Coder 32B | Code optimization |
-| **Others** | 20 | Groq, Cerebras, Together AI, etc. | Specialized tasks |
+| Provider      | Count | Examples                          | Use Cases                       |
+| ------------- | ----- | --------------------------------- | ------------------------------- |
+| **OpenAI**    | 8     | GPT-4o, GPT-4o-mini, GPT-4-turbo  | General-purpose, reliable       |
+| **Anthropic** | 6     | Claude 3.5 Sonnet, Claude 3 Opus  | Complex reasoning, optimization |
+| **Google**    | 5     | Gemini 2.0 Flash, Gemini 1.5 Pro  | Huge context, innovation        |
+| **Meta**      | 6     | Llama 3.3 70B, CodeLlama 70B      | Free, fast, versatile           |
+| **DeepSeek**  | 4     | DeepSeek Coder 33B, DeepSeek V3   | Coding specialist               |
+| **Mistral**   | 5     | Mistral Large, Codestral          | Reasoning, architecture         |
+| **Qwen**      | 4     | Qwen 2.5 Coder 32B                | Code optimization               |
+| **Others**    | 20    | Groq, Cerebras, Together AI, etc. | Specialized tasks               |
 
 ### Model Selection Logic
 
@@ -439,13 +452,13 @@ docs/
 
 ## 🎯 Project Status
 
-| Aspect | Status | Progress |
-|--------|--------|----------|
-| **Documentation** | ✅ Complete | 100% |
-| **Specification** | ✅ Complete | 100% |
-| **Implementation** | ⏳ Pending | 0% |
-| **Testing** | ⏳ Pending | 0% |
-| **Deployment** | ⏳ Pending | 0% |
+| Aspect             | Status      | Progress |
+| ------------------ | ----------- | -------- |
+| **Documentation**  | ✅ Complete | 100%     |
+| **Specification**  | ✅ Complete | 100%     |
+| **Implementation** | ⏳ Pending  | 0%       |
+| **Testing**        | ⏳ Pending  | 0%       |
+| **Deployment**     | ⏳ Pending  | 0%       |
 
 **Overall**: **Documentation & Specification Phase Complete** ✅
 
@@ -462,9 +475,10 @@ docs/
 ✅ **Model Selection Logic** з implementation-ready code  
 ✅ **Cross-references** між агентами, моделями, компонентами  
 ✅ **Developer onboarding** з quickstart guide  
-✅ **Production deployment** стратегія (local → Docker → K8s)  
+✅ **Production deployment** стратегія (local → Docker → K8s)
 
 **All specifications are implementation-ready and follow best practices for:**
+
 - ✅ Multi-agent orchestration (CrewAI/LangGraph)
 - ✅ Intelligent model routing (MoMA-style)
 - ✅ Zero-trust security (PII masking, RBAC)

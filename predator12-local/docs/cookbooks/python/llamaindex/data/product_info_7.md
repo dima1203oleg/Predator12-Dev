@@ -1,7 +1,9 @@
 # Information about product item_number: 7
+
 CozyNights Sleeping Bag, price $100,
 
 ## Brand
+
 CozyNights
 
 Main Category: CAMPING & HIKING
@@ -9,6 +11,7 @@ Sub Category: SLEEPING GEAR
 Product Type: SLEEPING BAGS
 
 ## Features
+
 - Lightweight: Designed to be lightweight for easy carrying during outdoor adventures.
 - 3-Season: Suitable for use in spring, summer, and fall seasons.
 - Compact Design: Folds down to a compact size for convenient storage and transport.
@@ -22,6 +25,7 @@ Product Type: SLEEPING BAGS
 - Temperature Rating: Provides reliable performance within a specific temperature range.
 
 ## Technical Specifications
+
 - Material: Polyester
 - Color: Red
 - Dimensions: 80 inches x 33 inches (Length x Width)
@@ -75,6 +79,7 @@ If you have any further questions or need assistance, please contact our custome
 We hope you have a comfortable and enjoyable experience with your CozyNights Sleeping Bag!
 
 ## Cautions:
+
 1. Do not machine wash the sleeping bag with harsh detergents or bleach, as it may damage the fabric and insulation.
 2. Avoid exposing the sleeping bag to direct sunlight for prolonged periods, as it may cause fading or deterioration of the materials.
 3. Do not store the sleeping bag when it is damp or wet, as this can lead to mold and mildew growth.
@@ -107,32 +112,35 @@ For any warranty-related inquiries or to initiate a warranty claim, please conta
 Please retain your proof of purchase as it will be required to verify warranty eligibility.
 
 ## Return Policy
-- If Membership status "None":	If you are not satisfied with your purchase, you can return it within 30 days for a full refund. The product must be unused and in its original packaging.
-- If Membership status "Gold":	Gold members can return their sleeping bags within 60 days of purchase for a full refund or exchange. The product must be unused and in its original packaging.
-- If Membership status "Platinum":	Platinum members can return their sleeping bags within 90 days of purchase for a full refund or exchange. The product must be unused and in its original packaging. Additionally, Platinum members receive a 10% discount on all sleeping bags purchases but from the same product brand.
+
+- If Membership status "None": If you are not satisfied with your purchase, you can return it within 30 days for a full refund. The product must be unused and in its original packaging.
+- If Membership status "Gold": Gold members can return their sleeping bags within 60 days of purchase for a full refund or exchange. The product must be unused and in its original packaging.
+- If Membership status "Platinum": Platinum members can return their sleeping bags within 90 days of purchase for a full refund or exchange. The product must be unused and in its original packaging. Additionally, Platinum members receive a 10% discount on all sleeping bags purchases but from the same product brand.
 
 ## Reviews
-31) Rating: 5
-   Review: The CozyNights Sleeping Bag is perfect for my camping trips. It's lightweight, warm, and the compact design makes it easy to pack. The included stuff sack is a great bonus. Highly recommend!
 
-32) Rating: 4
-   Review: I bought the CozyNights Sleeping Bag, and while it's warm and lightweight, I wish it had a built-in pillow. Overall, it's a good sleeping bag for camping.
+31. Rating: 5
+    Review: The CozyNights Sleeping Bag is perfect for my camping trips. It's lightweight, warm, and the compact design makes it easy to pack. The included stuff sack is a great bonus. Highly recommend!
 
-33) Rating: 5
-   Review: The CozyNights Sleeping Bag is perfect for my camping adventures. It's comfortable, warm, and packs down small, making it easy to carry. I love it!
+32. Rating: 4
+    Review: I bought the CozyNights Sleeping Bag, and while it's warm and lightweight, I wish it had a built-in pillow. Overall, it's a good sleeping bag for camping.
 
-34) Rating: 4
-   Review: I like the CozyNights Sleeping Bag, but I wish it came in more colors. The red color is nice, but I would prefer something more unique. Overall, it's a great sleeping bag.
+33. Rating: 5
+    Review: The CozyNights Sleeping Bag is perfect for my camping adventures. It's comfortable, warm, and packs down small, making it easy to carry. I love it!
 
-35) Rating: 5
-   Review: This sleeping bag is a game changer for my camping trips. It's warm, lightweight, and the compact design makes it easy to pack. I'm extremely satisfied with my purchase!
+34. Rating: 4
+    Review: I like the CozyNights Sleeping Bag, but I wish it came in more colors. The red color is nice, but I would prefer something more unique. Overall, it's a great sleeping bag.
+
+35. Rating: 5
+    Review: This sleeping bag is a game changer for my camping trips. It's warm, lightweight, and the compact design makes it easy to pack. I'm extremely satisfied with my purchase!
 
 ## FAQ
-31) What is the temperature rating of the CozyNights Sleeping Bag?
-   The CozyNights Sleeping Bag is rated for 3-season use and has a temperature rating of 20�F to 60�F (-6�C to 15�C).
 
-32) Can the CozyNights Sleeping Bag be zipped together with another sleeping bag to create a double sleeping bag?
-   Yes, two CozyNights Sleeping Bags can be zipped together to create a double sleeping bag, provided they have compatible zippers.
+31. What is the temperature rating of the CozyNights Sleeping Bag?
+    The CozyNights Sleeping Bag is rated for 3-season use and has a temperature rating of 20�F to 60�F (-6�C to 15�C).
 
-33) Does the CozyNights Sleeping Bag have a draft collar or draft tube?
-   The CozyNights Sleeping Bag features a draft tube along the zipper to help prevent cold air from entering and warm air from escaping.
+32. Can the CozyNights Sleeping Bag be zipped together with another sleeping bag to create a double sleeping bag?
+    Yes, two CozyNights Sleeping Bags can be zipped together to create a double sleeping bag, provided they have compatible zippers.
+
+33. Does the CozyNights Sleeping Bag have a draft collar or draft tube?
+    The CozyNights Sleeping Bag features a draft tube along the zipper to help prevent cold air from entering and warm air from escaping.

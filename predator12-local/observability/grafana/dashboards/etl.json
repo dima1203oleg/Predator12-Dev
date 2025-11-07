@@ -2,8 +2,8 @@
   "dashboard": {
     "title": "ETL Pipeline",
     "panels": [
-      {"type": "graph", "title": "ETL Throughput", "targets": []},
-      {"type": "graph", "title": "ETL Errors", "targets": []}
+      { "type": "graph", "title": "ETL Throughput", "targets": [] },
+      { "type": "graph", "title": "ETL Errors", "targets": [] }
     ]
   }
 }

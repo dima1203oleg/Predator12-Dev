@@ -6,7 +6,6 @@ Enhanced ETL Pipeline with:
 """
 
 from datetime import datetime
-from typing import Any, Dict
 
 import pandas as pd
 from observability.metrics import REQUEST_COUNT
@@ -45,7 +44,7 @@ class IncrementalETL:
             REQUEST_COUNT.labels(status="success").inc()
             return True
 
-        except Exception as e:
+        except Exception:
             REQUEST_COUNT.labels(status="error").inc()
             raise
 

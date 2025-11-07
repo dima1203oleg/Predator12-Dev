@@ -3,6 +3,7 @@
 ## 🎯 ЩО ЦЕ?
 
 **Інтерактивний модуль для управління:**
+
 - 🤖 Моделями AI (58+ безкоштовних)
 - 👥 Агентами (30+)
 - 🔑 Провайдерами та API ключами
@@ -41,6 +42,7 @@ Dashboard → AI Models → ⚙️ Provider Manager
 ```
 
 **Що бачите:**
+
 - **Models**: Reasoning, Code, Vision, Embed, Quick, Gen
 - **Agents**: Core, Specialized, Data, Security
 
@@ -53,6 +55,7 @@ Dashboard → AI Models → ⚙️ Provider Manager
 ```
 
 **Як використовувати:**
+
 1. Клікнути на категорію
 2. Побачити тільки моделі цієї категорії
 3. Додати нову модель через "Add Model"
@@ -74,6 +77,7 @@ Dashboard → AI Models → ⚙️ Provider Manager
 ```
 
 **Приклад:**
+
 ```
 Provider:      🤖 OpenAI
 Account Name:  Production Account
@@ -97,6 +101,7 @@ Models:        gpt-4-turbo, gpt-4, gpt-3.5-turbo
 ```
 
 **Дії:**
+
 - ✅ **Switch** - Активувати/Деактивувати
 - ✏️ **Edit** - Редагувати налаштування
 - 🗑️ **Delete** - Видалити акаунт
@@ -164,7 +169,7 @@ Models:
    └─ Active: ✅
 
 2. Додати OpenAI Development:
-   └─ Account: "Development"  
+   └─ Account: "Development"
    └─ Key: sk-dev-***
    └─ Active: ❌ (use only when needed)
 ```
@@ -314,6 +319,7 @@ Per Provider:
 ## ✅ CHECKLIST
 
 ### Перший запуск
+
 - [ ] Відкрити Dashboard
 - [ ] Перейти в Provider Manager
 - [ ] Додати перший провайдер
@@ -322,6 +328,7 @@ Per Provider:
 - [ ] Додати модель
 
 ### Production setup
+
 - [ ] Створити production акаунти
 - [ ] Налаштувати fallback стратегію
 - [ ] Перевірити rate limits
@@ -342,11 +349,13 @@ Per Provider:
 ## 📞 ДОПОМОГА
 
 **Документація:**
+
 - [Повний гід](./📱_MODEL_PROVIDER_MANAGER_GUIDE.md)
 - [Model Selection Logic](./MODEL_SELECTION_LOGIC_SPEC.md)
 - [Agent Configuration](./AGENTS_30_COMPLETE_SPEC.md)
 
 **Підтримка:**
+
 - GitHub Issues
 - Documentation
 - Community Forum

@@ -11,12 +11,14 @@
 ### 1️⃣ ТЕСТУВАННЯ ГОЛОСОВОГО ІНТЕРФЕЙСУ
 
 #### Базове тестування
+
 ```bash
 # Відкрийте браузер
 open http://localhost:5090/
 ```
 
 **Що тестувати:**
+
 - ✅ Натисніть кнопку мікрофону
 - ✅ Промовте команду голосом
 - ✅ Перегляньте транскрипцію
@@ -25,6 +27,7 @@ open http://localhost:5090/
 - ✅ Перевірте waveform візуалізацію
 
 #### Демо-команди для тесту
+
 1. **"Привіт"** - базова команда
 2. **"Розкажи про Predator12"** - складна команда
 3. **"Переключи на англійську"** - зміна мови
@@ -37,19 +40,22 @@ open http://localhost:5090/
 #### Для преміум функцій (опціонально)
 
 **OpenAI Whisper:**
+
 ```typescript
 // frontend/src/services/premiumFreeVoiceAPI.ts
-const OPENAI_API_KEY = 'ваш-ключ-тут';
+const OPENAI_API_KEY = "ваш-ключ-тут";
 ```
 
 **ElevenLabs TTS:**
+
 ```typescript
-const ELEVENLABS_API_KEY = 'ваш-ключ-тут';
+const ELEVENLABS_API_KEY = "ваш-ключ-тут";
 ```
 
 **Google Cloud Speech:**
+
 ```typescript
-const GOOGLE_API_KEY = 'ваш-ключ-тут';
+const GOOGLE_API_KEY = "ваш-ключ-тут";
 ```
 
 > 💡 **Примітка:** Безкоштовні провайдери працюють без ключів!
@@ -59,6 +65,7 @@ const GOOGLE_API_KEY = 'ваш-ключ-тут';
 ### 3️⃣ ПЕРЕГЛЯД ДОКУМЕНТАЦІЇ
 
 #### Швидкі команди
+
 ```bash
 # Відкрити головний README
 open 📖_VOICE_INTERFACE_MAIN_README.md
@@ -80,11 +87,13 @@ open 🎤_VOICE_INTERFACE_TECH_SPEC.md
 #### Додавання нових команд
 
 **1. Відкрийте файл:**
+
 ```bash
 code predator12-local/frontend/src/components/voice/AIVoiceInterface.tsx
 ```
 
 **2. Знайдіть метод `processVoiceCommand`:**
+
 ```typescript
 private processVoiceCommand(command: string) {
   // Додайте свої команди тут
@@ -95,8 +104,9 @@ private processVoiceCommand(command: string) {
 ```
 
 **3. Додайте логіку обробки:**
+
 ```typescript
-if (command.includes('відкрити налаштування')) {
+if (command.includes("відкрити налаштування")) {
   this.openSettings();
 }
 ```
@@ -104,6 +114,7 @@ if (command.includes('відкрити налаштування')) {
 #### Додавання нової мови
 
 **1. Відкрийте конфігурацію:**
+
 ```typescript
 // У AIVoiceInterface.tsx
 private languages = [
@@ -121,11 +132,13 @@ private languages = [
 #### Підключення до основної системи
 
 **1. Імпортуйте компонент:**
+
 ```typescript
-import { AIVoiceInterface } from './components/voice/AIVoiceInterface';
+import { AIVoiceInterface } from "./components/voice/AIVoiceInterface";
 ```
 
 **2. Додайте в ваш компонент:**
+
 ```typescript
 <AIVoiceInterface
   onCommand={handleVoiceCommand}
@@ -134,9 +147,10 @@ import { AIVoiceInterface } from './components/voice/AIVoiceInterface';
 ```
 
 **3. Обробіть команди:**
+
 ```typescript
 const handleVoiceCommand = (command: string) => {
-  console.log('Отримано команду:', command);
+  console.log("Отримано команду:", command);
   // Ваша логіка
 };
 ```
@@ -153,11 +167,13 @@ npm run build
 ```
 
 #### Перевірка білду
+
 ```bash
 npm run preview
 ```
 
 #### Деплой (приклад для Vercel)
+
 ```bash
 # Встановіть Vercel CLI
 npm i -g vercel
@@ -173,15 +189,17 @@ vercel
 ### Зміна кольорової схеми
 
 **1. Відкрийте CSS:**
+
 ```bash
 code predator12-local/frontend/src/components/voice/AIVoiceInterface.css
 ```
 
 **2. Змініть змінні:**
+
 ```css
 :root {
-  --primary-color: #4f46e5;  /* Ваш колір */
-  --accent-color: #06b6d4;   /* Акцент */
+  --primary-color: #4f46e5; /* Ваш колір */
+  --accent-color: #06b6d4; /* Акцент */
 }
 ```
 
@@ -189,7 +207,7 @@ code predator12-local/frontend/src/components/voice/AIVoiceInterface.css
 
 ```css
 .voice-interface {
-  width: 400px;  /* Змініть розмір */
+  width: 400px; /* Змініть розмір */
   height: 600px;
 }
 ```
@@ -201,6 +219,7 @@ code predator12-local/frontend/src/components/voice/AIVoiceInterface.css
 ### Ручне тестування
 
 **Чеклист:**
+
 - [ ] Запис голосу працює
 - [ ] Транскрипція точна
 - [ ] TTS відтворює мовлення
@@ -253,6 +272,7 @@ npm run dev > logs/vite.log 2>&1 &
 ### Сервер не запускається
 
 **Проблема:** Порт зайнятий
+
 ```bash
 # Знайти процес на порту 5090
 lsof -ti:5090 | xargs kill -9
@@ -264,6 +284,7 @@ PORT=3000 npm run dev
 ### Мікрофон не працює
 
 **Рішення:**
+
 1. Перевірте дозволи браузера
 2. Використовуйте HTTPS (для продакшн)
 3. Перевірте налаштування системи
@@ -271,6 +292,7 @@ PORT=3000 npm run dev
 ### API не відповідає
 
 **Рішення:**
+
 1. Перевірте API ключі
 2. Перевірте інтернет-з'єднання
 3. Спробуйте безкоштовний провайдер
@@ -280,11 +302,13 @@ PORT=3000 npm run dev
 ## 🎯 КОРОТКІ КОМАНДИ
 
 ### Швидкий запуск
+
 ```bash
 cd predator12-local/frontend && npm run dev
 ```
 
 ### Швидка зупинка
+
 ```bash
 # Ctrl+C в терміналі
 # Або
@@ -292,6 +316,7 @@ pkill -f "vite"
 ```
 
 ### Швидкий перезапуск
+
 ```bash
 pkill -f "vite" && cd predator12-local/frontend && npm run dev
 ```
@@ -301,12 +326,14 @@ pkill -f "vite" && cd predator12-local/frontend && npm run dev
 ## 📚 КОРИСНІ РЕСУРСИ
 
 ### Внутрішня документація
+
 - 📖 `VOICE_INTERFACE_MAIN_README.md`
 - 🎤 `VOICE_INTERFACE_QUICKSTART.md`
 - 🎤 `VOICE_INTERFACE_TECH_SPEC.md`
 - 🎤 `VOICE_INTERFACE_PROJECT_SUMMARY.md`
 
 ### Зовнішні ресурси
+
 - **Web Speech API:** https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API
 - **OpenAI Whisper:** https://platform.openai.com/docs/guides/speech-to-text
 - **ElevenLabs:** https://docs.elevenlabs.io/
@@ -316,16 +343,19 @@ pkill -f "vite" && cd predator12-local/frontend && npm run dev
 ## 🎉 ГОТОВІ СКРИПТИ
 
 ### Запуск всього проекту
+
 ```bash
 ./🚀_LAUNCH_VOICE_INTERFACE.sh
 ```
 
 ### Демонстрація
+
 ```bash
 ./🎤_VOICE_INTERFACE_DEMO.sh
 ```
 
 ### Перегляд документації
+
 ```bash
 ./📚_VIEW_DOCS.sh
 ```
@@ -335,18 +365,21 @@ pkill -f "vite" && cd predator12-local/frontend && npm run dev
 ## 💡 ПОРАДИ
 
 ### Для розробників
+
 - Використовуйте TypeScript для type safety
 - Дотримуйтесь існуючих конвенцій коду
 - Додавайте коментарі до складної логіки
 - Тестуйте на різних браузерах
 
 ### Для тестувальників
+
 - Тестуйте в різних умовах
 - Перевіряйте на мобільних пристроях
 - Документуйте знайдені баги
 - Пропонуйте покращення UX
 
 ### Для менеджерів
+
 - Слідкуйте за roadmap
 - Збирайте фідбек користувачів
 - Плануйте майбутні фічі
@@ -357,18 +390,21 @@ pkill -f "vite" && cd predator12-local/frontend && npm run dev
 ## 🔮 ROADMAP
 
 ### Короткострокові плани (1-2 тижні)
+
 - [ ] Додати більше мов
 - [ ] Покращити точність розпізнавання
 - [ ] Додати більше голосових команд
 - [ ] Створити мобільну версію
 
 ### Середньострокові плани (1-2 місяці)
+
 - [ ] Інтеграція з AI моделями
 - [ ] Підтримка офлайн режиму
 - [ ] Покращена візуалізація
 - [ ] Аналітика використання
 
 ### Довгострокові плани (3-6 місяців)
+
 - [ ] Підтримка діалогів
 - [ ] Навчання моделі на власних даних
 - [ ] API для інтеграції
@@ -379,6 +415,7 @@ pkill -f "vite" && cd predator12-local/frontend && npm run dev
 ## ✅ ШВИДКИЙ ЧЕКЛИСТ
 
 **Перед початком роботи:**
+
 - [x] Сервер запущено ✅
 - [x] Браузер відкрито ✅
 - [x] Документація доступна ✅
@@ -387,6 +424,7 @@ pkill -f "vite" && cd predator12-local/frontend && npm run dev
 - [ ] Ознайомлено з документацією
 
 **Готовий до продакшн:**
+
 - [ ] Всі тести пройдено
 - [ ] Код оптимізовано
 - [ ] Білд створено
@@ -400,6 +438,7 @@ pkill -f "vite" && cd predator12-local/frontend && npm run dev
 **Що робити прямо зараз:**
 
 1. **Відкрийте браузер:**
+
    ```bash
    open http://localhost:5090/
    ```
@@ -410,6 +449,7 @@ pkill -f "vite" && cd predator12-local/frontend && npm run dev
    - Перегляньте результат
 
 3. **Перегляньте документацію:**
+
    ```bash
    ./📚_VIEW_DOCS.sh
    ```

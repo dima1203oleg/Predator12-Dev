@@ -1,6 +1,4 @@
-"""
-Таски для агента прогнозування
-"""
+"""Таски для агента прогнозування."""
 
 from __future__ import annotations
 
@@ -15,7 +13,7 @@ from ..handlers.forecast_agent import ForecastAgent
 def train_forecast_model_task(
     self, dataset_id: str, model_type: str = "arima", **kwargs
 ) -> dict[str, Any]:
-    """Таск для навчання моделі прогнозування"""
+    """Таск для навчання моделі прогнозування."""
 
     agent = ForecastAgent()
 
@@ -37,7 +35,7 @@ def train_forecast_model_task(
 
 @celery_app.task(bind=True, name="forecast.make_forecast")
 def make_forecast_task(self, model_id: str, forecast_horizon: int = 30, **kwargs) -> dict[str, Any]:
-    """Таск для створення прогнозу"""
+    """Таск для створення прогнозу."""
 
     agent = ForecastAgent()
 
@@ -57,7 +55,7 @@ def make_forecast_task(self, model_id: str, forecast_horizon: int = 30, **kwargs
 
 @celery_app.task(bind=True, name="forecast.detect_trends")
 def detect_trends_task(self, dataset_id: str, time_series: list[float], **kwargs) -> dict[str, Any]:
-    """Таск для виявлення трендів"""
+    """Таск для виявлення трендів."""
 
     agent = ForecastAgent()
 

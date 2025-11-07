@@ -3,14 +3,9 @@ Self-Healing Tasks for Celery Workers
 Handles automated system recovery and health monitoring
 """
 
-import asyncio
-import json
 import logging
-import os
-from datetime import datetime, timedelta
-from typing import Any, Dict, List
-
-from celery import current_task
+from datetime import datetime
+from typing import Any, Dict
 
 from ..celery_app import celery_app
 

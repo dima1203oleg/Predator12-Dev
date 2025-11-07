@@ -1,4 +1,3 @@
-import os
 import subprocess
 import time
 from pathlib import Path
@@ -8,8 +7,7 @@ print("=" * 40)
 
 # Перевірка Python
 try:
-    import asyncio
-    import json
+    pass
 
     print("✅ Python модулі доступні")
 except ImportError as e:

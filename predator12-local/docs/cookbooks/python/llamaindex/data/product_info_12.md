@@ -1,7 +1,9 @@
 # Information about product item_number: 12
+
 TrekMaster Camping Chair, price $50
 
 ## Brand
+
 CampBuddy
 
 Main Category: CAMPING & HIKING
@@ -9,6 +11,7 @@ Sub Category: OTHER
 Product Type: OTHER
 
 ## Features
+
 - Sturdy Construction: Built with high-quality materials for durability and long-lasting performance.
 - Lightweight and Portable: Designed to be lightweight and easy to carry, making it convenient for camping, hiking, and outdoor activities.
 - Foldable Design: Allows for compact storage and effortless transportation.
@@ -25,6 +28,7 @@ Product Type: OTHER
 - Carry Bag: Includes a carrying bag for convenient storage and transportation.
 
 ## Technical Specs
+
 - Best Use: Camping, outdoor activities
 - Material:: Durable polyester fabric with reinforced stitching
 - Color: Blue
@@ -47,9 +51,10 @@ Product Type: OTHER
 - Cleaning: Easy to clean with removable and washable seat covers (if applicable)
 
 ## Return Policy
-- If Membership status "None":	If you are not satisfied with your purchase, you can return it within 30 days for a full refund. The product must be unused and in its original packaging.
-- If Membership status "Gold":	Gold members can return their camping tables within 60 days of purchase for a full refund or exchange. The product must be unused and in its original packaging.
-- If Membership status "Platinum":	Platinum members can return their camping tables within 90 days of purchase for a full refund or exchange. The product must be unused and in its original packaging. Additionally, Platinum members receive a 10% discount on all camping table purchases but from the same product brand.
+
+- If Membership status "None": If you are not satisfied with your purchase, you can return it within 30 days for a full refund. The product must be unused and in its original packaging.
+- If Membership status "Gold": Gold members can return their camping tables within 60 days of purchase for a full refund or exchange. The product must be unused and in its original packaging.
+- If Membership status "Platinum": Platinum members can return their camping tables within 90 days of purchase for a full refund or exchange. The product must be unused and in its original packaging. Additionally, Platinum members receive a 10% discount on all camping table purchases but from the same product brand.
 
 ## User Guide/Manual
 
@@ -138,33 +143,34 @@ For any questions, concerns, or warranty claims, please reach out to our friendl
 
 ## Reviews
 
-1) Rating: 5
+1. Rating: 5
    Review: I absolutely love the TrekMaster Camping Chair! It's lightweight, sturdy, and super comfortable. The padded armrests and breathable fabric make it perfect for long camping trips. Highly recommended for outdoor enthusiasts!
 
-2) Rating: 4
+2. Rating: 4
    Review: The TrekMaster Camping Chair is a great value for the price. It's easy to set up and packs down nicely. The cup holder and side pockets are convenient features. The only downside is that it could be a bit more cushioned for added comfort.
 
-3) Rating: 5
+3. Rating: 5
    Review: This camping chair exceeded my expectations! It's well-built, durable, and provides excellent back support. The compact design and lightweight construction make it perfect for backpacking trips. I'm thrilled with my purchase!
 
-4) Rating: 3
+4. Rating: 3
    Review: The TrekMaster Camping Chair is decent for short outings. It's lightweight and easy to carry, but I found the seat fabric to be less durable than expected. It's suitable for occasional use, but I would recommend something sturdier for frequent camping trips.
 
-5) Rating: 4
+5. Rating: 4
    Review: I'm happy with my TrekMaster Camping Chair. It's comfortable and sturdy enough to support my weight. The adjustable armrests and storage pockets are handy features. I deducted one star because the chair is a bit low to the ground, making it a bit challenging to get in and out of for some individuals.
 
 ## FAQ
-54) What is the weight capacity of the TrekMaster Camping Chair?
-   The TrekMaster Camping Chair can support up to 300 lbs (136 kg), thanks to its durable steel frame and strong fabric.
 
-55) Can the TrekMaster Camping Chair be used on uneven ground?
-   Yes, the TrekMaster Camping Chair has non-slip feet, which provide stability and prevent sinking into soft or uneven ground.
+54. What is the weight capacity of the TrekMaster Camping Chair?
+    The TrekMaster Camping Chair can support up to 300 lbs (136 kg), thanks to its durable steel frame and strong fabric.
 
-56) How compact is the TrekMaster Camping Chair when folded?
-   When folded, the TrekMaster Camping Chair measures approximately 38in x 5in x 5in, making it compact and easy to carry or pack in your vehicle.
+55. Can the TrekMaster Camping Chair be used on uneven ground?
+    Yes, the TrekMaster Camping Chair has non-slip feet, which provide stability and prevent sinking into soft or uneven ground.
 
-57) Is the TrekMaster Camping Chair easy to clean?
-   Yes, the TrekMaster Camping Chair is made of durable and easy-to-clean fabric. Simply wipe it down with a damp cloth and let it air dry.
+56. How compact is the TrekMaster Camping Chair when folded?
+    When folded, the TrekMaster Camping Chair measures approximately 38in x 5in x 5in, making it compact and easy to carry or pack in your vehicle.
 
-58) Are there any accessories available for the TrekMaster Camping Chair?
-   While there are no specific accessories designed for the TrekMaster Camping Chair, it comes with a built-in cup holder and can be used with a variety of universal camping chair accessories such as footrests, side tables, or organizers.
+57. Is the TrekMaster Camping Chair easy to clean?
+    Yes, the TrekMaster Camping Chair is made of durable and easy-to-clean fabric. Simply wipe it down with a damp cloth and let it air dry.
+
+58. Are there any accessories available for the TrekMaster Camping Chair?
+    While there are no specific accessories designed for the TrekMaster Camping Chair, it comes with a built-in cup holder and can be used with a variety of universal camping chair accessories such as footrests, side tables, or organizers.

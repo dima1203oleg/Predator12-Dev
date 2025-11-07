@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""
-Self-Diagnosis Agent for Predator11
-Continuously monitors system health and diagnoses issues
-"""
+"""Self-Diagnosis Agent for Predator11 Continuously monitors system health and
+diagnoses issues."""
 
 import asyncio
 import json
 import logging
 import time
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
@@ -86,7 +84,7 @@ class SelfDiagnosisAgent:
         self.logger.info("SelfDiagnosisAgent initialized")
 
     async def initialize(self):
-        """Initialize connections and resources"""
+        """Initialize connections and resources."""
         try:
             # Redis connection
             self.redis = aioredis.from_url(
@@ -120,7 +118,7 @@ class SelfDiagnosisAgent:
             raise
 
     async def start(self):
-        """Start the self-diagnosis agent"""
+        """Start the self-diagnosis agent."""
         self.running = True
         self.logger.info("Starting SelfDiagnosisAgent")
 
@@ -136,7 +134,7 @@ class SelfDiagnosisAgent:
         await asyncio.gather(diagnostic_task, consumer_task, trend_task)
 
     async def stop(self):
-        """Stop the agent gracefully"""
+        """Stop the agent gracefully."""
         self.running = False
         self.logger.info("Stopping SelfDiagnosisAgent")
 
@@ -150,7 +148,7 @@ class SelfDiagnosisAgent:
             self.kafka_consumer.close()
 
     async def _diagnostic_loop(self):
-        """Main diagnostic loop"""
+        """Main diagnostic loop."""
         while self.running:
             try:
                 with HEALTH_CHECK_DURATION.time():
@@ -189,7 +187,7 @@ class SelfDiagnosisAgent:
                 await asyncio.sleep(30)  # Wait before retry
 
     async def _kafka_consumer_loop(self):
-        """Process incoming Kafka messages"""
+        """Process incoming Kafka messages."""
         while self.running:
             try:
                 for message in self.kafka_consumer:
@@ -204,7 +202,7 @@ class SelfDiagnosisAgent:
                 await asyncio.sleep(10)
 
     async def _trend_analysis_loop(self):
-        """Analyze metric trends for proactive diagnosis"""
+        """Analyze metric trends for proactive diagnosis."""
         while self.running:
             try:
                 trends = await self._analyze_trends()
@@ -222,7 +220,7 @@ class SelfDiagnosisAgent:
                 await asyncio.sleep(60)
 
     async def _collect_system_metrics(self) -> Dict[str, Any]:
-        """Collect comprehensive system metrics"""
+        """Collect comprehensive system metrics."""
         metrics = {}
 
         try:
@@ -247,7 +245,7 @@ class SelfDiagnosisAgent:
         return metrics
 
     async def _collect_system_info(self) -> Dict[str, Any]:
-        """Collect system-level information"""
+        """Collect system-level information."""
         return {
             "cpu_percent": psutil.cpu_percent(interval=1),
             "memory_percent": psutil.virtual_memory().percent,
@@ -260,7 +258,7 @@ class SelfDiagnosisAgent:
         }
 
     async def _collect_service_health(self) -> Dict[str, Any]:
-        """Collect health status of services"""
+        """Collect health status of services."""
         services = {}
 
         # Check common service endpoints
@@ -286,7 +284,7 @@ class SelfDiagnosisAgent:
         return {"services": services}
 
     async def _collect_database_metrics(self) -> Dict[str, Any]:
-        """Collect database performance metrics"""
+        """Collect database performance metrics."""
         if not self.postgres_pool:
             return {}
 
@@ -316,7 +314,7 @@ class SelfDiagnosisAgent:
             return {"database": {"status": "error", "error": str(e)}}
 
     async def _collect_api_metrics(self) -> Dict[str, Any]:
-        """Collect API performance metrics from Redis"""
+        """Collect API performance metrics from Redis."""
         if not self.redis:
             return {}
 
@@ -335,7 +333,7 @@ class SelfDiagnosisAgent:
             return {"api": {"status": "error", "error": str(e)}}
 
     async def _collect_agent_metrics(self) -> Dict[str, Any]:
-        """Collect metrics from other agents"""
+        """Collect metrics from other agents."""
         if not self.redis:
             return {}
 
@@ -360,7 +358,7 @@ class SelfDiagnosisAgent:
             return {"agents": {"error": str(e)}}
 
     async def _perform_diagnoses(self, metrics: Dict[str, Any]) -> List[DiagnosisResult]:
-        """Perform diagnostic analysis on collected metrics"""
+        """Perform diagnostic analysis on collected metrics."""
         diagnoses = []
 
         # CPU diagnosis
@@ -431,7 +429,7 @@ class SelfDiagnosisAgent:
         return diagnoses
 
     async def _update_metric_history(self, metrics: Dict[str, Any]):
-        """Update historical metrics for trend analysis"""
+        """Update historical metrics for trend analysis."""
         timestamp = int(time.time())
 
         # Keep metrics for the last hour
@@ -452,7 +450,7 @@ class SelfDiagnosisAgent:
                 ]
 
     async def _get_metric_trends(self) -> Dict[str, List[float]]:
-        """Get recent metric trends"""
+        """Get recent metric trends."""
         trends = {}
 
         for metric, history in self.metric_history.items():
@@ -463,7 +461,7 @@ class SelfDiagnosisAgent:
         return trends
 
     async def _analyze_trends(self) -> List[Dict[str, Any]]:
-        """Analyze metric trends for anomalies"""
+        """Analyze metric trends for anomalies."""
         trend_analyses = []
 
         for metric, history in self.metric_history.items():
@@ -489,7 +487,7 @@ class SelfDiagnosisAgent:
         return trend_analyses
 
     async def _create_trend_diagnosis(self, trend: Dict[str, Any]) -> Optional[DiagnosisResult]:
-        """Create diagnosis based on trend analysis"""
+        """Create diagnosis based on trend analysis."""
         if not trend.get("anomaly_detected"):
             return None
 
@@ -536,7 +534,7 @@ class SelfDiagnosisAgent:
         return max(0.0, min(100.0, base_score))
 
     async def _store_health_report(self, report: HealthReport):
-        """Store health report in database"""
+        """Store health report in database."""
         if not self.postgres_pool:
             return
 
@@ -557,7 +555,7 @@ class SelfDiagnosisAgent:
             self.logger.error(f"Failed to store health report: {e}")
 
     async def _notify_diagnoses(self, diagnoses: List[DiagnosisResult]):
-        """Send notifications for significant diagnoses"""
+        """Send notifications for significant diagnoses."""
         if not self.kafka_producer or not diagnoses:
             return
 
@@ -584,7 +582,7 @@ class SelfDiagnosisAgent:
             self.logger.error(f"Failed to send diagnosis notifications: {e}")
 
     async def _process_health_event(self, event: Dict[str, Any]):
-        """Process incoming health events from Kafka"""
+        """Process incoming health events from Kafka."""
         try:
             event_type = event.get("type")
 
@@ -599,7 +597,7 @@ class SelfDiagnosisAgent:
             self.logger.error(f"Error processing health event: {e}")
 
     async def _process_prometheus_alert(self, alert: Dict[str, Any]):
-        """Process Prometheus alert and create diagnosis"""
+        """Process Prometheus alert and create diagnosis."""
         alert_name = alert.get("alert_name")
         severity = alert.get("severity", "low")
 
@@ -621,7 +619,7 @@ class SelfDiagnosisAgent:
         await self._notify_diagnoses([diagnosis])
 
     async def _process_service_status(self, status_event: Dict[str, Any]):
-        """Process service status change event"""
+        """Process service status change event."""
         service_name = status_event.get("service")
         status = status_event.get("status")
 
@@ -641,7 +639,7 @@ class SelfDiagnosisAgent:
 
 
 async def main():
-    """Main entry point for the Self-Diagnosis Agent"""
+    """Main entry point for the Self-Diagnosis Agent."""
     import os
 
     config = {

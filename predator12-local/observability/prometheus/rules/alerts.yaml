@@ -3,11 +3,11 @@ groups:
   - name: app-alerts
     rules:
       - alert: HighLatency
-        expr: 'histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, job)) > 1'
+        expr: "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, job)) > 1"
         for: 1m
         labels:
           severity: critical
-          deployment_name: '{{ $labels.job }}'
+          deployment_name: "{{ $labels.job }}"
         annotations:
           summary: "High request latency on {{ $labels.job }}"
           description: "The 99th percentile of request latency is over 1 second for the job {{ $labels.job }}."
@@ -49,11 +49,11 @@ groups:
           description: "The ETL job {{ $labels.job_name }} has failed to complete."
 
       - alert: ModelDriftDetected
-        expr: 'model_drift_score > 0.7'
+        expr: "model_drift_score > 0.7"
         for: 15m
         labels:
           severity: warning
-          model_name: '{{ $labels.model_name }}'
+          model_name: "{{ $labels.model_name }}"
         annotations:
           summary: "Data drift detected for model {{ $labels.model_name }}"
           description: "The input data for model {{ $labels.model_name }} has drifted significantly."
@@ -63,7 +63,7 @@ groups:
         for: 1m
         labels:
           severity: high
-          pod_name: '{{ $labels.pod_name }}'
+          pod_name: "{{ $labels.pod_name }}"
         annotations:
           summary: "Suspicious activity detected in pod {{ $labels.pod_name }}"
           description: "Falco has detected suspicious activity in pod {{ $labels.pod_name }}. Please investigate."

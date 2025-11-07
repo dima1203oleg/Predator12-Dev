@@ -4,8 +4,7 @@
 Складна логіка з конкурсом, арбітражем, fallback та захистом від перегріву
 """
 
-import json
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import yaml
 

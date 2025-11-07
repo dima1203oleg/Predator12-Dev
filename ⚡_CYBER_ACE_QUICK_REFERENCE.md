@@ -2,7 +2,7 @@
 
 **Last Updated:** 14 жовтня 2025  
 **Version:** 1.0.0  
-**Status:** ✅ Production Ready  
+**Status:** ✅ Production Ready
 
 ---
 
@@ -50,29 +50,35 @@ predator12-local/frontend/src/modules/cyber-ace/
 ## 🎯 Key Components
 
 ### 1. CyberAcePage
+
 **Purpose:** Main entry point  
 **Features:** Layout, background effects, component composition  
 **Route:** `/cyber-ace`
 
 ### 2. AceAvatar
+
 **Purpose:** 3D animated avatar  
 **Tech:** Three.js + @react-three/fiber  
 **Features:** Rotation, pulsation, particles, mood colors
 
 ### 3. VoiceInput
+
 **Purpose:** Voice + text input  
 **Tech:** Web Speech API  
 **Languages:** Ukrainian (uk-UA), English (en-US)
 
 ### 4. QuickActions
+
 **Purpose:** 6 quick action cards  
 **Actions:** Transactions, Risks, Reports, Search, Alerts, Health
 
 ### 5. AgentCards
+
 **Purpose:** Agent status display  
 **Agents:** Sherlock, Guardian, Oracle, Sentinel, Scout, Librarian
 
 ### 6. StatusBar
+
 **Purpose:** System status + controls  
 **Features:** Time, notifications, settings, language switcher
 
@@ -117,19 +123,19 @@ const { voiceInput, setVoiceInput } = useCyberAceStore();
 ### Switch Language
 
 ```typescript
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const { t, i18n } = useTranslation();
 
 // Get translation
-const title = t('title');
+const title = t("title");
 
 // Change language
-i18n.changeLanguage('uk-UA'); // Ukrainian
-i18n.changeLanguage('en-US'); // English
+i18n.changeLanguage("uk-UA"); // Ukrainian
+i18n.changeLanguage("en-US"); // English
 
 // Check current language
-const isUkrainian = i18n.language === 'uk-UA';
+const isUkrainian = i18n.language === "uk-UA";
 ```
 
 ### Add New Translation
@@ -182,16 +188,16 @@ const isUkrainian = i18n.language === 'uk-UA';
 
 ```css
 /* Primary */
---ace-primary: #00ffff;      /* Cyan */
---ace-secondary: #ff00ff;    /* Magenta */
+--ace-primary: #00ffff; /* Cyan */
+--ace-secondary: #ff00ff; /* Magenta */
 
 /* Status */
---ace-success: #00ff88;      /* Green */
---ace-warning: #ffaa00;      /* Orange */
---ace-error: #ff0055;        /* Red */
+--ace-success: #00ff88; /* Green */
+--ace-warning: #ffaa00; /* Orange */
+--ace-error: #ff0055; /* Red */
 
 /* Background */
---ace-bg-dark: #0a0e27;      /* Dark blue */
+--ace-bg-dark: #0a0e27; /* Dark blue */
 --ace-bg-card: rgba(255, 255, 255, 0.05);
 ```
 
@@ -270,19 +276,23 @@ npm run preview
 ## 🐛 Troubleshooting
 
 ### White Screen
+
 **Cause:** i18n Suspense issue  
 **Fix:** Already fixed (Suspense disabled)
 
 ### Voice Not Working
+
 **Cause:** Web Speech API not supported  
 **Browser:** Use Chrome or Edge  
 **Check:** Allow microphone permissions
 
 ### 3D Avatar Laggy
+
 **Cause:** Weak GPU  
 **Fix:** Reduce particles count in AceAvatar.tsx
 
 ### Language Not Switching
+
 **Cause:** localStorage issue  
 **Fix:** Clear browser cache and reload
 
@@ -325,11 +335,13 @@ const AceAvatar = lazy(() => import('./components/AceAvatar'));
 ## 🔗 Useful Links
 
 ### Documentation
+
 - [Full Documentation](/Users/dima/Documents/Predator12/🎉_CYBER_ACE_FINAL_SUMMARY.md)
 - [Testing Report](/Users/dima/Documents/Predator12/🧪_CYBER_ACE_TESTING_REPORT.md)
 - [Implementation Plan](/Users/dima/Documents/Predator12/🎯_CYBER_ACE_IMPLEMENTATION_PLAN.md)
 
 ### External Resources
+
 - [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
 - [Zustand](https://docs.pmnd.rs/zustand)
 - [i18next](https://www.i18next.com/)
@@ -368,13 +380,13 @@ const newAction = {
 agents: [
   // ...existing agents
   {
-    id: 'new-agent',
-    name: 'NewAgent',
-    role: 'Role',
-    status: 'online',
-    metrics: { accuracy: 95, tasksCompleted: 100, uptime: '99.9%' }
-  }
-]
+    id: "new-agent",
+    name: "NewAgent",
+    role: "Role",
+    status: "online",
+    metrics: { accuracy: 95, tasksCompleted: 100, uptime: "99.9%" },
+  },
+];
 
 // 2. Add translations
 ```
@@ -384,8 +396,8 @@ agents: [
 ```css
 /* Edit cyber-ace.css */
 :root {
-  --ace-primary: #00ffff;      /* Your color */
-  --ace-secondary: #ff00ff;    /* Your color */
+  --ace-primary: #00ffff; /* Your color */
+  --ace-secondary: #ff00ff; /* Your color */
 }
 ```
 
@@ -429,17 +441,20 @@ VITE_APP_VERSION=1.0.0
 ## 📞 Need Help?
 
 ### Documentation
+
 1. Check [Testing Report](/Users/dima/Documents/Predator12/🧪_CYBER_ACE_TESTING_REPORT.md)
 2. Review [Implementation Plan](/Users/dima/Documents/Predator12/🎯_CYBER_ACE_IMPLEMENTATION_PLAN.md)
 3. Read [Fix Summary](/Users/dima/Documents/Predator12/🔧_CYBER_ACE_FIX_SUMMARY.md)
 
 ### Known Issues
+
 - See [Testing Report — Known Issues section]
 
 ### Debug Mode
+
 ```typescript
 // Enable debug logging
-localStorage.setItem('debug', 'cyber-ace:*');
+localStorage.setItem("debug", "cyber-ace:*");
 
 // Check store state
 console.log(useCyberAceStore.getState());
@@ -449,6 +464,6 @@ console.log(useCyberAceStore.getState());
 
 **Quick Reference Created:** 14 жовтня 2025  
 **Last Updated:** 14 жовтня 2025  
-**Version:** 1.0.0  
+**Version:** 1.0.0
 
 ✨ Happy coding! 🤖

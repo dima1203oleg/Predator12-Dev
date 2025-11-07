@@ -4,47 +4,6 @@ metadata:
   name: provision-proxmox
   namespace: tekton-pipelines
 spec:
-  params:
-    - name: cluster-name
-      type: string
-      description: "Cluster name"
-      default: "demo"
-    - name: nodes
-      type: string
-      description: "Number of nodes"
-      default: "1"
-    - name: role
-      type: string
-      description: "k3s or rke2"
-      default: "k3s"
-    - name: execute
-      type: string
-      description: "set to '1' to actually execute (otherwise dry-run)"
-      default: "0"
-  workspaces:
-    - name: repo
-  steps:
-    - name: run-provision
-      image: alpine:3.18
-      script: |
-        #!/bin/sh
-        set -e
-        cd $(workspaces.repo.path)
-        chmod +x ./scripts/provision/proxmox_provision.sh || true
-        ARGS="--cluster-name $(params.cluster-name) --nodes $(params.nodes) --role $(params.role)"
-        if [ "$(params.execute)" = "1" ]; then
-          ARGS="$ARGS --execute"
-        else
-          ARGS="$ARGS --dry-run"
-        fi
-        echo "[tekton] invoking provision script: $ARGS"
-        ./scripts/provision/proxmox_provision.sh $ARGS
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: provision-proxmox
-  namespace: tekton-pipelines
-spec:
   description: "Provision VMs on Proxmox via repository script. Requires PROXMOX_* secrets mounted. Non-destructive template."
   params:
     - name: cluster-name

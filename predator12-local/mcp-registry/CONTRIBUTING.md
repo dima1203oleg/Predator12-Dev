@@ -8,14 +8,18 @@ This document outlines how to contribute to this project.
 There are two types of MCP servers you can add to the registry:
 
 ### 🏠 Local Servers (Containerized)
+
 Local servers run in Docker containers on your machine. They:
+
 - Require a Dockerfile in the source repository
 - Are built and hosted as Docker images
 - Run locally with full container isolation
 - Can benefit from Docker-built images with enhanced security features (signatures, provenance, SBOMs, automatic updates)
 
 ### 🌐 Remote Servers (Hosted)
+
 Remote servers are hosted externally and accessed via HTTP(S). They:
+
 - Don't require a Dockerfile (already deployed somewhere)
 - Use `streamable-http` or `sse` transport protocols
 - Often require OAuth authentication
@@ -226,17 +230,20 @@ task remote-wizard
 ```
 
 The wizard will guide you through:
+
 1. **Basic Information**: Server name and category
 2. **Server Details**: Title, description, icon URL, and documentation URL
 3. **Remote Configuration**: Transport type (streamable-http or sse) and server URL
 4. **OAuth Configuration**: Simple yes/no question
 
 If OAuth is enabled, the wizard automatically generates:
+
 - **Provider**: Uses your server name (e.g., `linear`)
 - **Secret**: `{server-name}.personal_access_token` (e.g., `linear.personal_access_token`)
 - **Environment Variable**: `{SERVER_NAME}_PERSONAL_ACCESS_TOKEN` (e.g., `LINEAR_PERSONAL_ACCESS_TOKEN`)
 
 This will create a directory under `servers/` with three files:
+
 - `server.yaml` - Server configuration
 - `tools.json` - Empty array (for dynamic tool discovery)
 - `readme.md` - Documentation link
@@ -331,6 +338,7 @@ docker mcp catalog reset
 #### 6️⃣ Open a pull request
 
 Create a pull request with your remote server files. Make sure to:
+
 - Include all required files (`server.yaml`, `tools.json`, and `readme.md`)
 - Verify that your server URL is publicly accessible
 - Test OAuth configuration if applicable

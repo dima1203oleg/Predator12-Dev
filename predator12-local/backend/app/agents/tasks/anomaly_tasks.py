@@ -1,11 +1,8 @@
-"""
-Таски для агента аномалій
-"""
+"""Таски для агента аномалій."""
 
 from __future__ import annotations
 
 import asyncio
-from datetime import datetime
 from typing import Any
 
 from ..celery_app import celery_app
@@ -16,7 +13,7 @@ from ..handlers.anomaly_agent import AnomalyDetectionAgent
 def detect_anomalies_task(
     self, dataset_id: str, model_type: str = "isolation_forest", **kwargs
 ) -> dict[str, Any]:
-    """Таск для виявлення аномалій"""
+    """Таск для виявлення аномалій."""
 
     agent = AnomalyDetectionAgent()
 
@@ -33,7 +30,7 @@ def detect_anomalies_task(
 def train_anomaly_model_task(
     self, dataset_id: str, model_type: str = "isolation_forest", **kwargs
 ) -> dict[str, Any]:
-    """Таск для навчання моделі виявлення аномалій"""
+    """Таск для навчання моделі виявлення аномалій."""
 
     agent = AnomalyDetectionAgent()
 
@@ -55,7 +52,7 @@ def train_anomaly_model_task(
 def evaluate_anomaly_model_task(
     self, model_id: str, test_dataset_id: str, **kwargs
 ) -> dict[str, Any]:
-    """Таск для оцінки моделі виявлення аномалій"""
+    """Таск для оцінки моделі виявлення аномалій."""
 
     agent = AnomalyDetectionAgent()
 
@@ -72,7 +69,7 @@ def evaluate_anomaly_model_task(
 def get_anomaly_scores_task(
     self, model_id: str, data_points: list[list[float]], **kwargs
 ) -> dict[str, Any]:
-    """Таск для отримання оцінок аномальності"""
+    """Таск для отримання оцінок аномальності."""
 
     agent = AnomalyDetectionAgent()
 

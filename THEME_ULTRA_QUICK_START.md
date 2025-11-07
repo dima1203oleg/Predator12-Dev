@@ -16,29 +16,29 @@ npm install @mui/material @emotion/react @emotion/styled
 ### Step 2: Copy Code (1 хвилина)
 
 **App.tsx:**
+
 ```tsx
-import { NexusThemeProvider } from './contexts/ThemeContext';
-import ThemeSwitcher from './components/theme/ThemeSwitcher';
+import { NexusThemeProvider } from "./contexts/ThemeContext";
+import ThemeSwitcher from "./components/theme/ThemeSwitcher";
 
 <NexusThemeProvider>
   <YourApp />
   <ThemeSwitcher />
-</NexusThemeProvider>
+</NexusThemeProvider>;
 ```
 
 ### Step 3: Use Themes (30 секунд)
 
 **Any Component:**
+
 ```tsx
-import { useNexusTheme } from '../contexts/ThemeContext';
+import { useNexusTheme } from "../contexts/ThemeContext";
 
 const { colors } = useNexusTheme();
 
 <Box sx={{ background: colors.background.paper }}>
-  <Typography sx={{ color: colors.text.primary }}>
-    Hello Theme!
-  </Typography>
-</Box>
+  <Typography sx={{ color: colors.text.primary }}>Hello Theme!</Typography>
+</Box>;
 ```
 
 ### Step 4: Run! (1 хвилина)
@@ -68,24 +68,28 @@ npm start
 ## 💡 ONE-LINERS
 
 **Change theme:**
+
 ```tsx
 const { setTheme } = useNexusTheme();
-setTheme('matrix');
+setTheme("matrix");
 ```
 
 **Get colors:**
+
 ```tsx
 const { colors } = useNexusTheme();
 ```
 
 **Use gradient:**
+
 ```tsx
-background: colors.gradients.primary
+background: colors.gradients.primary;
 ```
 
 **Add glow:**
+
 ```tsx
-boxShadow: `0 0 20px ${colors.primary.glow}`
+boxShadow: `0 0 20px ${colors.primary.glow}`;
 ```
 
 ---

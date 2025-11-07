@@ -3,9 +3,6 @@
 Nexus Core UI Launcher - запуск веб-інтерфейсу Predator Analytics
 """
 
-import json
-import os
-import signal
 import subprocess
 import sys
 import time
@@ -14,7 +11,7 @@ from pathlib import Path
 
 
 def check_port_available(port=5173):
-    """Перевіряє чи вільний порт"""
+    """Перевіряє чи вільний порт."""
     import socket
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -23,7 +20,7 @@ def check_port_available(port=5173):
 
 
 def start_vite_dev_server():
-    """Запускає Vite dev сервер"""
+    """Запускає Vite dev сервер."""
     frontend_dir = Path(__file__).parent / "frontend"
 
     if not frontend_dir.exists():
@@ -52,7 +49,7 @@ def start_vite_dev_server():
 
 
 def start_static_server():
-    """Запускає статичний сервер як резерв"""
+    """Запускає статичний сервер як резерв."""
     frontend_dir = Path(__file__).parent / "frontend"
     dist_dir = frontend_dir / "dist"
 
@@ -74,7 +71,7 @@ def start_static_server():
 
 
 def open_browser(url="http://localhost:5173"):
-    """Відкриває браузер"""
+    """Відкриває браузер."""
     print(f"🌐 Відкриваю браузер: {url}")
     try:
         webbrowser.open(url)

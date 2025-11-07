@@ -1,9 +1,10 @@
 # Runbook: OpenSearch Slow Aggregations
 
 - **Symptoms**
-High p95 latency (>3s), dashboard timeouts, heap pressure.
+  High p95 latency (>3s), dashboard timeouts, heap pressure.
 
 - **Immediate checks**
+
 1. Cluster health (`/_cluster/health`).
 2. Node JVM heap and cache stats.
 3. Shard counts per index and rollover status.

@@ -5,12 +5,14 @@
 ### Infrastructure Requirements
 
 #### Minimum System Requirements
+
 - **CPU**: 8 cores (16 threads recommended)
 - **Memory**: 32GB RAM (64GB recommended)
 - **Storage**: 500GB SSD (1TB recommended)
 - **Network**: 10Gbps (for high-throughput scenarios)
 
 #### Kubernetes Cluster
+
 ```bash
 # Node requirements
 - 3+ worker nodes
@@ -23,6 +25,7 @@
 ### 🔐 Security Configuration
 
 #### Vault Setup
+
 ```bash
 # Initialize Vault
 kubectl apply -f infra/security/vault-init.yaml
@@ -33,6 +36,7 @@ kubectl exec -it vault-0 -- vault operator unseal <key1>
 ```
 
 #### Keycloak Configuration
+
 ```bash
 # Create realm and roles
 kubectl apply -f infra/security/keycloak-realm.yaml
@@ -43,6 +47,7 @@ kubectl apply -f infra/security/keycloak-realm.yaml
 ### 📊 Monitoring Stack
 
 #### Prometheus + Grafana
+
 ```bash
 # Deploy monitoring
 helm install monitoring prometheus-community/kube-prometheus-stack \
@@ -51,6 +56,7 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
 ```
 
 #### Alert Rules
+
 ```yaml
 # Critical alerts configured:
 - ServiceDown (1min)
@@ -63,6 +69,7 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
 ### 🔄 CI/CD Pipeline
 
 #### GitHub Actions Workflow
+
 ```yaml
 # Automated workflow includes:
 - Code quality checks (linting, formatting)
@@ -74,13 +81,15 @@ helm install monitoring prometheus-community/kube-prometheus-stack \
 ```
 
 #### Deployment Stages
+
 1. **Development**: Feature branches → dev environment
-2. **Staging**: Develop branch → staging environment  
+2. **Staging**: Develop branch → staging environment
 3. **Production**: Main branch → production environment
 
 ### 📈 Scaling Configuration
 
 #### Horizontal Pod Autoscaler
+
 ```yaml
 # Auto-scaling rules:
 backend-api:
@@ -89,12 +98,13 @@ backend-api:
   targetCPUUtilization: 70%
 
 celery-workers:
-  minReplicas: 2  
+  minReplicas: 2
   maxReplicas: 20
   targetCPUUtilization: 80%
 ```
 
 #### Vertical Pod Autoscaler
+
 ```yaml
 # Resource optimization:
 - Automatic resource recommendations
@@ -105,6 +115,7 @@ celery-workers:
 ### 🗄️ Database Management
 
 #### PostgreSQL High Availability
+
 ```bash
 # Primary-replica setup
 - Primary: Write operations
@@ -113,6 +124,7 @@ celery-workers:
 ```
 
 #### Backup Strategy
+
 ```bash
 # Automated backups:
 - Hourly: WAL archiving
@@ -124,21 +136,24 @@ celery-workers:
 ### 🔍 Observability
 
 #### Metrics Collection
+
 - **Application metrics**: Custom Prometheus metrics
 - **Infrastructure metrics**: Node Exporter, cAdvisor
 - **Database metrics**: PostgreSQL Exporter
 - **Message queue**: Redis Exporter
 
 #### Logging Strategy
+
 ```yaml
 # Log aggregation:
 - Application logs → OpenSearch
-- Infrastructure logs → OpenSearch  
+- Infrastructure logs → OpenSearch
 - Audit logs → Separate index
 - Retention: 30 days (configurable)
 ```
 
 #### Distributed Tracing
+
 ```yaml
 # OpenTelemetry setup:
 - Jaeger backend
@@ -150,6 +165,7 @@ celery-workers:
 ### 🚨 Disaster Recovery
 
 #### Backup & Restore
+
 ```bash
 # Automated disaster recovery:
 1. Database backup (PostgreSQL + Redis)
@@ -159,6 +175,7 @@ celery-workers:
 ```
 
 #### Recovery Procedures
+
 ```bash
 # RTO: 15 minutes
 # RPO: 1 hour
@@ -168,6 +185,7 @@ celery-workers:
 ### 🧪 Testing Strategy
 
 #### Test Environments
+
 - **Unit tests**: 95%+ coverage requirement
 - **Integration tests**: API endpoints, database
 - **E2E tests**: Critical user journeys
@@ -175,6 +193,7 @@ celery-workers:
 - **Security tests**: Vulnerability scanning
 
 #### Quality Gates
+
 ```yaml
 # Required before production:
 - All tests passing
@@ -186,6 +205,7 @@ celery-workers:
 ### 📊 Capacity Planning
 
 #### Resource Monitoring
+
 ```yaml
 # Capacity alerts:
 - CPU utilization >70%
@@ -195,6 +215,7 @@ celery-workers:
 ```
 
 #### Scaling Triggers
+
 ```yaml
 # Automatic scaling:
 - Request rate >100 RPS
@@ -206,6 +227,7 @@ celery-workers:
 ### 🔧 Maintenance
 
 #### Update Strategy
+
 ```bash
 # Rolling updates:
 - Zero-downtime deployments
@@ -214,6 +236,7 @@ celery-workers:
 ```
 
 #### Maintenance Windows
+
 ```yaml
 # Scheduled maintenance:
 - Database updates: Sunday 2-4 AM UTC
@@ -224,12 +247,14 @@ celery-workers:
 ### 📞 Support & Operations
 
 #### Runbooks
+
 - **Service Recovery**: Step-by-step procedures
 - **Incident Response**: Escalation matrix
 - **Performance Tuning**: Optimization guides
 - **Security Response**: Breach procedures
 
 #### On-Call Procedures
+
 ```yaml
 # Alert escalation:
 Level 1: Development team (5min)
@@ -242,6 +267,7 @@ Level 3: Management team (30min)
 ## 🎯 Production Readiness Checklist
 
 ### Security ✅
+
 - [x] Authentication & authorization (Keycloak)
 - [x] Secrets management (Vault)
 - [x] Network policies (Kubernetes)
@@ -249,6 +275,7 @@ Level 3: Management team (30min)
 - [x] Runtime security monitoring
 
 ### Reliability ✅
+
 - [x] High availability setup
 - [x] Automatic failover
 - [x] Circuit breakers
@@ -256,6 +283,7 @@ Level 3: Management team (30min)
 - [x] Graceful degradation
 
 ### Observability ✅
+
 - [x] Comprehensive monitoring
 - [x] Distributed tracing
 - [x] Log aggregation
@@ -263,6 +291,7 @@ Level 3: Management team (30min)
 - [x] Performance profiling
 
 ### Scalability ✅
+
 - [x] Horizontal auto-scaling
 - [x] Load balancing
 - [x] Database optimization
@@ -270,6 +299,7 @@ Level 3: Management team (30min)
 - [x] CDN integration
 
 ### Operations ✅
+
 - [x] CI/CD pipeline
 - [x] Infrastructure as code
 - [x] Backup & recovery

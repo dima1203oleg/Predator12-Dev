@@ -9,11 +9,9 @@ Author: CYBER-ACE Team
 Version: 1.0.0
 """
 
-import asyncio
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-import openai
 from openai import AsyncOpenAI
 
 

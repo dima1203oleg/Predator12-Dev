@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
-"""
-🤖 Specialized Model Router for Predator Analytics
-Розумний роутер для оптимального розподілу 58 безкоштовних моделей за спеціалізацією агентів
-"""
+"""🤖 Specialized Model Router for Predator Analytics Розумний роутер для
+оптимального розподілу 58 безкоштовних моделей за спеціалізацією агентів."""
 
-import random
 from datetime import datetime
 from enum import Enum
 from typing import Any
@@ -13,7 +10,7 @@ import yaml
 
 
 class ModelTier(Enum):
-    """Рівні потужності моделей"""
+    """Рівні потужності моделей."""
 
     FLAGSHIP = "flagship"
     PREMIUM = "premium"
@@ -21,7 +18,7 @@ class ModelTier(Enum):
 
 
 class TaskComplexity(Enum):
-    """Складність задач"""
+    """Складність задач."""
 
     SIMPLE = "simple"
     MEDIUM = "medium"
@@ -30,7 +27,7 @@ class TaskComplexity(Enum):
 
 
 class AgentType(Enum):
-    """Типи агентів системи"""
+    """Типи агентів системи."""
 
     ANOMALY = "AnomalyAgent"
     FORECAST = "ForecastAgent"
@@ -42,7 +39,7 @@ class AgentType(Enum):
 
 
 class SpecializedModelRouter:
-    """Спеціалізований роутер моделей для агентів Predator Analytics"""
+    """Спеціалізований роутер моделей для агентів Predator Analytics."""
 
     def __init__(self):
         self.specialized_registry = self._load_specialized_registry()
@@ -50,7 +47,7 @@ class SpecializedModelRouter:
         self.usage_stats = {}
 
     def _load_specialized_registry(self) -> dict[str, Any]:
-        """Завантаження спеціалізованої конфігурації моделей"""
+        """Завантаження спеціалізованої конфігурації моделей."""
         try:
             registry_path = (
                 "/Users/dima/Documents/Predator11/backend/app/agents/specialized_registry.yaml"
@@ -62,7 +59,7 @@ class SpecializedModelRouter:
             return self._get_default_specialized_config()
 
     def _get_default_specialized_config(self) -> dict[str, Any]:
-        """Базова спеціалізована конфігурація моделей"""
+        """Базова спеціалізована конфігурація моделей."""
         return {
             "agents": {
                 "AnomalyAgent": {
@@ -203,7 +200,7 @@ class SpecializedModelRouter:
         task_complexity: TaskComplexity = TaskComplexity.MEDIUM,
         task_type: str = "general",
     ) -> str:
-        """Отримання оптимальної моделі для агента та задачі"""
+        """Отримання оптимальної моделі для агента та задачі."""
 
         if agent_type not in self.specialized_registry.get("agents", {}):
             return "openai/gpt-4o-mini"  # Fallback
@@ -234,7 +231,7 @@ class SpecializedModelRouter:
         return model or "openai/gpt-4o-mini"
 
     def get_embedding_model(self, agent_type: str) -> str:
-        """Отримання моделі для embeddings"""
+        """Отримання моделі для embeddings."""
         if agent_type not in self.specialized_registry.get("agents", {}):
             return "cohere/cohere-embed-v3-multilingual"
 
@@ -244,13 +241,13 @@ class SpecializedModelRouter:
         return embedding_models[0] if embedding_models else "cohere/cohere-embed-v3-multilingual"
 
     def _is_model_available(self, model: str) -> bool:
-        """Перевірка доступності моделі"""
+        """Перевірка доступності моделі."""
         # Симуляція перевірки доступності (можна інтегрувати з реальним API)
         unavailable_models = self.performance_stats.get("unavailable", set())
         return model not in unavailable_models
 
     def update_performance_stats(self, model: str, success: bool, response_time: float):
-        """Оновлення статистики продуктивності"""
+        """Оновлення статистики продуктивності."""
         if model not in self.performance_stats:
             self.performance_stats[model] = {
                 "total_requests": 0,
@@ -275,7 +272,7 @@ class SpecializedModelRouter:
         stats["success_rate"] = stats["successful_requests"] / stats["total_requests"]
 
     def get_agent_models_summary(self, agent_type: str) -> dict[str, Any]:
-        """Отримання повного набору моделей для агента"""
+        """Отримання повного набору моделей для агента."""
         if agent_type not in self.specialized_registry.get("agents", {}):
             return {}
 
@@ -298,7 +295,7 @@ class SpecializedModelRouter:
     def get_load_balanced_model(
         self, agent_type: str, task_complexity: TaskComplexity = TaskComplexity.MEDIUM
     ) -> str:
-        """Отримання моделі з урахуванням балансування навантаження"""
+        """Отримання моделі з урахуванням балансування навантаження."""
         agent_config = self.specialized_registry.get("agents", {}).get(agent_type, {})
 
         # Отримуємо список всіх доступних моделей для агента
@@ -332,7 +329,7 @@ class SpecializedModelRouter:
         return min(model_loads.keys(), key=lambda m: model_loads[m])
 
     def get_system_statistics(self) -> dict[str, Any]:
-        """Отримання статистики всієї системи"""
+        """Отримання статистики всієї системи."""
         total_agents = len(self.specialized_registry.get("agents", {}))
         total_models = 58  # Загальна кількість моделей
 
@@ -366,7 +363,7 @@ class SpecializedModelRouter:
 
 
 def test_specialized_routing():
-    """Тестування спеціалізованого роутингу моделей"""
+    """Тестування спеціалізованого роутингу моделей."""
     print("🤖 Testing Specialized Model Routing for Predator Analytics")
     print("=" * 80)
 

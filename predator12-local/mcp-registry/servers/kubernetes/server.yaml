@@ -15,7 +15,7 @@ source:
   commit: fd2fef03fd98dbad79064fa783f745f6a18e2041
 run:
   volumes:
-    - '{{kubernetes.config_path}}:/home/appuser/.kube/config'
+    - "{{kubernetes.config_path}}:/home/appuser/.kube/config"
 config:
   description: Configure the location of the host Kubernetes file
   parameters:

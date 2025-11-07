@@ -7,8 +7,9 @@
 ## 🎯 Що нового в V2
 
 ### ✨ Основні покращення:
+
 - **Backend API** - Централізоване керування провайдерами
-- **Зашифровані API ключі** - Безпечне зберігання облікових даних  
+- **Зашифровані API ключі** - Безпечне зберігання облікових даних
 - **Статистика використання** - Аналітика провайдерів
 - **Автоматичне тестування** - Валідація всіх провайдерів
 - **UI адміністрування** - Повнофункціональна панель керування
@@ -25,6 +26,7 @@ cd predator12-local
 ```
 
 **Очікуваний результат:**
+
 ```
 🚀 Запуск Backend сервера...
 🔗 Backend буде доступний на: http://localhost:8000
@@ -40,6 +42,7 @@ cd predator12-local
 ```
 
 **Очікуваний результат:**
+
 ```
 🎤 Premium FREE Voice API запущений!
 🔊 TTS: Coqui TTS ⭐⭐⭐⭐⭐
@@ -57,11 +60,13 @@ npm start
 ## 🎮 Як користуватися
 
 ### Голосове керування:
+
 1. **Floating Button** - Правий нижній кут екрану
 2. **Клік** - Розпочати слухання голосової команди
 3. **Правий клік** - Відкрити меню налаштувань
 
 ### Адміністрування:
+
 1. **Правий клік** на floating button → "Налаштування провайдерів"
 2. **Вкладки:**
    - **Провайдери** - Керування TTS/STT
@@ -72,35 +77,37 @@ npm start
 
 ### Backend API (http://localhost:8000)
 
-| Endpoint | Метод | Опис |
-|----------|-------|------|
-| `/api/voice-providers/providers` | GET | Список провайдерів |
-| `/api/voice-providers/providers` | POST | Створити провайдер |
-| `/api/voice-providers/providers/{id}` | PUT | Оновити провайдер |
-| `/api/voice-providers/providers/{id}/test` | POST | Тестувати провайдер |
-| `/api/voice-providers/settings` | GET/PUT | Глобальні налаштування |
-| `/api/voice-providers/usage/stats` | GET | Статистика використання |
-| `/api/voice-providers/health` | GET | Стан API |
+| Endpoint                                   | Метод   | Опис                    |
+| ------------------------------------------ | ------- | ----------------------- |
+| `/api/voice-providers/providers`           | GET     | Список провайдерів      |
+| `/api/voice-providers/providers`           | POST    | Створити провайдер      |
+| `/api/voice-providers/providers/{id}`      | PUT     | Оновити провайдер       |
+| `/api/voice-providers/providers/{id}/test` | POST    | Тестувати провайдер     |
+| `/api/voice-providers/settings`            | GET/PUT | Глобальні налаштування  |
+| `/api/voice-providers/usage/stats`         | GET     | Статистика використання |
+| `/api/voice-providers/health`              | GET     | Стан API                |
 
 ### Voice API (http://localhost:8001)
 
-| Endpoint | Метод | Опис |
-|----------|-------|------|
-| `/tts` | POST | Text-to-Speech |
-| `/stt` | POST | Speech-to-Text |
-| `/capabilities` | GET | Можливості системи |
-| `/health` | GET | Стан сервісу |
+| Endpoint        | Метод | Опис               |
+| --------------- | ----- | ------------------ |
+| `/tts`          | POST  | Text-to-Speech     |
+| `/stt`          | POST  | Speech-to-Text     |
+| `/capabilities` | GET   | Можливості системи |
+| `/health`       | GET   | Стан сервісу       |
 
 ## 🔧 Конфігурація провайдерів
 
 ### Безкоштовні провайдери (за замовчуванням):
 
 #### TTS:
+
 - **Coqui TTS** ⭐⭐⭐⭐⭐ - Найкраща якість, офлайн
 - **Google TTS** ⭐⭐⭐⭐ - Швидкий, онлайн
 - **pyttsx3** ⭐⭐⭐ - Системний, завжди доступний
 
 #### STT:
+
 - **Faster Whisper** ⭐⭐⭐⭐⭐ - Найкраща точність, офлайн
 - **Whisper** ⭐⭐⭐⭐⭐ - Максимальна підтримка мов
 - **Vosk** ⭐⭐⭐⭐ - Легкий, швидкий
@@ -145,6 +152,7 @@ npm start
 ## 📈 Моніторинг та діагностика
 
 ### Статус системи:
+
 ```bash
 # Перевірка Backend API
 curl http://localhost:8000/api/voice-providers/health
@@ -158,11 +166,11 @@ curl http://localhost:8000/api/voice-providers/usage/stats
 
 ### Типові помилки:
 
-| Помилка | Причина | Рішення |
-|---------|---------|---------|
-| Backend недоступний | Порт 8000 зайнятий | `./start-backend-voice.sh` |
-| Voice API offline | Залежності не встановлено | `./start-voice-premium-free.sh` |
-| Тест провайдера fails | Неправильний API ключ | Перевірити ключ в адмін панелі |
+| Помилка               | Причина                   | Рішення                         |
+| --------------------- | ------------------------- | ------------------------------- |
+| Backend недоступний   | Порт 8000 зайнятий        | `./start-backend-voice.sh`      |
+| Voice API offline     | Залежності не встановлено | `./start-voice-premium-free.sh` |
+| Тест провайдера fails | Неправильний API ключ     | Перевірити ключ в адмін панелі  |
 
 ## 🔐 Безпека
 
@@ -195,6 +203,7 @@ curl http://localhost:8000/api/voice-providers/usage/stats
 ## 🚨 Troubleshooting
 
 ### Backend не запускається:
+
 ```bash
 # Перевірити порт
 lsof -i :8000
@@ -206,6 +215,7 @@ pip install -r requirements.txt
 ```
 
 ### Voice API не працює:
+
 ```bash
 # Перевірити моделі
 cd predator12-local
@@ -216,6 +226,7 @@ pip install -r requirements_premium_free.txt
 ```
 
 ### Frontend не бачить API:
+
 ```bash
 # Перевірити CORS
 curl -H "Origin: http://localhost:3000" \
@@ -230,7 +241,7 @@ curl -H "Origin: http://localhost:3000" \
 Якщо все працює правильно, ви побачите:
 
 1. **✅ Backend** - http://localhost:8000/docs
-2. **✅ Voice API** - http://localhost:8001/docs  
+2. **✅ Voice API** - http://localhost:8001/docs
 3. **✅ Frontend** - http://localhost:3000
 4. **✅ Floating button** - Правий нижній кут
 5. **✅ Адмін панель** - Правий клік → Налаштування

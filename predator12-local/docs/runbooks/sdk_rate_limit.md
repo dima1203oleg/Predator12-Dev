@@ -1,9 +1,10 @@
 # Runbook: SDK Rate Limit or Timeouts
 
 - **Symptoms**
-Model calls fail with 429/5xx, UI stalls.
+  Model calls fail with 429/5xx, UI stalls.
 
 - **Immediate checks**
+
 1. Inspect `/metrics` for router RPS and error rate.
 2. Check exporter `opensearch_exporter` and backend logs.
 3. Validate `MODEL_SDK_BASE_URL` and `MODEL_SDK_KEY`.

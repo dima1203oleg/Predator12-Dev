@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Test script for Agents API endpoints
-"""
+"""Test script for Agents API endpoints."""
 
 import asyncio
 import json
@@ -18,7 +16,7 @@ class AgentsAPITester:
         self.client = httpx.AsyncClient(timeout=30.0)
 
     async def test_agent_status(self) -> Dict[str, Any]:
-        """Test GET /agents/status"""
+        """Test GET /agents/status."""
         print("🔍 Testing agent status endpoint...")
         try:
             response = await self.client.get(f"{self.base_url}/status")
@@ -36,7 +34,7 @@ class AgentsAPITester:
             return {"status": "error", "error": str(e)}
 
     async def test_available_analyses(self) -> Dict[str, Any]:
-        """Test GET /agents/analyses"""
+        """Test GET /agents/analyses."""
         print("📋 Testing available analyses endpoint...")
         try:
             response = await self.client.get(f"{self.base_url}/analyses")
@@ -54,7 +52,7 @@ class AgentsAPITester:
             return {"status": "error", "error": str(e)}
 
     async def test_workflow_execution(self) -> Dict[str, Any]:
-        """Test POST /agents/execute"""
+        """Test POST /agents/execute."""
         print("🚀 Testing workflow execution...")
 
         # Test valid workflow
@@ -80,7 +78,7 @@ class AgentsAPITester:
             return {"status": "error", "error": str(e)}
 
     async def test_invalid_workflow(self) -> Dict[str, Any]:
-        """Test workflow with invalid dependencies"""
+        """Test workflow with invalid dependencies."""
         print("⚠️  Testing invalid workflow (should fail)...")
 
         # Test invalid workflow - anomaly without ingest
@@ -103,7 +101,7 @@ class AgentsAPITester:
             return {"status": "error", "error": str(e)}
 
     async def test_simulation(self) -> Dict[str, Any]:
-        """Test POST /agents/simulate"""
+        """Test POST /agents/simulate."""
         print("🎭 Testing agent simulation...")
         try:
             response = await self.client.post(f"{self.base_url}/simulate")
@@ -136,7 +134,7 @@ class AgentsAPITester:
             return {"status": "error", "error": str(e)}
 
     async def test_workflow_list(self) -> Dict[str, Any]:
-        """Test GET /agents/workflows"""
+        """Test GET /agents/workflows."""
         print("📝 Testing workflow list...")
         try:
             response = await self.client.get(f"{self.base_url}/workflows?limit=5&offset=0")
@@ -169,7 +167,7 @@ class AgentsAPITester:
             return {"status": "error", "error": str(e)}
 
     async def run_all_tests(self) -> Dict[str, Any]:
-        """Run all API tests"""
+        """Run all API tests."""
         print("🧪 Starting Agents API comprehensive tests...\n")
 
         results = {}
@@ -208,12 +206,12 @@ class AgentsAPITester:
         }
 
     async def close(self):
-        """Close the HTTP client"""
+        """Close the HTTP client."""
         await self.client.aclose()
 
 
 async def main():
-    """Main test function"""
+    """Main test function."""
     tester = AgentsAPITester()
     try:
         results = await tester.run_all_tests()

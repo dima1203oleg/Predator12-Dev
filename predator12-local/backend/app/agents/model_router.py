@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-"""
-🤖 Specialized Model Router for Predator Analytics
-Розумний роутер для оптимального розподілу 58 безкоштовних моделей за спеціалізацією агентів
-"""
+"""🤖 Specialized Model Router for Predator Analytics Розумний роутер для
+оптимального розподілу 58 безкоштовних моделей за спеціалізацією агентів."""
 
 import random
 from datetime import datetime
@@ -13,7 +11,7 @@ import yaml
 
 
 class ModelTier(Enum):
-    """Рівні потужності моделей"""
+    """Рівні потужності моделей."""
 
     FLAGSHIP = "flagship"  # Найпотужніші моделі
     PREMIUM = "premium"  # Високоякісні моделі
@@ -23,7 +21,7 @@ class ModelTier(Enum):
 
 
 class TaskComplexity(Enum):
-    """Складність задач"""
+    """Складність задач."""
 
     SIMPLE = "simple"
     MEDIUM = "medium"
@@ -32,7 +30,7 @@ class TaskComplexity(Enum):
 
 
 class AgentType(Enum):
-    """Типи агентів системи"""
+    """Типи агентів системи."""
 
     ANOMALY = "AnomalyAgent"
     FORECAST = "ForecastAgent"
@@ -44,7 +42,7 @@ class AgentType(Enum):
 
 
 class ModelRouter:
-    """Розумний роутер моделей з спеціалізацією за агентами"""
+    """Розумний роутер моделей з спеціалізацією за агентами."""
 
     def __init__(self):
         self.specialized_registry = self._load_specialized_registry()
@@ -53,7 +51,7 @@ class ModelRouter:
         self.load_balancer = ModelLoadBalancer()
 
     def _load_model_registry(self) -> dict[str, Any]:
-        """Завантаження реєстру моделей з оптимізацією за потужністю"""
+        """Завантаження реєстру моделей з оптимізацією за потужністю."""
         return {
             # ═══════════════════════════════════════════════════════════════════
             #                    🏆 FLAGSHIP TIER (Найпотужніші)
@@ -187,7 +185,7 @@ class ModelRouter:
         task_complexity: TaskComplexity,
         task_type: str = "general",
     ) -> dict[str, Any]:
-        """Вибір оптимальної моделі для агента на основі складності задачі"""
+        """Вибір оптимальної моделі для агента на основі складності задачі."""
 
         # Завантаження агент-спеціфічних моделей з registry.yaml
         agent_models = self._get_agent_models(agent_name)
@@ -239,7 +237,7 @@ class ModelRouter:
         }
 
     def _get_agent_models(self, agent_name: str) -> dict[str, Any]:
-        """Отримання моделей для агента з registry.yaml"""
+        """Отримання моделей для агента з registry.yaml."""
         try:
             with open(
                 "/Users/dima/Documents/Predator11/backend/app/agents/registry.yaml", "r"
@@ -251,7 +249,7 @@ class ModelRouter:
             return {}
 
     def get_load_balanced_model(self, available_models: list[str]) -> str:
-        """Балансування навантаження між моделями"""
+        """Балансування навантаження між моделями."""
         # Простий round-robin з урахуванням статистики використання
         model_usage = {
             model: self.performance_stats.get(model, {}).get("usage_count", 0)
@@ -264,7 +262,7 @@ class ModelRouter:
     def update_model_performance(
         self, model: str, success: bool, response_time: float, quality_score: float
     ):
-        """Оновлення статистики продуктивності моделі"""
+        """Оновлення статистики продуктивності моделі."""
         if model not in self.performance_stats:
             self.performance_stats[model] = {
                 "usage_count": 0,
@@ -291,7 +289,7 @@ class ModelRouter:
         stats["avg_quality_score"] = (prev_quality_sum + quality_score) / stats["total_requests"]
 
     def get_model_recommendations(self, agent_name: str) -> dict[str, list[str]]:
-        """Отримання рекомендацій моделей для агента"""
+        """Отримання рекомендацій моделей для агента."""
         agent_models = self._get_agent_models(agent_name)
 
         recommendations = {
@@ -312,7 +310,7 @@ class ModelRouter:
 
 
 def main():
-    """Демонстрація роботи роутера моделей"""
+    """Демонстрація роботи роутера моделей."""
     router = ModelRouter()
 
     print("🤖 PREDATOR ANALYTICS - DYNAMIC MODEL ROUTER")

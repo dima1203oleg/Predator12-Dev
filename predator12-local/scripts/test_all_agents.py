@@ -4,7 +4,6 @@
 """
 
 import asyncio
-import os
 import sys
 
 sys.path.append("/Users/dima/Documents/Predator11/agents")

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-MetaSupervisorAgent (MVP)
+"""MetaSupervisorAgent (MVP)
 
 Lightweight autonomous scanner and reporter for Predator Analytics.
 Runs periodic scans (files, git last commit, kubernetes pods via kubectl if present,
@@ -189,7 +188,7 @@ def render_spec(report: Dict[str, Any]) -> str:
     if os.path.exists(OUT_SPEC):
         try:
             with open(OUT_SPEC, "r", encoding="utf-8") as f:
-                prev = f.read()
+                f.read()
             lines.append("(previous spec present — preserved in archived copies)\n")
         except Exception:
             pass

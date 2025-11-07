@@ -5,8 +5,9 @@ AutoTrain Loop — автоматичне перенавчання моделе�
 - Підтримує Ollama/LoRA/PEFT для донавчання.
 - Може запускатись вручну або за розкладом (через CI/CD).
 """
+
 import mlflow
-import os
+
 
 def retrain_model():
     # TODO: Додайте логіку завантаження нових даних, підготовки датасету
@@ -16,6 +17,7 @@ def retrain_model():
     # ... тренування ...
     mlflow.log_param("autotrain", True)
     mlflow.end_run()
+
 
 if __name__ == "__main__":
     retrain_model()

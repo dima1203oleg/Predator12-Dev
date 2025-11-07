@@ -7,6 +7,7 @@ This codespace comes with dependencies pre-installed. If you want to use this co
 ```shell
 npm install @mistralai/mistralai
 ```
+
 ## Running a sample
 
 To run a JavaScript sample, run a command like the following in your terminal:
@@ -15,6 +16,6 @@ To run a JavaScript sample, run a command like the following in your terminal:
 node samples/js/mistralai/multi_turn.js
 ```
 
-* [basic.js](basic.js): basic call to the gpt-4o-mini chat completion API
-* [multi_turn.js](multi_turn.js): multi-turn conversation with the chat completion API
-* [streaming.js](streaming.js): generate a response in streaming mode, token by token
+- [basic.js](basic.js): basic call to the gpt-4o-mini chat completion API
+- [multi_turn.js](multi_turn.js): multi-turn conversation with the chat completion API
+- [streaming.js](streaming.js): generate a response in streaming mode, token by token

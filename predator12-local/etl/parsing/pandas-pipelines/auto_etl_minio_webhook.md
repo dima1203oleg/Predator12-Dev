@@ -1,14 +1,18 @@
 # Автоматичний запуск ETL для митних декларацій при появі нового файлу у MinIO
 
 ## 1. MinIO Notification → Webhook
+
 - Налаштуйте MinIO на надсилання webhook при завантаженні нового файлу у bucket `originals`.
 - Приклад конфігурації:
+
 ```
 mc event add minio/originals arn:minio:sqs::webhook1:webhook --event put
 ```
 
 ## 2. Flask/FastAPI Webhook Listener
+
 - Створіть простий сервер, який приймає webhook і запускає ETL:
+
 ```python
 from flask import Flask, request
 import subprocess
@@ -28,6 +32,7 @@ if __name__ == '__main__':
 ## 3. Деплой webhook listener як окремий контейнер у Kubernetes або docker-compose.
 
 ## 4. (Опційно) Додавайте логіку для інтеграції з knowledge graph після ETL:
+
 ```python
 subprocess.Popen(['python', 'scripts/generate_knowledge_graph.py'])
 ```

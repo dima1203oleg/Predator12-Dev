@@ -1,11 +1,9 @@
 """
-Агент для роботи з датасетами
+Agent for working with datasets.
 """
 
 from __future__ import annotations
 
-import json
-import os
 from typing import Any
 
 import pandas as pd
@@ -18,13 +16,15 @@ logger = structlog.get_logger()
 
 
 class DatasetAgent(BaseAgent):
-    """Агент для завантаження, валідації та обробки датасетів"""
+    """Agent for loading, validating, and processing datasets."""
 
     def __init__(self, config: dict[str, Any] | None = None):
+        """Initialize DatasetAgent."""
         super().__init__("DatasetAgent", config)
         self.db_url = config.get("database_url") if config else None
 
     def capabilities(self) -> list[str]:
+        """Return the list of agent capabilities."""
         return [
             "load_dataset",
             "validate_dataset",
@@ -35,31 +35,26 @@ class DatasetAgent(BaseAgent):
         ]
 
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виконує завдання з обробки датасетів"""
-
+        """Execute a dataset processing task."""
         self.logger.info("Processing dataset task", task_type=task_type)
-
         if task_type == "load_dataset":
             return await self._load_dataset(payload)
-        elif task_type == "validate_dataset":
+        if task_type == "validate_dataset":
             return await self._validate_dataset(payload)
-        elif task_type == "process_dataset":
+        if task_type == "process_dataset":
             return await self._process_dataset(payload)
-        elif task_type == "save_dataset":
+        if task_type == "save_dataset":
             return await self._save_dataset(payload)
-        elif task_type == "get_dataset_info":
+        if task_type == "get_dataset_info":
             return await self._get_dataset_info(payload)
-        elif task_type == "split_dataset":
+        if task_type == "split_dataset":
             return await self._split_dataset(payload)
-        else:
-            raise ValueError(f"Unknown task type: {task_type}")
+        raise ValueError(f"Unknown task type: {task_type}")
 
     async def _load_dataset(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Завантажує датасет з файлу або БД"""
-
+        """Load dataset from file or database."""
         source = payload.get("source")
         source_type = payload.get("source_type", "file")
-
         try:
             if source_type == "file":
                 if source.endswith(".csv"):
@@ -70,21 +65,16 @@ class DatasetAgent(BaseAgent):
                     df = pd.read_excel(source)
                 else:
                     raise ValueError(f"Unsupported file format: {source}")
-
             elif source_type == "database":
                 if not self.db_url:
                     raise ValueError("Database URL not configured")
-
                 engine = create_engine(self.db_url)
                 query = payload.get("query")
                 df = pd.read_sql(query, engine)
-
             else:
                 raise ValueError(f"Unknown source type: {source_type}")
-
-            # Зберігаємо датасет у пам'ять (в реальній системі краще використовувати кеш)
+            # Store dataset in memory (in real system, use cache)
             dataset_id = f"dataset_{hash(source)}"
-
             return {
                 "status": "success",
                 "dataset_id": dataset_id,
@@ -93,34 +83,31 @@ class DatasetAgent(BaseAgent):
                 "dtypes": {col: str(dtype) for col, dtype in df.dtypes.items()},
                 "memory_usage": df.memory_usage(deep=True).sum(),
             }
-
-        except Exception as e:
-            self.logger.error("Failed to load dataset", error=str(e), source=source)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to load dataset", error=str(exc), source=source)
+            return {"status": "error", "error": str(exc)}
 
     async def _validate_dataset(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Валідує датасет на наявність помилок та аномалій"""
-
+        """Validate dataset for errors and anomalies."""
         dataset_id = payload.get("dataset_id")
         validation_rules = payload.get("rules", {})
 
-        # У реальній реалізації тут буде завантаження датасету з кешу
-        # Поки що повертаємо результат валідації
-
+        # In real implementation, load dataset from cache
+        # For now, return validation result
         issues = []
 
-        # Перевірка на пропущені значення
+        # Check for missing values
         if validation_rules.get("check_missing", True):
             issues.append(
                 {
                     "type": "missing_values",
                     "severity": "warning",
                     "description": "Dataset contains missing values",
-                    "count": 0,  # У реальній реалізації тут буде справжній підрахунок
+                    "count": 0,  # In real implementation, provide actual count
                 }
             )
 
-        # Перевірка на дублікати
+        # Check for duplicates
         if validation_rules.get("check_duplicates", True):
             issues.append(
                 {
@@ -139,8 +126,7 @@ class DatasetAgent(BaseAgent):
         }
 
     async def _process_dataset(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Обробляє датасет (очищення, трансформації)"""
-
+        """Process dataset (cleaning, transformations)."""
         dataset_id = payload.get("dataset_id")
         operations = payload.get("operations", [])
 
@@ -154,7 +140,7 @@ class DatasetAgent(BaseAgent):
                     {
                         "type": "drop_na",
                         "status": "completed",
-                        "rows_removed": 0,  # У реальній реалізації
+                        "rows_removed": 0,  # In real implementation
                     }
                 )
             elif op_type == "fill_na":
@@ -181,13 +167,12 @@ class DatasetAgent(BaseAgent):
         }
 
     async def _save_dataset(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Зберігає оброблений датасет"""
-
+        """Save the processed dataset."""
         dataset_id = payload.get("dataset_id")
         destination = payload.get("destination")
         format_type = payload.get("format", "csv")
 
-        # У реальній реалізації тут буде справжнє збереження
+        # In real implementation, perform actual saving
 
         return {
             "status": "success",
@@ -198,11 +183,10 @@ class DatasetAgent(BaseAgent):
         }
 
     async def _get_dataset_info(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Повертає інформацію про датасет"""
-
+        """Return information about the dataset."""
         dataset_id = payload.get("dataset_id")
 
-        # У реальній реалізації тут буде завантаження з кешу
+        # In real implementation, load from cache
 
         return {
             "status": "success",
@@ -217,13 +201,12 @@ class DatasetAgent(BaseAgent):
         }
 
     async def _split_dataset(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Розбиває датасет на тренувальну та тестову вибірки"""
-
+        """Split dataset into train and test sets."""
         dataset_id = payload.get("dataset_id")
         test_size = payload.get("test_size", 0.2)
         random_state = payload.get("random_state", 42)
 
-        # У реальній реалізації тут буде справжній розбиток
+        # In real implementation, perform actual split
 
         return {
             "status": "success",

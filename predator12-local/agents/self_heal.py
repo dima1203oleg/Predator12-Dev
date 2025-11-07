@@ -8,25 +8,21 @@ Self-Healing Agent
 
 import asyncio
 import logging
-import subprocess
 import time
-from datetime import datetime, timedelta
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from datetime import datetime
+from typing import Any, Dict, List
 
 import docker
 import psutil
 import requests
-import yaml
 
-from .base import AgentStatus, AgentTask, BaseAgent, RiskLevel, TaskPriority
+from .base import AgentTask, BaseAgent, RiskLevel, TaskPriority
 
 logger = logging.getLogger(__name__)
 
 
 class SelfHealingAgent(BaseAgent):
-    """
-    Агент самовідновлення системи
+    """Агент самовідновлення системи.
 
     Функції:
     - Моніторинг здоров'я сервісів
@@ -80,7 +76,7 @@ class SelfHealingAgent(BaseAgent):
         self.last_health_check = None
 
     async def plan_task(self, task: AgentTask) -> Dict[str, Any]:
-        """Планування завдання самовідновлення"""
+        """Планування завдання самовідновлення."""
 
         task_type = task.payload.get("type", "health_check")
 
@@ -107,7 +103,7 @@ class SelfHealingAgent(BaseAgent):
             }
 
     async def _plan_health_check(self, task: AgentTask) -> Dict[str, Any]:
-        """Планування перевірки здоров'я системи"""
+        """Планування перевірки здоров'я системи."""
 
         target = task.payload.get("target", "all")
 
@@ -161,7 +157,7 @@ class SelfHealingAgent(BaseAgent):
         }
 
     async def _plan_auto_heal(self, task: AgentTask) -> Dict[str, Any]:
-        """Планування автоматичного відновлення"""
+        """Планування автоматичного відновлення."""
 
         issue_type = task.payload.get("issue_type")
         affected_service = task.payload.get("service")
@@ -237,7 +233,7 @@ class SelfHealingAgent(BaseAgent):
         }
 
     async def execute_task(self, task: AgentTask, plan: Dict[str, Any]) -> Dict[str, Any]:
-        """Виконання завдання самовідновлення"""
+        """Виконання завдання самовідновлення."""
 
         results = {}
 
@@ -279,7 +275,7 @@ class SelfHealingAgent(BaseAgent):
     async def _execute_step(
         self, action: str, task: AgentTask, step: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Виконання окремого кроку"""
+        """Виконання окремого кроку."""
 
         try:
             if action == "check_system_resources":
@@ -310,7 +306,7 @@ class SelfHealingAgent(BaseAgent):
             return {"success": False, "error": str(e), "critical_error": True}
 
     async def _check_system_resources(self) -> Dict[str, Any]:
-        """Перевірка системних ресурсів"""
+        """Перевірка системних ресурсів."""
 
         try:
             # CPU
@@ -354,7 +350,7 @@ class SelfHealingAgent(BaseAgent):
             return {"success": False, "error": f"Помилка перевірки ресурсів: {e}"}
 
     async def _check_containers(self) -> Dict[str, Any]:
-        """Перевірка стану Docker контейнерів"""
+        """Перевірка стану Docker контейнерів."""
 
         if not self.docker_client:
             return {"success": False, "error": "Docker клієнт недоступний"}
@@ -391,7 +387,7 @@ class SelfHealingAgent(BaseAgent):
             return {"success": False, "error": f"Помилка перевірки контейнерів: {e}"}
 
     async def _check_services(self, services: List[str] = None) -> Dict[str, Any]:
-        """Перевірка доступності веб-сервісів"""
+        """Перевірка доступності веб-сервісів."""
 
         # Дефолтні сервіси для перевірки
         if not services:
@@ -433,7 +429,7 @@ class SelfHealingAgent(BaseAgent):
         }
 
     async def _attempt_container_restart(self, container_name: str) -> Dict[str, Any]:
-        """Спроба перезапуску контейнера"""
+        """Спроба перезапуску контейнера."""
 
         if not self.docker_client:
             return {"success": False, "error": "Docker клієнт недоступний"}
@@ -480,7 +476,7 @@ class SelfHealingAgent(BaseAgent):
             }
 
     def _update_recovery_stats(self, task: AgentTask, results: Dict[str, Any]):
-        """Оновлення статистики відновлень"""
+        """Оновлення статистики відновлень."""
 
         self.recovery_stats["total_healings"] += 1
 
@@ -492,7 +488,7 @@ class SelfHealingAgent(BaseAgent):
                 self.recovery_stats["anomalies_detected"] += step_result["anomalies_found"]
 
     async def get_health_summary(self) -> Dict[str, Any]:
-        """Отримання зведення стану здоров'я системи"""
+        """Отримання зведення стану здоров'я системи."""
 
         # Виконання швидкої перевірки здоров'я
         health_task = AgentTask(
@@ -542,7 +538,7 @@ class SelfHealingAgent(BaseAgent):
         return summary
 
     async def start_continuous_monitoring(self):
-        """Запуск безперервного моніторингу здоров'я"""
+        """Запуск безперервного моніторингу здоров'я."""
 
         logger.info("Запуск безперервного моніторингу здоров'я системи")
 
@@ -575,7 +571,7 @@ class SelfHealingAgent(BaseAgent):
                 await asyncio.sleep(self.health_check_interval * 2)  # Подвійна затримка при помилці
 
     async def _trigger_auto_healing(self, health_summary: Dict[str, Any]):
-        """Запуск автоматичного відновлення при критичних проблемах"""
+        """Запуск автоматичного відновлення при критичних проблемах."""
 
         logger.warning("Запуск автоматичного відновлення через критичні проблеми")
 

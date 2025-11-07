@@ -15,6 +15,7 @@
 **Файл:** `/predator12-local/backend/src/api/providers.ts`
 
 **Endpoints:**
+
 ```typescript
 GET    /api/providers                    // Список всіх провайдерів
 POST   /api/providers                    // Додати новий акаунт
@@ -28,6 +29,7 @@ GET    /api/providers/stats/overall      // Загальна статистик�
 ```
 
 **Features:**
+
 - ✅ Express Router з TypeScript
 - ✅ Zod validation schemas
 - ✅ Error handling
@@ -40,6 +42,7 @@ GET    /api/providers/stats/overall      // Загальна статистик�
 **Файл:** `/predator12-local/frontend/src/services/providerAPI.ts`
 
 **Functions:**
+
 - `fetchProviders()` - Отримати всіх провайдерів
 - `addProvider(data)` - Додати нового провайдера
 - `updateProvider(id, data)` - Оновити провайдера
@@ -52,6 +55,7 @@ GET    /api/providers/stats/overall      // Загальна статистик�
 - `toggleProviderStatus(id, isActive)` - Змінити статус
 
 **Features:**
+
 - ✅ Axios з interceptors
 - ✅ Authentication (Bearer token)
 - ✅ Error handling
@@ -65,6 +69,7 @@ GET    /api/providers/stats/overall      // Загальна статистик�
 **Файл:** `/predator12-local/frontend/src/services/websocket.ts`
 
 **Events:**
+
 - `provider:stats:update` - Real-time оновлення статистики
 - `provider:status:change` - Зміна статусу провайдера
 - `model:request:complete` - Завершення запиту до моделі
@@ -73,6 +78,7 @@ GET    /api/providers/stats/overall      // Загальна статистик�
 - `connection:failed` - Підключення не вдалося
 
 **Features:**
+
 - ✅ Socket.IO client
 - ✅ Auto-reconnect
 - ✅ Event subscriptions
@@ -86,6 +92,7 @@ GET    /api/providers/stats/overall      // Загальна статистик�
 **Файл:** `/predator12-local/frontend/src/hooks/useProviders.ts`
 
 **Returns:**
+
 ```typescript
 {
   // Data
@@ -107,6 +114,7 @@ GET    /api/providers/stats/overall      // Загальна статистик�
 ```
 
 **Features:**
+
 - ✅ State management
 - ✅ API integration
 - ✅ WebSocket integration
@@ -121,6 +129,7 @@ GET    /api/providers/stats/overall      // Загальна статистик�
 **Файл:** `/predator12-local/frontend/src/components/models/ModelProviderManager.tsx`
 
 **Changes:**
+
 - ✅ Використовує `useProviders` hook
 - ✅ Використовує `useWebSocket` hook
 - ✅ Асинхронні обробники подій
@@ -360,21 +369,21 @@ CREATE TABLE usage_stats (
 
 ```typescript
 // Backend - providers.test.ts
-describe('Providers API', () => {
-  test('GET /api/providers returns list', async () => {
-    const response = await request(app).get('/api/providers');
+describe("Providers API", () => {
+  test("GET /api/providers returns list", async () => {
+    const response = await request(app).get("/api/providers");
     expect(response.status).toBe(200);
     expect(Array.isArray(response.body)).toBe(true);
   });
 
-  test('POST /api/providers creates new provider', async () => {
+  test("POST /api/providers creates new provider", async () => {
     const newProvider = {
-      providerId: 'openai',
-      accountName: 'Test Account',
-      apiKey: 'sk-test123'
+      providerId: "openai",
+      accountName: "Test Account",
+      apiKey: "sk-test123",
     };
     const response = await request(app)
-      .post('/api/providers')
+      .post("/api/providers")
       .send(newProvider);
     expect(response.status).toBe(201);
     expect(response.body.id).toBeDefined();
@@ -382,20 +391,20 @@ describe('Providers API', () => {
 });
 
 // Frontend - useProviders.test.ts
-describe('useProviders hook', () => {
-  test('fetches providers on mount', async () => {
+describe("useProviders hook", () => {
+  test("fetches providers on mount", async () => {
     const { result, waitForNextUpdate } = renderHook(() => useProviders());
     await waitForNextUpdate();
     expect(result.current.providers.length).toBeGreaterThan(0);
   });
 
-  test('adds provider successfully', async () => {
+  test("adds provider successfully", async () => {
     const { result } = renderHook(() => useProviders());
     await act(async () => {
       await result.current.addProvider({
-        providerId: 'openai',
-        accountName: 'Test',
-        apiKey: 'sk-test'
+        providerId: "openai",
+        accountName: "Test",
+        apiKey: "sk-test",
       });
     });
     expect(result.current.providers.length).toBe(1);
@@ -410,22 +419,22 @@ describe('useProviders hook', () => {
 ### Backend Logging
 
 ```typescript
-import winston from 'winston';
+import winston from "winston";
 
 const logger = winston.createLogger({
-  level: 'info',
+  level: "info",
   format: winston.format.json(),
   transports: [
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' })
-  ]
+    new winston.transports.File({ filename: "error.log", level: "error" }),
+    new winston.transports.File({ filename: "combined.log" }),
+  ],
 });
 
 // Log API requests
 app.use((req, res, next) => {
   logger.info(`${req.method} ${req.path}`, {
     ip: req.ip,
-    userAgent: req.get('user-agent')
+    userAgent: req.get("user-agent"),
   });
   next();
 });
@@ -435,20 +444,20 @@ app.use((req, res, next) => {
 
 ```typescript
 // Sentry integration
-import * as Sentry from '@sentry/react';
+import * as Sentry from "@sentry/react";
 
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
-  environment: process.env.NODE_ENV
+  environment: process.env.NODE_ENV,
 });
 
 // Track API errors
 api.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     Sentry.captureException(error);
     return Promise.reject(error);
-  }
+  },
 );
 ```
 
@@ -459,6 +468,7 @@ api.interceptors.response.use(
 **СТАТУС:** ✅ Backend Integration Code READY
 
 **Створено:**
+
 - ✅ Backend API endpoints (~300 lines)
 - ✅ Frontend API service (~250 lines)
 - ✅ WebSocket service (~200 lines)
@@ -466,6 +476,7 @@ api.interceptors.response.use(
 - ✅ Updated ModelProviderManager
 
 **Наступні кроки:**
+
 1. Implement database layer
 2. Setup Express server
 3. Test API endpoints
@@ -478,6 +489,7 @@ api.interceptors.response.use(
 ---
 
 **Файли:**
+
 - Backend: `/predator12-local/backend/src/api/providers.ts`
 - API Service: `/predator12-local/frontend/src/services/providerAPI.ts`
 - WebSocket: `/predator12-local/frontend/src/services/websocket.ts`

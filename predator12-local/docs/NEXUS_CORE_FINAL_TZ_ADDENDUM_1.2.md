@@ -168,22 +168,22 @@ sequenceDiagram
 Top Bar: [NEXUS CORE] [Global Search…] [Mode: Analyst] [Notifications] [User]
 
 Sidebar:
-  • Overview (active)
-  • DataOps Hub
-  • OS Deck
-  • 3D Map
-  • Graph
-  • Simulator
-  • Incident Feed
-  • Admin/Billing
+• Overview (active)
+• DataOps Hub
+• OS Deck
+• 3D Map
+• Graph
+• Simulator
+• Incident Feed
+• Admin/Billing
 
 Main (Overview):
-  ┌ System Pulse (API p95, OS lag, ETL SLA, ML drift)
-  ├ Daily Briefing (OSINT+аналітика+AI-висновок)
-  ├ Top Anomalies (клік → деталі/SHAP/докази)
-  ├ KPI Summary (тренди імпорт/експорт/HS)
-  ├ Mini 3D Geo Timeline | Saved OpenSearch Views
-  └ Bottom Actions: [Upload CSV] [New Dataset] [Open AI]
+┌ System Pulse (API p95, OS lag, ETL SLA, ML drift)
+├ Daily Briefing (OSINT+аналітика+AI-висновок)
+├ Top Anomalies (клік → деталі/SHAP/докази)
+├ KPI Summary (тренди імпорт/експорт/HS)
+├ Mini 3D Geo Timeline | Saved OpenSearch Views
+└ Bottom Actions: [Upload CSV] [New Dataset] [Open AI]
 
 ### 2.2 Каркас React (спрощено)
 
@@ -233,7 +233,7 @@ env:
 
 resources:
   requests: { cpu: "500m", memory: "1024Mi" }
-  limits:   { cpu: "2",    memory: "4096Mi" }
+  limits: { cpu: "2", memory: "4096Mi" }
 
 autoscaling:
   enabled: true
@@ -242,7 +242,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 70
 
 probes:
-  liveness:  { path: /healthz/liveness,  port: 8000 }
+  liveness: { path: /healthz/liveness, port: 8000 }
   readiness: { path: /healthz/readiness, port: 8000 }
 ```
 
@@ -269,13 +269,34 @@ patches:
 ### 3.3 OpenSearch ISM/ILM (скорочено)
 
 ```json
-{ "policy": { "default_state": "hot", "states":[
-  {"name":"hot","actions":[{"rollover":{"min_size":"50gb","min_index_age":"3d"}}],
-   "transitions":[{"state_name":"warm","conditions":{"min_index_age":"14d"}}]},
-  {"name":"warm","actions":[{"replica_count":{"number_of_replicas":0}}],
-   "transitions":[{"state_name":"cold","conditions":{"min_index_age":"60d"}}]},
-  {"name":"cold","actions":[{"force_merge":{"max_num_segments":1}}]}
-], "ism_template":[{"index_patterns":["customs_*"],"priority":100}]}}
+{
+  "policy": {
+    "default_state": "hot",
+    "states": [
+      {
+        "name": "hot",
+        "actions": [
+          { "rollover": { "min_size": "50gb", "min_index_age": "3d" } }
+        ],
+        "transitions": [
+          { "state_name": "warm", "conditions": { "min_index_age": "14d" } }
+        ]
+      },
+      {
+        "name": "warm",
+        "actions": [{ "replica_count": { "number_of_replicas": 0 } }],
+        "transitions": [
+          { "state_name": "cold", "conditions": { "min_index_age": "60d" } }
+        ]
+      },
+      {
+        "name": "cold",
+        "actions": [{ "force_merge": { "max_num_segments": 1 } }]
+      }
+    ],
+    "ism_template": [{ "index_patterns": ["customs_*"], "priority": 100 }]
+  }
+}
 ```
 
 ---
@@ -291,9 +312,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: { python-version: '3.11' }
+        with: { python-version: "3.11" }
       - uses: actions/setup-node@v4
-        with: { node-version: '20' }
+        with: { node-version: "20" }
 
       # Lint/format
       - name: Backend lint
@@ -323,40 +344,47 @@ jobs:
 ## 5) Playwright E2E — вирізка
 
 ```ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('login → upload → ETL → dashboard → PII → export', async ({ page }) => {
-  await page.goto('/login');
-  await page.fill('#username', process.env.TEST_USER!);
-  await page.fill('#password', process.env.TEST_PASS!);
+test("login → upload → ETL → dashboard → PII → export", async ({ page }) => {
+  await page.goto("/login");
+  await page.fill("#username", process.env.TEST_USER!);
+  await page.fill("#password", process.env.TEST_PASS!);
   await page.click('button:has-text("Login")');
   await expect(page).toHaveURL(/overview/);
 
   // Upload
-  await page.click('text=Upload CSV');
+  await page.click("text=Upload CSV");
   const [fileChooser] = await Promise.all([
-    page.waitForEvent('filechooser'),
-    page.click('input[type="file"]')
+    page.waitForEvent("filechooser"),
+    page.click('input[type="file"]'),
   ]);
-  await fileChooser.setFiles('fixtures/customs_500mb.csv');
-  await expect(page.locator('[data-test=upload-progress]')).toContainText('%');
+  await fileChooser.setFiles("fixtures/customs_500mb.csv");
+  await expect(page.locator("[data-test=upload-progress]")).toContainText("%");
 
   // Wait ETL done (WS badge)
-  await expect(page.locator('[data-test=etl-status]')).toHaveText('SUCCEEDED', { timeout: 300000 });
+  await expect(page.locator("[data-test=etl-status]")).toHaveText("SUCCEEDED", {
+    timeout: 300000,
+  });
 
   // Dashboard
-  await page.click('text=OpenSearch Views');
+  await page.click("text=OpenSearch Views");
   await expect(page).toHaveURL(/dashboards/);
 
   // PII gating
-  await page.click('text=Reveal PII');
-  if (process.env.HAS_PII_ROLE !== 'true') {
-    await expect(page.locator('[data-test=toast]')).toContainText('FORBIDDEN_PII');
+  await page.click("text=Reveal PII");
+  if (process.env.HAS_PII_ROLE !== "true") {
+    await expect(page.locator("[data-test=toast]")).toContainText(
+      "FORBIDDEN_PII",
+    );
   }
 
   // Export
-  await page.click('text=Export CSV');
-  await expect(page.locator('[data-test=export-link]')).toHaveAttribute('href', /signed/);
+  await page.click("text=Export CSV");
+  await expect(page.locator("[data-test=export-link]")).toHaveAttribute(
+    "href",
+    /signed/,
+  );
 });
 ```
 
@@ -378,27 +406,50 @@ test:
 ```yaml
 # docker-compose.yml (скорочено для dev)
 services:
-  postgres: { image: postgres:15, environment: { POSTGRES_PASSWORD: pass }, ports: ["5432:5432"] }
-  opensearch: { image: opensearchproject/opensearch:2, environment: { discovery.type: single-node }, ports: ["9200:9200"] }
-  dashboards: { image: opensearchproject/opensearch-dashboards:2, ports: ["5601:5601"] }
+  postgres:
+    {
+      image: postgres:15,
+      environment: { POSTGRES_PASSWORD: pass },
+      ports: ["5432:5432"],
+    }
+  opensearch:
+    {
+      image: opensearchproject/opensearch:2,
+      environment: { discovery.type: single-node },
+      ports: ["9200:9200"],
+    }
+  dashboards:
+    { image: opensearchproject/opensearch-dashboards:2, ports: ["5601:5601"] }
   qdrant: { image: qdrant/qdrant:latest, ports: ["6333:6333"] }
-  minio: { image: minio/minio, command: server /data, ports: ["9000:9000","9001:9001"] }
+  minio:
+    {
+      image: minio/minio,
+      command: server /data,
+      ports: ["9000:9000", "9001:9001"],
+    }
   redis: { image: redis:7, ports: ["6379:6379"] }
-  keycloak: { image: quay.io/keycloak/keycloak:24, command: start-dev, ports: ["8080:8080"] }
+  keycloak:
+    {
+      image: quay.io/keycloak/keycloak:24,
+      command: start-dev,
+      ports: ["8080:8080"],
+    }
 ```
 
 ---
 
 ## 7) Runbooks (коротко)
+
 - ETL завис: перевірити Airflow UI → task logs (Loki) → перезапуск task → якщо MinIO outage — дочекатися й rerun.
 - OpenSearch повільний: перевірити CPU/iowait, shard count, hit ratio кешів; зменшити painless; перевести часті запити на pre-agg.
 - Keycloak down: перевірити pod/logs; сесії чинні; нові логіни — недоступні; SLA 2–5 хв відновлення.
-- DR: скрипт відновлення PG з pgBackRest (до RPO), OS snapshot restore, перевипуск alias *_current, smoke-тести.
+- DR: скрипт відновлення PG з pgBackRest (до RPO), OS snapshot restore, перевипуск alias \*\_current, smoke-тести.
 - Security alert: зупинити зовнішній парсер (feature-flag), увімкнути WAF-правила посиленого рівня.
 
 ---
 
 ## 8) Ризики та мінімізація
+
 - Сплески навантаження → HPA/VPA, кеш Redis, pre-agg індекси, rate-limit per plan.
 - Дрейф ML → PSI/KS метрики, автоперетренування, canary-релізи.
 - Зміни схем даних → Great Expectations + семвер для схем; backward-compatible міграції.
@@ -410,34 +461,41 @@ services:
 ## 9) Остаточний чекліст Go/No-Go (99%)
 
 Дані/OS
-- ILM/rollover + aliases *_current у всіх індексах
+
+- ILM/rollover + aliases \*\_current у всіх індексах
 - Pre-agg індекси для топ-дашів; p95 < 3 с @ 1B+
 - Data lineage у каталозі; retention, архів Parquet
 
 ML
+
 - MLflow registry (Staging→Prod), canary 10–20%
 - Drift PSI/KS у Prometheus + алерти
-- SHAP у відповідях /ml/*
+- SHAP у відповідях /ml/\*
 
 Безпека
+
 - PII масковано by default; audit розкриття
 - SBOM+Sign (cosign) → Kyverno “signed only”
 - DAST (ZAP) green; WAF rules включені
 
 Self-healing/DR
+
 - 5 chaos-сценаріїв пройдено (green)
 - RPO ≤ 15 хв, RTO ≤ 30 хв — перевірено на DR-стенді
 
 UI/UX
+
 - Fallback 3D→2D; WCAG 2.1 AA; Lighthouse ≥ 90
 - Usage-лічильники, graceful деградація при перевищенні квот
 
 E2E
+
 - Playwright: login→upload→ETL→даш→PII→export — green
 - k6/JMeter: 100 RPS, p95 < 3 c — green
 
 ---
 
 ## Фінальний підсумок
+
 - Документ містить повний склад компонентів, їх ролі, залежності та послідовності (E2E), разом із діаграмами, макетом першої сторінки, конфіг-шаблонами, тестами, runbooks, ризиками й Go/No-Go.
 - За цим ТЗ команда або ШІ може побудувати та вивести у прод Predator Analytics — Nexus Core до готовності ~99% з вимірюваними SLA/SLO.

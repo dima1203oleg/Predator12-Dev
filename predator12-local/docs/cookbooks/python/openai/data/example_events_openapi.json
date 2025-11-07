@@ -130,11 +130,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "name",
-                  "date",
-                  "location"
-                ]
+                "required": ["name", "date", "location"]
               }
             }
           }
@@ -173,11 +169,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "name",
-          "date",
-          "location"
-        ]
+        "required": ["name", "date", "location"]
       }
     }
   }

@@ -36,4 +36,3 @@ git commit -m "autopatch: applied via self-learning [runId:$RUN_ID]" || true
 git push origin main || true
 
 echo "Autopatch застосовано успішно"
-

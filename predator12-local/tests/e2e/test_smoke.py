@@ -3,8 +3,7 @@ E2E тестування для Predator12 з використанням pytest
 Smoke тесты для основних user flows
 """
 
-import json
-from typing import Any, Dict
+from typing import Dict
 
 import httpx
 import pytest

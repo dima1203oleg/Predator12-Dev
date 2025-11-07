@@ -7,7 +7,7 @@
 Predator11 Agents — це повноцінна багатоагентна система для аналітики, що включає:
 
 - **26 спеціалізованих агентів** з чіткими ролями та обов'язками
-- **58 AI/ML моделей** з інтелектуальною маршрутизацією та фолбеками  
+- **58 AI/ML моделей** з інтелектуальною маршрутизацією та фолбеками
 - **Автоматичне самолікування** та моніторинг системи
 - **PII захист** та RBAC контроль доступу
 - **Подієва архітектура** через Redis Streams
@@ -38,11 +38,13 @@ graph TB
 ## 📋 Список агентів
 
 ### 🎯 Оркестрація та маршрутизація
+
 - **ChiefOrchestratorAgent** (port 9001) - Головний діалоговий інтерфейс
 - **ModelRouterAgent** (port 9002) - Маршрутизація на 58 моделей з фолбеками
 - **ArbiterAgent** (port 9003) - Арбітраж відповідей кількох моделей
 
 ### 📊 Дані та ETL
+
 - **IngestAgent** (port 9010) - Завантаження файлів з профілюванням та PII сканом
 - **Schema&LineageAgent** (port 9011) - Схеми та лінійність даних
 - **DataQualityAgent** (port 9012) - Правила якості та quality gates
@@ -51,6 +53,7 @@ graph TB
 - **SyntheticDataAgent** (port 9015) - Автогенерація датасетів
 
 ### 🧠 Аналітика та ML
+
 - **AnomalyAgent** (port 9020) - Детекція аномалій з поясненнями
 - **ForecastAgent** (port 9021) - Прогнозування та what-if симуляції
 - **GraphAgent** (port 9022) - Аналіз графів та мережева аналітика
@@ -59,17 +62,20 @@ graph TB
 - **ReportGenAgent** (port 9025) - Автогенерація звітів
 
 ### 🎯 LLM/UX сервіси
+
 - **QueryPlannerAgent** (port 9030) - Природна мова → SQL/OpenSearch DSL
 - **PromptEngineeringAgent** (port 9031) - Автопобудова та оптимізація промптів
 - **DashboardBuilderAgent** (port 9032) - Автогенерація дашбордів
 
 ### 🛡️ Operational layer
+
 - **SelfDiagnosisAgent** (port 9040) - Аналіз здоров'я системи та RCA
 - **SelfHealingAgent** (port 9041) - Автоматичне відновлення та remediation
 - **AutoTrainAgent** (port 9042) - Автотренування та канарейкові деплойменти
 - **ReleaseManagerAgent** (port 9043) - Управління релізами та rollback
 
 ### 🔐 Безпека та комплаєнс
+
 - **Security&PrivacyAgent** (port 9050) - PII маскування, RBAC, UEBA
 - **ComplianceAgent** (port 9051) - GDPR та політики ретенції
 - **Billing&QuotaAgent** (port 9052) - Облік використання та квоти
@@ -78,6 +84,7 @@ graph TB
 ## 🚀 Швидкий старт
 
 ### Передумови
+
 - Docker 20.10+
 - Docker Compose 2.0+
 - 8GB+ RAM
@@ -115,6 +122,7 @@ make test-anomaly
 ## 🔧 API Endpoints
 
 ### Chief Orchestrator (порт 9001)
+
 ```bash
 # Відправлення запиту користувача
 curl -X POST http://localhost:9001/chief/ask \
@@ -130,6 +138,7 @@ curl http://localhost:9001/chief/status/{task_id}
 ```
 
 ### Model Router (порт 9002)
+
 ```bash
 # Маршрутизація запиту на модель
 curl -X POST http://localhost:9002/router/route \
@@ -148,6 +157,7 @@ curl http://localhost:9002/router/usage
 ```
 
 ### Data Quality Agent (порт 9012)
+
 ```bash
 # Запуск перевірки якості
 curl -X POST http://localhost:9012/quality/run \
@@ -162,6 +172,7 @@ curl http://localhost:9012/quality/report/{dataset_id}
 ```
 
 ### Anomaly Agent (порт 9020)
+
 ```bash
 # Детекція аномалій
 curl -X POST http://localhost:9020/anomaly/run \
@@ -177,12 +188,14 @@ curl -X POST http://localhost:9020/anomaly/run \
 ## 📊 Моніторинг та спостережуваність
 
 ### Доступні дашборди
+
 - **Grafana**: http://localhost:3000 (admin/admin)
 - **Prometheus**: http://localhost:9090
 - **Traefik**: http://localhost:8080
 - **MinIO**: http://localhost:9001 (minioadmin/minioadmin)
 
 ### Логи та метрики
+
 ```bash
 # Перегляд логів усіх агентів
 make logs
@@ -200,6 +213,7 @@ make health
 ## 🛠️ Розробка та налаштування
 
 ### Структура проекту
+
 ```
 agents/
 ├── docker-compose.agents.yml    # Основний compose файл
@@ -244,13 +258,16 @@ models["new-provider/new-model"] = ModelConfig(
 ## 🔐 Безпека та доступ
 
 ### RBAC ролі
+
 - **admin**: Повний доступ до всіх ресурсів
 - **sec_officer**: Безпека, комплаєнс, аудит
-- **analyst**: Аналітика без PII доступу  
+- **analyst**: Аналітика без PII доступу
 - **viewer**: Тільки перегляд дашбордів
 
 ### PII захист
+
 Усі персональні дані автоматично маскуються згідно з ролями:
+
 ```bash
 # Маскування PII в даних
 curl -X POST http://localhost:9050/security/mask \
@@ -268,6 +285,7 @@ curl -X POST http://localhost:9050/security/mask \
 ## 📈 Масштабування
 
 ### Горизонтальне масштабування
+
 ```bash
 # Масштабування агента до 3 реплік
 make scale AGENT=chief REPLICAS=3
@@ -277,6 +295,7 @@ docker-compose -f docker-compose.agents.yml up -d --scale anomaly-agent=5
 ```
 
 ### Оптимізація ресурсів
+
 - Використовуйте `CostOptimizerAgent` для автоматичної оптимізації
 - Налаштуйте кешування в Redis для частих запитів
 - Використовуйте дешевші моделі для простих задач
@@ -284,6 +303,7 @@ docker-compose -f docker-compose.agents.yml up -d --scale anomaly-agent=5
 ## 🧪 Тестування
 
 ### Unit тести
+
 ```bash
 # Запуск unit тестів для агента
 cd agents/chief
@@ -294,6 +314,7 @@ python -m pytest --cov=chief_orchestrator tests/
 ```
 
 ### Integration тести
+
 ```bash
 # E2E тестування через API
 make test
@@ -308,6 +329,7 @@ make health  # Перевірка самолікування
 ### Часті проблеми
 
 **Агент не відповідає**
+
 ```bash
 # Перевірка логів
 make logs-agent AGENT=chief
@@ -320,6 +342,7 @@ curl http://localhost:9001/chief/health
 ```
 
 **Проблеми з моделями**
+
 ```bash
 # Статистика Model Router
 curl http://localhost:9002/router/usage
@@ -329,6 +352,7 @@ curl http://localhost:9002/router/models
 ```
 
 **Проблеми з даними**
+
 ```bash
 # Перевірка OpenSearch
 curl http://localhost:9200/_cluster/health
@@ -342,6 +366,7 @@ make redis-cli
 ```
 
 ### Повне відновлення
+
 ```bash
 # Повний рестарт
 make restart

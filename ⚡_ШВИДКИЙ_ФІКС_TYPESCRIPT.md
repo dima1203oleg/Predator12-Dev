@@ -10,16 +10,19 @@
 ## 🔧 Швидке Виправлення IDE Помилок
 
 ### Варіант 1: Перезапуск TypeScript Server (швидко)
+
 1. Натисніть `Cmd+Shift+P` (або `F1`)
 2. Введіть: `TypeScript: Restart TS Server`
 3. Натисніть Enter
 
 ### Варіант 2: Перезавантаження VS Code
+
 ```bash
 # Просто закрийте і відкрийте VS Code
 ```
 
 ### Варіант 3: Очистка кешу
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/frontend
 rm -rf node_modules/.cache .vite
@@ -28,17 +31,20 @@ rm -rf node_modules/.cache .vite
 ## 🚀 Запуск Проекту
 
 ### 1. Запустити Dev Server
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/frontend
 npm run dev
 ```
 
 ### 2. Відкрити AI Assistant
+
 ```
 http://localhost:5173/assistant
 ```
 
 ### 3. Перевірити функціонал
+
 - ✅ 3D голова рендериться
 - ✅ Чат працює
 - ✅ Мікрофон реагує
@@ -50,18 +56,21 @@ http://localhost:5173/assistant
 ## 🧪 Тестування
 
 ### Швидкий тест у браузері
+
 ```javascript
 // Відкрити консоль (F12) на /assistant
 // Перевірити Zustand store:
-window.__ZUSTAND_DEVTOOLS__
+window.__ZUSTAND_DEVTOOLS__;
 ```
 
 ### Перевірка ASR/TTS
+
 1. Натисніть кнопку мікрофона
 2. Скажіть щось
 3. Перевірте відповідь TTS
 
 ### Перевірка перекладів
+
 1. Змініть мову на English
 2. Перевірте, що UI перекладається
 3. Поверніться на Українську
@@ -69,6 +78,7 @@ window.__ZUSTAND_DEVTOOLS__
 ## 📝 Інші Помилки в Проекті
 
 У проекті є синтаксичні помилки в **інших** компонентах (не стосуються AI Assistant):
+
 - `Enhanced3DGuide.tsx`
 - `EnhancedContextualChat.tsx`
 - `HolographicAIFaceV2.tsx`
@@ -80,16 +90,19 @@ window.__ZUSTAND_DEVTOOLS__
 ## 🎯 Пріоритети
 
 ### Високий пріоритет
+
 1. ✅ Перезапустити TypeScript Server
 2. ⬜ Протестувати UI в браузері
 3. ⬜ Перевірити голосовий ввід/вивід
 
 ### Середній пріоритет
+
 4. ⬜ Додати unit тести
 5. ⬜ Інтегрувати з реальним API
 6. ⬜ Додати більше українських голосів TTS
 
 ### Низький пріоритет
+
 7. ⬜ Оптимізувати bundle size
 8. ⬜ Провести accessibility audit
 9. ⬜ Додати advanced features (face tracking, etc.)
@@ -120,17 +133,20 @@ npm run build -- --analyze
 ## 🆘 Проблеми?
 
 ### TypeScript не бачить файли
+
 ```bash
 # Перезапустіть TS Server (див. вище)
 ```
 
 ### Помилки компіляції
+
 ```bash
 # Перевірте tsconfig.json
 cat predator12-local/frontend/tsconfig.json
 ```
 
 ### Помилки імпортів
+
 ```bash
 # Перевірте, що файли існують
 ls predator12-local/frontend/src/modules/assistant/components/

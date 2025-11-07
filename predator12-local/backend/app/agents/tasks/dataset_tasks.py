@@ -1,21 +1,19 @@
-import json
 import logging
-import os
 from typing import Any, Dict
 
-from celery import Celery, current_task
+from celery import current_task
 
 logger = logging.getLogger(__name__)
 
 
 @current_task.bind
 def process_dataset_upload(self, dataset_info: Dict[str, Any]) -> Dict[str, Any]:
-    """Обробка завантаженого датасету"""
+    """Обробка завантаженого датасету."""
     try:
         logger.info(f"Processing dataset upload: {dataset_info}")
 
         dataset_id = dataset_info.get("dataset_id")
-        file_path = dataset_info.get("file_path")
+        dataset_info.get("file_path")
 
         # Оновлення прогресу
         self.update_state(
@@ -47,7 +45,7 @@ def process_dataset_upload(self, dataset_info: Dict[str, Any]) -> Dict[str, Any]
 
 
 def validate_dataset_schema(dataset_id: str, schema_config: Dict[str, Any]) -> Dict[str, Any]:
-    """Валідація схеми датасету"""
+    """Валідація схеми датасету."""
     try:
         logger.info(f"Validating schema for dataset {dataset_id}")
 

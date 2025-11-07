@@ -3,7 +3,6 @@ ETL Processor (Lint-clean version)
 """
 
 from datetime import datetime
-from typing import Any, Dict
 
 import pandas as pd
 from observability.metrics import REQUEST_COUNT

@@ -14,6 +14,7 @@
 ### Крок 1: Перезапустити TypeScript Server (ОБОВ'ЯЗКОВО!)
 
 **У VS Code:**
+
 ```
 Cmd+Shift+P → "TypeScript: Restart TS Server"
 ```
@@ -45,6 +46,7 @@ cd /Users/dima/Documents/Predator12/predator12-local/frontend
 ```
 
 Цей скрипт перевірить:
+
 - ✅ Наявність всіх файлів
 - ✅ TypeScript помилки
 - ✅ Залежності
@@ -55,6 +57,7 @@ cd /Users/dima/Documents/Predator12/predator12-local/frontend
 Після запуску dev server перевірте:
 
 #### 1. Візуальні компоненти
+
 - [ ] 3D голова відображається і обертається
 - [ ] Чат панель відображається справа
 - [ ] Граф відображається зліва
@@ -62,6 +65,7 @@ cd /Users/dima/Documents/Predator12/predator12-local/frontend
 - [ ] Статус мікрофона відображається
 
 #### 2. Функціональність
+
 - [ ] Можна ввести текст у чат
 - [ ] AI відповідає на повідомлення
 - [ ] Мікрофон можна включити/вимкнути
@@ -70,12 +74,14 @@ cd /Users/dima/Documents/Predator12/predator12-local/frontend
 - [ ] Граф інтерактивний (hover, click)
 
 #### 3. Локалізація
+
 - [ ] За замовчуванням українська мова
 - [ ] Перемикач мов працює (🇺🇦 ↔️ 🇬🇧)
 - [ ] Всі тексти перекладаються
 - [ ] UI коректний в обох мовах
 
 #### 4. Голосовий контроль
+
 - [ ] ASR розпізнає українську мову
 - [ ] ASR розпізнає англійську мову
 - [ ] TTS промовляє українською
@@ -90,6 +96,7 @@ cd /Users/dima/Documents/Predator12/predator12-local/frontend
 
 **Причина**: Кеш IDE  
 **Рішення**:
+
 ```
 Cmd+Shift+P → "TypeScript: Restart TS Server"
 ```
@@ -97,12 +104,14 @@ Cmd+Shift+P → "TypeScript: Restart TS Server"
 ### Проблема: Dev server не запускається
 
 **Перевірка портів**:
+
 ```bash
 lsof -i :5173
 kill -9 <PID>  # якщо порт зайнятий
 ```
 
 **Очистка кешу**:
+
 ```bash
 rm -rf node_modules/.cache .vite
 npm install
@@ -111,11 +120,13 @@ npm install
 ### Проблема: Компоненти не рендеряться
 
 **Перевірка консолі**:
+
 1. Відкрийте DevTools (F12)
 2. Перевірте вкладку Console на помилки
 3. Перевірте вкладку Network на failed requests
 
 **Перевірка імпортів**:
+
 ```bash
 # У консолі браузера
 console.log(window.location.pathname)  // має бути /assistant
@@ -124,14 +135,16 @@ console.log(window.location.pathname)  // має бути /assistant
 ### Проблема: 3D не відображається
 
 **Можливі причини**:
+
 - WebGL не підтримується браузером
 - GPU не активна
 - Three.js не завантажилась
 
 **Перевірка**:
+
 ```javascript
 // У консолі браузера
-console.log(window.THREE)  // має показати об'єкт THREE
+console.log(window.THREE); // має показати об'єкт THREE
 ```
 
 ---
@@ -171,6 +184,7 @@ src/modules/assistant/
 ## 🎯 Основні Функції
 
 ### 1. 3D Голова (Head3D)
+
 - Процедурна wireframe сфера
 - Реакція на мікрофон (VU meter)
 - Cursor tracking (lookAt)
@@ -178,6 +192,7 @@ src/modules/assistant/
 - Scanline shader ефект
 
 ### 2. Чат (ChatPanel)
+
 - Історія повідомлень
 - Auto-scroll
 - Typing indicator
@@ -185,6 +200,7 @@ src/modules/assistant/
 - Intent parsing
 
 ### 3. Граф (NetworkPanel)
+
 - Візуалізація зв'язків
 - Force-directed layout
 - Інтерактивність
@@ -192,6 +208,7 @@ src/modules/assistant/
 - Tooltips
 
 ### 4. Алерти (RiskBanner)
+
 - Ротація алертів
 - Risk severity
 - Timestamps
@@ -199,6 +216,7 @@ src/modules/assistant/
 - Action buttons
 
 ### 5. Голосовий Контроль
+
 - ASR: Web Speech API + fallback
 - TTS: SpeechSynthesis + Coqui
 - Двомовність (uk-UA, en-US)
@@ -209,29 +227,32 @@ src/modules/assistant/
 
 ## 📊 Метрики KPI
 
-| Метрика | Ціль | Статус |
-|---------|------|--------|
-| TTFI (Time to First Interaction) | <2.5s | ⏳ Потребує тестування |
-| FPS (3D рендеринг) | ≥50 | ⏳ Потребує профілювання |
-| ASR точність (українська) | ≥85% | ⏳ Потребує тестування |
-| ASR точність (англійська) | ≥85% | ⏳ Потребує тестування |
-| WCAG 2.2 | AA | ⏳ Потребує audit |
+| Метрика                          | Ціль  | Статус                   |
+| -------------------------------- | ----- | ------------------------ |
+| TTFI (Time to First Interaction) | <2.5s | ⏳ Потребує тестування   |
+| FPS (3D рендеринг)               | ≥50   | ⏳ Потребує профілювання |
+| ASR точність (українська)        | ≥85%  | ⏳ Потребує тестування   |
+| ASR точність (англійська)        | ≥85%  | ⏳ Потребує тестування   |
+| WCAG 2.2                         | AA    | ⏳ Потребує audit        |
 
 ---
 
 ## 🔗 Корисні Посилання
 
 ### Документація
+
 - [🤖 Повний README](../../🤖_AI_ASSISTANT_README.md)
 - [✅ Чеклист](../../✅_AI_ASSISTANT_CHECKLIST.md)
 - [📚 Індекс документації](../../📚_ПОВНИЙ_ІНДЕКС_ДОКУМЕНТАЦІЇ.md)
 
 ### TypeScript Виправлення
+
 - [🎉 Детальний звіт](../../🎉_AI_ASSISTANT_TYPESCRIPT_FIXES.md)
 - [✅ Чеклист виправлень](../../✅_ЧЕКЛИСТ_TYPESCRIPT_ВИПРАВЛЕННЯ.md)
 - [🎊 Summary](../../🎊_TYPESCRIPT_FIXES_DONE.txt)
 
 ### Технічна Документація
+
 - [Three.js Docs](https://threejs.org/docs/)
 - [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
 - [Zustand](https://docs.pmnd.rs/zustand)
@@ -273,6 +294,7 @@ npm install
 Модуль AI Assistant повністю готовий до роботи!
 
 **Наступні кроки:**
+
 1. ✅ Restart TypeScript Server
 2. 🚀 Запустити dev server
 3. 🧪 Протестувати функціонал

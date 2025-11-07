@@ -1,4 +1,5 @@
 # 🧪 V3 Comprehensive Testing Guide
+
 ## Predator12 Nexus Core - Enhanced Dashboard Testing Protocol
 
 ---
@@ -6,6 +7,7 @@
 ## 📋 **PRE-LAUNCH CHECKLIST**
 
 ### ✅ Environment Setup
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/frontend
 npm install
@@ -13,6 +15,7 @@ npm run dev
 ```
 
 **Expected Result:**
+
 - ✓ Server starts on http://localhost:5090
 - ✓ No compilation errors
 - ✓ All dependencies resolved
@@ -23,7 +26,9 @@ npm run dev
 ## 🎨 **VISUAL DESIGN TESTING**
 
 ### 1️⃣ **Enhanced Icon Sizes**
+
 **Test Locations:**
+
 - Dashboard Metrics (top cards)
 - Service Status Cards
 - Category Filter Chips
@@ -31,6 +36,7 @@ npm run dev
 - Voice Control Button
 
 **Validation Criteria:**
+
 ```
 ✓ Service icons: 48px × 48px minimum
 ✓ Status dots: 16px diameter (was 10px)
@@ -41,6 +47,7 @@ npm run dev
 ```
 
 **Test Actions:**
+
 1. Open dashboard at 1920px width
 2. Inspect each icon with browser DevTools
 3. Verify sizes match specifications
@@ -52,6 +59,7 @@ npm run dev
 ### 2️⃣ **Typography & Spacing**
 
 **Headlines:**
+
 ```
 ✓ Main header: 42px (mobile: 32px)
 ✓ Section titles: 28px → 36px
@@ -61,6 +69,7 @@ npm run dev
 ```
 
 **Spacing:**
+
 ```
 ✓ Section gaps: 48px → 56px
 ✓ Card padding: 24px → 32px
@@ -70,6 +79,7 @@ npm run dev
 ```
 
 **Test Actions:**
+
 1. Measure headline font sizes (Computed styles)
 2. Check line-height ratios (1.2-1.5)
 3. Verify spacing with ruler tool
@@ -81,6 +91,7 @@ npm run dev
 ### 3️⃣ **Cosmic Visual Effects**
 
 **Animated Background:**
+
 ```
 ✓ Canvas renders particle network
 ✓ 150 particles visible
@@ -90,6 +101,7 @@ npm run dev
 ```
 
 **Glass Morphism:**
+
 ```
 ✓ backdrop-filter: blur(18px) works
 ✓ Semi-transparent backgrounds (rgba)
@@ -99,6 +111,7 @@ npm run dev
 ```
 
 **Gradient Accents:**
+
 ```
 ✓ Purple → Pink → Green gradient
 ✓ Applied to borders, buttons, badges
@@ -108,6 +121,7 @@ npm run dev
 ```
 
 **Test Actions:**
+
 1. Open dashboard in Chrome/Safari/Firefox
 2. Check background animation performance (fps)
 3. Hover over cards (glass effect)
@@ -121,6 +135,7 @@ npm run dev
 ### 1️⃣ **Keyboard Navigation**
 
 **Test Sequence:**
+
 ```
 Tab → Focus visible on first interactive element
 Tab → Move through all buttons/links
@@ -131,6 +146,7 @@ Shift+Tab → Reverse navigation
 ```
 
 **Validation:**
+
 ```
 ✓ Focus indicators have 3px purple outline
 ✓ Skip to main content link visible on Tab
@@ -144,11 +160,13 @@ Shift+Tab → Reverse navigation
 ### 2️⃣ **Screen Reader Compatibility**
 
 **Test with:**
+
 - macOS: VoiceOver (Cmd+F5)
 - Windows: NVDA / JAWS
 - Mobile: TalkBack (Android) / VoiceOver (iOS)
 
 **Required Announcements:**
+
 ```
 ✓ Page title: "Predator12 Nexus Core Dashboard"
 ✓ Landmark regions: header, main, navigation
@@ -160,13 +178,11 @@ Shift+Tab → Reverse navigation
 ```
 
 **ARIA Attributes:**
+
 ```html
-✓ role="alert" on notifications
-✓ aria-label on icon-only buttons
-✓ aria-describedby for help text
-✓ aria-live for dynamic content
-✓ aria-expanded for collapsible sections
-✓ aria-pressed for toggle buttons
+✓ role="alert" on notifications ✓ aria-label on icon-only buttons ✓
+aria-describedby for help text ✓ aria-live for dynamic content ✓ aria-expanded
+for collapsible sections ✓ aria-pressed for toggle buttons
 ```
 
 ---
@@ -174,6 +190,7 @@ Shift+Tab → Reverse navigation
 ### 3️⃣ **Color Contrast**
 
 **WCAG AAA Requirements (7:1 for text):**
+
 ```
 ✓ White text on dark background: ≥15:1
 ✓ Status colors vs background: ≥7:1
@@ -183,6 +200,7 @@ Shift+Tab → Reverse navigation
 ```
 
 **Test Tools:**
+
 - Chrome DevTools Lighthouse (Accessibility audit)
 - WebAIM Contrast Checker
 - axe DevTools Extension
@@ -192,6 +210,7 @@ Shift+Tab → Reverse navigation
 ### 4️⃣ **Visual Impairments**
 
 **Test Cases:**
+
 ```
 ✓ Zoom to 200% (no horizontal scroll)
 ✓ Browser text size increased to 24px
@@ -201,6 +220,7 @@ Shift+Tab → Reverse navigation
 ```
 
 **Expected Behavior:**
+
 ```
 ✓ Text remains readable at all zoom levels
 ✓ No content overlap at 200% zoom
@@ -216,6 +236,7 @@ Shift+Tab → Reverse navigation
 ### 1️⃣ **Page Load Metrics**
 
 **Target Metrics:**
+
 ```
 First Contentful Paint (FCP): < 1.5s
 Largest Contentful Paint (LCP): < 2.5s
@@ -225,6 +246,7 @@ First Input Delay (FID): < 100ms
 ```
 
 **Test with:**
+
 ```bash
 # Lighthouse CLI
 npm install -g lighthouse
@@ -234,6 +256,7 @@ lighthouse http://localhost:5090 --view
 ```
 
 **Expected Score:**
+
 ```
 Performance: ≥ 90
 Accessibility: 100
@@ -246,6 +269,7 @@ SEO: ≥ 80
 ### 2️⃣ **Runtime Performance**
 
 **Animation Smoothness:**
+
 ```
 ✓ Background particles: 60fps (16.7ms/frame)
 ✓ Card hover transitions: smooth, no jank
@@ -255,6 +279,7 @@ SEO: ≥ 80
 ```
 
 **Test Actions:**
+
 1. Open Chrome DevTools > Performance
 2. Start recording
 3. Interact with dashboard (scroll, hover, filter)
@@ -262,6 +287,7 @@ SEO: ≥ 80
 5. Analyze frame rate (should stay above 55fps)
 
 **Memory Usage:**
+
 ```
 ✓ Initial load: < 50 MB
 ✓ After 5 minutes: < 100 MB
@@ -274,6 +300,7 @@ SEO: ≥ 80
 ### 3️⃣ **Network Efficiency**
 
 **Initial Bundle Size:**
+
 ```
 ✓ main.js: < 500 KB (gzipped)
 ✓ main.css: < 100 KB (gzipped)
@@ -282,6 +309,7 @@ SEO: ≥ 80
 ```
 
 **API Calls:**
+
 ```
 ✓ Status updates: every 30s (not every frame)
 ✓ Polling uses exponential backoff on errors
@@ -290,6 +318,7 @@ SEO: ≥ 80
 ```
 
 **Test Tools:**
+
 ```bash
 # Bundle analysis
 npm run build
@@ -304,6 +333,7 @@ source-map-explorer dist/assets/*.js
 ### 1️⃣ **Service Status Display**
 
 **Test Cases:**
+
 ```
 1. All services online → Green status
 2. One service offline → Yellow warning
@@ -313,6 +343,7 @@ source-map-explorer dist/assets/*.js
 ```
 
 **Validation:**
+
 ```
 ✓ Status dot color matches state
 ✓ Tooltip shows last update time
@@ -326,6 +357,7 @@ source-map-explorer dist/assets/*.js
 ### 2️⃣ **Category Filtering**
 
 **Test Sequence:**
+
 ```
 1. Initial state: All categories selected
 2. Click "LLM" → Show only LLM models
@@ -335,6 +367,7 @@ source-map-explorer dist/assets/*.js
 ```
 
 **Validation:**
+
 ```
 ✓ Filter chips highlight when active
 ✓ Service cards filter instantly
@@ -348,6 +381,7 @@ source-map-explorer dist/assets/*.js
 ### 3️⃣ **Agent Control Center**
 
 **Test Scenarios:**
+
 ```
 A. Start agent → Status changes to "Running"
 B. Stop agent → Status changes to "Stopped"
@@ -357,6 +391,7 @@ E. Agent crash → Status shows "Error" + retry button
 ```
 
 **Validation:**
+
 ```
 ✓ Agent status updates in real-time
 ✓ Progress bar shows task completion (0-100%)
@@ -370,6 +405,7 @@ E. Agent crash → Status shows "Error" + retry button
 ### 4️⃣ **Voice Control**
 
 **Test Commands:**
+
 ```
 "Show services" → Navigate to services section
 "Filter by LLM" → Apply LLM category filter
@@ -379,6 +415,7 @@ E. Agent crash → Status shows "Error" + retry button
 ```
 
 **Validation:**
+
 ```
 ✓ Microphone permission requested
 ✓ Voice input captured (visual feedback)
@@ -393,6 +430,7 @@ E. Agent crash → Status shows "Error" + retry button
 ### 5️⃣ **Alert System**
 
 **Test Scenarios:**
+
 ```
 1. Success alert → Green border, checkmark icon
 2. Error alert → Red border, X icon
@@ -402,6 +440,7 @@ E. Agent crash → Status shows "Error" + retry button
 ```
 
 **Validation:**
+
 ```
 ✓ Auto-dismiss after 5 seconds
 ✓ Manual dismiss button (X) works
@@ -416,6 +455,7 @@ E. Agent crash → Status shows "Error" + retry button
 ## 🌐 **CROSS-BROWSER TESTING**
 
 ### Desktop Browsers
+
 ```
 ✓ Chrome 120+ (primary target)
 ✓ Firefox 121+
@@ -425,6 +465,7 @@ E. Agent crash → Status shows "Error" + retry button
 ```
 
 ### Mobile Browsers
+
 ```
 ✓ Chrome Mobile (Android)
 ✓ Safari Mobile (iOS)
@@ -433,6 +474,7 @@ E. Agent crash → Status shows "Error" + retry button
 ```
 
 ### Test Checklist per Browser
+
 ```
 1. Visual rendering (glassmorphism, gradients)
 2. Animations (background, transitions)
@@ -447,6 +489,7 @@ E. Agent crash → Status shows "Error" + retry button
 ## 📱 **RESPONSIVE DESIGN TESTING**
 
 ### Breakpoints
+
 ```
 Mobile:     375px - 767px
 Tablet:     768px - 1023px
@@ -458,6 +501,7 @@ Wide:       1920px+
 ### Test Cases
 
 **Mobile (375px):**
+
 ```
 ✓ Single column layout
 ✓ Voice button: 64px (enlarged)
@@ -468,6 +512,7 @@ Wide:       1920px+
 ```
 
 **Tablet (768px):**
+
 ```
 ✓ Two-column grid for service cards
 ✓ Side-by-side metrics (2x2 grid)
@@ -476,6 +521,7 @@ Wide:       1920px+
 ```
 
 **Desktop (1920px):**
+
 ```
 ✓ Three-column grid for services
 ✓ All filters visible inline
@@ -484,6 +530,7 @@ Wide:       1920px+
 ```
 
 **Test Actions:**
+
 1. Open Chrome DevTools (F12)
 2. Toggle Device Toolbar (Ctrl+Shift+M)
 3. Select preset devices OR enter custom dimensions
@@ -495,6 +542,7 @@ Wide:       1920px+
 ## 🔒 **SECURITY TESTING**
 
 ### 1️⃣ **Input Validation**
+
 ```
 ✓ No XSS vulnerabilities (escaped output)
 ✓ No SQL injection (backend sanitization)
@@ -503,6 +551,7 @@ Wide:       1920px+
 ```
 
 ### 2️⃣ **Authentication (if enabled)**
+
 ```
 ✓ Session timeout after 30 minutes
 ✓ Passwords hashed (bcrypt/Argon2)
@@ -511,10 +560,10 @@ Wide:       1920px+
 ```
 
 ### 3️⃣ **Content Security Policy**
+
 ```html
-✓ Inline scripts forbidden (use CSP nonce)
-✓ External resources from trusted CDNs only
-✓ No eval() or Function() calls
+✓ Inline scripts forbidden (use CSP nonce) ✓ External resources from trusted
+CDNs only ✓ No eval() or Function() calls
 ```
 
 ---
@@ -522,6 +571,7 @@ Wide:       1920px+
 ## 📊 **ACCEPTANCE CRITERIA**
 
 ### ✅ **Must Have (Critical)**
+
 - [ ] All services display correct status
 - [ ] Filters work without errors
 - [ ] No console errors on page load
@@ -532,6 +582,7 @@ Wide:       1920px+
 - [ ] Alerts display and dismiss correctly
 
 ### 🎯 **Should Have (Important)**
+
 - [ ] Voice control functional (if mic available)
 - [ ] Agent controls start/stop agents
 - [ ] 60fps animation performance
@@ -540,6 +591,7 @@ Wide:       1920px+
 - [ ] Color contrast meets WCAG AAA
 
 ### 💎 **Nice to Have (Enhancement)**
+
 - [ ] 3D holographic visualization
 - [ ] Advanced AI assistant
 - [ ] Multi-language support
@@ -553,9 +605,11 @@ Wide:       1920px+
 
 ```markdown
 ### Bug Title
+
 **Short description of the issue**
 
 **Steps to Reproduce:**
+
 1. Navigate to...
 2. Click on...
 3. Observe...
@@ -570,6 +624,7 @@ Wide:       1920px+
 [Attach images/videos if applicable]
 
 **Environment:**
+
 - Browser: Chrome 120.0.6099.234
 - OS: macOS 14.2.1
 - Screen Size: 1920x1080
@@ -577,7 +632,9 @@ Wide:       1920px+
 
 **Console Errors:**
 ```
+
 [Paste any errors from browser console]
+
 ```
 
 **Severity:**
@@ -592,17 +649,20 @@ Wide:       1920px+
 ## 🎬 **DEMO SCRIPT (5 Minutes)**
 
 ### **Act 1: First Impressions (30s)**
+
 1. Open dashboard → "Wow, look at the cosmic background animation!"
 2. Point out enlarged icons and clear typography
 3. Hover over service cards → Glass morphism effect
 
 ### **Act 2: Filtering & Navigation (60s)**
+
 1. Click "LLM" filter → Watch services filter instantly
 2. Click "Vision" → Multi-select demonstration
 3. Scroll through services → Smooth 60fps performance
 4. Click a service card → Detailed view (if implemented)
 
 ### **Act 3: Agent Control (90s)**
+
 1. Navigate to Agent Control Center
 2. Start Agent #1 → Status changes to "Running"
 3. Watch progress bar animate (0% → 100%)
@@ -610,12 +670,14 @@ Wide:       1920px+
 5. Stop agent → Status updates
 
 ### **Act 4: Voice Control (60s)**
+
 1. Click voice button (mic icon)
 2. Say "Show services" → Navigates to services section
 3. Say "Filter by LLM" → Applies filter
 4. Say "Status of Gemini" → Highlights card
 
 ### **Act 5: Accessibility (60s)**
+
 1. Enable VoiceOver (Cmd+F5 on Mac)
 2. Tab through interface → Focus indicators visible
 3. Activate button with Enter → Works correctly
@@ -623,6 +685,7 @@ Wide:       1920px+
 5. "This dashboard is fully accessible!"
 
 ### **Act 6: Responsive Design (30s)**
+
 1. Open DevTools (F12)
 2. Toggle Device Toolbar (Ctrl+Shift+M)
 3. Select iPhone 14 Pro → Layout adapts perfectly
@@ -635,6 +698,7 @@ Wide:       1920px+
 ### Common Issues
 
 **1. Dashboard won't start on port 5090**
+
 ```bash
 # Kill existing process
 lsof -ti:5090 | xargs kill -9
@@ -644,6 +708,7 @@ npm run dev
 ```
 
 **2. Blank screen on load**
+
 ```bash
 # Check console for errors
 # Clear browser cache (Ctrl+Shift+Delete)
@@ -653,12 +718,14 @@ npm install
 ```
 
 **3. Animations laggy**
+
 ```bash
 # Disable background animation in main-full.tsx
 # Or reduce particle count (150 → 50)
 ```
 
 **4. Voice control not working**
+
 ```
 # Grant microphone permission in browser settings
 # Chrome: chrome://settings/content/microphone
@@ -682,6 +749,7 @@ npm install
 - [ ] Stakeholder approval received
 
 **Signed:**
+
 ```
 Tester Name: _______________________
 Date: _______________________

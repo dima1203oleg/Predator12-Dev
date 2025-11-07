@@ -24,7 +24,7 @@ class OpenSearchCache:
 
     async def execute_cached_query(self, index: str, query: Dict[str, Any], executor: callable):
         """Execute query with caching"""
-        cache_key = self._get_cache_key(index, query)
+        self._get_cache_key(index, query)
 
         @self.cache.cached
         async def cached_query_execution():

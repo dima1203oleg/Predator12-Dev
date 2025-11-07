@@ -5,7 +5,6 @@ Test script for self-improvement functionality.
 This script verifies that the self-improvement agent system is working correctly.
 """
 
-import asyncio
 import json
 import logging
 from pathlib import Path
@@ -13,8 +12,7 @@ from typing import Any, Dict
 
 # Set up logging
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -258,7 +256,9 @@ def generate_test_report() -> Dict[str, Any]:
     return report
 
 
-def save_report(report: Dict[str, Any], output_file: str = "SELF_IMPROVEMENT_TEST_REPORT.json") -> None:
+def save_report(
+    report: Dict[str, Any], output_file: str = "SELF_IMPROVEMENT_TEST_REPORT.json"
+) -> None:
     """Save test report to file."""
     output_path = Path(__file__).parent.parent / output_file
     with open(output_path, "w") as f:

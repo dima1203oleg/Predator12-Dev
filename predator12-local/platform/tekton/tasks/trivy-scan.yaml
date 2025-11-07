@@ -3,20 +3,6 @@ kind: Task
 metadata:
   name: trivy-scan
 spec:
-  steps:
-    - name: trivy
-      image: aquasec/trivy:latest
-      script: |
-        #!/bin/sh
-        set -e
-        echo "Trivy scan (task) - image param should be provided by PipelineRun"
-        # Example usage: trivy image --exit-code 1 --severity CRITICAL,HIGH $IMAGE
-        exit 0
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: trivy-scan
-spec:
   params:
     - name: IMAGE
       type: string

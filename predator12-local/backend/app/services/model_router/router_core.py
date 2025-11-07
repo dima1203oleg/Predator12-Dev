@@ -498,7 +498,7 @@ class ModelRouter:
                                 messages=messages,
                                 **(params or {}),
                             )
-                            lat = time.perf_counter() - t0
+                            time.perf_counter() - t0
                             # Compare simple heuristic with visible
                             # If canary has explicit quality, compare; else use latency as tiebreaker
                             canary_quality = (
@@ -637,7 +637,6 @@ class ModelRouter:
             l = len(text)
             length_score = 1.0 / (1.0 + abs(l - target_len) / max(1.0, target_len))
             # keyword score in [0,1]
-            import re
 
             task_keywords = {}
             try:

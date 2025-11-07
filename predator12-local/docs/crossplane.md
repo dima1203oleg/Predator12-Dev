@@ -3,6 +3,7 @@
 Crossplane — Kubernetes-native control plane для керування інфраструктурою через CRD.
 
 ## Встановлення
+
 ```bash
 kubectl create namespace crossplane-system
 helm repo add crossplane-stable https://charts.crossplane.io/stable
@@ -10,6 +11,7 @@ helm install crossplane --namespace crossplane-system crossplane-stable/crosspla
 ```
 
 ## Приклад ресурсу (S3 Bucket)
+
 ```yaml
 apiVersion: s3.aws.crossplane.io/v1beta1
 kind: Bucket

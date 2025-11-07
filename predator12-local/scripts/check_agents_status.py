@@ -3,10 +3,8 @@
 Інструмент перевірки статусу агентів самовдосконалення та виправлення помилок
 """
 
-import json
 import os
 import sys
-import time
 from datetime import datetime, timedelta
 from pathlib import Path
 

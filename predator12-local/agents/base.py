@@ -14,13 +14,13 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
 
 class AgentStatus(Enum):
-    """Agent execution status"""
+    """Agent execution status."""
 
     IDLE = "idle"
     PLANNING = "planning"
@@ -33,7 +33,7 @@ class AgentStatus(Enum):
 
 
 class TaskPriority(Enum):
-    """Task priority levels"""
+    """Task priority levels."""
 
     LOW = 1
     NORMAL = 2
@@ -43,7 +43,7 @@ class TaskPriority(Enum):
 
 
 class RiskLevel(Enum):
-    """Risk assessment levels"""
+    """Risk assessment levels."""
 
     SAFE = "safe"
     LOW = "low"
@@ -54,7 +54,7 @@ class RiskLevel(Enum):
 
 @dataclass
 class AgentTask:
-    """Represents a task for an agent to execute"""
+    """Represents a task for an agent to execute."""
 
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     name: str = ""
@@ -69,7 +69,7 @@ class AgentTask:
     completed_at: Optional[datetime] = None
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert task to dictionary"""
+        """Convert task to dictionary."""
         return {
             "id": self.id,
             "name": self.name,
@@ -87,7 +87,7 @@ class AgentTask:
 
 @dataclass
 class AgentResult:
-    """Result of agent execution"""
+    """Result of agent execution."""
 
     task_id: str
     status: AgentStatus
@@ -103,7 +103,7 @@ class AgentResult:
     pull_request_url: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert result to dictionary"""
+        """Convert result to dictionary."""
         return {
             "task_id": self.task_id,
             "status": self.status.value,
@@ -122,7 +122,7 @@ class AgentResult:
 
 @dataclass
 class ExecutionPlan:
-    """Plan for executing a task"""
+    """Plan for executing a task."""
 
     steps: List[Dict[str, Any]] = field(default_factory=list)
     estimated_duration: float = 0.0
@@ -132,14 +132,14 @@ class ExecutionPlan:
     fallback_steps: List[Dict[str, Any]] = field(default_factory=list)
 
     def add_step(self, name: str, action: str, params: Dict[str, Any] = None):
-        """Add a step to the execution plan"""
+        """Add a step to the execution plan."""
         self.steps.append(
             {"name": name, "action": action, "params": params or {}, "order": len(self.steps) + 1}
         )
 
 
 class BaseAgent(ABC):
-    """Base class for all agents"""
+    """Base class for all agents."""
 
     def __init__(self, name: str, agent_type: str, config: Dict[str, Any] = None):
         self.name = name
@@ -179,16 +179,14 @@ class BaseAgent(ABC):
 
     @abstractmethod
     async def plan(self, task: AgentTask) -> ExecutionPlan:
-        """Create execution plan for the task"""
-        pass
+        """Create execution plan for the task."""
 
     @abstractmethod
     async def execute_step(self, step: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a single step in the plan"""
-        pass
+        """Execute a single step in the plan."""
 
     async def execute(self, task: AgentTask) -> AgentResult:
-        """Execute a task following Plan-then-Execute pattern"""
+        """Execute a task following Plan-then-Execute pattern."""
         start_time = time.time()
         self.current_task = task
         self.status = AgentStatus.PLANNING
@@ -260,7 +258,7 @@ class BaseAgent(ABC):
                 self.status = AgentStatus.IDLE
 
     async def _execute_plan(self, task: AgentTask, plan: ExecutionPlan) -> AgentResult:
-        """Execute the execution plan"""
+        """Execute the execution plan."""
         context = task.context.copy()
         executed_steps = []
 
@@ -334,7 +332,7 @@ class BaseAgent(ABC):
     async def _try_fallback(
         self, task: AgentTask, plan: ExecutionPlan, executed_steps: List
     ) -> AgentResult:
-        """Try fallback execution"""
+        """Try fallback execution."""
         logger.info(f"Agent {self.name} attempting fallback for task {task.id}")
 
         # Switch to fallback model
@@ -382,7 +380,7 @@ class BaseAgent(ABC):
         )
 
     async def _create_review_request(self, task: AgentTask, plan: ExecutionPlan) -> AgentResult:
-        """Create a review request for high-risk tasks"""
+        """Create a review request for high-risk tasks."""
         logger.info(f"Creating review request for high-risk task {task.id}")
 
         # This would create a Pull Request or review ticket
@@ -409,7 +407,7 @@ class BaseAgent(ABC):
         )
 
     async def _log_telemetry(self, event: str, data: Dict[str, Any]):
-        """Log telemetry data"""
+        """Log telemetry data."""
         telemetry_entry = {
             "timestamp": datetime.now().isoformat(),
             "agent": self.name,
@@ -422,7 +420,7 @@ class BaseAgent(ABC):
         logger.debug(f"Telemetry: {json.dumps(telemetry_entry)}")
 
     def get_status(self) -> Dict[str, Any]:
-        """Get current agent status"""
+        """Get current agent status."""
         return {
             "name": self.name,
             "type": self.agent_type,
@@ -438,7 +436,7 @@ class BaseAgent(ABC):
         }
 
     async def health_check(self) -> Dict[str, Any]:
-        """Perform agent health check"""
+        """Perform agent health check."""
         return {
             "healthy": True,
             "status": self.status.value,
@@ -449,7 +447,7 @@ class BaseAgent(ABC):
         }
 
     def _calculate_error_rate(self) -> float:
-        """Calculate agent error rate"""
+        """Calculate agent error rate."""
         total_tasks = self.telemetry_data["tasks_completed"] + self.telemetry_data["tasks_failed"]
         if total_tasks == 0:
             return 0.0

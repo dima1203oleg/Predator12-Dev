@@ -5,7 +5,6 @@ Agent Router and Model Selector
 Intelligent routing and model selection for agents.
 """
 
-import json
 import logging
 from dataclasses import dataclass
 from enum import Enum
@@ -17,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class ModelType(Enum):
-    """Types of AI models"""
+    """Types of AI models."""
 
     LANGUAGE_MODEL = "language_model"
     VISION_MODEL = "vision_model"
@@ -28,7 +27,7 @@ class ModelType(Enum):
 
 @dataclass
 class ModelMetadata:
-    """Metadata for AI models"""
+    """Metadata for AI models."""
 
     name: str
     model_type: ModelType
@@ -41,7 +40,7 @@ class ModelMetadata:
     max_concurrent_requests: int
 
     def calculate_score(self, criteria: Dict[str, float]) -> float:
-        """Calculate weighted score based on criteria"""
+        """Calculate weighted score based on criteria."""
         score = 0.0
 
         # Cost factor (lower is better)
@@ -67,14 +66,14 @@ class ModelMetadata:
 
 
 class ModelSelector:
-    """Selects optimal models based on task requirements"""
+    """Selects optimal models based on task requirements."""
 
     def __init__(self):
         self.models: Dict[str, ModelMetadata] = {}
         self._load_model_registry()
 
     def _load_model_registry(self):
-        """Load model metadata registry"""
+        """Load model metadata registry."""
         # Language models
         self.models["gpt-4"] = ModelMetadata(
             name="gpt-4",
@@ -144,7 +143,7 @@ class ModelSelector:
         required_capabilities: List[str] = None,
         preferences: Dict[str, float] = None,
     ) -> str:
-        """Select optimal model for task"""
+        """Select optimal model for task."""
 
         required_capabilities = required_capabilities or []
         preferences = preferences or {
@@ -184,7 +183,7 @@ class ModelSelector:
     def _adjust_preferences_for_task(
         self, task: AgentTask, agent_type: str, base_preferences: Dict[str, float]
     ) -> Dict[str, float]:
-        """Adjust model selection preferences based on task characteristics"""
+        """Adjust model selection preferences based on task characteristics."""
         preferences = base_preferences.copy()
 
         # High priority tasks prefer reliability over cost
@@ -221,7 +220,7 @@ class ModelSelector:
         return preferences
 
     def get_fallback_models(self, primary_model: str, agent_type: str) -> List[str]:
-        """Get fallback models for a primary model"""
+        """Get fallback models for a primary model."""
         primary_metadata = self.models.get(primary_model)
         if not primary_metadata:
             return ["gpt-3.5-turbo", "local-llama"]
@@ -249,7 +248,7 @@ class ModelSelector:
 
 
 class AgentRouter:
-    """Routes tasks to appropriate agents"""
+    """Routes tasks to appropriate agents."""
 
     def __init__(self):
         self.agents: Dict[str, Type[BaseAgent]] = {}
@@ -263,7 +262,7 @@ class AgentRouter:
         capabilities: List[str],
         priority_weights: Dict[str, float] = None,
     ):
-        """Register an agent with its capabilities"""
+        """Register an agent with its capabilities."""
         agent_name = agent_class.__name__
         self.agents[agent_name] = agent_class
         self.agent_capabilities[agent_name] = capabilities
@@ -272,12 +271,12 @@ class AgentRouter:
         logger.info(f"Registered agent {agent_name} with capabilities: {capabilities}")
 
     def route_task(self, task: AgentTask) -> Optional[str]:
-        """Route task to most appropriate agent"""
+        """Route task to most appropriate agent."""
 
         # Extract task characteristics
-        task_type = task.context.get("type", "general")
+        task.context.get("type", "general")
         required_capabilities = task.context.get("required_capabilities", [])
-        domain = task.context.get("domain", "general")
+        task.context.get("domain", "general")
 
         # Score agents based on task fit
         agent_scores = []
@@ -309,7 +308,7 @@ class AgentRouter:
         agent_capabilities: List[str],
         required_capabilities: List[str],
     ) -> float:
-        """Calculate how well an agent fits a task"""
+        """Calculate how well an agent fits a task."""
 
         score = 0.0
 
@@ -360,7 +359,7 @@ class AgentRouter:
     def create_agent_instance(
         self, agent_name: str, task: AgentTask, config: Dict[str, Any] = None
     ) -> Optional[BaseAgent]:
-        """Create an instance of the selected agent"""
+        """Create an instance of the selected agent."""
 
         if agent_name not in self.agents:
             logger.error(f"Agent {agent_name} not registered")
@@ -400,7 +399,7 @@ class AgentRouter:
             return None
 
     def _get_agent_type(self, agent_name: str) -> str:
-        """Determine agent type from name"""
+        """Determine agent type from name."""
         if any(keyword in agent_name.lower() for keyword in ["heal", "recovery", "restart", "fix"]):
             return "self_heal"
         elif any(keyword in agent_name.lower() for keyword in ["optim", "improve", "enhance"]):
@@ -411,7 +410,7 @@ class AgentRouter:
             return "general"
 
     def _requires_review(self, task: AgentTask, agent_name: str) -> bool:
-        """Determine if task requires human review"""
+        """Determine if task requires human review."""
 
         # Always require review for critical risk
         if task.risk_level == RiskLevel.CRITICAL:
@@ -439,7 +438,7 @@ class AgentRouter:
         return False
 
     def get_routing_stats(self) -> Dict[str, Any]:
-        """Get routing statistics"""
+        """Get routing statistics."""
         return {
             "registered_agents": len(self.agents),
             "agent_types": {

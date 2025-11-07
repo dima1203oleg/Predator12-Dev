@@ -4,13 +4,12 @@ Production-ready CSV parser for Ukrainian customs declarations
 Handles: semicolon delimiters, comma decimals, chunking, data validation
 """
 
-import json
 import logging
 import re
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Generator, List, Optional, Tuple
+from typing import Dict, Generator, List, Optional
 
 import pandas as pd
 

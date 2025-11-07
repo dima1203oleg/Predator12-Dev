@@ -4,8 +4,7 @@
 між 26 агентами з захистом від перегріву та fallback логікою
 """
 
-import json
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import yaml
 
@@ -363,7 +362,6 @@ def update_registry_yaml(config: Dict[str, Any]) -> str:
     for agent_name, agent_config in config["agents"].items():
         categories.add(agent_config["category"])
 
-    profile_counter = 1
     for category in categories:
         # Знаходимо агентів цієї категорії
         category_agents = [

@@ -3,6 +3,7 @@
 ## 🎉 Що створено
 
 ### ✅ Фронтенд компоненти (React/TypeScript)
+
 - **`/frontend/src/pages/Home.tsx`** - Головна героїчна сторінка
 - **`/frontend/src/components/Hero/HeroHUD.tsx`** - AI HUD з брендом та подіями
 - **`/frontend/src/components/Hero/AIFace.tsx`** - SVG неонова сітка-обличчя з анімацією
@@ -11,6 +12,7 @@
 - **`/frontend/src/styles/hero.css`** - Повний набір неонових стилів
 
 ### ✅ Бекенд API (FastAPI)
+
 - **`/backend/hero_api.py`** - Повний API для героя:
   - `POST /api/chat` - Обробка повідомлень чату
   - `GET /api/events` - SSE стрім подій агентів
@@ -18,6 +20,7 @@
   - `GET /health` - Health check
 
 ### ✅ Залежності
+
 - `cytoscape` - для інтерактивних графів
 - `@types/cytoscape` - типізація для TypeScript
 - `classnames` - для зручної роботи з CSS класами
@@ -35,6 +38,7 @@ python3.11 hero_api.py
 ```
 
 Ви побачите:
+
 ```
 🚀 Запуск Predator Analytics Hero API...
 📡 API: http://localhost:8000
@@ -49,6 +53,7 @@ npm start
 ```
 
 Або:
+
 ```bash
 npm run dev
 ```
@@ -62,11 +67,13 @@ npm run dev
 ## 🎨 Що ви побачите
 
 ### Ліва панель (HUD)
+
 - 🧠 **AI Face** - Неонова сітка-обличчя з анімацією очей
 - ⚠️ **Risk Ticker** - Банер з виявленими ризиками
 - 🤖 **Agent Events** - Стрім подій від агентів (SSE)
 
 ### Права панель
+
 - 💬 **Chat Dock** - Чат з AI:
   - Текстове введення (Enter для відправки)
   - 🎙️ Голосове введення (Web Speech API)
@@ -80,6 +87,7 @@ npm run dev
 ## 💡 Приклади запитів для чату
 
 Спробуйте:
+
 - "Покажи контрагентів"
 - "Які судові справи?"
 - "Побудуй граф зв'язків"
@@ -102,17 +110,20 @@ npm run dev
 ## 🐛 Якщо щось не працює
 
 ### Cytoscape не завантажується?
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/frontend
 npm install cytoscape @types/cytoscape --save
 ```
 
 ### SSE події не приходять?
+
 - Перевірте, що бекенд запущено на порті 8000
 - Перевірте консоль браузера (F12)
 - Переконайтеся, що CORS налаштовано правильно
 
 ### Голос не працює?
+
 - Використовуйте Chrome або Edge
 - Дозвольте доступ до мікрофона
 - Перевірте системні налаштування
@@ -144,21 +155,27 @@ backend/
 ## 🎯 Наступні кроки (опціонально)
 
 ### 1. Додайте реальних агентів
+
 Інтегруйте з вашим AI Assistant замість demo-логіки в `hero_api.py`
 
 ### 2. WebGL обличчя
+
 Заміньте `AIFace.tsx` на react-three-fiber для 3D ефектів
 
 ### 3. Live граф
+
 Підключіть `/api/network` до реальних даних та оновлюйте граф через SSE
 
 ### 4. Технічні сторінки
+
 Додайте інші сторінки:
+
 - Dashboard (аналітика)
 - Network (повний граф)
 - Settings (налаштування)
 
 ### 5. Kubernetes deployment
+
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -186,6 +203,7 @@ data:
 ## 🤝 Підтримка
 
 Якщо щось не виходить:
+
 1. Перевірте консоль браузера (F12)
 2. Перевірте логи бекенду
 3. Перезапустіть обидва сервери
@@ -196,6 +214,7 @@ data:
 ## 📊 Технічний стек
 
 ### Фронтенд
+
 - React 18 + TypeScript
 - Vite (швидкий білд)
 - Cytoscape (графи)
@@ -203,6 +222,7 @@ data:
 - Web Speech API (голос)
 
 ### Бекенд
+
 - FastAPI (Python 3.11)
 - SSE (Server-Sent Events)
 - Pydantic (валідація)

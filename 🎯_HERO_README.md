@@ -26,6 +26,7 @@
 ## 🎨 FEATURES
 
 ### ✨ AI Hero Interface
+
 - 🧠 **AI HUD** - Неонова сітка-обличчя з анімацією
 - 💬 **Smart Chat** - Інтелектуальний чат з backend
 - 🎙️ **Voice I/O** - Голосове введення (uk-UA) + TTS відповідей
@@ -34,6 +35,7 @@
 - 📡 **Agent Events** - Realtime SSE стрім агентських подій
 
 ### 🚀 Оптимізація
+
 - ⚡ Легкий для M3/8GB (без WebGL)
 - 📱 Responsive design (mobile-first)
 - 🎭 SVG анімації замість 3D
@@ -77,7 +79,9 @@ Predator12/
 ### Backend (FastAPI)
 
 #### `POST /api/chat`
+
 Обробка повідомлень чату
+
 ```json
 {
   "message": "Покажи контрагента",
@@ -86,14 +90,18 @@ Predator12/
 ```
 
 #### `GET /api/events` (SSE)
+
 Realtime стрім подій агентів
+
 ```
 Content-Type: text/event-stream
 data: [12:34:56] Router Agent: Обробка запиту...
 ```
 
 #### `GET /api/network`
+
 Дані графа зв'язків
+
 ```json
 {
   "nodes": [...],
@@ -106,6 +114,7 @@ data: [12:34:56] Router Agent: Обробка запиту...
 ## 🛠️ ТЕХНОЛОГІЇ
 
 ### Frontend
+
 - **React 18.3** - UI Framework
 - **TypeScript** - Type safety
 - **Vite 5.4** - Build tool
@@ -114,6 +123,7 @@ data: [12:34:56] Router Agent: Обробка запиту...
 - **Web Speech API** - Голосовий ввід/вивід
 
 ### Backend
+
 - **FastAPI** - Python web framework
 - **Uvicorn** - ASGI server
 - **SSE** - Server-Sent Events
@@ -124,6 +134,7 @@ data: [12:34:56] Router Agent: Обробка запиту...
 ## 📦 ВСТАНОВЛЕННЯ
 
 ### Автоматичне (рекомендовано)
+
 ```bash
 ./🚀_START_HERO.sh
 ```
@@ -131,6 +142,7 @@ data: [12:34:56] Router Agent: Обробка запиту...
 ### Ручне
 
 #### Frontend
+
 ```bash
 cd predator12-local/frontend
 npm install
@@ -138,6 +150,7 @@ npm run dev
 ```
 
 #### Backend
+
 ```bash
 cd predator12-local/backend
 python3.11 -m venv venv
@@ -151,22 +164,26 @@ uvicorn app.main:app --reload --port 8000
 ## 🎮 ВИКОРИСТАННЯ
 
 ### 1. Текстовий чат
+
 - Введіть запит у поле вводу
 - Натисніть **Enter** або кнопку **📤**
 - AI відповість з аналізом
 
 ### 2. Голосовий ввід
+
 - Клікніть на **🎙️**
 - Дозвольте доступ до мікрофону
 - Говоріть українською
 - AI розпізнає та відповість голосом
 
 ### 3. Граф зв'язків
+
 - Клік на вузол → підсвітка зв'язків
 - Zoom: колесо миші
 - Drag: перетягування вузлів
 
 ### 4. Агентські події
+
 - Автоматичний SSE стрім
 - Показує статуси агентів
 - Realtime оновлення
@@ -176,6 +193,7 @@ uvicorn app.main:app --reload --port 8000
 ## 🔧 КОНФІГУРАЦІЯ
 
 ### Frontend (.env.development)
+
 ```bash
 VITE_API_BASE_URL=http://localhost:8000
 VITE_ENABLE_VOICE=true
@@ -183,6 +201,7 @@ VITE_DEBUG_MODE=true
 ```
 
 ### Backend (app/main.py)
+
 ```python
 # CORS налаштування
 allow_origins=[
@@ -196,6 +215,7 @@ allow_origins=[
 ## 🐛 TROUBLESHOOTING
 
 ### Frontend не запускається
+
 ```bash
 cd predator12-local/frontend
 rm -rf node_modules package-lock.json
@@ -203,11 +223,13 @@ npm install
 ```
 
 ### Граф не відображається
+
 ```bash
 npm install cytoscape @types/cytoscape
 ```
 
 ### Backend не відповідає
+
 ```bash
 # Перевірте чи запущено
 curl http://localhost:8000/health
@@ -218,6 +240,7 @@ uvicorn app.main:app --reload --port 8000
 ```
 
 ### Голосовий ввід не працює
+
 - Використовуйте Chrome/Edge
 - Дайте дозвіл на мікрофон
 - Перевірте `VITE_ENABLE_VOICE=true`
@@ -227,6 +250,7 @@ uvicorn app.main:app --reload --port 8000
 ## 📊 PERFORMANCE
 
 ### Оптимізовано для M3/8GB
+
 - ✅ SVG замість WebGL
 - ✅ Dynamic imports
 - ✅ Lazy loading
@@ -234,6 +258,7 @@ uvicorn app.main:app --reload --port 8000
 - ✅ Cleanup on unmount
 
 ### Метрики
+
 - **Bundle size:** ~2MB (gzip)
 - **Initial load:** <3s
 - **TTI:** <5s
@@ -244,18 +269,21 @@ uvicorn app.main:app --reload --port 8000
 ## 🎯 ROADMAP
 
 ### v1.1 (Short-term)
+
 - [ ] WebGL version AI face (Three.js)
 - [ ] Chat history (localStorage)
 - [ ] Message animations
 - [ ] Theme switcher
 
 ### v2.0 (Mid-term)
+
 - [ ] Live graph updates (WebSocket)
 - [ ] Drag & drop files
 - [ ] Multi-language support
 - [ ] Dashboard metrics
 
 ### v3.0 (Long-term)
+
 - [ ] Multimodal (images, PDF)
 - [ ] 3D network graph
 - [ ] PWA support
@@ -275,10 +303,12 @@ uvicorn app.main:app --reload --port 8000
 ## 🤝 ПІДТРИМКА
 
 ### Контакти
+
 - **GitHub:** [Predator Analytics](https://github.com/predator-analytics)
 - **Docs:** http://localhost:8000/docs
 
 ### Посилання
+
 - [FastAPI Docs](https://fastapi.tiangolo.com/)
 - [Cytoscape.js](https://js.cytoscape.org/)
 - [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
@@ -295,7 +325,7 @@ MIT License - використовуйте вільно для комерцій�
 
 **Створено з ❤️ для Predator Analytics**
 
-*Оптимізовано для MacBook Pro M3 (8GB)*
+_Оптимізовано для MacBook Pro M3 (8GB)_
 
 🚀 **READY TO LAUNCH!**
 

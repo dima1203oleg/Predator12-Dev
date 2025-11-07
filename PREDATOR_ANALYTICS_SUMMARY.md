@@ -68,6 +68,7 @@ make k8s-install    # Deploy в Kubernetes
 ## 🏗️ Що Створено
 
 ### ✅ Backend (FastAPI + Python)
+
 - REST API з автодокументацією
 - Celery для фонових завдань
 - PostgreSQL база даних
@@ -78,6 +79,7 @@ make k8s-install    # Deploy в Kubernetes
 **Локація**: `predator-analytics/backend/`
 
 ### ✅ Frontend (Next.js + React)
+
 - Інтерактивний 3D аватар (Three.js)
 - Голосовий інтерфейс
 - Чат з AI-асистентом
@@ -87,6 +89,7 @@ make k8s-install    # Deploy в Kubernetes
 **Локація**: `predator-analytics/frontend/`
 
 ### ✅ AI Agents
+
 - **ArbiterAgent** - координує інші агенти
 - **DatasetInspectorAgent** - аналізує дані
 - Модульна архітектура для розширення
@@ -94,6 +97,7 @@ make k8s-install    # Deploy в Kubernetes
 **Локація**: `predator-analytics/backend/agents/`
 
 ### ✅ Infrastructure (Kubernetes)
+
 - Helm Charts (umbrella + subcharts)
 - Terraform конфігурація
 - ArgoCD для GitOps
@@ -103,6 +107,7 @@ make k8s-install    # Deploy в Kubernetes
 **Локація**: `predator-analytics/helm/`, `predator-analytics/terraform/`
 
 ### ✅ CI/CD
+
 - GitHub Actions workflows
 - Автоматичні тести
 - Docker builds
@@ -111,6 +116,7 @@ make k8s-install    # Deploy в Kubernetes
 **Локація**: `predator-analytics/.github/workflows/`
 
 ### ✅ Monitoring
+
 - Prometheus metrics
 - Grafana dashboards
 - SLO/SLI tracking
@@ -123,21 +129,25 @@ make k8s-install    # Deploy в Kubernetes
 ## 🎯 Основні Особливості
 
 ### 1. 3D AI-Аватар
+
 - Реалізовано з React Three Fiber
 - Анімації та particle effects
 - Реагує на голосові команди
 
 ### 2. Українська Мова
+
 - Повна підтримка TTS/STT українською (uk-UA)
 - Google Cloud та Azure інтеграція
 - Українські голоси (жіночі та чоловічі)
 
 ### 3. Multi-Agent System
+
 - Arbiter делегує задачі
 - Спеціалізовані агенти
 - Паралельна обробка
 
 ### 4. Production-Ready
+
 - Kubernetes deployment
 - Auto-scaling
 - Monitoring та alerting
@@ -203,11 +213,12 @@ predator-analytics/
 # Backend
 cp backend/.env.example backend/.env
 
-# Frontend  
+# Frontend
 cp frontend/.env.example frontend/.env
 ```
 
 **Backend `.env`:**
+
 ```bash
 DEBUG=true
 DB_HOST=localhost
@@ -219,6 +230,7 @@ AZURE_SPEECH_KEY=your_key
 ```
 
 **Frontend `.env`:**
+
 ```bash
 NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 ```
@@ -281,6 +293,7 @@ http://localhost:9090
 ```
 
 **Приклади запитів:**
+
 ```promql
 predator:api:latency:p95
 predator:api:success_rate
@@ -303,10 +316,12 @@ Dashboard вже налаштований у `monitoring/grafana/dashboard-overv
 ### Підтримувані Голоси
 
 **Google Cloud:**
+
 - `uk-UA-Wavenet-A` (жіночий, висока якість)
 - `uk-UA-Standard-A` (жіночий, стандарт)
 
 **Azure:**
+
 - `uk-UA-PolinaNeural` (жіночий, Neural)
 - `uk-UA-OstapNeural` (чоловічий, Neural)
 
@@ -343,6 +358,7 @@ POST /api/v1/voice/stt
 ### Keycloak (SSO)
 
 Конфігурація готова в `backend/core/config.py`:
+
 ```python
 KEYCLOAK_URL=http://localhost:8080
 KEYCLOAK_REALM=predator-analytics
@@ -359,17 +375,20 @@ KEYCLOAK_REALM=predator-analytics
 ### Troubleshooting
 
 **Backend не стартує:**
+
 ```bash
 docker-compose logs backend
 ```
 
 **Frontend не підключається:**
+
 ```bash
 # Перевірте NEXT_PUBLIC_API_URL
 cat frontend/.env
 ```
 
 **Database issues:**
+
 ```bash
 docker-compose exec postgres psql -U postgres -d predator_analytics
 ```
@@ -403,17 +422,20 @@ make clean
 ## ✨ Наступні Кроки
 
 1. **Запустіть локально**
+
    ```bash
    cd /Users/dima/Documents/Predator12/predator-analytics
    make dev
    ```
 
 2. **Відкрийте Frontend**
+
    ```
    http://localhost:3000
    ```
 
 3. **Протестуйте API**
+
    ```
    http://localhost:8000/api/docs
    ```
@@ -432,6 +454,7 @@ make clean
 ## 🏆 Статус
 
 ✅ **100% Готовність**
+
 - ✅ Backend API
 - ✅ Frontend з 3D аватаром
 - ✅ AI Agents
@@ -446,6 +469,7 @@ make clean
 ## 🤝 Підтримка Розробки
 
 Проєкт готовий до:
+
 - ✅ Локальної розробки
 - ✅ Production deployment
 - ✅ Масштабування

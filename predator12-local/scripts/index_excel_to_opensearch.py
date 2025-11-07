@@ -1,6 +1,6 @@
+import json
 import os
 import sys
-import json
 from typing import Any, Dict, List
 
 import pandas as pd
@@ -112,7 +112,9 @@ def main():
             print(f"❌ File not found: {path}")
             sys.exit(2)
         print(f"📄 Reading Excel: {path}")
-        df_read = pd.read_excel(path, sheet_name=SHEET_NAME if SHEET_NAME else None, engine="openpyxl")
+        df_read = pd.read_excel(
+            path, sheet_name=SHEET_NAME if SHEET_NAME else None, engine="openpyxl"
+        )
         if isinstance(df_read, dict):
             # No explicit sheet requested -> take the first sheet present
             if not df_read:

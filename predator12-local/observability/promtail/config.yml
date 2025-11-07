@@ -29,7 +29,7 @@ scrape_configs:
             tag:
       - regex:
           source: tag
-          expression: '^(?P<container_name>(?:[^|]*))'
+          expression: "^(?P<container_name>(?:[^|]*))"
       - timestamp:
           source: time
           format: RFC3339Nano
@@ -60,7 +60,7 @@ scrape_configs:
             tag:
       - regex:
           source: tag
-          expression: '^(?P<container_name>(?:[^|]*))'
+          expression: "^(?P<container_name>(?:[^|]*))"
       - timestamp:
           source: time
           format: RFC3339Nano
@@ -90,7 +90,7 @@ scrape_configs:
             tag:
       - regex:
           source: tag
-          expression: '^(?P<container_name>(?:[^|]*))'
+          expression: "^(?P<container_name>(?:[^|]*))"
       - timestamp:
           source: time
           format: RFC3339Nano
@@ -102,7 +102,7 @@ scrape_configs:
           stages:
             - regex:
                 source: output
-                expression: '(?P<level>DEBUG|INFO|WARNING|ERROR|CRITICAL)'
+                expression: "(?P<level>DEBUG|INFO|WARNING|ERROR|CRITICAL)"
             - labels:
                 level:
       - output:

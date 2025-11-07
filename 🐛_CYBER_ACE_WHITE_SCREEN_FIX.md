@@ -2,13 +2,14 @@
 
 **Дата:** 14 жовтня 2025  
 **Проблема:** Білий екран при завантаженні CYBER-ACE  
-**Статус:** 🔧 Виправлення застосовано  
+**Статус:** 🔧 Виправлення застосовано
 
 ---
 
 ## 🔍 Діагностика
 
 ### Проблема
+
 При переході на модуль CYBER-ACE відображається **білий екран**.
 
 ### Можливі Причини
@@ -24,15 +25,17 @@
 ## ✅ Застосовані Виправлення
 
 ### 1. Вимкнено Suspense в i18n
+
 **Файл:** `src/modules/cyber-ace/i18n.ts`
 
 ```typescript
 react: {
-  useSuspense: false // Було: true
+  useSuspense: false; // Було: true
 }
 ```
 
 ### 2. Додано Suspense Fallback
+
 **Файл:** `src/modules/cyber-ace/CyberAcePage.tsx`
 
 ```typescript
@@ -50,6 +53,7 @@ const CyberAcePageWithSuspense: React.FC = () => (
 ```
 
 ### 3. Додано Suspense в App.tsx
+
 **Файл:** `src/App.tsx`
 
 ```typescript
@@ -59,13 +63,15 @@ const CyberAcePageWithSuspense: React.FC = () => (
 ```
 
 ### 4. Додано i18n ініціалізацію
+
 **Файл:** `src/modules/cyber-ace/CyberAcePage.tsx`
 
 ```typescript
-import './i18n'; // Ініціалізація i18n
+import "./i18n"; // Ініціалізація i18n
 ```
 
 ### 5. Створено тестову сторінку
+
 **Файл:** `src/modules/cyber-ace/CyberAceTestPage.tsx`
 
 Проста сторінка для перевірки базової функціональності без складних залежностей.
@@ -77,6 +83,7 @@ import './i18n'; // Ініціалізація i18n
 ### Варіант 1: Відкрити в Браузері
 
 1. **Запустити dev server** (якщо не запущений):
+
    ```bash
    npm run dev
    ```
@@ -94,6 +101,7 @@ import './i18n'; // Ініціалізація i18n
 ### Варіант 2: Використати Тестову Сторінку
 
 **Тимчасово** змінити в App.tsx:
+
 ```typescript
 // Замінити:
 <CyberAcePage />
@@ -140,6 +148,7 @@ import './i18n'; // Ініціалізація i18n
 ### "Cannot find module './i18n'"
 
 **Рішення:**
+
 ```bash
 # Переконатись що файл існує
 ls src/modules/cyber-ace/i18n.ts
@@ -151,6 +160,7 @@ touch src/modules/cyber-ace/i18n.ts
 ### "useTranslation is not a function"
 
 **Рішення:**
+
 ```bash
 # Перевстановити i18next
 npm install --save i18next react-i18next
@@ -159,6 +169,7 @@ npm install --save i18next react-i18next
 ### "Three is not defined"
 
 **Рішення:**
+
 ```bash
 # Встановити Three.js
 npm install --save three @react-three/fiber @react-three/drei
@@ -168,12 +179,14 @@ npm install --save-dev @types/three
 ### "Cannot read property 'agents' of undefined"
 
 **Рішення:**
+
 - Перевірити що Zustand store правильно ініціалізовано
 - Додати optional chaining: `agents?.map(...)` замість `agents.map(...)`
 
 ### CSS не застосовується
 
 **Рішення:**
+
 ```typescript
 // Перевірити що імпорт є в CyberAcePage.tsx
 import './styles/cyber-ace.css';
@@ -241,6 +254,7 @@ npm run dev
 ## 💡 Поради
 
 ### Для Розробки
+
 1. **Завжди перевіряйте консоль** — більшість помилок там
 2. **Використовуйте React DevTools** — для дебагу компонентів
 3. **Перевіряйте Network** — для проблем з завантаженням
@@ -248,6 +262,7 @@ npm run dev
 5. **Використовуйте console.log** — для дебагу
 
 ### Для Production
+
 1. **Error Boundaries** — обгорнути компоненти
 2. **Loading States** — показувати прогрес
 3. **Fallback UI** — якщо щось не працює
@@ -280,4 +295,4 @@ npm run dev
 
 **Створено:** 14 жовтня 2025  
 **Оновлено:** 14 жовтня 2025  
-**Версія:** 1.1  
+**Версія:** 1.1

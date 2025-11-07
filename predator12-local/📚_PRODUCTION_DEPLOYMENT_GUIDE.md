@@ -5,8 +5,9 @@
 **Predator Analytics Nexus** - сучасний кібер-інтерфейс з 3D голографічними компонентами для багатоагентної аналітичної системи нового покоління.
 
 ### ✨ **Ключові особливості:**
+
 - 🤖 **HolographicGuide** - 3D AI-гід з голосовим управлінням
-- 🌌 **DataFlowMap** - 3D візуалізація потоків даних як планети  
+- 🌌 **DataFlowMap** - 3D візуалізація потоків даних як планети
 - 🔥 **MASupervisor** - 3D вулик агентів з real-time моніторингом
 - ⚡ **NexusCore** - центральний dashboard з інтуїтивною навігацією
 - 🎨 **Кібер-дизайн** - футуристичний інтерфейс з голографічними ефектами
@@ -16,6 +17,7 @@
 ## 🚀 ШВИДКИЙ ЗАПУСК
 
 ### **Опція 1: Автоматичний deployment** ⚡
+
 ```bash
 # Клонування та запуск одною командою
 git clone <repository-url>
@@ -25,6 +27,7 @@ chmod +x deploy_nexus.sh
 ```
 
 ### **Опція 2: Ручний запуск** 🛠️
+
 ```bash
 # 1. Підготовка environment
 cp .env.production .env
@@ -43,14 +46,14 @@ docker-compose -f docker-compose.nexus.yml ps
 
 ## 🌐 ДОСТУП ДО СИСТЕМИ
 
-| Сервіс | URL | Опис |
-|--------|-----|------|
-| **Frontend** | http://localhost:3000 | Головний кібер-інтерфейс |
-| **Backend API** | http://localhost:8000 | REST API та WebSocket |
-| **Nginx Proxy** | http://localhost:80 | Reverse proxy |
-| **Database** | localhost:5432 | PostgreSQL |
-| **Redis** | localhost:6379 | Cache та sessions |
-| **Monitoring** | http://localhost:9090 | Prometheus metrics |
+| Сервіс          | URL                   | Опис                     |
+| --------------- | --------------------- | ------------------------ |
+| **Frontend**    | http://localhost:3000 | Головний кібер-інтерфейс |
+| **Backend API** | http://localhost:8000 | REST API та WebSocket    |
+| **Nginx Proxy** | http://localhost:80   | Reverse proxy            |
+| **Database**    | localhost:5432        | PostgreSQL               |
+| **Redis**       | localhost:6379        | Cache та sessions        |
+| **Monitoring**  | http://localhost:9090 | Prometheus metrics       |
 
 ---
 
@@ -88,24 +91,28 @@ docker-compose -f docker-compose.nexus.yml ps
 ## 🎮 КОМПОНЕНТИ ТА ФУНКЦІОНАЛЬНІСТЬ
 
 ### 🤖 **HolographicGuide**
+
 - **3D рендеринг**: WebGL через Three.js
 - **Голосове управління**: SpeechRecognition API
 - **Анімовані стани**: neutral, alert, processing, success, error
 - **Інтеракція**: Голосові команди та візуальний feedback
 
-### 🌌 **DataFlowMap**  
+### 🌌 **DataFlowMap**
+
 - **3D візуалізація**: Планети як системні ноди
 - **Навігація**: OrbitControls для 3D простору
 - **Real-time данні**: Динамічне оновлення потоків
 - **Інтерактивність**: Hover ефекти та деталізація
 
 ### 🔥 **MASupervisor**
+
 - **Архітектура**: Гексагональний 3D вулик
 - **Агенти**: Real-time статуси та метрики
 - **Ефекти**: Sparkles, trails, energy rings
 - **Управління**: Інтерактивний контроль агентів
 
 ### ⚡ **NexusCore Dashboard**
+
 - **Модульність**: Pluggable компоненти
 - **Навігація**: Sidebar з live статусами
 - **Responsive**: Адаптивний дизайн
@@ -118,11 +125,12 @@ docker-compose -f docker-compose.nexus.yml ps
 ### **Environment файли:**
 
 **`.env.production`** - Production налаштування:
+
 ```bash
 # Database
 DATABASE_URL=postgresql://nexus:secure_password@nexus-db:5432/nexus
 
-# Security  
+# Security
 SECRET_KEY=nexus_super_secret_key_2025
 JWT_SECRET=jwt_secret_key_2025
 
@@ -133,6 +141,7 @@ FEATURE_VOICE_CONTROL=true
 ```
 
 **`docker-compose.nexus.yml`** - Orchestration:
+
 - Multi-service deployment
 - Health checks
 - Networking
@@ -140,6 +149,7 @@ FEATURE_VOICE_CONTROL=true
 - Security configurations
 
 **`nginx/nexus.conf`** - Reverse proxy:
+
 - SSL termination
 - Rate limiting
 - Static file serving
@@ -151,11 +161,12 @@ FEATURE_VOICE_CONTROL=true
 ## 🛠️ РОЗРОБКА ТА НАЛАГОДЖЕННЯ
 
 ### **Development режим:**
+
 ```bash
 # Frontend dev server
 cd frontend && npm run dev
 
-# Backend dev server  
+# Backend dev server
 cd backend && python app.py
 
 # Database для розробки
@@ -163,6 +174,7 @@ docker run -p 5432:5432 -e POSTGRES_PASSWORD=dev postgres:15
 ```
 
 ### **Логування та моніторинг:**
+
 ```bash
 # Переглянути логи
 docker-compose -f docker-compose.nexus.yml logs -f
@@ -175,6 +187,7 @@ docker stats $(docker-compose -f docker-compose.nexus.yml ps -q)
 ```
 
 ### **Debugging 3D компонентів:**
+
 - **WebGL інспектор**: Spector.js browser extension
 - **Three.js девтулз**: Three.js dev tools
 - **Performance профайлер**: Chrome DevTools Performance tab
@@ -184,8 +197,9 @@ docker stats $(docker-compose -f docker-compose.nexus.yml ps -q)
 ## 🔒 БЕЗПЕКА
 
 ### **Production security checklist:**
+
 - [x] Environment variables захищені
-- [x] HTTPS сертифікати налаштовані  
+- [x] HTTPS сертифікати налаштовані
 - [x] Rate limiting увімкнено
 - [x] CORS правильно налаштований
 - [x] Security headers додані
@@ -193,10 +207,11 @@ docker stats $(docker-compose -f docker-compose.nexus.yml ps -q)
 - [x] JWT secrets унікальні
 
 ### **Firewall правила:**
+
 ```bash
 # Відкрити тільки необхідні порти
 ufw allow 80/tcp    # HTTP
-ufw allow 443/tcp   # HTTPS  
+ufw allow 443/tcp   # HTTPS
 ufw allow 22/tcp    # SSH (обмежити за IP)
 ```
 
@@ -205,18 +220,20 @@ ufw allow 22/tcp    # SSH (обмежити за IP)
 ## 📊 МОНІТОРИНГ ТА АЛЕРТИ
 
 ### **Metrics що збираються:**
+
 - Frontend performance (Core Web Vitals)
 - 3D рендеринг FPS та GPU usage
-- API response times  
+- API response times
 - Database query performance
 - Voice API usage statistics
 - User interaction patterns
 
 ### **Health checks:**
+
 ```bash
 # Automated health monitoring
 curl http://localhost:80/health        # Nginx
-curl http://localhost:3000             # Frontend  
+curl http://localhost:3000             # Frontend
 curl http://localhost:8000/health      # Backend
 ```
 
@@ -225,6 +242,7 @@ curl http://localhost:8000/health      # Backend
 ## 🚀 МАСШТАБУВАННЯ
 
 ### **Горизонтальне масштабування:**
+
 ```yaml
 # docker-compose.scale.yml
 services:
@@ -237,6 +255,7 @@ services:
 ```
 
 ### **Performance оптимізації:**
+
 - CDN для статичних assets
 - Redis clustering
 - Database read replicas
@@ -248,6 +267,7 @@ services:
 ## 🛡️ BACKUP ТА ВІДНОВЛЕННЯ
 
 ### **Automated backups:**
+
 ```bash
 # Database backup
 docker exec nexus-db pg_dump -U nexus nexus > backup_$(date +%Y%m%d_%H%M%S).sql
@@ -257,6 +277,7 @@ docker run --volumes-from nexus-db -v $(pwd):/backup ubuntu tar czf /backup/db_b
 ```
 
 ### **Disaster recovery:**
+
 - Automated daily backups
 - Off-site backup storage
 - Recovery time objective: < 1 hour
@@ -269,6 +290,7 @@ docker run --volumes-from nexus-db -v $(pwd):/backup ubuntu tar czf /backup/db_b
 ### **Troubleshooting:**
 
 **Проблема**: Frontend не завантажується
+
 ```bash
 # Перевірити статус
 docker-compose -f docker-compose.nexus.yml ps nexus-frontend
@@ -278,21 +300,24 @@ docker-compose -f docker-compose.nexus.yml build nexus-frontend
 ```
 
 **Проблема**: 3D компоненти не рендеряться
+
 - Перевірити підтримку WebGL у браузері
 - Оновити GPU драйвери
 - Спробувати інший браузер (Chrome рекомендується)
 
 **Проблема**: Голосове управління не працює
+
 - Перевірити HTTPS (потрібно для SpeechRecognition)
 - Дозволити доступ до мікрофона
 - Перевірити підтримку Web Speech API
 
 ### **Логи та діагностика:**
+
 ```bash
 # Повна діагностика
 ./diagnose_nexus.sh
 
-# Експорт логів  
+# Експорт логів
 docker-compose -f docker-compose.nexus.yml logs > nexus_logs_$(date +%Y%m%d).txt
 ```
 
@@ -307,12 +332,12 @@ docker-compose -f docker-compose.nexus.yml logs > nexus_logs_$(date +%Y%m%d).txt
 ✅ **Голосове управління** через Web Speech API  
 ✅ **Real-time візуалізації** агентів та даних  
 ✅ **Production-ready** контейнеризація  
-✅ **Enterprise security** та моніторинг  
+✅ **Enterprise security** та моніторинг
 
 **Система готова до використання! 🏆**
 
 ---
 
-*Документація створена: 30 вересня 2025*  
-*Версія: 1.0.0-cyber*  
-*Статус: PRODUCTION READY* ✨
+_Документація створена: 30 вересня 2025_  
+_Версія: 1.0.0-cyber_  
+_Статус: PRODUCTION READY_ ✨

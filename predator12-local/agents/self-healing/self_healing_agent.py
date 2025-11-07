@@ -37,7 +37,7 @@ class HealingAction:
 
 
 class ModelSelector:
-    """Інтелектуальний вибір моделей для Self-Healing задач"""
+    """Інтелектуальний вибір моделей для Self-Healing задач."""
 
     def __init__(self):
         self.decision_models = [
@@ -58,7 +58,7 @@ class ModelSelector:
         ]
 
     def select_for_decision(self, context: Dict[str, Any]) -> str:
-        """Вибір моделі для прийняття рішень"""
+        """Вибір моделі для прийняття рішень."""
         urgency = context.get("urgency", "medium")
         complexity = context.get("complexity", 0.5)
 
@@ -70,7 +70,7 @@ class ModelSelector:
             return self.decision_models[2]  # Llama для валідації
 
     def select_for_analysis(self, context: Dict[str, Any]) -> str:
-        """Вибір моделі для аналізу проблем"""
+        """Вибір моделі для аналізу проблем."""
         data_size = context.get("log_lines", 0)
         problem_type = context.get("problem_type", "unknown")
 
@@ -83,7 +83,7 @@ class ModelSelector:
 
 
 class SelfHealingAgent:
-    """AI-powered агент самовідновлення з інтелектуальним вибором моделей"""
+    """AI-powered агент самовідновлення з інтелектуальним вибором моделей."""
 
     def __init__(self):
         self.model_selector = ModelSelector()
@@ -93,13 +93,13 @@ class SelfHealingAgent:
         self.session: Optional[aiohttp.ClientSession] = None
 
     async def get_session(self) -> aiohttp.ClientSession:
-        """Отримати HTTP сесію"""
+        """Отримати HTTP сесію."""
         if self.session is None or self.session.closed:
             self.session = aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30))
         return self.session
 
     async def query_model(self, model_name: str, messages: List[Dict[str, str]]) -> str:
-        """Запит до моделі через SDK"""
+        """Запит до моделі через SDK."""
         try:
             session = await self.get_session()
             payload = {
@@ -122,7 +122,7 @@ class SelfHealingAgent:
             return "Error in model query"
 
     async def check_service_health(self, service_name: str, endpoint: str) -> HealthCheck:
-        """Перевірка здоров'я сервісу з AI аналізом"""
+        """Перевірка здоров'я сервісу з AI аналізом."""
         try:
             session = await self.get_session()
             start_time = datetime.utcnow()
@@ -179,7 +179,7 @@ class SelfHealingAgent:
             )
 
     async def analyze_system_metrics(self) -> Dict[str, Any]:
-        """Аналіз системних метрик з AI"""
+        """Аналіз системних метрик з AI."""
         try:
             session = await self.get_session()
 
@@ -239,7 +239,7 @@ class SelfHealingAgent:
             return {"error": str(e), "timestamp": datetime.utcnow().isoformat()}
 
     async def plan_healing_action(self, health_checks: List[HealthCheck]) -> List[HealingAction]:
-        """Планування дій для відновлення з AI"""
+        """Планування дій для відновлення з AI."""
         try:
             # Підготовка контексту для AI
             unhealthy_services = [hc for hc in health_checks if hc.status != "healthy"]
@@ -269,7 +269,7 @@ class SelfHealingAgent:
                 },
             ]
 
-            ai_plan = await self.query_model(model, messages)
+            await self.query_model(model, messages)
 
             # Перетворення AI відповіді в структуровані дії (mock)
             actions = []
@@ -292,7 +292,7 @@ class SelfHealingAgent:
             return []
 
     async def execute_healing_action(self, action: HealingAction) -> Dict[str, Any]:
-        """Виконання дії відновлення"""
+        """Виконання дії відновлення."""
         try:
             logger.info(
                 f"Executing healing action: {action.action_type} on {action.target_service}"
@@ -321,7 +321,7 @@ class SelfHealingAgent:
             return {"status": "failed", "error": str(e), "timestamp": datetime.utcnow().isoformat()}
 
     async def learn_from_healing(self, action: HealingAction, result: Dict[str, Any]) -> None:
-        """Навчання на результатах відновлення"""
+        """Навчання на результатах відновлення."""
         try:
             context = {"complexity": 0.4, "problem_type": "learning"}
             model = self.model_selector.learning_models[0]  # Llama для навчання
@@ -355,7 +355,7 @@ class SelfHealingAgent:
             logger.error(f"Learning from healing failed: {e}")
 
     async def run_healing_cycle(self) -> Dict[str, Any]:
-        """Повний цикл самовідновлення"""
+        """Повний цикл самовідновлення."""
         cycle_id = f"cycle_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
         logger.info(f"Starting healing cycle: {cycle_id}")
 
@@ -424,13 +424,13 @@ class SelfHealingAgent:
             }
 
     async def close(self):
-        """Закрити HTTP сесію"""
+        """Закрити HTTP сесію."""
         if self.session and not self.session.closed:
             await self.session.close()
 
 
 async def main():
-    """Головна функція для тестування агента"""
+    """Головна функція для тестування агента."""
     print("🏥 SELF-HEALING AGENT DEMO")
     print("=" * 50)
 

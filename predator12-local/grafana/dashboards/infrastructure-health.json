@@ -27,14 +27,14 @@
             "legendFormat": "OpenSearch"
           }
         ],
-        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0},
+        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 },
         "fieldConfig": {
           "defaults": {
-            "color": {"mode": "thresholds"},
+            "color": { "mode": "thresholds" },
             "thresholds": {
               "steps": [
-                {"color": "red", "value": 0},
-                {"color": "green", "value": 1}
+                { "color": "red", "value": 0 },
+                { "color": "green", "value": 1 }
               ]
             }
           }
@@ -58,7 +58,7 @@
             "legendFormat": "Slow Queries"
           }
         ],
-        "gridPos": {"h": 8, "w": 9, "x": 6, "y": 0}
+        "gridPos": { "h": 8, "w": 9, "x": 6, "y": 0 }
       },
       {
         "id": 3,
@@ -70,15 +70,15 @@
             "legendFormat": "Redis Hit Rate %"
           }
         ],
-        "gridPos": {"h": 8, "w": 9, "x": 15, "y": 0},
+        "gridPos": { "h": 8, "w": 9, "x": 15, "y": 0 },
         "fieldConfig": {
           "defaults": {
             "unit": "percent",
             "thresholds": {
               "steps": [
-                {"color": "red", "value": 0},
-                {"color": "yellow", "value": 80},
-                {"color": "green", "value": 95}
+                { "color": "red", "value": 0 },
+                { "color": "yellow", "value": 80 },
+                { "color": "green", "value": 95 }
               ]
             }
           }
@@ -102,7 +102,7 @@
             "legendFormat": "Disk Usage %"
           }
         ],
-        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 }
       },
       {
         "id": 5,
@@ -118,7 +118,7 @@
             "legendFormat": "{{device}} - Transmitted"
           }
         ],
-        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 }
       },
       {
         "id": 6,
@@ -134,10 +134,10 @@
             "legendFormat": "{{name}} CPU %"
           }
         ],
-        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16}
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 }
       }
     ],
-    "time": {"from": "now-30m", "to": "now"},
+    "time": { "from": "now-30m", "to": "now" },
     "refresh": "30s"
   }
 }

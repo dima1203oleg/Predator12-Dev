@@ -1,0 +1,29 @@
+/* src/AppCustomStyles.css */
+
+.loading-cyber-ace {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    color: #00ffff;
+    font-size: 1.5rem;
+}
+
+/* Для анімованих частинок */
+.particle {
+    position: absolute;
+    border-radius: 50%;
+}
+
+/* Для PlayIcon у модулі */
+.module-play-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Для плаваючого AI помічника */
+.holographic-guide-float {
+    position: fixed;
+    z-index: 999;
+}

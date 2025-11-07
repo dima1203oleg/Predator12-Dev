@@ -1,22 +1,18 @@
-"""
-Таски для агента автопокращення
-"""
+"""Таски для агента автопокращення."""
 
 from __future__ import annotations
 
 import asyncio
-from typing import Any
 from pathlib import Path
+from typing import Any
 
 from ..celery_app import celery_app
 from ..handlers.auto_improve_agent import AutoImproveAgent
 
 
 @celery_app.task(bind=True, name="improve.analyze_performance")
-def analyze_performance_task(
-    self, component: str = "system", **kwargs
-) -> dict[str, Any]:
-    """Таск для аналізу продуктивності"""
+def analyze_performance_task(self, component: str = "system", **kwargs) -> dict[str, Any]:
+    """Таск для аналізу продуктивності."""
 
     agent = AutoImproveAgent()
 
@@ -35,10 +31,8 @@ def analyze_performance_task(
 
 
 @celery_app.task(bind=True, name="improve.suggest_optimizations")
-def suggest_optimizations_task(
-    self, performance_data: dict[str, Any], **kwargs
-) -> dict[str, Any]:
-    """Таск для пропозиції оптимізацій"""
+def suggest_optimizations_task(self, performance_data: dict[str, Any], **kwargs) -> dict[str, Any]:
+    """Таск для пропозиції оптимізацій."""
 
     agent = AutoImproveAgent()
 
@@ -60,7 +54,7 @@ def suggest_optimizations_task(
 def auto_tune_parameters_task(
     self, component: str, parameters: dict[str, Any], **kwargs
 ) -> dict[str, Any]:
-    """Таск для автоматичного налаштування параметрів"""
+    """Таск для автоматичного налаштування параметрів."""
 
     agent = AutoImproveAgent()
 
@@ -79,7 +73,9 @@ def auto_tune_parameters_task(
 
 
 @celery_app.task(bind=True, name="improve.generate_suggested_patch")
-def generate_suggested_patch_task(self, target_path: str = ".", provider: str = "local", **kwargs) -> dict[str, Any]:
+def generate_suggested_patch_task(
+    self, target_path: str = ".", provider: str = "local", **kwargs
+) -> dict[str, Any]:
     """Generate a suggested.patch using configured generator.
 
     This task is intentionally conservative: it attempts to call the AutoImproveAgent

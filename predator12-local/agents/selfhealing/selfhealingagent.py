@@ -11,7 +11,6 @@ import os
 from datetime import datetime
 
 import aioredis
-import httpx
 from prometheus_client import Counter, Gauge
 
 # Metrics
@@ -31,7 +30,7 @@ class SelfHealingAgent:
         self.redis = None
 
     async def initialize(self):
-        """Ініціалізація агента"""
+        """Ініціалізація агента."""
         try:
             # Виправлення Redis URL - додаємо схему якщо відсутня
             redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
@@ -67,7 +66,7 @@ class SelfHealingAgent:
             self.logger.warning(f"{self.agent_name} working without Redis coordination")
 
     async def start(self):
-        """Запуск основного циклу агента"""
+        """Запуск основного циклу агента."""
         self.running = True
         self.logger.info(f"Starting {self.agent_name} - {self.role}")
 
@@ -126,7 +125,7 @@ class SelfHealingAgent:
                     await asyncio.sleep(30)
 
     async def _auto_heal_cycle(self):
-        """Цикл автовідновлення"""
+        """Цикл автовідновлення."""
         self.logger.info("Starting AutoHeal monitoring cycle")
         heal_counter = 0
 
@@ -166,7 +165,7 @@ class SelfHealingAgent:
                 await asyncio.sleep(30)
 
     async def _self_improvement_cycle(self):
-        """Цикл самовдосконалення"""
+        """Цикл самовдосконалення."""
         self.logger.info("Starting SelfImprovement optimization cycle")
         improvement_counter = 0
 
@@ -206,7 +205,7 @@ class SelfHealingAgent:
                 await asyncio.sleep(30)
 
     async def _self_diagnosis_cycle(self):
-        """Цикл самодіагностики"""
+        """Цикл самодіагностики."""
         self.logger.info("Starting SelfDiagnosis analysis cycle")
         diagnosis_counter = 0
 
@@ -244,7 +243,7 @@ class SelfHealingAgent:
                 await asyncio.sleep(30)
 
     async def stop(self):
-        """Зупинка агента"""
+        """Зупинка агента."""
         self.running = False
         HEALTH_GAUGE.set(0)
         self.logger.info(f"Stopping {self.agent_name}")

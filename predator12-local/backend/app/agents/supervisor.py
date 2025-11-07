@@ -1,22 +1,16 @@
 #!/usr/bin/env python3
-"""
-Predator11 Agent Supervisor
-Manages long-running agents and coordinates their activities
-"""
+"""Predator11 Agent Supervisor Manages long-running agents and coordinates
+their activities."""
 
 import asyncio
-import json
 import logging
-import os
 import threading
 import time
 from datetime import datetime, timezone
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
 
 # Import agent classes
 try:
-    from ..workers.tasks.agent_tasks import execute_chief_orchestrator
     from ..workers.tasks.ml_tasks import check_model_performance
     from ..workers.tasks.self_healing_tasks import auto_heal_issues, run_health_check
 
@@ -27,7 +21,6 @@ except ImportError:
 # Import monitoring libraries
 try:
     import psutil
-    import requests
 
     MONITORING_AVAILABLE = True
 except ImportError:
@@ -37,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 
 class AgentSupervisor:
-    """Production Agent Supervisor for Predator11"""
+    """Production Agent Supervisor for Predator11."""
 
     def __init__(self):
         self.agents: Dict[str, Dict[str, Any]] = {
@@ -82,7 +75,7 @@ class AgentSupervisor:
         self.logger = logging.getLogger(__name__)
 
     def start(self):
-        """Start the agent supervisor"""
+        """Start the agent supervisor."""
         self.logger.info("Starting Predator11 Agent Supervisor...")
         self.running = True
 
@@ -103,7 +96,7 @@ class AgentSupervisor:
             self.stop_all_agents()
 
     def start_agent(self, agent_id: str) -> bool:
-        """Start a specific agent"""
+        """Start a specific agent."""
         if agent_id not in self.agents:
             self.logger.error(f"Unknown agent: {agent_id}")
             return False
@@ -136,7 +129,7 @@ class AgentSupervisor:
             return False
 
     def stop_agent(self, agent_id: str) -> bool:
-        """Stop a specific agent"""
+        """Stop a specific agent."""
         if agent_id not in self.agents:
             self.logger.error(f"Unknown agent: {agent_id}")
             return False
@@ -164,7 +157,7 @@ class AgentSupervisor:
             return False
 
     def stop_all_agents(self):
-        """Stop all agents"""
+        """Stop all agents."""
         self.logger.info("Stopping all agents...")
 
         for agent_id in self.agents:
@@ -206,7 +199,7 @@ class AgentSupervisor:
         return {"task_id": task_id, "status": "submitted", "agent": agent_id}
 
     def _run_agent(self, agent_id: str):
-        """Main loop for an agent"""
+        """Main loop for an agent."""
         agent = self.agents[agent_id]
 
         while agent["active"] and self.running:
@@ -241,7 +234,7 @@ class AgentSupervisor:
                 time.sleep(min(agent["interval"], 60))
 
     def _run_self_healing_agent(self):
-        """Self-healing agent logic"""
+        """Self-healing agent logic."""
         if not CELERY_AVAILABLE:
             self.logger.warning("Celery not available, skipping self-healing check")
             return
@@ -265,7 +258,7 @@ class AgentSupervisor:
             raise
 
     def _run_model_monitor_agent(self):
-        """Model monitoring agent logic"""
+        """Model monitoring agent logic."""
         if not CELERY_AVAILABLE:
             self.logger.warning("Celery not available, skipping model monitoring")
             return
@@ -287,7 +280,7 @@ class AgentSupervisor:
             raise
 
     def _run_data_quality_agent(self):
-        """Data quality monitoring agent logic"""
+        """Data quality monitoring agent logic."""
         try:
             # Check data quality metrics
             # This would integrate with your data quality monitoring system
@@ -298,7 +291,7 @@ class AgentSupervisor:
             raise
 
     def _run_resource_monitor_agent(self):
-        """Resource monitoring agent logic"""
+        """Resource monitoring agent logic."""
         if not MONITORING_AVAILABLE:
             self.logger.warning("Monitoring libraries not available")
             return
@@ -324,7 +317,7 @@ class AgentSupervisor:
             raise
 
     def _check_agent_health(self):
-        """Check health of all agents"""
+        """Check health of all agents."""
         for agent_id, agent in self.agents.items():
             if agent["active"]:
                 # Check if thread is still alive
@@ -348,7 +341,7 @@ class AgentSupervisor:
                         self.start_agent(agent_id)
 
     def get_status(self) -> Dict[str, Any]:
-        """Get status of all agents"""
+        """Get status of all agents."""
         status = {
             "supervisor_running": self.running,
             "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -369,7 +362,7 @@ class AgentSupervisor:
         return status
 
     def shutdown(self):
-        """Shutdown the supervisor"""
+        """Shutdown the supervisor."""
         self.logger.info("Shutting down Agent Supervisor...")
         self.running = False
         self.stop_all_agents()
@@ -377,7 +370,7 @@ class AgentSupervisor:
 
 
 def main():
-    """Main function to run the agent supervisor"""
+    """Main function to run the agent supervisor."""
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",

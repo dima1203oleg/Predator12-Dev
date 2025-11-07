@@ -7,14 +7,16 @@
 ## 🚀 Quick Start
 
 ### 1. Install
+
 ```bash
 npm install @mui/material @emotion/react @emotion/styled
 ```
 
 ### 2. Wrap your app
+
 ```tsx
-import { NexusThemeProvider } from './contexts/ThemeContext';
-import ThemeSwitcher from './components/theme/ThemeSwitcher';
+import { NexusThemeProvider } from "./contexts/ThemeContext";
+import ThemeSwitcher from "./components/theme/ThemeSwitcher";
 
 function App() {
   return (
@@ -27,8 +29,9 @@ function App() {
 ```
 
 ### 3. Use in components
+
 ```tsx
-import { useNexusTheme } from '../contexts/ThemeContext';
+import { useNexusTheme } from "../contexts/ThemeContext";
 
 const MyComponent = () => {
   const { colors, currentTheme } = useNexusTheme();
@@ -47,15 +50,15 @@ const MyComponent = () => {
 
 ## 🎨 Available Themes
 
-| Theme | ID | Colors | Style |
-|-------|-----|--------|-------|
-| 🌌 Dark Cyber | `dark-cyber` | Cyan + Purple | Default, Futuristic |
-| 🟢 Matrix | `matrix` | Neon Green | Classic Terminal |
-| 🌅 Sunset | `sunset` | Orange + Purple | Warm Gradient |
-| 🌊 Ocean | `ocean` | Deep Blue | Calm Ocean |
-| 🗼 Neon Tokyo | `neon-tokyo` | Pink + Cyan | Bright Neon |
-| 💾 Retro Terminal | `retro-terminal` | Amber | Monochrome |
-| ☀️ Light | `light` | Sky Blue + Purple | Clean Light |
+| Theme             | ID               | Colors            | Style               |
+| ----------------- | ---------------- | ----------------- | ------------------- |
+| 🌌 Dark Cyber     | `dark-cyber`     | Cyan + Purple     | Default, Futuristic |
+| 🟢 Matrix         | `matrix`         | Neon Green        | Classic Terminal    |
+| 🌅 Sunset         | `sunset`         | Orange + Purple   | Warm Gradient       |
+| 🌊 Ocean          | `ocean`          | Deep Blue         | Calm Ocean          |
+| 🗼 Neon Tokyo     | `neon-tokyo`     | Pink + Cyan       | Bright Neon         |
+| 💾 Retro Terminal | `retro-terminal` | Amber             | Monochrome          |
+| ☀️ Light          | `light`          | Sky Blue + Purple | Clean Light         |
 
 ---
 
@@ -74,32 +77,37 @@ frontend/src/
 ## 💡 Example Usage
 
 ### Change theme programmatically
+
 ```tsx
 const { setTheme } = useNexusTheme();
-setTheme('matrix'); // Switch to Matrix theme
+setTheme("matrix"); // Switch to Matrix theme
 ```
 
 ### Use theme colors
+
 ```tsx
 const { colors } = useNexusTheme();
 
-<Button sx={{
-  background: colors.gradients.primary,
-  '&:hover': {
-    boxShadow: `0 0 20px ${colors.primary.glow}`
-  }
-}}>
+<Button
+  sx={{
+    background: colors.gradients.primary,
+    "&:hover": {
+      boxShadow: `0 0 20px ${colors.primary.glow}`,
+    },
+  }}
+>
   Click Me
-</Button>
+</Button>;
 ```
 
 ### Toggle dark/light
+
 ```tsx
 const { toggleTheme } = useNexusTheme();
 
 <IconButton onClick={toggleTheme}>
   <Brightness4Icon />
-</IconButton>
+</IconButton>;
 ```
 
 ---
@@ -122,13 +130,14 @@ const { toggleTheme } = useNexusTheme();
 ✅ Material-UI integration  
 ✅ Floating theme switcher  
 ✅ Smooth animations  
-✅ Responsive design  
+✅ Responsive design
 
 ---
 
 ## 🎯 Color Structure
 
 Each theme includes:
+
 ```tsx
 {
   background: { default, paper, elevated },
@@ -147,13 +156,14 @@ Each theme includes:
 ## 🔧 API
 
 ### useNexusTheme()
+
 ```tsx
 const {
-  currentTheme,    // Current theme config
-  currentThemeId,  // Theme ID string
-  setTheme,        // Change theme function
-  toggleTheme,     // Toggle dark/light
-  colors           // Quick access to colors
+  currentTheme, // Current theme config
+  currentThemeId, // Theme ID string
+  setTheme, // Change theme function
+  toggleTheme, // Toggle dark/light
+  colors, // Quick access to colors
 } = useNexusTheme();
 ```
 
@@ -162,6 +172,7 @@ const {
 ## 🎮 Demo
 
 Run demo application:
+
 ```bash
 npm start
 ```
@@ -198,26 +209,32 @@ Click floating palette button (bottom-right) to switch themes!
 ## 🌟 Examples
 
 ### Gradient Text
+
 ```tsx
-<Typography sx={{
-  background: colors.gradients.primary,
-  backgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-}}>
+<Typography
+  sx={{
+    background: colors.gradients.primary,
+    backgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  }}
+>
   Gradient Text
 </Typography>
 ```
 
 ### Glowing Card
+
 ```tsx
-<Card sx={{
-  background: colors.background.paper,
-  border: `1px solid ${colors.border.light}`,
-  '&:hover': {
-    borderColor: colors.primary.main,
-    boxShadow: `0 8px 32px ${colors.primary.glow}`,
-  }
-}} />
+<Card
+  sx={{
+    background: colors.background.paper,
+    border: `1px solid ${colors.border.light}`,
+    "&:hover": {
+      borderColor: colors.primary.main,
+      boxShadow: `0 8px 32px ${colors.primary.glow}`,
+    },
+  }}
+/>
 ```
 
 ---
@@ -225,14 +242,17 @@ Click floating palette button (bottom-right) to switch themes!
 ## 🐛 Troubleshooting
 
 **Theme not persisting?**
+
 - Check localStorage is enabled
 - Verify `predator12-theme` key exists
 
 **Colors not updating?**
+
 - Ensure component uses `useNexusTheme()` hook
 - Check component is inside `NexusThemeProvider`
 
 **MUI components not themed?**
+
 - MUI automatically picks up theme
 - Use standard MUI color props: `color="primary"`
 

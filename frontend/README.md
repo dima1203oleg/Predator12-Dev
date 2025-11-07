@@ -9,16 +9,19 @@ Predator12 — це детермінована платформа обробки
 ### Встановлення
 
 1. **Клонування репозиторію:**
+
 ```bash
 git clone <repository-url>
 cd Predator12
 ```
 
 2. **Запуск через VS Code:**
+
 - Відкрийте папку в VS Code
 - Використайте доступні таски для запуску
 
 3. **Запуск через браузер:**
+
 - Відкрийте `frontend/index.html` в браузері
 - Або запустіть локальний сервер
 
@@ -46,21 +49,24 @@ Predator12/
 ### 1. AI Face (Інтерактивне 3D Обличчя)
 
 **Функції:**
+
 - 3D рендеринг через Three.js
 - Система емоцій (нейтральний, радісний, думаючий, говорячий, здивований, сумний)
 - Fallback до 2D при проблемах з WebGL
 - Адаптивна анімація та реакції
 
 **Використання:**
+
 ```javascript
-const aiFace = new AIFace('ai-face-container');
+const aiFace = new AIFace("ai-face-container");
 await aiFace.init();
-aiFace.setEmotion('happy');
+aiFace.setEmotion("happy");
 ```
 
 ### 2. Chat Interface (Чат-Інтерфейс)
 
 **Функції:**
+
 - Інтерактивний чат з AI
 - Голосовий синтез відповідей
 - Обробка повідомлень користувача
@@ -68,10 +74,11 @@ aiFace.setEmotion('happy');
 - Швидкі відповіді
 
 **Використання:**
+
 ```javascript
-const chatInterface = new ChatInterface('chat-container', {
-    aiFace: aiFaceInstance,
-    apiUrl: '/api/chat'
+const chatInterface = new ChatInterface("chat-container", {
+  aiFace: aiFaceInstance,
+  apiUrl: "/api/chat",
 });
 await chatInterface.init();
 ```
@@ -79,6 +86,7 @@ await chatInterface.init();
 ### 3. Network Graph (Візуалізація Мережі)
 
 **Функції:**
+
 - Інтерактивна візуалізація мережі зв'язків
 - D3.js для створення графіків
 - Зумування і панорамування
@@ -86,8 +94,9 @@ await chatInterface.init();
 - Пошук і фільтрація
 
 **Використання:**
+
 ```javascript
-const networkGraph = new NetworkGraph('network-container');
+const networkGraph = new NetworkGraph("network-container");
 await networkGraph.init();
 networkGraph.updateData(networkData);
 ```
@@ -98,14 +107,14 @@ networkGraph.updateData(networkData);
 
 ```javascript
 const config = {
-    api: {
-        baseUrl: '/api/v1',
-        endpoints: {
-            analyze: '/analyze',
-            chat: '/chat',
-            network: '/network'
-        }
-    }
+  api: {
+    baseUrl: "/api/v1",
+    endpoints: {
+      analyze: "/analyze",
+      chat: "/chat",
+      network: "/network",
+    },
+  },
 };
 ```
 
@@ -113,10 +122,10 @@ const config = {
 
 ```css
 :root {
-    --primary-color: #007acc;
-    --secondary-color: #00d4ff;
-    --background-color: #1a1a2e;
-    --text-color: #e0e0e0;
+  --primary-color: #007acc;
+  --secondary-color: #00d4ff;
+  --background-color: #1a1a2e;
+  --text-color: #e0e0e0;
 }
 ```
 
@@ -137,14 +146,14 @@ const network = app.networkGraph;
 
 ## 🎨 Емоції AI
 
-| Емоція | Опис | Використання |
-|--------|------|-------------|
-| `neutral` | Нейтральний стан | За замовчуванням |
-| `happy` | Радісний | Успішні операції |
-| `thinking` | Обдумування | Обробка запитів |
-| `speaking` | Говорить | Відповідь користувачу |
-| `surprised` | Здивований | Несподівані результати |
-| `sad` | Сумний | Помилки |
+| Емоція      | Опис             | Використання           |
+| ----------- | ---------------- | ---------------------- |
+| `neutral`   | Нейтральний стан | За замовчуванням       |
+| `happy`     | Радісний         | Успішні операції       |
+| `thinking`  | Обдумування      | Обробка запитів        |
+| `speaking`  | Говорить         | Відповідь користувачу  |
+| `surprised` | Здивований       | Несподівані результати |
+| `sad`       | Сумний           | Помилки                |
 
 ## 🌐 Події та Взаємодія
 
@@ -152,30 +161,31 @@ const network = app.networkGraph;
 
 ```javascript
 // Чат подія
-chatInterface.on('messageResponse', (response) => {
-    if (response.networkData) {
-        networkGraph.updateData(response.networkData);
-    }
+chatInterface.on("messageResponse", (response) => {
+  if (response.networkData) {
+    networkGraph.updateData(response.networkData);
+  }
 });
 
 // Мережа подія
-networkGraph.on('nodeClick', (nodeData) => {
-    const message = `Розкажи про: ${nodeData.label}`;
-    chatInterface.addMessage(message, 'user');
+networkGraph.on("nodeClick", (nodeData) => {
+  const message = `Розкажи про: ${nodeData.label}`;
+  chatInterface.addMessage(message, "user");
 });
 ```
 
 ## ⌨️ Клавіатурні Скорочення
 
-| Комбінація | Дія |
-|------------|-----|
+| Комбінація   | Дія                            |
+| ------------ | ------------------------------ |
 | `Ctrl+Enter` | Відправити повідомлення в чаті |
-| `Escape` | Скинути емоцію AI |
-| `F1` | Показати довідку |
+| `Escape`     | Скинути емоцію AI              |
+| `F1`         | Показати довідку               |
 
 ## 📱 Адаптивність
 
 Система повністю адаптивна для:
+
 - Десктоп (1200px+)
 - Планшет (768px - 1199px)
 - Мобільний (до 767px)
@@ -191,16 +201,16 @@ window.DEBUG = true;
 ### Логування
 
 ```javascript
-console.log('🎯 Predator12 Debug:', data);
+console.log("🎯 Predator12 Debug:", data);
 ```
 
 ## 🚦 Статуси Системи
 
-| Статус | Опис |
-|--------|------|
-| `🟢 Онлайн` | Всі компоненти працюють |
-| `🟡 Завантаження` | Ініціалізація системи |
-| `🔴 Помилка` | Критична помилка |
+| Статус            | Опис                    |
+| ----------------- | ----------------------- |
+| `🟢 Онлайн`       | Всі компоненти працюють |
+| `🟡 Завантаження` | Ініціалізація системи   |
+| `🔴 Помилка`      | Критична помилка        |
 
 ## 📊 Формати Даних
 
@@ -208,23 +218,23 @@ console.log('🎯 Predator12 Debug:', data);
 
 ```javascript
 const networkData = {
-    nodes: [
-        {
-            id: 'node1',
-            label: 'Назва вузла',
-            type: 'input|process|output|data',
-            x: 100,
-            y: 100
-        }
-    ],
-    links: [
-        {
-            source: 'node1',
-            target: 'node2',
-            weight: 1,
-            type: 'data-flow'
-        }
-    ]
+  nodes: [
+    {
+      id: "node1",
+      label: "Назва вузла",
+      type: "input|process|output|data",
+      x: 100,
+      y: 100,
+    },
+  ],
+  links: [
+    {
+      source: "node1",
+      target: "node2",
+      weight: 1,
+      type: "data-flow",
+    },
+  ],
 };
 ```
 
@@ -283,20 +293,24 @@ const message = {
 ## 🆘 Часті Проблеми
 
 ### Не працює 3D обличчя
+
 - Перевірте підтримку WebGL в браузері
 - Система автоматично перейде на 2D fallback
 
 ### Помилки завантаження
+
 - Перевірте шляхи до файлів
 - Переконайтеся що всі залежності завантажені
 
 ### Проблеми з голосом
+
 - Перевірте дозволи браузера для мікрофона
 - Web Speech API не підтримується в усіх браузерах
 
 ## 📞 Підтримка
 
 Для отримання допомоги:
+
 1. Перевірте секцію "Часті Проблеми"
 2. Включіть debug режим
 3. Перегляньте консоль браузера
@@ -311,6 +325,6 @@ Predator12 готовий до використання! Система забе
 ✅ Повноцінний чат  
 ✅ Візуалізація мережі зв'язків  
 ✅ Адаптивний дизайн  
-✅ Доступність і зручність  
+✅ Доступність і зручність
 
 Насолоджуйтесь роботою з найсучаснішою AI системою обробки даних! 🚀

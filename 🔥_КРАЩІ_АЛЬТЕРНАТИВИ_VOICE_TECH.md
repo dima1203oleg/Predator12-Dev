@@ -1,4 +1,5 @@
 # 🔥 НАЙКРАЩІ АЛЬТЕРНАТИВИ ГОЛОСОВИХ ТЕХНОЛОГІЙ
+
 ## Predator12 Nexus Core V5.2 - Повний Аналіз і Рекомендації
 
 > **Дата:** 2024  
@@ -10,10 +11,12 @@
 ## 📊 ПОТОЧНИЙ СТЕК (Що зараз використовується)
 
 ### TTS (Text-to-Speech)
+
 - ✅ **Coqui TTS** (XTTS v2) - Основна модель
 - ✅ **Web Speech API** - Браузерний fallback
 
 ### STT (Speech-to-Text)
+
 - ✅ **Whisper** (OpenAI) - Основна модель
 - ✅ **faster-whisper** - Оптимізована версія
 - ✅ **Web Speech API** - Браузерний fallback
@@ -25,7 +28,9 @@
 ### 🔊 TTS (Text-to-Speech) Альтернативи
 
 #### 1. **Piper TTS** 🏆 НАЙКРАЩА НОВА ОПЦІЯ
+
 **Чому краще за Coqui:**
+
 - ⚡ **Швидкість:** 100x швидше за Coqui TTS
 - 💾 **Розмір:** 10-50 MB (vs 2+ GB Coqui)
 - 🎯 **Якість:** Нейронні голоси high-quality
@@ -35,6 +40,7 @@
 - 📦 **Offline:** Повністю локальне рішення
 
 **Технічні характеристики:**
+
 - Модель: VITS (Variational Inference TTS)
 - Розробник: Rhasspy / Mike Hansen
 - Якість української: ⭐⭐⭐⭐⭐ (95%+)
@@ -42,6 +48,7 @@
 - VRAM: 100-500 MB
 
 **Встановлення:**
+
 ```bash
 pip install piper-tts
 # або
@@ -49,6 +56,7 @@ wget https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_linux_x86_6
 ```
 
 **Приклад використання:**
+
 ```python
 from piper import PiperVoice
 
@@ -68,7 +76,9 @@ audio = voice.synthesize("Привіт! Я голосовий асистент."
 ---
 
 #### 2. **Bark (Suno AI)** 🔥 НАЙРЕАЛІСТИЧНІШИЙ
+
 **Чому цікаво:**
+
 - 🎭 **Емоції:** Генерує емоції, сміх, зітхання
 - 🎵 **Музика:** Може співати
 - 🌍 **Мультимовність:** 100+ мов
@@ -76,16 +86,19 @@ audio = voice.synthesize("Привіт! Я голосовий асистент."
 - 🆓 **Open-Source:** MIT License
 
 **Недоліки:**
+
 - ⚠️ Повільний (GPU потрібен)
 - ⚠️ Великі моделі (3-7 GB)
 - ⚠️ Висока латентність (2-10 сек)
 
 **Встановлення:**
+
 ```bash
 pip install git+https://github.com/suno-ai/bark.git
 ```
 
 **Коли використовувати:**
+
 - 🎮 Ігри (емоційні діалоги)
 - 🎬 Відео (озвучка з емоціями)
 - 🎭 Інтерактивні асистенти
@@ -93,13 +106,16 @@ pip install git+https://github.com/suno-ai/bark.git
 ---
 
 #### 3. **StyleTTS 2** ⚡ НАЙКРАЩА ЯКІСТЬ 2024
+
 **Нова модель (2024):**
+
 - 🏆 Переможець порівнянь TTS 2024
 - 🎯 Якість голосу як у людини
 - ⚡ Середня швидкість
 - 🔓 Open-Source
 
 **Встановлення:**
+
 ```bash
 pip install styletts2
 ```
@@ -114,13 +130,16 @@ pip install styletts2
 ---
 
 #### 4. **TorToiSe TTS** 🐢 НАЙВИЩА ЯКІСТЬ (повільний)
+
 **Для максимальної якості:**
+
 - 🎯 **Якість:** Найкраща якість синтезу
 - 🎙️ **Voice Cloning:** Відмінне клонування
 - ⚠️ **Швидкість:** Дуже повільно (GPU обов'язковий)
 - 🌍 **Українська:** Підтримка через multilingual
 
 **Коли використовувати:**
+
 - 📚 Аудіокниги
 - 🎙️ Подкасти
 - 🎬 Якісна озвучка (offline)
@@ -130,7 +149,9 @@ pip install styletts2
 ### 🗣️ STT (Speech-to-Text) Альтернативи
 
 #### 1. **Whisper Large v3 Turbo** 🏆 НАЙКРАЩА ОПЦІЯ
+
 **Нова модель OpenAI (2024):**
+
 - ⚡ **Швидкість:** 8x швидше за Large v3
 - 🎯 **Точність:** 95%+ для української
 - 💾 **Розмір:** 1.5 GB (vs 3 GB Large v3)
@@ -138,6 +159,7 @@ pip install styletts2
 - 🌍 **99 мов:** Включаючи українську
 
 **Встановлення:**
+
 ```bash
 pip install openai-whisper
 # або
@@ -145,6 +167,7 @@ pip install faster-whisper  # Оптимізована версія
 ```
 
 **Приклад:**
+
 ```python
 import whisper
 
@@ -163,7 +186,9 @@ print(result["text"])
 ---
 
 #### 2. **Whisper.cpp** ⚡ НАЙШВИДШЕ РІШЕННЯ
+
 **C++ реалізація Whisper:**
+
 - ⚡ **Швидкість:** 5-10x швидше за оригінал
 - 💾 **Пам'ять:** Мінімальне використання
 - 🖥️ **CPU-only:** Не потребує GPU
@@ -171,6 +196,7 @@ print(result["text"])
 - 🔓 **Open-Source:** MIT License
 
 **Встановлення:**
+
 ```bash
 git clone https://github.com/ggerganov/whisper.cpp
 cd whisper.cpp
@@ -178,11 +204,13 @@ make
 ```
 
 **Python bindings:**
+
 ```bash
 pip install pywhispercpp
 ```
 
 **Коли використовувати:**
+
 - 📱 Мобільні додатки
 - 🌐 Веб-застосунки (WebAssembly)
 - 🚀 Production з high-load
@@ -191,7 +219,9 @@ pip install pywhispercpp
 ---
 
 #### 3. **Vosk** 🔒 НАЙКРАЩЕ OFFLINE
+
 **Легке offline рішення:**
+
 - 💾 **Розмір:** 50-500 MB моделі
 - ⚡ **Швидкість:** Real-time
 - 🔒 **Privacy:** Повністю offline
@@ -199,6 +229,7 @@ pip install pywhispercpp
 - 📦 **Easy setup:** Без залежностей
 
 **Встановлення:**
+
 ```bash
 pip install vosk
 # Завантажити українську модель (300 MB)
@@ -206,6 +237,7 @@ wget https://alphacephei.com/vosk/models/vosk-model-uk-v3.zip
 ```
 
 **Приклад:**
+
 ```python
 from vosk import Model, KaldiRecognizer
 import wave
@@ -234,18 +266,22 @@ while True:
 ---
 
 #### 4. **Silero VAD** 🎙️ VOICE ACTIVITY DETECTION
+
 **Для оптимізації STT:**
+
 - ⚡ **Real-time:** Voice Activity Detection
 - 🔇 **Noise filtering:** Фільтрація шуму
 - 💾 **Tiny:** 1 MB модель
 - 🚀 **Fast:** <1ms латентність
 
 **Встановлення:**
+
 ```bash
 pip install silero-vad
 ```
 
 **Використання з Whisper:**
+
 ```python
 import torch
 from silero_vad import load_silero_vad
@@ -264,37 +300,48 @@ if speech_probs > 0.5:
 ## 🌐 БРАУЗЕРНІ АЛЬТЕРНАТИВИ (Fallback)
 
 ### 1. **Web Speech API** (Поточне)
+
 **Pros:**
+
 - ✅ Немає встановлення
 - ✅ Працює скрізь
 - ✅ Google/Apple TTS/STT
 
 **Cons:**
+
 - ⚠️ Потребує інтернету (частково)
 - ⚠️ Обмежена українська підтримка
 - ⚠️ Privacy concerns
 
 ### 2. **Transformers.js** 🆕 WASM ML
-**Whisper в браузері:**
-```javascript
-import { pipeline } from '@xenova/transformers';
 
-const transcriber = await pipeline('automatic-speech-recognition',
-  'Xenova/whisper-tiny');
+**Whisper в браузері:**
+
+```javascript
+import { pipeline } from "@xenova/transformers";
+
+const transcriber = await pipeline(
+  "automatic-speech-recognition",
+  "Xenova/whisper-tiny",
+);
 const result = await transcriber(audioData);
 ```
 
 **Pros:**
+
 - ✅ Повністю offline (після завантаження)
 - ✅ Whisper якість
 - ✅ WebAssembly (швидко)
 
 **Cons:**
+
 - ⚠️ Завантаження моделей (100+ MB)
 - ⚠️ Повільніше за нативне
 
 ### 3. **Sherpa-ONNX** 🚀 WASM STT
+
 **Real-time STT в браузері:**
+
 - ⚡ Whisper/Paraformer моделі
 - 🌐 WebAssembly
 - 🔒 Offline-first
@@ -307,11 +354,13 @@ const result = await transcriber(audioData);
 ### 🎯 Оптимальна Конфігурація
 
 #### **TTS Стек:**
+
 1. **Primary:** Piper TTS (швидкість + якість)
 2. **High-quality:** StyleTTS 2 (для важливих випадків)
 3. **Fallback:** Web Speech API (браузер)
 
 #### **STT Стек:**
+
 1. **Primary:** Whisper Large v3 Turbo
 2. **Fast:** Whisper.cpp (production)
 3. **VAD:** Silero VAD (оптимізація)
@@ -392,6 +441,7 @@ aiohttp>=3.9.0
 ## 🚀 ПЛАН МІГРАЦІЇ (Крок за кроком)
 
 ### Фаза 1: Тестування Piper TTS (1-2 дні)
+
 ```bash
 # 1. Встановити Piper
 pip install piper-tts
@@ -405,6 +455,7 @@ python test_piper.py
 ```
 
 ### Фаза 2: Інтеграція Whisper Turbo (1 день)
+
 ```bash
 # 1. Оновити Whisper
 pip install --upgrade openai-whisper
@@ -414,6 +465,7 @@ python test_whisper_turbo.py
 ```
 
 ### Фаза 3: Оптимізація з Silero VAD (1 день)
+
 ```bash
 # 1. Встановити VAD
 pip install silero-vad
@@ -423,6 +475,7 @@ python integrate_vad.py
 ```
 
 ### Фаза 4: Production Setup (2-3 дні)
+
 ```bash
 # 1. Whisper.cpp для продакшн
 git clone https://github.com/ggerganov/whisper.cpp
@@ -438,23 +491,23 @@ python benchmark_all.py
 
 ### TTS Порівняння
 
-| Модель | Швидкість | Якість | Розмір | Українська | CPU | GPU | Offline |
-|--------|-----------|--------|--------|------------|-----|-----|---------|
-| **Piper** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | 50 MB | ✅ | ✅ | ⚠️ | ✅ |
-| StyleTTS 2 | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 1 GB | ✅ | ⚠️ | ✅ | ✅ |
-| Coqui XTTS | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 2 GB | ✅ | ⚠️ | ✅ | ✅ |
-| Bark | ⭐⭐ | ⭐⭐⭐⭐⭐ | 3 GB | ✅ | ❌ | ✅ | ✅ |
-| Web API | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | 0 | ⚠️ | ✅ | ✅ | ❌ |
+| Модель     | Швидкість  | Якість     | Розмір | Українська | CPU | GPU | Offline |
+| ---------- | ---------- | ---------- | ------ | ---------- | --- | --- | ------- |
+| **Piper**  | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐   | 50 MB  | ✅         | ✅  | ⚠️  | ✅      |
+| StyleTTS 2 | ⭐⭐⭐     | ⭐⭐⭐⭐⭐ | 1 GB   | ✅         | ⚠️  | ✅  | ✅      |
+| Coqui XTTS | ⭐⭐⭐     | ⭐⭐⭐⭐⭐ | 2 GB   | ✅         | ⚠️  | ✅  | ✅      |
+| Bark       | ⭐⭐       | ⭐⭐⭐⭐⭐ | 3 GB   | ✅         | ❌  | ✅  | ✅      |
+| Web API    | ⭐⭐⭐⭐⭐ | ⭐⭐⭐     | 0      | ⚠️         | ✅  | ✅  | ❌      |
 
 ### STT Порівняння
 
-| Модель | Точність | Швидкість | Розмір | Українська | CPU | Латентність | Offline |
-|--------|----------|-----------|--------|------------|-----|-------------|---------|
-| **Whisper Turbo** | 95%+ | ⭐⭐⭐⭐⭐ | 1.5 GB | ✅ | ⚠️ | 200ms | ✅ |
-| Whisper.cpp | 95%+ | ⭐⭐⭐⭐⭐ | 1 GB | ✅ | ✅ | 100ms | ✅ |
-| Vosk | 85%+ | ⭐⭐⭐⭐⭐ | 300 MB | ✅ | ✅ | 50ms | ✅ |
-| faster-whisper | 95%+ | ⭐⭐⭐⭐ | 1.5 GB | ✅ | ⚠️ | 300ms | ✅ |
-| Web API | 90%+ | ⭐⭐⭐⭐⭐ | 0 | ⚠️ | ✅ | 100ms | ❌ |
+| Модель            | Точність | Швидкість  | Розмір | Українська | CPU | Латентність | Offline |
+| ----------------- | -------- | ---------- | ------ | ---------- | --- | ----------- | ------- |
+| **Whisper Turbo** | 95%+     | ⭐⭐⭐⭐⭐ | 1.5 GB | ✅         | ⚠️  | 200ms       | ✅      |
+| Whisper.cpp       | 95%+     | ⭐⭐⭐⭐⭐ | 1 GB   | ✅         | ✅  | 100ms       | ✅      |
+| Vosk              | 85%+     | ⭐⭐⭐⭐⭐ | 300 MB | ✅         | ✅  | 50ms        | ✅      |
+| faster-whisper    | 95%+     | ⭐⭐⭐⭐   | 1.5 GB | ✅         | ⚠️  | 300ms       | ✅      |
+| Web API           | 90%+     | ⭐⭐⭐⭐⭐ | 0      | ⚠️         | ✅  | 100ms       | ❌      |
 
 ---
 
@@ -462,11 +515,11 @@ python benchmark_all.py
 
 ### Вартість Хостингу (місяць)
 
-| Рішення | Compute | Storage | Traffic | Total |
-|---------|---------|---------|---------|-------|
-| **Piper + Whisper.cpp** | $20 | $5 | $10 | **$35** |
-| Coqui + Whisper | $50 | $10 | $20 | **$80** |
-| Cloud API (Google) | $200 | $0 | $50 | **$250** |
+| Рішення                 | Compute | Storage | Traffic | Total    |
+| ----------------------- | ------- | ------- | ------- | -------- |
+| **Piper + Whisper.cpp** | $20     | $5      | $10     | **$35**  |
+| Coqui + Whisper         | $50     | $10     | $20     | **$80**  |
+| Cloud API (Google)      | $200    | $0      | $50     | **$250** |
 
 **Економія:** $215/місяць = **$2,580/рік** 💰
 
@@ -480,7 +533,7 @@ python benchmark_all.py
 production:
   tts:
     primary: piper-tts
-    quality: styletts2  # optional
+    quality: styletts2 # optional
     fallback: web-speech-api
 
   stt:
@@ -497,20 +550,21 @@ production:
 
 ### 📈 Очікувані Покращення
 
-| Метрика | Поточне | Нове | Покращення |
-|---------|---------|------|------------|
-| **TTS Швидкість** | 5x RT | 100x RT | **+1900%** |
-| **TTS Латентність** | 500ms | 50ms | **-90%** |
-| **STT Швидкість** | 3x RT | 10x RT | **+233%** |
-| **Розмір моделей** | 5 GB | 1.5 GB | **-70%** |
-| **CPU використання** | 80% | 20% | **-75%** |
-| **Вартість хостингу** | $80 | $35 | **-56%** |
+| Метрика               | Поточне | Нове    | Покращення |
+| --------------------- | ------- | ------- | ---------- |
+| **TTS Швидкість**     | 5x RT   | 100x RT | **+1900%** |
+| **TTS Латентність**   | 500ms   | 50ms    | **-90%**   |
+| **STT Швидкість**     | 3x RT   | 10x RT  | **+233%**  |
+| **Розмір моделей**    | 5 GB    | 1.5 GB  | **-70%**   |
+| **CPU використання**  | 80%     | 20%     | **-75%**   |
+| **Вартість хостингу** | $80     | $35     | **-56%**   |
 
 ---
 
 ## 📚 РЕСУРСИ
 
 ### Документація
+
 - [Piper TTS](https://github.com/rhasspy/piper)
 - [Whisper Turbo](https://github.com/openai/whisper)
 - [Whisper.cpp](https://github.com/ggerganov/whisper.cpp)
@@ -518,11 +572,13 @@ production:
 - [Vosk](https://alphacephei.com/vosk/)
 
 ### Моделі
+
 - [Piper Voices](https://huggingface.co/rhasspy/piper-voices)
 - [Whisper Models](https://huggingface.co/openai/whisper)
 - [Ukrainian Models](https://huggingface.co/models?language=uk)
 
 ### Benchmarks
+
 - [TTS Benchmark 2024](https://github.com/coqui-ai/TTS-benchmarks)
 - [Whisper Benchmark](https://github.com/openai/whisper/discussions)
 
@@ -531,6 +587,7 @@ production:
 ## ✅ NEXT STEPS
 
 ### Для впровадження:
+
 1. ✅ Прочитати цей документ
 2. 🔄 Встановити Piper TTS
 3. 🔄 Протестувати Whisper Turbo
@@ -540,6 +597,7 @@ production:
 7. 🔄 Production тестування
 
 ### Команди для старту:
+
 ```bash
 # 1. Backup поточного
 cp voice-requirements.txt voice-requirements.old.txt
@@ -565,6 +623,7 @@ python test_new_voice_stack.py
 ## 🎉 ВИСНОВОК
 
 **Piper + Whisper.cpp** - найкраще рішення для Predator12:
+
 - ⚡ Швидше в 20 разів
 - 💾 Легше в 3 рази
 - 💰 Дешевше в 2 рази

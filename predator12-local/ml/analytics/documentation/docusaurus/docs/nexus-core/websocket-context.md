@@ -19,13 +19,11 @@ The `WebSocketProvider` component must wrap your application to enable global We
 
 ```jsx
 // In App.jsx
-import { WebSocketProvider } from './context/WebSocketContext';
+import { WebSocketProvider } from "./context/WebSocketContext";
 
 const App = () => {
   return (
-    <WebSocketProvider>
-      {/* Your application components */}
-    </WebSocketProvider>
+    <WebSocketProvider>{/* Your application components */}</WebSocketProvider>
   );
 };
 ```
@@ -37,27 +35,27 @@ const App = () => {
 The easiest way to consume the global WebSocket context is through the `useGlobalWebSocket` hook:
 
 ```jsx
-import useGlobalWebSocket from '../../hooks/useGlobalWebSocket';
+import useGlobalWebSocket from "../../hooks/useGlobalWebSocket";
 
 const MyComponent = () => {
   // Handle incoming messages
   const handleMessages = (data) => {
-    console.log('Received data:', data);
+    console.log("Received data:", data);
     // Update component state
   };
 
   // Use the global WebSocket hook
   const { connectionStatus, sendMessage } = useGlobalWebSocket(
-    'my-endpoint',  // Just the endpoint name, no need for full URL
+    "my-endpoint", // Just the endpoint name, no need for full URL
     {
       onMessage: handleMessages,
-      autoReconnect: true
-    }
+      autoReconnect: true,
+    },
   );
 
   // Send a message
   const handleButtonClick = () => {
-    sendMessage({ type: 'request_data', id: 123 });
+    sendMessage({ type: "request_data", id: 123 });
   };
 
   return (
@@ -73,32 +71,32 @@ const MyComponent = () => {
 
 #### useGlobalWebSocket Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter  | Type   | Description                                             |
+| ---------- | ------ | ------------------------------------------------------- |
 | `endpoint` | string | The WebSocket endpoint to connect to (without base URL) |
-| `options` | object | Configuration options |
+| `options`  | object | Configuration options                                   |
 
 #### Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `onMessage` | function | null | Callback function that receives parsed messages |
-| `autoConnect` | boolean | true | Whether to automatically connect on mount |
-| `autoReconnect` | boolean | true | Whether to automatically attempt reconnection when the connection is lost |
-| `reconnectInterval` | number | 5000 | Time in milliseconds to wait before attempting to reconnect |
-| `maxReconnectAttempts` | number | 5 | Maximum number of reconnection attempts before giving up |
+| Option                 | Type     | Default | Description                                                               |
+| ---------------------- | -------- | ------- | ------------------------------------------------------------------------- |
+| `onMessage`            | function | null    | Callback function that receives parsed messages                           |
+| `autoConnect`          | boolean  | true    | Whether to automatically connect on mount                                 |
+| `autoReconnect`        | boolean  | true    | Whether to automatically attempt reconnection when the connection is lost |
+| `reconnectInterval`    | number   | 5000    | Time in milliseconds to wait before attempting to reconnect               |
+| `maxReconnectAttempts` | number   | 5       | Maximum number of reconnection attempts before giving up                  |
 
 #### Return Value
 
 The hook returns an object with the following properties:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `connectionStatus` | string | Current WebSocket connection status: 'connected', 'connecting', or 'disconnected' |
-| `lastMessage` | any | The most recent message received from the WebSocket |
-| `sendMessage` | function | Function to send a message through the WebSocket |
-| `connect` | function | Function to manually initiate a connection |
-| `disconnect` | function | Function to manually close the WebSocket connection |
+| Property           | Type     | Description                                                                       |
+| ------------------ | -------- | --------------------------------------------------------------------------------- |
+| `connectionStatus` | string   | Current WebSocket connection status: 'connected', 'connecting', or 'disconnected' |
+| `lastMessage`      | any      | The most recent message received from the WebSocket                               |
+| `sendMessage`      | function | Function to send a message through the WebSocket                                  |
+| `connect`          | function | Function to manually initiate a connection                                        |
+| `disconnect`       | function | Function to manually close the WebSocket connection                               |
 
 ## Benefits of Global WebSocket Management
 
@@ -108,13 +106,13 @@ Multiple components can share the same WebSocket connection, reducing the number
 
 ```jsx
 // Component A
-const { connectionStatus: statusA } = useGlobalWebSocket('data-updates', {
-  onMessage: handleDataUpdates
+const { connectionStatus: statusA } = useGlobalWebSocket("data-updates", {
+  onMessage: handleDataUpdates,
 });
 
 // Component B (elsewhere in the application)
-const { connectionStatus: statusB } = useGlobalWebSocket('data-updates', {
-  onMessage: handleOtherDataUpdates
+const { connectionStatus: statusB } = useGlobalWebSocket("data-updates", {
+  onMessage: handleOtherDataUpdates,
 });
 ```
 
@@ -180,16 +178,12 @@ Components can connect to multiple WebSocket endpoints if needed:
 
 ```jsx
 // Connect to real-time data feed
-const {
-  connectionStatus: dataStatus,
-  lastMessage: dataMessage
-} = useGlobalWebSocket('data-feed');
+const { connectionStatus: dataStatus, lastMessage: dataMessage } =
+  useGlobalWebSocket("data-feed");
 
 // Connect to notification channel
-const {
-  connectionStatus: notifyStatus,
-  lastMessage: notification
-} = useGlobalWebSocket('notifications');
+const { connectionStatus: notifyStatus, lastMessage: notification } =
+  useGlobalWebSocket("notifications");
 ```
 
 ## Integration with WebSocketStatus Component
@@ -197,7 +191,7 @@ const {
 The global WebSocket system works seamlessly with the `WebSocketStatus` component:
 
 ```jsx
-const { connectionStatus, connect } = useGlobalWebSocket('sentiment-updates');
+const { connectionStatus, connect } = useGlobalWebSocket("sentiment-updates");
 
 return (
   <div>

@@ -1,21 +1,18 @@
-"""
-🕵️ DEEP INVESTIGATOR AGENT
-Агент глибокого розслідування для комплексного аналізу підозрілих схем
-"""
+"""🕵️ DEEP INVESTIGATOR AGENT Агент глибокого розслідування для комплексного
+аналізу підозрілих схем."""
 
 import asyncio
-import json
 import random
 from dataclasses import dataclass
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from datetime import datetime
+from typing import Any, Dict, List
 
 import numpy as np
 
 
 @dataclass
 class Investigation:
-    """Структура розслідування"""
+    """Структура розслідування."""
 
     case_id: str
     title: str
@@ -32,7 +29,7 @@ class Investigation:
 
 @dataclass
 class Evidence:
-    """Структура доказів"""
+    """Структура доказів."""
 
     evidence_id: str
     case_id: str
@@ -44,7 +41,7 @@ class Evidence:
 
 
 class DeepInvestigatorAgent:
-    """Агент глибокого розслідування"""
+    """Агент глибокого розслідування."""
 
     def __init__(self):
         self.agent_id = "DeepInvestigator"
@@ -77,7 +74,7 @@ class DeepInvestigatorAgent:
         }
 
     async def start_investigation(self, trigger_event: Dict[str, Any]) -> Investigation:
-        """Початок нового розслідування"""
+        """Початок нового розслідування."""
         self.investigation_counter += 1
         case_id = f"INV-{datetime.now().strftime('%Y%m%d')}-{self.investigation_counter:04d}"
 
@@ -108,7 +105,7 @@ class DeepInvestigatorAgent:
         return investigation
 
     async def collect_initial_evidence(self, investigation: Investigation, trigger_event: Dict):
-        """Збір початкових доказів"""
+        """Збір початкових доказів."""
         print(f"   🔎 Збір початкових доказів для {investigation.case_id}...")
 
         # Симуляція збору різних типів доказів
@@ -164,7 +161,7 @@ class DeepInvestigatorAgent:
         await self.update_confidence_score(investigation)
 
     async def analyze_patterns(self, investigation: Investigation) -> Dict[str, Any]:
-        """Аналіз паттернів у зібраних доказах"""
+        """Аналіз паттернів у зібраних доказах."""
         print(f"   🧠 Аналіз паттернів для {investigation.case_id}...")
 
         # Вибір моделі для аналізу
@@ -203,7 +200,7 @@ class DeepInvestigatorAgent:
         return analysis_result
 
     def get_pattern_description(self, pattern_name: str) -> str:
-        """Отримання опису паттерну"""
+        """Отримання опису паттерну."""
         descriptions = {
             "shell_company": "Схема з використанням фіктивних компаній",
             "layering_scheme": "Багаторівнева схема відмивання коштів",
@@ -214,7 +211,7 @@ class DeepInvestigatorAgent:
     async def generate_recommendations(
         self, patterns: List[Dict], investigation: Investigation
     ) -> List[str]:
-        """Генерація рекомендацій на основі аналізу"""
+        """Генерація рекомендацій на основі аналізу."""
         recommendations = []
 
         if any(p["pattern"] == "shell_company" for p in patterns):
@@ -256,7 +253,7 @@ class DeepInvestigatorAgent:
         return recommendations[:5]  # Обмежуємо до 5 найважливіших
 
     async def update_confidence_score(self, investigation: Investigation):
-        """Оновлення рівня впевненості в розслідуванні"""
+        """Оновлення рівня впевненості в розслідуванні."""
         # Фактори впливу на впевненість
         evidence_factor = min(investigation.evidence_count / 10, 1.0)  # Максимум за 10 доказів
 
@@ -281,7 +278,7 @@ class DeepInvestigatorAgent:
             investigation.status = "low_confidence"
 
     async def conduct_investigation(self, case_id: str) -> Dict[str, Any]:
-        """Проведення повного розслідування"""
+        """Проведення повного розслідування."""
         if case_id not in self.active_investigations:
             raise ValueError(f"Розслідування {case_id} не знайдено")
 
@@ -310,7 +307,7 @@ class DeepInvestigatorAgent:
         return final_report
 
     async def extended_evidence_search(self, investigation: Investigation):
-        """Розширений пошук доказів"""
+        """Розширений пошук доказів."""
         print(f"   🔍 Розширений пошук доказів...")
 
         # Симуляція пошуку додаткових доказів
@@ -346,7 +343,7 @@ class DeepInvestigatorAgent:
         print(f"      📄 Знайдено {additional_evidence} додаткових доказів")
 
     async def build_network_map(self, investigation: Investigation) -> Dict[str, Any]:
-        """Побудова карти мережі зв'язків"""
+        """Побудова карти мережі зв'язків."""
         print(f"   🕸️ Побудова карти зв'язків...")
 
         # Симуляція побудови мережі
@@ -393,7 +390,7 @@ class DeepInvestigatorAgent:
     async def prepare_final_report(
         self, investigation: Investigation, analysis_result: Dict, network_map: Dict
     ) -> Dict[str, Any]:
-        """Підготовка фінального звіту"""
+        """Підготовка фінального звіту."""
         print(f"   📊 Підготовка фінального звіту...")
 
         report = {
@@ -425,7 +422,7 @@ class DeepInvestigatorAgent:
         return report
 
     def get_investigation_status(self, case_id: str) -> Dict[str, Any]:
-        """Отримання статусу розслідування"""
+        """Отримання статусу розслідування."""
         if case_id not in self.active_investigations:
             return {"error": f"Розслідування {case_id} не знайдено"}
 
@@ -441,7 +438,7 @@ class DeepInvestigatorAgent:
         }
 
     async def demo_investigation(self):
-        """Демонстрація можливостей агента"""
+        """Демонстрація можливостей агента."""
         print("🕵️ ДЕМОНСТРАЦІЯ DEEP INVESTIGATOR AGENT")
         print("=" * 60)
 

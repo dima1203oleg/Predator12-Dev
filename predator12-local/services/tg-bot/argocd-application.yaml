@@ -6,14 +6,14 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/dima1203oleg/Predator12-Dev'
+    repoURL: "https://github.com/dima1203oleg/Predator12-Dev"
     targetRevision: main
     path: services/tg-bot/helm
     helm:
       valueFiles:
         - values.yaml
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: "https://kubernetes.default.svc"
     namespace: predator
   syncPolicy:
     automated:

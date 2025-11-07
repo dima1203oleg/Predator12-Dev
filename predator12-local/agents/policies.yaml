@@ -16,7 +16,7 @@ competition_system:
   evaluation_criteria:
     accuracy_weight: 0.4
     speed_weight: 0.3
-    cost_weight: 0.2  # Завжди 0 для безкоштовних
+    cost_weight: 0.2 # Завжди 0 для безкоштовних
     reliability_weight: 0.1
 
   competition_modes:
@@ -48,15 +48,15 @@ thermal_protection:
   monitoring_interval_seconds: 5
 
   thresholds:
-    warning: 0.70    # 70% навантаження
-    critical: 0.85   # 85% навантаження
-    emergency: 0.95  # 95% навантаження
+    warning: 0.70 # 70% навантаження
+    critical: 0.85 # 85% навантаження
+    emergency: 0.95 # 95% навантаження
 
   cooldown_strategies:
-    level_1: "reduce_concurrency"      # Зменшити паралельність
-    level_2: "switch_to_fallback"      # Перемкнути на резерв
+    level_1: "reduce_concurrency" # Зменшити паралельність
+    level_2: "switch_to_fallback" # Перемкнути на резерв
     level_3: "activate_emergency_pool" # Активувати аварійний пул
-    level_4: "temporary_shutdown"      # Тимчасове відключення
+    level_4: "temporary_shutdown" # Тимчасове відключення
 
   recovery_parameters:
     cooldown_duration_seconds: 30
@@ -97,11 +97,11 @@ fallback_system:
 
 # 🚀 МАРШРУТИЗАЦІЯ З ОПТИМІЗАЦІЄЮ
 routing:
-  max_latency_ms: 2000  # Зменшено для кращої продуктивності
-  prefer_cost: true     # Завжди безкоштовні
-  fanout_best_of: 3     # Збільшено для конкурсу
+  max_latency_ms: 2000 # Зменшено для кращої продуктивності
+  prefer_cost: true # Завжди безкоштовні
+  fanout_best_of: 3 # Збільшено для конкурсу
   shadow_test: true
-  retry_attempts: 5     # Збільшено надійність
+  retry_attempts: 5 # Збільшено надійність
   circuit_breaker_threshold: 3
   circuit_breaker_timeout: 20
 
@@ -114,11 +114,11 @@ routing:
 
 # 💰 БЮДЖЕТИ (ВСЕ БЕЗКОШТОВНО!)
 budgets:
-  org_monthly_usd: 0      # Безкоштовно
-  per_user_daily_usd: 0   # Безкоштовно
+  org_monthly_usd: 0 # Безкоштовно
+  per_user_daily_usd: 0 # Безкоштовно
   per_agent_hourly_usd: 0 # Безкоштовно
   emergency_reserve_usd: 0 # Безкоштовно
-  cost_monitoring: false  # Не потрібно
+  cost_monitoring: false # Не потрібно
 
   # Моніторимо використання ресурсів замість грошей
   resource_limits:
@@ -129,7 +129,8 @@ budgets:
 # 🛡️ БЕЗПЕКА ТА ЗАХИСТ ДАНИХ
 pii:
   mask_by_default: true
-  allow_reveal_roles: ["analyst", "admin", "security_officer", "chief_orchestrator"]
+  allow_reveal_roles:
+    ["analyst", "admin", "security_officer", "chief_orchestrator"]
   audit_all_access: true
   retention_days: 90
   auto_purge_enabled: true
@@ -141,10 +142,10 @@ pii:
 
 # ⚡ ОБМЕЖЕННЯ ШВИДКОСТІ
 rate_limits:
-  per_user_per_minute: 500     # Збільшено
-  per_agent_per_minute: 2000   # Збільшено
-  per_model_per_minute: 1000   # Новий ліміт
-  burst_multiplier: 3          # Збільшено
+  per_user_per_minute: 500 # Збільшено
+  per_agent_per_minute: 2000 # Збільшено
+  per_model_per_minute: 1000 # Новий ліміт
+  burst_multiplier: 3 # Збільшено
 
   # Спеціальні ліміти для критичних агентів
   critical_agents:

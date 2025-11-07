@@ -1,17 +1,13 @@
-"""
-Granular Rate Limiting by Endpoint/User
-"""
+"""Granular Rate Limiting by Endpoint/User."""
 
-import time
 from typing import Optional
 
 import redis
 from fastapi import HTTPException, Request
-from fastapi.security import HTTPBearer
 
 
 class RateLimiter:
-    """Redis-backed rate limiting"""
+    """Redis-backed rate limiting."""
 
     def __init__(self, redis_client: redis.Redis):
         self.redis = redis_client
@@ -23,7 +19,7 @@ class RateLimiter:
         limit: int = 10,
         window: int = 60,
     ) -> bool:
-        """Check if request exceeds rate limit"""
+        """Check if request exceeds rate limit."""
         key = f"rate_limit:{request.url.path}:{user_id or request.client.host}"
 
         # Use Redis transactions
@@ -53,7 +49,7 @@ async def rate_limit(
     user: Optional[str] = None,
     redis: redis.Redis = Depends(get_redis),
 ):
-    """Apply configured rate limits"""
+    """Apply configured rate limits."""
     config = DEFAULT_LIMITS.get(request.url.path, {"limit": 10, "window": 60})
     limiter = RateLimiter(redis)
     await limiter.check_limit(

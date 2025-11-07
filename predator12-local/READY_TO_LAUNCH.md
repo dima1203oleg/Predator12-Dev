@@ -9,6 +9,7 @@
 ## 📊 Поточний стан
 
 ✅ **Виконано:**
+
 - [x] requirements-311-modern.txt оновлено (telethon, opensearch-py, faiss-cpu)
 - [x] Scripts створені (manage-ports, health-check, start-all, stop-all)
 - [x] Bash 3.x compatibility (замість zsh)
@@ -19,6 +20,7 @@
 - [x] PostgreSQL активний
 
 ⚠️ **Залишилось:**
+
 - [ ] Відключити старе KDM середовище
 - [ ] Створити новий Python 3.11 venv
 - [ ] Встановити залежності
@@ -75,6 +77,7 @@ bash scripts/setup-venv.sh
 ```
 
 Скрипт зробить:
+
 - ✅ Перевірить Python 3.11
 - ✅ Backup старого venv
 - ✅ Створить новий venv
@@ -100,6 +103,7 @@ bash scripts/system-check.sh
 ```
 
 Перевіряє:
+
 - Python 3.11 ✅
 - PostgreSQL ✅
 - Redis ✅
@@ -230,14 +234,14 @@ bash scripts/disable-kdm.sh
 
 ## 📚 Документація
 
-| Файл | Опис |
-|------|------|
-| [QUICKSTART.md](QUICKSTART.md) | Покрокова інструкція для новачків |
-| [PORTS_READY.md](PORTS_READY.md) | Порти, сервіси, troubleshooting |
-| [OPENSEARCH_SETUP_GUIDE.md](OPENSEARCH_SETUP_GUIDE.md) | OpenSearch для macOS |
-| [DISABLE_KDM.md](DISABLE_KDM.md) | Відключення старого KDM середовища |
-| [ALL_FIXES_APPLIED.md](ALL_FIXES_APPLIED.md) | Підсумок всіх виправлень |
-| [MIGRATION_GUIDE_PYTHON311.md](MIGRATION_GUIDE_PYTHON311.md) | Міграція на Python 3.11 |
+| Файл                                                         | Опис                               |
+| ------------------------------------------------------------ | ---------------------------------- |
+| [QUICKSTART.md](QUICKSTART.md)                               | Покрокова інструкція для новачків  |
+| [PORTS_READY.md](PORTS_READY.md)                             | Порти, сервіси, troubleshooting    |
+| [OPENSEARCH_SETUP_GUIDE.md](OPENSEARCH_SETUP_GUIDE.md)       | OpenSearch для macOS               |
+| [DISABLE_KDM.md](DISABLE_KDM.md)                             | Відключення старого KDM середовища |
+| [ALL_FIXES_APPLIED.md](ALL_FIXES_APPLIED.md)                 | Підсумок всіх виправлень           |
+| [MIGRATION_GUIDE_PYTHON311.md](MIGRATION_GUIDE_PYTHON311.md) | Міграція на Python 3.11            |
 
 ---
 
@@ -352,12 +356,14 @@ psql -U postgres -c "SELECT 1"
 ## ✅ Чек-лист готовності
 
 ### Базові вимоги
+
 - [ ] macOS з Homebrew
 - [ ] Python 3.11 встановлено
 - [ ] PostgreSQL встановлено та запущено
 - [ ] Git встановлено
 
 ### Налаштування проекту
+
 - [ ] KDM відключено (якщо було)
 - [ ] Python 3.11 venv створено
 - [ ] Залежності встановлено
@@ -366,6 +372,7 @@ psql -U postgres -c "SELECT 1"
 - [ ] Міграції БД застосовано
 
 ### Запуск
+
 - [ ] Backend запущено (http://localhost:8000)
 - [ ] API Docs доступні (http://localhost:8000/docs)
 - [ ] Health endpoint працює (curl /health)
@@ -390,6 +397,7 @@ open http://localhost:8000/docs
 ## 🆘 Потрібна допомога?
 
 1. **System check:**
+
    ```bash
    bash scripts/system-check.sh
    ```
@@ -400,6 +408,7 @@ open http://localhost:8000/docs
    - DISABLE_KDM.md - відключення KDM
 
 3. **Логи:**
+
    ```bash
    tail -f logs/backend.log
    tail -f logs/celery.log

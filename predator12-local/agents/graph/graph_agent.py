@@ -5,15 +5,11 @@ GraphAgent - Агент графового аналізу та пошуку зв
 """
 
 import asyncio
-import json
 import logging
-from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List
 
-import aiofiles
 import aiohttp
 import networkx as nx
 import numpy as np
@@ -47,9 +43,7 @@ class CommunityInfo:
 
 
 class GraphAgent:
-    """
-    Агент графового аналізу згідно з технічним завданням
-    """
+    """Агент графового аналізу згідно з технічним завданням."""
 
     def __init__(self):
         self.graphs: Dict[str, nx.Graph] = {}
@@ -74,7 +68,7 @@ class GraphAgent:
         }
 
     async def initialize(self):
-        """Ініціалізує графовий агент"""
+        """Ініціалізує графовий агент."""
         logger.info("🚀 Initializing Graph Agent...")
 
         # Створюємо базові графи
@@ -86,7 +80,7 @@ class GraphAgent:
         logger.info("✅ Graph Agent initialized successfully")
 
     async def create_base_graphs(self):
-        """Створює базові графи для різних типів даних"""
+        """Створює базові графи для різних типів даних."""
         # Граф соціальних зв'язків
         self.graphs["social"] = nx.Graph()
 
@@ -102,7 +96,7 @@ class GraphAgent:
         logger.info("📊 Created base graphs: social, network, events, knowledge")
 
     async def load_data_from_sources(self):
-        """Завантажує дані з різних джерел для побудови графів"""
+        """Завантажує дані з різних джерел для побудови графів."""
         try:
             # Завантажуємо дані з OpenSearch
             await self.load_from_opensearch()
@@ -116,7 +110,7 @@ class GraphAgent:
             logger.error(f"Failed to load data from sources: {e}")
 
     async def load_from_opensearch(self):
-        """Завантажує дані з OpenSearch для побудови графів"""
+        """Завантажує дані з OpenSearch для побудови графів."""
         try:
             async with aiohttp.ClientSession() as session:
                 # Отримуємо дані про взаємодії користувачів
@@ -141,7 +135,7 @@ class GraphAgent:
             logger.error(f"Failed to load from OpenSearch: {e}")
 
     async def load_from_postgres(self):
-        """Завантажує дані з PostgreSQL для побудови графів"""
+        """Завантажує дані з PostgreSQL для побудови графів."""
         try:
             import asyncpg
 
@@ -180,7 +174,7 @@ class GraphAgent:
             logger.error(f"Failed to load from PostgreSQL: {e}")
 
     async def add_interaction_to_graph(self, interaction_data: Dict[str, Any]):
-        """Додає взаємодію до графу"""
+        """Додає взаємодію до графу."""
         user_id = interaction_data.get("user_id")
         target_id = interaction_data.get("target_id")
         interaction_type = interaction_data.get("interaction_type", "unknown")
@@ -218,7 +212,7 @@ class GraphAgent:
                 )
 
     async def add_user_node(self, user_data):
-        """Додає вузол користувача до соціального графу"""
+        """Додає вузол користувача до соціального графу."""
         user_id = str(user_data["user_id"])
 
         node_properties = {
@@ -236,7 +230,7 @@ class GraphAgent:
         self.node_cache[user_id] = GraphNode(id=user_id, type="user", properties=node_properties)
 
     async def add_relationship_edge(self, relationship_data):
-        """Додає ребро зв'язку між користувачами"""
+        """Додає ребро зв'язку між користувачами."""
         source_id = str(relationship_data["source_id"])
         target_id = str(relationship_data["target_id"])
         rel_type = relationship_data.get("relationship_type", "connected")
@@ -251,7 +245,7 @@ class GraphAgent:
         self.graphs["social"].add_edge(source_id, target_id, **edge_properties)
 
     async def run_graph_analysis(self, graph_name: str, algorithm: str, **kwargs) -> Dict[str, Any]:
-        """Запускає графовий аналіз"""
+        """Запускає графовий аналіз."""
         if graph_name not in self.graphs:
             raise ValueError(f"Graph '{graph_name}' not found")
 
@@ -298,7 +292,7 @@ class GraphAgent:
             raise
 
     async def calculate_pagerank(self, graph: nx.Graph, **kwargs) -> Dict[str, float]:
-        """Обчислює PageRank для вузлів графу"""
+        """Обчислює PageRank для вузлів графу."""
         alpha = kwargs.get("alpha", 0.85)
         max_iter = kwargs.get("max_iter", 100)
 
@@ -319,7 +313,7 @@ class GraphAgent:
         }
 
     async def calculate_betweenness_centrality(self, graph: nx.Graph, **kwargs) -> Dict[str, float]:
-        """Обчислює центральність за посередництвом"""
+        """Обчислює центральність за посередництвом."""
         normalized = kwargs.get("normalized", True)
 
         betweenness = nx.betweenness_centrality(graph, normalized=normalized)
@@ -332,7 +326,7 @@ class GraphAgent:
         }
 
     async def calculate_closeness_centrality(self, graph: nx.Graph, **kwargs) -> Dict[str, float]:
-        """Обчислює центральність за близькістю"""
+        """Обчислює центральність за близькістю."""
         closeness = nx.closeness_centrality(graph)
         sorted_closeness = dict(sorted(closeness.items(), key=lambda x: x[1], reverse=True))
 
@@ -342,7 +336,7 @@ class GraphAgent:
         }
 
     async def detect_communities(self, graph: nx.Graph, **kwargs) -> Dict[str, Any]:
-        """Виявляє спільноти у графі"""
+        """Виявляє спільноти у графі."""
         algorithm = kwargs.get("algorithm", "louvain")
 
         if algorithm == "louvain":
@@ -387,7 +381,7 @@ class GraphAgent:
         }
 
     async def _find_key_nodes_in_community(self, subgraph: nx.Graph) -> List[str]:
-        """Знаходить ключові вузли в спільноті"""
+        """Знаходить ключові вузли в спільноті."""
         if subgraph.number_of_nodes() == 0:
             return []
 
@@ -399,7 +393,7 @@ class GraphAgent:
         return [node for node, _ in sorted_nodes[:3]]
 
     async def find_shortest_path(self, graph: nx.Graph, **kwargs) -> Dict[str, Any]:
-        """Знаходить найкоротший шлях між вузлами"""
+        """Знаходить найкоротший шлях між вузлами."""
         source = kwargs.get("source")
         target = kwargs.get("target")
 
@@ -435,7 +429,7 @@ class GraphAgent:
             }
 
     async def find_connected_components(self, graph: nx.Graph, **kwargs) -> Dict[str, Any]:
-        """Знаходить зв'язані компоненти"""
+        """Знаходить зв'язані компоненти."""
         if isinstance(graph, nx.DiGraph):
             # Для орієнтованого графу знаходимо слабко зв'язані компоненти
             components = list(nx.weakly_connected_components(graph))
@@ -471,7 +465,7 @@ class GraphAgent:
         }
 
     async def calculate_clustering(self, graph: nx.Graph, **kwargs) -> Dict[str, Any]:
-        """Обчислює коефіцієнт кластеризації"""
+        """Обчислює коефіцієнт кластеризації."""
         # Загальний коефіцієнт кластеризації
         avg_clustering = nx.average_clustering(graph)
 
@@ -492,7 +486,7 @@ class GraphAgent:
         }
 
     async def simulate_influence_propagation(self, graph: nx.Graph, **kwargs) -> Dict[str, Any]:
-        """Симулює поширення впливу по графу"""
+        """Симулює поширення впливу по графу."""
         seed_nodes = kwargs.get("seed_nodes", [])
         propagation_prob = kwargs.get("propagation_prob", 0.3)
         max_iterations = kwargs.get("max_iterations", 10)
@@ -541,7 +535,7 @@ class GraphAgent:
         }
 
     async def find_anomalous_nodes(self, graph_name: str) -> Dict[str, Any]:
-        """Знаходить аномальні вузли у графі"""
+        """Знаходить аномальні вузли у графі."""
         graph = self.graphs[graph_name]
 
         # Обчислюємо різні метрики центральності
@@ -602,7 +596,7 @@ class GraphAgent:
     async def export_graph_visualization(
         self, graph_name: str, output_format: str = "json"
     ) -> Dict[str, Any]:
-        """Експортує граф для візуалізації"""
+        """Експортує граф для візуалізації."""
         graph = self.graphs[graph_name]
 
         if output_format == "json":
@@ -641,7 +635,7 @@ class GraphAgent:
             raise ValueError(f"Unsupported output format: {output_format}")
 
     async def get_graph_statistics(self, graph_name: str) -> Dict[str, Any]:
-        """Повертає статистику графу"""
+        """Повертає статистику графу."""
         graph = self.graphs[graph_name]
 
         stats = {
@@ -670,7 +664,7 @@ class GraphAgent:
         return stats
 
     async def get_status(self) -> Dict[str, Any]:
-        """Повертає статус GraphAgent"""
+        """Повертає статус GraphAgent."""
         return {
             "timestamp": datetime.now().isoformat(),
             "graphs": {name: await self.get_graph_statistics(name) for name in self.graphs.keys()},
@@ -687,7 +681,7 @@ graph_agent = GraphAgent()
 
 
 async def main():
-    """Основна функція для запуску агента"""
+    """Основна функція для запуску агента."""
     logger.info("🚀 Starting Predator Analytics Graph Agent...")
 
     try:

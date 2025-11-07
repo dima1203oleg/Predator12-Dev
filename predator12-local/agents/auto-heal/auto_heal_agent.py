@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-"""
-AutoHeal Agent for Predator11
-Automatically detects and remediates system issues
-"""
+"""AutoHeal Agent for Predator11 Automatically detects and remediates system
+issues."""
 
 import asyncio
 import json
 import logging
 import subprocess
-import time
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
@@ -19,7 +16,7 @@ import asyncpg
 import docker
 import psutil
 from kafka import KafkaConsumer, KafkaProducer
-from prometheus_client import Counter, Gauge, Histogram
+from prometheus_client import Counter, Gauge
 
 # Metrics
 HEAL_ACTIONS_COUNTER = Counter("auto_heal_actions_total", "Total healing actions performed")
@@ -93,7 +90,7 @@ class AutoHealAgent:
         }
 
     async def initialize(self):
-        """Initialize connections and resources"""
+        """Initialize connections and resources."""
         try:
             # Redis connection
             self.redis = aioredis.from_url(
@@ -127,7 +124,7 @@ class AutoHealAgent:
             raise
 
     async def start(self):
-        """Start the auto-heal agent"""
+        """Start the auto-heal agent."""
         self.running = True
         self.logger.info("Starting AutoHealAgent")
 
@@ -143,7 +140,7 @@ class AutoHealAgent:
         await asyncio.gather(monitoring_task, consumer_task, remediation_task)
 
     async def stop(self):
-        """Stop the agent gracefully"""
+        """Stop the agent gracefully."""
         self.running = False
         self.logger.info("Stopping AutoHealAgent")
 
@@ -157,7 +154,7 @@ class AutoHealAgent:
             self.kafka_consumer.close()
 
     async def _monitoring_loop(self):
-        """Main monitoring loop to detect incidents"""
+        """Main monitoring loop to detect incidents."""
         while self.running:
             try:
                 # Collect system metrics
@@ -184,7 +181,7 @@ class AutoHealAgent:
                 await asyncio.sleep(60)
 
     async def _kafka_consumer_loop(self):
-        """Process incoming Kafka messages about incidents"""
+        """Process incoming Kafka messages about incidents."""
         while self.running:
             try:
                 # Poll for messages with timeout
@@ -199,7 +196,7 @@ class AutoHealAgent:
                 await asyncio.sleep(5)
 
     async def _remediation_loop(self):
-        """Process active incidents and execute remediation plans"""
+        """Process active incidents and execute remediation plans."""
         while self.running:
             try:
                 if self.active_incidents:
@@ -245,7 +242,7 @@ class AutoHealAgent:
                 await asyncio.sleep(60)
 
     async def _collect_system_health(self) -> Dict[str, Any]:
-        """Collect comprehensive system health metrics"""
+        """Collect comprehensive system health metrics."""
         health_data = {
             "timestamp": datetime.utcnow().isoformat(),
             "system": await self._collect_system_metrics(),
@@ -259,7 +256,7 @@ class AutoHealAgent:
         return health_data
 
     async def _collect_system_metrics(self) -> Dict[str, Any]:
-        """Collect system-level metrics"""
+        """Collect system-level metrics."""
         try:
             cpu_percent = psutil.cpu_percent(interval=1)
             memory = psutil.virtual_memory()
@@ -277,7 +274,7 @@ class AutoHealAgent:
             return {}
 
     async def _collect_service_health(self) -> Dict[str, Any]:
-        """Collect health status of Docker services"""
+        """Collect health status of Docker services."""
         services_health = {}
 
         try:
@@ -325,7 +322,7 @@ class AutoHealAgent:
         return services_health
 
     async def _collect_database_health(self) -> Dict[str, Any]:
-        """Collect database health metrics"""
+        """Collect database health metrics."""
         try:
             async with self.postgres_pool.acquire() as conn:
                 # Check connection count
@@ -367,7 +364,7 @@ class AutoHealAgent:
             return {"status": "unhealthy", "error": str(e)}
 
     async def _collect_redis_health(self) -> Dict[str, Any]:
-        """Collect Redis health metrics"""
+        """Collect Redis health metrics."""
         try:
             info = await self.redis.info()
 
@@ -385,7 +382,7 @@ class AutoHealAgent:
             return {"status": "unhealthy", "error": str(e)}
 
     async def _collect_disk_metrics(self) -> Dict[str, Any]:
-        """Collect disk usage metrics"""
+        """Collect disk usage metrics."""
         try:
             disk_usage = psutil.disk_usage("/")
 
@@ -401,7 +398,7 @@ class AutoHealAgent:
             return {}
 
     async def _collect_network_metrics(self) -> Dict[str, Any]:
-        """Collect network metrics"""
+        """Collect network metrics."""
         try:
             net_io = psutil.net_io_counters()
 
@@ -419,7 +416,7 @@ class AutoHealAgent:
             return {}
 
     async def _detect_incidents(self, health_data: Dict[str, Any]) -> List[Incident]:
-        """Detect incidents from health data"""
+        """Detect incidents from health data."""
         incidents = []
         timestamp = datetime.utcnow()
 
@@ -497,7 +494,7 @@ class AutoHealAgent:
         return incidents
 
     async def _is_duplicate_incident(self, incident: Incident) -> bool:
-        """Check if incident is already being handled"""
+        """Check if incident is already being handled."""
         for active_incident in self.active_incidents:
             if (
                 active_incident.type == incident.type
@@ -507,7 +504,7 @@ class AutoHealAgent:
         return False
 
     async def _create_remediation_plan(self, incident: Incident) -> Optional[RemediationPlan]:
-        """Create a remediation plan for the incident"""
+        """Create a remediation plan for the incident."""
         actions = []
         priority = 1
         estimated_downtime = 0
@@ -556,7 +553,7 @@ class AutoHealAgent:
         )
 
     async def _execute_remediation_plan(self, plan: RemediationPlan) -> bool:
-        """Execute a remediation plan"""
+        """Execute a remediation plan."""
         success = True
 
         self.logger.info(f"Executing remediation plan for: {plan.incident.description}")
@@ -602,7 +599,7 @@ class AutoHealAgent:
         return success
 
     async def _execute_healing_action(self, action: HealingAction, incident: Incident) -> bool:
-        """Execute a specific healing action"""
+        """Execute a specific healing action."""
         try:
             if action == HealingAction.RESTART_SERVICE:
                 return await self._restart_service(incident.affected_component)
@@ -634,7 +631,7 @@ class AutoHealAgent:
             return False
 
     async def _restart_service(self, service_name: str) -> bool:
-        """Restart a Docker service"""
+        """Restart a Docker service."""
         try:
             container = self.docker_client.containers.get(service_name)
             container.restart()
@@ -650,7 +647,7 @@ class AutoHealAgent:
             return False
 
     async def _scale_service(self, service_name: str, direction: str) -> bool:
-        """Scale a service up or down using docker-compose"""
+        """Scale a service up or down using docker-compose."""
         try:
             scale_factor = 2 if direction == "up" else 1
 
@@ -667,7 +664,7 @@ class AutoHealAgent:
             return False
 
     async def _clear_cache(self) -> bool:
-        """Clear Redis cache"""
+        """Clear Redis cache."""
         try:
             await self.redis.flushdb()
             return True
@@ -676,7 +673,7 @@ class AutoHealAgent:
             return False
 
     async def _kill_high_cpu_processes(self) -> bool:
-        """Kill processes consuming high CPU"""
+        """Kill processes consuming high CPU."""
         try:
             processes = []
             for proc in psutil.process_iter(["pid", "name", "cpu_percent"]):
@@ -703,7 +700,7 @@ class AutoHealAgent:
             return False
 
     async def _cleanup_disk(self) -> bool:
-        """Clean up disk space"""
+        """Clean up disk space."""
         try:
             # Clean Docker system
             subprocess.run(["docker", "system", "prune", "-f"], check=True)
@@ -720,7 +717,7 @@ class AutoHealAgent:
             return False
 
     async def _rollback_service(self, service_name: str) -> bool:
-        """Rollback a service to previous version"""
+        """Rollback a service to previous version."""
         try:
             # This would typically involve deploying previous container version
             # For now, just restart the service
@@ -731,7 +728,7 @@ class AutoHealAgent:
             return False
 
     async def _process_kafka_incident(self, incident_data: Dict[str, Any]):
-        """Process incident received from Kafka"""
+        """Process incident received from Kafka."""
         try:
             incident = Incident(
                 type=IncidentType(incident_data.get("type", "service_down")),
@@ -753,7 +750,7 @@ class AutoHealAgent:
             self.logger.error(f"Failed to process Kafka incident: {e}")
 
     async def _notify_incident_detected(self, incident: Incident):
-        """Notify other systems about detected incident"""
+        """Notify other systems about detected incident."""
         notification = {
             "type": "incident_detected",
             "incident": {
@@ -770,7 +767,7 @@ class AutoHealAgent:
         self.kafka_producer.send("system.notifications", notification)
 
     async def _notify_remediation_result(self, plan: RemediationPlan, success: bool):
-        """Notify about remediation result"""
+        """Notify about remediation result."""
         notification = {
             "type": "remediation_completed",
             "incident": {
@@ -789,7 +786,7 @@ class AutoHealAgent:
 
 
 async def main():
-    """Main entry point for the Auto-Heal Agent"""
+    """Main entry point for the Auto-Heal Agent."""
     import os
 
     config = {

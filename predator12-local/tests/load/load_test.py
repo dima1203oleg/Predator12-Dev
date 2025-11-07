@@ -4,9 +4,8 @@ Load Testing Сценарії для Predator12
 """
 
 import random
-import time
 
-from locust import HttpUser, TaskSet, between, events, task
+from locust import TaskSet, between, events, task
 from locust.contrib.fasthttp import FastHttpUser
 
 

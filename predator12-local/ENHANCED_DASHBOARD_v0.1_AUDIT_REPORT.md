@@ -5,6 +5,7 @@
 ### ✅ ЗАВЕРШЕНО
 
 #### 1. **3D-Гід з Колізійним Детектуванням**
+
 - ✅ Доопрацьований `HolographicAIFace.tsx` з новими пропами:
   - `collisionAvoidance` - увімкнення уникнення колізій
   - `adaptiveOpacity` - адаптивна прозорість при перекритті
@@ -15,6 +16,7 @@
 - ✅ Перевірка кожні 200ms для оптимальної продуктивності
 
 #### 2. **Покращений HealthCard з Поясненнями**
+
 - ✅ Автоматичні пояснення для `unknown` станів
 - ✅ Рекомендовані дії (CTA) відповідно до статусу
 - ✅ Підказки причин та способів вирішення
@@ -22,6 +24,7 @@
 - ✅ Tooltip'и та лейбли для всіх елементів
 
 #### 3. **AgentStatusCard з Детальною Інформацією**
+
 - ✅ Відображення 8 різних типів агентів (ETL, Security, Analytics, etc.)
 - ✅ Реальний час метрики (CPU, RAM, останнє з'єднання)
 - ✅ Швидкі дії: перезапуск, логи, налаштування
@@ -29,6 +32,7 @@
 - ✅ Загальне здоров'я системи агентів з процентами
 
 #### 4. **EnhancedDashboard - Центральна Панель**
+
 - ✅ Інтеграція всіх компонентів в єдиному інтерфейсі
 - ✅ Автооновлення кожні 30 секунд
 - ✅ Mock WebSocket для реальних подій
@@ -36,12 +40,14 @@
 - ✅ Повноекранний режим та адаптивний дизайн
 
 #### 5. **Mock API з Реалістичними Сценаріями**
+
 - ✅ `/api/health` - з різними статусами (ok, degraded, unknown, critical)
 - ✅ `/api/agents` - генерація реалістичних агентів з метриками
 - ✅ WebSocket events - симуляція реальних подій системи
 - ✅ Утиліти обробки помилок та рекомендовані дії
 
 #### 6. **UX/UI Покращення згідно з ТЗ**
+
 - ✅ Усунення колізій FAB кнопок (відступи 16-24px)
 - ✅ Пояснення для всіх unknown станів
 - ✅ Єдиний центр сповіщень (NotificationHub)
@@ -52,27 +58,30 @@
 ### 🔧 ТЕХНІЧНА РЕАЛІЗАЦІЯ
 
 #### Event Bus та Zustand Store
+
 ```typescript
 // AppEventStore з повною функціональністю
 type AppEvent =
-  | { type: 'HEALTH_UNKNOWN'; source: 'prometheus' | 'backend'; hint?: string }
-  | { type: 'AGENT_DOWN'; agentId: string }
-  | { type: 'NETWORK_OFFLINE' }
-  | { type: 'ACTION_REQUIRED'; cta: { label: string; run: () => void } };
+  | { type: "HEALTH_UNKNOWN"; source: "prometheus" | "backend"; hint?: string }
+  | { type: "AGENT_DOWN"; agentId: string }
+  | { type: "NETWORK_OFFLINE" }
+  | { type: "ACTION_REQUIRED"; cta: { label: string; run: () => void } };
 ```
 
 #### Колізійне Детектування
+
 ```typescript
 // Автоматичне уникнення UI елементів
 const positions = [
-  { bottom: 24, right: 24 },   // Стандартна
-  { bottom: 24, left: 24 },    // Ліва нижня  
-  { top: 80, right: 24 },      // З відступом для AppBar
+  { bottom: 24, right: 24 }, // Стандартна
+  { bottom: 24, left: 24 }, // Ліва нижня
+  { top: 80, right: 24 }, // З відступом для AppBar
   // ... + 3 додаткові позиції
 ];
 ```
 
 #### API Контракти (Mock)
+
 ```typescript
 // Реалістичні дані з затримками та різними сценаріями
 GET /api/health → { status, reasons, components }
@@ -102,6 +111,7 @@ frontend/src/components/
 ### 🎨 ДИЗАЙН ПОКРАЩЕННЯ
 
 #### Усунені Проблеми
+
 - ❌ Колізії елементів у правому нижньому куті → ✅ Автоматичне позиціонування
 - ❌ Невизначеність станів "unknown" → ✅ Детальні пояснення + CTA
 - ❌ Неочевидна семантика іконок → ✅ Tooltip'и та лейбли
@@ -110,6 +120,7 @@ frontend/src/components/
 - ❌ Дрібні touch targets → ✅ Мінімум 44x44px
 
 #### Нова Палітра та Контрасти
+
 ```typescript
 // Відмова від кислотних неонів, покращений контраст
 border: `1px solid ${nexusColors.sapphire}60`, // Замість 100%
@@ -122,31 +133,37 @@ color: nexusColors.frost, // Контраст 7.2:1
 ## 🔄 НАСТУПНІ КРОКИ (Тиждень 2-4)
 
 ### 📡 Backend Інтеграція
+
 - [ ] Реальні ендпоінти `/api/health`, `/api/agents`
 - [ ] WebSocket `/ws/events` для реального часу
 - [ ] SSO Keycloak/OIDC інтеграція
 
 ### 🎙️ Голосова Функціональність
+
 - [ ] TTS/STT з Web Speech API або локальний
 - [ ] Opt-in дозволи з активним індикатором
 - [ ] Контекстні голосові підказки
 
 ### ⚡ Продуктивність та Fallback
+
 - [ ] Three.js → Canvas/CSS graceful fallback
 - [ ] Перфоманс бюджет (FPS ≥50, TTI <2.5s)
 - [ ] OffscreenCanvas для важких обчислень
 
 ### 🛡️ Безпека та Спостережуваність
+
 - [ ] CSP, XSS протекція, sanitization
 - [ ] OpenTelemetry для UI метрик
 - [ ] Sentry для фронтенд винятків
 
 ### 📱 PWA та Офлайн
+
 - [ ] Service Worker для кешування
 - [ ] Черга подій в офлайні
 - [ ] Автоматичні retry з backoff
 
 ### 🧪 Тестування
+
 - [ ] Unit тести для компонентів
 - [ ] E2E тести з Playwright
 - [ ] A11y тести з screen readers
@@ -165,6 +182,7 @@ color: nexusColors.frost, // Контраст 7.2:1
 ## 🚀 ГОТОВНІСТЬ ДО ДЕМОНСТРАЦІЇ
 
 Enhanced Dashboard v0.1 готовий для демонстрації та тестування:
+
 - ✅ Запускається через `npm start`
 - ✅ Доступний через навігацію "🎯 Dashboard v0.1"
 - ✅ Повністю функціональний з mock даними

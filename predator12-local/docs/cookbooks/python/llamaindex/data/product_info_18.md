@@ -1,7 +1,9 @@
 # Information about product item_number: 18
+
 TrekStar Hiking Sandals, price $70,
 
 ## Brand
+
 TrekReady
 
 Main Category: FOOTWEAR
@@ -9,6 +11,7 @@ Sub Category: MEN'S FOOTWEAR
 Product Type: SANDALS
 
 ## Features
+
 - Durable and lightweight construction for comfortable hiking
 - Breathable and quick-drying materials to keep your feet cool and dry
 - Adjustable straps for a customizable and secure fit
@@ -23,6 +26,7 @@ Product Type: SANDALS
 - Made with high-quality materials for durability and long-lasting performance
 
 ## Technical Specs
+
 Based on the provided features, here are the technical specifications for the TrekStar Hiking Sandals:
 
 ## Technical Specs
@@ -58,7 +62,7 @@ It is essential to choose the correct size for your TrekStar Hiking Sandals to e
 2. Refer to the size chart provided by TrekStar to find your corresponding size.
 3. Try on the sandals and make sure they feel snug but not too tight. The straps should be adjustable for a secure fit.
 
-3. Adjusting the Straps
+4. Adjusting the Straps
 
 The TrekStar Hiking Sandals come with adjustable straps for a personalized fit. Follow these instructions to adjust the straps:
 
@@ -79,7 +83,7 @@ To take off the TrekStar Hiking Sandals:
 1. Loosen the straps on both the forefoot and ankle areas.
 2. Open the sandals and gently slide your foot out.
 
-5. Care and Maintenance
+3. Care and Maintenance
 
 Proper care and maintenance will prolong the life of your TrekStar Hiking Sandals. Follow these guidelines:
 
@@ -89,6 +93,7 @@ Proper care and maintenance will prolong the life of your TrekStar Hiking Sandal
 4. Regularly check the straps, buckles, and footbed for any signs of wear or damage. If any issues are found, discontinue use and contact customer support.
 
 ## Caution Information
+
 1. Do not wear the sandals without properly adjusting the straps. Always ensure a secure and comfortable fit by adjusting the straps according to your foot size and preference.
 
 2. Do not use the sandals for activities they are not designed for. The TrekStar Hiking Sandals are intended for hiking and outdoor activities. Avoid using them for sports or activities with high impact or excessive wear.
@@ -110,9 +115,11 @@ Proper care and maintenance will prolong the life of your TrekStar Hiking Sandal
 10. Do not disregard the warranty terms and conditions. Familiarize yourself with the warranty information provided with the sandals and follow the recommended guidelines for warranty claims and returns.
 
 ## Warranty Information
+
 Certainly! Here's the Warranty Information for the TrekStar Hiking Sandals:
 
 ## Warranty Information
+
 - Warranty Coverage: The TrekStar Hiking Sandals are covered by a 1-year limited warranty from the date of purchase. The warranty covers manufacturing defects and workmanship under normal use.
 
 - Warranty Claims: If you encounter any issues with your sandals during the warranty period, please contact our customer care team (details provided below) to initiate a warranty claim. Our team will guide you through the process and assist you with the necessary steps.
@@ -125,6 +132,7 @@ Certainly! Here's the Warranty Information for the TrekStar Hiking Sandals:
 
 For any warranty-related inquiries or to initiate a warranty claim, please contact our customer care team:
 TrekStar Hiking Sandals Customer Care
+
 - Phone: 1-800-123-4567
 - Email: support@trekstar.com
 - Hours of Operation: Monday to Friday, 9:00 AM to 5:00 PM (EST)
@@ -134,35 +142,38 @@ Our customer care team is dedicated to providing excellent service and ensuring 
 Please note that the warranty is valid only for the original purchaser and is non-transferable.
 
 ## Return Policy
-- If Membership status "None        ":	Returns are accepted within 30 days of purchase, provided the tent is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Gold":	Returns are accepted within 60 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
-- If Membership status "Platinum":	Returns are accepted within 90 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+
+- If Membership status "None ": Returns are accepted within 30 days of purchase, provided the tent is unused, undamaged and in its original packaging. Customer is responsible for the cost of return shipping. Once the returned item is received, a refund will be issued for the cost of the item minus a 10% restocking fee. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+- If Membership status "Gold": Returns are accepted within 60 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided. Once the returned item is received, a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
+- If Membership status "Platinum": Returns are accepted within 90 days of purchase, provided the tent is unused, undamaged and in its original packaging. Free return shipping is provided, and a full refund will be issued. If the item was damaged during shipping or if there is a defect, the customer should contact customer service within 7 days of receiving the item.
 
 ## Reviews
-1) Rating: 5
+
+1. Rating: 5
    Review: I absolutely love my TrekStar Hiking Sandals! They provide excellent comfort and support during long hikes. The adjustable straps allow for a perfect fit, and the durable construction gives me confidence on rugged terrains. These sandals are a must-have for any outdoor enthusiast!
 
-2) Rating: 4
+2. Rating: 4
    Review: The TrekStar Hiking Sandals are great for warm weather adventures. They have a sturdy sole that offers good traction, and the open design keeps my feet cool. The straps are easy to adjust, ensuring a secure fit. The only improvement I would suggest is adding more cushioning for added comfort.
 
-3) Rating: 3
+3. Rating: 3
    Review: The TrekStar Hiking Sandals are decent for the price. They are lightweight and breathable, making them suitable for summer hikes. However, I found that the sizing runs slightly small, so I recommend going up a size for a more comfortable fit. The durability could also be improved for longer-lasting use.
 
-4) Rating: 5
+4. Rating: 5
    Review: I am impressed with the quality of the TrekStar Hiking Sandals. They are durable and can withstand various terrains. The adjustable straps provide a customized fit, and the sandals offer good arch support. I've worn them on multiple hikes, and they have held up exceptionally well. Highly recommended!
 
-5) Rating: 4
+5. Rating: 4
    Review: The TrekStar Hiking Sandals are a reliable choice for outdoor activities. They offer excellent breathability, keeping my feet cool on hot days. The traction is reliable on most surfaces, and the adjustable straps allow for a secure and comfortable fit. My only suggestion would be to add more padding to the footbed for enhanced comfort.
 
 ## FAQ
-79) Are the TrekStar Hiking Sandals suitable for water-based activities?
-   Yes, the TrekStar Hiking Sandals are designed with quick-drying synthetic materials and excellent traction, making them suitable for activities such as river crossings and beach walks.
 
-80) How do I find the right size for the TrekStar Hiking Sandals?
-   To find the right size for the TrekStar Hiking Sandals, refer to the manufacturer's sizing chart and measure your feet according to their guidelines.
+79. Are the TrekStar Hiking Sandals suitable for water-based activities?
+    Yes, the TrekStar Hiking Sandals are designed with quick-drying synthetic materials and excellent traction, making them suitable for activities such as river crossings and beach walks.
 
-81) Can I wear the TrekStar Hiking Sandals with socks?
-   While the TrekStar Hiking Sandals are designed to be worn barefoot, you may choose to wear them with thin, moisture-wicking socks for additional comfort and blister prevention.
+80. How do I find the right size for the TrekStar Hiking Sandals?
+    To find the right size for the TrekStar Hiking Sandals, refer to the manufacturer's sizing chart and measure your feet according to their guidelines.
 
-82) How do I clean and maintain the TrekStar Hiking Sandals?
-   To clean the TrekStar Hiking Sandals, simply rinse them with water and use a soft brush to remove any dirt or debris. Allow them to air dry away from direct sunlight.
+81. Can I wear the TrekStar Hiking Sandals with socks?
+    While the TrekStar Hiking Sandals are designed to be worn barefoot, you may choose to wear them with thin, moisture-wicking socks for additional comfort and blister prevention.
+
+82. How do I clean and maintain the TrekStar Hiking Sandals?
+    To clean the TrekStar Hiking Sandals, simply rinse them with water and use a soft brush to remove any dirt or debris. Allow them to air dry away from direct sunlight.

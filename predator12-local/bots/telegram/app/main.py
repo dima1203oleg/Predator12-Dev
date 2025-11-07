@@ -33,6 +33,7 @@ except ImportError:
 # Імпорт агента для керування природною мовою
 try:
     from agents.supervisor import ProductionSupervisor
+
     from backend.app.agents.handlers import NaturalLanguageController
 
     AGENT_AVAILABLE = True

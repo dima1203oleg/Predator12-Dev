@@ -1,7 +1,5 @@
-"""
-Production Configuration for Predator Analytics
-Environment-specific settings and feature flags
-"""
+"""Production Configuration for Predator Analytics Environment-specific
+settings and feature flags."""
 
 from __future__ import annotations
 
@@ -138,7 +136,7 @@ class APIConfig:
 
 @dataclass
 class Config:
-    """Main configuration class"""
+    """Main configuration class."""
 
     environment: Environment = Environment(os.getenv("ENVIRONMENT", "development"))
     debug: bool = os.getenv("DEBUG", "false").lower() == "true"
@@ -174,7 +172,7 @@ class Config:
     )
 
     def __post_init__(self):
-        """Post-initialization setup"""
+        """Post-initialization setup."""
         # Environment-specific overrides
         if self.environment == Environment.PRODUCTION:
             self.debug = False
@@ -204,11 +202,11 @@ class Config:
         return self.environment == Environment.TESTING
 
     def get_feature(self, feature_name: str, default: bool = False) -> bool:
-        """Get feature flag value"""
+        """Get feature flag value."""
         return self.features.get(feature_name, default)
 
     def to_dict(self) -> dict[str, any]:
-        """Convert config to dictionary"""
+        """Convert config to dictionary."""
         return {
             "environment": self.environment.value,
             "debug": self.debug,
@@ -249,12 +247,12 @@ DEVELOPMENT_CONFIG = {
 
 
 def get_config() -> Config:
-    """Get the global configuration instance"""
+    """Get the global configuration instance."""
     return config
 
 
 def update_config_from_env():
-    """Update configuration from environment variables"""
+    """Update configuration from environment variables."""
     global config
     config = Config()
     return config

@@ -37,57 +37,67 @@
 ### Варіант 2: Ручне налаштування
 
 \`\`\`bash
+
 # 1. Ініціалізація БД
+
 ./scripts/init_local_db.sh
 
 # 2. Міграції
+
 ./scripts/migrate_db.sh
 
 # 3. Smoke тести
+
 ./smoke_tests/run_smoke.sh
 
 # 4. Запуск
+
 make dev
 \`\`\`
 
 ### Варіант 3: Makefile команди
 
 \`\`\`bash
-make setup    # Перевірка
-make initdb   # Ініціалізація БД
-make migrate  # Міграції
-make dev      # Запуск
+make setup # Перевірка
+make initdb # Ініціалізація БД
+make migrate # Міграції
+make dev # Запуск
 \`\`\`
 
 ---
 
 ## 📊 Поточний стан:
 
-| Компонент | Статус |
-|-----------|--------|
-| Python 3.11 | ✅ Встановлено |
-| Node.js | ✅ Готовий |
-| PostgreSQL@14 | ✅ Працює |
-| Backend venv | ✅ Створено |
-| Frontend deps | ✅ Встановлено |
-| .env | ✅ Готовий |
-| База даних | ⏳ Потребує ініціалізації |
+| Компонент     | Статус                    |
+| ------------- | ------------------------- |
+| Python 3.11   | ✅ Встановлено            |
+| Node.js       | ✅ Готовий                |
+| PostgreSQL@14 | ✅ Працює                 |
+| Backend venv  | ✅ Створено               |
+| Frontend deps | ✅ Встановлено            |
+| .env          | ✅ Готовий                |
+| База даних    | ⏳ Потребує ініціалізації |
 
 ---
 
 ## 🔗 Корисні команди:
 
 \`\`\`bash
+
 # Перевірка Python
+
 /opt/homebrew/bin/python3.11 --version
 
 # Перевірка PostgreSQL
+
 brew services list | grep postgresql
 
 # Перевірка статусу системи
+
 make status
 
 # Допомога
+
 make help
 \`\`\`
 

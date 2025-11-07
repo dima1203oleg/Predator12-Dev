@@ -7,7 +7,7 @@ import asyncio
 import logging
 import os
 
-from aiogram import Bot, Dispatcher, F, types
+from aiogram import Bot, Dispatcher, types
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.filters import Command, CommandStart
 from prometheus_client import Counter, start_http_server

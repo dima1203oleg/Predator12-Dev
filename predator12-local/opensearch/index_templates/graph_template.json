@@ -1,9 +1,7 @@
 {
   "index_template": {
     "name": "graph_template",
-    "index_patterns": [
-      "graph_*"
-    ],
+    "index_patterns": ["graph_*"],
     "template": {
       "settings": {
         "number_of_shards": 2,

@@ -3,7 +3,8 @@ enabled: true
 approver: "owner:dima"
 scopes:
   - name: ci-cd
-    actions: [build, test, scan, push-image, helm-deploy, argocd-sync, migrate-db]
+    actions:
+      [build, test, scan, push-image, helm-deploy, argocd-sync, migrate-db]
     environments: [dev, stage]
   - name: data
     actions: [etl-run, reindex, vectorize, opensearch-refresh]

@@ -19,6 +19,7 @@
 Система множинних тем дозволяє користувачам динамічно змінювати зовнішній вигляд інтерфейсу без перезавантаження. Всі теми оптимізовані для кіберпанк-естетики та професійного використання.
 
 ### Особливості:
+
 - ✅ **7 унікальних тем** - від Dark Cyber до Retro Terminal
 - ✅ **Динамічне переключення** - без перезавантаження сторінки
 - ✅ **LocalStorage** - збереження обраної теми
@@ -32,49 +33,63 @@
 ## 🎨 Доступні теми
 
 ### 1. 🌌 Dark Cyber (Default)
+
 **ID:** `dark-cyber`
+
 - **Тип:** Dark
 - **Палітра:** Cyan (#00f2ff) + Purple (#8a2be2)
 - **Стиль:** Futuristic cyberpunk
 - **Використання:** Основна темна тема для щоденної роботи
 
 ### 2. 🟢 Matrix
+
 **ID:** `matrix`
+
 - **Тип:** Dark
 - **Палітра:** Neon Green (#00ff41)
 - **Стиль:** Classic terminal matrix
 - **Використання:** Для фанатів Matrix та консольного інтерфейсу
 
 ### 3. 🌅 Sunset
+
 **ID:** `sunset`
+
 - **Тип:** Dark
 - **Палітра:** Orange (#ff6b35) + Purple (#c44cff)
 - **Стиль:** Warm sunset gradient
 - **Використання:** Тепла альтернатива для вечірньої роботи
 
 ### 4. 🌊 Ocean
+
 **ID:** `ocean`
+
 - **Тип:** Dark
 - **Палітра:** Deep Blue (#00d4ff) + Azure
 - **Стиль:** Deep ocean depths
 - **Використання:** Спокійна тема з морською гамою
 
 ### 5. 🗼 Neon Tokyo
+
 **ID:** `neon-tokyo`
+
 - **Тип:** Dark
 - **Палітра:** Pink (#ff0099) + Cyan (#00ffff)
 - **Стиль:** Japanese neon streets
 - **Використання:** Яскрава неонова тема для креативної роботи
 
 ### 6. 💾 Retro Terminal
+
 **ID:** `retro-terminal`
+
 - **Тип:** Dark
 - **Палітра:** Amber (#ffb000)
 - **Стиль:** Classic monochrome terminal
 - **Використання:** Ностальгійна тема старих терміналів
 
 ### 7. ☀️ Light
+
 **ID:** `light`
+
 - **Тип:** Light
 - **Палітра:** Sky Blue (#0ea5e9) + Purple (#8b5cf6)
 - **Стиль:** Clean modern light
@@ -93,10 +108,10 @@ npm install @mui/material @emotion/react @emotion/styled
 ### 2. Обгортання додатку в ThemeProvider
 
 ```tsx
-import React from 'react';
-import { NexusThemeProvider } from './contexts/ThemeContext';
-import ThemeSwitcher from './components/theme/ThemeSwitcher';
-import App from './App';
+import React from "react";
+import { NexusThemeProvider } from "./contexts/ThemeContext";
+import ThemeSwitcher from "./components/theme/ThemeSwitcher";
+import App from "./App";
 
 const Root = () => {
   return (
@@ -113,9 +128,9 @@ export default Root;
 ### 3. Використання теми в компонентах
 
 ```tsx
-import React from 'react';
-import { Box, Typography } from '@mui/material';
-import { useNexusTheme } from '../contexts/ThemeContext';
+import React from "react";
+import { Box, Typography } from "@mui/material";
+import { useNexusTheme } from "../contexts/ThemeContext";
 
 const MyComponent = () => {
   const { colors, currentTheme } = useNexusTheme();
@@ -133,9 +148,9 @@ const MyComponent = () => {
         variant="h4"
         sx={{
           background: colors.gradients.primary,
-          backgroundClip: 'text',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
+          backgroundClip: "text",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
         }}
       >
         {currentTheme.name} Theme
@@ -153,33 +168,29 @@ const MyComponent = () => {
 
 ```tsx
 interface ThemeContextValue {
-  currentTheme: ThemeConfig;      // Поточна конфігурація теми
-  currentThemeId: string;          // ID поточної теми
-  setTheme: (themeId: string) => void;  // Встановити тему
-  toggleTheme: () => void;         // Перемкнути dark/light
-  colors: ThemeColorPalette;       // Швидкий доступ до кольорів
+  currentTheme: ThemeConfig; // Поточна конфігурація теми
+  currentThemeId: string; // ID поточної теми
+  setTheme: (themeId: string) => void; // Встановити тему
+  toggleTheme: () => void; // Перемкнути dark/light
+  colors: ThemeColorPalette; // Швидкий доступ до кольорів
 }
 ```
 
 ### useNexusTheme Hook
 
 ```tsx
-import { useNexusTheme } from '../contexts/ThemeContext';
+import { useNexusTheme } from "../contexts/ThemeContext";
 
 const MyComponent = () => {
   const {
-    currentTheme,    // Поточна тема
-    currentThemeId,  // ID теми
-    setTheme,        // Функція зміни теми
-    toggleTheme,     // Функція toggle
-    colors           // Колірна палітра
+    currentTheme, // Поточна тема
+    currentThemeId, // ID теми
+    setTheme, // Функція зміни теми
+    toggleTheme, // Функція toggle
+    colors, // Колірна палітра
   } = useNexusTheme();
 
-  return (
-    <button onClick={() => setTheme('matrix')}>
-      Switch to Matrix
-    </button>
-  );
+  return <button onClick={() => setTheme("matrix")}>Switch to Matrix</button>;
 };
 ```
 
@@ -235,28 +246,28 @@ interface ThemeColorPalette {
 ### Крок 1: Визначте конфігурацію
 
 ```tsx
-import { ThemeConfig } from '../theme/themes';
+import { ThemeConfig } from "../theme/themes";
 
 export const myCustomTheme: ThemeConfig = {
-  id: 'my-custom-theme',
-  name: 'My Custom',
-  description: 'Моя унікальна тема',
-  icon: '🌟',
-  type: 'dark',
+  id: "my-custom-theme",
+  name: "My Custom",
+  description: "Моя унікальна тема",
+  icon: "🌟",
+  type: "dark",
   colors: {
     background: {
-      default: '#1a1a1a',
-      paper: '#2a2a2a',
-      elevated: '#3a3a3a',
+      default: "#1a1a1a",
+      paper: "#2a2a2a",
+      elevated: "#3a3a3a",
     },
     primary: {
-      main: '#ff6b9d',
-      light: '#ff8eb3',
-      dark: '#e54f7f',
-      glow: 'rgba(255, 107, 157, 0.4)'
+      main: "#ff6b9d",
+      light: "#ff8eb3",
+      dark: "#e54f7f",
+      glow: "rgba(255, 107, 157, 0.4)",
     },
     // ... решта кольорів
-  }
+  },
 };
 ```
 
@@ -264,13 +275,13 @@ export const myCustomTheme: ThemeConfig = {
 
 ```tsx
 // В themes.ts
-import { myCustomTheme } from './customThemes';
+import { myCustomTheme } from "./customThemes";
 
 export const allThemes: ThemeConfig[] = [
   darkCyberTheme,
   matrixTheme,
   // ... інші теми
-  myCustomTheme,  // Додайте свою тему
+  myCustomTheme, // Додайте свою тему
 ];
 ```
 
@@ -278,7 +289,7 @@ export const allThemes: ThemeConfig[] = [
 
 ```tsx
 const { setTheme } = useNexusTheme();
-setTheme('my-custom-theme');
+setTheme("my-custom-theme");
 ```
 
 ---
@@ -297,6 +308,7 @@ Floating кнопка для відкриття діалогу вибору те
 ```
 
 **Особливості:**
+
 - Floating button з gradient background
 - Responsive dialog з превью тем
 - Smooth анімації та transitions
@@ -308,12 +320,11 @@ Floating кнопка для відкриття діалогу вибору те
 React Context Provider для управління темами.
 
 ```tsx
-<NexusThemeProvider defaultThemeId="dark-cyber">
-  {children}
-</NexusThemeProvider>
+<NexusThemeProvider defaultThemeId="dark-cyber">{children}</NexusThemeProvider>
 ```
 
 **Props:**
+
 - `defaultThemeId?: string` - ID теми за замовчуванням
 - `children: ReactNode` - Дочірні компоненти
 
@@ -344,7 +355,7 @@ const themeId = getCurrentThemeId(); // 'dark-cyber' | null
 ```tsx
 useEffect(() => {
   const unsubscribe = onThemeChange((theme) => {
-    console.log('Theme changed to:', theme.name);
+    console.log("Theme changed to:", theme.name);
   });
 
   return unsubscribe;
@@ -356,9 +367,9 @@ useEffect(() => {
 Отримати конфігурацію теми за ID.
 
 ```tsx
-import { getThemeById } from '../theme/themes';
+import { getThemeById } from "../theme/themes";
 
-const theme = getThemeById('matrix');
+const theme = getThemeById("matrix");
 ```
 
 ### createNexusTheme()
@@ -366,7 +377,7 @@ const theme = getThemeById('matrix');
 Створити Material-UI theme з конфігурації.
 
 ```tsx
-import { createNexusTheme } from '../theme/themes';
+import { createNexusTheme } from "../theme/themes";
 
 const muiTheme = createNexusTheme(myThemeConfig);
 ```
@@ -378,9 +389,9 @@ const muiTheme = createNexusTheme(myThemeConfig);
 ### Приклад 1: Компонент з темою
 
 ```tsx
-import React from 'react';
-import { Card, CardContent, Typography, Button } from '@mui/material';
-import { useNexusTheme } from '../contexts/ThemeContext';
+import React from "react";
+import { Card, CardContent, Typography, Button } from "@mui/material";
+import { useNexusTheme } from "../contexts/ThemeContext";
 
 const ThemedCard = () => {
   const { colors, currentTheme } = useNexusTheme();
@@ -390,7 +401,7 @@ const ThemedCard = () => {
       sx={{
         background: colors.background.paper,
         border: `1px solid ${colors.border.light}`,
-        '&:hover': {
+        "&:hover": {
           borderColor: colors.primary.main,
           boxShadow: `0 8px 32px ${colors.primary.glow}`,
         },
@@ -421,17 +432,17 @@ const ThemedCard = () => {
 ### Приклад 2: Theme Toggle Button
 
 ```tsx
-import React from 'react';
-import { IconButton } from '@mui/material';
-import { Brightness4, Brightness7 } from '@mui/icons-material';
-import { useNexusTheme } from '../contexts/ThemeContext';
+import React from "react";
+import { IconButton } from "@mui/material";
+import { Brightness4, Brightness7 } from "@mui/icons-material";
+import { useNexusTheme } from "../contexts/ThemeContext";
 
 const ThemeToggle = () => {
   const { currentTheme, toggleTheme } = useNexusTheme();
 
   return (
     <IconButton onClick={toggleTheme}>
-      {currentTheme.type === 'dark' ? <Brightness7 /> : <Brightness4 />}
+      {currentTheme.type === "dark" ? <Brightness7 /> : <Brightness4 />}
     </IconButton>
   );
 };
@@ -440,19 +451,16 @@ const ThemeToggle = () => {
 ### Приклад 3: Theme Selector Dropdown
 
 ```tsx
-import React from 'react';
-import { Select, MenuItem } from '@mui/material';
-import { useNexusTheme } from '../contexts/ThemeContext';
-import { allThemes } from '../theme/themes';
+import React from "react";
+import { Select, MenuItem } from "@mui/material";
+import { useNexusTheme } from "../contexts/ThemeContext";
+import { allThemes } from "../theme/themes";
 
 const ThemeSelector = () => {
   const { currentThemeId, setTheme } = useNexusTheme();
 
   return (
-    <Select
-      value={currentThemeId}
-      onChange={(e) => setTheme(e.target.value)}
-    >
+    <Select value={currentThemeId} onChange={(e) => setTheme(e.target.value)}>
       {allThemes.map((theme) => (
         <MenuItem key={theme.id} value={theme.id}>
           {theme.icon} {theme.name}
@@ -502,13 +510,13 @@ const { colors } = useNexusTheme();
 <Typography
   sx={{
     background: colors.gradients.primary,
-    backgroundClip: 'text',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
   }}
 >
   Gradient Text
-</Typography>
+</Typography>;
 ```
 
 ### 3. Додавайте hover ефекти з glow
@@ -516,7 +524,7 @@ const { colors } = useNexusTheme();
 ```tsx
 <Button
   sx={{
-    '&:hover': {
+    "&:hover": {
       boxShadow: `0 0 20px ${colors.primary.glow}`,
     },
   }}
@@ -531,7 +539,7 @@ const { colors } = useNexusTheme();
 <Box
   sx={{
     background: colors.background.paper,
-    transition: 'all 0.3s ease',
+    transition: "all 0.3s ease",
   }}
 />
 ```
@@ -545,10 +553,11 @@ const { colors } = useNexusTheme();
 **Проблема:** LocalStorage не працює
 
 **Рішення:**
+
 ```tsx
 // Перевірте, чи працює localStorage
-if (typeof window !== 'undefined') {
-  console.log(localStorage.getItem('predator12-theme'));
+if (typeof window !== "undefined") {
+  console.log(localStorage.getItem("predator12-theme"));
 }
 ```
 
@@ -557,6 +566,7 @@ if (typeof window !== 'undefined') {
 **Проблема:** Компонент не підписаний на зміни
 
 **Рішення:**
+
 ```tsx
 // Використовуйте хук у компоненті
 const { colors } = useNexusTheme();
@@ -567,6 +577,7 @@ const { colors } = useNexusTheme();
 **Проблема:** MUI використовує власну тему
 
 **Рішення:**
+
 ```tsx
 // MUI автоматично отримує тему через ThemeProvider
 // Використовуйте стандартні кольори MUI

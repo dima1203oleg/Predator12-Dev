@@ -40,8 +40,9 @@
 ```
 
 **Code:**
+
 ```tsx
-setTheme('dark-cyber');
+setTheme("dark-cyber");
 ```
 
 ---
@@ -82,8 +83,9 @@ setTheme('dark-cyber');
 ```
 
 **Code:**
+
 ```tsx
-setTheme('matrix');
+setTheme("matrix");
 ```
 
 ---
@@ -124,8 +126,9 @@ setTheme('matrix');
 ```
 
 **Code:**
+
 ```tsx
-setTheme('sunset');
+setTheme("sunset");
 ```
 
 ---
@@ -166,8 +169,9 @@ setTheme('sunset');
 ```
 
 **Code:**
+
 ```tsx
-setTheme('ocean');
+setTheme("ocean");
 ```
 
 ---
@@ -208,8 +212,9 @@ setTheme('ocean');
 ```
 
 **Code:**
+
 ```tsx
-setTheme('neon-tokyo');
+setTheme("neon-tokyo");
 ```
 
 ---
@@ -250,8 +255,9 @@ setTheme('neon-tokyo');
 ```
 
 **Code:**
+
 ```tsx
-setTheme('retro-terminal');
+setTheme("retro-terminal");
 ```
 
 ---
@@ -292,8 +298,9 @@ setTheme('retro-terminal');
 ```
 
 **Code:**
+
 ```tsx
-setTheme('light');
+setTheme("light");
 ```
 
 ---
@@ -319,6 +326,7 @@ setTheme('light');
 ## 🎨 COLOR USAGE GUIDE
 
 ### Backgrounds
+
 ```
 Use:     colors.background.default  (Main app background)
          colors.background.paper     (Cards, panels)
@@ -326,6 +334,7 @@ Use:     colors.background.default  (Main app background)
 ```
 
 ### Text
+
 ```
 Primary:    colors.text.primary      (Headings, important)
 Secondary:  colors.text.secondary    (Descriptions, hints)
@@ -334,6 +343,7 @@ Glow:       colors.text.glow         (Highlighted text)
 ```
 
 ### Borders
+
 ```
 Light:   colors.border.light      (Subtle borders)
 Medium:  colors.border.medium     (Normal borders)
@@ -341,6 +351,7 @@ Heavy:   colors.border.heavy      (Focused borders)
 ```
 
 ### Effects
+
 ```
 Glow:      boxShadow: `0 0 20px ${colors.primary.glow}`
 Gradient:  background: colors.gradients.primary
@@ -353,16 +364,13 @@ Hover:     transform: translateY(-2px)
 
 ```tsx
 // Floating button in UI
-<ThemeSwitcher
-  currentThemeId={currentThemeId}
-  onThemeChange={setTheme}
-/>
+<ThemeSwitcher currentThemeId={currentThemeId} onThemeChange={setTheme} />;
 
 // Programmatic
 const { setTheme } = useNexusTheme();
-setTheme('matrix');        // Green terminal
-setTheme('neon-tokyo');    // Pink neon
-setTheme('ocean');         // Deep blue
+setTheme("matrix"); // Green terminal
+setTheme("neon-tokyo"); // Pink neon
+setTheme("ocean"); // Deep blue
 ```
 
 ---
@@ -388,4 +396,4 @@ Gaming:        🗼 Neon Tokyo  (3%)
 
 🎨 **Predator12 Nexus Core V3 - Theme Visual Guide**
 
-*Choose your style, change your mood!*
+_Choose your style, change your mood!_

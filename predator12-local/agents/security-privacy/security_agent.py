@@ -82,9 +82,7 @@ class PIIDetection:
 
 
 class SecurityAgent:
-    """
-    Агент безпеки та аудиту згідно з технічним завданням
-    """
+    """Агент безпеки та аудиту згідно з технічним завданням."""
 
     def __init__(self):
         self.pii_patterns = self._load_pii_patterns()
@@ -103,7 +101,7 @@ class SecurityAgent:
         self.user_roles_cache: Dict[str, List[str]] = {}
 
     def _load_pii_patterns(self) -> Dict[PIIType, List[str]]:
-        """Завантажує паттерни для виявлення PII"""
+        """Завантажує паттерни для виявлення PII."""
         return {
             PIIType.EMAIL: [r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b"],
             PIIType.PHONE: [
@@ -132,7 +130,7 @@ class SecurityAgent:
         }
 
     async def initialize(self):
-        """Ініціалізує SecurityAgent"""
+        """Ініціалізує SecurityAgent."""
         logger.info("🔒 Initializing Security Agent...")
 
         # Завантажуємо існуючі інциденти з БД
@@ -144,7 +142,7 @@ class SecurityAgent:
         logger.info("✅ Security Agent initialized successfully")
 
     async def load_security_incidents(self):
-        """Завантажує інциденти безпеки з БД"""
+        """Завантажує інциденти безпеки з БД."""
         try:
             import asyncpg
 
@@ -200,7 +198,7 @@ class SecurityAgent:
             logger.error(f"Failed to load security incidents: {e}")
 
     async def start_security_monitoring(self):
-        """Запускає постійний моніторинг безпеки"""
+        """Запускає постійний моніторинг безпеки."""
         logger.info("👁️ Starting continuous security monitoring...")
 
         while True:
@@ -226,7 +224,7 @@ class SecurityAgent:
     async def validate_access_request(
         self, user_token: str, resource: str, action: str
     ) -> Dict[str, Any]:
-        """Валідує запит на доступ до ресурсу"""
+        """Валідує запит на доступ до ресурсу."""
         try:
             # Декодуємо JWT токен
             user_info = await self.decode_user_token(user_token)
@@ -279,7 +277,7 @@ class SecurityAgent:
             return {"allowed": False, "reason": "Validation error"}
 
     async def decode_user_token(self, token: str) -> Optional[Dict[str, Any]]:
-        """Декодує JWT токен користувача"""
+        """Декодує JWT токен користувача."""
         try:
             # Отримуємо публічний ключ від Keycloak
             async with aiohttp.ClientSession() as session:
@@ -287,7 +285,7 @@ class SecurityAgent:
                     f"{self.keycloak_url}/realms/predator11/protocol/openid-connect/certs"
                 ) as response:
                     if response.status == 200:
-                        keys_data = await response.json()
+                        await response.json()
                         # Для спрощення використовуємо перший ключ
                         # У продакшені потрібна правильна верифікація за kid
 
@@ -303,7 +301,7 @@ class SecurityAgent:
             return None
 
     async def is_user_blocked(self, user_id: str) -> bool:
-        """Перевіряє чи заблокований користувач"""
+        """Перевіряє чи заблокований користувач."""
         # Перевіряємо в кеші та БД
         try:
             import asyncpg
@@ -325,7 +323,7 @@ class SecurityAgent:
             return False
 
     async def get_resource_security_level(self, resource: str) -> SecurityLevel:
-        """Визначає рівень безпеки ресурсу"""
+        """Визначає рівень безпеки ресурсу."""
         # Правила для визначення рівня безпеки
         if "pii" in resource.lower() or "personal" in resource.lower():
             return SecurityLevel.RESTRICTED
@@ -341,7 +339,7 @@ class SecurityAgent:
     async def check_rbac_permissions(
         self, user_roles: List[str], resource: str, action: str
     ) -> bool:
-        """Перевіряє RBAC права доступу"""
+        """Перевіряє RBAC права доступу."""
         # Матриця прав доступу згідно з ТЗ
         permissions_matrix = {
             "admin": ["*"],  # Повні права
@@ -382,7 +380,7 @@ class SecurityAgent:
     async def detect_and_mask_pii(
         self, data: Dict[str, Any], user_has_pii_access: bool = False
     ) -> Dict[str, Any]:
-        """Виявляє та маскує PII дані"""
+        """Виявляє та маскує PII дані."""
         masked_data = data.copy()
         detections = []
 
@@ -438,7 +436,7 @@ class SecurityAgent:
         }
 
     async def mask_pii_value(self, value: str, pii_type: PIIType) -> str:
-        """Маскує PII значення"""
+        """Маскує PII значення."""
         if pii_type == PIIType.EMAIL:
             # email@domain.com -> e***@d***.com
             parts = value.split("@")
@@ -487,7 +485,7 @@ class SecurityAgent:
             return value[:2] + "*" * (len(value) - 4) + value[-2:]
 
     async def log_pii_detection(self, detection: PIIDetection, user_has_access: bool):
-        """Логує виявлення PII"""
+        """Логує виявлення PII."""
         log_entry = {
             "timestamp": datetime.now().isoformat(),
             "field_name": detection.field_name,
@@ -508,7 +506,7 @@ class SecurityAgent:
         await self.save_pii_audit_log(log_entry)
 
     async def save_pii_audit_log(self, log_entry: Dict[str, Any]):
-        """Зберігає лог PII в БД"""
+        """Зберігає лог PII в БД."""
         try:
             import asyncpg
 
@@ -552,7 +550,7 @@ class SecurityAgent:
             logger.error(f"Failed to save PII audit log: {e}")
 
     async def log_access_attempt(self, user_id: str, resource: str, action: str, success: bool):
-        """Логує спроби доступу"""
+        """Логує спроби доступу."""
         access_log = {
             "timestamp": datetime.now().isoformat(),
             "user_id": user_id,
@@ -584,7 +582,7 @@ class SecurityAgent:
         description: str,
         evidence: Dict[str, Any] = None,
     ):
-        """Логує інцидент безпеки"""
+        """Логує інцидент безпеки."""
         incident_id = hashlib.md5(
             f"{datetime.now().isoformat()}-{incident_type}-{source_ip}".encode()
         ).hexdigest()[:16]
@@ -612,7 +610,7 @@ class SecurityAgent:
         logger.warning(f"🚨 Security incident: {incident_type} - {description}")
 
     async def save_security_incident(self, incident: SecurityIncident):
-        """Зберігає інцидент безпеки в БД"""
+        """Зберігає інцидент безпеки в БД."""
         try:
             import asyncpg
 
@@ -642,7 +640,7 @@ class SecurityAgent:
             logger.error(f"Failed to save security incident: {e}")
 
     async def send_security_alert(self, incident: SecurityIncident):
-        """Надсилає алерт про інцидент безпеки"""
+        """Надсилає алерт про інцидент безпеки."""
         try:
             # Відправляємо в Alertmanager
             alert_data = [
@@ -670,7 +668,7 @@ class SecurityAgent:
             logger.error(f"Failed to send security alert: {e}")
 
     async def block_user(self, user_id: str, reason: str):
-        """Блокує користувача"""
+        """Блокує користувача."""
         try:
             import asyncpg
 
@@ -715,7 +713,7 @@ class SecurityAgent:
             logger.error(f"Failed to block user {user_id}: {e}")
 
     async def check_suspicious_activity(self):
-        """Перевіряє підозрілу активність"""
+        """Перевіряє підозрілу активність."""
         # Аналізуємо останні невдалі спроби входу
         suspicious_users = [
             user_id for user_id, count in self.failed_login_attempts.items() if count >= 3
@@ -731,7 +729,7 @@ class SecurityAgent:
             )
 
     async def analyze_access_logs(self):
-        """Аналізує логи доступу для виявлення аномалій"""
+        """Аналізує логи доступу для виявлення аномалій."""
         # Тут би був аналіз патернів доступу, але для демо просто перевіряємо кількість
         current_hour = datetime.now().replace(minute=0, second=0, microsecond=0)
 
@@ -739,12 +737,11 @@ class SecurityAgent:
         logger.debug("🔍 Analyzing access logs for anomalies...")
 
     async def cleanup_blocked_ips(self):
-        """Очищає застарілі заблоковані IP"""
+        """Очищає застарілі заблоковані IP."""
         # В реальній системі тут була б логіка розблокування IP через певний час
-        pass
 
     async def update_user_roles_cache(self):
-        """Оновлює кеш ролей користувачів"""
+        """Оновлює кеш ролей користувачів."""
         try:
             # В реальній системі тут би був запит до Keycloak API
             # або БД для оновлення кешу ролей
@@ -756,7 +753,7 @@ class SecurityAgent:
     async def get_pii_audit_report(
         self, start_date: datetime, end_date: datetime
     ) -> Dict[str, Any]:
-        """Генерує звіт про доступ до PII"""
+        """Генерує звіт про доступ до PII."""
         try:
             import asyncpg
 
@@ -800,7 +797,7 @@ class SecurityAgent:
             return {"error": str(e)}
 
     async def get_security_status(self) -> Dict[str, Any]:
-        """Повертає поточний статус безпеки"""
+        """Повертає поточний статус безпеки."""
         recent_incidents = [
             incident
             for incident in self.security_incidents
@@ -831,7 +828,7 @@ security_agent = SecurityAgent()
 
 
 async def main():
-    """Основна функція для запуску агента"""
+    """Основна функція для запуску агента."""
     logger.info("🚀 Starting Predator Analytics Security Agent...")
 
     try:

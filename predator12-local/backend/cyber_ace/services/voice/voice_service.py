@@ -9,7 +9,6 @@ Author: CYBER-ACE Team
 Version: 1.0.0
 """
 
-import asyncio
 from typing import Any, Dict, Optional
 
 import azure.cognitiveservices.speech as speechsdk

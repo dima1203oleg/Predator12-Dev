@@ -33,8 +33,7 @@ dp = Dispatcher()
 async def handle_start(message: types.Message) -> None:
     """Handle /start command."""
     await message.answer(
-        "👋 Вітаємо у Predator 12 Telegram Bot.\n"
-        "Доступні команди: /help, /status, /upload, /id"
+        "👋 Вітаємо у Predator 12 Telegram Bot.\n" "Доступні команди: /help, /status, /upload, /id"
     )
 
 
@@ -80,4 +79,3 @@ async def main() -> None:
 
 if __name__ == "__main__":
     asyncio.run(main())
-

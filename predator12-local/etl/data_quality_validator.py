@@ -4,7 +4,6 @@ Implements data quality checks specific to customs declarations format
 """
 
 import logging
-import re
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 

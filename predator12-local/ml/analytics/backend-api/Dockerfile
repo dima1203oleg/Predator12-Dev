@@ -1,6 +1,8 @@
 # Dockerfile for Predator Analytics FastAPI Backend
 FROM python:3.10-slim
 
+LABEL Name="analytics-backend-api" Version="1.0.0"
+
 # Set working directory
 WORKDIR /app
 

@@ -64,6 +64,7 @@ pip list
 #### 4.1 Pydantic v2 зміни
 
 **Було (v1):**
+
 ```python
 from pydantic import BaseModel
 
@@ -80,6 +81,7 @@ user_json = user.json()
 ```
 
 **Стало (v2):**
+
 ```python
 from pydantic import BaseModel, ConfigDict
 
@@ -96,6 +98,7 @@ user_copy = user.model_copy()        # замість .copy()
 ```
 
 **Основні зміни:**
+
 - `.dict()` → `.model_dump()`
 - `.json()` → `.model_dump_json()`
 - `.parse_obj()` → `.model_validate()`
@@ -107,6 +110,7 @@ user_copy = user.model_copy()        # замість .copy()
 #### 4.2 SQLAlchemy 2.0 зміни
 
 **Було (1.4):**
+
 ```python
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import Session
@@ -122,6 +126,7 @@ users = session.query(User).filter(User.name == "John").all()
 ```
 
 **Стало (2.0):**
+
 ```python
 from sqlalchemy import select
 from sqlalchemy.orm import Mapped, mapped_column, Session
@@ -143,6 +148,7 @@ async with AsyncSession(engine) as session:
 ```
 
 **Основні зміни:**
+
 - `Column` → `mapped_column` + type hints
 - `session.query()` → `select()` + `session.execute()`
 - Додано async підтримку через `AsyncSession`
@@ -151,6 +157,7 @@ async with AsyncSession(engine) as session:
 #### 4.3 FastAPI зміни
 
 **Було:**
+
 ```python
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
@@ -162,6 +169,7 @@ async def get_user(user_id: int, db: Session = Depends(get_db)):
 ```
 
 **Стало:**
+
 ```python
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
@@ -177,12 +185,14 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
 #### 4.4 psycopg3 зміни
 
 **Було (psycopg2):**
+
 ```python
 DATABASE_URL = "postgresql://user:pass@localhost/db"
 engine = create_engine(DATABASE_URL)
 ```
 
 **Стало (psycopg3):**
+
 ```python
 # Для async
 DATABASE_URL = "postgresql+psycopg://user:pass@localhost/db"
@@ -267,12 +277,14 @@ LOG_LEVEL=INFO
 ## 📝 Checklist міграції
 
 ### Pre-migration:
+
 - [ ] Backup бази даних
 - [ ] Backup поточного venv
 - [ ] Commit всіх змін у git
 - [ ] Документуйте поточну версію залежностей
 
 ### Migration:
+
 - [ ] Створіть новий venv з Python 3.11
 - [ ] Встановіть requirements-311-modern.txt
 - [ ] Оновіть Pydantic моделі (v1 → v2)
@@ -281,6 +293,7 @@ LOG_LEVEL=INFO
 - [ ] Оновіть `.env` файл
 
 ### Post-migration:
+
 - [ ] Запустіть тести
 - [ ] Перевірте API endpoints
 - [ ] Перевірте database queries
@@ -295,11 +308,13 @@ LOG_LEVEL=INFO
 ### Проблема 1: ImportError для Pydantic
 
 **Помилка:**
+
 ```
 AttributeError: 'User' object has no attribute 'dict'
 ```
 
 **Рішення:**
+
 ```python
 # Замініть .dict() на .model_dump()
 user_dict = user.model_dump()
@@ -308,11 +323,13 @@ user_dict = user.model_dump()
 ### Проблема 2: SQLAlchemy query не працює
 
 **Помилка:**
+
 ```
 AttributeError: 'AsyncSession' object has no attribute 'query'
 ```
 
 **Рішення:**
+
 ```python
 # Використовуйте select() замість session.query()
 from sqlalchemy import select
@@ -324,11 +341,13 @@ user = result.scalar_one_or_none()
 ### Проблема 3: psycopg3 connection URL
 
 **Помилка:**
+
 ```
 NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgres
 ```
 
 **Рішення:**
+
 ```python
 # Додайте +psycopg до URL
 DATABASE_URL = "postgresql+psycopg://user:pass@localhost/db"
@@ -337,11 +356,13 @@ DATABASE_URL = "postgresql+psycopg://user:pass@localhost/db"
 ### Проблема 4: Pydantic Config
 
 **Помилка:**
+
 ```
 TypeError: BaseModel.Config is deprecated
 ```
 
 **Рішення:**
+
 ```python
 # Використовуйте model_config замість class Config
 from pydantic import ConfigDict

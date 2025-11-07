@@ -1,22 +1,19 @@
 #!/usr/bin/env python3
-"""
-📊 Model Usage Analytics & Monitoring Dashboard
-Система аналізу використання всіх 58 моделей в multi-agent системі
-"""
+"""📊 Model Usage Analytics & Monitoring Dashboard Система аналізу використання
+всіх 58 моделей в multi-agent системі."""
 
 import json
 import time
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 import matplotlib.pyplot as plt
-import pandas as pd
 
 
 class ModelUsageAnalytics:
-    """Аналітика використання моделей в multi-agent системі"""
+    """Аналітика використання моделей в multi-agent системі."""
 
     def __init__(self, log_file: str = "model_usage.log"):
         self.log_file = Path(log_file)
@@ -54,7 +51,7 @@ class ModelUsageAnalytics:
         response_time: float,
         performance_score: float = 0.0,
     ):
-        """Логування використання моделі"""
+        """Логування використання моделі."""
         timestamp = datetime.now()
 
         # Оновлення статистики моделі
@@ -113,7 +110,7 @@ class ModelUsageAnalytics:
         self.save_log_entry(log_entry)
 
     def generate_comprehensive_report(self) -> dict[str, Any]:
-        """Генерація повного аналітичного звіту"""
+        """Генерація повного аналітичного звіту."""
 
         total_models = len(self.usage_stats)
         total_requests = sum(stats["total_requests"] for stats in self.usage_stats.values())
@@ -183,7 +180,7 @@ class ModelUsageAnalytics:
         }
 
     def _generate_recommendations(self) -> list[str]:
-        """Генерація рекомендацій на основі статистики"""
+        """Генерація рекомендацій на основі статистики."""
         recommendations = []
 
         # Аналіз неактивних моделей
@@ -228,7 +225,7 @@ class ModelUsageAnalytics:
         return recommendations[:5]  # Топ-5 рекомендацій
 
     def _get_all_available_models(self) -> list[str]:
-        """Отримання списку всіх 58 доступних моделей"""
+        """Отримання списку всіх 58 доступних моделей."""
         return [
             # AI21 Labs
             "ai21-labs/ai21-jamba-1.5-large",
@@ -300,7 +297,7 @@ class ModelUsageAnalytics:
         ]
 
     def save_log_entry(self, entry: dict[str, Any]):
-        """Збереження запису в лог"""
+        """Збереження запису в лог."""
         try:
             with open(self.log_file, "a") as f:
                 f.write(json.dumps(entry) + "\n")
@@ -308,7 +305,7 @@ class ModelUsageAnalytics:
             print(f"❌ Помилка збереження логу: {e}")
 
     def load_existing_data(self):
-        """Завантаження існуючих даних з логу"""
+        """Завантаження існуючих даних з логу."""
         if not self.log_file.exists():
             return
 
@@ -331,7 +328,7 @@ class ModelUsageAnalytics:
             print(f"❌ Помилка завантаження існуючих даних: {e}")
 
     def generate_visual_report(self, save_path: str = "model_usage_report.png"):
-        """Генерація візуального звіту"""
+        """Генерація візуального звіту."""
         try:
             fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 12))
 
@@ -425,7 +422,7 @@ class ModelUsageAnalytics:
 
 
 def main():
-    """Демонстрація системи аналізу використання моделей"""
+    """Демонстрація системи аналізу використання моделей."""
     analytics = ModelUsageAnalytics()
 
     print("📊 PREDATOR ANALYTICS - MODEL USAGE ANALYTICS")

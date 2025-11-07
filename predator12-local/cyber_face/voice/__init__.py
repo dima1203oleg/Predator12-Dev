@@ -4,7 +4,6 @@ Handles speech recognition, text-to-speech, and voice commands
 """
 
 import asyncio
-import json
 import logging
 from dataclasses import dataclass
 from enum import Enum
@@ -279,7 +278,6 @@ class TextToSpeech:
         """Play audio data (placeholder)"""
         # In a real implementation, this would play the audio
         # through appropriate audio system
-        pass
 
 
 class WakeWordDetector:

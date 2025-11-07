@@ -186,6 +186,7 @@ curl -X POST http://localhost:9200/customs_safe_current/_search \
 1. **MinIO unhealthy**: The healthcheck uses curl which isn't available in the container. This is cosmetic - MinIO works fine.
 
 2. **Grafana datasource not found**: Restart Grafana after provisioning changes:
+
    ```bash
    docker compose restart grafana
    ```
@@ -232,6 +233,7 @@ K8S_ENDPOINT=http://localhost:8001
 ### Prometheus Retention
 
 Adjust retention in docker-compose.yml:
+
 ```yaml
 prometheus:
   command:
@@ -240,8 +242,8 @@ prometheus:
 
 ### OpenSearch Optimization
 
-- Monitor cluster health: http://localhost:9200/_cluster/health
-- Check shard allocation: http://localhost:9200/_cat/shards
+- Monitor cluster health: http://localhost:9200/\_cluster/health
+- Check shard allocation: http://localhost:9200/\_cat/shards
 - Adjust ISM policies in `/opensearch/ism_policies/`
 
 ## Security Considerations

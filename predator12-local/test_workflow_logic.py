@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Test script for workflow logic validation
-"""
+"""Test script for workflow logic validation."""
 
 import os
 import sys
@@ -12,7 +10,7 @@ from routes_agents import WorkflowRequest, _validate_workflow_dependencies
 
 
 def test_workflow_dependencies():
-    """Test workflow dependency validation"""
+    """Test workflow dependency validation."""
     print("🧪 Testing workflow dependencies...")
 
     # Valid workflows
@@ -49,7 +47,7 @@ def test_workflow_dependencies():
 
 
 def test_workflow_request_validation():
-    """Test WorkflowRequest validation"""
+    """Test WorkflowRequest validation."""
     print("\n🧪 Testing WorkflowRequest validation...")
 
     # Valid requests
@@ -76,7 +74,7 @@ def test_workflow_request_validation():
 
 
 def main():
-    """Run all tests"""
+    """Run all tests."""
     print("🚀 Starting workflow logic tests...\n")
 
     try:

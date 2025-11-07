@@ -10,7 +10,7 @@
     5432, // PostgreSQL
     6379, // Redis
     9000, // Qdrant
-    9001  // MinIO (if used)
+    9001 // MinIO (if used)
   ],
   "customizations": {
     "vscode": {

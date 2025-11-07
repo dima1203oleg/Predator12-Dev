@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Startup script for Agent Supervisor with correct path handling
-"""
+"""Startup script for Agent Supervisor with correct path handling."""
 import os
 import sys
 

@@ -1,9 +1,10 @@
 # Runbook: Ingest Stalled or Failing
 
 - **Symptoms**
-Ingest job stuck, no progress updates on `/ws/progress`, delayed indices in OpenSearch.
+  Ingest job stuck, no progress updates on `/ws/progress`, delayed indices in OpenSearch.
 
 - **Immediate checks**
+
 1. Check Redis queue length and worker health.
 2. Inspect backend logs for exceptions (Loki if available).
 3. Verify MinIO connectivity and object size.

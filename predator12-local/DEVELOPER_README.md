@@ -34,57 +34,67 @@ open http://localhost:3000
 ### 🎯 **START HERE**
 
 #### 1️⃣ [NEXUS_CORE_TZ_V11.md](./docs/NEXUS_CORE_TZ_V11.md)
-   **📌 ГОЛОВНА ТЕХНІЧНА СПЕЦИФІКАЦІЯ**
-   - Архітектура системи
-   - Unified Command Center (Пульт Керування)
-   - 30 AI агентів + 58 LLM моделей
-   - Data pipeline (ingestion → analytics)
-   - DevOps (local-first → Docker → K8s)
-   - Security (Zero-trust, PII masking, RBAC)
-   - Timeline (12 тижнів)
-   - Acceptance criteria
+
+**📌 ГОЛОВНА ТЕХНІЧНА СПЕЦИФІКАЦІЯ**
+
+- Архітектура системи
+- Unified Command Center (Пульт Керування)
+- 30 AI агентів + 58 LLM моделей
+- Data pipeline (ingestion → analytics)
+- DevOps (local-first → Docker → K8s)
+- Security (Zero-trust, PII masking, RBAC)
+- Timeline (12 тижнів)
+- Acceptance criteria
 
 #### 2️⃣ [COMMAND_CENTER_UNIFIED_UI.md](./docs/COMMAND_CENTER_UNIFIED_UI.md)
-   **🎮 UI/UX ДОКУМЕНТАЦІЯ**
-   - React 18 + TypeScript + Vite
-   - 9 модулів інтерфейсу:
-     - 3D/2D Dashboard (Three.js)
-     - Real-Time Data Feed (WebSocket)
-     - Simulator (What-if scenarios)
-     - Agent Orchestration Map (vis-network)
-     - Billing (PII unlock + usage)
-     - Upload Progress (multi-format)
-     - Notifications, Settings, Command Palette
-   - Dark theme + responsive design
+
+**🎮 UI/UX ДОКУМЕНТАЦІЯ**
+
+- React 18 + TypeScript + Vite
+- 9 модулів інтерфейсу:
+  - 3D/2D Dashboard (Three.js)
+  - Real-Time Data Feed (WebSocket)
+  - Simulator (What-if scenarios)
+  - Agent Orchestration Map (vis-network)
+  - Billing (PII unlock + usage)
+  - Upload Progress (multi-format)
+  - Notifications, Settings, Command Palette
+- Dark theme + responsive design
 
 #### 3️⃣ [AGENTS_30_COMPLETE_SPEC.md](./docs/AGENTS_30_COMPLETE_SPEC.md)
-   **🤖 30 AI АГЕНТІВ — ПОВНИЙ КАТАЛОГ**
-   - **Self-Heal (10 агентів)**: PortCollision, OOMKiller, EnvVarFixer, DockerRestarter, etc.
-   - **Optimize (10 агентів)**: CodeRefactorer, QueryOptimizer, CacheOptimizer, BundleSizeReducer, etc.
-   - **Modernize (10 агентів)**: DependencyUpgrader, APIVersionMigrator, SecurityPatcher, etc.
-   - YAML configs з role, dependencies, triggers, metrics, LLM selection
-   - Python приклади з CrewAI/LangGraph
-   - OpenTelemetry tracing
+
+**🤖 30 AI АГЕНТІВ — ПОВНИЙ КАТАЛОГ**
+
+- **Self-Heal (10 агентів)**: PortCollision, OOMKiller, EnvVarFixer, DockerRestarter, etc.
+- **Optimize (10 агентів)**: CodeRefactorer, QueryOptimizer, CacheOptimizer, BundleSizeReducer, etc.
+- **Modernize (10 агентів)**: DependencyUpgrader, APIVersionMigrator, SecurityPatcher, etc.
+- YAML configs з role, dependencies, triggers, metrics, LLM selection
+- Python приклади з CrewAI/LangGraph
+- OpenTelemetry tracing
 
 #### 4️⃣ [MODEL_SELECTION_LOGIC_SPEC.md](./docs/MODEL_SELECTION_LOGIC_SPEC.md)
-   **🧠 ЛОГІКА ВИБОРУ МОДЕЛЕЙ — IMPLEMENTATION GUIDE**
-   - Router Layer (task context → model selection)
-   - Model Registry (58 моделей з metadata)
-   - Scoring Engine (capability + cost + latency + health)
-   - Execution Layer (LiteLLM + retry/fallback)
-   - Feedback Loop (RLHF + AutoTrain + LoRA)
-   - OpenTelemetry tracing
-   - 3 детальні usage examples
-   - Unit tests + deployment configs
+
+**🧠 ЛОГІКА ВИБОРУ МОДЕЛЕЙ — IMPLEMENTATION GUIDE**
+
+- Router Layer (task context → model selection)
+- Model Registry (58 моделей з metadata)
+- Scoring Engine (capability + cost + latency + health)
+- Execution Layer (LiteLLM + retry/fallback)
+- Feedback Loop (RLHF + AutoTrain + LoRA)
+- OpenTelemetry tracing
+- 3 детальні usage examples
+- Unit tests + deployment configs
 
 #### 5️⃣ [DOCUMENTATION_INDEX.md](./docs/DOCUMENTATION_INDEX.md)
-   **📚 ПОВНИЙ ІНДЕКС ДОКУМЕНТАЦІЇ**
-   - Навігація по всіх документах
-   - Cross-references між агентами та моделями
-   - Development workflow
-   - Monitoring & metrics
-   - Security considerations
-   - Production deployment guides
+
+**📚 ПОВНИЙ ІНДЕКС ДОКУМЕНТАЦІЇ**
+
+- Навігація по всіх документах
+- Cross-references між агентами та моделями
+- Development workflow
+- Monitoring & metrics
+- Security considerations
+- Production deployment guides
 
 ---
 
@@ -131,7 +141,9 @@ open http://localhost:3000
 ## 🎯 Key Features
 
 ### ✅ **Unified Command Center**
+
 Єдиний веб-інтерфейс ("Пульт Керування") для всієї системи:
+
 - **3D/2D Volumetric Dashboards** — Three.js візуалізації
 - **Real-Time Data Feed** — WebSocket updates з аномаліями/алертами
 - **AI Simulator** — What-if аналіз сценаріїв
@@ -140,6 +152,7 @@ open http://localhost:3000
 - **Multi-Format Uploads** — PDF/Excel/CSV/ZIP drag-and-drop
 
 ### 🤖 **30 AI Agents + 58 LLM Models**
+
 - **Self-Heal (10)**: Автоматичне відновлення (port conflicts, OOM, Docker crashes, etc.)
 - **Optimize (10)**: Оптимізація коду/даних/запитів (refactoring, query opt, cache, bundle size, etc.)
 - **Modernize (10)**: Модернізація (dependencies, API migrations, security patches, CI/CD, etc.)
@@ -148,6 +161,7 @@ open http://localhost:3000
 - **RLHF Feedback Loop**: Continuous learning через AutoTrain + LoRA
 
 ### 📊 **Multi-Source Analytics**
+
 - **PostgreSQL**: Structured data (customs, invoices, registries)
 - **OpenSearch**: Full-text search + time-series logs
 - **Qdrant**: Vector similarity search для embeddings
@@ -156,6 +170,7 @@ open http://localhost:3000
 - **Kafka**: Event streaming (real-time ingestion)
 
 ### 🔒 **Zero-Trust Security**
+
 - **PII Masking**: Automatic email/phone/name/IBAN masking
 - **RBAC**: Role-based access (admin, analyst, viewer)
 - **Audit Trail**: All actions logged → OpenSearch
@@ -163,6 +178,7 @@ open http://localhost:3000
 - **Encryption**: TLS 1.3, AES-256 at rest
 
 ### 🚀 **Local-First Development**
+
 - **No Docker Locally**: brew/apt інсталяція (PG, Redis, OpenSearch, Qdrant)
 - **F5 "Run Both"**: One-click start в VSCode
 - **Hot Reload**: Frontend (Vite) + Backend (FastAPI reload)
@@ -480,6 +496,7 @@ def test_self_heal_workflow():
 ## 📞 Support & Resources
 
 ### Documentation
+
 - **Main Spec**: [NEXUS_CORE_TZ_V11.md](./docs/NEXUS_CORE_TZ_V11.md)
 - **UI Docs**: [COMMAND_CENTER_UNIFIED_UI.md](./docs/COMMAND_CENTER_UNIFIED_UI.md)
 - **Agents**: [AGENTS_30_COMPLETE_SPEC.md](./docs/AGENTS_30_COMPLETE_SPEC.md)
@@ -487,12 +504,14 @@ def test_self_heal_workflow():
 - **Full Index**: [DOCUMENTATION_INDEX.md](./docs/DOCUMENTATION_INDEX.md)
 
 ### Community
+
 - **Slack**: #predator-analytics
 - **Jira**: [PRED Project](https://jira.example.com/projects/PRED)
 - **Confluence**: [Predator Analytics Wiki](https://confluence.example.com/predator)
 - **GitHub**: [Issues](https://github.com/your-org/predator-analytics/issues)
 
 ### Contacts
+
 - **Project Lead**: [Your Name] (your.name@example.com)
 - **Tech Lead**: [Tech Lead Name] (tech.lead@example.com)
 - **Support**: support@predator-analytics.com
@@ -501,22 +520,23 @@ def test_self_heal_workflow():
 
 ## 🎯 Quick Links
 
-| Resource | URL |
-|----------|-----|
-| **Local UI** | http://localhost:3000 |
-| **Backend API** | http://localhost:8000 |
-| **API Docs (Swagger)** | http://localhost:8000/docs |
-| **Grafana** | http://localhost:3001 (admin/admin) |
-| **Prometheus** | http://localhost:9090 |
-| **OpenSearch** | http://localhost:9200 |
-| **Qdrant** | http://localhost:6333 |
-| **Jaeger** | http://localhost:16686 |
+| Resource               | URL                                 |
+| ---------------------- | ----------------------------------- |
+| **Local UI**           | http://localhost:3000               |
+| **Backend API**        | http://localhost:8000               |
+| **API Docs (Swagger)** | http://localhost:8000/docs          |
+| **Grafana**            | http://localhost:3001 (admin/admin) |
+| **Prometheus**         | http://localhost:9090               |
+| **OpenSearch**         | http://localhost:9200               |
+| **Qdrant**             | http://localhost:6333               |
+| **Jaeger**             | http://localhost:16686              |
 
 ---
 
 ## 🙏 Credits
 
 Розроблено командою Predator Analytics з використанням:
+
 - **CrewAI** + **LangGraph** — Multi-agent orchestration
 - **LiteLLM** — Universal LLM interface (100+ providers)
 - **React 18** + **Three.js** — Interactive 3D UI

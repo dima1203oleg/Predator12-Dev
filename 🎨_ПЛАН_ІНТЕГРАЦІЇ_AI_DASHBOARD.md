@@ -2,13 +2,14 @@
 
 **Дата:** 2024-12-28  
 **Проект:** Predator12 MEGA Dashboard  
-**Статус:** 🚀 READY TO IMPLEMENT  
+**Статус:** 🚀 READY TO IMPLEMENT
 
 ---
 
 ## 🎯 МЕТА
 
 Інтегрувати 30+ AI агентів та 58+ безплатних моделей у MEGA Dashboard з:
+
 - ✅ Real-time метриками
 - ✅ Інтерактивним управлінням
 - ✅ Візуалізацією логіки вибору моделей
@@ -391,7 +392,7 @@ export interface AIAgent {
   id: string;
   name: string;
   description: string;
-  status: 'active' | 'idle' | 'training' | 'offline';
+  status: "active" | "idle" | "training" | "offline";
   category: string;
   arbiterModel: string;
   competitionModels: string[];
@@ -399,7 +400,7 @@ export interface AIAgent {
   emergencyPool: string[];
   llmProfile: string;
   loadBalancing: string;
-  priority: 'critical' | 'normal';
+  priority: "critical" | "normal";
   maxConcurrent: number;
   thermalProtection: boolean;
   metrics: {
@@ -415,12 +416,12 @@ export interface AIModel {
   name: string;
   provider: string;
   category: string;
-  status: 'online' | 'offline' | 'loading';
+  status: "online" | "offline" | "loading";
   capabilities: string[];
   contextWindow: number;
   cost: number;
-  speed: 'fast' | 'medium' | 'slow';
-  quality: 'high' | 'medium' | 'low';
+  speed: "fast" | "medium" | "slow";
+  quality: "high" | "medium" | "low";
   metrics: {
     requestsPerMin: number;
     avgLatency: number;
@@ -437,6 +438,7 @@ export interface AIModel {
 ### 📅 Phase 1: Basic Integration (1-2 дні)
 
 **Задачі:**
+
 1. ✅ Створити основні компоненти:
    - `AgentCard.tsx`
    - `AgentGrid.tsx`
@@ -444,14 +446,12 @@ export interface AIModel {
    - `ModelLibrary.tsx`
 
 2. ✅ Інтегрувати в main.tsx:
+
    ```tsx
-   import { AIAgentsSection } from './components/ai/AIAgentsSection';
+   import { AIAgentsSection } from "./components/ai/AIAgentsSection";
 
    // В Dashboard компоненті
-   <AIAgentsSection
-     agents={aiAgents}
-     models={aiModels}
-   />
+   <AIAgentsSection agents={aiAgents} models={aiModels} />;
    ```
 
 3. ✅ Додати базову стилізацію:
@@ -460,6 +460,7 @@ export interface AIModel {
    - Responsive layout
 
 **Deliverables:**
+
 - ✅ Базовий AI Dashboard
 - ✅ Відображення 30+ агентів
 - ✅ Відображення 58+ моделей
@@ -470,6 +471,7 @@ export interface AIModel {
 ### 📅 Phase 2: Interactive Features (2-3 дні)
 
 **Задачі:**
+
 1. ✅ Додати інтерактивність:
    - Agent Details Modal
    - Model Comparison Tool
@@ -487,6 +489,7 @@ export interface AIModel {
    - View logs
 
 **Deliverables:**
+
 - ✅ Інтерактивний dashboard
 - ✅ Real-time оновлення
 - ✅ Управління агентами
@@ -496,6 +499,7 @@ export interface AIModel {
 ### 📅 Phase 3: Advanced Visualization (3-4 дні)
 
 **Задачі:**
+
 1. ✅ Model Competition Visualizer:
    - Live змагання моделей
    - Quality scores
@@ -512,6 +516,7 @@ export interface AIModel {
    - Success rate trends
 
 **Deliverables:**
+
 - ✅ Model Competition Viz
 - ✅ Thermal Dashboard
 - ✅ Performance Analytics
@@ -521,35 +526,37 @@ export interface AIModel {
 ### 📅 Phase 4: API Integration (2-3 дні)
 
 **Задачі:**
+
 1. ✅ Connect to backend:
+
    ```typescript
    // /frontend/src/api/agentsApi.ts
 
    export const agentsApi = {
-     getAll: () => fetch('/api/agents'),
+     getAll: () => fetch("/api/agents"),
      getById: (id: string) => fetch(`/api/agents/${id}`),
      execute: (id: string, task: any) =>
        fetch(`/api/agents/${id}/execute`, {
-         method: 'POST',
-         body: JSON.stringify(task)
+         method: "POST",
+         body: JSON.stringify(task),
        }),
-     getMetrics: (id: string) =>
-       fetch(`/api/agents/${id}/metrics`)
+     getMetrics: (id: string) => fetch(`/api/agents/${id}/metrics`),
    };
    ```
 
 2. ✅ WebSocket для real-time:
+
    ```typescript
    // /frontend/src/api/websocketClient.ts
 
-   const ws = new WebSocket('ws://localhost:8000/ws');
+   const ws = new WebSocket("ws://localhost:8000/ws");
 
    ws.onmessage = (event) => {
      const data = JSON.parse(event.data);
-     if (data.type === 'agent_metrics') {
+     if (data.type === "agent_metrics") {
        updateAgentMetrics(data);
      }
-     if (data.type === 'competition_result') {
+     if (data.type === "competition_result") {
        updateCompetition(data);
      }
    };
@@ -558,6 +565,7 @@ export interface AIModel {
 3. ✅ Error handling & fallbacks
 
 **Deliverables:**
+
 - ✅ Live backend connection
 - ✅ Real-time data streaming
 - ✅ Error handling
@@ -567,6 +575,7 @@ export interface AIModel {
 ### 📅 Phase 5: Polish & Optimize (1-2 дні)
 
 **Задачі:**
+
 1. ✅ Performance optimization:
    - Code splitting
    - Lazy loading
@@ -583,6 +592,7 @@ export interface AIModel {
    - User guide
 
 **Deliverables:**
+
 - ✅ Optimized dashboard
 - ✅ Polished UI/UX
 - ✅ Complete documentation
@@ -594,13 +604,13 @@ export interface AIModel {
 ```json
 {
   "dependencies": {
-    "@tanstack/react-query": "^5.0.0",  // Для data fetching
-    "recharts": "^2.10.0",               // Для графіків
-    "framer-motion": "^10.0.0",          // Для анімацій
-    "socket.io-client": "^4.6.0",        // Для WebSocket
-    "zustand": "^4.4.0",                 // State management (опціонально)
-    "react-hot-toast": "^2.4.0",         // Для notifications
-    "lucide-react": "^0.300.0"           // Іконки
+    "@tanstack/react-query": "^5.0.0", // Для data fetching
+    "recharts": "^2.10.0", // Для графіків
+    "framer-motion": "^10.0.0", // Для анімацій
+    "socket.io-client": "^4.6.0", // Для WebSocket
+    "zustand": "^4.4.0", // State management (опціонально)
+    "react-hot-toast": "^2.4.0", // Для notifications
+    "lucide-react": "^0.300.0" // Іконки
   }
 }
 ```
@@ -646,42 +656,58 @@ Code Quality:
 ### Colors (Cyber Theme)
 
 ```css
---primary: #00f2ff;        /* Neon Blue */
---secondary: #ff006e;      /* Neon Pink */
---success: #00ff88;        /* Neon Green */
---warning: #ffaa00;        /* Neon Orange */
---danger: #ff0055;         /* Neon Red */
---critical: #ff00ff;       /* Neon Magenta */
+--primary: #00f2ff; /* Neon Blue */
+--secondary: #ff006e; /* Neon Pink */
+--success: #00ff88; /* Neon Green */
+--warning: #ffaa00; /* Neon Orange */
+--danger: #ff0055; /* Neon Red */
+--critical: #ff00ff; /* Neon Magenta */
 
---bg-dark: #0a0e1a;        /* Dark background */
---bg-card: rgba(20, 28, 46, 0.7);  /* Card background */
+--bg-dark: #0a0e1a; /* Dark background */
+--bg-card: rgba(20, 28, 46, 0.7); /* Card background */
 --glass: rgba(255, 255, 255, 0.05); /* Glassmorphism */
 ```
 
 ### Typography
 
 ```css
---font-heading: 'Orbitron', sans-serif;
---font-body: 'Inter', sans-serif;
---font-mono: 'Fira Code', monospace;
+--font-heading: "Orbitron", sans-serif;
+--font-body: "Inter", sans-serif;
+--font-mono: "Fira Code", monospace;
 ```
 
 ### Animations
 
 ```css
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes slideIn {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes glow {
-  0%, 100% { box-shadow: 0 0 10px var(--primary); }
-  50% { box-shadow: 0 0 20px var(--primary); }
+  0%,
+  100% {
+    box-shadow: 0 0 10px var(--primary);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--primary);
+  }
 }
 ```
 

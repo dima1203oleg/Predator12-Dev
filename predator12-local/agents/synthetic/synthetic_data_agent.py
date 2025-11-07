@@ -4,13 +4,12 @@
 Автогенерація датасетів з реалістичними розподілами та анонімізацією
 """
 
-import json
 import random
 import time
 import uuid
 from dataclasses import dataclass
-from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Union
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -24,7 +23,7 @@ logger = structlog.get_logger(__name__)
 
 @dataclass
 class SyntheticConfig:
-    """Конфігурація для генерації синтетичних даних"""
+    """Конфігурація для генерації синтетичних даних."""
 
     schema: Dict[str, Any]
     rows: int = 10000
@@ -36,7 +35,7 @@ class SyntheticConfig:
 
 
 class SyntheticDataAgent:
-    """Агент для генерації синтетичних даних"""
+    """Агент для генерації синтетичних даних."""
 
     def __init__(self):
         self.app = FastAPI(title="Synthetic Data Agent", version="1.0.0")
@@ -61,11 +60,11 @@ class SyntheticDataAgent:
         self._setup_routes()
 
     def _setup_routes(self):
-        """Налаштування HTTP маршрутів"""
+        """Налаштування HTTP маршрутів."""
 
         @self.app.post("/synthetic/generate")
         async def generate_dataset(request: dict):
-            """Генерація синтетичного датасету"""
+            """Генерація синтетичного датасету."""
             try:
                 config = SyntheticConfig(
                     schema=request["schema"],
@@ -86,7 +85,7 @@ class SyntheticDataAgent:
 
         @self.app.post("/synthetic/anonymize")
         async def anonymize_data(request: dict):
-            """Анонімізація існуючих даних"""
+            """Анонімізація існуючих даних."""
             try:
                 dataset_id = request["dataset_id"]
                 pii_fields = request.get("pii_fields", [])
@@ -101,7 +100,7 @@ class SyntheticDataAgent:
 
         @self.app.get("/synthetic/health")
         async def health():
-            """Health check"""
+            """Health check."""
             return {
                 "status": "healthy",
                 "timestamp": datetime.now().isoformat(),
@@ -109,7 +108,7 @@ class SyntheticDataAgent:
             }
 
     async def generate_synthetic_data(self, config: SyntheticConfig) -> Dict[str, Any]:
-        """Генерація синтетичних даних за конфігурацією"""
+        """Генерація синтетичних даних за конфігурацією."""
 
         start_time = time.time()
         dataset_id = str(uuid.uuid4())
@@ -174,7 +173,7 @@ class SyntheticDataAgent:
         }
 
     def _generate_string(self, count: int, config: Dict) -> List[str]:
-        """Генерація рядків"""
+        """Генерація рядків."""
         min_len = config.get("min_length", 5)
         max_len = config.get("max_length", 50)
         pattern = config.get("pattern", "word")
@@ -192,7 +191,7 @@ class SyntheticDataAgent:
             ]
 
     def _generate_integer(self, count: int, config: Dict) -> List[int]:
-        """Генерація цілих чисел"""
+        """Генерація цілих чисел."""
         min_val = config.get("min_value", 1)
         max_val = config.get("max_value", 100000)
         distribution = config.get("distribution", "uniform")
@@ -206,7 +205,7 @@ class SyntheticDataAgent:
             return [random.randint(min_val, max_val) for _ in range(count)]
 
     def _generate_float(self, count: int, config: Dict) -> List[float]:
-        """Генерація дробових чисел"""
+        """Генерація дробових чисел."""
         min_val = config.get("min_value", 0.0)
         max_val = config.get("max_value", 1000.0)
         decimals = config.get("decimals", 2)
@@ -221,7 +220,7 @@ class SyntheticDataAgent:
             return [round(random.uniform(min_val, max_val), decimals) for _ in range(count)]
 
     def _generate_date(self, count: int, config: Dict) -> List[str]:
-        """Генерація дат"""
+        """Генерація дат."""
         start_date = datetime.strptime(config.get("start_date", "2020-01-01"), "%Y-%m-%d")
         end_date = datetime.strptime(config.get("end_date", "2025-12-31"), "%Y-%m-%d")
 
@@ -233,11 +232,11 @@ class SyntheticDataAgent:
         return dates
 
     def _generate_email(self, count: int, config: Dict) -> List[str]:
-        """Генерація email адрес"""
+        """Генерація email адрес."""
         return [self.faker.email() for _ in range(count)]
 
     def _generate_phone(self, count: int, config: Dict) -> List[str]:
-        """Генерація телефонних номерів"""
+        """Генерація телефонних номерів."""
         country = config.get("country", "UA")
         if country == "UA":
             return [f"+380{random.randint(100000000, 999999999)}" for _ in range(count)]
@@ -245,11 +244,11 @@ class SyntheticDataAgent:
             return [self.faker.phone_number() for _ in range(count)]
 
     def _generate_company(self, count: int, config: Dict) -> List[str]:
-        """Генерація назв компаній"""
+        """Генерація назв компаній."""
         return [self.faker.company() for _ in range(count)]
 
     def _generate_address(self, count: int, config: Dict) -> List[str]:
-        """Генерація адрес"""
+        """Генерація адрес."""
         return [self.faker.address().replace("\n", ", ") for _ in range(count)]
 
     def _generate_hs_code(self, count: int, config: Dict) -> List[str]:
@@ -282,10 +281,10 @@ class SyntheticDataAgent:
         return codes
 
     def _generate_amount(self, count: int, config: Dict) -> List[float]:
-        """Генерація грошових сум"""
+        """Генерація грошових сум."""
         min_amount = config.get("min_amount", 100)
         max_amount = config.get("max_amount", 1000000)
-        currency = config.get("currency", "USD")
+        config.get("currency", "USD")
 
         # Логнормальний розподіл для реалістичних сум
         amounts = np.random.lognormal(mean=np.log(min_amount * 10), sigma=1.0, size=count)
@@ -294,7 +293,7 @@ class SyntheticDataAgent:
         return amounts.round(2).tolist()
 
     def _generate_country(self, count: int, config: Dict) -> List[str]:
-        """Генерація країн"""
+        """Генерація країн."""
         region = config.get("region", "all")
 
         if region == "europe":
@@ -307,7 +306,7 @@ class SyntheticDataAgent:
         return [random.choice(countries) for _ in range(count)]
 
     def _inject_anomalies(self, df: pd.DataFrame, anomaly_rate: float) -> pd.DataFrame:
-        """Додавання аномалій до датасету"""
+        """Додавання аномалій до датасету."""
 
         num_anomalies = int(len(df) * anomaly_rate)
         anomaly_indices = random.sample(range(len(df)), num_anomalies)
@@ -324,7 +323,7 @@ class SyntheticDataAgent:
         return df
 
     def _add_noise(self, df: pd.DataFrame, noise_level: float) -> pd.DataFrame:
-        """Додавання шуму до числових колонок"""
+        """Додавання шуму до числових колонок."""
 
         numeric_cols = df.select_dtypes(include=[np.number]).columns
 
@@ -336,7 +335,7 @@ class SyntheticDataAgent:
         return df
 
     def _apply_pii_policy(self, df: pd.DataFrame, policy: str, schema: Dict) -> pd.DataFrame:
-        """Застосування політики PII"""
+        """Застосування політики PII."""
 
         pii_fields = []
         for field_name, field_config in schema.items():
@@ -358,7 +357,7 @@ class SyntheticDataAgent:
     async def anonymize_dataset(
         self, dataset_id: str, pii_fields: List[str], method: str
     ) -> Dict[str, Any]:
-        """Анонімізація існуючого датасету"""
+        """Анонімізація існуючого датасету."""
 
         # Тут має бути логіка завантаження існуючого датасету
         # та застосування методів анонімізації (k-anonymity, l-diversity, t-closeness)
@@ -371,7 +370,7 @@ class SyntheticDataAgent:
         }
 
     async def _publish_event(self, event_type: str, data: Dict[str, Any]):
-        """Публікація події в Redis Streams"""
+        """Публікація події в Redis Streams."""
         try:
             event_data = {
                 "event_type": event_type,

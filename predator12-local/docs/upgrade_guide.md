@@ -3,11 +3,13 @@
 ## Upgrade Steps
 
 1. **Build new image**:
+
    ```bash
    docker build -t predator/orchestrator:v2 -f backend/Dockerfile .
    ```
 
 2. **Deploy gradually**:
+
    ```bash
    # Stage 1: 25% traffic
    kubectl set image deployment/predator-orchestrator \

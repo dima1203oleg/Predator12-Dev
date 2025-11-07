@@ -87,7 +87,7 @@ def safe_remove_source_folders():
             try:
                 # Створення summary
                 print(f"  📄 Створення summary для {name}...")
-                summary_file = create_backup_summary(source_path, backup_base)
+                create_backup_summary(source_path, backup_base)
 
                 # Копіюємо лише важливі файли (не node_modules, .venv тощо)
                 print(f"  📂 Backup важливих файлів з {name}...")

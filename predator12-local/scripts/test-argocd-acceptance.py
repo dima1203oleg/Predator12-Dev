@@ -12,14 +12,10 @@ Validates all requirements from the technical specification:
 - Policy enforcement
 """
 
-import asyncio
-import json
 import subprocess
 import sys
 from datetime import datetime
-from typing import Dict, List, Tuple
-
-import requests
+from typing import Tuple
 
 
 class Colors:

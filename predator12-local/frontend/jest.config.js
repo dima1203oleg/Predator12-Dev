@@ -1,7 +1,7 @@
 // Jest Configuration для React Компонентів Predator12
 // Налаштування для Unit та Integration тестів
 
-module.exports = {
+export default {
     displayName: "frontend-tests",
     testEnvironment: "jsdom",
     roots: ["<rootDir>/src"],

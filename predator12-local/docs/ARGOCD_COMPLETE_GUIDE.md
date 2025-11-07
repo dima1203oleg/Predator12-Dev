@@ -20,6 +20,7 @@
 ### What is ArgoCD?
 
 ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes. It:
+
 - Monitors Git repositories for changes
 - Automatically syncs desired state to clusters
 - Provides drift detection and self-healing
@@ -163,6 +164,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
 ```
 
 Open: https://localhost:8080
+
 - Username: `admin`
 - Password: (from above command)
 
@@ -231,13 +233,13 @@ g, predator12-developers, role:developer
 
 #### Roles
 
-| Role | Permissions | Users |
-|------|-------------|-------|
-| **admin** | Full access | predator12-admins |
-| **developer** | View all, sync dev/staging | predator12-developers |
-| **operator** | View all, sync all | predator12-operators |
-| **readonly** | View only | predator12-viewers |
-| **ci-deployer** | Create/sync apps (automation) | ci-deployer account |
+| Role            | Permissions                   | Users                 |
+| --------------- | ----------------------------- | --------------------- |
+| **admin**       | Full access                   | predator12-admins     |
+| **developer**   | View all, sync dev/staging    | predator12-developers |
+| **operator**    | View all, sync all            | predator12-operators  |
+| **readonly**    | View only                     | predator12-viewers    |
+| **ci-deployer** | Create/sync apps (automation) | ci-deployer account   |
 
 ### SSO Integration (Keycloak)
 
@@ -288,8 +290,8 @@ ApplicationSets automatically create Applications across environments:
 ```yaml
 syncPolicy:
   automated:
-    prune: true      # Delete resources not in Git
-    selfHeal: true   # Automatically sync on drift
+    prune: true # Delete resources not in Git
+    selfHeal: true # Automatically sync on drift
 ```
 
 #### Manual Sync (Production)
@@ -298,7 +300,7 @@ syncPolicy:
 syncPolicy:
   automated:
     prune: false
-    selfHeal: false  # Requires manual approval
+    selfHeal: false # Requires manual approval
 ```
 
 ### Sync Waves
@@ -353,16 +355,16 @@ Canary deployment strategy:
 strategy:
   canary:
     steps:
-      - setWeight: 10    # 10% traffic to canary
-      - pause: 2m        # Wait 2 minutes
-      - analysis: {...}  # Run analysis
-      - setWeight: 25    # 25% traffic
+      - setWeight: 10 # 10% traffic to canary
+      - pause: 2m # Wait 2 minutes
+      - analysis: { ... } # Run analysis
+      - setWeight: 25 # 25% traffic
       - pause: 5m
-      - analysis: {...}
+      - analysis: { ... }
       - setWeight: 50
       - pause: 5m
-      - analysis: {...}
-      - setWeight: 100   # Full rollout
+      - analysis: { ... }
+      - setWeight: 100 # Full rollout
 ```
 
 ### Analysis Templates
@@ -447,6 +449,7 @@ rate(argocd_app_sync_total{phase="Failed"}[5m])
 ### Grafana Dashboards
 
 Import ArgoCD dashboards:
+
 - Dashboard ID: 14584 (ArgoCD Overview)
 - Dashboard ID: 14391 (ArgoCD Notifications)
 
@@ -702,6 +705,7 @@ jobs:
 ## Support
 
 For issues or questions:
+
 - GitHub Issues: [predator12-local/issues](https://github.com/predator12-org/predator12-local/issues)
 - Slack: #predator12-deployments
 - Email: devops@predator12.com

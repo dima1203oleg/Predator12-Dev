@@ -1,27 +1,25 @@
 #!/usr/bin/env python3
 """
-Скрипт для тестування функціональності бічного меню
+Скрипт для тестування функціональності бічного меню.
 """
 
-import json
 import sys
-import time
 from pathlib import Path
 
 import requests
 
 
 def test_frontend_availability():
-    """Перевіряє доступність фронтенду"""
+    """Перевіряє доступність фронтенду."""
     try:
         response = requests.get("http://localhost:3000", timeout=5)
         return response.status_code == 200
-    except:
+    except requests.RequestException:
         return False
 
 
 def check_module_components():
-    """Перевіряє наявність компонентів модулів"""
+    """Перевіряє наявність компонентів модулів."""
     frontend_path = Path(__file__).parent.parent / "frontend" / "src" / "components" / "modules"
 
     required_modules = [
@@ -43,7 +41,7 @@ def check_module_components():
 
 
 def check_nexus_core():
-    """Перевіряє конфігурацію NexusCore"""
+    """Перевіряє конфігурацію NexusCore."""
     nexus_core_path = (
         Path(__file__).parent.parent / "frontend" / "src" / "components" / "nexus" / "NexusCore.tsx"
     )
@@ -91,21 +89,16 @@ def check_nexus_core():
 def main():
     print("🔍 Тестування функціональності бічного меню...")
     print("=" * 50)
-
     # 1. Перевірка компонентів модулів
     print("1️⃣ Перевірка наявності компонентів модулів...")
     missing_modules = check_module_components()
-
     if missing_modules:
         print(f"❌ Відсутні модулі: {', '.join(missing_modules)}")
         return 1
-    else:
-        print("✅ Всі необхідні компоненти модулів присутні")
-
+    print("✅ Всі необхідні компоненти модулів присутні")
     # 2. Перевірка конфігурації NexusCore
     print("\n2️⃣ Перевірка конфігурації NexusCore...")
     is_valid, details = check_nexus_core()
-
     if not is_valid:
         print(f"❌ Проблеми в NexusCore: {details}")
         if isinstance(details, dict):
@@ -114,9 +107,7 @@ def main():
             if details.get("missing_cases"):
                 print(f"   Відсутні case блоки: {details['missing_cases']}")
         return 1
-    else:
-        print("✅ NexusCore правильно налаштовано")
-
+    print("✅ NexusCore правильно налаштовано")
     # 3. Перевірка доступності фронтенду
     print("\n3️⃣ Перевірка доступності фронтенду...")
     if test_frontend_availability():
@@ -124,11 +115,9 @@ def main():
     else:
         print("⚠️ Фронтенд недоступний на http://localhost:3000")
         print("   Запустіть фронтенд командою: npm start (в папці frontend)")
-
     print("\n🎉 Тест завершено!")
     print("📝 Результат: Всі модулі правильно підключені до бічного меню")
     print("💡 Тепер кнопки бічного меню повинні показувати реальний контент замість заглушок")
-
     return 0
 
 

@@ -22,13 +22,13 @@
 
 ### Current Focus vs. Future
 
-| Aspect | Now (Local-First) | Future (Production) |
-|--------|-------------------|---------------------|
-| **Services** | brew/apt (PG, Redis, Qdrant, OS) | Docker/Helm/ArgoCD |
-| **Launch** | F5 "Run Both" | Canary/Blue-Green Rollouts |
-| **Agents** | 30 agents + 58 models local | Distributed K8s pods |
-| **GitOps** | Manual scripts | ArgoCD/Tekton automation |
-| **DR** | Local backups | RPO≤15min, RTO≤30min |
+| Aspect       | Now (Local-First)                | Future (Production)        |
+| ------------ | -------------------------------- | -------------------------- |
+| **Services** | brew/apt (PG, Redis, Qdrant, OS) | Docker/Helm/ArgoCD         |
+| **Launch**   | F5 "Run Both"                    | Canary/Blue-Green Rollouts |
+| **Agents**   | 30 agents + 58 models local      | Distributed K8s pods       |
+| **GitOps**   | Manual scripts                   | ArgoCD/Tekton automation   |
+| **DR**       | Local backups                    | RPO≤15min, RTO≤30min       |
 
 ---
 
@@ -207,6 +207,7 @@ The **Command Center** is the single web interface that integrates all functiona
 ### Key Features
 
 #### 1. Dashboard Module
+
 ```typescript
 // frontend/components/Dashboard/Dashboard3D.tsx
 import { Canvas } from '@react-three/fiber';
@@ -244,6 +245,7 @@ export function Dashboard3D({ data, fallback2D = false }) {
 ```
 
 #### 2. Data Feed (Anomaly Stream)
+
 ```typescript
 // frontend/components/Feed/DataFeed.tsx
 export function DataFeed() {
@@ -274,6 +276,7 @@ export function DataFeed() {
 ```
 
 #### 3. AI Terminal (OpenWebUI Integration)
+
 ```typescript
 // frontend/components/AITerminal/Terminal.tsx
 export function AITerminal() {
@@ -312,6 +315,7 @@ export function AITerminal() {
 ```
 
 #### 4. PII Unlock Interface
+
 ```typescript
 // frontend/components/Billing/PIIToggle.tsx
 export function PIIToggle() {
@@ -356,6 +360,7 @@ export function PIIToggle() {
 ### Agent Categories
 
 #### Data Agents (10)
+
 1. **DatasetIngestAgent**: Import CSV/XLSX, Great Expectations validation, PG staging
 2. **DatasetRegistryAgent**: Register datasets, create index templates/ISM/aliases
 3. **IndexerAgent**: Normalize, PII mask, index to OpenSearch/Qdrant
@@ -368,6 +373,7 @@ export function PIIToggle() {
 10. **LineageTrackerAgent**: Data lineage DAGs, impact analysis
 
 #### Query Agents (5)
+
 1. **SearchPlannerAgent**: Route queries (PG/OS/Qdrant/ML optimal path)
 2. **ModelRouterAgent**: LLM selection (context/resource/accuracy/historical)
 3. **ArbiterAgent**: Compare 5 models in parallel, select/assemble best response
@@ -375,6 +381,7 @@ export function PIIToggle() {
 5. **QueryOptimizerAgent**: Rewrite queries for performance, cache suggestions
 
 #### Analysis Agents (7)
+
 1. **AnomalyDetectionAgent**: IsolationForest/AutoEncoder + SHAP explanations
 2. **ForecastAgent**: Prophet/LightGBM/XGBoost trends, confidence intervals
 3. **ReportExportAgent**: CSV/PNG/PDF/PPTX, "Morning Newspaper", signed MinIO URLs
@@ -384,6 +391,7 @@ export function PIIToggle() {
 7. **SentimentAgent**: NLP sentiment on text data (Telegram, reports)
 
 #### Self-Heal Agents (10)
+
 1. **AutoHealAgent**: Alert response (restart/scale/rollback playbooks)
 2. **SelfDiagnosisAgent**: Failure classification, stack analysis, similar incidents
 3. **RedTeamAgent**: Continuous pentest, vulnerability reports
@@ -396,6 +404,7 @@ export function PIIToggle() {
 10. **BackupValidatorAgent**: Test restore, integrity checks
 
 #### Self-Optimize Agents (10)
+
 1. **TestGeneratorAgent**: Unit/integration tests from code (pytest/jest)
 2. **MigrationGeneratorAgent**: Alembic migrations from schema changes
 3. **CodeLinterAgent**: Ruff/Black/Prettier automation, dry-run mode
@@ -408,6 +417,7 @@ export function PIIToggle() {
 10. **APIResponseOptimizerAgent**: Payload compression, pagination tuning
 
 #### Self-Modernize Agents (10)
+
 1. **DependencyUpdaterAgent**: Automated PRs with [auto-deps] tags
 2. **FrameworkMigratorAgent**: React upgrades, API deprecation fixes
 3. **PythonVersionMigratorAgent**: 3.11→3.12 compatibility checks
@@ -843,10 +853,10 @@ policies:
 
   # Priority Levels
   priorities:
-    critical: 1  # Self-heal, security
-    high: 2      # User queries, analysis
-    normal: 3    # Optimization, reports
-    low: 4       # Modernization, background tasks
+    critical: 1 # Self-heal, security
+    high: 2 # User queries, analysis
+    normal: 3 # Optimization, reports
+    low: 4 # Modernization, background tasks
 
   # Degradation Strategy
   degradation:
@@ -878,7 +888,7 @@ policies:
 
   pii_audit:
     log_all_disclosures: true
-    retention_days: 730  # 2 years
+    retention_days: 730 # 2 years
 
   # Billing Gates
   billing_tiers:
@@ -915,7 +925,7 @@ policies:
   # Telemetry
   telemetry:
     otel_enabled: true
-    trace_sampling_rate: 0.1  # 10%
+    trace_sampling_rate: 0.1 # 10%
     metrics_interval_seconds: 30
     log_level: INFO
 ```
@@ -1093,17 +1103,20 @@ This is the primary specification document. Additional documentation:
 ## 🎯 Acceptance Criteria
 
 ### Performance
+
 - [ ] Dashboard p95 latency < 3s at ≥1B docs (cache enabled)
 - [ ] 500-700MB CSV import E2E ≤ 5min (raw→Parquet→PG→OS/Qdrant)
 - [ ] 3D visualization FPS ≥ 30 on recommended hardware
 - [ ] Search autocomplete < 200ms
 
 ### Self-Healing
+
 - [ ] 5 chaos scenarios pass (pod kill, node failure, MinIO/Keycloak pause)
 - [ ] AutoHeal restarts services within 30s
 - [ ] SelfDiagnosis classifies failures with 85% accuracy
 
 ### PII & Security
+
 - [ ] PII masked by default (sha256+pepper)
 - [ ] Unlock audit logged with user/timestamp/reason
 - [ ] RBAC enforced (view_pii role required)
@@ -1111,6 +1124,7 @@ This is the primary specification document. Additional documentation:
 - [ ] Trivy/CodeQL/DAST scans pass
 
 ### ML & Agents
+
 - [ ] Canary deployment promotes better models automatically
 - [ ] Drift monitoring alerts on accuracy drop > 5%
 - [ ] Arbiter consensus from 5 models completes < 10s
@@ -1118,16 +1132,19 @@ This is the primary specification document. Additional documentation:
 - [ ] Fallback chain activated on primary failure < 2s
 
 ### DR & Backups (Future)
+
 - [ ] RPO ≤ 15min (continuous backups)
 - [ ] RTO ≤ 30min (verified restore)
 - [ ] Quarterly DR drills pass
 
 ### Accessibility
+
 - [ ] Lighthouse score ≥ 90 (Perf/Best/Acc/SEO)
 - [ ] WCAG 2.1 AA compliance
 - [ ] Screen reader compatible
 
 ### DevEx
+
 - [ ] `make start` launches full stack locally
 - [ ] F5 "Run Both" works in VS Code
 - [ ] Breakpoints hit in backend/frontend
@@ -1221,6 +1238,7 @@ Current Status: Phase 1 Complete, Phase 2-8 In Progress
 - ✅ **Future-ready architecture** (Helm/ArgoCD/K8s planned)
 
 **Next Steps:**
+
 1. Review and approve this specification
 2. Begin Phase 2 (Data Layer) implementation
 3. Set up CI/CD pipelines

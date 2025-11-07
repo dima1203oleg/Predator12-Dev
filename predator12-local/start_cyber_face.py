@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 def check_dependencies():
-    """Check if all required dependencies are installed"""
+    """Check if all required dependencies are installed."""
     required_packages = ["fastapi", "uvicorn", "websockets", "numpy", "opencv-python", "pyyaml"]
 
     missing_packages = []
@@ -44,7 +44,7 @@ def check_dependencies():
 
 
 def setup_environment():
-    """Setup environment variables"""
+    """Setup environment variables."""
     # Set default environment variables if not present
     env_vars = {
         "CYBER_FACE_ENV": "development",
@@ -61,7 +61,7 @@ def setup_environment():
 
 
 async def main():
-    """Main startup function"""
+    """Main startup function."""
     logger.info("🤖 Starting Cyber Face AI...")
 
     # Check dependencies

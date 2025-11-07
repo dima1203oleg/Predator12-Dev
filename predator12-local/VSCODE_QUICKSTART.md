@@ -27,13 +27,13 @@ code --install-extension ms-python.black-formatter
 
 ## ✅ Що Виправлено
 
-| Проблема | Статус |
-|----------|--------|
-| Коментарі в JSON | ✅ Видалено |
+| Проблема                         | Статус                       |
+| -------------------------------- | ---------------------------- |
+| Коментарі в JSON                 | ✅ Видалено                  |
 | `type: python` → `type: debugpy` | ✅ Оновлено (7 конфігурацій) |
-| `type: pwa-node` → `type: node` | ✅ Оновлено |
-| Відсутність extraPaths | ✅ Додано |
-| Дублікат settings-local.json | ✅ Видалено |
+| `type: pwa-node` → `type: node`  | ✅ Оновлено                  |
+| Відсутність extraPaths           | ✅ Додано                    |
+| Дублікат settings-local.json     | ✅ Видалено                  |
 
 ---
 
@@ -45,6 +45,7 @@ code --install-extension ms-python.black-formatter
 ```
 
 **Вивід:**
+
 - ✅ Валідація JSON файлів
 - ✅ Перевірка Python environment
 - ✅ Список рекомендованих розширень
@@ -54,23 +55,25 @@ code --install-extension ms-python.black-formatter
 
 ## 📚 Детальна Документація
 
-| Документ | Опис |
-|----------|------|
-| `VSCODE_COMPLETE_REPORT.md` | 📊 Повний звіт з усіма деталями |
-| `VSCODE_WARNINGS_FIXED.md` | 🔧 Технічні деталі виправлень |
-| `README.md` | 📖 Загальна інформація про проект |
+| Документ                    | Опис                              |
+| --------------------------- | --------------------------------- |
+| `VSCODE_COMPLETE_REPORT.md` | 📊 Повний звіт з усіма деталями   |
+| `VSCODE_WARNINGS_FIXED.md`  | 🔧 Технічні деталі виправлень     |
+| `README.md`                 | 📖 Загальна інформація про проект |
 
 ---
 
 ## 🐛 Troubleshooting
 
 ### Pylance: "Import could not be resolved"
+
 ```bash
 # Cmd+Shift+P → "Python: Select Interpreter" → .venv/bin/python
 # Cmd+Shift+P → "Python: Restart Language Server"
 ```
 
 ### Debugger не запускається
+
 ```bash
 source .venv/bin/activate
 pip install debugpy
@@ -78,6 +81,7 @@ pip install debugpy
 ```
 
 ### Formatter не працює
+
 ```bash
 code --install-extension ms-python.black-formatter
 code --install-extension esbenp.prettier-vscode
@@ -88,12 +92,14 @@ code --install-extension esbenp.prettier-vscode
 ## 🎉 Готово!
 
 Тепер можна:
+
 - 🐍 Дебажити Python (F5)
 - 🌐 Дебажити Frontend (F5)
 - 🧪 Запускати тести
 - 📝 Форматувати код автоматично
 
 **Наступні кроки:**
+
 1. Перезавантажити VS Code ✨
 2. Вибрати Python interpreter 🐍
 3. Почати розробку! 🚀

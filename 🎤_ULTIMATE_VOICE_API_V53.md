@@ -64,12 +64,15 @@ npm start
 ## 🎯 Основні можливості
 
 ### 1. **Автоматичний вибір провайдера**
+
 Система автоматично вибирає найкращий доступний провайдер:
+
 - ✅ API доступний → використовується API
 - ❌ API недоступний → використовується Local
 - ❌ Local недоступний → використовується Browser
 
 ### 2. **Українська мова з високою якістю**
+
 - ElevenLabs: Нейронні українські голоси
 - Google Cloud: Wavenet-Ukrainian
 - Azure: OstapNeural, PolinaNeural
@@ -77,11 +80,13 @@ npm start
 - Browser: Системні українські голоси
 
 ### 3. **Кешування для швидкості**
+
 - Автоматичне кешування згенерованих аудіо
 - Миттєве відтворення повторних запитів
 - Економія API лімітів
 
 ### 4. **Production-ready**
+
 - Обробка помилок на кожному рівні
 - Логування всіх операцій
 - Health check endpoints
@@ -165,15 +170,15 @@ python3 voice_api_ultimate.py
 ### Frontend (TypeScript/React)
 
 ```typescript
-import { voiceAPIUltimate } from '@/services/voiceAPIUltimate';
+import { voiceAPIUltimate } from "@/services/voiceAPIUltimate";
 
 // TTS з автоматичним fallback
 const response = await voiceAPIUltimate.textToSpeech({
-  text: 'Привіт! Я ваш AI асистент.',
-  language: 'uk',
+  text: "Привіт! Я ваш AI асистент.",
+  language: "uk",
   speed: 1.0,
-  provider: 'auto',  // auto, api, local, browser
-  quality: 'high'
+  provider: "auto", // auto, api, local, browser
+  quality: "high",
 });
 
 console.log(`Озвучено через: ${response.provider}`);
@@ -182,8 +187,8 @@ console.log(`Озвучено через: ${response.provider}`);
 const audioBlob = await recordAudio();
 const sttResponse = await voiceAPIUltimate.speechToText(
   audioBlob,
-  'uk',
-  'auto'
+  "uk",
+  "auto",
 );
 
 console.log(`Розпізнано: ${sttResponse.text}`);
@@ -194,9 +199,9 @@ console.log(`Розпізнано: ${sttResponse.text}`);
 ```typescript
 const capabilities = await voiceAPIUltimate.loadCapabilities();
 
-console.log('API Services:', capabilities.api_services);
-console.log('Local Models:', capabilities.local_models);
-console.log('Recommended:', capabilities.recommended_provider);
+console.log("API Services:", capabilities.api_services);
+console.log("Local Models:", capabilities.local_models);
+console.log("Recommended:", capabilities.recommended_provider);
 ```
 
 ---
@@ -204,9 +209,11 @@ console.log('Recommended:', capabilities.recommended_provider);
 ## 📚 API Endpoints
 
 ### `POST /api/tts`
+
 Синтез мовлення з триступеневою логікою fallback
 
 **Request:**
+
 ```json
 {
   "text": "Привіт! Як справи?",
@@ -219,6 +226,7 @@ console.log('Recommended:', capabilities.recommended_provider);
 ```
 
 **Response:**
+
 ```json
 {
   "audio_url": "/audio/tts_20240101_120000.wav",
@@ -232,9 +240,11 @@ console.log('Recommended:', capabilities.recommended_provider);
 ```
 
 ### `POST /api/stt`
+
 Розпізнавання мовлення
 
 **Request:**
+
 ```bash
 curl -X POST http://localhost:8000/api/stt \
   -F "audio=@recording.wav" \
@@ -243,6 +253,7 @@ curl -X POST http://localhost:8000/api/stt \
 ```
 
 **Response:**
+
 ```json
 {
   "text": "Привіт як справи",
@@ -255,9 +266,11 @@ curl -X POST http://localhost:8000/api/stt \
 ```
 
 ### `GET /api/capabilities`
+
 Інформація про можливості системи
 
 **Response:**
+
 ```json
 {
   "api_services": {
@@ -278,9 +291,11 @@ curl -X POST http://localhost:8000/api/stt \
 ```
 
 ### `GET /health`
+
 Health check
 
 **Response:**
+
 ```json
 {
   "status": "healthy",
@@ -337,7 +352,7 @@ curl -X POST http://localhost:8000/api/stt \
 Компонент автоматично використовує Ultimate Voice API:
 
 ```tsx
-import { voiceAPIUltimate } from '@/services/voiceAPIUltimate';
+import { voiceAPIUltimate } from "@/services/voiceAPIUltimate";
 
 // Автоматична ініціалізація capabilities
 useEffect(() => {
@@ -349,13 +364,13 @@ const speakText = async (text: string) => {
   try {
     const response = await voiceAPIUltimate.textToSpeech({
       text,
-      language: 'uk',
-      provider: 'auto'
+      language: "uk",
+      provider: "auto",
     });
 
     console.log(`Озвучено через: ${response.provider}`);
   } catch (error) {
-    console.error('TTS error:', error);
+    console.error("TTS error:", error);
   }
 };
 
@@ -364,14 +379,14 @@ const recognizeSpeech = async (audioBlob: Blob) => {
   try {
     const response = await voiceAPIUltimate.speechToText(
       audioBlob,
-      'uk',
-      'auto'
+      "uk",
+      "auto",
     );
 
     console.log(`Розпізнано: ${response.text}`);
     return response.text;
   } catch (error) {
-    console.error('STT error:', error);
+    console.error("STT error:", error);
   }
 };
 ```
@@ -380,31 +395,33 @@ const recognizeSpeech = async (audioBlob: Blob) => {
 
 ## 📊 Порівняння провайдерів
 
-| Provider | Якість | Швидкість | Українська | Ціна | Offline |
-|----------|--------|-----------|------------|------|---------|
-| **ElevenLabs** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡ | ✅ | 💰 Free tier | ❌ |
-| **Google Cloud** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡⚡ | ✅ Wavenet | 💰 Free tier | ❌ |
-| **Azure Speech** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡ | ✅ Neural | 💰 Free tier | ❌ |
-| **Coqui TTS** | ⭐⭐⭐⭐ | ⚡⚡⚡ | ✅ | 💰 Free | ✅ |
-| **Piper** | ⭐⭐⭐⭐ | ⚡⚡⚡⚡⚡ | ✅ | 💰 Free | ✅ |
-| **Whisper** | ⭐⭐⭐⭐⭐ | ⚡⚡ | ✅ | 💰 Free | ✅ |
-| **faster-whisper** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡ | ✅ | 💰 Free | ✅ |
-| **Browser API** | ⭐⭐⭐ | ⚡⚡⚡⚡⚡ | ✅ | 💰 Free | ✅ |
+| Provider           | Якість     | Швидкість  | Українська | Ціна         | Offline |
+| ------------------ | ---------- | ---------- | ---------- | ------------ | ------- |
+| **ElevenLabs**     | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡   | ✅         | 💰 Free tier | ❌      |
+| **Google Cloud**   | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡⚡ | ✅ Wavenet | 💰 Free tier | ❌      |
+| **Azure Speech**   | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡   | ✅ Neural  | 💰 Free tier | ❌      |
+| **Coqui TTS**      | ⭐⭐⭐⭐   | ⚡⚡⚡     | ✅         | 💰 Free      | ✅      |
+| **Piper**          | ⭐⭐⭐⭐   | ⚡⚡⚡⚡⚡ | ✅         | 💰 Free      | ✅      |
+| **Whisper**        | ⭐⭐⭐⭐⭐ | ⚡⚡       | ✅         | 💰 Free      | ✅      |
+| **faster-whisper** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡   | ✅         | 💰 Free      | ✅      |
+| **Browser API**    | ⭐⭐⭐     | ⚡⚡⚡⚡⚡ | ✅         | 💰 Free      | ✅      |
 
 ---
 
 ## 💡 Best Practices
 
 ### 1. **Використовуйте 'auto' provider**
+
 ```typescript
 // ✅ Добре - система вибере найкращий
-voiceAPIUltimate.textToSpeech({ text, provider: 'auto' });
+voiceAPIUltimate.textToSpeech({ text, provider: "auto" });
 
 // ❌ Погано - прив'язка до конкретного провайдера
-voiceAPIUltimate.textToSpeech({ text, provider: 'api' });
+voiceAPIUltimate.textToSpeech({ text, provider: "api" });
 ```
 
 ### 2. **Перевіряйте capabilities**
+
 ```typescript
 const capabilities = await voiceAPIUltimate.loadCapabilities();
 const provider = capabilities.recommended_provider;
@@ -412,16 +429,18 @@ console.log(`Використовую: ${provider}`);
 ```
 
 ### 3. **Обробляйте помилки**
+
 ```typescript
 try {
   await voiceAPIUltimate.textToSpeech({ text });
 } catch (error) {
-  console.error('TTS failed:', error);
+  console.error("TTS failed:", error);
   // Fallback вже відбувся автоматично
 }
 ```
 
 ### 4. **Очищайте кеш**
+
 ```typescript
 // Очистити кеш після завершення роботи
 voiceAPIUltimate.clearCache();
@@ -432,16 +451,19 @@ voiceAPIUltimate.clearCache();
 ## 🔒 Безпека та Privacy
 
 ### API Keys
+
 - 🔐 Зберігайте API keys в environment variables
 - ❌ Ніколи не комітьте keys в Git
 - ✅ Використовуйте `.env` файли
 
 ### Local Models
+
 - ✅ Повна privacy - дані не виходять з системи
 - ✅ GDPR compliant
 - ✅ Працює offline
 
 ### Browser API
+
 - ✅ Дані обробляються локально в браузері
 - ⚠️ Залежить від браузера (Chrome, Firefox, Safari)
 
@@ -451,28 +473,31 @@ voiceAPIUltimate.clearCache();
 
 ### Швидкість генерації (1 секунда аудіо)
 
-| Provider | Час генерації | Якість |
-|----------|---------------|--------|
-| ElevenLabs | ~0.5-1s | Відмінна |
-| Google Cloud | ~0.3-0.7s | Відмінна |
-| Azure | ~0.5-1s | Відмінна |
-| Coqui TTS | ~2-5s | Добра |
-| Piper | ~0.5-1s | Добра |
-| Browser API | Миттєво | Середня |
+| Provider     | Час генерації | Якість   |
+| ------------ | ------------- | -------- |
+| ElevenLabs   | ~0.5-1s       | Відмінна |
+| Google Cloud | ~0.3-0.7s     | Відмінна |
+| Azure        | ~0.5-1s       | Відмінна |
+| Coqui TTS    | ~2-5s         | Добра    |
+| Piper        | ~0.5-1s       | Добра    |
+| Browser API  | Миттєво       | Середня  |
 
 ### Системні вимоги
 
 **Мінімальні (Browser only):**
+
 - 🖥️ CPU: Будь-який сучасний
 - 💾 RAM: 1 GB
 - 💿 Диск: 0 MB
 
 **Оптимальні (Local Models):**
+
 - 🖥️ CPU: 4+ cores
 - 💾 RAM: 4-8 GB
 - 💿 Диск: 5 GB для моделей
 
 **Рекомендовані (API + Local):**
+
 - 🖥️ CPU: 8+ cores
 - 💾 RAM: 8-16 GB
 - 💿 Диск: 10 GB
@@ -532,12 +557,14 @@ export ELEVENLABS_API_KEY="your_key"
 ## 🎯 Roadmap
 
 ### v5.4 (Заплановано)
+
 - [ ] WebSocket підтримка для streaming
 - [ ] Кастомні голоси (voice cloning)
 - [ ] Аналітика використання
 - [ ] Мобільна оптимізація
 
 ### v6.0 (Майбутнє)
+
 - [ ] Підтримка більше мов (100+)
 - [ ] Емоційні голоси
 - [ ] Realtime voice conversion
@@ -548,11 +575,13 @@ export ELEVENLABS_API_KEY="your_key"
 ## 📞 Підтримка
 
 **Документація:**
+
 - 📖 Основна: [VOICE_README.md](./VOICE_README.md)
 - ⚡ Quickstart: [VOICE_QUICKSTART.txt](./VOICE_QUICKSTART.txt)
 - 🎤 Гайд: [VOICE_GUIDE.md](./VOICE_GUIDE.md)
 
 **Логи:**
+
 ```bash
 # API сервер логи
 tail -f /var/log/voice-api.log
@@ -590,6 +619,7 @@ cd frontend && npm start           # Frontend
 ```
 
 **Функції:**
+
 - ✅ Триступенева логіка fallback
 - ✅ API-First підхід (ElevenLabs, Google, Azure)
 - ✅ Local fallback (Coqui, Piper, Whisper)
@@ -599,6 +629,7 @@ cd frontend && npm start           # Frontend
 - ✅ Production-ready з повним тестуванням
 
 **Наступні кроки:**
+
 1. Налаштувати API keys для кращої якості
 2. Запустити систему: `./start-voice-ultimate.sh`
 3. Протестувати: `python3 test_voice_ultimate.py`

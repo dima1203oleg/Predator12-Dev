@@ -14,15 +14,13 @@
 import asyncio
 import json
 import logging
-import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
 
-import aiohttp
 from cryptography.fernet import Fernet
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Security
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi import APIRouter, HTTPException
+from fastapi.security import HTTPBearer
 from pydantic import BaseModel, Field
 
 # Налаштування логування
@@ -591,7 +589,7 @@ async def health_check():
     """Перевірка здоров'я Voice Providers API"""
     try:
         providers = load_providers()
-        settings = load_settings()
+        load_settings()
 
         return {
             "status": "healthy",

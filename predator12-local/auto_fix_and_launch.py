@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-"""
-🔧 АВТОМАТИЧНЕ ВИПРАВЛЕННЯ ТА ЗАПУСК СИСТЕМИ PREDATOR11
-Скрипт для автоматичного запуску всіх компонентів системи
-"""
-import asyncio
+"""🔧 АВТОМАТИЧНЕ ВИПРАВЛЕННЯ ТА ЗАПУСК СИСТЕМИ PREDATOR11 Скрипт для
+автоматичного запуску всіх компонентів системи."""
 import logging
 import subprocess
 import time
@@ -20,7 +17,7 @@ class SystemLauncher:
         self.base_path = Path("/Users/dima/Documents/Predator11")
 
     def check_docker(self):
-        """Перевіряє статус Docker"""
+        """Перевіряє статус Docker."""
         try:
             result = subprocess.run(["docker", "ps"], capture_output=True, text=True, timeout=5)
             return result.returncode == 0
@@ -28,7 +25,7 @@ class SystemLauncher:
             return False
 
     def start_docker(self):
-        """Запускає Docker Desktop"""
+        """Запускає Docker Desktop."""
         logger.info("🐳 Запускаю Docker Desktop...")
         try:
             subprocess.run(["open", "-a", "Docker"], check=False)
@@ -45,7 +42,7 @@ class SystemLauncher:
             return False
 
     def start_standalone_models(self):
-        """Запускає standalone model server"""
+        """Запускає standalone model server."""
         logger.info("🤖 Запускаю Standalone Model Server...")
         try:
             # Перевіряємо чи вже запущений
@@ -76,7 +73,7 @@ class SystemLauncher:
             return False
 
     def start_docker_compose(self):
-        """Запускає Docker Compose"""
+        """Запускає Docker Compose."""
         logger.info("🐋 Запускаю Docker Compose...")
         try:
             result = subprocess.run(
@@ -94,7 +91,7 @@ class SystemLauncher:
             return False
 
     def start_agents(self):
-        """Запускає агентів самовдосконалення"""
+        """Запускає агентів самовдосконалення."""
         logger.info("🤖 Запускаю агентів самовдосконалення...")
 
         agents = [
@@ -120,7 +117,7 @@ class SystemLauncher:
         return started_agents > 0
 
     def run_system_check(self):
-        """Перевіряє стан системи"""
+        """Перевіряє стан системи."""
         logger.info("🔍 Перевіряю стан системи...")
 
         checks = {
@@ -140,7 +137,7 @@ class SystemLauncher:
         return results
 
     def launch_full_system(self):
-        """Запускає всю систему"""
+        """Запускає всю систему."""
         logger.info("🚀 ЗАПУСК ПОВНОЇ СИСТЕМИ PREDATOR11")
         logger.info("=" * 50)
 

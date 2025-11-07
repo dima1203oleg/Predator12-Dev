@@ -3,14 +3,12 @@
 🆓 ХМАРНИЙ MODEL SDK ДЛЯ PREDATOR11 (БЕЗ ЛОКАЛЬНИХ МОДЕЛЕЙ)
 Тільки безкоштовні хмарні API провайдери
 """
-import asyncio
 import logging
-import os
 from typing import Any, Dict, List, Optional
 
 import httpx
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)

@@ -6,11 +6,10 @@
 import os
 import random
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 import yaml
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
 
 router = APIRouter(prefix="/api/agents", tags=["agents"])
 
@@ -21,7 +20,7 @@ REGISTRY_PATH = os.path.join(
 
 
 def load_agents_registry() -> Dict[str, Any]:
-    """Завантаження реєстру агентів"""
+    """Завантаження реєстру агентів."""
     try:
         with open(REGISTRY_PATH, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
@@ -32,7 +31,7 @@ def load_agents_registry() -> Dict[str, Any]:
 
 
 def get_agent_status(agent_name: str, config: Dict) -> Dict[str, Any]:
-    """Отримати поточний статус агента"""
+    """Отримати поточний статус агента."""
     # Статуси на основі пріоритету
     priority = config.get("priority", "normal")
     status_map = {
@@ -69,7 +68,7 @@ def get_agent_status(agent_name: str, config: Dict) -> Dict[str, Any]:
 
 @router.get("/status")
 async def get_agents_status():
-    """Отримати статус всіх 26 агентів"""
+    """Отримати статус всіх 26 агентів."""
     try:
         agents_config = load_agents_registry()
 
@@ -98,7 +97,7 @@ async def get_agents_status():
 
 @router.get("/health")
 async def agents_health():
-    """Health check для агентів"""
+    """Health check для агентів."""
     try:
         agents_config = load_agents_registry()
         return {
@@ -112,7 +111,7 @@ async def agents_health():
 
 @router.get("/{agent_id}")
 async def get_agent_details(agent_id: str):
-    """Детальна інформація про конкретного агента"""
+    """Детальна інформація про конкретного агента."""
     try:
         agents_config = load_agents_registry()
 

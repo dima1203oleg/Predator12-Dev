@@ -14,10 +14,9 @@ from typing import Any, Callable, Dict, List, Optional, Set
 import websockets
 from websockets.server import WebSocketServerProtocol
 
-from ..ai import ConversationContext, ConversationResponse
+from ..ai import ConversationResponse
 from ..avatar import AvatarState
 from ..vision import EmotionResult
-from ..voice import VoiceCommand
 
 logger = logging.getLogger(__name__)
 

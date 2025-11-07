@@ -10,11 +10,13 @@ npm run type-check
 ```
 
 **Проблеми**:
+
 - Lazy loading module resolution
 - D3 types compatibility
 - Store method signatures
 
 **Рішення**:
+
 ```typescript
 // Add default exports to components
 export default function Head3D() { ... }
@@ -35,6 +37,7 @@ npm install three @react-three/fiber @react-three/drei @react-three/postprocessi
 ### 3. Manual Testing 🧪
 
 **Чеклист**:
+
 - [ ] ASR працює (Chrome/Edge)
 - [ ] TTS працює (всі браузери)
 - [ ] 3D голова рендериться
@@ -126,10 +129,10 @@ const getToken = async () => {
 const executeIntent = async (text: string) => {
   const token = await getToken();
   const response = await fetch(`${API_BASE}/intent/execute`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ text, locale }),
   });
@@ -147,10 +150,9 @@ useEffect(() => {
 
   ws.onmessage = (event) => {
     const alert = JSON.parse(event.data);
-    useAssistantStore.getState().setAlerts([
-      ...useAssistantStore.getState().alerts.items,
-      alert,
-    ]);
+    useAssistantStore
+      .getState()
+      .setAlerts([...useAssistantStore.getState().alerts.items, alert]);
   };
 
   return () => ws.close();
@@ -169,19 +171,19 @@ npm install --save-dev @testing-library/react @testing-library/jest-dom vitest
 
 ```typescript
 // __tests__/assistantStore.test.ts
-import { renderHook, act } from '@testing-library/react';
-import { useAssistantStore } from '../state/assistantStore';
+import { renderHook, act } from "@testing-library/react";
+import { useAssistantStore } from "../state/assistantStore";
 
-describe('assistantStore', () => {
-  it('should push message', () => {
+describe("assistantStore", () => {
+  it("should push message", () => {
     const { result } = renderHook(() => useAssistantStore());
 
     act(() => {
-      result.current.pushMessage({ role: 'user', text: 'Hello' });
+      result.current.pushMessage({ role: "user", text: "Hello" });
     });
 
     expect(result.current.chat.history).toHaveLength(1);
-    expect(result.current.chat.history[0].text).toBe('Hello');
+    expect(result.current.chat.history[0].text).toBe("Hello");
   });
 });
 ```
@@ -214,13 +216,13 @@ describe('ChatPanel Integration', () => {
 
 ```typescript
 // e2e/assistant.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('voice interaction flow', async ({ page }) => {
-  await page.goto('http://localhost:5173/assistant');
+test("voice interaction flow", async ({ page }) => {
+  await page.goto("http://localhost:5173/assistant");
 
   // Grant mic permissions
-  await page.context().grantPermissions(['microphone']);
+  await page.context().grantPermissions(["microphone"]);
 
   // Click mic button
   await page.click('button[aria-label="Start recording"]');
@@ -229,7 +231,7 @@ test('voice interaction flow', async ({ page }) => {
   await page.waitForTimeout(2000);
 
   // Check transcript
-  const transcript = await page.textContent('.chat-message.user');
+  const transcript = await page.textContent(".chat-message.user");
   expect(transcript).toBeTruthy();
 });
 ```
@@ -253,6 +255,7 @@ npm run build -- --analyze
 ```
 
 **Optimization**:
+
 ```typescript
 // Use CDN for heavy libs
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0"></script>
@@ -265,7 +268,7 @@ const Head3D = lazy(() => import(/* webpackChunkName: "head3d" */ './components/
 
 ```typescript
 // analytics.ts
-import { onCLS, onFID, onFCP, onLCP, onTTFB } from 'web-vitals';
+import { onCLS, onFID, onFCP, onLCP, onTTFB } from "web-vitals";
 
 onCLS(console.log);
 onFID(console.log);

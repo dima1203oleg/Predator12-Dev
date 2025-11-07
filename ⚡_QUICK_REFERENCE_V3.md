@@ -11,12 +11,14 @@
 ## 🚀 Quick Commands
 
 ### Start Server
+
 ```bash
 cd /Users/dima/Documents/Predator12
 ./launch-enhanced-v3.sh
 ```
 
 ### Stop Server
+
 ```bash
 # Press Ctrl+C in terminal
 # OR
@@ -24,12 +26,14 @@ lsof -ti:5090 | xargs kill -9
 ```
 
 ### View Status
+
 ```bash
 # Check if server is running
 lsof -i:5090
 ```
 
 ### Open Dashboard
+
 ```bash
 # In browser, navigate to:
 http://localhost:5090/
@@ -59,6 +63,7 @@ predator12-local/frontend/
 ## 🎨 What's New in V3
 
 ### Visual Enhancements
+
 - 📏 **Larger Icons**: 68px metrics (was 50px)
 - 🔵 **Bigger Status Dots**: 14px (was 10px)
 - 🎯 **Section Icons**: 38px (NEW)
@@ -66,6 +71,7 @@ predator12-local/frontend/
 - 🤖 **Agent Status**: 32px (NEW)
 
 ### Code Improvements
+
 - ✅ All inline styles → CSS
 - ✅ Accessibility attributes added
 - ✅ Component modularization
@@ -73,6 +79,7 @@ predator12-local/frontend/
 - ✅ No console errors
 
 ### Cosmic Effects
+
 - ✨ 670+ lines of CSS animations
 - 🌌 Starfield background
 - 💫 Holographic effects
@@ -107,22 +114,26 @@ predator12-local/frontend/
 ## 🔧 Troubleshooting
 
 ### Port Already in Use
+
 ```bash
 lsof -ti:5090 | xargs kill -9
 ```
 
 ### Dependencies Missing
+
 ```bash
 cd predator12-local/frontend
 npm install --legacy-peer-deps
 ```
 
 ### Vite Not Found
+
 ```bash
 npm install vite@latest
 ```
 
 ### Clear Cache
+
 ```bash
 rm -rf node_modules/.vite
 npm run dev -- --port 5090 --host
@@ -182,4 +193,4 @@ npm run dev -- --port 5090 --host
 
 **Remember**: Press `h + Enter` in Vite terminal for help menu!
 
-*Keep building amazing things!* 🚀
+_Keep building amazing things!_ 🚀

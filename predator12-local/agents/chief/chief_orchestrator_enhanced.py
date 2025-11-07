@@ -16,9 +16,8 @@ from typing import Any, Dict, List, Optional
 import aiohttp
 import redis
 import structlog
-from circuitbreaker import CircuitBreakerMonitor, circuit
-from fastapi import BackgroundTasks, FastAPI, HTTPException
-from pydantic import BaseModel
+from circuitbreaker import circuit
+from fastapi import FastAPI, HTTPException
 
 # Circuit Breaker Configuration
 DEFAULT_FAILURE_THRESHOLD = 3
@@ -46,7 +45,7 @@ class Priority(Enum):
 
 @dataclass
 class AgentTask:
-    """Задача для окремого агента"""
+    """Задача для окремого агента."""
 
     agent_name: str
     task_type: str
@@ -57,7 +56,7 @@ class AgentTask:
 
 @dataclass
 class UserRequest:
-    """Запит користувача"""
+    """Запит користувача."""
 
     query: str
     channel: str  # ui, telegram, api
@@ -68,7 +67,7 @@ class UserRequest:
 
 @dataclass
 class ExecutionPlan:
-    """План виконання задачі"""
+    """План виконання задачі."""
 
     task_id: str
     user_request: UserRequest
@@ -79,7 +78,7 @@ class ExecutionPlan:
 
 
 class ChiefOrchestratorAgent:
-    """Головний агент-оркестратор"""
+    """Головний агент-оркестратор."""
 
     def __init__(self):
         self.app = FastAPI(title="Chief Orchestrator Agent", version="1.0.0")
@@ -92,7 +91,7 @@ class ChiefOrchestratorAgent:
         self._setup_routes()
 
     def _load_agent_capabilities(self) -> Dict[str, List[str]]:
-        """Завантаження можливостей агентів"""
+        """Завантаження можливостей агентів."""
         return {
             "IngestAgent": ["file_upload", "data_profiling", "pii_detection"],
             "DataQualityAgent": ["validation", "quality_scoring", "anomaly_detection"],
@@ -106,11 +105,11 @@ class ChiefOrchestratorAgent:
         }
 
     def _setup_routes(self):
-        """Налаштування HTTP маршрутів"""
+        """Налаштування HTTP маршрутів."""
 
         @self.app.post("/chief/ask")
         async def ask(request: dict):
-            """Основний endpoint для запитів користувача"""
+            """Основний endpoint для запитів користувача."""
             try:
                 user_request = UserRequest(
                     query=request["query"],
@@ -129,7 +128,7 @@ class ChiefOrchestratorAgent:
 
         @self.app.get("/chief/status/{task_id}")
         async def get_status(task_id: str):
-            """Статус виконання задачі"""
+            """Статус виконання задачі."""
             if task_id not in self.active_tasks:
                 raise HTTPException(status_code=404, detail="Task not found")
 
@@ -143,7 +142,7 @@ class ChiefOrchestratorAgent:
 
         @self.app.get("/chief/health")
         async def health():
-            """Health check"""
+            """Health check."""
             return {
                 "status": "healthy",
                 "active_tasks": len(self.active_tasks),
@@ -151,7 +150,7 @@ class ChiefOrchestratorAgent:
             }
 
     async def process_user_request(self, user_request: UserRequest) -> str:
-        """Обробка запиту користувача з декомпозицією на задачі"""
+        """Обробка запиту користувача з декомпозицією на задачі."""
 
         task_id = str(uuid.uuid4())
         logger.info("Processing user request", task_id=task_id, query=user_request.query)
@@ -178,7 +177,7 @@ class ChiefOrchestratorAgent:
     async def _create_execution_plan(
         self, task_id: str, user_request: UserRequest
     ) -> ExecutionPlan:
-        """Створення плану виконання через LLM"""
+        """Створення плану виконання через LLM."""
 
         # Промпт для планування
         planning_prompt = f"""
@@ -233,7 +232,7 @@ class ChiefOrchestratorAgent:
         )
 
     async def _create_fallback_plan(self, user_request: UserRequest) -> Dict[str, Any]:
-        """Fallback план для простих запитів"""
+        """Fallback план для простих запитів."""
 
         query_lower = user_request.query.lower()
 
@@ -292,7 +291,7 @@ class ChiefOrchestratorAgent:
             }
 
     async def _execute_plan(self, plan: ExecutionPlan):
-        """Виконання плану з урахуванням залежностей"""
+        """Виконання плану з урахуванням залежностей."""
 
         logger.info("Starting plan execution", task_id=plan.task_id)
 
@@ -356,7 +355,7 @@ class ChiefOrchestratorAgent:
 
     @circuit(failure_threshold=DEFAULT_FAILURE_THRESHOLD, recovery_timeout=DEFAULT_RECOVERY_TIMEOUT)
     async def _execute_agent_task(self, task: AgentTask, context_results: Dict) -> Dict[str, Any]:
-        """Виконання задачі окремого агента"""
+        """Виконання задачі окремого агента."""
 
         # Визначаємо URL агента (за портом з agents.yaml)
         agent_ports = {
@@ -397,7 +396,7 @@ class ChiefOrchestratorAgent:
                 raise Exception(f"Network error calling {task.agent_name}: {e}")
 
     async def _agent_fallback(self, agent_name: str, error: str) -> Dict[str, Any]:
-        """Fallback behavior when agent calls fail"""
+        """Fallback behavior when agent calls fail."""
         logger.warning("Using fallback for agent", agent=agent_name, error=error)
         return {
             "status": "fallback",
@@ -409,7 +408,7 @@ class ChiefOrchestratorAgent:
     async def _aggregate_results(
         self, plan: ExecutionPlan, results: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Агрегація результатів від всіх агентів"""
+        """Агрегація результатів від всіх агентів."""
 
         # Промпт для агрегації
         aggregation_prompt = f"""
@@ -444,7 +443,7 @@ class ChiefOrchestratorAgent:
         }
 
     async def _call_model_router(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        """Виклик Model Router для LLM"""
+        """Виклик Model Router для LLM."""
 
         try:
             async with aiohttp.ClientSession() as session:
@@ -465,7 +464,7 @@ class ChiefOrchestratorAgent:
             return {"response": "Task completed. Please review the detailed results."}
 
     async def _publish_event(self, event_type: str, data: Dict[str, Any]):
-        """Публікація події в Redis Streams"""
+        """Публікація події в Redis Streams."""
 
         try:
             stream_name = f"pred:events:{event_type}"
@@ -481,7 +480,7 @@ class ChiefOrchestratorAgent:
             logger.error("Failed to publish event", event_type=event_type, error=str(e))
 
     async def _get_task_progress(self, task_id: str) -> Dict[str, Any]:
-        """Отримання прогресу виконання задачі"""
+        """Отримання прогресу виконання задачі."""
 
         # TODO: Реалізувати відстеження прогресу через Redis/події
         return {

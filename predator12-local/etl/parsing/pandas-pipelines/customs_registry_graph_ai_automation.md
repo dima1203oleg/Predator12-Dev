@@ -1,7 +1,9 @@
 # Автоматизація побудови графів зв’язків та інтеграція з AI-агентами
 
 ## 1. Побудова графа зв’язків після ETL/merge
+
 - Використовуйте NetworkX для побудови графа компаній, осіб, декларацій, судових справ:
+
 ```python
 import networkx as nx
 import pandas as pd
@@ -16,7 +18,9 @@ nx.write_gml(G, 'customs_graph.gml')
 ```
 
 ## 2. Інтеграція з AI-агентами
+
 - Після побудови графа викликайте AI-агента для аналізу схем, аномалій, пошуку фірм-прокладок:
+
 ```python
 from agents.arbiter_agent import analyze_graph
 anomalies = analyze_graph('customs_graph.gml')
@@ -24,6 +28,7 @@ print(anomalies)
 ```
 
 ## 3. Автоматизація
+
 - Додавайте ці кроки у ETL/merge pipeline або запускайте автоматично після кожного імпорту.
 - Результати аналізу можна зберігати у knowledge graph, відображати у Grafana/OpenSearch Dashboard, або надсилати алерти.
 

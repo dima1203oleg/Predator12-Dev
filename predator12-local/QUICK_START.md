@@ -33,6 +33,7 @@ make frontend
 ## 📋 Передумови
 
 ### macOS
+
 ```bash
 # Встановити Homebrew (якщо немає)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -44,6 +45,7 @@ brew services start redis
 ```
 
 ### Linux (Ubuntu/Debian)
+
 ```bash
 sudo apt update
 sudo apt install python3.11 python3-pip nodejs npm postgresql redis-server
@@ -54,12 +56,14 @@ sudo systemctl start redis-server
 ## 🔧 Перша налаштування
 
 ### 1. Клонувати або скопіювати проект
+
 ```bash
 cd /Users/dima/Documents/Predator12
 # Папка predator12-local вже має бути створена
 ```
 
 ### 2. Налаштувати .env
+
 ```bash
 cd predator12-local
 cp .env.example .env
@@ -72,6 +76,7 @@ nano .env
 ### 3. Встановити залежності
 
 #### Backend (Python)
+
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
@@ -79,6 +84,7 @@ pip install -r backend/requirements.txt
 ```
 
 #### Frontend (Node.js)
+
 ```bash
 cd frontend
 npm install
@@ -86,6 +92,7 @@ cd ..
 ```
 
 ### 4. Ініціалізувати базу даних
+
 ```bash
 # Створити користувача та БД
 ./scripts/init_local_db.sh
@@ -100,12 +107,14 @@ cd ..
 ### 5. Запустити сервіси
 
 #### Backend
+
 ```bash
 source .venv/bin/activate
 uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 #### Frontend (в іншому терміналі)
+
 ```bash
 cd frontend
 npm run dev
@@ -114,6 +123,7 @@ npm run dev
 ## 🔍 Перевірка
 
 ### Швидкий тест
+
 ```bash
 # Backend health
 curl http://localhost:8000/health
@@ -126,6 +136,7 @@ open http://localhost:8000/docs
 ```
 
 ### Повний smoke тест
+
 ```bash
 make smoke
 ```
@@ -133,6 +144,7 @@ make smoke
 ## 📊 Міграція даних з Predator11
 
 ### Якщо потрібно перенести дані
+
 ```bash
 # 1. Створити дамп з контейнера
 cd ../Predator11
@@ -150,6 +162,7 @@ make restore
 ## 🐞 Дебагінг у VS Code
 
 ### Запустити з дебагером
+
 1. Відкрити VS Code
 2. `F5` або Debug panel → Вибрати конфігурацію:
    - `🐍 Python: FastAPI Backend Debug` - тільки backend
@@ -157,6 +170,7 @@ make restore
    - `🚀 Full Stack Debug` - все разом
 
 ### Breakpoints
+
 - Backend: Поставити breakpoint в `backend/main.py` або в агентах
 - Frontend: Поставити breakpoint в `frontend/src/` файлах
 
@@ -212,6 +226,7 @@ make logs
 ## ⚠️ Типові помилки
 
 ### Помилка: "Port already in use"
+
 ```bash
 # Знайти процес
 lsof -ti:8000  # Backend
@@ -222,6 +237,7 @@ kill -9 $(lsof -ti:8000)
 ```
 
 ### Помилка: "Cannot connect to database"
+
 ```bash
 # Перевірити PostgreSQL
 brew services list | grep postgresql
@@ -234,6 +250,7 @@ psql -h 127.0.0.1 -U postgres -c "SELECT 1;"
 ```
 
 ### Помилка: "Module not found"
+
 ```bash
 # Backend
 source .venv/bin/activate
@@ -244,6 +261,7 @@ cd frontend && npm install
 ```
 
 ### Помилка: "Migration failed"
+
 ```bash
 # Очистити БД і почати заново
 psql -U predator_user -d predator -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
@@ -268,6 +286,7 @@ cd backend && alembic upgrade head
 ## 🆘 Допомога
 
 Якщо нічого не працює:
+
 ```bash
 # Повне перевстановлення
 make clean
@@ -282,6 +301,7 @@ make migrate
 **🎉 Готово! Тепер можна розробляти!**
 
 Наступні кроки:
+
 1. Відкрити http://localhost:3000
 2. Перевірити API на http://localhost:8000/docs
 3. Почати кодити! 🚀

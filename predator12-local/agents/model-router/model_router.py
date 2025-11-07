@@ -31,7 +31,7 @@ class ModelType(Enum):
 
 @dataclass
 class ModelConfig:
-    """Конфігурація моделі"""
+    """Конфігурація моделі."""
 
     name: str
     provider: str
@@ -45,7 +45,7 @@ class ModelConfig:
 
 @dataclass
 class ModelUsage:
-    """Статистика використання моделі"""
+    """Статистика використання моделі."""
 
     requests_count: int = 0
     total_tokens: int = 0
@@ -56,7 +56,7 @@ class ModelUsage:
 
 @dataclass
 class RoutingRequest:
-    """Запит на маршрутизацію"""
+    """Запит на маршрутизацію."""
 
     model_type: str
     prompt: str
@@ -69,13 +69,13 @@ class RoutingRequest:
 
 
 class RateLimiter:
-    """Rate limiter для моделей"""
+    """Rate limiter для моделей."""
 
     def __init__(self):
         self.requests = defaultdict(deque)  # model_name -> deque of timestamps
 
     def can_request(self, model_name: str, rate_limit_rpm: int) -> bool:
-        """Перевіряє чи можна зробити запит"""
+        """Перевіряє чи можна зробити запит."""
         now = time.time()
         minute_ago = now - 60
 
@@ -114,7 +114,7 @@ class ModelRouterAgent:
         self._setup_routes()
 
     def _init_models_config(self) -> Dict[str, ModelConfig]:
-        """Ініціалізація конфігурації 58 моделей"""
+        """Ініціалізація конфігурації 58 моделей."""
         models = {}
 
         # Reasoning Models (5 моделей)
@@ -291,7 +291,7 @@ class ModelRouterAgent:
         return models
 
     def _init_routing_policies(self) -> Dict[str, List[str]]:
-        """Ініціалізація політик маршрутизації"""
+        """Ініціалізація політик маршрутизації."""
         return {
             ModelType.REASONING.value: [
                 "openai/gpt-5",
@@ -318,11 +318,11 @@ class ModelRouterAgent:
         }
 
     def _setup_routes(self):
-        """Налаштування HTTP маршрутів"""
+        """Налаштування HTTP маршрутів."""
 
         @self.app.post("/router/route")
         async def route_request(request: dict):
-            """Основний endpoint для маршрутизації"""
+            """Основний endpoint для маршрутизації."""
             try:
                 routing_request = RoutingRequest(
                     model_type=request["model_type"],
@@ -344,7 +344,7 @@ class ModelRouterAgent:
 
         @self.app.get("/router/models")
         async def list_models():
-            """Список доступних моделей"""
+            """Список доступних моделей."""
             models_by_type = defaultdict(list)
             for model_name, config in self.models_config.items():
                 models_by_type[config.model_type.value].append(
@@ -360,7 +360,7 @@ class ModelRouterAgent:
 
         @self.app.get("/router/health")
         async def health():
-            """Health check з метриками"""
+            """Health check з метриками."""
             total_requests = sum(usage.requests_count for usage in self.model_usage.values())
             avg_error_rate = sum(usage.error_rate for usage in self.model_usage.values()) / max(
                 1, len(self.model_usage)
@@ -376,7 +376,7 @@ class ModelRouterAgent:
 
         @self.app.get("/router/usage")
         async def get_usage():
-            """Статистика використання моделей"""
+            """Статистика використання моделей."""
             usage_stats = {}
             for model_name, usage in self.model_usage.items():
                 usage_stats[model_name] = {
@@ -389,7 +389,7 @@ class ModelRouterAgent:
             return usage_stats
 
     async def route_and_execute(self, request: RoutingRequest) -> Dict[str, Any]:
-        """Маршрутизація та виконання запиту з фолбеками"""
+        """Маршрутизація та виконання запиту з фолбеками."""
 
         start_time = time.time()
 
@@ -468,7 +468,7 @@ class ModelRouterAgent:
     async def _execute_model_request(
         self, model_name: str, request: RoutingRequest, config: ModelConfig
     ) -> Dict[str, Any]:
-        """Виконання запиту до конкретної моделі через SDK"""
+        """Виконання запиту до конкретної моделі через SDK."""
 
         # Підготовка запиту до SDK
         sdk_request = {
@@ -520,7 +520,7 @@ class ModelRouterAgent:
     async def _update_usage_stats(
         self, model_name: str, request: RoutingRequest, latency: float, success: bool
     ):
-        """Оновлення статистики використання моделі"""
+        """Оновлення статистики використання моделі."""
 
         usage = self.model_usage[model_name]
         usage.requests_count += 1
@@ -539,7 +539,7 @@ class ModelRouterAgent:
             usage.error_rate = usage.error_rate * (usage.requests_count - 1) / usage.requests_count
 
     async def _publish_event(self, event_type: str, data: Dict[str, Any]):
-        """Публікація події в Redis Streams"""
+        """Публікація події в Redis Streams."""
         try:
             event_data = {
                 "event_type": event_type,

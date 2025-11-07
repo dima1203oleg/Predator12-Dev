@@ -1,11 +1,10 @@
 ---
 name: Add a new MCP server
 about: Requests for adding a new MCP server to the Docker Catalog
-title: ""
+title: ''
 labels: submission
-assignees: ""
+assignees: ''
 ---
-
 ## MCP Server Information
 
 **Server Name:**

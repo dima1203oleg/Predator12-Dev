@@ -11,6 +11,7 @@
 ### 🔊 TTS (Text-to-Speech)
 
 #### 1. **Coqui TTS** ⭐⭐⭐⭐⭐ (Найкраща якість)
+
 - **Українська**: `tts_models/uk/mai/vits`
 - **Англійська**: `tts_models/en/ljspeech/vits`
 - **Особливості**:
@@ -20,6 +21,7 @@
   - Open-source
 
 #### 2. **gTTS** ⭐⭐⭐⭐ (Google безкоштовний)
+
 - **Мови**: українська, англійська, 100+ мов
 - **Особливості**:
   - Google якість (без API key!)
@@ -28,6 +30,7 @@
   - Без обмежень
 
 #### 3. **pyttsx3** ⭐⭐⭐ (Системні голоси)
+
 - **Мови**: залежить від системи
 - **Особливості**:
   - Офлайн
@@ -39,6 +42,7 @@
 ### 🎧 STT (Speech-to-Text)
 
 #### 1. **faster-whisper** ⭐⭐⭐⭐⭐ (Найшвидший)
+
 - **Модель**: OpenAI Whisper base
 - **Мови**: українська, англійська, 90+ мов
 - **Особливості**:
@@ -48,6 +52,7 @@
   - INT8 квантізація для швидкості
 
 #### 2. **Whisper** ⭐⭐⭐⭐ (Якщо faster-whisper недоступний)
+
 - **Модель**: OpenAI Whisper base
 - **Мови**: українська, англійська, 90+ мов
 - **Особливості**:
@@ -56,6 +61,7 @@
   - Open-source від OpenAI
 
 #### 3. **Vosk** ⭐⭐⭐ (Real-time)
+
 - **Мови**: українська, англійська, 20+ мов
 - **Особливості**:
   - Дуже швидкий
@@ -125,6 +131,7 @@ npm run dev
 ### API Endpoints:
 
 #### TTS (Text-to-Speech)
+
 ```bash
 curl -X POST http://localhost:5094/api/tts \
   -H "Content-Type: application/json" \
@@ -138,6 +145,7 @@ curl -X POST http://localhost:5094/api/tts \
 ```
 
 #### STT (Speech-to-Text)
+
 ```bash
 curl -X POST http://localhost:5094/api/stt \
   -F "audio=@audio.wav" \
@@ -146,6 +154,7 @@ curl -X POST http://localhost:5094/api/stt \
 ```
 
 #### Capabilities
+
 ```bash
 curl http://localhost:5094/api/capabilities
 ```
@@ -154,14 +163,14 @@ curl http://localhost:5094/api/capabilities
 
 ## 📊 ПОРІВНЯННЯ ПРОВАЙДЕРІВ
 
-| Провайдер | Якість | Швидкість | Офлайн | Українська | Безкоштовний |
-|-----------|--------|-----------|--------|------------|--------------|
-| **TTS: Coqui** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡ | ✅ | ✅ | ✅ |
-| **TTS: gTTS** | ⭐⭐⭐⭐ | ⚡⚡⚡⚡⚡ | ❌ | ✅ | ✅ |
-| **TTS: pyttsx3** | ⭐⭐⭐ | ⚡⚡⚡⚡⚡ | ✅ | ⚠️ | ✅ |
-| **STT: faster-whisper** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡⚡ | ✅ | ✅ | ✅ |
-| **STT: Whisper** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡ | ✅ | ✅ | ✅ |
-| **STT: Vosk** | ⭐⭐⭐⭐ | ⚡⚡⚡⚡⚡ | ✅ | ✅ | ✅ |
+| Провайдер               | Якість     | Швидкість  | Офлайн | Українська | Безкоштовний |
+| ----------------------- | ---------- | ---------- | ------ | ---------- | ------------ |
+| **TTS: Coqui**          | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡   | ✅     | ✅         | ✅           |
+| **TTS: gTTS**           | ⭐⭐⭐⭐   | ⚡⚡⚡⚡⚡ | ❌     | ✅         | ✅           |
+| **TTS: pyttsx3**        | ⭐⭐⭐     | ⚡⚡⚡⚡⚡ | ✅     | ⚠️         | ✅           |
+| **STT: faster-whisper** | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡⚡ | ✅     | ✅         | ✅           |
+| **STT: Whisper**        | ⭐⭐⭐⭐⭐ | ⚡⚡⚡     | ✅     | ✅         | ✅           |
+| **STT: Vosk**           | ⭐⭐⭐⭐   | ⚡⚡⚡⚡⚡ | ✅     | ✅         | ✅           |
 
 ---
 
@@ -170,18 +179,21 @@ curl http://localhost:5094/api/capabilities
 Система автоматично вибирає найкращий доступний провайдер:
 
 ### TTS (Українська):
+
 1. **Coqui TTS** → Якщо модель завантажена
 2. **gTTS** → Якщо є інтернет
 3. **pyttsx3** → Завжди доступний
 4. **Browser API** → Якщо API недоступний
 
 ### TTS (Англійська):
+
 1. **Coqui TTS** → Якщо модель завантажена
 2. **gTTS** → Якщо є інтернет
 3. **pyttsx3** → Завжди доступний
 4. **Browser API** → Якщо API недоступний
 
 ### STT (Обидві мови):
+
 1. **faster-whisper** → Найшвидший
 2. **Whisper** → Якщо faster-whisper недоступний
 3. **Vosk** → Для real-time
@@ -198,14 +210,14 @@ curl http://localhost:5094/api/capabilities
 await premiumFreeVoiceAPI.textToSpeech({
   text: "Привіт!",
   language: "uk",
-  provider: "coqui"  // або "gtts", "pyttsx3", "auto"
+  provider: "coqui", // або "gtts", "pyttsx3", "auto"
 });
 
 // STT
 await premiumFreeVoiceAPI.speechToText({
   audio: audioBlob,
   language: "uk",
-  provider: "faster-whisper"  // або "whisper", "vosk", "auto"
+  provider: "faster-whisper", // або "whisper", "vosk", "auto"
 });
 ```
 
@@ -214,12 +226,14 @@ await premiumFreeVoiceAPI.speechToText({
 ## 📦 СИСТЕМНІ ВИМОГИ
 
 ### Мінімальні:
+
 - **RAM**: 4GB
 - **CPU**: будь-який сучасний процесор
 - **Диск**: 2GB вільного місця
 - **ОС**: macOS, Linux, Windows
 
 ### Рекомендовані:
+
 - **RAM**: 8GB+
 - **CPU**: 4+ ядра
 - **Диск**: 5GB вільного місця
@@ -236,13 +250,14 @@ await premiumFreeVoiceAPI.speechToText({
 ✅ **Швидкість** - faster-whisper 5-10x швидше за Whisper  
 ✅ **Автоматичний fallback** - завжди працює  
 ✅ **Open-source** - прозорий код, без чорних скриньок  
-✅ **Легке розгортання** - один скрипт для запуску  
+✅ **Легке розгортання** - один скрипт для запуску
 
 ---
 
 ## 🐛 TROUBLESHOOTING
 
 ### "API недоступний"
+
 ```bash
 # Запустіть API сервер:
 cd /Users/dima/Documents/Predator12/predator12-local
@@ -250,12 +265,14 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ```
 
 ### "Модель не завантажується"
+
 ```bash
 # Перевірте інтернет-з'єднання (для першого завантаження)
 # Моделі завантажаться автоматично при першому запуску
 ```
 
 ### "Помилка встановлення"
+
 ```bash
 # Оновіть pip:
 pip install --upgrade pip
@@ -265,6 +282,7 @@ pip install -r requirements_premium_free.txt
 ```
 
 ### "Повільно працює"
+
 ```bash
 # Використовуйте faster-whisper замість whisper:
 # Він автоматично вибирається якщо доступний
@@ -285,24 +303,26 @@ pip install -r requirements_premium_free.txt
 ## 🎯 ПРИКЛАДИ
 
 ### JavaScript/TypeScript:
+
 ```typescript
-import { premiumFreeVoiceAPI } from './services/premiumFreeVoiceAPI';
+import { premiumFreeVoiceAPI } from "./services/premiumFreeVoiceAPI";
 
 // TTS
 await premiumFreeVoiceAPI.textToSpeech({
   text: "Привіт! Як справи?",
-  language: "uk"
+  language: "uk",
 });
 
 // STT
 const result = await premiumFreeVoiceAPI.speechToText({
   audio: audioBlob,
-  language: "uk"
+  language: "uk",
 });
 console.log(result.text);
 ```
 
 ### Python:
+
 ```python
 import requests
 
@@ -322,6 +342,7 @@ print(response.json()['text'])
 ```
 
 ### cURL:
+
 ```bash
 # TTS
 curl -X POST http://localhost:5094/api/tts \

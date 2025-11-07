@@ -17,18 +17,21 @@ cd /Users/dima/Documents/Predator12/predator12-local
 ### Варіант 2: Ручний 👨‍💻
 
 **Terminal 1 - Backend:**
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/backend
 python3 -m uvicorn app.main:app --reload --port 8000
 ```
 
 **Terminal 2 - Frontend:**
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/frontend
 npm run dev
 ```
 
 **Terminal 3 - Tests:**
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local
 ./test-cyber-ace-integration.sh

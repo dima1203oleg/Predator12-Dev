@@ -2,8 +2,6 @@
 Data Quality Metrics for ETL Monitoring
 """
 
-from typing import Any, Dict
-
 from prometheus_client import Counter, Gauge, Histogram
 
 # Metrics

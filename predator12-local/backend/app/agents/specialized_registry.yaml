@@ -15,25 +15,25 @@ agents:
 
     # Основні моделі для детекції аномалій (reasoning + аналітика)
     primary_models:
-      flagship: "deepseek/deepseek-r1"          # Найкращий reasoning для аномалій
-      premium: "openai/o1"                      # OpenAI reasoning
-      standard: "microsoft/phi-4-reasoning"     # Microsoft reasoning
+      flagship: "deepseek/deepseek-r1" # Найкращий reasoning для аномалій
+      premium: "openai/o1" # OpenAI reasoning
+      standard: "microsoft/phi-4-reasoning" # Microsoft reasoning
 
     # Fallback для різних типів аномалій
     fallback_models:
-      - "deepseek/deepseek-r1-0528"            # Експериментальна DeepSeek
-      - "openai/o1-mini"                       # Швидка детекція
-      - "microsoft/mai-ds-r1"                  # Microsoft AI для data science
-      - "mistral-ai/mistral-large-2411"        # Потужна Mistral
+      - "deepseek/deepseek-r1-0528" # Експериментальна DeepSeek
+      - "openai/o1-mini" # Швидка детекція
+      - "microsoft/mai-ds-r1" # Microsoft AI для data science
+      - "mistral-ai/mistral-large-2411" # Потужна Mistral
 
     # Спеціалізовані моделі
     embedding_models:
-      - "cohere/cohere-embed-v3-multilingual"  # Багатомовні embeddings
-      - "openai/text-embedding-3-large"        # Великі embeddings
+      - "cohere/cohere-embed-v3-multilingual" # Багатомовні embeddings
+      - "openai/text-embedding-3-large" # Великі embeddings
 
     specialized_models:
       statistical: "deepseek/deepseek-v3-0324" # Статистичні обчислення
-      ml_detection: "openai/o1-preview"        # ML детекція
+      ml_detection: "openai/o1-preview" # ML детекція
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                            📈 FORECAST AGENT
@@ -45,24 +45,24 @@ agents:
 
     # Основні моделі для прогнозування (великі контекстні моделі)
     primary_models:
-      flagship: "meta/meta-llama-3.1-405b-instruct"  # Найбільша для складних прогнозів
-      premium: "mistral-ai/mistral-large-2411"        # Потужна Mistral
-      standard: "openai/gpt-5"                        # Найновіша GPT
+      flagship: "meta/meta-llama-3.1-405b-instruct" # Найбільша для складних прогнозів
+      premium: "mistral-ai/mistral-large-2411" # Потужна Mistral
+      standard: "openai/gpt-5" # Найновіша GPT
 
     # Fallback для різних типів прогнозів
     fallback_models:
-      - "mistral-ai/mistral-medium-2505"       # Середня Mistral
-      - "openai/o3"                            # Reasoning для прогнозів
-      - "xai/grok-3"                           # Альтернативна думка
-      - "meta/llama-3.3-70b-instruct"          # Потужна Llama
+      - "mistral-ai/mistral-medium-2505" # Середня Mistral
+      - "openai/o3" # Reasoning для прогнозів
+      - "xai/grok-3" # Альтернативна думка
+      - "meta/llama-3.3-70b-instruct" # Потужна Llama
 
     # Спеціалізовані моделі
     embedding_models:
-      - "cohere/cohere-embed-v3-multilingual"  # Багатомовні embeddings
+      - "cohere/cohere-embed-v3-multilingual" # Багатомовні embeddings
 
     specialized_models:
-      time_series: "microsoft/phi-4"           # Часові ряди
-      trend_analysis: "openai/gpt-5-chat"      # Тренд аналіз
+      time_series: "microsoft/phi-4" # Часові ряди
+      trend_analysis: "openai/gpt-5-chat" # Тренд аналіз
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                      🕸️ GRAPH INTELLIGENCE AGENT
@@ -74,24 +74,24 @@ agents:
 
     # Основні моделі для графів (reasoning + multimodal)
     primary_models:
-      flagship: "microsoft/phi-4-reasoning"            # Ідеальна для графів
-      premium: "microsoft/phi-4-multimodal-instruct"   # Мультимодальна
-      standard: "meta/llama-4-maverick-17b-128e-instruct-fp8"  # Спеціалізована Llama-4
+      flagship: "microsoft/phi-4-reasoning" # Ідеальна для графів
+      premium: "microsoft/phi-4-multimodal-instruct" # Мультимодальна
+      standard: "meta/llama-4-maverick-17b-128e-instruct-fp8" # Спеціалізована Llama-4
 
     # Fallback для різних типів графів
     fallback_models:
-      - "openai/gpt-4.1"                      # Покращена GPT-4
-      - "meta/llama-3.3-70b-instruct"         # Потужна для складних графів
-      - "deepseek/deepseek-r1"                # Reasoning для топології
-      - "microsoft/phi-4"                     # Основна Phi-4
+      - "openai/gpt-4.1" # Покращена GPT-4
+      - "meta/llama-3.3-70b-instruct" # Потужна для складних графів
+      - "deepseek/deepseek-r1" # Reasoning для топології
+      - "microsoft/phi-4" # Основна Phi-4
 
     # Спеціалізовані моделі
     embedding_models:
       - "cohere/cohere-embed-v3-multilingual" # Багатомовні embeddings
 
     specialized_models:
-      network_analysis: "meta/llama-4-scout-17b-16e-instruct"  # Мережевий аналіз
-      topology: "microsoft/phi-3.5-vision-instruct"             # Візуальна топологія
+      network_analysis: "meta/llama-4-scout-17b-16e-instruct" # Мережевий аналіз
+      topology: "microsoft/phi-3.5-vision-instruct" # Візуальна топологія
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                            📊 DATASET AGENT
@@ -103,25 +103,25 @@ agents:
 
     # Основні моделі для обробки даних (multimodal + code)
     primary_models:
-      flagship: "openai/gpt-4o"                       # Мультимодальна для різних форматів
-      premium: "microsoft/phi-4-reasoning"            # Reasoning для структурування
+      flagship: "openai/gpt-4o" # Мультимодальна для різних форматів
+      premium: "microsoft/phi-4-reasoning" # Reasoning для структурування
       standard: "cohere/cohere-command-r-plus-08-2024" # Potужна Cohere для тексту
 
     # Fallback для різних типів даних
     fallback_models:
-      - "microsoft/phi-3.5-vision-instruct"   # Візуальні дані
-      - "mistral-ai/codestral-2501"           # Структуровані дані
-      - "openai/gpt-4.1-mini"                 # Швидка обробка
-      - "meta/meta-llama-3.1-8b-instruct"     # Ефективна обробка
+      - "microsoft/phi-3.5-vision-instruct" # Візуальні дані
+      - "mistral-ai/codestral-2501" # Структуровані дані
+      - "openai/gpt-4.1-mini" # Швидка обробка
+      - "meta/meta-llama-3.1-8b-instruct" # Ефективна обробка
 
     # Спеціалізовані моделі
     embedding_models:
       - "cohere/cohere-embed-v3-multilingual" # Багатомовні embeddings
-      - "cohere/cohere-embed-v3-english"      # Англійські embeddings
+      - "cohere/cohere-embed-v3-english" # Англійські embeddings
 
     specialized_models:
-      etl_processing: "mistral-ai/codestral-2501"      # ETL операції
-      data_cleaning: "openai/gpt-4o-mini"              # Очищення даних
+      etl_processing: "mistral-ai/codestral-2501" # ETL операції
+      data_cleaning: "openai/gpt-4o-mini" # Очищення даних
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                            🛡️ SECURITY AGENT
@@ -133,24 +133,24 @@ agents:
 
     # Основні моделі для безпеки (reasoning + analysis)
     primary_models:
-      flagship: "deepseek/deepseek-r1"        # Глибокий аналіз загроз
-      premium: "microsoft/phi-4-reasoning"    # Логічний аналіз безпеки
-      standard: "openai/o1-preview"           # Reasoning для безпеки
+      flagship: "deepseek/deepseek-r1" # Глибокий аналіз загроз
+      premium: "microsoft/phi-4-reasoning" # Логічний аналіз безпеки
+      standard: "openai/o1-preview" # Reasoning для безпеки
 
     # Fallback для різних типів загроз
     fallback_models:
-      - "microsoft/mai-ds-r1"                # Microsoft AI для безпеки
-      - "xai/grok-3"                         # Альтернативна оцінка
-      - "openai/o3-mini"                     # Швидкий аналіз загроз
-      - "mistral-ai/mistral-nemo"            # Компактна але потужна
+      - "microsoft/mai-ds-r1" # Microsoft AI для безпеки
+      - "xai/grok-3" # Альтернативна оцінка
+      - "openai/o3-mini" # Швидкий аналіз загроз
+      - "mistral-ai/mistral-nemo" # Компактна але потужна
 
     # Спеціалізовані моделі
     embedding_models:
       - "cohere/cohere-embed-v3-multilingual" # Багатомовні embeddings
 
     specialized_models:
-      threat_analysis: "deepseek/deepseek-v3-0324"     # Аналіз загроз
-      vulnerability_scan: "microsoft/phi-4-mini-reasoning"  # Сканування вразливостей
+      threat_analysis: "deepseek/deepseek-v3-0324" # Аналіз загроз
+      vulnerability_scan: "microsoft/phi-4-mini-reasoning" # Сканування вразливостей
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                         🔧 SELF-HEALING AGENT
@@ -162,24 +162,24 @@ agents:
 
     # Основні моделі для швидкого реагування (fast + efficient)
     primary_models:
-      flagship: "openai/gpt-4o-mini"          # Швидке реагування
+      flagship: "openai/gpt-4o-mini" # Швидке реагування
       premium: "microsoft/phi-4-mini-reasoning" # Швидке міркування
-      standard: "mistral-ai/ministral-3b"     # Ефективна мініатюрна
+      standard: "mistral-ai/ministral-3b" # Ефективна мініатюрна
 
     # Fallback для різних типів проблем
     fallback_models:
-      - "mistral-ai/codestral-2501"          # Код-орієнтована
-      - "microsoft/phi-3.5-moe-instruct"     # Mixture of Experts
-      - "openai/gpt-4.1-nano"                # Мікро-модель для швидких дій
-      - "deepseek/deepseek-v3-0324"          # Backup аналітика
+      - "mistral-ai/codestral-2501" # Код-орієнтована
+      - "microsoft/phi-3.5-moe-instruct" # Mixture of Experts
+      - "openai/gpt-4.1-nano" # Мікро-модель для швидких дій
+      - "deepseek/deepseek-v3-0324" # Backup аналітика
 
     # Спеціалізовані моделі
     embedding_models:
-      - "openai/text-embedding-3-small"      # Швидкі embeddings
+      - "openai/text-embedding-3-small" # Швидкі embeddings
 
     specialized_models:
-      diagnostics: "microsoft/phi-3.5-mini-instruct"    # Діагностика
-      auto_repair: "openai/gpt-5-nano"                  # Автоматичне лікування
+      diagnostics: "microsoft/phi-3.5-mini-instruct" # Діагностика
+      auto_repair: "openai/gpt-5-nano" # Автоматичне лікування
 
   # ═══════════════════════════════════════════════════════════════════════════════
   #                        📚 AUTO-IMPROVE AGENT
@@ -191,24 +191,24 @@ agents:
 
     # Основні моделі для навчання (largest + newest)
     primary_models:
-      flagship: "meta/meta-llama-3.1-405b-instruct"  # Найбільша для навчання
-      premium: "openai/gpt-5"                         # Найновіша GPT
-      standard: "mistral-ai/mistral-large-2411"       # Потужна альтернатива
+      flagship: "meta/meta-llama-3.1-405b-instruct" # Найбільша для навчання
+      premium: "openai/gpt-5" # Найновіша GPT
+      standard: "mistral-ai/mistral-large-2411" # Потужна альтернатива
 
     # Fallback для різних типів покращень
     fallback_models:
-      - "openai/o3"                          # Найновіша reasoning
-      - "xai/grok-3"                         # Креативні рішення
-      - "deepseek/deepseek-r1"               # Reasoning для покращень
-      - "microsoft/phi-4"                    # Системний аналіз
+      - "openai/o3" # Найновіша reasoning
+      - "xai/grok-3" # Креативні рішення
+      - "deepseek/deepseek-r1" # Reasoning для покращень
+      - "microsoft/phi-4" # Системний аналіз
 
     # Спеціалізовані моделі
     embedding_models:
       - "cohere/cohere-embed-v3-multilingual" # Багатомовні embeddings
 
     specialized_models:
-      optimization: "mistral-ai/mistral-small-2503"    # Оптимізація
-      learning: "openai/gpt-5-mini"                    # Навчання нових підходів
+      optimization: "mistral-ai/mistral-small-2503" # Оптимізація
+      learning: "openai/gpt-5-mini" # Навчання нових підходів
 
 # ═══════════════════════════════════════════════════════════════════════════════════
 #                           🌍 ADDITIONAL MODELS POOL
@@ -218,44 +218,44 @@ agents:
 additional_models:
   # AI21 Labs models
   general_purpose:
-    - "ai21-labs/ai21-jamba-1.5-large"      # Великий Jamba
-    - "ai21-labs/ai21-jamba-1.5-mini"       # Мініатюрний Jamba
+    - "ai21-labs/ai21-jamba-1.5-large" # Великий Jamba
+    - "ai21-labs/ai21-jamba-1.5-mini" # Мініатюрний Jamba
 
   # Cohere models
   command_models:
-    - "cohere/cohere-command-a"              # Cohere Command A
-    - "cohere/cohere-command-r-08-2024"      # Cohere Command R
+    - "cohere/cohere-command-a" # Cohere Command A
+    - "cohere/cohere-command-r-08-2024" # Cohere Command R
 
   # Core42 models
   arabic_specialized:
-    - "core42/jais-30b-chat"                 # Арабська спеціалізована
+    - "core42/jais-30b-chat" # Арабська спеціалізована
 
   # Meta vision models
   vision_models:
-    - "meta/llama-3.2-11b-vision-instruct"  # Візія 11B
-    - "meta/llama-3.2-90b-vision-instruct"  # Візія 90B
+    - "meta/llama-3.2-11b-vision-instruct" # Візія 11B
+    - "meta/llama-3.2-90b-vision-instruct" # Візія 90B
 
   # Microsoft Phi family
   phi_variants:
     - "microsoft/phi-3-medium-128k-instruct" # Phi-3 Medium 128K
-    - "microsoft/phi-3-medium-4k-instruct"   # Phi-3 Medium 4K
-    - "microsoft/phi-3-mini-128k-instruct"   # Phi-3 Mini 128K
-    - "microsoft/phi-3-mini-4k-instruct"     # Phi-3 Mini 4K
-    - "microsoft/phi-3-small-128k-instruct"  # Phi-3 Small 128K
-    - "microsoft/phi-3-small-8k-instruct"    # Phi-3 Small 8K
+    - "microsoft/phi-3-medium-4k-instruct" # Phi-3 Medium 4K
+    - "microsoft/phi-3-mini-128k-instruct" # Phi-3 Mini 128K
+    - "microsoft/phi-3-mini-4k-instruct" # Phi-3 Mini 4K
+    - "microsoft/phi-3-small-128k-instruct" # Phi-3 Small 128K
+    - "microsoft/phi-3-small-8k-instruct" # Phi-3 Small 8K
 
   # OpenAI variants
   openai_variants:
-    - "openai/gpt-4.1-mini"                  # GPT-4.1 Mini
-    - "openai/gpt-4.1-nano"                  # GPT-4.1 Nano
-    - "openai/gpt-5-chat"                    # GPT-5 Chat
-    - "openai/gpt-5-mini"                    # GPT-5 Mini
-    - "openai/gpt-5-nano"                    # GPT-5 Nano
-    - "openai/o4-mini"                       # O4 Mini
+    - "openai/gpt-4.1-mini" # GPT-4.1 Mini
+    - "openai/gpt-4.1-nano" # GPT-4.1 Nano
+    - "openai/gpt-5-chat" # GPT-5 Chat
+    - "openai/gpt-5-mini" # GPT-5 Mini
+    - "openai/gpt-5-nano" # GPT-5 Nano
+    - "openai/o4-mini" # O4 Mini
 
   # XAI models
   xai_variants:
-    - "xai/grok-3-mini"                      # Grok-3 Mini
+    - "xai/grok-3-mini" # Grok-3 Mini
 
 # ═══════════════════════════════════════════════════════════════════════════════════
 #                              📊 MODEL STATISTICS
@@ -267,32 +267,32 @@ statistics:
   agents_count: 8
 
   distribution_by_agent:
-    AnomalyAgent: 8         # 8 моделей (4 primary + 4 fallback)
-    ForecastAgent: 7        # 7 моделей
-    GraphIntelligenceAgent: 8  # 8 моделей
-    DatasetAgent: 8         # 8 моделей
-    SecurityAgent: 7        # 7 моделей
-    SelfHealingAgent: 7     # 7 моделей
-    AutoImproveAgent: 7     # 7 моделей
-    Additional_Pool: 6      # 6 додаткових моделей
+    AnomalyAgent: 8 # 8 моделей (4 primary + 4 fallback)
+    ForecastAgent: 7 # 7 моделей
+    GraphIntelligenceAgent: 8 # 8 моделей
+    DatasetAgent: 8 # 8 моделей
+    SecurityAgent: 7 # 7 моделей
+    SelfHealingAgent: 7 # 7 моделей
+    AutoImproveAgent: 7 # 7 моделей
+    Additional_Pool: 6 # 6 додаткових моделей
 
   models_by_provider:
-    openai: 14              # OpenAI моделей
-    microsoft: 13           # Microsoft моделей
-    meta: 6                 # Meta моделей
-    mistral-ai: 6           # Mistral AI моделей
-    deepseek: 4             # DeepSeek моделей
-    cohere: 5               # Cohere моделей
-    xai: 2                  # xAI моделей
-    ai21-labs: 2            # AI21 Labs моделей
-    core42: 1               # Core42 моделей
+    openai: 14 # OpenAI моделей
+    microsoft: 13 # Microsoft моделей
+    meta: 6 # Meta моделей
+    mistral-ai: 6 # Mistral AI моделей
+    deepseek: 4 # DeepSeek моделей
+    cohere: 5 # Cohere моделей
+    xai: 2 # xAI моделей
+    ai21-labs: 2 # AI21 Labs моделей
+    core42: 1 # Core42 моделей
 
   capability_coverage:
-    reasoning: 15           # Reasoning моделей
-    multimodal: 8           # Мультимодальні моделі
-    code_specialized: 3     # Код-спеціалізовані
-    vision: 4               # Візуальні моделі
-    embedding: 4            # Embedding моделі
-    chat_optimized: 12      # Чат-оптимізовані
-    large_context: 8        # Великий контекст
-    efficient: 4            # Ефективні швидкі
+    reasoning: 15 # Reasoning моделей
+    multimodal: 8 # Мультимодальні моделі
+    code_specialized: 3 # Код-спеціалізовані
+    vision: 4 # Візуальні моделі
+    embedding: 4 # Embedding моделі
+    chat_optimized: 12 # Чат-оптимізовані
+    large_context: 8 # Великий контекст
+    efficient: 4 # Ефективні швидкі

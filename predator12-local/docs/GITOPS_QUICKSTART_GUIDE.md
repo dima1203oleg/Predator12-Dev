@@ -5,6 +5,7 @@
 ## 🎯 What You Get
 
 A complete, production-ready GitOps stack with:
+
 - ArgoCD for declarative deployments
 - Argo Rollouts for progressive delivery
 - Sealed Secrets for secure secret management

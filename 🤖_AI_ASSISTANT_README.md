@@ -130,13 +130,13 @@ http://localhost:5173/assistant
 
 ## 🎮 Keyboard Shortcuts
 
-| Комбінація | Дія |
-|-----------|-----|
-| `M` | Toggle microphone |
-| `Esc` | Stop ASR + TTS |
-| `Ctrl+L` | Clear chat |
-| `Enter` | Send message |
-| `Shift+Enter` | New line in chat |
+| Комбінація    | Дія               |
+| ------------- | ----------------- |
+| `M`           | Toggle microphone |
+| `Esc`         | Stop ASR + TTS    |
+| `Ctrl+L`      | Clear chat        |
+| `Enter`       | Send message      |
+| `Shift+Enter` | New line in chat  |
 
 ---
 
@@ -164,14 +164,14 @@ GET  /health               # Health check
 
 ## 📊 Performance Metrics
 
-| Метрика | Target | Поточне значення |
-|---------|--------|-----------------|
-| TTFI (Time To First Interaction) | <2.5s | ~1.8s (dev) |
-| FPS (3D Head) | ≥50 | ~60 (Chrome) |
-| GPU Budget | ≤5% | ~3-5% (mid-range) |
-| ASR Accuracy (UA) | ≥85% | ~90% (native) |
-| ASR Accuracy (EN) | ≥85% | ~95% (native) |
-| Bundle Size | <500KB | ~420KB (gzipped) |
+| Метрика                          | Target | Поточне значення  |
+| -------------------------------- | ------ | ----------------- |
+| TTFI (Time To First Interaction) | <2.5s  | ~1.8s (dev)       |
+| FPS (3D Head)                    | ≥50    | ~60 (Chrome)      |
+| GPU Budget                       | ≤5%    | ~3-5% (mid-range) |
+| ASR Accuracy (UA)                | ≥85%   | ~90% (native)     |
+| ASR Accuracy (EN)                | ≥85%   | ~95% (native)     |
+| Bundle Size                      | <500KB | ~420KB (gzipped)  |
 
 ---
 

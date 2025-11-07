@@ -29,6 +29,7 @@ helm version          # Optional, for Helm charts
 **Fastest way - just press F5!**
 
 1. **Open in VS Code**
+
    ```bash
    cd /Users/dima/Documents/Predator12/predator12-local
    code .
@@ -70,6 +71,7 @@ python agents/supervisor.py &                    # Start AI agents
 ## 🔧 What Gets Started
 
 ### Development Services (Docker Compose)
+
 - ✅ PostgreSQL 16 (port 5432)
 - ✅ Redis 7 (port 6379)
 - ✅ OpenSearch 2.11 (port 9200)
@@ -80,6 +82,7 @@ python agents/supervisor.py &                    # Start AI agents
 - ✅ MailHog (port 8025)
 
 ### Application Services
+
 - ✅ FastAPI Backend (port 8000)
 - ✅ React Frontend (port 3000)
 - ✅ AI Agent Supervisor (background)
@@ -90,20 +93,24 @@ python agents/supervisor.py &                    # Start AI agents
 ## 🐛 Debugging
 
 ### Backend (Python)
+
 - Set breakpoints in VS Code
 - Press F5 → Select **"🐍 Python: FastAPI Backend Debug"**
 - Breakpoints will hit automatically
 
 ### Frontend (Node.js)
+
 - Set breakpoints in `.tsx`/`.jsx` files
 - Press F5 → Select **"🌐 Node: Frontend Debug"**
 - Or use browser DevTools
 
 ### Full Stack
+
 - Press F5 → Select **"🚀 Full Stack Debug (F5)"**
 - Debug both backend and frontend simultaneously
 
 ### AI Agents
+
 - Press F5 → Select **"🤖 Python: Agent Debug"**
 - Monitor in real-time at http://localhost:8080
 
@@ -129,6 +136,7 @@ pytest smoke_tests/ -v
 ```
 
 **In VS Code:**
+
 - Press F5 → Select **"🧪 Python: Run Tests"**
 
 ---
@@ -152,6 +160,7 @@ kubectl apply -k infra/argocd/base
 ### Deploy
 
 **Option 1: Git Push (Automatic)**
+
 ```bash
 git add .
 git commit -m "feat: my awesome feature"
@@ -160,6 +169,7 @@ git push
 ```
 
 **Option 2: Manual Sync**
+
 ```bash
 argocd app sync predator12-backend --prune
 argocd app sync predator12-frontend --prune
@@ -167,6 +177,7 @@ argocd app sync predator12-agents --prune
 ```
 
 **Option 3: GitHub Actions**
+
 - Push to `main` branch triggers CI/CD
 - Automatic build → test → deploy pipeline
 
@@ -184,11 +195,13 @@ python agents/supervisor.py
 ```
 
 ### Agent Dashboard
+
 - Open: http://localhost:8080
 - View all 30+ agents in real-time
 - Monitor self-healing, optimization, modernization
 
 ### Key Agents
+
 - **Self-Healing**: Detects and fixes issues automatically
 - **Optimize**: Analyzes performance and suggests improvements
 - **Modernize**: Refactors code to best practices
@@ -200,6 +213,7 @@ python agents/supervisor.py
 ## 📊 Monitoring
 
 ### Access Dashboards
+
 ```bash
 # Grafana (metrics visualization)
 open http://localhost:3000
@@ -216,6 +230,7 @@ open http://localhost:8080
 ```
 
 ### VS Code Tasks
+
 - `Cmd+Shift+P` → **Tasks: Run Task**
 - Select: **"📊 Monitoring: Open Grafana"** (or Prometheus/Jaeger)
 
@@ -224,6 +239,7 @@ open http://localhost:8080
 ## 🛠️ Common Tasks
 
 ### Database Migrations
+
 ```bash
 # Create new migration
 cd backend
@@ -234,10 +250,12 @@ alembic upgrade head
 ```
 
 **VS Code:**
+
 - Tasks → **"🐍 Backend: Create Migration"**
 - Tasks → **"🐍 Backend: Run Migrations"**
 
 ### Code Quality
+
 ```bash
 # Format code
 black backend/ && isort backend/
@@ -254,10 +272,12 @@ pre-commit run --all-files
 ```
 
 **VS Code:**
+
 - Tasks → **"🎨 Backend: Format Code"**
 - Tasks → **"✅ Pre-commit: Run All"**
 
 ### Security Scan
+
 ```bash
 # Python security
 bandit -r backend/ agents/ -ll
@@ -270,6 +290,7 @@ gitleaks detect --source . -v
 ```
 
 **VS Code:**
+
 - Tasks → **"🔒 Security: Run Bandit"**
 
 ---
@@ -277,14 +298,17 @@ gitleaks detect --source . -v
 ## 🔄 Hot Reload
 
 **Backend (Python)**
+
 - ✅ Automatic with `--reload` flag
 - Just save `.py` files and see changes instantly
 
 **Frontend (React)**
+
 - ✅ Automatic with Vite
 - Save `.tsx`/`.jsx` files and see changes in browser
 
 **Agent Configuration**
+
 - ✅ Edit `agents/registry.yaml`
 - Supervisor auto-reloads changed agents
 
@@ -332,6 +356,7 @@ docker compose -f docker-compose.dev.yml down -v
 ## 🆘 Troubleshooting
 
 ### Port Already in Use
+
 ```bash
 # Find process using port
 lsof -ti:8000
@@ -340,6 +365,7 @@ kill -9 $(lsof -ti:8000)
 ```
 
 ### Database Connection Error
+
 ```bash
 # Check if postgres is running
 docker compose -f docker-compose.dev.yml ps postgres
@@ -352,6 +378,7 @@ docker compose -f docker-compose.dev.yml logs postgres
 ```
 
 ### Frontend Won't Start
+
 ```bash
 # Clean install
 cd frontend
@@ -361,6 +388,7 @@ npm run dev
 ```
 
 ### Can't Connect to Services
+
 ```bash
 # Check all services
 docker compose -f docker-compose.dev.yml ps
@@ -413,6 +441,7 @@ redis-cli ping                        # Redis
 ## 🎯 Summary
 
 **To start developing:**
+
 1. Open in VS Code: `code .`
 2. Press **F5**
 3. Select **"🚀 Full Stack Debug (F5)"**

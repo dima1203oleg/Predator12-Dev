@@ -3,16 +3,19 @@
 ## ⚡ Launch Dashboard in 3 Steps
 
 ### 1. Navigate to Frontend
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/frontend
 ```
 
 ### 2. Start Development Server
+
 ```bash
 npm run dev
 ```
 
 ### 3. Open Browser
+
 ```
 http://localhost:5173
 ```
@@ -22,6 +25,7 @@ http://localhost:5173
 ## 🎯 What You'll See
 
 ### Main Dashboard
+
 - **4 Metric Cards**: CPU, Agents, GPU, Tasks
 - **25+ Service Cards**: All backend services
 - **AI Agents Section** ⭐ NEW!
@@ -30,6 +34,7 @@ http://localhost:5173
   - **Competition Tab**: Coming soon
 
 ### Key Features
+
 - 🔍 **Search**: Real-time filtering
 - 🏷️ **Filters**: By category and provider
 - 🎴 **Cards**: Detailed metrics and status
@@ -40,14 +45,14 @@ http://localhost:5173
 
 ## ✅ Phase 1 Status
 
-| Item | Status |
-|------|--------|
-| AI Agents Integration | ✅ COMPLETE |
-| Models Display | ✅ COMPLETE |
-| Search & Filter | ✅ COMPLETE |
-| Modal System | ✅ COMPLETE |
-| Documentation | ✅ COMPLETE |
-| TypeScript Compilation | ✅ SUCCESS |
+| Item                   | Status      |
+| ---------------------- | ----------- |
+| AI Agents Integration  | ✅ COMPLETE |
+| Models Display         | ✅ COMPLETE |
+| Search & Filter        | ✅ COMPLETE |
+| Modal System           | ✅ COMPLETE |
+| Documentation          | ✅ COMPLETE |
+| TypeScript Compilation | ✅ SUCCESS  |
 
 ---
 
@@ -78,12 +83,14 @@ http://localhost:5173
 ## 🔧 Troubleshooting
 
 ### Port Already in Use
+
 ```bash
 lsof -ti:5173 | xargs kill -9
 npm run dev
 ```
 
 ### Module Not Found
+
 ```bash
 rm -rf node_modules package-lock.json
 npm install
@@ -91,6 +98,7 @@ npm run dev
 ```
 
 ### TypeScript Errors
+
 ```bash
 npm run typecheck
 ```
@@ -110,6 +118,7 @@ npm run typecheck
 ## 🚀 Next: Phase 2
 
 ### Coming Soon
+
 - 🔌 WebSocket real-time updates
 - 📡 Backend API integration
 - 🎮 Execute task functionality

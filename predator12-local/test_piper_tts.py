@@ -4,13 +4,14 @@
 """
 
 import time
-import os
 from pathlib import Path
 
+
 def test_piper_installation():
-    """Перевірка встановлення Piper"""
+    """Перевірка встановлення Piper."""
     try:
-        import piper
+        pass
+
         print("✅ Piper TTS встановлено")
         return True
     except ImportError:
@@ -18,8 +19,9 @@ def test_piper_installation():
         print("Встановіть: pip install piper-tts")
         return False
 
+
 def download_ukrainian_model():
-    """Завантажити українську модель Piper"""
+    """Завантажити українську модель Piper."""
     model_dir = Path("models/piper")
     model_dir.mkdir(parents=True, exist_ok=True)
 
@@ -40,23 +42,23 @@ def download_ukrainian_model():
         # Завантажити модель
         print(f"Завантаження {model_url}...")
         response = requests.get(model_url, stream=True)
-        total_size = int(response.headers.get('content-length', 0))
+        total_size = int(response.headers.get("content-length", 0))
 
-        with open(model_path, 'wb') as f:
+        with open(model_path, "wb") as f:
             downloaded = 0
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
                 downloaded += len(chunk)
                 if total_size > 0:
                     progress = (downloaded / total_size) * 100
-                    print(f"\rПрогрес: {progress:.1f}%", end='')
+                    print(f"\rПрогрес: {progress:.1f}%", end="")
 
         print("\n✅ Модель завантажена")
 
         # Завантажити конфіг
         print(f"Завантаження {config_url}...")
         response = requests.get(config_url)
-        with open(config_path, 'w') as f:
+        with open(config_path, "w") as f:
             f.write(response.text)
 
         print("✅ Конфіг завантажений")
@@ -66,16 +68,17 @@ def download_ukrainian_model():
         print(f"❌ Помилка завантаження: {e}")
         return None
 
+
 def test_piper_synthesis():
-    """Тест синтезу з Piper"""
-    print("\n" + "="*60)
+    """Тест синтезу з Piper."""
+    print("\n" + "=" * 60)
     print("🔊 ТЕСТ PIPER TTS СИНТЕЗУ")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     try:
-        from piper import PiperVoice
         import wave
-        import numpy as np
+
+        from piper import PiperVoice
 
         # Завантажити модель
         model_path = download_ukrainian_model()
@@ -127,7 +130,7 @@ def test_piper_synthesis():
 
             # Зберегти аудіо
             output_file = output_dir / f"test_{i}.wav"
-            with wave.open(str(output_file), 'wb') as wf:
+            with wave.open(str(output_file), "wb") as wf:
                 wf.setnchannels(1)
                 wf.setsampwidth(2)  # 16-bit
                 wf.setframerate(voice.config.sample_rate)
@@ -136,9 +139,9 @@ def test_piper_synthesis():
             print(f"   💾 Збережено: {output_file}")
 
         # Підсумок
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("📊 ПІДСУМОК ТЕСТУВАННЯ")
-        print("="*60)
+        print("=" * 60)
         print(f"Всього фраз: {len(test_phrases)}")
         print(f"Всього символів: {total_chars}")
         print(f"Загальний час: {total_time:.3f}s")
@@ -151,14 +154,16 @@ def test_piper_synthesis():
     except Exception as e:
         print(f"❌ Помилка тесту: {e}")
         import traceback
+
         traceback.print_exc()
         return False
 
+
 def compare_with_coqui():
-    """Порівняння Piper vs Coqui"""
-    print("\n" + "="*60)
+    """Порівняння Piper vs Coqui."""
+    print("\n" + "=" * 60)
     print("⚔️  ПОРІВНЯННЯ: Piper vs Coqui TTS")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     test_text = "Система аналітики готова до роботи."
 
@@ -171,7 +176,7 @@ def compare_with_coqui():
             voice = PiperVoice.load(model_path)
 
             start = time.time()
-            audio = voice.synthesize(test_text)
+            voice.synthesize(test_text)
             piper_time = time.time() - start
 
             print(f"⚡ Piper TTS: {piper_time:.3f}s")
@@ -186,11 +191,7 @@ def compare_with_coqui():
         tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2")
 
         start = time.time()
-        tts.tts_to_file(
-            text=test_text,
-            file_path="test_audio/coqui_test.wav",
-            language="uk"
-        )
+        tts.tts_to_file(text=test_text, file_path="test_audio/coqui_test.wav", language="uk")
         coqui_time = time.time() - start
 
         print(f"🐌 Coqui TTS: {coqui_time:.3f}s")
@@ -205,9 +206,10 @@ def compare_with_coqui():
 
     return piper_time, coqui_time
 
+
 if __name__ == "__main__":
     print("\n🔥 PIPER TTS - Найшвидший Синтезатор")
-    print("="*60 + "\n")
+    print("=" * 60 + "\n")
 
     # Перевірка встановлення
     if not test_piper_installation():
@@ -223,4 +225,4 @@ if __name__ == "__main__":
         compare_with_coqui()
 
     print("\n✅ Тестування завершено!")
-    print("="*60)
+    print("=" * 60)

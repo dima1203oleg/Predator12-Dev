@@ -11,7 +11,7 @@ spec:
       default: "main"
   results:
     - name: commit
-      description: 'cloned commit'
+      description: "cloned commit"
   steps:
     - name: clone
       image: alpine/git

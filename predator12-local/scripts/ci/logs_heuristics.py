@@ -7,9 +7,8 @@ Can be extended with ML models for production.
 import re
 import sys
 from collections import Counter
-from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Set
+from typing import Dict, List
 
 
 class LogAnalyzer:
@@ -177,7 +176,7 @@ def main():
         sys.exit(1)
 
     analyzer = LogAnalyzer(sys.argv[1])
-    success = analyzer.analyze()
+    analyzer.analyze()
     analyzer.report()
 
     # Don't fail CI for warnings, only for critical security issues

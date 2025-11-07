@@ -19,6 +19,7 @@
 ## 🎨 UI Components Testing
 
 ### CyberAcePage
+
 - [ ] Сторінка завантажується без помилок
 - [ ] Всі компоненти відображаються
 - [ ] Фонові ефекти працюють (grid, particles, scan lines)
@@ -26,6 +27,7 @@
 - [ ] Responsive на різних екранах
 
 ### AceAvatar (3D)
+
 - [ ] Аватар відображається
 - [ ] Обертання працює
 - [ ] Пульсація при прослуховуванні
@@ -34,6 +36,7 @@
 - [ ] Статус текст відображається
 
 ### StatusBar
+
 - [ ] Відображається на верху
 - [ ] CYBER-ACE логотип
 - [ ] Системний статус (online/offline/etc)
@@ -42,6 +45,7 @@
 - [ ] Sticky позиція при скролі
 
 ### VoiceInput
+
 - [ ] Текстове поле працює
 - [ ] Placeholder відображається
 - [ ] Кнопка мікрофону працює
@@ -52,6 +56,7 @@
 - [ ] Обробка помилок (якщо мікрофон недоступний)
 
 ### QuickActions
+
 - [ ] 6 швидких дій відображаються
 - [ ] Іконки та labels правильні
 - [ ] Hover ефекти працюють
@@ -60,6 +65,7 @@
 - [ ] Glow ефект на hover
 
 ### AgentCards
+
 - [ ] Панель відкривається/закривається
 - [ ] 6 агентів відображаються
 - [ ] Статус індикатори правильні
@@ -74,6 +80,7 @@
 ## 🧠 State Management Testing
 
 ### Zustand Store
+
 - [ ] Store ініціалізується
 - [ ] Початкові агенти завантажені (6 агентів)
 - [ ] `isActive` встановлюється в `true`
@@ -91,6 +98,7 @@
 ## 🌍 Localization Testing
 
 ### Ukrainian (uk-UA)
+
 - [ ] Мова за замовчуванням — українська
 - [ ] Привітання українською
 - [ ] Всі labels українською
@@ -99,12 +107,14 @@
 - [ ] Помилки українською
 
 ### English (en-US)
+
 - [ ] Можна переключитись на англійську
 - [ ] Всі тексти перекладені
 - [ ] Немає missing translations
 - [ ] Fallback працює
 
 ### i18n
+
 - [ ] Мова зберігається в localStorage
 - [ ] `document.lang` оновлюється
 - [ ] Зміна мови без перезавантаження
@@ -114,6 +124,7 @@
 ## 🎤 Voice Control Testing
 
 ### Web Speech API
+
 - [ ] SpeechRecognition ініціалізується
 - [ ] Мова встановлюється правильно (uk-UA / en-US)
 - [ ] `continuous` = true
@@ -125,6 +136,7 @@
 - [ ] Перезапуск при закінченні
 
 ### Voice Commands
+
 - [ ] "Проаналізуй дані" → команда надсилається
 - [ ] "Виявити ризики" → команда надсилається
 - [ ] "Показати агентів" → команда надсилається
@@ -135,6 +147,7 @@
 ## 🎨 Styling & Animations
 
 ### CSS
+
 - [ ] Cyber-punk дизайн
 - [ ] Gradient фони
 - [ ] Glow ефекти
@@ -146,6 +159,7 @@
 - [ ] Cyber particles
 
 ### Framer Motion
+
 - [ ] Fade-in анімації
 - [ ] Slide-in анімації
 - [ ] Stagger animations
@@ -158,16 +172,19 @@
 ## 📱 Responsive Testing
 
 ### Desktop (1920x1080)
+
 - [ ] Layout правильний
 - [ ] Всі компоненти відображаються
 - [ ] Анімації smooth
 
 ### Tablet (768x1024)
+
 - [ ] Layout адаптується
 - [ ] Quick actions grid змінюється
 - [ ] Agents panel full-width
 
 ### Mobile (375x667)
+
 - [ ] Layout mobile-friendly
 - [ ] Тексти читабельні
 - [ ] Кнопки достатньо великі
@@ -190,17 +207,20 @@
 ## ⚡ Performance Testing
 
 ### Load Time
+
 - [ ] < 2s для завантаження
 - [ ] Three.js сцена швидко ініціалізується
 - [ ] Немає затримок при першому рендері
 
 ### Runtime Performance
+
 - [ ] 60 FPS під час анімацій
 - [ ] Smooth scroll
 - [ ] Немає memory leaks
 - [ ] React DevTools Profiler показує хороші результати
 
 ### Optimization
+
 - [ ] Lazy loading працює
 - [ ] Мемоізація працює
 - [ ] useMemo для важких обчислень
@@ -211,12 +231,14 @@
 ## 🐛 Error Handling
 
 ### Web Speech API Errors
+
 - [ ] "not-allowed" — показується помилка
 - [ ] "no-speech" — показується підказка
 - [ ] "audio-capture" — показується помилка
 - [ ] "network" — показується помилка
 
 ### Store Errors
+
 - [ ] Неіснуючий agent ID — handled
 - [ ] Неіснуючий task ID — handled
 - [ ] Invalid updates — handled
@@ -226,18 +248,21 @@
 ## 🔧 Integration Points (TODO)
 
 ### Backend API
+
 - [ ] REST endpoints створені
 - [ ] WebSocket з'єднання
 - [ ] Authentication
 - [ ] Error handling
 
 ### AI Processing
+
 - [ ] OpenAI integration
 - [ ] Intent recognition
 - [ ] Context management
 - [ ] Response generation
 
 ### TTS
+
 - [ ] Azure Speech або інше
 - [ ] Voice selection
 - [ ] Speed/Pitch control
@@ -247,19 +272,21 @@
 
 ## 📊 Test Results
 
-### ✅ Passed Tests: ___/___
-### ❌ Failed Tests: ___/___
-### ⚠️ Warnings: ___/___
+### ✅ Passed Tests: **_/_**
+
+### ❌ Failed Tests: **_/_**
+
+### ⚠️ Warnings: **_/_**
 
 ---
 
 ## 🐛 Found Issues
 
-| # | Issue | Component | Priority | Status |
-|---|-------|-----------|----------|--------|
-| 1 |       |           |          |        |
-| 2 |       |           |          |        |
-| 3 |       |           |          |        |
+| #   | Issue | Component | Priority | Status |
+| --- | ----- | --------- | -------- | ------ |
+| 1   |       |           |          |        |
+| 2   |       |           |          |        |
+| 3   |       |           |          |        |
 
 ---
 
@@ -276,13 +303,14 @@ _Додайте свої нотатки тут_
 - [ ] Ready for next phase
 - [ ] Documentation updated
 
-**Tested by:** _______________
-**Date:** _______________
-**Signature:** _______________
+**Tested by:** **\*\***\_\_\_**\*\***
+**Date:** **\*\***\_\_\_**\*\***
+**Signature:** **\*\***\_\_\_**\*\***
 
 ---
 
 **Next Steps:**
+
 1. Fix found issues
 2. Re-test failed tests
 3. Document results

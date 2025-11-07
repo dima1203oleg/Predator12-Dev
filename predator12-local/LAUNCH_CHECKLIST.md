@@ -19,6 +19,7 @@ bash scripts/disable-kdm.sh
 ```
 
 **Або вручну:**
+
 ```bash
 # Знайти KDM в конфігах
 grep -rn "kdm" ~/.zshrc ~/.bashrc
@@ -41,6 +42,7 @@ bash scripts/setup-venv.sh
 ```
 
 **Або вручну:**
+
 ```bash
 cd backend
 python3.11 -m venv venv
@@ -60,6 +62,7 @@ bash scripts/system-check.sh
 ```
 
 **Очікуваний результат:**
+
 ```
 ✅ Python 3.11
 ✅ PostgreSQL
@@ -79,6 +82,7 @@ nano .env  # або code .env
 ```
 
 **Мінімальні параметри:**
+
 ```env
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/predator12
 REDIS_URL=redis://localhost:6379/0
@@ -154,27 +158,32 @@ source backend/venv/bin/activate && python scripts/health-check.py
 ## 🐛 Troubleshooting
 
 ### Бачу "Активація KDM..."
+
 ```bash
 bash scripts/disable-kdm.sh
 ```
 
 ### Порт зайнятий
+
 ```bash
 bash scripts/manage-ports.sh free-single 8000
 ```
 
 ### Python не 3.11
+
 ```bash
 python3.11 --version  # перевірити
 bash scripts/setup-venv.sh  # пересоздати
 ```
 
 ### PostgreSQL не працює
+
 ```bash
 brew services restart postgresql@14
 ```
 
 ### Помилки імпортів
+
 ```bash
 source backend/venv/bin/activate
 pip install --force-reinstall -r backend/requirements-311-modern.txt

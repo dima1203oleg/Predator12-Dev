@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
-"""
-🏭 ПРОДАКШН SUPERVISOR v4.0
-Конкурсна система з арбітражем та термальним захистом для 21 безкоштовної моделі
-"""
+"""🏭 ПРОДАКШН SUPERVISOR v4.0 Конкурсна система з арбітражем та термальним
+захистом для 21 безкоштовної моделі."""
 
 import argparse
 import asyncio
-import hashlib
 import json
 import logging
 import random
@@ -15,9 +12,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
-import aiohttp
 import structlog
 import yaml
 
@@ -29,7 +25,7 @@ logging.basicConfig(
 
 
 class TaskType(Enum):
-    """Типи завдань для агентів"""
+    """Типи завдань для агентів."""
 
     CRITICAL_ORCHESTRATION = "critical_orchestration"
     CRITICAL_ROUTING = "critical_routing"
@@ -60,7 +56,7 @@ class TaskType(Enum):
 
 
 class CompetitionResult(Enum):
-    """Результати конкурсу моделей"""
+    """Результати конкурсу моделей."""
 
     WINNER = "winner"
     RUNNER_UP = "runner_up"
@@ -71,7 +67,7 @@ class CompetitionResult(Enum):
 
 @dataclass
 class ThermalStatus:
-    """Термальний статус агента/моделі"""
+    """Термальний статус агента/моделі."""
 
     temperature: float = 0.0  # 0.0 - 1.0
     load_percentage: float = 0.0
@@ -82,7 +78,7 @@ class ThermalStatus:
 
 @dataclass
 class CompetitionEntry:
-    """Запис учасника конкурсу"""
+    """Запис учасника конкурсу."""
 
     model_id: str
     agent_id: str
@@ -96,7 +92,7 @@ class CompetitionEntry:
 
 @dataclass
 class ArbitrationDecision:
-    """Рішення арбітража"""
+    """Рішення арбітража."""
 
     winner_model: str
     confidence: float
@@ -106,7 +102,7 @@ class ArbitrationDecision:
 
 
 class ProductionSupervisor:
-    """🏭 Продакшн супервізор з конкурсною системою"""
+    """🏭 Продакшн супервізор з конкурсною системою."""
 
     def __init__(
         self,
@@ -140,7 +136,7 @@ class ProductionSupervisor:
         self.initialize_thermal_monitoring()
 
     def load_configuration(self):
-        """Завантажує продакшн конфігурацію"""
+        """Завантажує продакшн конфігурацію."""
         try:
             # Завантажуємо registry
             with open(self.config_path, "r", encoding="utf-8") as f:
@@ -164,7 +160,7 @@ class ProductionSupervisor:
             raise
 
     def initialize_thermal_monitoring(self):
-        """Ініціалізує систему термального моніторингу"""
+        """Ініціалізує систему термального моніторингу."""
         for agent_id in self.agents.keys():
             self.thermal_status[agent_id] = ThermalStatus()
 
@@ -172,7 +168,7 @@ class ProductionSupervisor:
             self.thermal_status[f"model_{model_id}"] = ThermalStatus()
 
     def get_all_available_models(self) -> List[str]:
-        """Повертає список всіх доступних моделей"""
+        """Повертає список всіх доступних моделей."""
         models = set()
         for agent_config in self.agents.values():
             if "competition_models" in agent_config:
@@ -184,7 +180,7 @@ class ProductionSupervisor:
         return list(models)
 
     def update_thermal_status(self, entity_id: str, load_increase: float = 0.1):
-        """Оновлює термальний статус"""
+        """Оновлює термальний статус."""
         if entity_id not in self.thermal_status:
             self.thermal_status[entity_id] = ThermalStatus()
 
@@ -232,7 +228,7 @@ class ProductionSupervisor:
         return True
 
     def get_available_competition_models(self, agent_id: str) -> List[str]:
-        """Повертає доступні моделі для конкурсу"""
+        """Повертає доступні моделі для конкурсу."""
         if agent_id not in self.agents:
             return []
 
@@ -259,7 +255,7 @@ class ProductionSupervisor:
     async def run_model_competition(
         self, agent_id: str, task: str, task_type: TaskType
     ) -> CompetitionEntry:
-        """🏆 Запускає конкурс між моделями"""
+        """🏆 Запускає конкурс між моделями."""
 
         available_models = self.get_available_competition_models(agent_id)
 
@@ -345,7 +341,7 @@ class ProductionSupervisor:
         }
 
     def _calculate_quality_score(self, model_id: str, task_type: TaskType) -> float:
-        """Розраховує оцінку якості для моделі та типу завдання"""
+        """Розраховує оцінку якості для моделі та типу завдання."""
 
         # Базова оцінка моделі
         base_scores = {
@@ -413,7 +409,7 @@ class ProductionSupervisor:
     async def _select_competition_winner(
         self, competitors: List[CompetitionEntry], agent_id: str
     ) -> CompetitionEntry:
-        """Вибирає переможця конкурсу або запускає арбітраж"""
+        """Вибирає переможця конкурсу або запускає арбітраж."""
 
         # Фільтруємо успішні результати
         successful = [c for c in competitors if c.status != CompetitionResult.FAILED]
@@ -464,7 +460,7 @@ class ProductionSupervisor:
     async def _run_arbitration(
         self, contestant1: CompetitionEntry, contestant2: CompetitionEntry, agent_id: str
     ) -> Optional[ArbitrationDecision]:
-        """Запускає арбітраж між двома конкурентами"""
+        """Запускає арбітраж між двома конкурентами."""
 
         if agent_id not in self.agents:
             return None
@@ -491,7 +487,7 @@ class ProductionSupervisor:
     async def handle_agent_request(
         self, agent_id: str, task: str, task_type: TaskType = TaskType.CRITICAL_ORCHESTRATION
     ) -> Dict[str, Any]:
-        """🤖 Обробляє запит від агента"""
+        """🤖 Обробляє запит від агента."""
 
         self.metrics["total_requests"] += 1
 
@@ -524,7 +520,7 @@ class ProductionSupervisor:
     async def _handle_emergency_fallback(
         self, agent_id: str, task: str, task_type: TaskType
     ) -> Dict[str, Any]:
-        """🆘 Обробляє аварійний fallback"""
+        """🆘 Обробляє аварійний fallback."""
 
         if agent_id not in self.agents:
             return {"success": False, "error": "Agent not found"}
@@ -552,7 +548,7 @@ class ProductionSupervisor:
         return {"success": False, "error": "All emergency models unavailable", "agent": agent_id}
 
     def get_system_status(self) -> Dict[str, Any]:
-        """📊 Повертає статус системи"""
+        """📊 Повертає статус системи."""
 
         # Рахуємо термальні статуси
         thermal_counts = {"normal": 0, "warning": 0, "critical": 0, "emergency": 0}
@@ -587,7 +583,8 @@ class ProductionSupervisor:
 
     # Backwards-compatible convenience methods expected by tests
     async def get_status(self) -> Dict[str, Any]:
-        """Асинхронний адаптер до get_system_status для сумісності з тестами."""
+        """Асинхронний адаптер до get_system_status для сумісності з
+        тестами."""
         status = self.get_system_status()
         return {
             "status": "operational" if status.get("system_health") == "healthy" else "degraded",
@@ -602,7 +599,8 @@ class ProductionSupervisor:
     async def execute_command(
         self, agent_name: str, command: str, payload: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Виконує команду у вказаного агента або викидає ValueError якщо агент не знайдений.
+        """Виконує команду у вказаного агента або викидає ValueError якщо агент
+        не знайдений.
 
         Це мінімальна реалізація для тестів: якщо агент має метод `execute`, його викликаємо,
         інакше повертаємо змодельований task submission.
@@ -630,7 +628,7 @@ class ProductionSupervisor:
         return {"task_id": task_id, "status": "submitted", "agent": agent_name}
 
     def run_thermal_maintenance(self):
-        """🌡️ Запускає термальне обслуговування"""
+        """🌡️ Запускає термальне обслуговування."""
         logger.info("🌡️ Запускаю термальне обслуговування...")
 
         cooled_entities = 0
@@ -685,7 +683,7 @@ def main():
 
 
 async def test_supervisor(supervisor: ProductionSupervisor):
-    """🧪 Тестує supervisor"""
+    """🧪 Тестує supervisor."""
     print("🧪 Тестування продакшн supervisor...")
 
     # Тест 1: Статус системи
@@ -713,7 +711,7 @@ async def test_supervisor(supervisor: ProductionSupervisor):
 
 
 def run_daemon(supervisor: ProductionSupervisor):
-    """🔄 Запускає supervisor як daemon"""
+    """🔄 Запускає supervisor як daemon."""
     print("🔄 Запуск supervisor як daemon...")
 
     while True:
@@ -736,7 +734,7 @@ def run_daemon(supervisor: ProductionSupervisor):
 
 
 def run_interactive(supervisor: ProductionSupervisor):
-    """💬 Інтерактивний режим"""
+    """💬 Інтерактивний режим."""
 
     print("💬 Інтерактивний режим Predator Nexus Production Supervisor")
     print("Команди: status, test, thermal, history, quit")

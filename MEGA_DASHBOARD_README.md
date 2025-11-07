@@ -3,11 +3,13 @@
 ## ⚡ Швидкий Старт
 
 ### 1️⃣ Автоматичний Deploy (5 хв)
+
 ```bash
 ./rebuild-mega-dashboard.sh
 ```
 
 ### 2️⃣ Ручний Deploy (10 хв)
+
 ```bash
 cd predator12-local/frontend
 cp src/main-mega.tsx src/main.tsx
@@ -18,6 +20,7 @@ docker-compose up -d frontend
 ```
 
 ### 3️⃣ Перевірка
+
 ```bash
 open http://localhost:3000
 ```
@@ -50,7 +53,7 @@ open http://localhost:3000
 
 **Version:** MEGA v1.0  
 **Status:** ✅ Production Ready  
-**Tech:** React 18 + TypeScript + Vite  
+**Tech:** React 18 + TypeScript + Vite
 
 ---
 

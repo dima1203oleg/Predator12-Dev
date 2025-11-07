@@ -4,13 +4,11 @@ OpenTelemetry Instrumentation для Predator12 Backend
 """
 
 import os
-from typing import Optional
 
 from opentelemetry import metrics, trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.exporter.prometheus import PrometheusMetricReader
 from opentelemetry.instrumentation.celery import CeleryInstrumentor
 
 # Instrumentations

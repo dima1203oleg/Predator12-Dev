@@ -74,6 +74,7 @@ predator12-local/
 #### 🔄 Інтеграція з GitOps:
 
 **Workflow:**
+
 1. Розробка локально з VS Code debugging (F5)
 2. Тестування з pytest
 3. Commit змін до Git
@@ -81,6 +82,7 @@ predator12-local/
 5. Моніторинг через ArgoCD UI + Grafana
 
 **Скрипти з DEBUG_PY=1:**
+
 ```bash
 # Локальний debug
 DEBUG_PY=1 ./scripts/start-all.sh
@@ -91,6 +93,7 @@ kubectl port-forward pod/backend-xxx 5678:5678
 ```
 
 #### Документація:
+
 - ✅ `VSCODE_README.md` - Головний файл
 - ✅ `VSCODE_QUICKSTART.md` - Швидкий старт
 - ✅ `VSCODE_COMPLETE_REPORT.md` - Повний звіт
@@ -119,6 +122,7 @@ graph LR
 ##### 1. Dev Зміни
 
 **Backend Helm Chart:**
+
 ```yaml
 # helm/charts/backend/values.yaml
 replicaCount: 1
@@ -151,6 +155,7 @@ env:
 ```
 
 **Frontend Helm Chart:**
+
 ```yaml
 # helm/charts/frontend/values.yaml
 replicaCount: 1
@@ -169,6 +174,7 @@ ingress:
 ```
 
 **Environment Overrides:**
+
 ```yaml
 # helm/overlays/dev/backend-values.yaml
 replicaCount: 1
@@ -190,6 +196,7 @@ env:
 ##### 2. Git Commit + Push
 
 **Workflow:**
+
 ```bash
 # Feature branch
 git checkout -b feature/new-api
@@ -210,6 +217,7 @@ git push origin feature/new-api
 ```
 
 **CI Checks (.github/workflows/helm-lint.yml):**
+
 ```yaml
 name: Helm Lint
 on: [pull_request]
@@ -227,6 +235,7 @@ jobs:
 ##### 3. ArgoCD Watcher
 
 **Конфігурація:**
+
 - Poll interval: 3 хвилини (або webhook для instant sync)
 - Спостереження за `helm/charts/` та `helm/overlays/`
 - Multi-branch support (dev/staging/prod)
@@ -234,11 +243,12 @@ jobs:
 ##### 4. Sync / Apply Змін
 
 **Auto-Sync Налаштування:**
+
 ```yaml
 syncPolicy:
   automated:
-    prune: true      # Видаляти застарілі ресурси
-    selfHeal: true   # Автоматично виправляти drift
+    prune: true # Видаляти застарілі ресурси
+    selfHeal: true # Автоматично виправляти drift
   syncOptions:
     - CreateNamespace=true
     - ApplyOutOfSyncOnly=true
@@ -251,6 +261,7 @@ syncPolicy:
 ```
 
 **Health Checks:**
+
 ```yaml
 # Custom health check для PostgreSQL
 health:
@@ -265,12 +276,14 @@ health:
 ##### 5. Моніторинг / Dashboard
 
 **ArgoCD UI:**
+
 - Status sync: OutOfSync / Synced / Progressing
 - Diffs: Покрокові зміни між Git та кластером
 - History: Rollback до попередніх версій
 - Events: Логи sync операцій
 
 **Observability Stack:**
+
 ```yaml
 # Prometheus метрики
 - argocd_app_sync_total
@@ -283,12 +296,12 @@ health:
 - Predator Backend Performance
 - Predator Celery Queue Metrics
 - Kubernetes Cluster Overview
-
 # OpenTelemetry Tracing
 # Інструментація FastAPI для distributed tracing
 ```
 
 **Notifications:**
+
 ```yaml
 # ArgoCD Notifications (Slack/Email)
 triggers:
@@ -310,11 +323,13 @@ templates:
 #### ApplicationSet (Multi-Env)
 
 **Переваги:**
+
 - Один YAML для всіх environments
 - Автоматична генерація Applications
 - DRY principle для конфігурацій
 
 **Приклад:**
+
 ```yaml
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -336,12 +351,12 @@ spec:
           - env: prod
             namespace: prod
             replicas: "5"
-            autoSync: "false"  # Manual approval для prod
+            autoSync: "false" # Manual approval для prod
   template:
     metadata:
-      name: 'predator-backend-{{env}}'
+      name: "predator-backend-{{env}}"
       labels:
-        environment: '{{env}}'
+        environment: "{{env}}"
     spec:
       project: default
       source:
@@ -353,14 +368,14 @@ spec:
             - ../../overlays/{{env}}/backend-values.yaml
           parameters:
             - name: replicaCount
-              value: '{{replicas}}'
+              value: "{{replicas}}"
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{namespace}}'
+        namespace: "{{namespace}}"
       syncPolicy:
         automated:
-          prune: '{{autoSync}}'
-          selfHeal: '{{autoSync}}'
+          prune: "{{autoSync}}"
+          selfHeal: "{{autoSync}}"
         syncOptions:
           - CreateNamespace=true
 ```
@@ -371,6 +386,7 @@ spec:
 Забезпечує правильний порядок розгортання залежностей.
 
 **Приклад:**
+
 ```yaml
 # Wave 1: CRDs та Databases
 apiVersion: v1
@@ -407,6 +423,7 @@ metadata:
 #### Hooks
 
 **Pre-Sync Hook (Database Migrations):**
+
 ```yaml
 apiVersion: batch/v1
 kind: Job
@@ -419,19 +436,20 @@ spec:
   template:
     spec:
       containers:
-      - name: alembic
-        image: predator-backend:latest
-        command: ["alembic", "upgrade", "head"]
-        env:
-          - name: DATABASE_URL
-            valueFrom:
-              secretKeyRef:
-                name: db-secret
-                key: url
+        - name: alembic
+          image: predator-backend:latest
+          command: ["alembic", "upgrade", "head"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: url
       restartPolicy: Never
 ```
 
 **Post-Sync Hook (Smoke Tests):**
+
 ```yaml
 apiVersion: batch/v1
 kind: Job
@@ -444,24 +462,26 @@ spec:
   template:
     spec:
       containers:
-      - name: pytest
-        image: predator-backend:latest
-        command: ["pytest", "smoke_tests/"]
+        - name: pytest
+          image: predator-backend:latest
+          command: ["pytest", "smoke_tests/"]
       restartPolicy: Never
 ```
 
 #### Rollbacks
 
 **Auto-Rollback:**
+
 ```yaml
 syncPolicy:
   automated:
     selfHeal: true
   rollback:
-    limit: 3  # Кількість версій для rollback
+    limit: 3 # Кількість версій для rollback
 ```
 
 **Manual Rollback:**
+
 ```bash
 # Via CLI
 argocd app rollback predator-backend-prod <revision>
@@ -473,6 +493,7 @@ ArgoCD → Application → History → Select Revision → Rollback
 #### RBAC
 
 **Roles:**
+
 ```yaml
 # argocd-rbac-cm ConfigMap
 policy.csv: |
@@ -492,12 +513,13 @@ policy.csv: |
 #### Multi-Env Promotion
 
 **GitHub Actions Pipeline:**
+
 ```yaml
 name: Multi-Env Promotion
 on:
   push:
     branches: [main]
-    tags: ['v*']
+    tags: ["v*"]
 
 jobs:
   deploy-dev:
@@ -538,6 +560,7 @@ jobs:
 #### Secrets Management
 
 **External Secrets Operator + Vault:**
+
 ```yaml
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
@@ -559,6 +582,7 @@ spec:
 ```
 
 **SOPS для Git-Encrypted Secrets:**
+
 ```yaml
 # helm/overlays/prod/secrets.yaml (encrypted)
 apiVersion: v1
@@ -679,7 +703,7 @@ spec:
     - group: apps
       kind: Deployment
       jsonPointers:
-        - /spec/replicas  # Якщо HPA керує replicas
+        - /spec/replicas # Якщо HPA керує replicas
 ```
 
 ### ArgoCD ApplicationSet (Multi-Env)
@@ -723,7 +747,7 @@ spec:
           - env: prod
             namespace: prod
             replicas: "5"
-            autoSync: "false"  # Manual approval
+            autoSync: "false" # Manual approval
             branch: release/prod
             resources:
               requests:
@@ -735,9 +759,9 @@ spec:
 
   template:
     metadata:
-      name: 'predator-backend-{{env}}'
+      name: "predator-backend-{{env}}"
       labels:
-        environment: '{{env}}'
+        environment: "{{env}}"
         managed-by: argocd
       annotations:
         notifications.argoproj.io/subscribe.on-sync-failed.slack: predator-alerts
@@ -747,31 +771,31 @@ spec:
 
       source:
         repoURL: https://github.com/your-org/predator12.git
-        targetRevision: '{{branch}}'
+        targetRevision: "{{branch}}"
         path: helm/charts/backend
         helm:
           valueFiles:
             - ../../overlays/{{env}}/backend-values.yaml
           parameters:
             - name: replicaCount
-              value: '{{replicas}}'
+              value: "{{replicas}}"
             - name: resources.requests.cpu
-              value: '{{resources.requests.cpu}}'
+              value: "{{resources.requests.cpu}}"
             - name: resources.requests.memory
-              value: '{{resources.requests.memory}}'
+              value: "{{resources.requests.memory}}"
             - name: resources.limits.cpu
-              value: '{{resources.limits.cpu}}'
+              value: "{{resources.limits.cpu}}"
             - name: resources.limits.memory
-              value: '{{resources.limits.memory}}'
+              value: "{{resources.limits.memory}}"
 
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{namespace}}'
+        namespace: "{{namespace}}"
 
       syncPolicy:
         automated:
-          prune: '{{autoSync}}'
-          selfHeal: '{{autoSync}}'
+          prune: "{{autoSync}}"
+          selfHeal: "{{autoSync}}"
         syncOptions:
           - CreateNamespace=true
           - ApplyOutOfSyncOnly=true
@@ -929,30 +953,35 @@ kubectl get pods -n dev
 ## ✅ Критерії Якості
 
 ### Автоматизація
+
 - ✅ 100% Git-based, no manual kubectl
 - ✅ Auto-sync для dev/staging
 - ✅ Manual approval для prod
 - ✅ CI/CD pipeline для build + deploy
 
 ### Стабільність
+
 - ✅ Health checks для всіх компонентів
 - ✅ Auto-rollback на failures
 - ✅ Sync waves для dependencies
 - ✅ Pre/Post-sync hooks для migrations/tests
 
 ### Безпека
+
 - ✅ RBAC для різних ролей
 - ✅ Secrets management (Vault/SOPS)
 - ✅ Network policies для ізоляції
 - ✅ Image scanning у CI
 
 ### Масштабованість
+
 - ✅ Multi-env support (dev/staging/prod)
 - ✅ HPA для автоскейлингу
 - ✅ Resource limits налаштовані
 - ✅ ApplicationSet для DRY configs
 
 ### Уніфікація
+
 - ✅ Вся команда використовує Git workflow
 - ✅ Єдиний source of truth
 - ✅ Versioned infrastructure
@@ -981,6 +1010,7 @@ spec:
 ```
 
 **Key Metrics:**
+
 - `predator_requests_total` - HTTP requests
 - `predator_request_duration_seconds` - Latency
 - `predator_celery_tasks_total` - Background tasks
@@ -990,18 +1020,21 @@ spec:
 ### Grafana Dashboards
 
 **Dashboard 1: ArgoCD Overview**
+
 - Applications health status
 - Sync success rate
 - Out of sync applications
 - Sync duration
 
 **Dashboard 2: Predator Backend**
+
 - Request rate / Error rate / Duration (RED metrics)
 - Celery queue length
 - Database connections
 - Memory / CPU usage
 
 **Dashboard 3: Kubernetes Cluster**
+
 - Node resources
 - Pod status
 - Network traffic
@@ -1031,15 +1064,18 @@ FastAPIInstrumentor.instrument_app(app)
 ## 🔗 Інтеграція з Існуючою Документацією
 
 ### VS Code Integration
+
 - ✅ `VSCODE_README.md` - Локальний debug setup
 - ✅ `VSCODE_QUICKSTART.md` - F5 для debug
 - 🔄 Додати конфігурацію для remote debug (attach до K8s pod)
 
 ### Migration Guides
+
 - ✅ `MIGRATION_GUIDE_PYTHON311.md` - Python 3.11 міграція
 - 🔄 Додати секцію про containerization для K8s
 
 ### Project Overview
+
 - ✅ `README.md` - Загальна документація
 - 🔄 Оновити з секцією GitOps/ArgoCD
 
@@ -1048,12 +1084,14 @@ FastAPIInstrumentor.instrument_app(app)
 ## 🚀 Наступні Кроки
 
 ### Для Локальної Розробки:
+
 1. ✅ Використовувати VS Code debug (F5)
 2. ✅ Запускати тести локально (pytest)
 3. 🔄 Commit змін до Git
 4. 🔄 ArgoCD auto-sync до dev кластеру
 
 ### Для Production Deployment:
+
 1. 🔄 Створити Helm charts для всіх компонентів
 2. 🔄 Налаштувати ArgoCD ApplicationSet
 3. 🔄 Налаштувати CI/CD pipeline
@@ -1062,6 +1100,7 @@ FastAPIInstrumentor.instrument_app(app)
 6. 🔄 Manual approval для prod deploy
 
 ### Для Team Onboarding:
+
 1. ✅ Документація готова (цей файл)
 2. 🔄 Training session по GitOps workflow
 3. 🔄 Setup developer access (RBAC)
@@ -1093,6 +1132,7 @@ FastAPIInstrumentor.instrument_app(app)
 7. **Масштабованість** з HPA, resource limits
 
 **Статус:**
+
 - ✅ Локальний dev environment готовий
 - 🔄 GitOps infrastructure потрібно налаштувати
 - 📝 Документація повна

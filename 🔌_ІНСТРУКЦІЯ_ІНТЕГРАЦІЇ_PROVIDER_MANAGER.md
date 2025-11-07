@@ -16,7 +16,7 @@
 
 ```typescript
 // Після інших імпортів, приблизно на рядку 15-20
-import ModelProviderManager from './components/models/ModelProviderManager';
+import ModelProviderManager from "./components/models/ModelProviderManager";
 ```
 
 ---
@@ -32,7 +32,7 @@ const aiModelsTabList = [
   "All Models",
   "Competition",
   // ⬇️ ДОДАТИ ТУТ ⬇️
-  "Provider Manager"
+  "Provider Manager",
 ];
 ```
 
@@ -55,26 +55,36 @@ const aiModelsTabList = [
 **Знайти розділ з TabPanel (приблизно рядок 1300-1400):**
 
 ```tsx
-{/* Overview Tab */}
+{
+  /* Overview Tab */
+}
 <TabPanel value={aiModelsActiveTab} index={0}>
   {/* ... existing content ... */}
-</TabPanel>
+</TabPanel>;
 
-{/* All Models Tab */}
+{
+  /* All Models Tab */
+}
 <TabPanel value={aiModelsActiveTab} index={1}>
   {/* ... existing content ... */}
-</TabPanel>
+</TabPanel>;
 
-{/* Competition Tab */}
+{
+  /* Competition Tab */
+}
 <TabPanel value={aiModelsActiveTab} index={2}>
   {/* ... existing content ... */}
-</TabPanel>
+</TabPanel>;
 
-{/* ⬇️ ДОДАТИ ТУТ ⬇️ */}
-{/* Provider Manager Tab */}
+{
+  /* ⬇️ ДОДАТИ ТУТ ⬇️ */
+}
+{
+  /* Provider Manager Tab */
+}
 <TabPanel value={aiModelsActiveTab} index={3}>
   <ModelProviderManager />
-</TabPanel>
+</TabPanel>;
 ```
 
 ---
@@ -87,7 +97,7 @@ const aiModelsTabList = [
 
 ```tsx
 // В розділі AI Models у sidebar
-<ListItem button onClick={() => navigate('/ai/models/provider-manager')}>
+<ListItem button onClick={() => navigate("/ai/models/provider-manager")}>
   <ListItemIcon>
     <SettingsIcon sx={{ color: nexusColors.quantum }} />
   </ListItemIcon>
@@ -100,10 +110,10 @@ const aiModelsTabList = [
 **Файл:** `/predator12-local/frontend/src/pages/ProviderManagerPage.tsx`
 
 ```tsx
-import React from 'react';
-import { Box, Container } from '@mui/material';
-import ModelProviderManager from '../components/models/ModelProviderManager';
-import MainLayout from '../layouts/MainLayout';
+import React from "react";
+import { Box, Container } from "@mui/material";
+import ModelProviderManager from "../components/models/ModelProviderManager";
+import MainLayout from "../layouts/MainLayout";
 
 const ProviderManagerPage: React.FC = () => {
   return (
@@ -124,9 +134,9 @@ export default ProviderManagerPage;
 
 ```tsx
 // В App.tsx або routes.tsx
-import ProviderManagerPage from './pages/ProviderManagerPage';
+import ProviderManagerPage from "./pages/ProviderManagerPage";
 
-<Route path="/ai/models/provider-manager" element={<ProviderManagerPage />} />
+<Route path="/ai/models/provider-manager" element={<ProviderManagerPage />} />;
 ```
 
 ---
@@ -155,6 +165,7 @@ npm install react-router-dom
 ### Checklist після інтеграції:
 
 1. **Перевірити імпорт**
+
    ```bash
    # Запустити TypeScript compiler
    npm run type-check
@@ -163,11 +174,13 @@ npm install react-router-dom
    ```
 
 2. **Перевірити build**
+
    ```bash
    npm run build
    ```
 
 3. **Запустити dev server**
+
    ```bash
    npm start
    ```
@@ -199,25 +212,25 @@ npm install react-router-dom
 
 ```typescript
 export const nexusColors = {
-  sapphire: '#00f2ff',    // Основні акценти
-  quantum: '#8a2be2',     // Градієнти
-  emerald: '#00ff44',     // Success states
-  crimson: '#ff0066',     // Error states
-  nebula: '#9370db',      // Secondary
-  frost: '#e0e0ff',       // Text primary
-  shadow: '#4a5568'       // Text muted
+  sapphire: "#00f2ff", // Основні акценти
+  quantum: "#8a2be2", // Градієнти
+  emerald: "#00ff44", // Success states
+  crimson: "#ff0066", // Error states
+  nebula: "#9370db", // Secondary
+  frost: "#e0e0ff", // Text primary
+  shadow: "#4a5568", // Text muted
 };
 ```
 
 ### Застосувати до всього Dashboard
 
 ```tsx
-import { createTheme, ThemeProvider } from '@mui/material';
-import { nexusColors } from './theme/nexusTheme';
+import { createTheme, ThemeProvider } from "@mui/material";
+import { nexusColors } from "./theme/nexusTheme";
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
       main: nexusColors.sapphire,
     },
@@ -229,17 +242,17 @@ const theme = createTheme({
     },
     error: {
       main: nexusColors.crimson,
-    }
+    },
   },
   typography: {
-    fontFamily: 'Orbitron, Roboto, sans-serif'
-  }
+    fontFamily: "Orbitron, Roboto, sans-serif",
+  },
 });
 
 // В App.tsx
 <ThemeProvider theme={theme}>
   <App />
-</ThemeProvider>
+</ThemeProvider>;
 ```
 
 ---
@@ -269,12 +282,13 @@ REACT_APP_ENABLE_MODEL_COMPETITION=true
 ```typescript
 export const PROVIDER_CONFIG = {
   // Endpoints
-  apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000',
-  providersEndpoint: '/api/providers',
-  modelsEndpoint: '/api/models',
+  apiUrl: process.env.REACT_APP_API_URL || "http://localhost:8000",
+  providersEndpoint: "/api/providers",
+  modelsEndpoint: "/api/models",
 
   // Features
-  enableProviderManager: process.env.REACT_APP_ENABLE_PROVIDER_MANAGER === 'true',
+  enableProviderManager:
+    process.env.REACT_APP_ENABLE_PROVIDER_MANAGER === "true",
   enableMultiAccount: true,
   enableCustomEndpoints: true,
 
@@ -283,8 +297,8 @@ export const PROVIDER_CONFIG = {
   maxModelsPerAccount: 50,
 
   // UI
-  showApiKeys: false,  // Default hide
-  animationDuration: 200,  // ms
+  showApiKeys: false, // Default hide
+  animationDuration: 200, // ms
 };
 ```
 
@@ -299,10 +313,10 @@ export const PROVIDER_CONFIG = {
 **Файл:** `/predator12-local/frontend/src/services/providerAPI.ts`
 
 ```typescript
-import axios from 'axios';
-import { ProviderAccount } from '../components/models/ModelProviderManager';
+import axios from "axios";
+import { ProviderAccount } from "../components/models/ModelProviderManager";
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export const providerAPI = {
   // Get all providers
@@ -318,39 +332,51 @@ export const providerAPI = {
   },
 
   // Add new account
-  addAccount: async (account: Omit<ProviderAccount, 'id' | 'addedAt'>) => {
-    const response = await axios.post(`${API_URL}/api/providers/accounts`, account);
+  addAccount: async (account: Omit<ProviderAccount, "id" | "addedAt">) => {
+    const response = await axios.post(
+      `${API_URL}/api/providers/accounts`,
+      account,
+    );
     return response.data;
   },
 
   // Update account
   updateAccount: async (id: string, account: Partial<ProviderAccount>) => {
-    const response = await axios.put(`${API_URL}/api/providers/accounts/${id}`, account);
+    const response = await axios.put(
+      `${API_URL}/api/providers/accounts/${id}`,
+      account,
+    );
     return response.data;
   },
 
   // Delete account
   deleteAccount: async (id: string) => {
-    const response = await axios.delete(`${API_URL}/api/providers/accounts/${id}`);
+    const response = await axios.delete(
+      `${API_URL}/api/providers/accounts/${id}`,
+    );
     return response.data;
   },
 
   // Toggle account
   toggleAccount: async (id: string) => {
-    const response = await axios.post(`${API_URL}/api/providers/accounts/${id}/toggle`);
+    const response = await axios.post(
+      `${API_URL}/api/providers/accounts/${id}/toggle`,
+    );
     return response.data;
-  }
+  },
 };
 ```
 
 ### Використання в компоненті
 
 ```tsx
-import { providerAPI } from '../../services/providerAPI';
-import { useEffect, useState } from 'react';
+import { providerAPI } from "../../services/providerAPI";
+import { useEffect, useState } from "react";
 
 const ModelProviderManager: React.FC = () => {
-  const [providerAccounts, setProviderAccounts] = useState<ProviderAccount[]>([]);
+  const [providerAccounts, setProviderAccounts] = useState<ProviderAccount[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -363,7 +389,7 @@ const ModelProviderManager: React.FC = () => {
       const accounts = await providerAPI.getAccounts();
       setProviderAccounts(accounts);
     } catch (error) {
-      console.error('Failed to load accounts:', error);
+      console.error("Failed to load accounts:", error);
     } finally {
       setLoading(false);
     }
@@ -381,7 +407,7 @@ const ModelProviderManager: React.FC = () => {
       setProviderAccounts([...providerAccounts, newAccount]);
       setAddProviderDialogOpen(false);
     } catch (error) {
-      console.error('Failed to add account:', error);
+      console.error("Failed to add account:", error);
     }
   };
 
@@ -416,32 +442,32 @@ npm start
 **Файл:** `/predator12-local/frontend/src/components/models/ModelProviderManager.test.tsx`
 
 ```tsx
-import { render, screen, fireEvent } from '@testing-library/react';
-import ModelProviderManager from './ModelProviderManager';
+import { render, screen, fireEvent } from "@testing-library/react";
+import ModelProviderManager from "./ModelProviderManager";
 
-describe('ModelProviderManager', () => {
-  it('should render tabs', () => {
+describe("ModelProviderManager", () => {
+  it("should render tabs", () => {
     render(<ModelProviderManager />);
-    expect(screen.getByText('🤖 Models')).toBeInTheDocument();
-    expect(screen.getByText('👥 Agents')).toBeInTheDocument();
+    expect(screen.getByText("🤖 Models")).toBeInTheDocument();
+    expect(screen.getByText("👥 Agents")).toBeInTheDocument();
   });
 
-  it('should switch between models and agents', () => {
+  it("should switch between models and agents", () => {
     render(<ModelProviderManager />);
 
-    const agentsTab = screen.getByText('👥 Agents');
+    const agentsTab = screen.getByText("👥 Agents");
     fireEvent.click(agentsTab);
 
-    expect(screen.getByText('Core Agents')).toBeInTheDocument();
+    expect(screen.getByText("Core Agents")).toBeInTheDocument();
   });
 
-  it('should open add provider dialog', () => {
+  it("should open add provider dialog", () => {
     render(<ModelProviderManager />);
 
-    const addButton = screen.getByText('Add Provider Account');
+    const addButton = screen.getByText("Add Provider Account");
     fireEvent.click(addButton);
 
-    expect(screen.getByText('➕ Add New Provider Account')).toBeInTheDocument();
+    expect(screen.getByText("➕ Add New Provider Account")).toBeInTheDocument();
   });
 });
 ```
@@ -510,6 +536,7 @@ docker run -p 3000:3000 predator12-frontend
 **Готово!** 🎉
 
 Якщо виникнуть питання або проблеми з інтеграцією:
+
 1. Перевірити console на помилки
 2. Перевірити TypeScript типи
 3. Перевірити імпорти та залежності

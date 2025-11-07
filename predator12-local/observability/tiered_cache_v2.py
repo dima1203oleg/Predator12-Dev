@@ -5,9 +5,7 @@ Advanced Tiered Cache with:
 - Hot key detection
 """
 
-import heapq
-import time
-from typing import Any, Dict, Optional
+from typing import Dict
 
 
 class AdvancedTieredCache:

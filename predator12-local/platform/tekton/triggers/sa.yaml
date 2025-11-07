@@ -21,7 +21,14 @@ rules:
     resources: ["pipelineruns", "pipelines", "tasks", "runs"]
     verbs: ["get", "list", "create", "update", "patch", "delete"]
   - apiGroups: [""]
-    resources: ["pods", "pods/log", "secrets", "serviceaccounts", "persistentvolumeclaims"]
+    resources:
+      [
+        "pods",
+        "pods/log",
+        "secrets",
+        "serviceaccounts",
+        "persistentvolumeclaims",
+      ]
     verbs: ["get", "list", "create", "update", "patch", "delete"]
 
 ---

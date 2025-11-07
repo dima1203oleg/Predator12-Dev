@@ -1,0 +1,45 @@
+{
+  "agents": [
+    {
+      "id": "a1",
+      "name": "DataProcessor",
+      "desc": "Processes and analyzes data",
+      "models": []
+    },
+    {
+      "id": "a2",
+      "name": "NLPAssistant",
+      "desc": "Natural Language Processing",
+      "models": []
+    }
+  ],
+  "models": [
+    {
+      "id": "m1",
+      "name": "GPT-4",
+      "type": "language_model"
+    },
+    {
+      "id": "m2",
+      "name": "Claude-3",
+      "type": "language_model"
+    },
+    {
+      "id": "m3",
+      "name": "Llama-2",
+      "type": "language_model"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "acc1",
+      "label": "OpenAI API",
+      "type": "api_key"
+    },
+    {
+      "id": "acc2",
+      "label": "Google Cloud",
+      "type": "service_account"
+    }
+  ]
+}

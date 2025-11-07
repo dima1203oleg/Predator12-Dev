@@ -1,5 +1,5 @@
 """
-Агенти-обробники для Predator Analytics Nexus Core
+Handler agents for Predator Analytics Nexus Core.
 """
 
 from .anomaly_agent import AnomalyDetectionAgent

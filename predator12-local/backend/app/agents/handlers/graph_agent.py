@@ -1,10 +1,9 @@
 """
-Агент для графової аналітики та мережевого аналізу
+Агент для графової аналітики та мережевого аналізу.
 """
 
 from __future__ import annotations
 
-import json
 import math
 from typing import Any
 
@@ -12,13 +11,14 @@ from .base_agent import BaseAgent
 
 
 class GraphAnalyticsAgent(BaseAgent):
-    """Агент для аналізу графів, мереж та зв'язків між сутностями"""
+    """Агент для аналізу графів, мереж та зв'язків між сутностями."""
 
     def __init__(self, config: dict[str, Any] | None = None):
         super().__init__("GraphAnalyticsAgent", config)
         self.graphs = {}  # Кеш завантажених графів
 
     def capabilities(self) -> list[str]:
+        """Повертає список можливостей агента графової аналітики."""
         return [
             "create_graph",
             "analyze_centrality",
@@ -30,29 +30,28 @@ class GraphAnalyticsAgent(BaseAgent):
         ]
 
     async def execute(self, task_type: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виконує завдання графової аналітики"""
+        """Виконує завдання графової аналітики."""
 
         self.logger.info("Processing graph analytics task", task_type=task_type)
 
         if task_type == "create_graph":
             return await self._create_graph(payload)
-        elif task_type == "analyze_centrality":
+        if task_type == "analyze_centrality":
             return await self._analyze_centrality(payload)
-        elif task_type == "find_communities":
+        if task_type == "find_communities":
             return await self._find_communities(payload)
-        elif task_type == "detect_patterns":
+        if task_type == "detect_patterns":
             return await self._detect_patterns(payload)
-        elif task_type == "calculate_shortest_path":
+        if task_type == "calculate_shortest_path":
             return await self._calculate_shortest_path(payload)
-        elif task_type == "analyze_connectivity":
+        if task_type == "analyze_connectivity":
             return await self._analyze_connectivity(payload)
-        elif task_type == "detect_anomalous_nodes":
+        if task_type == "detect_anomalous_nodes":
             return await self._detect_anomalous_nodes(payload)
-        else:
-            raise ValueError(f"Unknown task type: {task_type}")
+        raise ValueError(f"Unknown task type: {task_type}")
 
     async def _create_graph(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Створює граф з наданих даних"""
+        """Створює граф з наданих даних."""
 
         dataset_id = payload.get("dataset_id")
         nodes = payload.get("nodes", [])
@@ -128,12 +127,12 @@ class GraphAnalyticsAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to create graph", error=str(e), dataset_id=dataset_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to create graph", error=str(exc), dataset_id=dataset_id)
+            return {"status": "error", "error": str(exc)}
 
     async def _analyze_centrality(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Аналізує централізованість вузлів у графі"""
+        """Аналізує централізованість вузлів у графі."""
 
         graph_id = payload.get("graph_id")
         centrality_types = payload.get("centrality_types", ["degree", "betweenness", "closeness"])
@@ -203,12 +202,12 @@ class GraphAnalyticsAgent(BaseAgent):
                 "top_nodes": top_nodes,
             }
 
-        except Exception as e:
-            self.logger.error("Failed to analyze centrality", error=str(e), graph_id=graph_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to analyze centrality", error=str(exc), graph_id=graph_id)
+            return {"status": "error", "error": str(exc)}
 
     async def _find_communities(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Знаходить спільноти у графі"""
+        """Знаходить спільноти у графі."""
 
         graph_id = payload.get("graph_id")
         algorithm = payload.get("algorithm", "label_propagation")
@@ -301,12 +300,12 @@ class GraphAnalyticsAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to find communities", error=str(e), graph_id=graph_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to find communities", error=str(exc), graph_id=graph_id)
+            return {"status": "error", "error": str(exc)}
 
     def _dfs_component(self, start_node: str, adjacency_list: dict, visited: set) -> list[str]:
-        """Пошук у глибину для знаходження зв'язаної компоненти"""
+        """Пошук у глибину для знаходження зв'язаної компоненти."""
         component = []
         stack = [start_node]
 
@@ -323,7 +322,7 @@ class GraphAnalyticsAgent(BaseAgent):
         return component
 
     def _calculate_community_density(self, members: list[str], adjacency_list: dict) -> float:
-        """Розраховує щільність спільноти"""
+        """Розраховує щільність спільноти."""
         if len(members) < 2:
             return 0.0
 
@@ -355,7 +354,7 @@ class GraphAnalyticsAgent(BaseAgent):
         return modularity / len(communities) if communities else 0.0
 
     async def _detect_patterns(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виявляє структурні патерни у графі"""
+        """Виявляє структурні патерни у графі."""
 
         graph_id = payload.get("graph_id")
         pattern_types = payload.get("pattern_types", ["triangles", "stars", "chains"])
@@ -438,14 +437,14 @@ class GraphAnalyticsAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to detect patterns", error=str(e), graph_id=graph_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to detect patterns", error=str(exc), graph_id=graph_id)
+            return {"status": "error", "error": str(exc)}
 
     def _find_chain_from_node(
         self, start_node: str, adjacency_list: dict, visited_edges: set
     ) -> list[str]:
-        """Знаходить ланцюг, що починається з заданого вузла"""
+        """Знаходить ланцюг, що починається з заданого вузла."""
         chain = [start_node]
         current = start_node
 
@@ -473,7 +472,7 @@ class GraphAnalyticsAgent(BaseAgent):
         return chain
 
     async def _calculate_shortest_path(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Обчислює найкоротший шлях між вузлами"""
+        """Обчислює найкоротший шлях між вузлами."""
 
         graph_id = payload.get("graph_id")
         source = payload.get("source")
@@ -534,12 +533,14 @@ class GraphAnalyticsAgent(BaseAgent):
                 "message": "No path found",
             }
 
-        except Exception as e:
-            self.logger.error("Failed to calculate shortest path", error=str(e), graph_id=graph_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error(
+                "Failed to calculate shortest path", error=str(exc), graph_id=graph_id
+            )
+            return {"status": "error", "error": str(exc)}
 
     async def _analyze_connectivity(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Аналізує зв'язність графа"""
+        """Аналізує зв'язність графа."""
 
         graph_id = payload.get("graph_id")
 
@@ -611,12 +612,12 @@ class GraphAnalyticsAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to analyze connectivity", error=str(e), graph_id=graph_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to analyze connectivity", error=str(exc), graph_id=graph_id)
+            return {"status": "error", "error": str(exc)}
 
     async def _detect_anomalous_nodes(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Виявляє аномальні вузли у графі"""
+        """Виявляє аномальні вузли у графі."""
 
         graph_id = payload.get("graph_id")
         anomaly_threshold = payload.get("anomaly_threshold", 2.0)
@@ -687,6 +688,6 @@ class GraphAnalyticsAgent(BaseAgent):
                 },
             }
 
-        except Exception as e:
-            self.logger.error("Failed to detect anomalous nodes", error=str(e), graph_id=graph_id)
-            return {"status": "error", "error": str(e)}
+        except Exception as exc:
+            self.logger.error("Failed to detect anomalous nodes", error=str(exc), graph_id=graph_id)
+            return {"status": "error", "error": str(exc)}

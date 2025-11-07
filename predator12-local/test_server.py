@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import http.server
-import socketserver
 import os
+import socketserver
 import sys
 
 # Перехід до директорії dist
 try:
-    os.chdir('frontend/dist')
+    os.chdir("frontend/dist")
     print("✅ Перейшов до frontend/dist")
 except:
     print("❌ Не вдалося знайти frontend/dist. Виконайте npm run build спочатку.")
@@ -14,16 +14,18 @@ except:
 
 PORT = 8080
 
+
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
-        self.send_header('Pragma', 'no-cache')
-        self.send_header('Expires', '0')
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
         super().end_headers()
 
     def log_message(self, format, *args):
         print(f"🌐 {self.address_string()} - {format % args}")
+
 
 print(f"🚀 Запуск Predator Nexus на http://localhost:{PORT}")
 print(f"📂 Директорія: {os.getcwd()}")

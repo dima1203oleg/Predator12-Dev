@@ -339,7 +339,7 @@ def cache_response(expire: int = 60):
  * API Client for Predator12 Platform
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 interface DashboardStats {
   total_models: number;
@@ -368,7 +368,7 @@ class APIClient {
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
 
@@ -376,7 +376,7 @@ class APIClient {
       const response = await fetch(url, {
         ...options,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...options.headers,
         },
       });
@@ -398,16 +398,16 @@ class APIClient {
 
   // Dashboard endpoints
   async getDashboardStats(): Promise<DashboardStats> {
-    return this.request<DashboardStats>('/api/v1/dashboard/stats');
+    return this.request<DashboardStats>("/api/v1/dashboard/stats");
   }
 
   async getSystemStatus(): Promise<SystemStatus> {
-    return this.request<SystemStatus>('/api/v1/dashboard/system-status');
+    return this.request<SystemStatus>("/api/v1/dashboard/system-status");
   }
 
   // Health check
   async checkHealth(): Promise<{ status: string }> {
-    return this.request<{ status: string }>('/health');
+    return this.request<{ status: string }>("/health");
   }
 }
 
@@ -423,15 +423,15 @@ export type { DashboardStats, SystemStatus, APIError };
 /**
  * Custom hooks for API integration
  */
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { apiClient, DashboardStats, SystemStatus } from '../api/client';
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { apiClient, DashboardStats, SystemStatus } from "../api/client";
 
 /**
  * Fetch dashboard statistics
  */
 export function useStats(): UseQueryResult<DashboardStats, Error> {
   return useQuery({
-    queryKey: ['dashboard', 'stats'],
+    queryKey: ["dashboard", "stats"],
     queryFn: () => apiClient.getDashboardStats(),
     refetchInterval: 5000, // Refresh every 5 seconds
     staleTime: 3000,
@@ -444,7 +444,7 @@ export function useStats(): UseQueryResult<DashboardStats, Error> {
  */
 export function useSystemStatus(): UseQueryResult<SystemStatus, Error> {
   return useQuery({
-    queryKey: ['system', 'status'],
+    queryKey: ["system", "status"],
     queryFn: () => apiClient.getSystemStatus(),
     refetchInterval: 10000, // Refresh every 10 seconds
     staleTime: 5000,
@@ -457,7 +457,7 @@ export function useSystemStatus(): UseQueryResult<SystemStatus, Error> {
  */
 export function useHealth(): UseQueryResult<{ status: string }, Error> {
   return useQuery({
-    queryKey: ['health'],
+    queryKey: ["health"],
     queryFn: () => apiClient.checkHealth(),
     refetchInterval: 30000, // Refresh every 30 seconds
     retry: 2,
@@ -886,7 +886,7 @@ After completion:
 ✅ Resource usage відображається в real-time  
 ✅ Error handling працює коректно  
 ✅ Loading states відображаються  
-✅ Performance оптимізовано через caching  
+✅ Performance оптимізовано через caching
 
 ---
 

@@ -8,7 +8,7 @@ import asyncio
 import json
 import logging
 from datetime import datetime
-from typing import Any, Dict, Tuple
+from typing import Tuple
 
 import aiohttp
 

@@ -10,10 +10,12 @@
 ### 1. ✅ Bash compatibility (manage-ports.sh)
 
 **Проблема:**
+
 - Скрипт використовував `declare -A` (асоціативні масиви) - недоступні в bash 3.x на macOS
 - zsh-специфічний синтаксис `${(@k)PORTS}` та `read "REPLY?..."`
 
 **Виправлення:**
+
 ```bash
 # Було (не працювало):
 #!/usr/bin/env zsh
@@ -30,6 +32,7 @@ PORTS=(
 ```
 
 **Тестування:**
+
 ```bash
 bash scripts/manage-ports.sh check
 # ✅ Працює!
@@ -41,12 +44,12 @@ bash scripts/manage-ports.sh check
 
 **Що було змінено:**
 
-| Пакет | Було | Стало | Причина |
-|-------|------|-------|---------|
-| telethon | 1.33.1 | 1.41.2 | Застаріла версія |
-| opensearch-py | ==3.0.0 | >=2.4.1,<3.0 | Сумісність з OpenSearch 2.x |
-| faiss-cpu | ==1.12.0 | >=1.10,<1.13 | Стабільність на macOS ARM/x86 |
-| redis | 6.4.0 | 6.4.0 (уточнено) | Клієнт redis-py, не сервер |
+| Пакет         | Було     | Стало            | Причина                       |
+| ------------- | -------- | ---------------- | ----------------------------- |
+| telethon      | 1.33.1   | 1.41.2           | Застаріла версія              |
+| opensearch-py | ==3.0.0  | >=2.4.1,<3.0     | Сумісність з OpenSearch 2.x   |
+| faiss-cpu     | ==1.12.0 | >=1.10,<1.13     | Стабільність на macOS ARM/x86 |
+| redis         | 6.4.0    | 6.4.0 (уточнено) | Клієнт redis-py, не сервер    |
 
 **Файл:** `backend/requirements-311-modern.txt`
 
@@ -55,6 +58,7 @@ bash scripts/manage-ports.sh check
 ### 3. ✅ .gitignore налаштовано
 
 **Додано правила:**
+
 ```gitignore
 # Logs (але зберігаємо структуру)
 logs/*
@@ -81,6 +85,7 @@ venv/
 ```
 
 **Результат:**
+
 - logs/.gitkeep доданий з `-f`
 - Тимчасові файли ігноруються
 - Важливі файли збережено
@@ -90,6 +95,7 @@ venv/
 ### 4. ✅ Porти перевірені та звільнені
 
 **Статус:**
+
 ```
 ✅ Port 8000 (Backend FastAPI) - вільний
 ✅ Port 3000 (Frontend) - вільний
@@ -101,6 +107,7 @@ venv/
 ```
 
 **Інструменти:**
+
 - `bash scripts/manage-ports.sh check` - перевірка
 - `bash scripts/manage-ports.sh free-dev` - звільнити dev-порти
 - `bash scripts/manage-ports.sh free-single 8000` - звільнити конкретний
@@ -110,6 +117,7 @@ venv/
 ### 5. ✅ Shebang виправлено у всіх скриптах
 
 **Змінено:**
+
 ```bash
 # Було:
 #!/usr/bin/env zsh
@@ -121,11 +129,13 @@ set -Eeuo pipefail
 ```
 
 **Файли:**
+
 - scripts/manage-ports.sh ✅
 - scripts/start-all.sh ✅
 - scripts/stop-all.sh ✅
 
 **Переваги:**
+
 - `-E` - трасування помилок у функціях
 - `-e` - вихід при помилці
 - `-u` - помилка при неініціалізованих змінних
@@ -136,6 +146,7 @@ set -Eeuo pipefail
 ### 6. ✅ Git commit з heredoc
 
 **Було (проблема):**
+
 ```bash
 git commit -m "багаторядковий
 текст
@@ -144,6 +155,7 @@ git commit -m "багаторядковий
 ```
 
 **Стало:**
+
 ```bash
 git commit -F- <<'MSG'
 ✨ feat: title
@@ -155,6 +167,7 @@ MSG
 ```
 
 **Результат:**
+
 ```
 commit 9aece07
 ✨ feat: comprehensive port management and service control tools
@@ -167,14 +180,15 @@ commit 9aece07
 
 **Рекомендації для Predator12:**
 
-| OpenSearch Server | Python Client | Brew Formula |
-|-------------------|---------------|--------------|
-| 2.19.x (stable) | `opensearch-py>=2.4.1,<3.0` | `brew install opensearch` |
-| 3.x (новіша) | `opensearch-py==3.0.0` | Ручне встановлення |
+| OpenSearch Server | Python Client               | Brew Formula              |
+| ----------------- | --------------------------- | ------------------------- |
+| 2.19.x (stable)   | `opensearch-py>=2.4.1,<3.0` | `brew install opensearch` |
+| 3.x (новіша)      | `opensearch-py==3.0.0`      | Ручне встановлення        |
 
 **Обране рішення:** OpenSearch 2.x + client 2.x (максимальна стабільність)
 
 **Встановлення:**
+
 ```bash
 brew install opensearch opensearch-dashboards
 brew services start opensearch
@@ -189,6 +203,7 @@ open http://localhost:5601
 ### 8. ✅ Структура логів
 
 **Створено:**
+
 ```
 predator12-local/
 ├── logs/
@@ -202,6 +217,7 @@ predator12-local/
 ```
 
 **Використання:**
+
 ```bash
 # Логи зберігаються тут
 logs/backend.log
@@ -244,6 +260,7 @@ tail -f logs/backend.log
 ## 🚀 Що далі?
 
 ### Крок 1: Створити venv (5-10 хв)
+
 ```bash
 cd backend
 python3.11 -m venv venv
@@ -253,11 +270,13 @@ pip install -r requirements-311-modern.txt
 ```
 
 ### Крок 2: Health check (1 хв)
+
 ```bash
 python scripts/health-check.py
 ```
 
 ### Крок 3: Налаштувати .env (2-3 хв)
+
 ```bash
 cd backend
 cp .env.example .env
@@ -265,16 +284,19 @@ nano .env  # відредагувати
 ```
 
 ### Крок 4: Міграції БД (1-2 хв)
+
 ```bash
 alembic upgrade head
 ```
 
 ### Крок 5: Запуск (instant)
+
 ```bash
 bash scripts/start-all.sh
 ```
 
 ### Крок 6: Перевірка (instant)
+
 ```bash
 curl http://localhost:8000/health
 open http://localhost:8000/docs
@@ -306,6 +328,7 @@ open http://localhost:8000/docs
 **Всі виправлення застосовані!**
 
 Система готова до розробки:
+
 - ✅ Bash compatibility
 - ✅ Python 3.11 modern stack
 - ✅ Порти вільні
@@ -314,6 +337,7 @@ open http://localhost:8000/docs
 - ✅ Git чистий
 
 **Команда для старту:**
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local
 bash scripts/manage-ports.sh check

@@ -1,7 +1,7 @@
 """Proxy for app.agents.handlers.dataset_agent used by tests.
 
-Re-exports repository implementation when available, otherwise provides a
-minimal fallback that satisfies the tests' interface expectations.
+Re-exports repository implementation when available, otherwise provides
+a minimal fallback that satisfies the tests' interface expectations.
 """
 
 try:

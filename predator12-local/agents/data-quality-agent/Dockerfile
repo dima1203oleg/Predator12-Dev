@@ -1,5 +1,7 @@
 FROM python:3.11-slim
 
+LABEL Name="data-quality-agent" Version="1.0.0"
+
 WORKDIR /app
 
 # Встановлення системних залежностей

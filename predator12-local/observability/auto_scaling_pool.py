@@ -2,9 +2,7 @@
 Пулі потоків з авто-скейлінгом та метриками Prometheus
 """
 
-import math
 import time
-from threading import Event
 
 from prometheus_client import Gauge
 

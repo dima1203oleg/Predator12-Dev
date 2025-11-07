@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Chief Orchestrator with Tiered Caching
-"""
-from functools import wraps
+"""Chief Orchestrator with Tiered Caching."""
 
 import redis
 from agents.chief.chief_orchestrator import ChiefOrchestratorAgent
@@ -10,7 +7,7 @@ from agents.chief.models import AgentTask
 
 
 class TieredCacheChiefOrchestrator(ChiefOrchestratorAgent):
-    """ChiefOrchestrator with tiered caching support"""
+    """ChiefOrchestrator with tiered caching support."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,7 +18,7 @@ class TieredCacheChiefOrchestrator(ChiefOrchestratorAgent):
         self.cache = TieredCache(self.redis_client)
 
     async def _execute_agent_task(self, task: AgentTask, context_results: Dict) -> Dict[str, Any]:
-        """Wrapped with tiered caching"""
+        """Wrapped with tiered caching."""
 
         async def cached_task_execution(t: AgentTask, ctx: Dict):
             return await super()._execute_agent_task(t, ctx)
@@ -29,7 +26,7 @@ class TieredCacheChiefOrchestrator(ChiefOrchestratorAgent):
         return await self.cache.cached(cached_task_execution)(task, context_results)
 
     async def warm_caches(self):
-        """Pre-warm common agent tasks"""
+        """Pre-warm common agent tasks."""
         common_tasks = [
             AgentTask("DataQualityAgent", "quality_check", {}),
             AgentTask("AnomalyAgent", "detect_anomalies", {}),

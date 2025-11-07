@@ -15,6 +15,7 @@
 ## 🔍 ЩО ПЕРЕВІРИТИ
 
 ### У Console (DevTools):
+
 ```
 🔊 Тестування TTS (Українська)...
 🎤 Доступно голосів: 84
@@ -32,18 +33,21 @@
 ### 1. "Голосів 0" або "Український голос не знайдено"
 
 **Рішення A**: Почекайте завантаження голосів
+
 ```javascript
 // У Console:
-speechSynthesis.getVoices().length
+speechSynthesis.getVoices().length;
 // Якщо 0 - почекайте 2-3 секунди, потім спробуйте знову
 ```
 
 **Рішення B**: Перезавантажте сторінку
+
 - Натисніть F5 або Cmd+R
 - Почекайте 2-3 секунди
 - Спробуйте знову
 
 **Рішення C**: Перевірте браузер
+
 - Chrome: ✅ Найкраща підтримка
 - Edge: ✅ Добра підтримка
 - Safari: ⚠️ Обмежена підтримка
@@ -54,11 +58,13 @@ speechSynthesis.getVoices().length
 ### 2. "Озвучування не працює" (без помилок)
 
 **Перевірте гучність:**
+
 - Системна гучність не на мінімумі
 - Гучність браузера не на мінімумі
 - Динаміки/навушники підключені
 
 **Перевірте у Console:**
+
 ```javascript
 // Простий тест:
 const utterance = new SpeechSynthesisUtterance("Тест");
@@ -73,6 +79,7 @@ speechSynthesis.speak(utterance);
 **Причина:** Speech Synthesis недоступний у браузері
 
 **Рішення:**
+
 - Використовуйте Chrome або Edge
 - Оновіть браузер до останньої версії
 - Перевірте, чи ввімкнено звук у системі
@@ -84,11 +91,13 @@ speechSynthesis.speak(utterance);
 **Причина:** Немає українських голосів
 
 **Рішення A**: Встановіть українські голоси (macOS)
+
 1. System Settings → Accessibility → Spoken Content
 2. System Voice → Manage Voices
 3. Завантажте українські голоси (Lesya, Oleksandr)
 
 **Рішення B**: Використайте Google Chrome
+
 - Chrome має вбудовані Google голоси для всіх мов
 - Не потрібно встановлювати системні голоси
 
@@ -99,6 +108,7 @@ speechSynthesis.speak(utterance);
 **Це нормально** для системних голосів!
 
 **Покращення:**
+
 - Використайте Chrome (Google Neural voices)
 - Інтегруйте з Ultimate Voice API (Coqui TTS, Google Cloud TTS)
 - Встановіть якісніші системні голоси
@@ -111,22 +121,24 @@ speechSynthesis.speak(utterance);
 
 ```javascript
 // 1. Перевірка підтримки
-console.log('TTS доступний:', 'speechSynthesis' in window);
+console.log("TTS доступний:", "speechSynthesis" in window);
 
 // 2. Список всіх голосів
 speechSynthesis.getVoices().forEach((voice, i) => {
-    console.log(`${i}: ${voice.name} (${voice.lang})`);
+  console.log(`${i}: ${voice.name} (${voice.lang})`);
 });
 
 // 3. Тільки українські голоси
-speechSynthesis.getVoices()
-    .filter(v => v.lang.startsWith('uk'))
-    .forEach(v => console.log(v.name, v.lang));
+speechSynthesis
+  .getVoices()
+  .filter((v) => v.lang.startsWith("uk"))
+  .forEach((v) => console.log(v.name, v.lang));
 
 // 4. Тільки англійські голоси
-speechSynthesis.getVoices()
-    .filter(v => v.lang.startsWith('en'))
-    .forEach(v => console.log(v.name, v.lang));
+speechSynthesis
+  .getVoices()
+  .filter((v) => v.lang.startsWith("en"))
+  .forEach((v) => console.log(v.name, v.lang));
 
 // 5. Простий тест
 const test = new SpeechSynthesisUtterance("Привіт");
@@ -137,9 +149,9 @@ speechSynthesis.speak(test);
 speechSynthesis.cancel();
 
 // 7. Перевірити статус
-console.log('Speaking:', speechSynthesis.speaking);
-console.log('Pending:', speechSynthesis.pending);
-console.log('Paused:', speechSynthesis.paused);
+console.log("Speaking:", speechSynthesis.speaking);
+console.log("Pending:", speechSynthesis.pending);
+console.log("Paused:", speechSynthesis.paused);
 ```
 
 ---
@@ -156,6 +168,7 @@ speakResponseBrowser("Привіт! Як справи?");
 ### Перевірка у React:
 
 1. Запустіть frontend:
+
 ```bash
 cd /Users/dima/Documents/Predator12/predator12-local/frontend
 npm run dev
@@ -192,6 +205,7 @@ curl -X POST http://localhost:8765/tts \
 ```
 
 ### Fallback логіка:
+
 1. **API Services** (Google Cloud TTS, AWS Polly) - якщо онлайн
 2. **Local Models** (Coqui TTS, pyttsx3) - якщо офлайн
 3. **Browser API** (speechSynthesis) - завжди доступний
@@ -200,13 +214,13 @@ curl -X POST http://localhost:8765/tts \
 
 ## 📊 ПОРІВНЯННЯ ПРОВАЙДЕРІВ
 
-| Провайдер | Якість | Швидкість | Офлайн | Українська |
-|-----------|--------|-----------|--------|------------|
-| Google Cloud TTS | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡ | ❌ | ✅ Нейронна |
-| AWS Polly | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡ | ❌ | ✅ Neural |
-| Coqui TTS | ⭐⭐⭐⭐ | ⚡⚡⚡ | ✅ | ✅ Багатомовна |
-| pyttsx3 | ⭐⭐⭐ | ⚡⚡⚡⚡⚡ | ✅ | ⚠️ Системні |
-| Browser API | ⭐⭐⭐ | ⚡⚡⚡⚡ | ✅ | ⚠️ Залежить |
+| Провайдер        | Якість     | Швидкість  | Офлайн | Українська     |
+| ---------------- | ---------- | ---------- | ------ | -------------- |
+| Google Cloud TTS | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡   | ❌     | ✅ Нейронна    |
+| AWS Polly        | ⭐⭐⭐⭐⭐ | ⚡⚡⚡⚡   | ❌     | ✅ Neural      |
+| Coqui TTS        | ⭐⭐⭐⭐   | ⚡⚡⚡     | ✅     | ✅ Багатомовна |
+| pyttsx3          | ⭐⭐⭐     | ⚡⚡⚡⚡⚡ | ✅     | ⚠️ Системні    |
+| Browser API      | ⭐⭐⭐     | ⚡⚡⚡⚡   | ✅     | ⚠️ Залежить    |
 
 ---
 
@@ -225,6 +239,7 @@ curl -X POST http://localhost:8765/tts \
 ## 🎯 ШВИДКИЙ ТЕСТ
 
 ### 1. На тестовій сторінці:
+
 ```
 1. Оновити сторінку (F5)
 2. Натиснути "🔊 Тест TTS (Українська)"
@@ -234,11 +249,10 @@ curl -X POST http://localhost:8765/tts \
 ```
 
 ### 2. У DevTools Console:
+
 ```javascript
 // Швидкий тест:
-speechSynthesis.speak(
-  new SpeechSynthesisUtterance("Тест TTS працює!")
-);
+speechSynthesis.speak(new SpeechSynthesisUtterance("Тест TTS працює!"));
 ```
 
 ---
@@ -254,6 +268,7 @@ speechSynthesis.speak(
 5. **Спробуйте простий тест** - code snippet вище
 
 ### Документація:
+
 - MDN: https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis
 - Chrome TTS: https://developer.chrome.com/docs/extensions/reference/tts/
 

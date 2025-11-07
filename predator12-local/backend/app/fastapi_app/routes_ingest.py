@@ -7,8 +7,6 @@ from pathlib import Path
 from typing import Optional
 from uuid import UUID, uuid4
 
-from typing_extensions import Literal
-
 # Delta Revision 1.1 - Enhanced data governance and ILM
 try:
     from data_governance import DataClassification, enforce_data_governance

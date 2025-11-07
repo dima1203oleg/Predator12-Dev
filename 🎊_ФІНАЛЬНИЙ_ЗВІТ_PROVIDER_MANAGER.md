@@ -9,6 +9,7 @@
 **Функціонал:**
 
 #### 📊 Перемикання між Models та Agents
+
 ```typescript
 ✅ Tabs для вибору режиму (Models/Agents)
 ✅ Автоматичне оновлення категорій
@@ -17,9 +18,10 @@
 ```
 
 #### 🎯 Категорії моделей (6 категорій)
+
 ```
 🧠 Reasoning      - 12 моделей
-💻 Code           - 10 моделей  
+💻 Code           - 10 моделей
 👁️ Vision         - 8 моделей
 🔗 Embeddings     - 6 моделей
 ⚡ Quick/Fast     - 8 моделей
@@ -27,6 +29,7 @@
 ```
 
 #### 👥 Категорії агентів (4 категорії)
+
 ```
 ⚙️ Core           - 5 агентів
 🎯 Specialized    - 10 агентів
@@ -35,6 +38,7 @@
 ```
 
 #### 🔑 Підтримка провайдерів (8 провайдерів)
+
 ```
 🤖 OpenAI
 🧬 Anthropic
@@ -47,6 +51,7 @@
 ```
 
 #### 💼 Множинні акаунти
+
 ```
 ✅ Необмежена кількість акаунтів від одного провайдера
 ✅ Унікальні назви (Production, Development, Testing)
@@ -157,7 +162,7 @@ const [showApiKey, setShowApiKey] = useState(false);
 
 ```tsx
 <Grid container spacing={3}>
-  {categories.map(category => (
+  {categories.map((category) => (
     <Grid item xs={12} md={6} lg={4}>
       <motion.div whileHover={{ scale: 1.02 }}>
         <Card>
@@ -170,16 +175,12 @@ const [showApiKey, setShowApiKey] = useState(false);
               </Stack>
 
               {/* Description */}
-              <Typography variant="body2">
-                {category.description}
-              </Typography>
+              <Typography variant="body2">{category.description}</Typography>
 
               {/* Stats + Action */}
               <Stack direction="row" justifyContent="space-between">
                 <Chip label={`${category.modelCount} models`} />
-                <Button endIcon={<AddIcon />}>
-                  Add Model
-                </Button>
+                <Button endIcon={<AddIcon />}>Add Model</Button>
               </Stack>
             </Stack>
           </CardContent>
@@ -319,7 +320,7 @@ const [showApiKey, setShowApiKey] = useState(false);
 ```typescript
 const handleAddProvider = () => {
   const selectedProvider = AVAILABLE_PROVIDERS.find(
-    p => p.id === newProviderForm.providerId
+    (p) => p.id === newProviderForm.providerId,
   );
 
   if (!selectedProvider) return;
@@ -329,11 +330,12 @@ const handleAddProvider = () => {
     providerName: selectedProvider.name,
     accountName: newProviderForm.accountName,
     apiKey: newProviderForm.apiKey,
-    apiEndpoint: newProviderForm.apiEndpoint || selectedProvider.defaultEndpoint,
+    apiEndpoint:
+      newProviderForm.apiEndpoint || selectedProvider.defaultEndpoint,
     isActive: true,
     addedAt: new Date().toISOString(),
     requestCount: 0,
-    models: newProviderForm.models
+    models: newProviderForm.models,
   };
 
   setProviderAccounts([...providerAccounts, newAccount]);
@@ -341,11 +343,11 @@ const handleAddProvider = () => {
 
   // Reset form
   setNewProviderForm({
-    providerId: '',
-    accountName: '',
-    apiKey: '',
-    apiEndpoint: '',
-    models: []
+    providerId: "",
+    accountName: "",
+    apiKey: "",
+    apiEndpoint: "",
+    models: [],
   });
 };
 ```
@@ -354,12 +356,10 @@ const handleAddProvider = () => {
 
 ```typescript
 const handleToggleAccount = (accountId: string) => {
-  setProviderAccounts(accounts =>
-    accounts.map(acc =>
-      acc.id === accountId
-        ? { ...acc, isActive: !acc.isActive }
-        : acc
-    )
+  setProviderAccounts((accounts) =>
+    accounts.map((acc) =>
+      acc.id === accountId ? { ...acc, isActive: !acc.isActive } : acc,
+    ),
   );
 };
 ```
@@ -368,8 +368,8 @@ const handleToggleAccount = (accountId: string) => {
 
 ```typescript
 const handleDeleteAccount = (accountId: string) => {
-  setProviderAccounts(accounts =>
-    accounts.filter(acc => acc.id !== accountId)
+  setProviderAccounts((accounts) =>
+    accounts.filter((acc) => acc.id !== accountId),
   );
 };
 ```
@@ -378,17 +378,20 @@ const handleDeleteAccount = (accountId: string) => {
 
 ```typescript
 const providerStats = useMemo(() => {
-  const stats = new Map<string, {
-    accounts: number;
-    active: number;
-    requests: number;
-  }>();
+  const stats = new Map<
+    string,
+    {
+      accounts: number;
+      active: number;
+      requests: number;
+    }
+  >();
 
-  providerAccounts.forEach(account => {
+  providerAccounts.forEach((account) => {
     const current = stats.get(account.providerName) || {
       accounts: 0,
       active: 0,
-      requests: 0
+      requests: 0,
     };
 
     current.accounts++;
@@ -456,14 +459,14 @@ const providerStats = useMemo(() => {
 
 ```typescript
 nexusColors = {
-  sapphire: '#00f2ff',    // Акценти
-  quantum: '#8a2be2',     // Градієнти
-  emerald: '#00ff44',     // Success
-  crimson: '#ff0066',     // Danger
-  nebula: '#9370db',      // Secondary
-  frost: '#e0e0ff',       // Text
-  shadow: '#4a5568'       // Muted
-}
+  sapphire: "#00f2ff", // Акценти
+  quantum: "#8a2be2", // Градієнти
+  emerald: "#00ff44", // Success
+  crimson: "#ff0066", // Danger
+  nebula: "#9370db", // Secondary
+  frost: "#e0e0ff", // Text
+  shadow: "#4a5568", // Muted
+};
 ```
 
 ### Градієнти:
@@ -471,9 +474,9 @@ nexusColors = {
 ```css
 background: linear-gradient(
   135deg,
-  rgba(0,242,255,0.05) 0%,
-  rgba(138,43,226,0.05) 100%
-)
+  rgba(0, 242, 255, 0.05) 0%,
+  rgba(138, 43, 226, 0.05) 100%
+);
 ```
 
 ### Анімації (Framer Motion):
@@ -492,15 +495,17 @@ background: linear-gradient(
 ## 📊 СТАТИСТИКА
 
 ### Код:
+
 ```
 ModelProviderManager.tsx:  800+ рядків
-Повний гід:                500+ рядків  
+Повний гід:                500+ рядків
 Швидка інструкція:         350+ рядків
 ──────────────────────────────────────
 РАЗОМ:                     1650+ рядків
 ```
 
 ### Компоненти:
+
 ```
 React Components:          15
 TypeScript Interfaces:     5
@@ -510,6 +515,7 @@ Framer Motion Animations:  5+
 ```
 
 ### Функціонал:
+
 ```
 Tabs:                      2 (Models/Agents)
 Categories:                10 (6 models + 4 agents)
@@ -543,21 +549,21 @@ import ModelProviderManager from './components/models/ModelProviderManager';
 // Backend endpoints
 const API = {
   // Providers
-  getProviders: '/api/providers',
-  getProviderAccounts: '/api/providers/accounts',
-  addProviderAccount: '/api/providers/accounts',
-  updateProviderAccount: '/api/providers/accounts/:id',
-  deleteProviderAccount: '/api/providers/accounts/:id',
-  toggleProviderAccount: '/api/providers/accounts/:id/toggle',
+  getProviders: "/api/providers",
+  getProviderAccounts: "/api/providers/accounts",
+  addProviderAccount: "/api/providers/accounts",
+  updateProviderAccount: "/api/providers/accounts/:id",
+  deleteProviderAccount: "/api/providers/accounts/:id",
+  toggleProviderAccount: "/api/providers/accounts/:id/toggle",
 
   // Models
-  getModels: '/api/models',
-  getModelsByCategory: '/api/models/category/:category',
-  addModel: '/api/models',
+  getModels: "/api/models",
+  getModelsByCategory: "/api/models/category/:category",
+  addModel: "/api/models",
 
   // Agents
-  getAgents: '/api/agents',
-  getAgentsByCategory: '/api/agents/category/:category'
+  getAgents: "/api/agents",
+  getAgentsByCategory: "/api/agents/category/:category",
 };
 ```
 
@@ -566,21 +572,25 @@ const API = {
 ## 🎯 НАСТУПНІ КРОКИ
 
 ### Фаза 1: Тестування
+
 - [ ] Unit tests (Jest + React Testing Library)
 - [ ] Integration tests
 - [ ] E2E tests (Cypress)
 
 ### Фаза 2: Backend Integration
+
 - [ ] Підключити до реальних API
 - [ ] Додати валідацію API ключів
 - [ ] Реалізувати rate limiting
 
 ### Фаза 3: Розширення
+
 - [ ] Додати model comparison
 - [ ] Додати cost tracking
 - [ ] Додати performance metrics
 
 ### Фаза 4: Production
+
 - [ ] Оптимізація bundle size
 - [ ] SSR підтримка
 - [ ] Monitoring та analytics
@@ -590,6 +600,7 @@ const API = {
 ## 📈 МЕТРИКИ УСПІХУ
 
 ### Досягнуто:
+
 ```
 ✅ 100% функціонал реалізовано
 ✅ 100% документація створена
@@ -599,6 +610,7 @@ const API = {
 ```
 
 ### Performance:
+
 ```
 Bundle size:        ~50KB (gzipped)
 Initial render:     <100ms

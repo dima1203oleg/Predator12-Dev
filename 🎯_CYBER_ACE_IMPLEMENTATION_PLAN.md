@@ -11,6 +11,7 @@
 ## 📊 Поточний Стан
 
 ### ✅ Що Вже Є
+
 - 3D Wireframe голова (Three.js)
 - Базовий чат з AI
 - Голосовий контроль (STT/TTS)
@@ -21,6 +22,7 @@
 - Zustand state management
 
 ### 🎯 Що Треба Додати
+
 - Home Screen (головна сторінка)
 - Система агентів
 - Делегування завдань
@@ -34,9 +36,11 @@
 ## 🗓️ План По Тижнях
 
 ### ✅ Тиждень 0 (ЗАРАЗ - 14-20 жовтня)
+
 **Тема**: Тестування & Підготовка
 
 #### Завдання:
+
 - [x] Запустити dev server
 - [x] Протестувати поточний AI Assistant
 - [x] Створити концепцію CYBER-ACE
@@ -45,6 +49,7 @@
 - [ ] Підготувати технічні специфікації
 
 #### Deliverables:
+
 - TEST_RESULTS_AI_ASSISTANT.md
 - CYBER_ACE_WIREFRAMES.md
 - TECH_SPECS_V1.md
@@ -52,9 +57,11 @@
 ---
 
 ### 🔵 Тиждень 1 (21-27 жовтня)
+
 **Тема**: Home Screen & Navigation
 
 #### Завдання:
+
 1. **Створити Home Screen компонент**
    - Головна сторінка з CYBER-ACE в центрі
    - Карточки швидких дій
@@ -73,6 +80,7 @@
    - Suggested prompts
 
 #### Технічний Stack:
+
 ```typescript
 // New components
 src/modules/assistant/
@@ -84,6 +92,7 @@ src/modules/assistant/
 ```
 
 #### Deliverables:
+
 - Home Screen MVP
 - Navigation система
 - Розширений чат
@@ -91,9 +100,11 @@ src/modules/assistant/
 ---
 
 ### 🔵 Тиждень 2 (28 жовтня - 3 листопада)
+
 **Тема**: Agent System Foundation
 
 #### Завдання:
+
 1. **Agent Manager**
    - Базова структура для управління агентами
    - Agent registry
@@ -112,6 +123,7 @@ src/modules/assistant/
    - Query builder
 
 #### Технічний Stack:
+
 ```typescript
 src/services/agents/
   ├── AgentManager.ts         # Менеджер агентів
@@ -122,10 +134,12 @@ src/services/agents/
 ```
 
 #### API Integration:
+
 - OpenAI API для NLP
 - LangChain для orchestration
 
 #### Deliverables:
+
 - Agent Manager система
 - NLP Agent (MVP)
 - Search Agent (skeleton)
@@ -133,9 +147,11 @@ src/services/agents/
 ---
 
 ### 🔵 Тиждень 3 (4-10 листопада)
+
 **Тема**: Agents Implementation
 
 #### Завдання:
+
 1. **Risk Agent**
    - Scoring система
    - Multi-factor analysis
@@ -155,6 +171,7 @@ src/services/agents/
    - Custom formatting
 
 #### Технічний Stack:
+
 ```typescript
 src/services/agents/
   ├── RiskAgent.ts            # Аналіз ризиків
@@ -164,6 +181,7 @@ src/services/agents/
 ```
 
 #### Deliverables:
+
 - Risk Agent (MVP)
 - Network Agent (MVP)
 - Report Agent (MVP)
@@ -171,9 +189,11 @@ src/services/agents/
 ---
 
 ### 🔵 Тиждень 4 (11-17 листопада)
+
 **Тема**: Intelligence & Context
 
 #### Завдання:
+
 1. **Context Memory**
    - Session context (short-term)
    - User preferences (long-term)
@@ -193,6 +213,7 @@ src/services/agents/
    - Priority queue
 
 #### Технічний Stack:
+
 ```typescript
 src/services/intelligence/
   ├── ContextManager.ts       # Context управління
@@ -202,11 +223,13 @@ src/services/intelligence/
 ```
 
 #### Backend Integration:
+
 - Qdrant для векторних embeddings
 - Redis для session storage
 - WebSocket для real-time
 
 #### Deliverables:
+
 - Context Memory система
 - Intent Router
 - Proactive Engine (MVP)
@@ -214,9 +237,11 @@ src/services/intelligence/
 ---
 
 ### 🔵 Тиждень 5 (18-24 листопада)
+
 **Тема**: Enhancement & Polish
 
 #### Завдання:
+
 1. **Advanced Voice**
    - Azure Speech integration
    - Більше українських голосів
@@ -236,6 +261,7 @@ src/services/intelligence/
    - A/B testing framework
 
 #### Технічний Stack:
+
 ```typescript
 src/services/personalization/
   ├── UserProfile.ts          # Профіль користувача
@@ -245,6 +271,7 @@ src/services/personalization/
 ```
 
 #### Deliverables:
+
 - Azure Speech інтеграція
 - Персоналізація система
 - Analytics framework
@@ -252,9 +279,11 @@ src/services/personalization/
 ---
 
 ### 🔵 Тиждень 6 (25 листопада - 1 грудня)
+
 **Тема**: Integration & Production
 
 #### Завдання:
+
 1. **Backend Integration**
    - FastAPI endpoints
    - OpenSearch queries
@@ -282,6 +311,7 @@ src/services/personalization/
    - Deployment pipeline
 
 #### Deliverables:
+
 - Production-ready backend
 - Повний test coverage
 - Документація
@@ -354,6 +384,7 @@ interface Context {
 ## 🎨 UI/UX Guidelines
 
 ### Design Principles
+
 1. **Minimal Friction** - Одне питання = одна дія
 2. **Proactive** - Система сама підказує наступні кроки
 3. **Transparent** - Показуємо що робить система
@@ -361,12 +392,14 @@ interface Context {
 5. **Accessible** - WCAG 2.2 AA compliance
 
 ### Animation Guidelines
+
 - Transition duration: 200-300ms
 - Easing: cubic-bezier(0.4, 0.0, 0.2, 1)
 - Skeleton screens для loading
 - Micro-interactions для feedback
 
 ### Voice Guidelines
+
 - Підтвердження команд звуком
 - Visual feedback при слуханні
 - Error messages зрозумілі
@@ -377,22 +410,27 @@ interface Context {
 ## 🔧 Technical Decisions
 
 ### State Management
+
 **Рішення**: Zustand (вже використовується)  
 **Чому**: Просто, швидко, без boilerplate
 
 ### AI Orchestration
+
 **Рішення**: LangChain  
 **Чому**: Industry standard, багато готових компонентів
 
 ### Vector Database
+
 **Рішення**: Qdrant  
 **Чому**: Швидко, self-hosted option, хороша документація
 
 ### Speech Services
+
 **Рішення**: Azure Speech (українська) + Web Speech API (fallback)  
 **Чому**: Найкраща якість для української мови
 
 ### Backend Framework
+
 **Рішення**: FastAPI (вже використовується)  
 **Чому**: Швидко, async, автоматична документація
 
@@ -401,31 +439,37 @@ interface Context {
 ## 📊 Success Metrics
 
 ### Week 1
+
 - [ ] Home Screen завантажується < 2s
 - [ ] Navigation transitions smooth (60 FPS)
 - [ ] Всі quick actions працюють
 
 ### Week 2
+
 - [ ] NLP Agent accuracy > 80%
 - [ ] Intent recognition latency < 500ms
 - [ ] Agent Manager handles 10+ concurrent tasks
 
 ### Week 3
+
 - [ ] Risk scoring працює для 5+ факторів
 - [ ] Network graph будується < 3s
 - [ ] PDF reports генеруються < 5s
 
 ### Week 4
+
 - [ ] Context memory зберігає 10+ turns
 - [ ] Intent routing accuracy > 90%
 - [ ] Proactive alerts < 1s delay
 
 ### Week 5
+
 - [ ] Voice recognition accuracy > 90% (UA)
 - [ ] TTS naturalness score > 4/5
 - [ ] Personalization improves UX by 20%
 
 ### Week 6
+
 - [ ] Backend integration 100% complete
 - [ ] Test coverage > 80%
 - [ ] Production deployment successful
@@ -436,31 +480,41 @@ interface Context {
 ## 🚨 Risks & Mitigation
 
 ### Risk 1: OpenAI API Costs
+
 **Mitigation**:
+
 - Кешування responses
 - Rate limiting
 - Fallback на локальні моделі
 
 ### Risk 2: Ukrainian TTS Quality
+
 **Mitigation**:
+
 - Azure Speech primary
 - Google Cloud TTS secondary
 - Web Speech API fallback
 
 ### Risk 3: Complex Agent Coordination
+
 **Mitigation**:
+
 - Start simple (single agent)
 - Incremental complexity
 - Extensive testing
 
 ### Risk 4: Performance з 3D
+
 **Mitigation**:
+
 - LOD (Level of Detail)
 - Lazy loading
 - GPU budget monitoring
 
 ### Risk 5: Context Management Complexity
+
 **Mitigation**:
+
 - Clear data structure
 - TTL для старих даних
 - Vector similarity search
@@ -470,21 +524,25 @@ interface Context {
 ## 👥 Team & Roles
 
 ### Frontend Developer
+
 - React/TypeScript
 - Three.js
 - UI/UX implementation
 
 ### Backend Developer
+
 - FastAPI
 - OpenSearch
 - Qdrant integration
 
 ### AI/ML Engineer
+
 - LangChain
 - Prompt engineering
 - Agent development
 
 ### QA Engineer
+
 - Testing framework
 - E2E scenarios
 - Performance testing
@@ -494,12 +552,14 @@ interface Context {
 ## 📚 Resources
 
 ### Documentation
+
 - LangChain: https://python.langchain.com/docs/
 - Azure Speech: https://docs.microsoft.com/azure/cognitive-services/speech-service/
 - Qdrant: https://qdrant.tech/documentation/
 - FastAPI: https://fastapi.tiangolo.com/
 
 ### Inspiration
+
 - GitHub Copilot Chat
 - ChatGPT interface
 - Claude AI
@@ -510,6 +570,7 @@ interface Context {
 ## ✅ Definition of Done
 
 ### Feature DOD
+
 - [ ] Code written & reviewed
 - [ ] Tests written (unit + integration)
 - [ ] Documentation updated
@@ -517,6 +578,7 @@ interface Context {
 - [ ] Product owner approved
 
 ### Sprint DOD
+
 - [ ] All features meet DOD
 - [ ] No critical bugs
 - [ ] Performance metrics met

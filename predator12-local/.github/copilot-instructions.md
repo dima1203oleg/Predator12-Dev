@@ -87,6 +87,7 @@ thermal_limits:
 When suggesting commands, prefer invoking these tasks rather than raw docker-compose commands so the developer can run them via VS Code UI.
 
 -- Додаткові довідники:
+
 - `docs/autogen-integration.md` — інтеграція генераторів патчів і guardrails.
 - `docs/ai-tooling-integration.md` — повний план налаштування локальних LLM, VS Code плагінів та автономних сценаріїв.
 

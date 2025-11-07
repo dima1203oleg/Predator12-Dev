@@ -4,12 +4,9 @@
 Переносить файли з AAPredator8.0 та codespaces-models у відповідну структуру
 """
 
-import json
 import logging
-import os
 import shutil
 from pathlib import Path
-from typing import Dict, List
 
 # Налаштування логування
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

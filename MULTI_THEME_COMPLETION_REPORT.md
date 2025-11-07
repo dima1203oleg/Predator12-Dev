@@ -32,12 +32,14 @@
 **Файл:** `frontend/src/theme/themes.ts`
 
 **Функції:**
+
 - 7 ThemeConfig об'єктів з повною палітрою
 - Генерація Material-UI theme з конфігурації
 - Утиліти для роботи з темами
 - TypeScript типізація
 
 **Теми:**
+
 1. 🌌 Dark Cyber (Cyan + Purple) - Default
 2. 🟢 Matrix (Neon Green)
 3. 🌅 Sunset (Orange + Purple)
@@ -47,6 +49,7 @@
 7. ☀️ Light (Sky Blue + Purple)
 
 **Колірна структура кожної теми:**
+
 ```tsx
 {
   background: { default, paper, elevated },
@@ -65,6 +68,7 @@
 **Файл:** `frontend/src/contexts/ThemeContext.tsx`
 
 **Функції:**
+
 - React Context для глобального стану
 - NexusThemeProvider компонент
 - useNexusTheme() custom hook
@@ -73,13 +77,14 @@
 - Auto-save функціонал
 
 **API:**
+
 ```tsx
 const {
-  currentTheme,    // ThemeConfig
-  currentThemeId,  // string
-  setTheme,        // (id: string) => void
-  toggleTheme,     // () => void
-  colors           // ThemeColorPalette
+  currentTheme, // ThemeConfig
+  currentThemeId, // string
+  setTheme, // (id: string) => void
+  toggleTheme, // () => void
+  colors, // ThemeColorPalette
 } = useNexusTheme();
 ```
 
@@ -88,6 +93,7 @@ const {
 **Файл:** `frontend/src/components/theme/ThemeSwitcher.tsx`
 
 **Функції:**
+
 - Floating кнопка (bottom-right)
 - Modal dialog з preview тем
 - Color palette preview
@@ -97,6 +103,7 @@ const {
 - Responsive дизайн
 
 **UI Features:**
+
 - Grid layout для тем
 - Gradient backgrounds
 - Interactive cards
@@ -109,6 +116,7 @@ const {
 **Файл:** `frontend/src/AppThemeDemo.tsx`
 
 **Функції:**
+
 - Повний приклад інтеграції
 - Demo різних компонентів
 - Showcase всіх тем
@@ -170,6 +178,7 @@ Documentation:
 ### Theme Color Palettes
 
 #### 1. Dark Cyber 🌌
+
 ```
 Background: #0a0e1a, #111827, #1a1f35
 Primary: #00f2ff (Cyan)
@@ -178,6 +187,7 @@ Accents: cyan, purple, pink, green, yellow, orange
 ```
 
 #### 2. Matrix 🟢
+
 ```
 Background: #0d0d0d, #1a1a1a, #262626
 Primary: #00ff41 (Neon Green)
@@ -186,6 +196,7 @@ Accents: green, lime, emerald, mint, forest, neon
 ```
 
 #### 3. Sunset 🌅
+
 ```
 Background: #1a0f1f, #2a1838, #3a2048
 Primary: #ff6b35 (Orange)
@@ -194,6 +205,7 @@ Accents: orange, coral, purple, magenta, pink, amber
 ```
 
 #### 4. Ocean 🌊
+
 ```
 Background: #001220, #002030, #003048
 Primary: #00d4ff (Cyan)
@@ -202,6 +214,7 @@ Accents: cyan, azure, teal, aqua, navy, sky
 ```
 
 #### 5. Neon Tokyo 🗼
+
 ```
 Background: #0f0517, #1a0a2e, #271542
 Primary: #ff0099 (Pink)
@@ -210,6 +223,7 @@ Accents: pink, cyan, yellow, purple, green, orange
 ```
 
 #### 6. Retro Terminal 💾
+
 ```
 Background: #000000, #0a0a0a, #1a1a1a
 Primary: #ffb000 (Amber)
@@ -218,6 +232,7 @@ Accents: amber, gold, orange, yellow, bronze, copper
 ```
 
 #### 7. Light ☀️
+
 ```
 Background: #f8fafc, #ffffff, #f1f5f9
 Primary: #0ea5e9 (Sky Blue)
@@ -228,6 +243,7 @@ Accents: cyan, purple, pink, green, orange, yellow
 ### Component Features
 
 **ThemeSwitcher:**
+
 - Floating button з gradient та glow
 - Full-screen modal з grid layout
 - Preview cards з hover effects
@@ -237,6 +253,7 @@ Accents: cyan, purple, pink, green, orange, yellow
 - Smooth transitions (0.3s ease)
 
 **Theme Context:**
+
 - Automatic localStorage save/load
 - Custom event dispatching
 - Theme change callbacks
@@ -244,6 +261,7 @@ Accents: cyan, purple, pink, green, orange, yellow
 - SSR compatibility checks
 
 **Material-UI Integration:**
+
 - Custom component overrides
 - Typography configuration
 - Border radius customization
@@ -259,8 +277,8 @@ Accents: cyan, purple, pink, green, orange, yellow
 
 ```tsx
 // App.tsx
-import { NexusThemeProvider } from './contexts/ThemeContext';
-import ThemeSwitcher from './components/theme/ThemeSwitcher';
+import { NexusThemeProvider } from "./contexts/ThemeContext";
+import ThemeSwitcher from "./components/theme/ThemeSwitcher";
 
 function App() {
   return (
@@ -275,21 +293,25 @@ function App() {
 ### У компонентах
 
 ```tsx
-import { useNexusTheme } from '../contexts/ThemeContext';
+import { useNexusTheme } from "../contexts/ThemeContext";
 
 const MyComponent = () => {
   const { colors, currentTheme, setTheme } = useNexusTheme();
 
   return (
-    <Box sx={{
-      background: colors.background.paper,
-      border: `1px solid ${colors.border.light}`,
-    }}>
-      <Typography sx={{
-        background: colors.gradients.primary,
-        backgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-      }}>
+    <Box
+      sx={{
+        background: colors.background.paper,
+        border: `1px solid ${colors.border.light}`,
+      }}
+    >
+      <Typography
+        sx={{
+          background: colors.gradients.primary,
+          backgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}
+      >
         {currentTheme.name}
       </Typography>
     </Box>
@@ -302,8 +324,10 @@ const MyComponent = () => {
 ## 📚 ДОКУМЕНТАЦІЯ
 
 ### 1. MULTI_THEME_GUIDE.md
+
 **Розмір:** 600+ рядків  
 **Зміст:**
+
 - Огляд системи
 - Детальний опис всіх тем
 - Швидкий старт
@@ -314,8 +338,10 @@ const MyComponent = () => {
 - Troubleshooting
 
 ### 2. THEME_SYSTEM_QUICK_REF.md
+
 **Розмір:** 250+ рядків  
 **Зміст:**
+
 - Швидкий довідник
 - Таблиця тем
 - API cheat sheet
@@ -323,8 +349,10 @@ const MyComponent = () => {
 - Checklist
 
 ### 3. THEME_INTEGRATION_EXAMPLES.md
+
 **Розмір:** 400+ рядків  
 **Зміст:**
+
 - Оновлення App.tsx
 - ModelProviderManager integration
 - DashboardsPage integration
@@ -337,30 +365,35 @@ const MyComponent = () => {
 ## ✨ ОСОБЛИВОСТІ
 
 ### 1. Performance
+
 - Мемоізація theme об'єктів
 - Оптимізовані re-renders
 - Lazy loading не потрібен (малий розмір)
 - Smooth transitions без лагів
 
 ### 2. Accessibility
+
 - WCAG контрастність
 - Keyboard navigation
 - Screen reader support
 - Focus indicators
 
 ### 3. Developer Experience
+
 - Повна TypeScript типізація
 - Intellisense підтримка
 - Зрозуміла структура
 - Багато прикладів
 
 ### 4. User Experience
+
 - Smooth анімації
 - Visual feedback
 - Intuitive UI
 - Responsive design
 
 ### 5. Maintainability
+
 - Модульна структура
 - Single source of truth
 - Легко додавати нові теми
@@ -371,6 +404,7 @@ const MyComponent = () => {
 ## 🎯 TESTING CHECKLIST
 
 ### Функціональність
+
 - [x] Переключення між темами працює
 - [x] LocalStorage save/load працює
 - [x] Theme context доступний всюди
@@ -380,6 +414,7 @@ const MyComponent = () => {
 - [x] Hover effects працюють
 
 ### UI/UX
+
 - [x] ThemeSwitcher відкривається
 - [x] Preview cards відображаються
 - [x] Color swatches правильні
@@ -388,12 +423,14 @@ const MyComponent = () => {
 - [x] Icons відображаються
 
 ### Браузери
+
 - [x] Chrome
 - [x] Firefox
 - [x] Safari
 - [x] Edge
 
 ### Devices
+
 - [x] Desktop (1920x1080)
 - [x] Laptop (1366x768)
 - [x] Tablet (768x1024)
@@ -404,6 +441,7 @@ const MyComponent = () => {
 ## 📊 СТАТИСТИКА
 
 ### Code Metrics
+
 - **Total Lines:** ~2500+
 - **Components:** 3 major
 - **Themes:** 7 complete
@@ -412,6 +450,7 @@ const MyComponent = () => {
 - **Documentation:** 1250+ lines
 
 ### Features
+
 - **Theme configs:** 7
 - **Color categories:** 8
 - **Gradient presets:** 4 per theme
@@ -419,6 +458,7 @@ const MyComponent = () => {
 - **Status colors:** 4 per theme
 
 ### Files Created
+
 - **Core files:** 4
 - **Documentation:** 3
 - **Total files:** 7
@@ -438,7 +478,7 @@ const MyComponent = () => {
 ✅ **Floating ThemeSwitcher UI**  
 ✅ **Повна документація**  
 ✅ **Integration examples**  
-✅ **Production-ready code**  
+✅ **Production-ready code**
 
 ### Переваги системи
 
@@ -448,7 +488,7 @@ const MyComponent = () => {
 🎯 **UX** - інтуїтивний interface  
 📱 **Responsive** - працює на всіх пристроях  
 🔒 **Type-safe** - повна типізація  
-📚 **Documented** - детальна документація  
+📚 **Documented** - детальна документація
 
 ---
 
@@ -485,6 +525,7 @@ const MyComponent = () => {
 Система множинних тем для Predator12 Nexus Core V3 **повністю реалізована** та готова до production використання. Всі компоненти протестовані, задокументовані та оптимізовані для найкращого user experience.
 
 ### Ключові досягнення:
+
 - ✅ 7 унікальних тем
 - ✅ Повна TypeScript підтримка
 - ✅ Material-UI інтеграція
@@ -503,4 +544,4 @@ const MyComponent = () => {
 
 🎨 **Predator12 Nexus Core V3 - Multi-Theme System**
 
-*"From Dark Cyber to Retro Terminal - 7 themes for every mood"*
+_"From Dark Cyber to Retro Terminal - 7 themes for every mood"_

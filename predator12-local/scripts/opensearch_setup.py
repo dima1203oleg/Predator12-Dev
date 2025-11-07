@@ -35,11 +35,7 @@ def ensure_index_with_alias(index: str, alias: str):
     url_idx = f"{OS_URL}/{index}"
     if requests.head(url_idx).status_code == 404:
         settings = {
-            "settings": {
-                "index": {
-                    "opendistro.index_state_management.policy_id": "customs_policy"
-                }
-            }
+            "settings": {"index": {"opendistro.index_state_management.policy_id": "customs_policy"}}
         }
         r = requests.put(url_idx, json=settings)
         r.raise_for_status()

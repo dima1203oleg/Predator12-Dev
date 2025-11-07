@@ -8,16 +8,16 @@
 
 ## 📊 Service Categories
 
-| Icon | Category | Count | Services |
-|------|----------|-------|----------|
-| 🚀 | **Core Application** | 5 | Backend API, Frontend, Celery Worker, Scheduler, Agent Supervisor |
-| 💾 | **Database & Storage** | 4 | PostgreSQL, Redis, MinIO, Qdrant (⚠️) |
-| 🔍 | **Search & Indexing** | 2 | OpenSearch, OpenSearch Dashboard |
-| 📨 | **Message Queue** | 1 | Redpanda Kafka |
-| 🤖 | **AI/ML Services** | 1 | Model SDK |
-| 📊 | **Monitoring Stack** | 7 | Prometheus, Grafana, Loki, Promtail, Tempo, AlertManager, Blackbox |
-| 📈 | **System Metrics** | 2 | cAdvisor, Node Exporter |
-| 🔐 | **Security & Auth** | 1 | Keycloak |
+| Icon | Category               | Count | Services                                                           |
+| ---- | ---------------------- | ----- | ------------------------------------------------------------------ |
+| 🚀   | **Core Application**   | 5     | Backend API, Frontend, Celery Worker, Scheduler, Agent Supervisor  |
+| 💾   | **Database & Storage** | 4     | PostgreSQL, Redis, MinIO, Qdrant (⚠️)                              |
+| 🔍   | **Search & Indexing**  | 2     | OpenSearch, OpenSearch Dashboard                                   |
+| 📨   | **Message Queue**      | 1     | Redpanda Kafka                                                     |
+| 🤖   | **AI/ML Services**     | 1     | Model SDK                                                          |
+| 📊   | **Monitoring Stack**   | 7     | Prometheus, Grafana, Loki, Promtail, Tempo, AlertManager, Blackbox |
+| 📈   | **System Metrics**     | 2     | cAdvisor, Node Exporter                                            |
+| 🔐   | **Security & Auth**    | 1     | Keycloak                                                           |
 
 **TOTAL:** 25 services (24 online, 1 warning)
 
@@ -77,11 +77,13 @@ docker compose up -d frontend
 ## ✅ What Changed
 
 **Before (v1.1):**
+
 - 10 services
 - No categories
 - Basic list
 
 **After (v2.0):**
+
 - ✨ 25 services (+150%)
 - ✨ 7 categories with icons
 - ✨ Category headers with counters
@@ -97,6 +99,7 @@ docker compose up -d frontend
 Read: `PHASE1_API_INTEGRATION.md`
 
 Tasks:
+
 - Create `/api/services` endpoint
 - Fetch from Docker API
 - Real-time updates
@@ -107,6 +110,7 @@ Tasks:
 ## 🐛 Troubleshooting
 
 **Dashboard not updating?**
+
 ```bash
 # Clear cache
 Cmd + Shift + R (macOS)
@@ -118,6 +122,7 @@ docker compose up -d frontend
 ```
 
 **Container unhealthy?**
+
 ```bash
 docker logs predator12-local-frontend-1
 docker compose restart frontend

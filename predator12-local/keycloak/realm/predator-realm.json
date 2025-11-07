@@ -8,13 +8,8 @@
       "name": "Predator WebChat",
       "rootUrl": "http://localhost:3001",
       "baseUrl": "/",
-      "redirectUris": [
-        "http://localhost:3001/*"
-      ],
-      "webOrigins": [
-        "http://localhost:3001",
-        "http://localhost:3010"
-      ],
+      "redirectUris": ["http://localhost:3001/*"],
+      "webOrigins": ["http://localhost:3001", "http://localhost:3010"],
       "publicClient": true,
       "protocol": "openid-connect",
       "standardFlowEnabled": true,

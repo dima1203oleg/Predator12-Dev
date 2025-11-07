@@ -6,7 +6,7 @@
 
 
 def system_status_report():
-    """Генерує звіт про поточний стан системи"""
+    """Генерує звіт про поточний стан системи."""
 
     print("🤖 PREDATOR ANALYTICS NEXUS CORE - SYSTEM STATUS REPORT")
     print("=" * 80)

@@ -3,12 +3,10 @@ Chrono-Spatial Analysis API endpoints for Nexus Core
 Provides 4D visualization data and temporal analysis capabilities
 """
 
-import math
 import random
-from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Query
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/api/v1/chrono-spatial", tags=["chrono-spatial"])
