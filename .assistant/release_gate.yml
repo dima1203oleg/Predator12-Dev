@@ -1,0 +1,5 @@
+# Release gate configuration
+prod_requirements:
+  min_coverage: 80
+  security_scan: true
+  performance_baseline: true
