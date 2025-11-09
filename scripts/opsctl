@@ -165,7 +165,11 @@ cmd_deploy() {
     if command -v kubectl &> /dev/null && [ -n "$kubeconfig" ]; then
         log_info "Kubectl detected, verifying deployment..."
         # Verify cluster access
-        kubectl cluster-info &> /dev/null && log_info "Cluster access verified" || log_warn "Could not verify cluster access"
+        if kubectl cluster-info &> /dev/null; then
+            log_info "Cluster access verified"
+        else
+            log_warn "Could not verify cluster access"
+        fi
     fi
     
     log_info "Deployment to ${env} completed"
@@ -241,7 +245,8 @@ cmd_check_gate() {
     
     # Check if we're on a stable branch
     if [ -d "${PROJECT_ROOT}/.git" ]; then
-        local current_branch=$(git -C "${PROJECT_ROOT}" rev-parse --abbrev-ref HEAD)
+        local current_branch
+        current_branch=$(git -C "${PROJECT_ROOT}" rev-parse --abbrev-ref HEAD)
         log_info "Current branch: ${current_branch}"
         
         if [ "$env" = "prod" ] && [ "$current_branch" != "main" ]; then
@@ -252,7 +257,8 @@ cmd_check_gate() {
     
     # Check for recent commits
     if [ -d "${PROJECT_ROOT}/.git" ]; then
-        local commit_count=$(git -C "${PROJECT_ROOT}" rev-list --count HEAD~5..HEAD 2>/dev/null || echo "0")
+        local commit_count
+        commit_count=$(git -C "${PROJECT_ROOT}" rev-list --count HEAD~5..HEAD 2>/dev/null || echo "0")
         log_info "Recent commits: ${commit_count}"
     fi
     
