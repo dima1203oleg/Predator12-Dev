@@ -25,7 +25,7 @@ case "$CMD" in
       if [ -n "$KUBECONFIG_FILE" ]; then
         TKN_CMD+=(--kubeconfig "$KUBECONFIG_FILE")
       fi
-      "${TKN_CMD[@]}" || { echo "[opsctl] error: tkn pipeline start failed" >&2; echo "1"; exit 6; }
+      "${TKN_CMD[@]}" || { echo "[opsctl] error: tkn pipeline start failed" >&2; exit 6; }
       exit 0
     fi
 
@@ -58,14 +58,11 @@ case "$CMD" in
     if ! command -v argocd >/dev/null 2>&1; then
       echo "[opsctl] error: argocd CLI not found" >&2; exit 1
     fi  
-    if [ -n "
-${ARGO_AUTH_TOKEN:-}" ]; then
+    if [ -n "${ARGO_AUTH_TOKEN:-}" ]; then
       echo "[opsctl] using ARGO_AUTH_TOKEN for login" >&2
       argocd login "${ARGO_SERVER:-}" --auth-token "${ARGO_AUTH_TOKEN}" --insecure || { echo "[opsctl] error: argocd login failed" >&2; exit 2; }
     else
-      if [ -z "
-${ARGO_USER:-}" ] || [ -z "
-${ARGO_PASS:-}" ]; then
+      if [ -z "${ARGO_USER:-}" ] || [ -z "${ARGO_PASS:-}" ]; then
         echo "[opsctl] error: ARGO_USER/ARGO_PASS not set and ARGO_AUTH_TOKEN missing" >&2
         exit 3
       fi
@@ -107,8 +104,7 @@ etl-run)
     done
     echo "[opsctl] maybe-release env=$ENV timebox=$TIMEBOX" >&2
     python scripts/maybe_release.py --env "$ENV" --timebox "$TIMEBOX" || { echo "[opsctl] maybe-release: gate failed" >&2; exit 5; }
-     if [ "
-${AUTO_MERGE:-0}" = "1" ]; then
+    if [ "${AUTO_MERGE:-0}" = "1" ]; then
       echo "[opsctl] AUTO_MERGE=1 -> performing automated manifest update and deploy" >&2
       ./scripts/create-manifests-pr.sh "$MANIFESTS_REPO" "$BRANCH" "$OPS_IMAGE" || { echo "[opsctl] error: create-manifests-pr failed" >&2; exit 7; }
       if command -v argocd >/dev/null 2>&1; then
