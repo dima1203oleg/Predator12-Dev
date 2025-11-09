@@ -19,7 +19,7 @@ git config user.email "ci-bot@example.com"
 git config user.name "ci-bot"
 
 # Update naive: replace image lines in values*.yaml
-find . -type f -name "values*.yaml" -print0 | xargs -0 -n1 sed -i.bak "s|image: .*|image: '$IMAGE'|g" || true
+find . -type f -name "values*.yaml" -print0 | xargs -0 -n1 sed -i.bak "s|image: .*|image: $IMAGE|g" || true
 
 git add .
 if git commit -m "chore: update images to $IMAGE"; then
