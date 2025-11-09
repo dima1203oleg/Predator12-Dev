@@ -1,0 +1,71 @@
+# ============================================================================
+# DATABASE SYNCHRONIZATION CRON JOBS
+# ============================================================================
+# This file contains example cron jobs for automated database synchronization
+# in the Predator12 system.
+#
+# To install these cron jobs:
+# 1. Edit this file to match your environment
+# 2. Copy the desired lines to your crontab: crontab -e
+# 3. Ensure the user running cron has access to the scripts
+# ============================================================================
+
+# Set environment variables (adjust paths as needed)
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+PROJECT_ROOT=/path/to/Predator12-Dev
+PYTHON=/usr/bin/python3
+
+# ============================================================================
+# OPTION 1: Full sync every 2 hours (recommended for production)
+# ============================================================================
+# Runs complete sync of all databases every 2 hours
+0 */2 * * * cd $PROJECT_ROOT && $PYTHON scripts/db-sync-orchestrator.py >> /var/log/predator12/db-sync.log 2>&1
+
+# ============================================================================
+# OPTION 2: Different sync schedules for different databases
+# ============================================================================
+# OpenSearch sync every hour (faster, lighter)
+0 * * * * cd $PROJECT_ROOT && $PYTHON scripts/db-sync-orchestrator.py --single opensearch >> /var/log/predator12/opensearch-sync.log 2>&1
+
+# Qdrant sync every 4 hours (slower due to embeddings)
+0 */4 * * * cd $PROJECT_ROOT && $PYTHON scripts/db-sync-orchestrator.py --single qdrant >> /var/log/predator12/qdrant-sync.log 2>&1
+
+# Redis cache invalidation every 30 minutes
+*/30 * * * * cd $PROJECT_ROOT && $PYTHON scripts/db-sync-orchestrator.py --single redis >> /var/log/predator12/redis-sync.log 2>&1
+
+# ============================================================================
+# OPTION 3: Sync only during off-peak hours
+# ============================================================================
+# Full sync at 2 AM and 2 PM every day
+0 2,14 * * * cd $PROJECT_ROOT && $PYTHON scripts/db-sync-orchestrator.py >> /var/log/predator12/db-sync.log 2>&1
+
+# ============================================================================
+# OPTION 4: Lightweight sync during business hours
+# ============================================================================
+# Quick sync without Qdrant during business hours (9 AM - 6 PM)
+0 9-18 * * 1-5 cd $PROJECT_ROOT && $PYTHON scripts/db-sync-orchestrator.py --skip-qdrant >> /var/log/predator12/db-sync-light.log 2>&1
+
+# Heavy sync with Qdrant outside business hours
+0 20,22,0,2,4,6 * * * cd $PROJECT_ROOT && $PYTHON scripts/db-sync-orchestrator.py >> /var/log/predator12/db-sync-full.log 2>&1
+
+# ============================================================================
+# Log rotation recommendation
+# ============================================================================
+# Add to /etc/logrotate.d/predator12:
+# /var/log/predator12/*.log {
+#     daily
+#     rotate 7
+#     compress
+#     delaycompress
+#     missingok
+#     notifempty
+#     create 0640 predator12 predator12
+# }
+# ============================================================================
+
+# ============================================================================
+# MONITORING: Check sync status
+# ============================================================================
+# Check if sync is running properly (every 6 hours)
+0 */6 * * * tail -100 /var/log/predator12/db-sync.log | grep -q "SYNCHRONIZATION SUMMARY" && echo "Sync OK" || echo "Sync may have issues" | mail -s "Predator12 DB Sync Alert" admin@example.com
