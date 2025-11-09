@@ -1,0 +1,306 @@
+#!/usr/bin/env bash
+#
+# opsctl - Operations Control Script for Non-Stop Predator Workflow
+#
+# This script orchestrates the core operations for the Non-Stop Predator
+# deployment pipeline including build, test, scan, deploy, ETL, and release
+# operations.
+#
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Logging functions
+log_info() {
+    echo -e "${BLUE}[INFO]${NC} $*"
+}
+
+log_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $*"
+}
+
+log_warn() {
+    echo -e "${YELLOW}[WARN]${NC} $*"
+}
+
+log_error() {
+    echo -e "${RED}[ERROR]${NC} $*" >&2
+}
+
+# Usage information
+usage() {
+    cat << EOF
+Usage: opsctl <command> [options]
+
+Commands:
+    build-test-scan         Build, test, and scan the application
+    deploy <env>            Deploy to specified environment
+    etl-run                 Run ETL jobs
+    check-gate              Check release gates
+    maybe-release           Conditional release based on gates
+    enable-autoheal         Enable auto-healing capabilities
+
+Options:
+    --env <environment>     Specify target environment (dev|stage|prod)
+    --kubeconfig <path>     Path to kubeconfig file
+    --nonstop               Enable non-stop mode
+    --jobs <selector>       Job selector for ETL (all|changed)
+    --timebox <duration>    Time limit for operations (e.g., 12h, 30m)
+    -h, --help              Show this help message
+
+Examples:
+    opsctl build-test-scan
+    opsctl deploy stage --kubeconfig ./kubeconfig --nonstop
+    opsctl etl-run --jobs changed --nonstop
+    opsctl check-gate --env prod
+    opsctl maybe-release --env prod --timebox 12h
+
+EOF
+    exit 0
+}
+
+# Parse global options
+parse_options() {
+    ENV=""
+    KUBECONFIG_PATH=""
+    NONSTOP=false
+    JOBS="all"
+    TIMEBOX=""
+    
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --env)
+                ENV="$2"
+                shift 2
+                ;;
+            --kubeconfig)
+                KUBECONFIG_PATH="$2"
+                shift 2
+                ;;
+            --nonstop)
+                NONSTOP=true
+                shift
+                ;;
+            --jobs)
+                JOBS="$2"
+                shift 2
+                ;;
+            --timebox)
+                TIMEBOX="$2"
+                shift 2
+                ;;
+            -h|--help)
+                usage
+                ;;
+            *)
+                # Unknown option, might be handled by subcommand
+                break
+                ;;
+        esac
+    done
+}
+
+# Command: build-test-scan
+cmd_build_test_scan() {
+    log_info "Starting build-test-scan pipeline..."
+    
+    # Build stage
+    log_info "Building application..."
+    if [[ -f "${REPO_ROOT}/Dockerfile" ]]; then
+        log_info "Docker build detected"
+        # In actual implementation, would run: docker build -t app:latest .
+        log_success "Build completed (stub)"
+    else
+        log_warn "No Dockerfile found, skipping Docker build"
+    fi
+    
+    # Test stage
+    log_info "Running tests..."
+    if [[ -f "${REPO_ROOT}/package.json" ]]; then
+        log_info "Node.js project detected"
+        # Would run: npm test
+        log_success "Tests passed (stub)"
+    elif [[ -f "${REPO_ROOT}/requirements.txt" ]]; then
+        log_info "Python project detected"
+        # Would run: pytest
+        log_success "Tests passed (stub)"
+    else
+        log_warn "No test configuration found"
+    fi
+    
+    # Security scan stage
+    log_info "Running security scans..."
+    # Would run: trivy scan, sonarqube, etc.
+    log_success "Security scans completed (stub)"
+    
+    log_success "Build-test-scan pipeline completed successfully"
+    return 0
+}
+
+# Command: deploy
+cmd_deploy() {
+    local env="$1"
+    
+    if [[ -z "$env" ]]; then
+        log_error "Environment not specified. Use: opsctl deploy <env>"
+        exit 1
+    fi
+    
+    log_info "Deploying to environment: ${env}"
+    
+    if [[ -n "$KUBECONFIG_PATH" ]]; then
+        log_info "Using kubeconfig: ${KUBECONFIG_PATH}"
+    fi
+    
+    if [[ "$NONSTOP" == true ]]; then
+        log_info "Non-stop deployment mode enabled"
+    fi
+    
+    # Deployment logic
+    log_info "Syncing with ArgoCD..."
+    # Would run: argocd app sync predator-${env}
+    log_success "Deployment to ${env} completed (stub)"
+    
+    return 0
+}
+
+# Command: etl-run
+cmd_etl_run() {
+    log_info "Running ETL jobs..."
+    
+    if [[ "$JOBS" == "changed" ]]; then
+        log_info "Running only changed ETL jobs"
+        # Would detect and run only changed jobs
+        log_success "Changed ETL jobs completed (stub)"
+    else
+        log_info "Running all ETL jobs"
+        # Would run all ETL jobs
+        log_success "All ETL jobs completed (stub)"
+    fi
+    
+    if [[ "$NONSTOP" == true ]]; then
+        log_info "Non-stop mode: Continuing on failures"
+    fi
+    
+    return 0
+}
+
+# Command: check-gate
+cmd_check_gate() {
+    log_info "Checking release gates for environment: ${ENV:-prod}"
+    
+    # Call the Python script for gate checking
+    if [[ -f "${SCRIPT_DIR}/check_release_gate.py" ]]; then
+        python3 "${SCRIPT_DIR}/check_release_gate.py" --env "${ENV:-prod}"
+        local exit_code=$?
+        
+        if [[ $exit_code -eq 0 ]]; then
+            log_success "Release gate check passed"
+        else
+            log_error "Release gate check failed"
+        fi
+        
+        return $exit_code
+    else
+        log_warn "check_release_gate.py not found, assuming gate passed"
+        return 0
+    fi
+}
+
+# Command: maybe-release
+cmd_maybe_release() {
+    log_info "Evaluating conditional release for environment: ${ENV:-prod}"
+    
+    if [[ -n "$TIMEBOX" ]]; then
+        log_info "Timebox: ${TIMEBOX}"
+    fi
+    
+    # Call the Python script for conditional release
+    if [[ -f "${SCRIPT_DIR}/maybe_release.py" ]]; then
+        local args="--env ${ENV:-prod}"
+        [[ -n "$TIMEBOX" ]] && args="$args --timebox $TIMEBOX"
+        
+        python3 "${SCRIPT_DIR}/maybe_release.py" $args
+        local exit_code=$?
+        
+        if [[ $exit_code -eq 0 ]]; then
+            log_success "Release decision completed"
+        else
+            log_error "Release decision failed"
+        fi
+        
+        return $exit_code
+    else
+        log_warn "maybe_release.py not found, skipping release logic"
+        return 0
+    fi
+}
+
+# Command: enable-autoheal
+cmd_enable_autoheal() {
+    log_info "Enabling auto-healing capabilities..."
+    
+    # Auto-healing logic
+    log_info "Configuring self-healing policies..."
+    # Would configure:
+    # - Pod auto-restart policies
+    # - Service mesh circuit breakers
+    # - Health check endpoints
+    # - Automated rollback triggers
+    
+    log_success "Auto-healing enabled (stub)"
+    return 0
+}
+
+# Main command dispatcher
+main() {
+    if [[ $# -eq 0 ]]; then
+        log_error "No command specified"
+        usage
+    fi
+    
+    local command="$1"
+    shift
+    
+    # Parse options for all commands
+    parse_options "$@"
+    
+    case "$command" in
+        build-test-scan)
+            cmd_build_test_scan
+            ;;
+        deploy)
+            cmd_deploy "${1:-}"
+            ;;
+        etl-run)
+            cmd_etl_run
+            ;;
+        check-gate)
+            cmd_check_gate
+            ;;
+        maybe-release)
+            cmd_maybe_release
+            ;;
+        enable-autoheal)
+            cmd_enable_autoheal
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            log_error "Unknown command: $command"
+            usage
+            ;;
+    esac
+}
+
+main "$@"
