@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CMD="${1:-}"
+shift || true
+
+usage() {
+  echo "opsctl <build-test-scan|deploy|etl-run|check-gate|maybe-release|enable-autoheal|provision-infra> [flags]"
+}
+
+case "$CMD" in
+  build-test-scan)
+    echo "[opsctl] build, test, lint, sbom, scan" >&2
+    OPS_GIT_URL="${OPS_GIT_URL:-}"; OPS_IMAGE="${OPS_IMAGE:-}"
+    KUBECONFIG_FILE="${KUBECONFIG:-}"; DRY_RUN="${DRY_RUN:-0}"
+
+    if [ "$DRY_RUN" = "1" ]; then
+      echo "[opsctl] dry-run: would run build pipeline for $OPS_GIT_URL -> $OPS_IMAGE" >&2
+      exit 0
+    fi
+
+    if command -v tkn >/dev/null 2>&1 && [ -n "$OPS_GIT_URL" ] && [ -n "$OPS_IMAGE" ] && [ -n "$KUBECONFIG_FILE" ]; then
+      echo "[opsctl] starting Tekton pipeline build-and-scan via tkn" >&2
+      TKN_CMD=(tkn pipeline start build-and-scan --param git-url="$OPS_GIT_URL" --param image="$OPS_IMAGE")
+      if [ -n "$KUBECONFIG_FILE" ]; then
+        TKN_CMD+=(--kubeconfig "$KUBECONFIG_FILE")
+      fi
+      "${TKN_CMD[@]}" || { echo "[opsctl] error: tkn pipeline start failed" >&2; exit 6; }
+      exit 0
+    fi
+
+    make build test lint || { echo "[opsctl] error: build/test failed" >&2; exit 1; }
+    make sbom || true
+    make trivy || true
+    ;;  
+  deploy)
+    ENV="${1:-stage}"; shift || true
+    KUBEFILE="${KUBECONFIG:-}"; DRY_RUN=0
+    while (( "${#}" )); do
+      case "$1" in
+        --kubeconfig)
+          KUBEFILE="$2"; shift 2;;
+        --dry-run)
+          DRY_RUN=1; shift;;
+        --help)
+          usage; exit 0;;
+        *)
+          shift;;
+      esac
+    done
+
+    echo "[opsctl] deploy env=$ENV using kube=${KUBEFILE:-<none>}" >&2
+    if [ "$DRY_RUN" = "1" ]; then
+      echo "[opsctl] dry-run: would sync Argo CD app for env=$ENV" >&2
+      exit 0
+    fi
+
+    if ! command -v argocd >/dev/null 2>&1; then
+      echo "[opsctl] error: argocd CLI not found" >&2; exit 1
+    fi  
+    if [ -n "${ARGO_AUTH_TOKEN:-}" ]; then
+      echo "[opsctl] using ARGO_AUTH_TOKEN for login" >&2
+      argocd login "${ARGO_SERVER:-}" --auth-token "${ARGO_AUTH_TOKEN}" --insecure || { echo "[opsctl] error: argocd login failed" >&2; exit 2; }
+    else
+      if [ -z "${ARGO_USER:-}" ] || [ -z "${ARGO_PASS:-}" ]; then
+        echo "[opsctl] error: ARGO_USER/ARGO_PASS not set and ARGO_AUTH_TOKEN missing" >&2
+        exit 3
+      fi
+      argocd login "${ARGO_SERVER:-}" --username "${ARGO_USER}" --password "${ARGO_PASS}" --insecure || { echo "[opsctl] error: argocd login failed" >&2; exit 2; }
+    fi
+    APP_NAME="platform-$ENV"
+    echo "[opsctl] syncing Argo CD app: $APP_NAME" >&2
+    argocd app sync "$APP_NAME" --prune --timeout 600 || { echo "[opsctl] error: argocd app sync failed" >&2; exit 4; }
+    ;;  
+etl-run)
+    echo "[opsctl] run ETL jobs: $*"
+    python -m pipelines.run --changed-only || true
+    ;;  
+  check-gate)
+    ENV="prod"
+    while (( "${#}" )); do
+      case "$1" in
+        --env)
+          ENV="$2"; shift 2;;
+        *)
+          shift;;
+      esac
+    done
+    echo "[opsctl] check release gate for env=$ENV"
+    python scripts/check_release_gate.py || exit 1
+    ;;  
+  maybe-release)
+    ENV="prod"
+    TIMEBOX="12h"
+    while (( "${#}" )); do
+      case "$1" in
+        --env)
+          ENV="$2"; shift 2;;
+        --timebox)
+          TIMEBOX="$2"; shift 2;;
+        *)
+          shift;;
+      esac
+    done
+    echo "[opsctl] maybe-release env=$ENV timebox=$TIMEBOX" >&2
+    python scripts/maybe_release.py --env "$ENV" --timebox "$TIMEBOX" || { echo "[opsctl] maybe-release: gate failed" >&2; exit 5; }
+    if [ "${AUTO_MERGE:-0}" = "1" ]; then
+      echo "[opsctl] AUTO_MERGE=1 -> performing automated manifest update and deploy" >&2
+      ./scripts/create-manifests-pr.sh "$MANIFESTS_REPO" "$BRANCH" "$OPS_IMAGE" || { echo "[opsctl] error: create-manifests-pr failed" >&2; exit 7; }
+      if command -v argocd >/dev/null 2>&1; then
+        APP_NAME="platform-$ENV"
+        argocd login "${ARGO_SERVER:-}" --auth-token "${ARGO_AUTH_TOKEN:-}" --insecure >/dev/null 2>&1 || true
+        argocd app sync "$APP_NAME" --prune --timeout 600 || { echo "[opsctl] error: argocd app sync after auto-merge failed" >&2; exit 8; }
+      fi
+    fi
+    ;;  
+  provision-infra)
+    echo "[opsctl] provision-infra: delegating to scripts/provision/proxmox_provision.sh" >&2
+    PROV_SCRIPT="${PROV_SCRIPT:-scripts/provision/proxmox_provision.sh}"
+    if [ ! -x "$PROV_SCRIPT" ]; then
+      echo "[opsctl] error: provision script not found or not executable: $PROV_SCRIPT" >&2
+      exit 1
+    fi
+    "$PROV_SCRIPT" "$@" || { code=$?; echo "[opsctl] provision-infra failed (code=$code)" >&2; exit $code; }
+    ;;  
+  enable-autoheal)
+    echo "[opsctl] enabling autoheal in namespace predator-stage"
+    kubectl apply -n predator-stage -f platform/ops/autoheal/ || exit 1;
+    ;;  
+  *)
+    echo "opsctl <build-test-scan|deploy|etl-run|check-gate|maybe-release|enable-autoheal|provision-infra>"; exit 1;
+    ;;
+esac
+
+exit 0

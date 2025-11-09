@@ -1,0 +1,6 @@
+# Release gate configuration for Non-Stop Predator workflow
+prod_requirements:
+  min_coverage: 80
+  max_critical_vulnerabilities: 0
+  require_sbom: true
+  require_signed_commits: false
