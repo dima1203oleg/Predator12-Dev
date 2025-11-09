@@ -5,7 +5,7 @@ CMD="${1:-}"
 shift || true
 
 usage() {
-  echo "opsctl <build-test-scan|deploy|etl-run|check-gate|maybe-release|enable-autoheal> [flags]"
+  echo "opsctl <build-test-scan|deploy|etl-run|check-gate|maybe-release|enable-autoheal|provision-infra> [flags]"
 }
 
 case "$CMD" in
@@ -128,7 +128,7 @@ etl-run)
     kubectl apply -n predator-stage -f platform/ops/autoheal/ || exit 1;
     ;;  
   *)
-    echo "opsctl <build-test-scan|deploy|etl-run|check-gate|maybe-release|enable-autoheal>"; exit 1;
+    echo "opsctl <build-test-scan|deploy|etl-run|check-gate|maybe-release|enable-autoheal|provision-infra>"; exit 1;
     ;;
 esac
 
