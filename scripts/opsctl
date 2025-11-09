@@ -84,12 +84,33 @@ case "$CMD" in
     python -m pipelines.run --changed-only || true
     ;;
   check-gate)
-    ENV="${2:-prod}"
+    # Parse flags for check-gate
+    ENV="prod"
+    while (( "$#" )); do
+      case "$1" in
+        --env)
+          ENV="$2"; shift 2;;
+        *)
+          shift;;
+      esac
+    done
     echo "[opsctl] check release gate for env=$ENV"
     python scripts/check_release_gate.py || exit 1
     ;;
   maybe-release)
-    ENV="${2:-prod}"; TIMEBOX="${3:-12h}"
+    # Parse flags for maybe-release
+    ENV="prod"
+    TIMEBOX="12h"
+    while (( "$#" )); do
+      case "$1" in
+        --env)
+          ENV="$2"; shift 2;;
+        --timebox)
+          TIMEBOX="$2"; shift 2;;
+        *)
+          shift;;
+      esac
+    done
     echo "[opsctl] maybe-release env=$ENV timebox=$TIMEBOX" >&2
     # run decision logic (script should exit non-zero on failure)
     python scripts/maybe_release.py --env "$ENV" --timebox "$TIMEBOX" || { echo "[opsctl] maybe-release: gate failed" >&2; exit 5; }
