@@ -234,3 +234,76 @@ def cleanup_old_results():
     except Exception as e:
         logger.error(f"Cleanup task failed: {str(e)}")
         return {"status": "error", "error": str(e)}
+
+
+@current_app.task(bind=True, queue="db_sync")
+def database_sync_task(self, skip_qdrant: bool = False, skip_opensearch: bool = False) -> Dict[str, Any]:
+    """
+    Automated database synchronization task
+    Syncs PostgreSQL data to OpenSearch, Qdrant, and invalidates Redis cache
+    """
+    import subprocess
+    import sys
+    from pathlib import Path
+    
+    try:
+        logger.info("Starting automated database synchronization...")
+        
+        # Get path to sync orchestrator
+        project_root = Path(__file__).parent.parent.parent.parent.parent
+        sync_script = project_root / "scripts" / "db-sync-orchestrator.py"
+        
+        if not sync_script.exists():
+            logger.error(f"Sync orchestrator not found: {sync_script}")
+            return {
+                "status": "error",
+                "error": "Sync orchestrator script not found",
+                "timestamp": datetime.utcnow().isoformat(),
+            }
+        
+        # Build command
+        cmd = [sys.executable, str(sync_script)]
+        if skip_qdrant:
+            cmd.append("--skip-qdrant")
+        if skip_opensearch:
+            cmd.append("--skip-opensearch")
+        
+        # Execute sync
+        logger.info(f"Executing: {' '.join(cmd)}")
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=1200  # 20 minute timeout
+        )
+        
+        if result.returncode == 0:
+            logger.info("Database synchronization completed successfully")
+            return {
+                "status": "completed",
+                "output": result.stdout,
+                "timestamp": datetime.utcnow().isoformat(),
+            }
+        else:
+            logger.error(f"Database synchronization failed: {result.stderr}")
+            return {
+                "status": "failed",
+                "error": result.stderr,
+                "output": result.stdout,
+                "timestamp": datetime.utcnow().isoformat(),
+            }
+    
+    except subprocess.TimeoutExpired:
+        logger.error("Database synchronization timed out")
+        return {
+            "status": "timeout",
+            "error": "Sync operation timed out after 20 minutes",
+            "timestamp": datetime.utcnow().isoformat(),
+        }
+    except Exception as e:
+        logger.error(f"Database synchronization error: {str(e)}")
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": datetime.utcnow().isoformat(),
+        }
