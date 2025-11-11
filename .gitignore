@@ -11,6 +11,9 @@ build/
 *.log
 .env
 .env.local
+__pycache__/
+*.pyc
+*.pyo
 
 # OS files
 .DS_Store

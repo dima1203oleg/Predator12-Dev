@@ -6,7 +6,10 @@
 import asyncio
 import json
 import logging
-from datetime import datetime
+import os
+import subprocess
+import uuid
+from datetime import datetime, timezone
 from typing import Any, Dict, List
 
 from celery import current_app
@@ -24,7 +27,7 @@ def osint_analysis_task(self, domain: str, analysis_type: str = "full") -> Dict[
         result = {
             "domain": domain,
             "analysis_type": analysis_type,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "findings": {
                 "whois_info": {
                     "registrar": "Mock Registrar",
@@ -75,11 +78,11 @@ def self_healing_check(self) -> Dict[str, Any]:
             healing_actions.append({"action": "restart_failed_services", "executed": True})
 
         result = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "system_health": checks,
             "healing_actions": healing_actions,
             "overall_status": "healthy" if not healing_actions else "recovered",
-            "next_check": datetime.utcnow().isoformat(),
+            "next_check": datetime.now(timezone.utc).isoformat(),
         }
 
         logger.info(f"Self-healing check completed: {len(healing_actions)} actions taken")
@@ -150,7 +153,7 @@ def auto_train_model_task(
                 "recall": 0.91,
                 "f1_score": 0.89,
             },
-            "model_path": f"models/{model_name}_v{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
+            "model_path": f"models/{model_name}_v{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}",
             "status": "completed",
             "training_time_seconds": sum(r["duration_seconds"] for r in results.values()),
         }
@@ -185,7 +188,7 @@ def data_quality_analysis_task(self, dataset_id: str, rules: List[str] = None) -
         result = {
             "dataset_id": dataset_id,
             "analysis_id": str(uuid.uuid4()),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "rules_applied": rules or ["default_rules"],
             "quality_checks": quality_checks,
             "overall_score": overall_score,
@@ -228,9 +231,103 @@ def cleanup_old_results():
             "status": "completed",
             "items_cleaned": cleaned_items,
             "total_cleaned": total_cleaned,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
     except Exception as e:
         logger.error(f"Cleanup task failed: {str(e)}")
         return {"status": "error", "error": str(e)}
+
+
+@current_app.task(bind=True, queue="db_sync")
+def database_sync_task(self) -> Dict[str, Any]:
+    """
+    Синхронізація даних між базами: PostgreSQL → OpenSearch, Qdrant, Redis
+    Виконує скрипт db-sync-orchestrator.py для координації синхронізації
+    """
+    try:
+        logger.info("Starting database synchronization task")
+        
+        # Визначаємо шлях до скрипта
+        project_root = os.getenv("PROJECT_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+        script_path = os.path.join(project_root, "scripts", "db-sync-orchestrator.py")
+        
+        if not os.path.exists(script_path):
+            error_msg = f"db-sync-orchestrator.py not found at {script_path}"
+            logger.error(error_msg)
+            return {
+                "status": "error",
+                "error": error_msg,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+        
+        # Підготовка змінних оточення
+        env = os.environ.copy()
+        env.update({
+            "DATABASE_URL": os.getenv("DATABASE_URL", "postgresql://localhost:5432/predator12"),
+            "OPENSEARCH_URL": os.getenv("OPENSEARCH_URL", "http://localhost:9200"),
+            "QDRANT_URL": os.getenv("QDRANT_URL", "http://localhost:6333"),
+            "REDIS_URL": os.getenv("REDIS_URL", "redis://localhost:6379/0"),
+            "MINIO_URL": os.getenv("MINIO_URL", "http://localhost:9000"),
+        })
+        
+        # Виконання скрипта синхронізації з timeout
+        start_time = datetime.now(timezone.utc)
+        
+        logger.info(f"Executing: python3 {script_path}")
+        
+        try:
+            result = subprocess.run(
+                ["python3", script_path],
+                cwd=project_root,
+                env=env,
+                capture_output=True,
+                text=True,
+                timeout=300,  # 5 хвилин timeout
+            )
+            
+            end_time = datetime.now(timezone.utc)
+            duration = (end_time - start_time).total_seconds()
+            
+            # Парсинг результатів
+            sync_result = {
+                "status": "success" if result.returncode == 0 else "failed",
+                "return_code": result.returncode,
+                "duration_seconds": round(duration, 2),
+                "start_time": start_time.isoformat(),
+                "end_time": end_time.isoformat(),
+                "stdout": result.stdout[-2000:] if result.stdout else "",  # Останні 2000 символів
+                "stderr": result.stderr[-1000:] if result.stderr else "",  # Останні 1000 символів
+            }
+            
+            if result.returncode == 0:
+                logger.info(f"Database sync completed successfully in {duration:.2f}s")
+            else:
+                logger.error(f"Database sync failed with code {result.returncode}")
+                logger.error(f"STDERR: {result.stderr}")
+            
+            return sync_result
+            
+        except subprocess.TimeoutExpired as e:
+            end_time = datetime.now(timezone.utc)
+            duration = (end_time - start_time).total_seconds()
+            
+            logger.error(f"Database sync timed out after {duration:.2f}s")
+            
+            return {
+                "status": "timeout",
+                "error": "Sync operation exceeded 5 minute timeout",
+                "duration_seconds": round(duration, 2),
+                "start_time": start_time.isoformat(),
+                "end_time": end_time.isoformat(),
+                "stdout": e.stdout.decode() if e.stdout else "",
+                "stderr": e.stderr.decode() if e.stderr else "",
+            }
+        
+    except Exception as e:
+        logger.error(f"Database sync task failed with exception: {str(e)}")
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
