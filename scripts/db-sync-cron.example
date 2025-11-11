@@ -1,0 +1,80 @@
+# Predator12 Database Synchronization Cron Jobs
+# 
+# Copy this file to /etc/cron.d/ or add to your crontab
+# Usage: sudo cp db-sync-cron.example /etc/cron.d/predator12-db-sync
+#
+# Cron format: minute hour day month weekday command
+#              0-59  0-23 1-31 1-12  0-7     (0 and 7 are Sunday)
+
+# Set environment variables
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+PROJECT_ROOT=/opt/predator12
+DATABASE_URL=postgresql://user:password@localhost:5432/predator12
+OPENSEARCH_URL=http://localhost:9200
+QDRANT_URL=http://localhost:6333
+REDIS_URL=redis://:password@localhost:6379/0
+
+# ============================================================================
+# FULL SYNC - Every 2 hours (default production schedule)
+# ============================================================================
+0 */2 * * * root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py >> /var/log/predator12/db-sync.log 2>&1
+
+# ============================================================================
+# STAGGERED SYNC - Different schedules per database
+# ============================================================================
+
+# OpenSearch sync - Every hour (for real-time search)
+# 0 * * * * root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py --single opensearch >> /var/log/predator12/opensearch-sync.log 2>&1
+
+# Qdrant sync - Every 3 hours (vectors less frequently updated)
+# 0 */3 * * * root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py --single qdrant >> /var/log/predator12/qdrant-sync.log 2>&1
+
+# Redis cache invalidation - Every 30 minutes (cache consistency)
+# */30 * * * * root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py --single redis >> /var/log/predator12/redis-sync.log 2>&1
+
+# ============================================================================
+# OFF-PEAK HOURS SYNC - Heavy operations during low-traffic periods
+# ============================================================================
+
+# Full rebuild at 2 AM daily (complete re-indexing)
+# 0 2 * * * root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py --fail-fast >> /var/log/predator12/db-sync-full.log 2>&1
+
+# Weekly deep sync on Sunday at 3 AM
+# 0 3 * * 0 root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py >> /var/log/predator12/db-sync-weekly.log 2>&1
+
+# ============================================================================
+# BUSINESS HOURS OPTIMIZATION - Frequent syncs during peak usage
+# ============================================================================
+
+# Every 30 minutes during business hours (9 AM - 6 PM, Mon-Fri)
+# */30 9-18 * * 1-5 root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py --single opensearch >> /var/log/predator12/opensearch-business.log 2>&1
+
+# Minimal sync outside business hours (every 4 hours)
+# 0 */4 * * * root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py --skip-qdrant >> /var/log/predator12/db-sync-minimal.log 2>&1
+
+# ============================================================================
+# MONITORING & CLEANUP
+# ============================================================================
+
+# Health check every 15 minutes
+# */15 * * * * root curl -s http://localhost:8000/api/v1/health/db-sync >> /var/log/predator12/health-check.log 2>&1
+
+# Log rotation daily at midnight
+# 0 0 * * * root find /var/log/predator12/ -name "*.log" -mtime +7 -delete
+
+# ============================================================================
+# EXAMPLES FOR DIFFERENT SCENARIOS
+# ============================================================================
+
+# High-frequency updates (every 15 minutes)
+# */15 * * * * root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py --single redis
+
+# Low-priority sync (once per day at 4 AM)
+# 0 4 * * * root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py --skip-opensearch
+
+# Weekend-only sync
+# 0 */2 * * 6,0 root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py
+
+# Month-end full sync (1st day of month at 1 AM)
+# 0 1 1 * * root cd $PROJECT_ROOT && python3 scripts/db-sync-orchestrator.py --fail-fast
