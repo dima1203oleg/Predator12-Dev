@@ -45,6 +45,7 @@ celery_app.conf.update(
         "app.workers.tasks.generate_report_task": {"queue": "reports"},
         "app.workers.tasks.auto_train_model_task": {"queue": "training"},
         "app.workers.tasks.data_quality_analysis_task": {"queue": "quality"},
+        "app.workers.tasks.database_sync_task": {"queue": "db_sync"},
     },
     # Налаштування воркерів
     worker_prefetch_multiplier=1,
@@ -67,6 +68,7 @@ celery_app.conf.task_queues = (
     Queue("reports", routing_key="reports"),
     Queue("training", routing_key="training"),
     Queue("quality", routing_key="quality"),
+    Queue("db_sync", routing_key="db_sync"),
 )
 
 # Періодичні задачі (Celery Beat)
@@ -92,6 +94,11 @@ celery_app.conf.beat_schedule = {
         "task": "app.workers.tasks.data_quality_analysis_task",
         "schedule": 14400.0,  # 4 години
         "args": ["default_dataset", ["default_rules"]],
+    },
+    # Синхронізація баз даних кожні 2 години
+    "database-sync": {
+        "task": "app.workers.tasks.database_sync_task",
+        "schedule": 7200.0,  # 2 години
     },
 }
 

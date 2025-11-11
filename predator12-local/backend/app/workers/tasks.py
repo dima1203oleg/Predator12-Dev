@@ -6,6 +6,9 @@
 import asyncio
 import json
 import logging
+import os
+import subprocess
+import uuid
 from datetime import datetime
 from typing import Any, Dict, List
 
@@ -234,3 +237,97 @@ def cleanup_old_results():
     except Exception as e:
         logger.error(f"Cleanup task failed: {str(e)}")
         return {"status": "error", "error": str(e)}
+
+
+@current_app.task(bind=True, queue="db_sync")
+def database_sync_task(self) -> Dict[str, Any]:
+    """
+    Синхронізація даних між базами: PostgreSQL → OpenSearch, Qdrant, Redis
+    Виконує скрипт db-sync-orchestrator.py для координації синхронізації
+    """
+    try:
+        logger.info("Starting database synchronization task")
+        
+        # Визначаємо шлях до скрипта
+        project_root = os.getenv("PROJECT_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../..")))
+        script_path = os.path.join(project_root, "scripts", "db-sync-orchestrator.py")
+        
+        if not os.path.exists(script_path):
+            error_msg = f"db-sync-orchestrator.py not found at {script_path}"
+            logger.error(error_msg)
+            return {
+                "status": "error",
+                "error": error_msg,
+                "timestamp": datetime.utcnow().isoformat(),
+            }
+        
+        # Підготовка змінних оточення
+        env = os.environ.copy()
+        env.update({
+            "DATABASE_URL": os.getenv("DATABASE_URL", "postgresql://localhost:5432/predator12"),
+            "OPENSEARCH_URL": os.getenv("OPENSEARCH_URL", "http://localhost:9200"),
+            "QDRANT_URL": os.getenv("QDRANT_URL", "http://localhost:6333"),
+            "REDIS_URL": os.getenv("REDIS_URL", "redis://localhost:6379/0"),
+            "MINIO_URL": os.getenv("MINIO_URL", "http://localhost:9000"),
+        })
+        
+        # Виконання скрипта синхронізації з timeout
+        start_time = datetime.utcnow()
+        
+        logger.info(f"Executing: python3 {script_path}")
+        
+        try:
+            result = subprocess.run(
+                ["python3", script_path],
+                cwd=project_root,
+                env=env,
+                capture_output=True,
+                text=True,
+                timeout=300,  # 5 хвилин timeout
+            )
+            
+            end_time = datetime.utcnow()
+            duration = (end_time - start_time).total_seconds()
+            
+            # Парсинг результатів
+            sync_result = {
+                "status": "success" if result.returncode == 0 else "failed",
+                "return_code": result.returncode,
+                "duration_seconds": round(duration, 2),
+                "start_time": start_time.isoformat(),
+                "end_time": end_time.isoformat(),
+                "stdout": result.stdout[-2000:] if result.stdout else "",  # Останні 2000 символів
+                "stderr": result.stderr[-1000:] if result.stderr else "",  # Останні 1000 символів
+            }
+            
+            if result.returncode == 0:
+                logger.info(f"Database sync completed successfully in {duration:.2f}s")
+            else:
+                logger.error(f"Database sync failed with code {result.returncode}")
+                logger.error(f"STDERR: {result.stderr}")
+            
+            return sync_result
+            
+        except subprocess.TimeoutExpired as e:
+            end_time = datetime.utcnow()
+            duration = (end_time - start_time).total_seconds()
+            
+            logger.error(f"Database sync timed out after {duration:.2f}s")
+            
+            return {
+                "status": "timeout",
+                "error": "Sync operation exceeded 5 minute timeout",
+                "duration_seconds": round(duration, 2),
+                "start_time": start_time.isoformat(),
+                "end_time": end_time.isoformat(),
+                "stdout": e.stdout.decode() if e.stdout else "",
+                "stderr": e.stderr.decode() if e.stderr else "",
+            }
+        
+    except Exception as e:
+        logger.error(f"Database sync task failed with exception: {str(e)}")
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": datetime.utcnow().isoformat(),
+        }
