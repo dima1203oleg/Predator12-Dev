@@ -9,7 +9,7 @@ import logging
 import os
 import subprocess
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List
 
 from celery import current_app
@@ -27,7 +27,7 @@ def osint_analysis_task(self, domain: str, analysis_type: str = "full") -> Dict[
         result = {
             "domain": domain,
             "analysis_type": analysis_type,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "findings": {
                 "whois_info": {
                     "registrar": "Mock Registrar",
@@ -78,11 +78,11 @@ def self_healing_check(self) -> Dict[str, Any]:
             healing_actions.append({"action": "restart_failed_services", "executed": True})
 
         result = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "system_health": checks,
             "healing_actions": healing_actions,
             "overall_status": "healthy" if not healing_actions else "recovered",
-            "next_check": datetime.utcnow().isoformat(),
+            "next_check": datetime.now(timezone.utc).isoformat(),
         }
 
         logger.info(f"Self-healing check completed: {len(healing_actions)} actions taken")
@@ -153,7 +153,7 @@ def auto_train_model_task(
                 "recall": 0.91,
                 "f1_score": 0.89,
             },
-            "model_path": f"models/{model_name}_v{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}",
+            "model_path": f"models/{model_name}_v{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}",
             "status": "completed",
             "training_time_seconds": sum(r["duration_seconds"] for r in results.values()),
         }
@@ -188,7 +188,7 @@ def data_quality_analysis_task(self, dataset_id: str, rules: List[str] = None) -
         result = {
             "dataset_id": dataset_id,
             "analysis_id": str(uuid.uuid4()),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "rules_applied": rules or ["default_rules"],
             "quality_checks": quality_checks,
             "overall_score": overall_score,
@@ -231,7 +231,7 @@ def cleanup_old_results():
             "status": "completed",
             "items_cleaned": cleaned_items,
             "total_cleaned": total_cleaned,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
     except Exception as e:
@@ -258,7 +258,7 @@ def database_sync_task(self) -> Dict[str, Any]:
             return {
                 "status": "error",
                 "error": error_msg,
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.now(timezone.utc).isoformat(),
             }
         
         # Підготовка змінних оточення
@@ -272,7 +272,7 @@ def database_sync_task(self) -> Dict[str, Any]:
         })
         
         # Виконання скрипта синхронізації з timeout
-        start_time = datetime.utcnow()
+        start_time = datetime.now(timezone.utc)
         
         logger.info(f"Executing: python3 {script_path}")
         
@@ -286,7 +286,7 @@ def database_sync_task(self) -> Dict[str, Any]:
                 timeout=300,  # 5 хвилин timeout
             )
             
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             duration = (end_time - start_time).total_seconds()
             
             # Парсинг результатів
@@ -309,7 +309,7 @@ def database_sync_task(self) -> Dict[str, Any]:
             return sync_result
             
         except subprocess.TimeoutExpired as e:
-            end_time = datetime.utcnow()
+            end_time = datetime.now(timezone.utc)
             duration = (end_time - start_time).total_seconds()
             
             logger.error(f"Database sync timed out after {duration:.2f}s")
@@ -329,5 +329,5 @@ def database_sync_task(self) -> Dict[str, Any]:
         return {
             "status": "error",
             "error": str(e),
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }

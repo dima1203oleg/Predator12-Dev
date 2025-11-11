@@ -10,7 +10,7 @@ import logging
 import os
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional, Any
 
 # Setup logging
@@ -55,7 +55,7 @@ class DatabaseSyncOrchestrator:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.results = {
-            'start_time': datetime.utcnow().isoformat(),
+            'start_time': datetime.now(timezone.utc).isoformat(),
             'syncs': {},
             'errors': [],
             'warnings': []
@@ -330,7 +330,7 @@ class DatabaseSyncOrchestrator:
             self.sync_minio_metadata()  # Always returns True or warnings
         
         # Finalize results
-        self.results['end_time'] = datetime.utcnow().isoformat()
+        self.results['end_time'] = datetime.now(timezone.utc).isoformat()
         self.results['overall_status'] = 'success' if success else 'failed'
         
         # Print summary
