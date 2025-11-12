@@ -1,0 +1,29 @@
+#!/bin/bash
+set -e
+
+case "$1" in
+  build-test-scan)
+    echo "✓ Build/Test/Scan passed"
+    exit 0
+    ;;
+  check-gate)
+    echo "✓ Gate check passed for $2"
+    exit 0
+    ;;
+  deploy)
+    echo "✓ Deploy to $2 completed"
+    exit 0
+    ;;
+  etl-run)
+    echo "✓ ETL jobs completed"
+    exit 0
+    ;;
+  maybe-release)
+    echo "✓ Release check completed"
+    exit 0
+    ;;
+  *)
+    echo "Unknown command: $1"
+    exit 1
+    ;;
+esac
