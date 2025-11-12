@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Validate Non-Stop config
         run: python3 scripts/validate_nonstop.py
   ci:
@@ -21,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Build/Test/Scan
         run: ./scripts/opsctl build-test-scan
   cd:
@@ -29,6 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Login Vault (OIDC)
         uses: hashicorp/vault-action@v3
         with:
@@ -46,6 +52,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Run ETL changed jobs
         run: ./scripts/opsctl etl-run --jobs changed --nonstop
   gate_prod:
@@ -53,6 +61,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Check release gate
         run: ./scripts/opsctl check-gate --env prod
       - name: Maybe release (auto-merge)
