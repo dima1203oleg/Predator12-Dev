@@ -1,0 +1,85 @@
+{
+  "models": [
+    {
+      "title": "DeepSeek R1 (Reasoning)",
+      "provider": "deepseek",
+      "model": "deepseek-reasoner",
+      "apiBase": "https://api.deepseek.com/v1",
+      "apiKey": "${DEEPSEEK_API_KEY}",
+      "contextLength": 65536
+    },
+    {
+      "title": "DeepSeek Coder V2",
+      "provider": "deepseek",
+      "model": "deepseek-coder",
+      "apiBase": "https://api.deepseek.com/v1",
+      "apiKey": "${DEEPSEEK_API_KEY}",
+      "contextLength": 16384
+    },
+    {
+      "title": "Gemini 2.5 Pro",
+      "provider": "google",
+      "model": "gemini-2.5-pro-latest",
+      "apiKey": "${GEMINI_API_KEY}"
+    },
+    {
+      "title": "GPT-4o (Copilot)",
+      "provider": "openai",
+      "model": "gpt-4o",
+      "apiBase": "https://models.github.ai/inference",
+      "apiKey": "${GITHUB_TOKEN}"
+    }
+  ],
+  "tabAutocompleteModel": {
+    "title": "DeepSeek Coder",
+    "provider": "deepseek",
+    "model": "deepseek-coder"
+  },
+  "embeddingsProvider": {
+    "provider": "openai",
+    "model": "text-embedding-3-small",
+    "apiBase": "https://models.github.ai/inference",
+    "apiKey": "${GITHUB_TOKEN}"
+  },
+  "slashCommands": [
+    {
+      "name": "deepseek",
+      "description": "Use DeepSeek R1 for reasoning"
+    },
+    {
+      "name": "gemini",
+      "description": "Use Gemini 2.5 Pro"
+    },
+    {
+      "name": "copilot",
+      "description": "Use GitHub Copilot"
+    }
+  ],
+  "contextProviders": [
+    {
+      "name": "code",
+      "params": {}
+    },
+    {
+      "name": "docs",
+      "params": {}
+    },
+    {
+      "name": "diff",
+      "params": {}
+    },
+    {
+      "name": "terminal",
+      "params": {}
+    },
+    {
+      "name": "problems",
+      "params": {}
+    }
+  ],
+  "allowAnonymousTelemetry": false,
+  "experimental": {
+    "promptPath": ".continue/prompts",
+    "useChunking": true
+  }
+}
